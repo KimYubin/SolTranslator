@@ -1,0 +1,3 @@
+C:\Windows\System32\cmd.exe /A /Q /K C:\Qt\6.8.2\msvc2022_64\bin\qtenv2.bat
+
+windeployqt F:\Dev\QtProject\FinTranslator\cmake-build-debug-visual-studio\FinTranslator.exe

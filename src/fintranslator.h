@@ -26,11 +26,12 @@ private slots:
     void on_findButton_clicked();
 
 private:
-    void loadTextFile();
+    void loadSettings();
+    void loadAPI();
     
     Ui::FinTranslator* ui;
 
-    std::unique_ptr<TranslateManager> translateManager;
+    TranslateManager* translateManager;
 
     
 

@@ -5,15 +5,19 @@
 #include "ConfigManager.h"
 #include <QSettings>
 
+#include "FinTypes.h"
+
 void ConfigManager::setAPI(const QString& inAPI)
 {
-    QSettings settings("api", QSettings::IniFormat);
-
-    settings.setValue("openai", inAPI);
+    GetAPISetting().setValue(EngineName::OPEN_AI, inAPI);
 }
 
 QString ConfigManager::getAPI()
 {
-    QSettings settings("api", QSettings::IniFormat);
-    return settings.value("openai").toString();
+    return GetAPISetting().value(EngineName::OPEN_AI).toString();
+}
+
+QSettings ConfigManager::GetAPISetting()
+{
+    return QSettings{StaticPath::API_KEY_PATH, QSettings::IniFormat};
 }

@@ -4,12 +4,15 @@
 #include <QTextStream>
 #include <QMessageBox>
 
+#include "ConfigManager.h"
+#include "FinTypes.h"
+
 
 FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinTranslator)
 {
     ui->setupUi(this);
-    translateManager = std::make_unique<TranslateManager>(this);
-    // loadTextFile();
+    translateManager = new TranslateManager(this);
+    loadSettings();
 }
 
 FinTranslator::~FinTranslator()
@@ -17,21 +20,36 @@ FinTranslator::~FinTranslator()
     delete ui;
 }
 
-void FinTranslator::loadTextFile()
+void FinTranslator::loadSettings()
 {
-    QFile inputFile(":/save/textfinder.txt");
-    inputFile.open(QIODevice::ReadOnly);
+    loadAPI();
+}
 
-    QTextStream in(&inputFile);
-    QString line = in.readAll();
-    inputFile.close();
-
-    ui->textEditOrigin->setPlainText(line);
+void FinTranslator::loadAPI()
+{
+    QString newAPI = ui->lineEdit_api->text();
+    if (newAPI.isEmpty())
+    {
+        QString oldAPI = ConfigManager::get().getAPI();
+        if (oldAPI.isEmpty() == false)
+        {
+            QString asteriskAPI = oldAPI.first(3) + "***...";
+            ui->lineEdit_api->setText(asteriskAPI);
+        }
+    }
+    else
+    {
+        if (newAPI.last(6) != "***...")
+        {
+            ConfigManager::get().setAPI(newAPI);
+        }
+    }
 }
 
 void FinTranslator::on_findButton_clicked()
 {
+    loadAPI();
+
     QString orignText = ui->textEditOrigin->toPlainText();
-    translateManager->translateText(ui->textEditTranslate, orignText, "eng", "kor");
-    
+    translateManager->translateText(ui->textEditTranslate, orignText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
 }

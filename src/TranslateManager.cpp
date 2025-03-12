@@ -5,6 +5,7 @@
 #include "TranslateManager.h"
 
 #include "ConfigManager.h"
+#include "FinTypes.h"
 #include "TranslateUnit.h"
 
 TranslateManager::TranslateManager(QObject* parent): QObject(parent)
@@ -17,13 +18,7 @@ void TranslateManager::translateText(QTextEdit* inTextEditableObj
                                      , const QString& sourceLang
                                      , const QString& targetLang)
 {
-    std::shared_ptr<TranslateUnit> tran = TranslateUnit::create(); 
-    tran->translateText(this, inTextEditableObj, text, sourceLang, targetLang);
-
-    translate_units.emplace(tran);
+    TranslateUnit* tranUnit = new TranslateUnit(this);
+    tranUnit->translateText(inTextEditableObj, text, Langs::ENGLISH.Name, Langs::KOREAN.Name);
 }
 
-void TranslateManager::removeUnit(const std::shared_ptr<TranslateUnit>& InUnit)
-{
-    translate_units.erase(InUnit);
-}

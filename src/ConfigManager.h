@@ -5,6 +5,7 @@
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
 #include <QObject>
+#include <QSettings>
 
 
 class ConfigManager : public QObject
@@ -23,6 +24,8 @@ public:
     QString getAPI();
 
 private:
+    QSettings GetAPISetting();
+
     ConfigManager() = default;
 };
 

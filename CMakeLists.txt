@@ -26,6 +26,9 @@ set(PROJECT_SOURCES
         src/TranslateUnit.h
         src/ConfigManager.cpp
         src/ConfigManager.h
+        src/FinTypes.cpp
+        src/FinTypes.h
+        src/magic_enum.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -12,7 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
 find_package(Qt${QT_VERSION_MAJOR}  REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
@@ -29,7 +28,16 @@ set(PROJECT_SOURCES
         src/FinTypes.cpp
         src/FinTypes.h
         src/magic_enum.hpp
+        src/simpletranslatewidget.cpp
+        src/simpletranslatewidget.h
+        src/simpletranslatewidget.ui
+        src/GlobalHotKeyManager.cpp
+        src/GlobalHotKeyManager.h
 )
+
+add_library(qhotkey src/QHotkey/qhotkey.cpp)
+add_library(QHotkey::QHotkey ALIAS qhotkey)
+
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FinTranslator
@@ -57,6 +65,31 @@ endif()
 
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
+
+target_include_directories(qhotkey PUBLIC src/QHotkey)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui)
+
+target_link_libraries(qhotkey PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
+
+if(APPLE)
+    find_library(CARBON_LIBRARY Carbon)
+    mark_as_advanced(CARBON_LIBRARY)
+
+    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_mac.cpp)
+    target_link_libraries(qhotkey PRIVATE ${CARBON_LIBRARY})
+elseif(WIN32)
+    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_win.cpp)
+else()
+    find_package(X11 REQUIRED)
+    target_link_libraries(qhotkey PRIVATE ${X11_LIBRARIES})
+    
+    include_directories(${X11_INCLUDE_DIR})
+    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_x11.cpp)
+endif()
+
+target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

@@ -3,7 +3,6 @@
 
 #include <QWidget>
 
-#include "TranslateManager.h"
 
 QT_BEGIN_NAMESPACE
 

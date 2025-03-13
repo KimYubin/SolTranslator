@@ -18,18 +18,10 @@ TranslateUnit::TranslateUnit(QObject* parent) : QNetworkAccessManager(parent)
     connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
 }
 
-void TranslateUnit::translateText(QTextEdit* inTextEditableObj
-                                  , const QString& text
-                                  , const QString& sourceLang
-                                  , const QString& targetLang)
+void TranslateUnit::translateText_Impl(const QString& text
+                                     , const QString& sourceLang
+                                     , const QString& targetLang)
 {
-    if (inTextEditableObj == nullptr)
-    {
-        return;
-    }
-
-    textEditableObject = inTextEditableObj;
-    
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -72,8 +64,9 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
         {
             QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
             qDebug() << "Translated Text: " << translatedText;
-
-            textEditableObject->setText(translatedText);
+            
+            // textEditableObject->setText(translatedText);
+            emit CompletedTranslate(translatedText);
         }
     }
     else

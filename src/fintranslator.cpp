@@ -6,6 +6,7 @@
 
 #include "ConfigManager.h"
 #include "FinTypes.h"
+#include "TranslateManager.h"
 
 
 FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinTranslator)
@@ -18,6 +19,11 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
 FinTranslator::~FinTranslator()
 {
     delete ui;
+}
+
+void FinTranslator::onSimpleTranslate(const QString& InOriginText)
+{
+    translateManager->translateSimple(InOriginText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
 }
 
 void FinTranslator::loadSettings()

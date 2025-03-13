@@ -33,6 +33,11 @@ set(PROJECT_SOURCES
         src/simpletranslatewidget.ui
         src/GlobalHotKeyManager.cpp
         src/GlobalHotKeyManager.h
+        src/RunCopKey.cpp
+        src/RunCopKey.h
+        src/RunCopy_Impl_Win.cpp
+        src/RunCopy_Impl_Linux.cpp
+        src/RunCopy_Impl_Mac.cpp
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)
@@ -70,6 +75,7 @@ target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_include_directories(qhotkey PUBLIC src/QHotkey)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui)
 
+target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
 target_link_libraries(qhotkey PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
 
 if(APPLE)

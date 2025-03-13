@@ -21,10 +21,13 @@ public:
     TranslateManager(QObject* parent = nullptr);
 
     void translateText(QTextEdit* inTextEditableObj
-                       , const QString& text
+                     , const QString& text
+                     , const QString& sourceLang
+                     , const QString& targetLang);
+
+    void translateSimple(const QString& text
                        , const QString& sourceLang
                        , const QString& targetLang);
-
 
 private slots:
 

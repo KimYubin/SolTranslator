@@ -7,25 +7,35 @@
 
 #include <QWidget>
 
+class QVBoxLayout;
+class QLabel;
 QT_BEGIN_NAMESPACE
-namespace Ui { class SimpleTranslateWidget; }
+
+namespace Ui
+{
+class SimpleTranslateWidget;
+}
+
 QT_END_NAMESPACE
 
 
-
-class SimpleTranslateWidget : public QWidget {
-Q_OBJECT
+class SimpleTranslateWidget : public QWidget
+{
+    Q_OBJECT
 
 public:
-    SimpleTranslateWidget(const QString &translatedText, QWidget *parent = nullptr);
+    SimpleTranslateWidget(QWidget* parent = nullptr);
 
     ~SimpleTranslateWidget() override;
 
-    void showTranslationPopup(const QString &translatedText);
+    void showTranslationPopup(const QString& translatedText);
 
 private:
-    Ui::SimpleTranslateWidget *ui;
-    
+    Ui::SimpleTranslateWidget* ui;
+
+    QVBoxLayout* boxLayout;
+
+    QLabel* outTextLabel;
 };
 
 

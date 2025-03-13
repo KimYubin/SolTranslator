@@ -6,6 +6,7 @@
 
 #include "ConfigManager.h"
 #include "FinTypes.h"
+#include "GlobalHotKeyManager.h"
 #include "TranslateManager.h"
 
 
@@ -13,6 +14,7 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
 {
     ui->setupUi(this);
     translateManager = new TranslateManager(this);
+    globalHotKeyManager = new GlobalHotKeyManager(this);
     loadSettings();
 }
 

@@ -4,6 +4,8 @@
 #include <QWidget>
 
 
+class TranslateManager;
+class GlobalHotKeyManager;
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -21,6 +23,8 @@ public:
     FinTranslator(QWidget* parent = nullptr);
     ~FinTranslator();
 
+    void onSimpleTranslate(const QString& InOriginText);
+
 private slots:
     void on_findButton_clicked();
 
@@ -31,6 +35,7 @@ private:
     Ui::FinTranslator* ui;
 
     TranslateManager* translateManager;
+    GlobalHotKeyManager* globalHotKeyManager; 
 
     
 

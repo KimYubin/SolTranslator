@@ -19,14 +19,13 @@ public:
 
 
 private slots:
-    std::unordered_map<HotkeyType, QHotkey* > hotKeys;
-    
     void RegisterHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);
 
 public:
     void FireSimpleTranslate();
 
-    
+private:
+    std::unordered_map<HotkeyType, QHotkey* > hotKeys;
     
 };
 

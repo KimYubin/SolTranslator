@@ -18,7 +18,7 @@
 
 GlobalHotKeyManager::GlobalHotKeyManager(QObject* parent): QObject(parent)
 {
-    RegisterHotKey(HotkeyType::simpleTranslate, QKeySequence("Alt+Z"), &GlobalHotKeyManager::FireSimpleTranslate);
+    RegisterHotKey(HotkeyType::simpleTranslate, QKeySequence("Alt+X"), &GlobalHotKeyManager::FireSimpleTranslate);
 }
 
 void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)
@@ -41,22 +41,35 @@ void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySe
 
 void GlobalHotKeyManager::FireSimpleTranslate()
 {
-    QKeyEvent* pressEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier);
-    QKeyEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier);
+    QClipboard* clipboard = QApplication::clipboard();
 
-    
-    QGuiApplication::postEvent(QGuiApplication::focusWindow(), pressEvent);
-    QGuiApplication::postEvent(QGuiApplication::focusWindow(), releaseEvent);
+    QString lastClipboardText = clipboard->text();
+
     RunCopKey::DoCopy();
-    QThread::msleep(100); // 클립보드 갱신 대기
 
-    // 2. 클립보드에서 텍스트 가져오기
-    
-    QClipboard *clipboard = QApplication::clipboard();
-    QString selectedText = clipboard->text(/*QClipboard::Selection*/);
-
-    if (FinTranslator* Fin = dynamic_cast<FinTranslator*>(parent()))
+    // 클립보드 갱신 대기
+    connect(clipboard, &QClipboard::changed, clipboard, [&, inLastText = std::move(lastClipboardText)](QClipboard::Mode mode)
     {
-        Fin->onSimpleTranslate(selectedText);
-    }
+        switch (mode)
+        {
+        case QClipboard::Clipboard:
+        {
+            const QString selectedText = QApplication::clipboard()->text();
+            if (FinTranslator* Fin = dynamic_cast<FinTranslator*>(parent()))
+            {
+                Fin->onSimpleTranslate(selectedText);
+            }
+
+            // 이전 클립보드 원상복구
+            if (inLastText != selectedText)
+            {
+                clipboard->clear();
+            }
+            break;
+        }
+        case QClipboard::Selection: break;
+        case QClipboard::FindBuffer: break;
+        default: ;
+        }
+    }, Qt::SingleShotConnection);
 }

@@ -33,9 +33,6 @@ public:
 private:
     Ui::SimpleTranslateWidget* ui;
 
-    QVBoxLayout* boxLayout;
-
-    QLabel* outTextLabel;
 };
 
 

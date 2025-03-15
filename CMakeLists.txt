@@ -18,7 +18,7 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/fintranslator.cpp
         src/fintranslator.h
-        fintranslator.ui
+        ui/fintranslator.ui
         src/TranslateManager.cpp
         src/TranslateManager.h
         src/TranslateUnit.cpp
@@ -30,7 +30,7 @@ set(PROJECT_SOURCES
         src/magic_enum.hpp
         src/simpletranslatewidget.cpp
         src/simpletranslatewidget.h
-        src/simpletranslatewidget.ui
+        ui/simpletranslatewidget.ui
         src/GlobalHotKeyManager.cpp
         src/GlobalHotKeyManager.h
         src/RunCopKey.cpp

@@ -22,6 +22,13 @@ void TranslateUnit::translateText_Impl(const QString& text
                                      , const QString& sourceLang
                                      , const QString& targetLang)
 {
+    if (text.isEmpty())
+    {
+        emit CompletedTranslate(text);
+        deleteLater();
+        return;
+    }
+    
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -65,7 +72,6 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
             QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
             qDebug() << "Translated Text: " << translatedText;
             
-            // textEditableObject->setText(translatedText);
             emit CompletedTranslate(translatedText);
         }
     }

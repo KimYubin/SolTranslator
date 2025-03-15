@@ -1,5 +1,5 @@
 #include "fintranslator.h"
-#include "../ui_fintranslator.h"
+#include "../ui/ui_fintranslator.h"
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
@@ -58,6 +58,7 @@ void FinTranslator::on_findButton_clicked()
 {
     loadAPI();
 
-    QString orignText = ui->textEditOrigin->toPlainText();
-    translateManager->translateText(ui->textEditTranslate, orignText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
+    const QString orignText = ui->plainTextEditOrigin->toPlainText();
+
+    translateManager->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
 }

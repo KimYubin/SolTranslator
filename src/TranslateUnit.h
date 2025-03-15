@@ -4,6 +4,7 @@
 
 #ifndef TRANSLATEUNIT_H
 #define TRANSLATEUNIT_H
+
 #include <QNetworkAccessManager>
 #include <QTextEdit>
 
@@ -41,8 +42,7 @@ private slots:
     void onReplyFinished(QNetworkReply* reply);
 
 private:
-    QTextEdit* textEditableObject;
-    // std::weak_ptr<QTextEdit> textEditableObject;
+
 };
 
 

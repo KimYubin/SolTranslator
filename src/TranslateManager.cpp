@@ -13,14 +13,6 @@ TranslateManager::TranslateManager(QObject* parent): QObject(parent)
 {
 }
 
-void TranslateManager::translateText(QTextEdit* inTextEditableObj
-                                   , const QString& text
-                                   , const QString& sourceLang
-                                   , const QString& targetLang)
-{
-    TranslateUnit* tranUnit = new TranslateUnit(this);
-    tranUnit->translateText(inTextEditableObj, &QTextEdit::setText, text, sourceLang, targetLang);
-}
 
 void TranslateManager::translateSimple(const QString& text
                                      , const QString& sourceLang

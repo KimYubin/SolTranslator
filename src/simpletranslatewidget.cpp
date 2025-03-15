@@ -10,7 +10,7 @@
 #include <qboxlayout.h>
 #include <qscreen.h>
 
-#include "../ui_SimpleTranslateWidget.h"
+#include "../ui/ui_SimpleTranslateWidget.h"
 
 
 SimpleTranslateWidget::SimpleTranslateWidget(QWidget* parent)
@@ -20,14 +20,11 @@ SimpleTranslateWidget::SimpleTranslateWidget(QWidget* parent)
     ui->setupUi(this);
 
     // 구조 설정 및 위치 지정.
-    boxLayout    = new QVBoxLayout(this);
-    outTextLabel = new QLabel(this);
-    outTextLabel->setStyleSheet("background-color: white; padding: 10px; border: 1px solid gray;");
-    outTextLabel->setWordWrap(true);
-    outTextLabel->setMaximumWidth(300);
+    // ui->outTextLabel->setStyleSheet("background-color: white; padding: 0px; border: 0px solid gray;");
+    ui->outTextLabel->setWordWrap(true);
+    ui->outTextLabel->setMaximumWidth(300);
 
-    boxLayout->addWidget(outTextLabel);
-    setLayout(boxLayout);
+    setLayout(ui->boxLayout);
 
     move(QCursor::pos()); // 마우스 위치에 팝업 표시
 
@@ -46,12 +43,12 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    outTextLabel->setText(translatedText);
+    ui->outTextLabel->setText(translatedText);
     if (QScreen* screen = QGuiApplication::primaryScreen())
     {
         int maxWidth = screen->size().width() / 5;
-        outTextLabel->setMaximumWidth(maxWidth);
+        ui->outTextLabel->setMaximumWidth(maxWidth);
     }
 
-    adjustSize(); // 내용에 맞게 창 크기 조절    
+    adjustSize(); // 내용에 맞게 창 크기 조절
 }

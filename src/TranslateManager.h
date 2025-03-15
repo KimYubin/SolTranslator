@@ -10,8 +10,14 @@
 #include <QJsonDocument>
 #include <unordered_set>
 
+#include "TranslateUnit.h"
+
 class QTextEdit;
 class TranslateUnit;
+
+template <typename Func>
+using FunctorContextType = typename QtPrivate::ContextTypeForFunctor<Func>::ContextType;
+
 
 class TranslateManager : public QObject
 {
@@ -20,7 +26,9 @@ class TranslateManager : public QObject
 public:
     TranslateManager(QObject* parent = nullptr);
 
-    void translateText(QTextEdit* inTextEditableObj
+    template <typename Func>
+    void translateText(const FunctorContextType<Func>* inTextEditableObj
+                     , Func&& slotfunctor
                      , const QString& text
                      , const QString& sourceLang
                      , const QString& targetLang);
@@ -30,9 +38,20 @@ public:
                        , const QString& targetLang);
 
 private slots:
-
-
 };
+
+
+
+template <typename Func>
+void TranslateManager::translateText(const FunctorContextType<Func>* inTextEditableObj
+                                   , Func&& slotfunctor
+                                   , const QString& text
+                                   , const QString& sourceLang
+                                   , const QString& targetLang)
+{
+    TranslateUnit* tranUnit = new TranslateUnit(this);
+    tranUnit->translateText(inTextEditableObj, std::forward<Func>(slotfunctor), text, sourceLang, targetLang);
+}
 
 #endif //TRANSLATEMANAGER_H
 

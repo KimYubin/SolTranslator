@@ -38,6 +38,8 @@ set(PROJECT_SOURCES
         src/RunCopy_Impl_Win.cpp
         src/RunCopy_Impl_Linux.cpp
         src/RunCopy_Impl_Mac.cpp
+        src/FinHashQueue.cpp
+        src/FinHashQueue.h
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

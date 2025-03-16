@@ -17,7 +17,7 @@ class TranslateUnit : public QNetworkAccessManager
     Q_OBJECT
 
 public:
-    TranslateUnit(QObject* parent);
+    TranslateUnit(TranslateManager* parent);
 
     template <typename Func>
     void translateText(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
@@ -31,9 +31,9 @@ public:
     }
 
 
-    void translateText_Impl(const QString& text
-                          , const QString& sourceLang
-                          , const QString& targetLang);
+    void translateText_Impl(const QString& inText
+                          , const QString& inSourceLang
+                          , const QString& inTargetLang);
 
 signals:
     void CompletedTranslate(const QString& TranslateText);
@@ -42,7 +42,9 @@ private slots:
     void onReplyFinished(QNetworkReply* reply);
 
 private:
-
+    QString originText;
+    QString sourceLang;
+    QString targetLang;
 };
 
 

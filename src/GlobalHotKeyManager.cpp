@@ -18,7 +18,7 @@
 
 GlobalHotKeyManager::GlobalHotKeyManager(QObject* parent): QObject(parent)
 {
-    RegisterHotKey(HotkeyType::simpleTranslate, QKeySequence("Alt+X"), &GlobalHotKeyManager::FireSimpleTranslate);
+    RegisterHotKey(HotkeyType::simpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
 }
 
 void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)

@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <unordered_set>
 
+#include "FinHashQueue.h"
 #include "TranslateUnit.h"
 
 class QTextEdit;
@@ -38,6 +39,23 @@ public:
                        , const QString& targetLang);
 
 private slots:
+
+public:
+    void setCacheText(const QString& originText
+                    , const QString& translateText
+                    , const QString& targetLang);
+
+    std::tuple<bool, QString> findCachingText(const QString& originText, const QString& targetLang);
+
+private:
+    int maxCacheLength = 50;
+    struct TextCache
+    {
+        QString targetLang;
+        QString translateText;
+    };
+
+    hash_queue<QString, TextCache> cachingTranslateText;
 };
 
 

@@ -13,22 +13,36 @@
 #include "FinTypes.h"
 #include "TranslateManager.h"
 
-TranslateUnit::TranslateUnit(QObject* parent) : QNetworkAccessManager(parent)
+TranslateUnit::TranslateUnit(TranslateManager* parent) : QNetworkAccessManager(parent)
 {
     connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
 }
 
-void TranslateUnit::translateText_Impl(const QString& text
-                                     , const QString& sourceLang
-                                     , const QString& targetLang)
+void TranslateUnit::translateText_Impl(const QString& inText
+                                     , const QString& inSourceLang
+                                     , const QString& inTargetLang)
 {
-    if (text.isEmpty())
+    if (inText.isEmpty())
     {
-        emit CompletedTranslate(text);
+        emit CompletedTranslate(inText);
         deleteLater();
         return;
     }
-    
+    if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
+    {
+        auto [bIsFind, findCache] = translate_manager->findCachingText(inText, inTargetLang);
+        if (bIsFind)
+        {
+            emit CompletedTranslate(findCache);
+            deleteLater();
+            return;
+        }
+    }
+
+    originText = inText;
+    sourceLang = inSourceLang;
+    targetLang = inTargetLang;
+
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -42,13 +56,13 @@ void TranslateUnit::translateText_Impl(const QString& text
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(sourceLang, targetLang);
-    std::cout<<QString(StaticPrompt::OPEN_AI_PROMPT).arg(sourceLang, targetLang).toStdString()<<std::endl;
+    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(inSourceLang, inTargetLang);
+    std::cout<<QString(StaticPrompt::OPEN_AI_PROMPT).arg(inSourceLang, inTargetLang).toStdString()<<std::endl;
     messages.append(systemMessage);
 
     QJsonObject userMessage;
     userMessage["role"] = "user";
-    userMessage["content"] = text;
+    userMessage["content"] = inText;
     messages.append(userMessage);
 
     json["messages"] = messages;
@@ -63,15 +77,19 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
 {
     if (reply->error() == QNetworkReply::NoError)
     {
-        QByteArray responseData = reply->readAll();
+        QByteArray responseData    = reply->readAll();
         QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-        QJsonObject jsonObject = jsonResponse.object();
-        QJsonArray choices = jsonObject["choices"].toArray();
+        QJsonObject jsonObject     = jsonResponse.object();
+        QJsonArray choices         = jsonObject["choices"].toArray();
         if (!choices.isEmpty())
         {
-            QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
-            qDebug() << "Translated Text: " << translatedText;
-            
+            const QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
+
+            if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
+            {
+                translate_manager->setCacheText(originText, translatedText, targetLang);
+            }
+
             emit CompletedTranslate(translatedText);
         }
     }

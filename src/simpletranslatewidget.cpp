@@ -71,3 +71,31 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
         move(QCursor::pos());
     }
 }
+
+void SimpleTranslateWidget::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        bIsDrag   = true;
+        event->accept();
+    }
+}
+
+void SimpleTranslateWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if (bIsDrag && (event->button() == Qt::LeftButton))
+    {
+        move(event->globalPosition().toPoint() - dragPoint);
+        event->accept();
+    }
+}
+
+void SimpleTranslateWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        bIsDrag = false;
+        event->accept();
+    }
+}

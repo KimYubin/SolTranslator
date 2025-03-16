@@ -1,246 +1,196 @@
-
-Qt documentation
-Qt Creator 15.0.1
-ALL TOPICS
-Installation
-Getting Started
-Tutorials
-Build and run
-C++ debugging
-Mobile application
-Qt Quick and Python
-Qt Quick application
-Qt Quick debugging
-Qt Widgets and Python
-Qt Widgets application
-Qt Widgets UI and Python
-Use internal libraries with qmake
-Tutorials
-How To
-Reference
-Search
-Qt Creator Documentation
-Tutorial: Qt Widgets application
-Tutorial: Qt Widgets application
-This tutorial describes how to use Qt Creator to create a small Qt application, Text Finder. It is a simplified version of the Qt UI Tools Text Finder example. You'll use Qt Widgets Designer to construct the application user interface from Qt widgets and the code editor to write the application logic in C++.
-
-
-
-Create the Text Finder project
-Go to File > New Project > Application (Qt) > Qt Widgets Application.
-{New Project dialog}
-
-Select Choose to open the Project Location dialog.
-{Project Location dialog}
-
-In Name, type TextFinder.
-In Create in, enter the path for the project files. For example, C:\Qt\examples.
-Select Next (on Windows and Linux) or Continue (on macOS) to open the Define Build System dialog.
-{Define Build System dialog}
-
-In Build system, select CMake as the build system to use for building the project.
-Select Next or Continue to open the Class Information dialog.
-{Class Information dialog}
-
-In Class name, type TextFinder as the class name.
-In Base class, select QWidget as the base class type.
-Note: Header file, Source file and Form file s are automatically updated to match the name of the class.
-
-Select Next or Continue to open the Translation File dialog.
-{Translation File dialog}
-
-In Language, you can select a language that you plan to translate the application to. This sets up localization support for the application. You can add other languages later by editing the project file.
-Select Next or Continue to open the Kit Selection dialog.
-{Kit Selection dialog}
-
-Select build and run kits for your project.
-Select Next or Continue to open the Project Management dialog.
-{Project Management dialog}
-
-Review the project settings, and select Finish (on Windows and Linux) or Done (on macOS) to create the project.
-Note: The project opens in the Edit mode, which hides these instructions. To return to these instructions, open the Help mode.
-
-The TextFinder project now has the following files:
-
-main.cpp
-textfinder.h
-textfinder.cpp
-textfinder.ui
-CMakeLists.txt
-{TextFinder project contents}
-
-The .h and .cpp files come with the necessary boiler plate code.
-
-If you selected CMake as the build system, Qt Creator created a CMakeLists.txt project file for you.
-
-Fill in the missing pieces
-Begin by designing the user interface and then move on to filling in the missing code. Finally, add the find functionality.
-
-Design the user interface
-{Text Finder UI}
-
-In the Edit mode, double-click the textfinder.ui file in the Projects view to launch the integrated Qt Widgets Designer.
-Drag the following widgets to the form:
-Label (QLabel)
-Line Edit (QLineEdit)
-Push Button (QPushButton)
-{Adding widgets to Text Finder UI}
-
-Note: To easily locate the widgets, use the search box at the top of the Widget Box. For example, to find the Label widget, start typing the word label.
-
-{Filter}
-
-Double-click the Label widget and enter the text Keyword.
-Double-click the Push Button widget and enter the text Find.
-In the Properties view, change the objectName to findButton.
-{Changing object names}
-
-Press Ctrl+A (or Cmd+A) to select the widgets and select Lay out Horizontally (or press Ctrl+H on Linux or Windows or Ctrl+Shift+H on macOS) to apply a horizontal layout (QHBoxLayout).
-{Applying horizontal layout}
-
-Drag a Text Edit widget (QTextEdit) to the form.
-Select the screen area, and then select Lay out Vertically (or press Ctrl+L) to apply a vertical layout (QVBoxLayout).
-{Text Finder UI}
-
-Applying the horizontal and vertical layouts ensures that the application UI scales to different screen sizes.
-
-To call a find function when users select the Find button, you use the Qt signals and slots mechanism. A signal is emitted when a particular event occurs and a slot is a function that is called in response to a particular signal. Qt widgets have predefined signals and slots that you can use directly from Qt Widgets Designer. To add a slot for the find function:
-Right-click the Find button to open a context-menu.
-Select Go to Slot > clicked(), and then select OK.
-This adds a private slot, on_findButton_clicked(), to the header file, textfinder.h and a private function, TextFinder::on_findButton_clicked(), to the source file, textfinder.cpp.
-
-Press Ctrl+S (or Cmd+S) to save your changes.
-For more information about designing forms with Qt Widgets Designer, see the Qt Widgets Designer Manual.
-
-Complete the header file
-The textfinder.h file already has the necessary #includes, a constructor, a destructor, and the Ui object. You need to add a private function, loadTextFile(), to read and display the contents of the input text file in the QTextEdit.
-
-In the Projects view in the Edit view, double-click the textfinder.h file to open it for editing.
-Add a private function to the private section, after the Ui::TextFinder pointer:
-private slots:
-    void on_findButton_clicked();
-
-private:
-    Ui::TextFinder *ui;
-    void loadTextFile();
-
-Complete the source file
-Now that the header file is complete, move on to the source file, textfinder.cpp.
-
-In the Projects view in the Edit view, double-click the textfinder.cpp file to open it for editing.
-Add code to load a text file using QFile, read it with QTextStream, and then display it on textEdit with QTextEdit::setPlainText():
-void TextFinder::loadTextFile()
-{
-    QFile inputFile(":/input.txt");
-    inputFile.open(QIODevice::ReadOnly);
-
-    QTextStream in(&inputFile);
-    QString line = in.readAll();
-    inputFile.close();
-
-    ui->textEdit->setPlainText(line);
-    QTextCursor cursor = ui->textEdit->textCursor();
-    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
-}
-
-
-To use QFile and QTextStream, add the following #includes to textfinder.cpp:
-#include "./ui_textfinder.h"
-#include <QFile>
-#include <QTextStream>
-
-For the on_findButton_clicked() slot, add code to extract the search string and use the QTextEdit::find() function to look for the search string within the text file:
-void TextFinder::on_findButton_clicked()
-{
-    QString searchString = ui->lineEdit->text();
-    ui->textEdit->find(searchString, QTextDocument::FindWholeWords);
-}
-
-
-Add a line to call loadTextFile() in the constructor:
-TextFinder::TextFinder(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::TextFinder)
-{
-    ui->setupUi(this);
-    loadTextFile();
-}
-
-The following line of code automatically calls the on_findButton_clicked() slot in the uic generated ui_textfinder.h file:
-
-QMetaObject::connectSlotsByName(TextFinder);
-
-Create a resource file
-You need a resource file (.qrc) within which you embed the input text file. The input file can be any .txt file with a paragraph of text. Create a text file called input.txt and store it in the textfinder folder.
-
-To add a resource file:
-
-Go to File > New File > Qt > Qt Resource File > Choose.
-{New File dialog}
-
-The Choose the Location dialog opens.
-
-{Choose the Location dialog}
-
-In Name, enter textfinder.
-In Path, enter the path to the project, and select Next or Continue.
-The Project Management dialog opens.
-
-{Project Management dialog}
-
-In Add to project, select TextFinder and select Finish or Done to open the file in the code editor.
-Select Add > Add Prefix.
-In Prefix, replace the default prefix with a slash (/).
-Select Add > Add Files, to locate and add input.txt.
-{Editing resource files}
-
-Add resources to the project file
-For the text file to appear when you run the application, you must specify the resource file as a source file in the CMakeLists.txt file that the wizard created for you:
-
-set(PROJECT_SOURCES
-        main.cpp
-        textfinder.cpp
-        textfinder.h
-        textfinder.ui
-        ${TS_FILES}
-        textfinder.qrc
-)
-
-Build and run your application
-Now that you have all the necessary files, select  to build and run your application.
-
-TutorialsHow To
-
-Copyright © The Qt Company Ltd. and other contributors. Documentation contributions included herein are the copyrights of their respective owners. The documentation provided herein is licensed under the terms of the GNU Free Documentation License version 1.3 as published by the Free Software Foundation. Qt and respective logos are trademarks of The Qt Company Ltd in Finland and/or other countries worldwide. All other trademarks are property of their respective owners.
-
-
-
-Contact Us
-Qt Group
-Our Story
-Brand
-News
-Careers
-Investors
-Qt Products
-Quality Assurance Products
-Licensing
-License Agreement
-Open Source
-Plans and pricing
-Download
-FAQ
-Learn Qt
-For Learners
-For Students and Teachers
-Qt Documentation
-Qt Forum
-Support & Services
-Professional Services
-Customer Success
-Support Services
-Partners
-Qt World
-© 2025 The Qt Company
-Feedback
-Qt Group includes The Qt Company Oy and its global subsidiaries and affiliates.
+{"NONE", "NONE"},
+{"AUTO", "AUTO"},
+{"ab", "Abkhaz"},
+{"ace", "Acehnese"},
+{"ach", "Acholi"},
+{"af", "Afrikaans"},
+{"sq", "Albanian"},
+{"alz", "Alur"},
+{"am", "Amharic"},
+{"ar", "Arabic"},
+{"hy", "Armenian"},
+{"as", "Assamese"},
+{"awa", "Awadhi"},
+{"ay", "Aymara"},
+{"az", "Azerbaijani"},
+{"ban", "Balinese"},
+{"bm", "Bambara"},
+{"ba", "Bashkir"},
+{"eu", "Basque"},
+{"btx", "Batak Karo"},
+{"bts", "Batak Simalungun"},
+{"bbc", "Batak Toba"},
+{"be", "Belarusian"},
+{"bem", "Bemba"},
+{"bn", "Bengali"},
+{"bew", "Betawi"},
+{"bho", "Bhojpuri"},
+{"bik", "Bikol"},
+{"bs", "Bosnian"},
+{"br", "Breton"},
+{"bg", "Bulgarian"},
+{"bua", "Buryat"},
+{"yue", "Cantonese"},
+{"ca", "Catalan"},
+{"ceb", "Cebuano"},
+{"ny", "Chichewa (Nyanja)"},
+{"zh-CN or zh (BCP-47)", "Chinese (Simplified)"},
+{"zh-TW (BCP-47)", "Chinese (Traditional)"},
+{"cv", "Chuvash"},
+{"co", "Corsican"},
+{"crh", "Crimean Tatar"},
+{"hr", "Croatian"},
+{"cs", "Czech"},
+{"da", "Danish"},
+{"din", "Dinka"},
+{"dv", "Divehi"},
+{"doi", "Dogri"},
+{"dov", "Dombe"},
+{"nl", "Dutch"},
+{"dz", "Dzongkha"},
+{"en", "English"},
+{"eo", "Esperanto"},
+{"et", "Estonian"},
+{"ee", "Ewe"},
+{"fj", "Fijian"},
+{"fil or tl", "Filipino (Tagalog)"},
+{"fi", "Finnish"},
+{"fr", "French"},
+{"fr-FR", "French (French)"},
+{"fr-CA", "French (Canadian)"},
+{"fy", "Frisian"},
+{"ff", "Fulfulde"},
+{"gaa", "Ga"},
+{"gl", "Galician"},
+{"lg", "Ganda (Luganda)"},
+{"ka", "Georgian"},
+{"de", "German"},
+{"el", "Greek"},
+{"gn", "Guarani"},
+{"gu", "Gujarati"},
+{"ht", "Haitian Creole"},
+{"cnh", "Hakha Chin"},
+{"ha", "Hausa"},
+{"haw", "Hawaiian"},
+{"iw or he", "Hebrew"},
+{"hil", "Hiligaynon"},
+{"hi", "Hindi"},
+{"hmn", "Hmong"},
+{"hu", "Hungarian"},
+{"hrx", "Hunsrik"},
+{"is", "Icelandic"},
+{"ig", "Igbo"},
+{"ilo", "Iloko"},
+{"id", "Indonesian"},
+{"ga", "Irish"},
+{"it", "Italian"},
+{"ja", "Japanese"},
+{"jw or jv", "Javanese"},
+{"kn", "Kannada"},
+{"pam", "Kapampangan"},
+{"kk", "Kazakh"},
+{"km", "Khmer"},
+{"cgg", "Kiga"},
+{"rw", "Kinyarwanda"},
+{"ktu", "Kituba"},
+{"gom", "Konkani"},
+{"ko", "Korean"},
+{"kri", "Krio"},
+{"ku", "Kurdish (Kurmanji)"},
+{"ckb", "Kurdish (Sorani)"},
+{"ky", "Kyrgyz"},
+{"lo", "Lao"},
+{"ltg", "Latgalian"},
+{"la", "Latin"},
+{"lv", "Latvian"},
+{"lij", "Ligurian"},
+{"li", "Limburgan"},
+{"ln", "Lingala"},
+{"lt", "Lithuanian"},
+{"lmo", "Lombard"},
+{"luo", "Luo"},
+{"lb", "Luxembourgish"},
+{"mk", "Macedonian"},
+{"mai", "Maithili"},
+{"mak", "Makassar"},
+{"mg", "Malagasy"},
+{"ms", "Malay"},
+{"ms-Arab", "Malay (Jawi)"},
+{"ml", "Malayalam"},
+{"mt", "Maltese"},
+{"mi", "Maori"},
+{"mr", "Marathi"},
+{"chm", "Meadow Mari"},
+{"mni-Mtei", "Meiteilon (Manipuri)"},
+{"min", "Minang"},
+{"lus", "Mizo"},
+{"mn", "Mongolian"},
+{"my", "Myanmar (Burmese)"},
+{"nr", "Ndebele (South)"},
+{"new", "Nepalbhasa (Newari)"},
+{"ne", "Nepali"},
+{"nso", "Northern Sotho (Sepedi)"},
+{"no", "Norwegian"},
+{"nus", "Nuer"},
+{"oc", "Occitan"},
+{"or", "Odia (Oriya)"},
+{"om", "Oromo"},
+{"pag", "Pangasinan"},
+{"pap", "Papiamento"},
+{"ps", "Pashto"},
+{"fa", "Persian"},
+{"pl", "Polish"},
+{"pt", "Portuguese"},
+{"pt-PT", "Portuguese (Portugal)"},
+{"pt-BR", "Portuguese (Brazil)"},
+{"pa", "Punjabi"},
+{"pa-Arab", "Punjabi (Shahmukhi)"},
+{"qu", "Quechua"},
+{"rom", "Romani"},
+{"ro", "Romanian"},
+{"rn", "Rundi"},
+{"ru", "Russian"},
+{"sm", "Samoan"},
+{"sg", "Sango"},
+{"sa", "Sanskrit"},
+{"gd", "Scots Gaelic"},
+{"sr", "Serbian"},
+{"st", "Sesotho"},
+{"crs", "Seychellois Creole"},
+{"shn", "Shan"},
+{"sn", "Shona"},
+{"scn", "Sicilian"},
+{"szl", "Silesian"},
+{"sd", "Sindhi"},
+{"si", "Sinhala (Sinhalese)"},
+{"sk", "Slovak"},
+{"sl", "Slovenian"},
+{"so", "Somali"},
+{"es", "Spanish"},
+{"su", "Sundanese"},
+{"sw", "Swahili"},
+{"ss", "Swati"},
+{"sv", "Swedish"},
+{"tg", "Tajik"},
+{"ta", "Tamil"},
+{"tt", "Tatar"},
+{"te", "Telugu"},
+{"tet", "Tetum"},
+{"th", "Thai"},
+{"ti", "Tigrinya"},
+{"ts", "Tsonga"},
+{"tn", "Tswana"},
+{"tr", "Turkish"},
+{"tk", "Turkmen"},
+{"ak", "Twi (Akan)"},
+{"uk", "Ukrainian"},
+{"ur", "Urdu"},
+{"ug", "Uyghur"},
+{"uz", "Uzbek"},
+{"vi", "Vietnamese"},
+{"cy", "Welsh"},
+{"xh", "Xhosa"},
+{"yi", "Yiddish"},
+{"yo", "Yoruba"},
+{"yua", "Yucatec Maya"},
+{"zu", "Zulu"}

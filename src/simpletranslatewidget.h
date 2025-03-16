@@ -31,18 +31,16 @@ public:
     void showTranslationPopup(const QString& translatedText);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent *event) override;
-
-    virtual void mouseMoveEvent(QMouseEvent *event) override;
-
-    virtual void mouseReleaseEvent(QMouseEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
     bool bIsDrag = false;
     QPoint dragPoint;
+
 private:
     Ui::SimpleTranslateWidget* ui;
-
 };
 
 

@@ -6,8 +6,8 @@
 
 #include "simpletranslatewidget.h"
 
-#include <QLabel>
 #include <qboxlayout.h>
+#include <qevent.h>
 #include <qscreen.h>
 
 #include "../ui/ui_SimpleTranslateWidget.h"
@@ -18,16 +18,11 @@ SimpleTranslateWidget::SimpleTranslateWidget(QWidget* parent)
     , ui(new Ui::SimpleTranslateWidget)
 {
     ui->setupUi(this);
+    
+    setLayout(ui->boxLayout);
 
     // 구조 설정 및 위치 지정.
     // ui->outTextLabel->setStyleSheet("background-color: white; padding: 0px; border: 0px solid gray;");
-    ui->outTextLabel->setWordWrap(true);
-    ui->outTextLabel->setMaximumWidth(300);
-
-    setLayout(ui->boxLayout);
-
-    move(QCursor::pos()); // 마우스 위치에 팝업 표시
-
     showTranslationPopup(" ");
 
     show();
@@ -44,11 +39,35 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui->outTextLabel->setText(translatedText);
+    adjustSize();
+
+    constexpr float widthRatio  = 0.20f;
+    constexpr float heightRatio = 0.6f;
+    constexpr float xPosRatio   = 0.85f;
+    constexpr float yPosRatio   = 0.35f;
+    
     if (QScreen* screen = QGuiApplication::primaryScreen())
     {
-        int maxWidth = screen->size().width() / 5;
-        ui->outTextLabel->setMaximumWidth(maxWidth);
-    }
+        const float screenWidthf  = static_cast<float>(screen->size().width());
+        const float screenHeightf = static_cast<float>(screen->size().height());
 
-    adjustSize(); // 내용에 맞게 창 크기 조절
+        const int maxWidth  = screenWidthf * widthRatio;
+        const int maxHeight = screenHeightf * heightRatio;
+        setMaximumWidth(maxWidth);
+        setMaximumHeight(maxHeight);
+
+        ui->outTextLabel->setWordWrap(true);
+
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
+        QPoint targetCenterPos    = QPoint(screenWidthf * xPosRatio, screenHeightf * yPosRatio);
+        QPoint widgetRelCenterPos = rect().center();
+        QPoint targetPos          = targetCenterPos - widgetRelCenterPos;
+
+        move(targetPos);
+    }
+    else
+    {
+        move(QCursor::pos());
+    }
 }

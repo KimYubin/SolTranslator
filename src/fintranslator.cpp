@@ -16,6 +16,8 @@
 FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinTranslator)
 {
     ui->setupUi(this);
+    
+    setLayout(ui->mainLayout);
 
     loadSettings();
 
@@ -38,8 +40,14 @@ FinTranslator::~FinTranslator()
 
 void FinTranslator::setVisible(bool visible)
 {
+    if (visible)
+    {
+        activateWindow();
+    }
+
     miniToTrayAction->setEnabled(visible);
     restoreAction->setEnabled(visible == false);
+
     QWidget::setVisible(visible);
 }
 

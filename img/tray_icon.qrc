@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/img">
-        <file alias="icon_img.png">translate_48dp_E3E3E3_FILL0_wght600_GRAD200_opsz48.png</file>
+        <file alias="icon_img.png">icon.png</file>
     </qresource>
 </RCC>

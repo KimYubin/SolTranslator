@@ -30,18 +30,25 @@ public:
         translateText_Impl(text, sourceLang, targetLang);
     }
 
-
+private:
     void translateText_Impl(const QString& inText
                           , const QString& inSourceLang
                           , const QString& inTargetLang);
 
+protected:
+    virtual void requestTranslate() = 0;
+
+private:
 signals:
     void CompletedTranslate(const QString& TranslateText);
-    
+
 private slots:
     void onReplyFinished(QNetworkReply* reply);
 
-private:
+protected:
+    virtual void replyTranslate(QNetworkReply* reply) = 0;
+
+protected:
     QString originText;
     QString sourceLang;
     QString targetLang;

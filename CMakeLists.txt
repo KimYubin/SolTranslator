@@ -40,6 +40,10 @@ set(PROJECT_SOURCES
         src/RunCopy_Impl_Mac.cpp
         src/FinHashQueue.cpp
         src/FinHashQueue.h
+        src/TlUnitFactory.cpp
+        src/TlUnitFactory.h
+        src/TranslateUnitOpenAi.cpp
+        src/TranslateUnitOpenAi.h
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

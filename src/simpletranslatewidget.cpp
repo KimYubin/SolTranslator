@@ -58,6 +58,7 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
     {
         const float screenWidthf  = static_cast<float>(screen->size().width());
         const float screenHeightf = static_cast<float>(screen->size().height());
+        const float minScreenLength = std::min(screenWidthf, screenHeightf);
 
         const int maxWidth  = screenWidthf * widthRatio;
         const int maxHeight = screenHeightf * heightRatio;

@@ -1,0 +1,26 @@
+﻿//
+// Created by YubinKim on 25/03/17 월.
+//
+
+#ifndef TRANSLATEUNITOPENAI_H
+#define TRANSLATEUNITOPENAI_H
+
+#include "TranslateUnit.h"
+
+
+class TranslateUnitOpenAI final : public TranslateUnit
+{
+    Q_OBJECT
+
+public:
+    TranslateUnitOpenAI(TranslateManager* parent);
+
+protected:
+    virtual void requestTranslate() override;
+    virtual void replyTranslate(QNetworkReply* reply) override;
+
+};
+
+
+
+#endif //TRANSLATEUNITOPENAI_H

@@ -11,6 +11,7 @@
 #include <unordered_set>
 
 #include "FinHashQueue.h"
+#include "TlUnitFactory.h"
 #include "TranslateUnit.h"
 
 class QTextEdit;
@@ -67,7 +68,7 @@ void TranslateManager::translateText(const FunctorContextType<Func>* inTextEdita
                                    , const QString& sourceLang
                                    , const QString& targetLang)
 {
-    TranslateUnit* tranUnit = new TranslateUnit(this);
+    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(this);
     tranUnit->translateText(inTextEditableObj, std::forward<Func>(slotfunctor), text, sourceLang, targetLang);
 }
 

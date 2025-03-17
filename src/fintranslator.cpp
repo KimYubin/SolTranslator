@@ -36,35 +36,29 @@ FinTranslator::~FinTranslator()
     delete ui;
 }
 
+void FinTranslator::setVisible(bool visible)
+{
+    miniToTrayAction->setEnabled(visible);
+    restoreAction->setEnabled(visible == false);
+    QWidget::setVisible(visible);
+}
+
+void FinTranslator::closeEvent(QCloseEvent* event)
+{
+    if (event->spontaneous() == false || isVisible() == false)
+    {
+        return;
+    }
+    if (trayIcon->isVisible())
+    {
+        hide();
+        event->ignore();
+    }
+}
+
 void FinTranslator::onSimpleTranslate(const QString& InOriginText)
 {
     translateManager->translateSimple(InOriginText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
-}
-
-void FinTranslator::loadSettings()
-{
-    loadAPI();
-}
-
-void FinTranslator::loadAPI()
-{
-    QString newAPI = ui->lineEdit_api->text();
-    if (newAPI.isEmpty())
-    {
-        QString oldAPI = ConfigManager::get().getAPI();
-        if (oldAPI.isEmpty() == false)
-        {
-            QString asteriskAPI = oldAPI.first(3) + "***...";
-            ui->lineEdit_api->setText(asteriskAPI);
-        }
-    }
-    else
-    {
-        if (newAPI.last(6) != "***...")
-        {
-            ConfigManager::get().setAPI(newAPI);
-        }
-    }
 }
 
 void FinTranslator::on_findButton_clicked()
@@ -96,23 +90,29 @@ void FinTranslator::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void FinTranslator::setVisible(bool visible)
+void FinTranslator::loadSettings()
 {
-    miniToTrayAction->setEnabled(visible);
-    restoreAction->setEnabled(visible == false);
-    QWidget::setVisible(visible);
+    loadAPI();
 }
 
-void FinTranslator::closeEvent(QCloseEvent* event)
+void FinTranslator::loadAPI()
 {
-    if (event->spontaneous() == false || isVisible() == false)
+    QString newAPI = ui->lineEdit_api->text();
+    if (newAPI.isEmpty())
     {
-        return;
+        QString oldAPI = ConfigManager::get().getAPI();
+        if (oldAPI.isEmpty() == false)
+        {
+            QString asteriskAPI = oldAPI.first(3) + "***...";
+            ui->lineEdit_api->setText(asteriskAPI);
+        }
     }
-    if (trayIcon->isVisible())
+    else
     {
-        hide();
-        event->ignore();
+        if (newAPI.last(6) != "***...")
+        {
+            ConfigManager::get().setAPI(newAPI);
+        }
     }
 }
 

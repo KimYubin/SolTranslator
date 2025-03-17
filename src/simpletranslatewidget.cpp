@@ -85,7 +85,7 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
 
     // QApplication::processEvents();
     // update();
-    // 네트워크 대기로 인한 지연된 상태 탈출
+    // 네트워크 대기로 인한 지연된 업데이트 탈출
     repaint();
 }
 

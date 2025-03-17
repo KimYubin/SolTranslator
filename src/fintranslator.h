@@ -2,6 +2,7 @@
 #define FINTRANSLATOR_H
 
 #include <QWidget>
+#include <QSystemTrayIcon>
 
 
 class TranslateManager;
@@ -37,7 +38,27 @@ private:
     TranslateManager* translateManager;
     GlobalHotKeyManager* globalHotKeyManager; 
 
-    
 
+public:
+    virtual void setVisible(bool visible) override;
+
+protected:
+    virtual void closeEvent(QCloseEvent *event) override;
+
+private slots:
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
+private:
+    void createActions();
+    void createTrayIcon();
+    void setIcon();
+
+    QAction* miniToTrayAction;
+    QAction* restoreAction;
+    QAction* quitAction;
+
+    QSystemTrayIcon* trayIcon;
+    QMenu* trayIconMenu;
 };
+
 #endif // FINTRANSLATOR_H

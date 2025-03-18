@@ -44,6 +44,8 @@ set(PROJECT_SOURCES
         src/TlUnitFactory.h
         src/TranslateUnitOpenAi.cpp
         src/TranslateUnitOpenAi.h
+        src/TranslateUnitGoogle.cpp
+        src/TranslateUnitGoogle.h
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

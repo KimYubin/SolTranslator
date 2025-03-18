@@ -15,8 +15,7 @@
 #include "TranslateManager.h"
 
 TranslateUnitOpenAI::TranslateUnitOpenAI(TranslateManager* parent): TranslateUnit(parent)
-{
-}
+{}
 
 void TranslateUnitOpenAI::requestTranslate()
 {
@@ -52,19 +51,14 @@ void TranslateUnitOpenAI::requestTranslate()
 
 void TranslateUnitOpenAI::replyTranslate(QNetworkReply* reply)
 {
-    QByteArray responseData    = reply->readAll();
-    QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-    QJsonObject jsonObject     = jsonResponse.object();
-    QJsonArray choices         = jsonObject["choices"].toArray();
-    if (!choices.isEmpty())
+    const QByteArray responseData    = reply->readAll();
+    const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
+    const QJsonObject jsonObject     = responseJson.object();
+    const QJsonArray choices         = jsonObject["choices"].toArray();
+    if (choices.isEmpty() == false)
     {
         const QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
 
-        if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
-        {
-            translate_manager->setCacheText(originText, translatedText, targetLang);
-        }
-
-        emit CompletedTranslate(translatedText);
+        updateTranslatedText(translatedText);
     }
 }

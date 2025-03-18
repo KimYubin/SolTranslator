@@ -26,7 +26,7 @@ public:
                      , const QString& sourceLang
                      , const QString& targetLang)
     {
-        connect(this, &TranslateUnit::CompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
+        connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
         translateText_Impl(text, sourceLang, targetLang);
     }
 
@@ -40,13 +40,25 @@ protected:
 
 private:
 signals:
-    void CompletedTranslate(const QString& TranslateText);
+    /** 완료된 번역문을 등록된 슬롯에 적용합니다. */
+    void ApplyCompletedTranslate(const QString& TranslateText);
 
 private slots:
     void onReplyFinished(QNetworkReply* reply);
 
 protected:
+    /** 받은 응답에서 번역문을 추출합니다. */
     virtual void replyTranslate(QNetworkReply* reply) = 0;
+
+    /**
+     * 추출 완료된 번역문에 대한 후처리를 합니다.
+     * 번역문을 등록된 슬롯에 적용하고, 본 객체를 파괴합니다.
+     *
+     * @see replyTranslate
+     * @see ApplyCompletedTranslate
+     * @param translatedText 
+     */
+    void updateTranslatedText(const QString& translatedText);
 
 protected:
     QString originText;

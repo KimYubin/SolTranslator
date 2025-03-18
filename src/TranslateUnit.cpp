@@ -21,8 +21,7 @@ void TranslateUnit::translateText_Impl(const QString& inText
 {
     if (inText.isEmpty())
     {
-        emit CompletedTranslate(inText);
-        deleteLater();
+        updateTranslatedText(inText);
         return;
     }
     if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
@@ -30,8 +29,7 @@ void TranslateUnit::translateText_Impl(const QString& inText
         auto [bIsFind, findCache] = translate_manager->findCachingText(inText, inTargetLang);
         if (bIsFind)
         {
-            emit CompletedTranslate(findCache);
-            deleteLater();
+            updateTranslatedText(findCache);
             return;
         }
     }
@@ -58,5 +56,20 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
     }
     reply->deleteLater();
 
+    deleteLater();
+}
+
+void TranslateUnit::updateTranslatedText(const QString& translatedText)
+{
+    if (translatedText.isEmpty() == false)
+    {
+        if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
+        {
+            translate_manager->setCacheText(originText, translatedText, targetLang);
+        }
+    }
+
+    // 빈 문자열도 적용합니다.
+    emit ApplyCompletedTranslate(translatedText);
     deleteLater();
 }

@@ -32,27 +32,34 @@ public:
     void translateText(const FunctorContextType<Func>* inTextEditableObj
                      , Func&& slotfunctor
                      , const QString& text
-                     , const QString& sourceLang
-                     , const QString& targetLang);
+                     , const LangType sourceLang
+                     , const LangType targetLang);
 
     void translateSimple(const QString& text
-                       , const QString& sourceLang
-                       , const QString& targetLang);
+                       , const LangType sourceLang
+                       , const LangType targetLang);
 
 private slots:
 
 public:
     void setCacheText(const QString& originText
                     , const QString& translateText
-                    , const QString& targetLang);
+                    , const LangType targetLang);
 
-    std::tuple<bool, QString> findCachingText(const QString& originText, const QString& targetLang);
+    std::tuple<bool, QString> findCachingText(const QString& originText, const LangType targetLang);
+
+    void SetEngineType(EngineType inEngine) { currentEngine = inEngine; }
+    EngineType GetCurrentEngineType() const { return currentEngine; };
 
 private:
+    EngineType currentEngine;
+
+    // ~===========
+    // cache
     int maxCacheLength = 50;
     struct TextCache
     {
-        QString targetLang;
+        LangType targetLang;
         QString translateText;
     };
 
@@ -65,8 +72,8 @@ template <typename Func>
 void TranslateManager::translateText(const FunctorContextType<Func>* inTextEditableObj
                                    , Func&& slotfunctor
                                    , const QString& text
-                                   , const QString& sourceLang
-                                   , const QString& targetLang)
+                                   , const LangType sourceLang
+                                   , const LangType targetLang)
 {
     TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(this);
     tranUnit->translateText(inTextEditableObj, std::forward<Func>(slotfunctor), text, sourceLang, targetLang);

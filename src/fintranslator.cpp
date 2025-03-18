@@ -66,7 +66,7 @@ void FinTranslator::closeEvent(QCloseEvent* event)
 
 void FinTranslator::onSimpleTranslate(const QString& InOriginText)
 {
-    translateManager->translateSimple(InOriginText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
+    translateManager->translateSimple(InOriginText, LangType::AUTO, LangType::ko);
 }
 
 void FinTranslator::on_findButton_clicked()
@@ -75,7 +75,7 @@ void FinTranslator::on_findButton_clicked()
 
     const QString orignText = ui->plainTextEditOrigin->toPlainText();
 
-    translateManager->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, Langs::ENGLISH.Name, Langs::KOREAN.Name);
+    translateManager->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, LangType::en, LangType::ko);
 }
 
 void FinTranslator::iconActivated(QSystemTrayIcon::ActivationReason reason)

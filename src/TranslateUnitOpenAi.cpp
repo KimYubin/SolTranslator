@@ -32,8 +32,7 @@ void TranslateUnitOpenAI::requestTranslate()
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(sourceLang, targetLang);
-    std::cout<<QString(StaticPrompt::OPEN_AI_PROMPT).arg(sourceLang, targetLang).toStdString()<<std::endl;
+    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(sourceLang), Langs::GetEnglishName(targetLang));
     messages.append(systemMessage);
 
     QJsonObject userMessage;

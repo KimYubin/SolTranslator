@@ -7,6 +7,8 @@
 #include <QString>
 
 
+enum class LangType;
+
 class FinTypes
 {
 };
@@ -34,21 +36,32 @@ public:
 struct LangInfo
 {
 public:
-    LangInfo(const QString& InName, const QString& InCode): Name(InName), Code(InCode)    {
-    };
-    QString Name;
-    QString Code;
+    LangInfo(const LangType inLangType, const QString& inCodeName, const QString& inEngName, const QString& inEndonymName)
+        : langType(inLangType)
+        , codeName(inCodeName)
+        , engName(inEngName)
+        , endonymName(inEndonymName) {}
+
+
+    LangType langType;   // 언어 타입
+    QString codeName;    // ISO 639 언어 코드
+    QString engName;     // 영명
+    QString endonymName; // 사용 지역 내에서 사용하는 자칭 이름
 };
 
 struct Langs
 {
 public:
-    static const LangInfo ENGLISH;
-    static const LangInfo KOREAN;
+    static LangInfo GetLangInfo(const LangType inLangType);
+    static QString GetCodeName(const LangType inLangType);
+    static QString GetEnglishName(const LangType inLangType);
+    static QString GetEndonymName(const LangType inLangType);
+private:
+    static const std::unordered_map<LangType, LangInfo> langs;
 };
 
 
-enum class Lang
+enum class LangType
 {
     NONE, AUTO, ab, ace, ach, af, sq, alz, am, ar, hy, as, awa, ay, az, ban, bm, ba, eu, btx, bts, bbc, be, bem, bn, bew, bho, bik, bs, br, bg, bua
   , yue, ca, ceb, ny, zh_CN, zh_TW, cv, co, crh, hr, cs, da, din, dv, doi, dov, nl, dz, en, eo, et, ee, fj, fil, fi, fr, fr_FR, fr_CA, fy, ff, gaa, gl

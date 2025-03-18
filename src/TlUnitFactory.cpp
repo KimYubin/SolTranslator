@@ -7,27 +7,28 @@
 #include <iostream>
 
 #include "magic_enum.hpp"
+#include "TranslateManager.h"
 #include "TranslateUnit.h"
 #include "TranslateUnitGoogle.h"
 #include "TranslateUnitOpenAi.h"
 
 TlUnitFactory::TlUnitFactory(QObject* parent)
 {
-    CurrentEngine = EngineType::Google;
 }
 
-TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* parent)
+TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* translateManager)
 {
     TranslateUnit* tlUnit = nullptr;
-    switch (CurrentEngine)
+    const EngineType currentEngine = translateManager->GetCurrentEngineType();
+    switch (currentEngine)
     {
     case EngineType::None:
         break;
     case EngineType::Google:
-        tlUnit = new TranslateUnitGoogle(parent);
+        tlUnit = new TranslateUnitGoogle(translateManager);
         break;
     case EngineType::OpenAI:
-        tlUnit = new TranslateUnitOpenAI(parent);
+        tlUnit = new TranslateUnitOpenAI(translateManager);
         break;
     case EngineType::Size:
         break;
@@ -38,7 +39,7 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* parent)
     if (const char* className = tlUnit ? tlUnit->metaObject()->className() : nullptr)
     {
         std::string classNameSubStr = std::string(className).substr(std::size("TranslateUnit") - 1);
-        if (magic_enum::enum_name(CurrentEngine) == classNameSubStr)
+        if (magic_enum::enum_name(currentEngine) == classNameSubStr)
         {
             bValid = true;
         }
@@ -51,7 +52,3 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* parent)
     return tlUnit;
 }
 
-void TlUnitFactory::SetEngine(EngineType NewEngine)
-{
-    CurrentEngine = NewEngine;
-}

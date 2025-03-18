@@ -15,8 +15,8 @@ TranslateUnitGoogle::TranslateUnitGoogle(TranslateManager* parent): TranslateUni
 void TranslateUnitGoogle::requestTranslate()
 {
     QUrl url = QString("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3").arg(
-        "en"// sourceLang
-      , "ko"// targetLang
+        Langs::GetCodeName(sourceLang)
+      , Langs::GetCodeName(targetLang)
       , QUrl::toPercentEncoding(originText));
 
     QNetworkRequest request(url);

@@ -34,13 +34,8 @@ public:
         return *instance;
     }
 
-    TranslateUnit* NewTranslateUnit(TranslateManager* parent);
+    TranslateUnit* NewTranslateUnit(TranslateManager* translateManager);
 
-
-    void SetEngine(EngineType NewEngine);
-
-private:
-    EngineType CurrentEngine;
 };
 
 

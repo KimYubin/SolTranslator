@@ -8,6 +8,8 @@
 #include <QNetworkAccessManager>
 #include <QTextEdit>
 
+#include "FinTypes.h"
+
 
 class QTextEdit;
 class TranslateManager;
@@ -23,8 +25,8 @@ public:
     void translateText(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
                      , Func&& slotfunctor
                      , const QString& text
-                     , const QString& sourceLang
-                     , const QString& targetLang)
+                     , const LangType sourceLang
+                     , const LangType targetLang)
     {
         connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
         translateText_Impl(text, sourceLang, targetLang);
@@ -32,8 +34,8 @@ public:
 
 private:
     void translateText_Impl(const QString& inText
-                          , const QString& inSourceLang
-                          , const QString& inTargetLang);
+                          , const LangType inSourceLang
+                          , const LangType inTargetLang);
 
 protected:
     virtual void requestTranslate() = 0;
@@ -62,8 +64,8 @@ protected:
 
 protected:
     QString originText;
-    QString sourceLang;
-    QString targetLang;
+    LangType sourceLang;
+    LangType targetLang;
 };
 
 

@@ -16,8 +16,8 @@ TranslateUnit::TranslateUnit(TranslateManager* parent) : QNetworkAccessManager(p
 }
 
 void TranslateUnit::translateText_Impl(const QString& inText
-                                     , const QString& inSourceLang
-                                     , const QString& inTargetLang)
+                                     , const LangType inSourceLang
+                                     , const LangType inTargetLang)
 {
     if (inText.isEmpty())
     {

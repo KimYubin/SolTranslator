@@ -13,18 +13,18 @@
 
 TranslateManager::TranslateManager(QObject* parent): QObject(parent)
 {
+    SetEngineType(EngineType::OpenAI);
 }
 
-
 void TranslateManager::translateSimple(const QString& text
-                                     , const QString& sourceLang
-                                     , const QString& targetLang)
+                                     , const LangType sourceLang
+                                     , const LangType targetLang)
 {
     SimpleTranslateWidget* simple = new SimpleTranslateWidget();
     translateText(simple, &SimpleTranslateWidget::showTranslationPopup, text, sourceLang, targetLang);
 }
 
-void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const QString& targetLang)
+void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
 {
     if (cachingTranslateText.size() >= maxCacheLength)
     {
@@ -33,7 +33,7 @@ void TranslateManager::setCacheText(const QString& originText, const QString& tr
     cachingTranslateText.push(originText, {targetLang, translateText});
 }
 
-std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const QString& targetLang)
+std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const LangType targetLang)
 {
     std::tuple<bool, QString> res = {false, QString()};
 

@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/save">
-        <file>textfinder.txt</file>
-    </qresource>
-</RCC>

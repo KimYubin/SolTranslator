@@ -31,6 +31,19 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
     setIcon();
 
     trayIcon->show();
+
+    QFile theme(":/theme/dark.qss");
+    if (!theme.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+
+    else
+    {
+        theme.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&theme);
+        setStyleSheet(ts.readAll());
+    }
 }
 
 FinTranslator::~FinTranslator()
@@ -147,11 +160,12 @@ void FinTranslator::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setVisible(true);
+    trayIcon->setToolTip("FinTranslator");
 }
 
 void FinTranslator::setIcon()
 {
-    QIcon icon = QIcon(":/img/icon_img.png");
+    QIcon icon = QIcon(":/image/icon_img.png");
     trayIcon->setIcon(icon);
     setWindowIcon(icon);
 }

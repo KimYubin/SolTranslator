@@ -52,13 +52,13 @@ add_library(qhotkey src/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)
 
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FinTranslator
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        textfinder.qrc
+            MANUAL_FINALIZATION
+            ${PROJECT_SOURCES}
 
-        img/tray_icon.qrc
+            resource/theme/theme.qrc
+            resource/image/image.qrc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET FinTranslator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

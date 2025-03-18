@@ -26,27 +26,22 @@ void TranslateManager::translateSimple(const QString& text
 
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
 {
-    if (cachingTranslateText.size() >= maxCacheLength)
+    // 중복은 순서 최신화
+    cachingTranslateText.push({originText, currentEngine, targetLang}, translateText);
+    if (cachingTranslateText.size() > maxCacheLength)
     {
         cachingTranslateText.pop();
     }
-    cachingTranslateText.push(originText, {targetLang, translateText});
 }
 
 std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const LangType targetLang)
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    if (const TextCache* text_cache = cachingTranslateText.find(originText))
+    const TextCacheKey findCacheKey = TextCacheKey{originText, currentEngine, targetLang};
+    if (const QString* text_cache = cachingTranslateText.find(findCacheKey))
     {
-        TextCache newTextCache = std::move(*text_cache);
-        if (newTextCache.targetLang == targetLang)
-        {
-            res = {true, newTextCache.translateText};
-        }
-
-        // cachingTranslateText.erase(originText);
-        cachingTranslateText.push(originText, newTextCache);
+        res = {true, *text_cache};
     }
 
     return res;

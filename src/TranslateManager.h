@@ -57,13 +57,39 @@ private:
     // ~===========
     // cache
     int maxCacheLength = 50;
-    struct TextCache
+
+    struct TextCacheKey
     {
+        QString originText;
+        EngineType engineType;
         LangType targetLang;
-        QString translateText;
     };
 
-    hash_queue<QString, TextCache> cachingTranslateText;
+    struct cache_ky_hasher
+    {
+        size_t operator()(const TextCacheKey& inKy) const
+        {
+            return std::hash<::QString>()(inKy.originText
+                + QString::fromStdString(std::to_string(EnumToInt(inKy.engineType)) + std::to_string(EnumToInt(inKy.targetLang))));
+        }
+    };
+
+    struct cache_ky_eq
+    {
+        bool operator()(const TextCacheKey& ACacheKy, const TextCacheKey& BCacheKy) const
+        {
+            return (ACacheKy.engineType == BCacheKy.engineType)
+                    && (ACacheKy.targetLang == BCacheKy.targetLang)
+                    && (ACacheKy.originText == BCacheKy.originText);
+        }
+    };
+
+    /**
+     * 캐시된 번역문을 관리합니다.
+     * 원문, 엔진, 목표언어를 key로 사용합니다.
+     * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
+     */
+    hash_queue<TextCacheKey, QString, cache_ky_hasher, cache_ky_eq> cachingTranslateText;
 };
 
 

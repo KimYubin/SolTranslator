@@ -10,16 +10,6 @@
 class TranslateManager;
 class TranslateUnit;
 
-enum class EngineType
-{
-    None = 0
-
-  , Google
-  , OpenAI
-
-  , Size
-};
-
 class TlUnitFactory : public QObject
 {
     Q_OBJECT

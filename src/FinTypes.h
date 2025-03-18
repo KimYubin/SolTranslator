@@ -33,6 +33,30 @@ public:
     static const QString OPEN_AI_PROMPT;
 };
 
+/**
+ * enum class 값을 베이스 타입 값으로 static casting합니다.
+ * 
+ * @tparam E enum class Only
+ * @param e 변환 대상 enum
+ * @return static_cast<uint8>(e). std::underlying_type_t<E>(e)
+ */
+template <typename E>
+constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToInt(E e) noexcept
+{
+    return static_cast<std::underlying_type_t<E>>(e);
+}
+
+
+enum class EngineType
+{
+    None = 0
+
+  , Google
+  , OpenAI
+
+  , Size
+};
+
 struct LangInfo
 {
 public:

@@ -54,7 +54,8 @@ protected:
 
     /**
      * 추출 완료된 번역문에 대한 후처리를 합니다.
-     * 번역문을 등록된 슬롯에 적용하고, 본 객체를 파괴합니다.
+     * 캐시를 업데이트하고, 
+     * 번역문을 등록된 signal을 발동하고, 본 객체를 파괴합니다.
      *
      * @see replyTranslate
      * @see ApplyCompletedTranslate

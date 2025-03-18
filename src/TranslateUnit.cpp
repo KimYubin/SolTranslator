@@ -24,19 +24,23 @@ void TranslateUnit::translateText_Impl(const QString& inText
         updateTranslatedText(inText);
         return;
     }
+
+    // cache 텍스트 관련 작업에서 사용되기 때문에, 먼저 업데이트
+    originText = inText;
+    sourceLang = inSourceLang;
+    targetLang = inTargetLang;
+
     if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
     {
         auto [bIsFind, findCache] = translate_manager->findCachingText(inText, inTargetLang);
         if (bIsFind)
         {
+            // 캐싱되어있다면 업데이트 합니다.
+            // 내부에서 캐시의 순서를 최신으로 변경합니다.
             updateTranslatedText(findCache);
             return;
         }
     }
-
-    originText = inText;
-    sourceLang = inSourceLang;
-    targetLang = inTargetLang;
 
     // to subclass
     requestTranslate();

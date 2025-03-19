@@ -25,7 +25,7 @@ class SimpleTranslatePopup : public QWidget
     Q_OBJECT
 
 public:
-    SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    explicit SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
 
     ~SimpleTranslatePopup() override;
 

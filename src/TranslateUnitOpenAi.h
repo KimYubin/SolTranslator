@@ -13,7 +13,7 @@ class TranslateUnitOpenAI final : public TranslateUnit
     Q_OBJECT
 
 public:
-    TranslateUnitOpenAI(TranslateManager* parent);
+    explicit TranslateUnitOpenAI(TranslateManager* parent);
 
 protected:
     virtual void requestTranslate() override;

@@ -15,7 +15,7 @@ class TlUnitFactory : public QObject
     Q_OBJECT
 
 private:
-    TlUnitFactory(QObject* parent = nullptr);
+    explicit TlUnitFactory(QObject* parent = nullptr);
 
 public:
     static TlUnitFactory& get()

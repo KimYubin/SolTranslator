@@ -16,7 +16,7 @@ class DataManager : public AbstractManager
     Q_OBJECT
 
 public:
-    DataManager(FinTranslatorCore* parent);
+    explicit DataManager(FinTranslatorCore* parent);
 
     cache_queue loadTranslateCache();
     bool saveTranslateCache(const cache_queue& CacheTextQueue);

@@ -18,7 +18,7 @@ class GlobalHotKeyManager : public AbstractManager
     Q_OBJECT
 
 public:
-    GlobalHotKeyManager(FinTranslatorCore* parent);
+    explicit GlobalHotKeyManager(FinTranslatorCore* parent);
 
 private slots:
     void RegisterHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);

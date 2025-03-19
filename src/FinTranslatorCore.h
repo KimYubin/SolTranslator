@@ -17,8 +17,8 @@ class FinTranslatorCore : public QObject
     Q_OBJECT
 
 public:
-    FinTranslatorCore(QObject* parent = nullptr);
-    ~FinTranslatorCore();
+    explicit FinTranslatorCore(QObject* parent = nullptr);
+    ~FinTranslatorCore() override;
 
 public:
     void onSimpleTranslate(const QString& InOriginText);

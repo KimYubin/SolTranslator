@@ -14,7 +14,7 @@ class AbstractManager : public QObject
     Q_OBJECT
 
 public:
-    AbstractManager(FinTranslatorCore* parent);
+    explicit AbstractManager(FinTranslatorCore* parent);
 
 protected:
     FinTranslatorCore* getFinCore() const;

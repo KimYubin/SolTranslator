@@ -27,8 +27,8 @@ class FinTranslatorMainWidget : public QWidget
     Q_OBJECT
     
 public:
-    FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
-    ~FinTranslatorMainWidget();
+    explicit FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    ~FinTranslatorMainWidget() override;
 
     virtual void setVisible(bool visible) override;
 

@@ -28,7 +28,7 @@ class TranslateManager : public AbstractManager
     Q_OBJECT
 
 public:
-    TranslateManager(FinTranslatorCore* parent);
+    explicit TranslateManager(FinTranslatorCore* parent);
 
     template <typename Func>
     void translateText(const FunctorContextType<Func>* inTextEditableObj

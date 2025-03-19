@@ -19,7 +19,7 @@ class TranslateUnit : public QNetworkAccessManager
     Q_OBJECT
 
 public:
-    TranslateUnit(TranslateManager* parent);
+    explicit TranslateUnit(TranslateManager* parent);
 
     template <typename Func>
     void translateText(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj

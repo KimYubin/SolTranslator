@@ -51,6 +51,11 @@ set(PROJECT_SOURCES
         src/SimpleTranslatePopup.cpp
         src/SimpleTranslatePopup.h
         ui/SimpleTranslatePopup.ui
+        src/FinTranslatorCore.cpp
+        src/FinTranslatorCore.h
+        src/FinTranslatorMainWidget.cpp
+        src/FinTranslatorMainWidget.h
+        ui/FinTranslatorMainWidget.ui
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

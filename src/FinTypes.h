@@ -25,6 +25,8 @@ struct StaticPath
 {
 public:
     static const QString API_KEY_PATH;
+
+    static const QString CACHE_QUEUE_SAVE_PATH;
 };
 
 struct StaticPrompt

@@ -5,6 +5,7 @@
 #include <QSystemTrayIcon>
 
 
+class DataManager;
 class TranslateManager;
 class GlobalHotKeyManager;
 QT_BEGIN_NAMESPACE
@@ -47,6 +48,7 @@ private:
 
     Ui::FinTranslator* ui;
 
+    DataManager* dataManager;
     TranslateManager* translateManager;
     GlobalHotKeyManager* globalHotKeyManager;
 

@@ -47,3 +47,13 @@ std::tuple<bool, QString> TranslateManager::findCachingText(const QString& origi
     return res;
 }
 
+void TranslateManager::updateNewCacheQueue(cache_queue&& newCache)
+{
+    cachingTranslateText = std::move(newCache);
+}
+
+const cache_queue& TranslateManager::getCacheQueue() const
+{
+    return cachingTranslateText;
+}
+

@@ -8,6 +8,7 @@
 
 
 #include "ConfigManager.h"
+#include "DataManager.h"
 #include "FinTypes.h"
 #include "GlobalHotKeyManager.h"
 #include "TranslateManager.h"
@@ -21,8 +22,13 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
 
     loadSettings();
 
+    dataManager         = new DataManager(this);
     translateManager    = new TranslateManager(this);
     globalHotKeyManager = new GlobalHotKeyManager(this);
+
+
+    // 캐시 로드
+    translateManager->updateNewCacheQueue(dataManager->loadTranslateCache());
 
     createActions();
     createTrayIcon();
@@ -48,6 +54,9 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
 
 FinTranslator::~FinTranslator()
 {
+    // 캐시 저장
+    dataManager->saveTranslateCache(translateManager->getCacheQueue());
+
     delete ui;
 }
 
@@ -98,7 +107,7 @@ void FinTranslator::iconActivated(QSystemTrayIcon::ActivationReason reason)
     case QSystemTrayIcon::Trigger:
         break;
     case QSystemTrayIcon::DoubleClick:
-        showNormal();
+        show();
         break;
     case QSystemTrayIcon::MiddleClick:
         break;
@@ -165,7 +174,7 @@ void FinTranslator::createTrayIcon()
 
 void FinTranslator::setIcon()
 {
-    QIcon icon = QIcon(":/image/icon_img.png");
+    QIcon icon = QIcon(":/img/icon_img.png");
     trayIcon->setIcon(icon);
     setWindowIcon(icon);
 }

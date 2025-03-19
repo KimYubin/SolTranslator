@@ -5,6 +5,10 @@
 #ifndef FINHASHQUEUE_H
 #define FINHASHQUEUE_H
 #include <unordered_map>
+#include <QString>
+#include <QCoreApplication>
+
+#include "FinTypes.h"
 
 
 /**
@@ -18,10 +22,57 @@ class hash_queue
     using pair_list = std::list<std::pair<_Kty, _Valty>>;
 
     pair_list keyValQueue; // key, value queue
-	
+
     std::unordered_map<_Kty, typename pair_list::iterator, _Hasher, _Keyeq> keyListHash; // key, list_iterator 매핑 테이블
 
 public:
+    hash_queue() = default;
+
+    // ~===================
+    // copy & move
+    hash_queue(const hash_queue& inOther)
+        : keyValQueue(inOther.keyValQueue)
+    {
+        keyListHash.reserve(inOther.keyListHash.size());
+        for (auto it = keyValQueue.begin(); it != keyValQueue.end(); ++it)
+        {
+            keyListHash[it->first] = it;
+        }
+    }
+
+    hash_queue(hash_queue&& inOther) noexcept
+        : keyValQueue(std::move(inOther.keyValQueue))
+        , keyListHash(std::move(inOther.keyListHash))
+    {}
+
+    hash_queue& operator=(const hash_queue& inOther)
+    {
+        if (this == &inOther)
+            return *this;
+
+        keyValQueue = inOther.keyValQueue;
+        keyListHash.reserve(inOther.keyListHash.size());
+        for (auto it = keyValQueue.begin(); it != keyValQueue.end(); ++it)
+        {
+            keyListHash[it->first] = it;
+        }
+        return *this;
+    }
+
+    hash_queue& operator=(hash_queue&& inOther) noexcept
+    {
+        if (this == &inOther)
+            return *this;
+
+        keyValQueue = std::move(inOther.keyValQueue);
+        keyListHash = std::move(inOther.keyListHash);
+        return *this;
+    }
+
+
+    // ~=====================
+    // queue interface
+
     void push(const _Kty& key, const _Valty& value)
     {
         // 순서 유지를 위해, 이미 존재할 경우 삭제 후 다시 삽입
@@ -88,7 +139,77 @@ public:
     {
         return keyValQueue.size();
     }
+
+    //~ =====================
+    // 반복자
+    // 반복자 타입 정의
+    using iterator       = typename pair_list::iterator;
+    using const_iterator = typename pair_list::const_iterator;
+
+    // begin(), end() 제공
+    iterator begin() noexcept
+    {
+        return keyValQueue.begin();
+    }
+
+    iterator end() noexcept
+    {
+        return keyValQueue.end();
+    }
+
+    const_iterator begin() const noexcept
+    {
+        return keyValQueue.begin();
+    }
+
+    const_iterator end() const noexcept
+    {
+        return keyValQueue.end();
+    }
+
+    const_iterator cbegin() const noexcept
+    {
+        return keyValQueue.cbegin();
+    }
+
+    const_iterator cend() const noexcept
+    {
+        return keyValQueue.cend();
+    }
 };
+
+
+struct TextCacheKey
+{
+    QString originText;
+    EngineType engineType;
+    LangType targetLang;
+};
+
+struct cache_ky_hasher
+{
+    size_t operator()(const TextCacheKey& inKy) const
+    {
+        return std::hash<::QString>()(inKy.originText + QChar(EnumToInt(inKy.engineType)) + QChar(EnumToInt(inKy.targetLang)));
+    }
+};
+
+struct cache_ky_eq
+{
+    bool operator()(const TextCacheKey& ACacheKy, const TextCacheKey& BCacheKy) const
+    {
+        return (ACacheKy.engineType == BCacheKy.engineType)
+                && (ACacheKy.targetLang == BCacheKy.targetLang)
+                && (ACacheKy.originText == BCacheKy.originText);
+    }
+};
+
+/**
+ * 캐시된 번역문을 관리합니다.
+ * 원문, 엔진, 목표언어를 key로 사용합니다.
+ * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
+ */
+using cache_queue = hash_queue<TextCacheKey, QString, cache_ky_hasher, cache_ky_eq>;
 
 
 #endif //FINHASHQUEUE_H

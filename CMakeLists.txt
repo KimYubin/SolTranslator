@@ -16,9 +16,13 @@ find_package(Qt${QT_VERSION_MAJOR}  REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/fintranslator.cpp
-        src/fintranslator.h
-        ui/fintranslator.ui
+
+        src/FinTranslatorCore.cpp
+        src/FinTranslatorCore.h
+        src/FinTranslatorMainWidget.cpp
+        src/FinTranslatorMainWidget.h
+        ui/FinTranslatorMainWidget.ui
+
         src/TranslateManager.cpp
         src/TranslateManager.h
         src/TranslateUnit.cpp
@@ -28,7 +32,7 @@ set(PROJECT_SOURCES
         src/FinTypes.cpp
         src/FinTypes.h
         src/magic_enum.hpp
-        
+
         src/GlobalHotKeyManager.cpp
         src/GlobalHotKeyManager.h
         src/RunCopKey.cpp
@@ -51,11 +55,7 @@ set(PROJECT_SOURCES
         src/SimpleTranslatePopup.cpp
         src/SimpleTranslatePopup.h
         ui/SimpleTranslatePopup.ui
-        src/FinTranslatorCore.cpp
-        src/FinTranslatorCore.h
-        src/FinTranslatorMainWidget.cpp
-        src/FinTranslatorMainWidget.h
-        ui/FinTranslatorMainWidget.ui
+
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

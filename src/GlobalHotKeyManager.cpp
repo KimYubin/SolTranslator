@@ -13,7 +13,6 @@
 #include <QClipboard>
 #include <QThread>
 
-#include "fintranslator.h"
 #include "FinTranslatorCore.h"
 #include "RunCopKey.h"
 

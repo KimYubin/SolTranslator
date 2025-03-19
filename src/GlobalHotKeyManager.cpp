@@ -16,9 +16,9 @@
 #include "fintranslator.h"
 #include "RunCopKey.h"
 
-GlobalHotKeyManager::GlobalHotKeyManager(QObject* parent): QObject(parent)
+GlobalHotKeyManager::GlobalHotKeyManager(FinTranslator* parent): AbstractManager(parent)
 {
-    RegisterHotKey(HotkeyType::simpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
+    RegisterHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
 }
 
 void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)
@@ -36,6 +36,7 @@ void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySe
         hotkey = findIt->second;
         hotkey->setShortcut(shortcut, true);
     }
+
     QObject::connect(hotkey, &QHotkey::activated, this, std::bind(InFunction, this));
 }
 
@@ -55,7 +56,7 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             const QString selectedText = QApplication::clipboard()->text();
-            if (FinTranslator* Fin = dynamic_cast<FinTranslator*>(parent()))
+            if (FinTranslator* Fin = getFinTranslator())
             {
                 Fin->onSimpleTranslate(selectedText);
             }

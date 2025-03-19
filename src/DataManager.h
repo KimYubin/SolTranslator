@@ -6,15 +6,16 @@
 #define SAVEMANAGER_H
 #include <QObject>
 
+#include "AbstractManager.h"
 #include "FinHashQueue.h"
 
 
-class DataManager : public QObject
+class DataManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    DataManager(QObject* parent = nullptr);
+    DataManager(FinTranslator* parent);
 
     cache_queue loadTranslateCache();
     bool saveTranslateCache(const cache_queue& CacheTextQueue);

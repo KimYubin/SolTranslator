@@ -11,7 +11,7 @@
 #include "simpletranslatewidget.h"
 #include "TranslateUnit.h"
 
-TranslateManager::TranslateManager(QObject* parent): QObject(parent)
+TranslateManager::TranslateManager(FinTranslator* parent): AbstractManager(parent)
 {
     SetEngineType(EngineType::OpenAI);
 }

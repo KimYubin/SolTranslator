@@ -48,6 +48,8 @@ set(PROJECT_SOURCES
         src/TranslateUnitGoogle.h
         src/DataManager.cpp
         src/DataManager.h
+        src/AbstractManager.cpp
+        src/AbstractManager.h
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

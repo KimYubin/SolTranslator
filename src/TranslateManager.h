@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <unordered_set>
 
+#include "AbstractManager.h"
 #include "FinHashQueue.h"
 #include "TlUnitFactory.h"
 #include "TranslateUnit.h"
@@ -21,12 +22,12 @@ template <typename Func>
 using FunctorContextType = typename QtPrivate::ContextTypeForFunctor<Func>::ContextType;
 
 
-class TranslateManager : public QObject
+class TranslateManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    TranslateManager(QObject* parent = nullptr);
+    TranslateManager(FinTranslator* parent);
 
     template <typename Func>
     void translateText(const FunctorContextType<Func>* inTextEditableObj

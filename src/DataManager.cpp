@@ -12,8 +12,9 @@
 
 #include "magic_enum.hpp"
 
-DataManager::DataManager(QObject* parent) :QObject(parent)
+DataManager::DataManager(FinTranslator* parent): AbstractManager(parent)
 {
+    
 }
 
 cache_queue DataManager::loadTranslateCache()

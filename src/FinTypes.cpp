@@ -12,7 +12,7 @@ const QString EngineName::OPEN_AI = "openai";
 
 
 const QString StaticPath::API_KEY_PATH = "./save/api";
-const QString StaticPath::CACHE_QUEUE_SAVE_PATH = "./save/cache_save.json";
+const QString StaticPath::CACHE_QUEUE_SAVE_PATH = "./save/Translate_History.json";
 
 
 const QString StaticPrompt::OPEN_AI_PROMPT =

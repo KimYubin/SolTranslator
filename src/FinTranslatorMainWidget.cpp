@@ -5,6 +5,9 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_FinTranslatorMainWidget.h" resolved
 
 #include "FinTranslatorMainWidget.h"
+
+#include <iostream>
+
 #include "../ui/ui_FinTranslatorMainWidget.h"
 
 #include <QFile>
@@ -16,19 +19,20 @@
 #include "ConfigManager.h"
 #include <qevent.h>
 
-#include "FinTranslatorCore.h"
-#include "FinTypes.h"
+#include "TextEditTranslateWidget.h"
 #include "TranslateManager.h"
 
 FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent), finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
 {
     ui->setupUi(this);
-    
+
     setLayout(ui->mainLayout);
 
-    loadSettings();
-    
+    // addTab에서 부모 추가되므로, 부모추가 금지. 
+    textEditTranslate = new TextEditTranslateWidget(finCore);
+    ui->mainTabWidget->addTab(textEditTranslate, "TranslateText");
+
     createActions();
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
@@ -37,18 +41,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     trayIcon->show();
 
-    QFile theme(":/theme/dark.qss");
-    if (!theme.exists())
-    {
-        printf("Unable to set stylesheet, file not found\n");
-    }
+    applyTheme();
 
-    else
-    {
-        theme.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&theme);
-        setStyleSheet(ts.readAll());
-    }
+    setWindowTitle(tr("FinTranslator"));
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()
@@ -69,6 +64,21 @@ void FinTranslatorMainWidget::setVisible(bool visible)
     QWidget::setVisible(visible);
 }
 
+void FinTranslatorMainWidget::applyTheme()
+{
+    QFile theme(":/theme/dark.qss");
+    if (!theme.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        theme.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&theme);
+        setStyleSheet(ts.readAll());
+    }
+}
+
 void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
 {
     if (event->spontaneous() == false || isVisible() == false)
@@ -80,15 +90,6 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
         hide();
         event->ignore();
     }
-}
-
-void FinTranslatorMainWidget::on_findButton_clicked()
-{
-    loadAPI();
-
-    const QString orignText = ui->plainTextEditOrigin->toPlainText();
-
-    finCore->getTranslateManager()->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, LangType::en, LangType::ko);
 }
 
 void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -108,32 +109,6 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
         break;
     default:
         ;
-    }
-}
-
-void FinTranslatorMainWidget::loadSettings()
-{
-    loadAPI();
-}
-
-void FinTranslatorMainWidget::loadAPI()
-{
-    QString newAPI = ui->lineEdit_api->text();
-    if (newAPI.isEmpty())
-    {
-        QString oldAPI = ConfigManager::get().getAPI();
-        if (oldAPI.isEmpty() == false)
-        {
-            QString asteriskAPI = oldAPI.first(3) + "***...";
-            ui->lineEdit_api->setText(asteriskAPI);
-        }
-    }
-    else
-    {
-        if (newAPI.last(6) != "***...")
-        {
-            ConfigManager::get().setAPI(newAPI);
-        }
     }
 }
 
@@ -160,7 +135,7 @@ void FinTranslatorMainWidget::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setVisible(true);
-    trayIcon->setToolTip("FinTranslatorMainWidget");
+    trayIcon->setToolTip("FinTranslator");
 }
 
 void FinTranslatorMainWidget::setIcon()

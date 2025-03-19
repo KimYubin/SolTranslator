@@ -55,6 +55,9 @@ set(PROJECT_SOURCES
         src/SimpleTranslatePopup.cpp
         src/SimpleTranslatePopup.h
         ui/SimpleTranslatePopup.ui
+        src/TextEditTranslateWidget.cpp
+        src/TextEditTranslateWidget.h
+        ui/TextEditTranslateWidget.ui
 
 )
 

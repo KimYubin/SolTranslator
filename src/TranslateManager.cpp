@@ -8,7 +8,7 @@
 #include "ConfigManager.h"
 #include "FinHashQueue.h"
 #include "FinTypes.h"
-#include "simpletranslatewidget.h"
+#include "SimpleTranslatePopup.h"
 #include "TranslateUnit.h"
 
 TranslateManager::TranslateManager(FinTranslator* parent): AbstractManager(parent)
@@ -20,8 +20,8 @@ void TranslateManager::translateSimple(const QString& text
                                      , const LangType sourceLang
                                      , const LangType targetLang)
 {
-    SimpleTranslateWidget* simple = new SimpleTranslateWidget();
-    translateText(simple, &SimpleTranslateWidget::showTranslationPopup, text, sourceLang, targetLang);
+    SimpleTranslatePopup* simple = new SimpleTranslatePopup();
+    translateText(simple, &SimpleTranslatePopup::showTranslationPopup, text, sourceLang, targetLang);
 }
 
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)

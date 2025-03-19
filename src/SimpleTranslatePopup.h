@@ -2,8 +2,8 @@
 // Created by YubinKim on 25/03/12 수.
 //
 
-#ifndef SIMPLETRANSLATEWIDGET_H
-#define SIMPLETRANSLATEWIDGET_H
+#ifndef SIMPLETRANSLATEPOPUP_H
+#define SIMPLETRANSLATEPOPUP_H
 
 #include <QWidget>
 
@@ -13,20 +13,20 @@ QT_BEGIN_NAMESPACE
 
 namespace Ui
 {
-class SimpleTranslateWidget;
+class SimpleTranslatePopup;
 }
 
 QT_END_NAMESPACE
 
 
-class SimpleTranslateWidget : public QWidget
+class SimpleTranslatePopup : public QWidget
 {
     Q_OBJECT
 
 public:
-    SimpleTranslateWidget(QWidget* parent = nullptr);
+    SimpleTranslatePopup(QWidget* parent = nullptr);
 
-    ~SimpleTranslateWidget() override;
+    ~SimpleTranslatePopup() override;
 
     void showTranslationPopup(const QString& translatedText);
 
@@ -40,8 +40,8 @@ private:
     QPoint dragPoint;
 
 private:
-    Ui::SimpleTranslateWidget* ui;
+    Ui::SimpleTranslatePopup* ui;
 };
 
 
-#endif //SIMPLETRANSLATEWIDGET_H
+#endif //SIMPLETRANSLATEPOPUP_H

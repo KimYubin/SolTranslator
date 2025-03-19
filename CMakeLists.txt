@@ -28,9 +28,7 @@ set(PROJECT_SOURCES
         src/FinTypes.cpp
         src/FinTypes.h
         src/magic_enum.hpp
-        src/simpletranslatewidget.cpp
-        src/simpletranslatewidget.h
-        ui/simpletranslatewidget.ui
+        
         src/GlobalHotKeyManager.cpp
         src/GlobalHotKeyManager.h
         src/RunCopKey.cpp
@@ -50,6 +48,9 @@ set(PROJECT_SOURCES
         src/DataManager.h
         src/AbstractManager.cpp
         src/AbstractManager.h
+        src/SimpleTranslatePopup.cpp
+        src/SimpleTranslatePopup.h
+        ui/SimpleTranslatePopup.ui
 )
 
 add_library(qhotkey src/QHotkey/qhotkey.cpp)

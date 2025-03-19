@@ -2,21 +2,21 @@
 // Created by YubinKim on 25/03/12 수.
 //
 
-// You may need to build the project (run Qt uic code generator) to get "ui_SimpleTranslateWidget.h" resolved
+// You may need to build the project (run Qt uic code generator) to get "ui_SimpleTranslatePopup.h" resolved
 
-#include "simpletranslatewidget.h"
+#include "SimpleTranslatePopup.h"
 
 #include <qboxlayout.h>
 #include <qevent.h>
 #include <qscreen.h>
 #include <QGraphicsDropShadowEffect>
 
-#include "../ui/ui_SimpleTranslateWidget.h"
+#include "../ui/ui_SimpleTranslatePopup.h"
 
 
-SimpleTranslateWidget::SimpleTranslateWidget(QWidget* parent)
+SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint)
-    , ui(new Ui::SimpleTranslateWidget)
+    , ui(new Ui::SimpleTranslatePopup)
 {
     ui->setupUi(this);
     ui->bgFrame->setLayout(ui->textVLayout);
@@ -38,13 +38,13 @@ SimpleTranslateWidget::SimpleTranslateWidget(QWidget* parent)
     show();
 }
 
-SimpleTranslateWidget::~SimpleTranslateWidget()
+SimpleTranslatePopup::~SimpleTranslatePopup()
 {
     delete ui;
 }
 
 
-void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
+void SimpleTranslatePopup::showTranslationPopup(const QString& translatedText)
 {
     ui->resultTextLabel->setWordWrap(false);
     ui->resultTextLabel->setText(translatedText);
@@ -90,7 +90,7 @@ void SimpleTranslateWidget::showTranslationPopup(const QString& translatedText)
     repaint();
 }
 
-void SimpleTranslateWidget::mousePressEvent(QMouseEvent* event)
+void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -100,7 +100,7 @@ void SimpleTranslateWidget::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void SimpleTranslateWidget::mouseMoveEvent(QMouseEvent* event)
+void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
 {
     if (bIsDrag && (event->button() | Qt::LeftButton))
     {
@@ -109,7 +109,7 @@ void SimpleTranslateWidget::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void SimpleTranslateWidget::mouseReleaseEvent(QMouseEvent* event)
+void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {

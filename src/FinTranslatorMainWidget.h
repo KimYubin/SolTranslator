@@ -1,37 +1,41 @@
-﻿#ifndef FINTRANSLATOR_H
-#define FINTRANSLATOR_H
+﻿//
+// Created by YubinKim on 25/03/19 수.
+//
 
-#include <QWidget>
+#ifndef FINTRANSLATORMAINWIDGET_H
+#define FINTRANSLATORMAINWIDGET_H
+
 #include <QSystemTrayIcon>
+#include <QWidget>
 
 
-class DataManager;
-class TranslateManager;
+class FinTranslatorCore;
 class GlobalHotKeyManager;
+class TranslateManager;
+class DataManager;
 QT_BEGIN_NAMESPACE
 
 namespace Ui
 {
-class FinTranslator;
+class FinTranslatorMainWidget;
 }
 
 QT_END_NAMESPACE
 
-class FinTranslator : public QWidget
+class FinTranslatorMainWidget : public QWidget
 {
     Q_OBJECT
-
+    
 public:
-    FinTranslator(QWidget* parent = nullptr);
-    ~FinTranslator();
+    FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    ~FinTranslatorMainWidget();
 
     virtual void setVisible(bool visible) override;
 
 protected:
     virtual void closeEvent(QCloseEvent* event) override;
 
-public:
-    void onSimpleTranslate(const QString& InOriginText);
+
 
 private slots:
     void on_findButton_clicked();
@@ -45,12 +49,10 @@ private:
     void createTrayIcon();
     void setIcon();
 
+    FinTranslatorCore* finCore;
 
-    Ui::FinTranslator* ui;
+    Ui::FinTranslatorMainWidget* ui;
 
-    DataManager* dataManager;
-    TranslateManager* translateManager;
-    GlobalHotKeyManager* globalHotKeyManager;
 
     // ~==============
     // trayIcon
@@ -62,4 +64,5 @@ private:
     QMenu* trayIconMenu;
 };
 
-#endif // FINTRANSLATOR_H
+
+#endif //FINTRANSLATORMAINWIDGET_H

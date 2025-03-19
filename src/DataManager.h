@@ -9,13 +9,14 @@
 #include "AbstractManager.h"
 #include "FinHashQueue.h"
 
+class FinTranslatorCore;
 
 class DataManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    DataManager(FinTranslator* parent);
+    DataManager(FinTranslatorCore* parent);
 
     cache_queue loadTranslateCache();
     bool saveTranslateCache(const cache_queue& CacheTextQueue);

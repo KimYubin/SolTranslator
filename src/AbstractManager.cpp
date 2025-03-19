@@ -4,19 +4,21 @@
 
 #include "AbstractManager.h"
 
-AbstractManager::AbstractManager(FinTranslator* parent): QObject(parent)
+#include "FinTranslatorCore.h"
+
+AbstractManager::AbstractManager(FinTranslatorCore* parent) : QObject(parent)
 {
 }
 
-FinTranslator* AbstractManager::getFinTranslator() const
+FinTranslatorCore* AbstractManager::getFinCore() const
 {
-    if (FinTranslator* Fin = dynamic_cast<FinTranslator*>(parent()))
+    if (FinTranslatorCore* Fin = dynamic_cast<FinTranslatorCore*>(parent()))
     {
         return Fin;
     }
     else
     {
-        qWarning("AbstractManager::getFinTranslator()");
+        qWarning("AbstractManager::getFinTranslatorCore()");
         return nullptr;
     }
 }

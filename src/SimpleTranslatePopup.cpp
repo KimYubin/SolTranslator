@@ -14,8 +14,9 @@
 #include "../ui/ui_SimpleTranslatePopup.h"
 
 
-SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
+SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint)
+    , finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
     ui->setupUi(this);

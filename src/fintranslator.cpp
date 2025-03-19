@@ -21,10 +21,10 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
     setLayout(ui->mainLayout);
 
     loadSettings();
-
-    dataManager         = new DataManager(this);
-    translateManager    = new TranslateManager(this);
-    globalHotKeyManager = new GlobalHotKeyManager(this);
+    //
+    // dataManager         = new DataManager(this);
+    // translateManager    = new TranslateManager(this);
+    // globalHotKeyManager = new GlobalHotKeyManager(this);
 
 
     // 캐시 로드

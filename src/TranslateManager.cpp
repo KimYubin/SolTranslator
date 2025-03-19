@@ -11,7 +11,7 @@
 #include "SimpleTranslatePopup.h"
 #include "TranslateUnit.h"
 
-TranslateManager::TranslateManager(FinTranslator* parent): AbstractManager(parent)
+TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
     SetEngineType(EngineType::OpenAI);
 }
@@ -20,7 +20,7 @@ void TranslateManager::translateSimple(const QString& text
                                      , const LangType sourceLang
                                      , const LangType targetLang)
 {
-    SimpleTranslatePopup* simple = new SimpleTranslatePopup();
+    SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
     translateText(simple, &SimpleTranslatePopup::showTranslationPopup, text, sourceLang, targetLang);
 }
 

@@ -1,65 +1,39 @@
-﻿#ifndef FINTRANSLATOR_H
-#define FINTRANSLATOR_H
+﻿//
+// Created by YubinKim on 25/03/19 수.
+//
 
-#include <QWidget>
-#include <QSystemTrayIcon>
+#ifndef FINTRANSLATORCORE_H
+#define FINTRANSLATORCORE_H
+#include <QObject>
 
 
-class DataManager;
-class TranslateManager;
+class FinTranslatorMainWidget;
 class GlobalHotKeyManager;
-QT_BEGIN_NAMESPACE
+class TranslateManager;
+class DataManager;
 
-namespace Ui
-{
-class FinTranslator;
-}
-
-QT_END_NAMESPACE
-
-class FinTranslator : public QWidget
+class FinTranslatorCore : public QObject
 {
     Q_OBJECT
 
 public:
-    FinTranslator(QWidget* parent = nullptr);
-    ~FinTranslator();
-
-    virtual void setVisible(bool visible) override;
-
-protected:
-    virtual void closeEvent(QCloseEvent* event) override;
+    FinTranslatorCore(QObject* parent = nullptr);
+    ~FinTranslatorCore();
 
 public:
     void onSimpleTranslate(const QString& InOriginText);
 
-private slots:
-    void on_findButton_clicked();
-    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    DataManager* getDataManager() const { return dataManager; }
+    TranslateManager* getTranslateManager() const { return translateManager; }
+    GlobalHotKeyManager* getGlobalHotKeyManager() const { return globalHotKeyManager; }
 
 private:
-    void loadSettings();
-    void loadAPI();
-
-    void createActions();
-    void createTrayIcon();
-    void setIcon();
-
-
-    Ui::FinTranslator* ui;
+    FinTranslatorMainWidget* finMainWidget;
 
     DataManager* dataManager;
     TranslateManager* translateManager;
     GlobalHotKeyManager* globalHotKeyManager;
-
-    // ~==============
-    // trayIcon
-    QAction* miniToTrayAction;
-    QAction* restoreAction;
-    QAction* quitAction;
-
-    QSystemTrayIcon* trayIcon;
-    QMenu* trayIconMenu;
 };
 
-#endif // FINTRANSLATOR_H
+
+#endif //FINTRANSLATORCORE_H

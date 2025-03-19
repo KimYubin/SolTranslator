@@ -1,12 +1,12 @@
-#include "fintranslator.h"
 
 #include <QApplication>
+
+#include "FinTranslatorCore.h"
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    FinTranslator w;
-    w.show();
+    FinTranslatorCore finTranslatorCore;
 
     return app.exec();
 }

@@ -4,19 +4,20 @@
 
 #ifndef ABSTRACTMANAGER_H
 #define ABSTRACTMANAGER_H
+#include <QObject>
 
-#include "fintranslator.h"
 
+class FinTranslatorCore;
 
 class AbstractManager : public QObject
 {
     Q_OBJECT
 
 public:
-    AbstractManager(FinTranslator* parent);
+    AbstractManager(FinTranslatorCore* parent);
 
 protected:
-    FinTranslator* getFinTranslator() const;
+    FinTranslatorCore* getFinCore() const;
 };
 
 

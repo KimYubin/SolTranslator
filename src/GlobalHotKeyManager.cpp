@@ -14,9 +14,10 @@
 #include <QThread>
 
 #include "fintranslator.h"
+#include "FinTranslatorCore.h"
 #include "RunCopKey.h"
 
-GlobalHotKeyManager::GlobalHotKeyManager(FinTranslator* parent): AbstractManager(parent)
+GlobalHotKeyManager::GlobalHotKeyManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
     RegisterHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
 }
@@ -56,7 +57,7 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             const QString selectedText = QApplication::clipboard()->text();
-            if (FinTranslator* Fin = getFinTranslator())
+            if (FinTranslatorCore* Fin = getFinCore())
             {
                 Fin->onSimpleTranslate(selectedText);
             }

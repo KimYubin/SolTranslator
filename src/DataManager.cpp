@@ -12,7 +12,7 @@
 
 #include "magic_enum.hpp"
 
-DataManager::DataManager(FinTranslator* parent): AbstractManager(parent)
+DataManager::DataManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
     
 }

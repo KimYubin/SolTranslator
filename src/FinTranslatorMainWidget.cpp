@@ -1,5 +1,11 @@
-﻿#include "fintranslator.h"
-#include "../ui/ui_fintranslator.h"
+﻿//
+// Created by YubinKim on 25/03/19 수.
+//
+
+// You may need to build the project (run Qt uic code generator) to get "ui_FinTranslatorMainWidget.h" resolved
+
+#include "FinTranslatorMainWidget.h"
+#include "../ui/ui_FinTranslatorMainWidget.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -8,31 +14,24 @@
 
 
 #include "ConfigManager.h"
-#include "DataManager.h"
+#include <qevent.h>
+
+#include "FinTranslatorCore.h"
 #include "FinTypes.h"
-#include "GlobalHotKeyManager.h"
 #include "TranslateManager.h"
 
-
-FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinTranslator)
+FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
+    : QWidget(parent), finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
 {
     ui->setupUi(this);
     
     setLayout(ui->mainLayout);
 
     loadSettings();
-    //
-    // dataManager         = new DataManager(this);
-    // translateManager    = new TranslateManager(this);
-    // globalHotKeyManager = new GlobalHotKeyManager(this);
-
-
-    // 캐시 로드
-    translateManager->updateNewCacheQueue(dataManager->loadTranslateCache());
-
+    
     createActions();
     createTrayIcon();
-    connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslator::iconActivated);
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
 
     setIcon();
 
@@ -52,15 +51,12 @@ FinTranslator::FinTranslator(QWidget* parent) : QWidget(parent), ui(new Ui::FinT
     }
 }
 
-FinTranslator::~FinTranslator()
+FinTranslatorMainWidget::~FinTranslatorMainWidget()
 {
-    // 캐시 저장
-    dataManager->saveTranslateCache(translateManager->getCacheQueue());
-
     delete ui;
 }
 
-void FinTranslator::setVisible(bool visible)
+void FinTranslatorMainWidget::setVisible(bool visible)
 {
     if (visible)
     {
@@ -73,7 +69,7 @@ void FinTranslator::setVisible(bool visible)
     QWidget::setVisible(visible);
 }
 
-void FinTranslator::closeEvent(QCloseEvent* event)
+void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
 {
     if (event->spontaneous() == false || isVisible() == false)
     {
@@ -86,21 +82,16 @@ void FinTranslator::closeEvent(QCloseEvent* event)
     }
 }
 
-void FinTranslator::onSimpleTranslate(const QString& InOriginText)
-{
-    translateManager->translateSimple(InOriginText, LangType::AUTO, LangType::ko);
-}
-
-void FinTranslator::on_findButton_clicked()
+void FinTranslatorMainWidget::on_findButton_clicked()
 {
     loadAPI();
 
     const QString orignText = ui->plainTextEditOrigin->toPlainText();
 
-    translateManager->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, LangType::en, LangType::ko);
+    finCore->getTranslateManager()->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, LangType::en, LangType::ko);
 }
 
-void FinTranslator::iconActivated(QSystemTrayIcon::ActivationReason reason)
+void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason)
     {
@@ -120,12 +111,12 @@ void FinTranslator::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void FinTranslator::loadSettings()
+void FinTranslatorMainWidget::loadSettings()
 {
     loadAPI();
 }
 
-void FinTranslator::loadAPI()
+void FinTranslatorMainWidget::loadAPI()
 {
     QString newAPI = ui->lineEdit_api->text();
     if (newAPI.isEmpty())
@@ -146,7 +137,7 @@ void FinTranslator::loadAPI()
     }
 }
 
-void FinTranslator::createActions()
+void FinTranslatorMainWidget::createActions()
 {
     miniToTrayAction = new QAction(tr("Mi&nimize"), this);
     connect(miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
@@ -158,7 +149,7 @@ void FinTranslator::createActions()
     connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 }
 
-void FinTranslator::createTrayIcon()
+void FinTranslatorMainWidget::createTrayIcon()
 {
     trayIconMenu = new QMenu(this);
     trayIconMenu->addAction(miniToTrayAction);
@@ -169,10 +160,10 @@ void FinTranslator::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setVisible(true);
-    trayIcon->setToolTip("FinTranslator");
+    trayIcon->setToolTip("FinTranslatorMainWidget");
 }
 
-void FinTranslator::setIcon()
+void FinTranslatorMainWidget::setIcon()
 {
     QIcon icon = QIcon(":/img/icon_img.png");
     trayIcon->setIcon(icon);

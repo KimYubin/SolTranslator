@@ -7,6 +7,7 @@
 
 #include <QWidget>
 
+class FinTranslatorCore;
 class QVBoxLayout;
 class QLabel;
 QT_BEGIN_NAMESPACE
@@ -24,7 +25,7 @@ class SimpleTranslatePopup : public QWidget
     Q_OBJECT
 
 public:
-    SimpleTranslatePopup(QWidget* parent = nullptr);
+    SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
 
     ~SimpleTranslatePopup() override;
 
@@ -40,6 +41,7 @@ private:
     QPoint dragPoint;
 
 private:
+    FinTranslatorCore* finCore;
     Ui::SimpleTranslatePopup* ui;
 };
 

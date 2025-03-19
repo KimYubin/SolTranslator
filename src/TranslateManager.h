@@ -17,6 +17,7 @@
 
 class QTextEdit;
 class TranslateUnit;
+class FinTranslatorCore;
 
 template <typename Func>
 using FunctorContextType = typename QtPrivate::ContextTypeForFunctor<Func>::ContextType;
@@ -27,7 +28,7 @@ class TranslateManager : public AbstractManager
     Q_OBJECT
 
 public:
-    TranslateManager(FinTranslator* parent);
+    TranslateManager(FinTranslatorCore* parent);
 
     template <typename Func>
     void translateText(const FunctorContextType<Func>* inTextEditableObj

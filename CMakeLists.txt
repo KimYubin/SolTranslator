@@ -58,6 +58,9 @@ set(PROJECT_SOURCES
         src/TextEditTranslateWidget.cpp
         src/TextEditTranslateWidget.h
         ui/TextEditTranslateWidget.ui
+        src/SettingsWidget.cpp
+        src/SettingsWidget.h
+        ui/SettingsWidget.ui
 
 )
 

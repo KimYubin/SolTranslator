@@ -67,16 +67,26 @@ void FinTranslatorMainWidget::setVisible(bool visible)
 void FinTranslatorMainWidget::applyTheme()
 {
     QFile theme(":/theme/dark.qss");
-    if (!theme.exists())
+    if (theme.exists())
     {
-        printf("Unable to set stylesheet, file not found\n");
+        theme.open(QFile::ReadOnly | QFile::Text);
+        QTextStream themeStream(&theme);
+        qApp->setStyleSheet(themeStream.readAll());
     }
     else
     {
-        theme.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&theme);
-        setStyleSheet(ts.readAll());
+        printf("Unable to set stylesheet, file not found\n");
     }
+}
+
+QString FinTranslatorMainWidget::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
+{
+    QString res = templateTheme;
+    for (const auto& [colorName, colorValue] : colors)
+    {
+        res.replace("${" + colorName + "}", colorValue);
+    }
+    return res;
 }
 
 void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)

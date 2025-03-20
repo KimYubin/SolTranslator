@@ -34,7 +34,11 @@ public:
 
     virtual void setVisible(bool visible) override;
 
+    // ~=================
+    // theme
     void applyTheme();
+    
+    QString applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors);
     
 protected:
     virtual void closeEvent(QCloseEvent* event) override;

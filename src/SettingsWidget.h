@@ -8,19 +8,28 @@
 #include <QWidget>
 
 
+class FinTranslatorCore;
 QT_BEGIN_NAMESPACE
-namespace Ui { class SettingsWidget; }
+
+namespace Ui
+{
+class SettingsWidget;
+}
+
 QT_END_NAMESPACE
 
-class SettingsWidget : public QWidget {
-Q_OBJECT
+class SettingsWidget : public QWidget
+{
+    Q_OBJECT
 
 public:
-    explicit SettingsWidget(QWidget *parent = nullptr);
+    explicit SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
     ~SettingsWidget() override;
 
 private:
-    Ui::SettingsWidget *ui;
+    FinTranslatorCore* finCore;
+
+    Ui::SettingsWidget* ui;
 };
 
 

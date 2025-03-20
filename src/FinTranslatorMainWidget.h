@@ -9,6 +9,7 @@
 #include <QWidget>
 
 
+class SettingsWidget;
 class TextEditTranslateWidget;
 class FinTranslatorCore;
 class GlobalHotKeyManager;
@@ -57,7 +58,9 @@ private:
 
     // ~==============
     // sub widgets
-    TextEditTranslateWidget* textEditTranslate; 
+    TextEditTranslateWidget* textEditTranslate;
+
+    SettingsWidget* settingsWidget;
     
 
     // ~==============

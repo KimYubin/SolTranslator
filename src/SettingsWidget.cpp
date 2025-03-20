@@ -8,10 +8,13 @@
 #include "../ui/ui_SettingsWidget.h"
 
 
-SettingsWidget::SettingsWidget(QWidget* parent) :
-    QWidget(parent), ui(new Ui::SettingsWidget)
+SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
+    : QWidget(parent)
+    , finCore(inFinCore)
+    , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
+    setLayout(ui->mainLayout);
 }
 
 SettingsWidget::~SettingsWidget()

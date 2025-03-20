@@ -18,7 +18,11 @@
 
 #include "ConfigManager.h"
 #include <qevent.h>
+#include <qstyle.h>
+#include <qtabbar.h>
+#include <QButtonGroup>
 
+#include "SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
 #include "TranslateManager.h"
 
@@ -29,10 +33,32 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     setLayout(ui->mainLayout);
 
-    // addTab에서 부모 추가되므로, 부모추가 금지. 
+    // ~======================
+    // tab button, instead of tab bar.
+    // addTab에서 부모 추가되므로, 부모추가 금지.
     textEditTranslate = new TextEditTranslateWidget(finCore);
-    ui->mainTabWidget->addTab(textEditTranslate, "TranslateText");
+    settingsWidget    = new SettingsWidget(finCore);
 
+    const int textEditTabIdx = ui->mainTabWidget->addTab(textEditTranslate, tr("Text"));
+    const int settingTabIdx  = ui->mainTabWidget->addTab(settingsWidget, tr("Settings"));
+
+    QButtonGroup* buttonGroup = new QButtonGroup(this);
+    buttonGroup->setExclusive(true);
+
+    ui->button_0_TextTab->setCheckable(true);
+    ui->button_1->setCheckable(true);
+    ui->button_9_setting->setCheckable(true);
+
+    buttonGroup->addButton(ui->button_0_TextTab, 0);
+    buttonGroup->addButton(ui->button_1, 1);
+    buttonGroup->addButton(ui->button_9_setting, 9);
+
+    connect(ui->button_0_TextTab, &QPushButton::clicked, [=]() { ui->mainTabWidget->setCurrentIndex(textEditTabIdx); });
+    connect(ui->button_9_setting, &QPushButton::clicked, [=]() { ui->mainTabWidget->setCurrentIndex(settingTabIdx); });
+
+
+    // ~====================
+    // tray icon
     createActions();
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
@@ -162,7 +188,7 @@ void FinTranslatorMainWidget::createTrayIcon()
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setVisible(true);
-    trayIcon->setToolTip("FinTranslator");
+    trayIcon->setToolTip(tr("FinTranslator"));
 }
 
 void FinTranslatorMainWidget::setIcon()

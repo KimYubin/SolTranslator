@@ -34,7 +34,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setAttribute(Qt::WA_TranslucentBackground);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-    showTranslationPopup(" ");
+    showTranslationPopup(tr(" "));
 
     show();
 }

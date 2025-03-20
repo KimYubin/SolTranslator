@@ -43,6 +43,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     applyTheme();
 
+    connect(ui->pushButton, &QPushButton::clicked, this, &FinTranslatorMainWidget::applyTheme);
+    
     setWindowTitle(tr("FinTranslator"));
 }
 
@@ -66,12 +68,27 @@ void FinTranslatorMainWidget::setVisible(bool visible)
 
 void FinTranslatorMainWidget::applyTheme()
 {
-    QFile theme(":/theme/dark.qss");
+    QFile theme("../resource/theme/dark.qss");
+    if (theme.exists() == false)
+    {
+        theme.setFileName(":/theme/dark.qss");
+    }
+
     if (theme.exists())
     {
         theme.open(QFile::ReadOnly | QFile::Text);
+
         QTextStream themeStream(&theme);
-        qApp->setStyleSheet(themeStream.readAll());
+        const QString themeString = themeStream.readAll();
+        if (themeString.isEmpty() == false)
+        {
+            qApp->setStyleSheet(themeString);
+        }
+
+        for (QWidget* childWidget : qApp->allWidgets())
+        {
+            childWidget->repaint();
+        }
     }
     else
     {

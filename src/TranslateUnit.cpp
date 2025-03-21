@@ -10,29 +10,27 @@
 #include "FinTypes.h"
 #include "TranslateManager.h"
 
-TranslateUnit::TranslateUnit(TranslateManager* parent) : QNetworkAccessManager(parent)
+TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
+                           , TranslateManager* parent)
+    : QNetworkAccessManager(parent)
+    , originText(inTranslateRequestInfo.originText)
+    , sourceLang(inTranslateRequestInfo.sourceLang)
+    , targetLang(inTranslateRequestInfo.targetLang)
 {
     connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
 }
 
-void TranslateUnit::executeTextTranslation_Impl(const QString& inText
-                                     , const LangType inSourceLang
-                                     , const LangType inTargetLang)
+void TranslateUnit::executeTextTranslation_Impl()
 {
-    if (inText.isEmpty())
+    if (originText.isEmpty())
     {
-        updateTranslatedText(inText);
+        updateTranslatedText(originText);
         return;
     }
 
-    // cache 텍스트 관련 작업에서 사용되기 때문에, 먼저 업데이트
-    originText = inText;
-    sourceLang = inSourceLang;
-    targetLang = inTargetLang;
-
     if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
     {
-        auto [bIsFind, findCache] = translate_manager->findCachingText(inText, inTargetLang);
+        auto [bIsFind, findCache] = translate_manager->findCachingText(originText, targetLang);
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
@@ -63,17 +61,17 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
     deleteLater();
 }
 
-void TranslateUnit::updateTranslatedText(const QString& translatedText)
+void TranslateUnit::updateTranslatedText(const QString& inTranslatedText)
 {
-    if (translatedText.isEmpty() == false)
+    if (inTranslatedText.isEmpty() == false)
     {
         if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
         {
-            translate_manager->setCacheText(originText, translatedText, targetLang);
+            translate_manager->setCacheText(originText, inTranslatedText, targetLang);
         }
     }
 
     // 빈 문자열도 적용합니다.
-    emit ApplyCompletedTranslate(translatedText);
+    emit ApplyCompletedTranslate(inTranslatedText);
     deleteLater();
 }

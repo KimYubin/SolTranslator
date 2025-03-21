@@ -9,7 +9,9 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 
-TranslateUnitGoogle::TranslateUnitGoogle(TranslateManager* parent): TranslateUnit(parent)
+TranslateUnitGoogle::TranslateUnitGoogle(const TranslateRequestInfo& inTranslateRequestInfo
+                                       , TranslateManager* parent)
+    : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
 void TranslateUnitGoogle::requestTranslate()
@@ -31,9 +33,9 @@ void TranslateUnitGoogle::replyTranslateFinished(QNetworkReply* reply)
     const QJsonArray jsonArr         = responseJson.array();
     if (jsonArr.isEmpty() == false)
     {
-        const QString translatedText = jsonArr[0].toArray()[0].toArray()[0].toString();
+        const QString replyTranslatedText = jsonArr[0].toArray()[0].toArray()[0].toString();
 
-        updateTranslatedText(translatedText);
+        updateTranslatedText(replyTranslatedText);
     }
     else
     {

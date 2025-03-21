@@ -48,9 +48,9 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 }
 
 
-void SimpleTranslatePopup::showTranslationPopup(const QString& translatedText)
+void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
 {
-    ui->resultText->setText(translatedText);
+    ui->resultText->setText(inTranslatedText);
 
     constexpr float widthRatio  = 0.20f;
     constexpr float heightRatio = 0.6f;

@@ -6,6 +6,8 @@
 #define TLENGINE_H
 #include <QObject>
 
+#include "FinTypes.h"
+
 
 class TranslateManager;
 class TranslateUnit;
@@ -24,8 +26,8 @@ public:
         return *instance;
     }
 
-    TranslateUnit* NewTranslateUnit(TranslateManager* translateManager);
-
+    TranslateUnit* NewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
+                                  , TranslateManager* translateManager);
 };
 
 

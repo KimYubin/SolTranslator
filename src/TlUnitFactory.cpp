@@ -16,7 +16,8 @@ TlUnitFactory::TlUnitFactory(QObject* parent)
 {
 }
 
-TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* translateManager)
+TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
+                                             , TranslateManager* translateManager)
 {
     TranslateUnit* tlUnit = nullptr;
     const EngineType currentEngine = translateManager->GetCurrentEngineType();
@@ -25,10 +26,10 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(TranslateManager* translateManage
     case EngineType::None:
         break;
     case EngineType::Google:
-        tlUnit = new TranslateUnitGoogle(translateManager);
+        tlUnit = new TranslateUnitGoogle(inTranslateRequestInfo, translateManager);
         break;
     case EngineType::OpenAI:
-        tlUnit = new TranslateUnitOpenAI(translateManager);
+        tlUnit = new TranslateUnitOpenAI(inTranslateRequestInfo, translateManager);
         break;
     case EngineType::Size:
         break;

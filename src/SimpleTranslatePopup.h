@@ -30,7 +30,7 @@ public:
 
     ~SimpleTranslatePopup() override;
 
-    void showTranslationPopup(const QString& translatedText);
+    void showTranslationPopup(const QString& inTranslatedText);
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;

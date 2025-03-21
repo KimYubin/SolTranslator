@@ -14,7 +14,9 @@
 #include "FinTypes.h"
 #include "TranslateManager.h"
 
-TranslateUnitOpenAI::TranslateUnitOpenAI(TranslateManager* parent): TranslateUnit(parent)
+TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
+                                       , TranslateManager* parent)
+    : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
 void TranslateUnitOpenAI::requestTranslate()
@@ -56,7 +58,7 @@ void TranslateUnitOpenAI::replyTranslateFinished(QNetworkReply* reply)
     const QJsonArray choices         = jsonObject["choices"].toArray();
     if (choices.isEmpty() == false)
     {
-        const QString translatedText = choices.first().toObject()["message"].toObject()["content"].toString();
+        const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
 
         updateTranslatedText(translatedText);
     }

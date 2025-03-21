@@ -13,7 +13,8 @@ class TranslateUnitGoogle final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit TranslateUnitGoogle(TranslateManager* parent);
+    explicit TranslateUnitGoogle(const TranslateRequestInfo& inTranslateRequestInfo
+                               , TranslateManager* parent);
 
 protected:
     virtual void requestTranslate() override;

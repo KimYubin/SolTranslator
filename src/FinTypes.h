@@ -59,6 +59,22 @@ enum class EngineType
   , Size
 };
 
+struct TranslateRequestInfo
+{
+    TranslateRequestInfo() = default;
+
+    TranslateRequestInfo(const QString& inOriginText
+                       , const LangType inSourceLang
+                       , const LangType inTargetLang)
+        : originText(inOriginText)
+        , sourceLang(inSourceLang)
+        , targetLang(inTargetLang) {}
+
+    QString originText;
+    LangType sourceLang;
+    LangType targetLang;
+};
+
 struct LangInfo
 {
 public:

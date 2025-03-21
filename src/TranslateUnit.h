@@ -19,23 +19,19 @@ class TranslateUnit : public QNetworkAccessManager
     Q_OBJECT
 
 public:
-    explicit TranslateUnit(TranslateManager* parent);
+    explicit TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
+                         , TranslateManager* parent);
 
     template <typename Func>
     void executeTextTranslation(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
-                     , Func&& slotfunctor
-                     , const QString& text
-                     , const LangType sourceLang
-                     , const LangType targetLang)
+                     , Func&& slotfunctor)
     {
         connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
-        executeTextTranslation_Impl(text, sourceLang, targetLang);
+        executeTextTranslation_Impl();
     }
 
 private:
-    void executeTextTranslation_Impl(const QString& inText
-                          , const LangType inSourceLang
-                          , const LangType inTargetLang);
+    void executeTextTranslation_Impl();
 
 protected:
     virtual void requestTranslate() = 0;
@@ -59,10 +55,11 @@ protected:
      *
      * @see replyTranslate
      * @see ApplyCompletedTranslate
-     * @param translatedText 
+     * @param inTranslatedText
      */
-    void updateTranslatedText(const QString& translatedText);
+    void updateTranslatedText(const QString& inTranslatedText);
 
+    void addTranslatedText(const QString& inTranslatedText);
 protected:
     QString originText;
     LangType sourceLang;

@@ -53,8 +53,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     buttonGroup->addButton(ui->button_1, 1);
     buttonGroup->addButton(ui->button_9_setting, 9);
 
-    connect(ui->button_0_TextTab, &QPushButton::clicked, [=]() { ui->mainTabWidget->setCurrentIndex(textEditTabIdx); });
-    connect(ui->button_9_setting, &QPushButton::clicked, [=]() { ui->mainTabWidget->setCurrentIndex(settingTabIdx); });
+    connect(ui->button_0_TextTab, &QPushButton::clicked, this, [=]() { ui->mainTabWidget->setCurrentIndex(textEditTabIdx); });
+    connect(ui->button_9_setting, &QPushButton::clicked, this, [=]() { ui->mainTabWidget->setCurrentIndex(settingTabIdx); });
 
 
     // ~====================

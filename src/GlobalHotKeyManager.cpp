@@ -37,7 +37,7 @@ void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySe
         hotkey->setShortcut(shortcut, true);
     }
 
-    QObject::connect(hotkey, &QHotkey::activated, this, std::bind(InFunction, this));
+    connect(hotkey, &QHotkey::activated, this, std::bind(InFunction, this));
 }
 
 void GlobalHotKeyManager::FireSimpleTranslate()
@@ -49,7 +49,7 @@ void GlobalHotKeyManager::FireSimpleTranslate()
     RunCopKey::DoCopy();
 
     // 클립보드 갱신 대기
-    connect(clipboard, &QClipboard::changed, clipboard, [&, inLastText = std::move(lastClipboardText)](QClipboard::Mode mode)
+    connect(clipboard, &QClipboard::changed, this, [&, inLastText = std::move(lastClipboardText)](QClipboard::Mode mode)
     {
         switch (mode)
         {

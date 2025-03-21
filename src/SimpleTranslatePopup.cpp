@@ -11,6 +11,7 @@
 #include <qscreen.h>
 #include <QGraphicsDropShadowEffect>
 
+
 #include "../ui/ui_SimpleTranslatePopup.h"
 
 
@@ -34,7 +35,9 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setAttribute(Qt::WA_TranslucentBackground);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
-    showTranslationPopup(tr(" "));
+    ui->resultText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+
+    showTranslationPopup(" ");
 
     show();
 }
@@ -47,8 +50,7 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& translatedText)
 {
-    ui->resultTextLabel->setWordWrap(false);
-    ui->resultTextLabel->setText(translatedText);
+    ui->resultText->setText(translatedText);
 
     constexpr float widthRatio  = 0.20f;
     constexpr float heightRatio = 0.6f;
@@ -70,7 +72,38 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& translatedText)
         setMinimumWidth(minWidth);
         setMinimumHeight(minHeight);
 
-        ui->resultTextLabel->setWordWrap(true);
+        // ~==========
+        // text edit size
+        const QMargins outerMargin = ui->outerVLayout->contentsMargins();
+        const QMargins innerMargin = ui->textVLayout->contentsMargins();
+        const int frameMargin      = ui->bgFrame->lineWidth() * 2;
+
+        const QMargins totalMargin = outerMargin + innerMargin + frameMargin;
+        const int widthMargin      = (totalMargin.left() + totalMargin.right());
+        const int heightMargin     = (totalMargin.top() + totalMargin.bottom());
+
+        const QSize minTextEditSize = {minWidth - widthMargin, minHeight - heightMargin};
+        const QSize maxTextEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
+
+        ui->resultText->setMinimumWidth(minTextEditSize.width());
+        ui->resultText->setMinimumHeight(minTextEditSize.height());
+        ui->resultText->setMaximumWidth(maxTextEditSize.width());
+        ui->resultText->setMaximumHeight(maxTextEditSize.height());
+
+        ui->resultText->document()->adjustSize();
+
+        const int docWidth     = ui->resultText->document()->size().width();
+        const int desiredWidth = qBound(minTextEditSize.width(), docWidth, maxTextEditSize.width());
+        ui->resultText->setFixedWidth(desiredWidth);
+
+        ui->resultText->repaint();
+
+        // 너비 조정 후 높이 조정
+        const int docHeight     = ui->resultText->document()->size().height();
+        const int desiredHeight = qBound(minTextEditSize.height(), docHeight, maxTextEditSize.height());
+        ui->resultText->setFixedHeight(desiredHeight);
+
+
         ui->bgFrame->adjustSize();
         adjustSize();
 

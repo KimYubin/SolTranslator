@@ -10,6 +10,7 @@
 class FinTranslatorCore;
 class QVBoxLayout;
 class QLabel;
+
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -42,6 +43,7 @@ private:
 
 private:
     FinTranslatorCore* finCore;
+
     Ui::SimpleTranslatePopup* ui;
 };
 

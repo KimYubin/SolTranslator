@@ -1,23 +1,49 @@
-﻿
+﻿/*  ------------------------------------------------------------------------  */
+/*  project custom */
+/*  ------------------------------------------------------------------------  */
+
+
+/*  ------------------------------------------------------------------------  */
+/*  SimpleTranslatePopup */
+
 #SimpleTranslatePopup QFrame
+, #SimpleTranslatePopup QTextEdit
 {
   background-color: rgb(40, 40, 40);
   border-radius : 10px;
 }
 
 #SimpleTranslatePopup QLabel
+, #SimpleTranslatePopup QTextEdit
 {
  	color: rgb(250, 250, 250);
-  background-color:transparent;
+  /* background-color:transparent; */
+  font-size:15pt;
 }
+
+
+
+/*  ------------------------------------------------------------------------  */
+/*  FinTranslatorMainWidget */
 
 #FinTranslatorMainWidget QTabBar::tab 
 {
   width: 0px;
-  height : 0px;
+  height : 0px; /* 28px */
   color: transparent;
   background: transparent;
+  /* color: #ffffff;*/
+  border: 0px;
+  font-size:0;
+
+  padding: 0 0px; /* 16px */
 }
+
+#FinTranslatorMainWidget QTabBar{
+  /* text-transform: uppercase; */
+  /* font-weight: bold; */
+}
+
 
 
 /*  ------------------------------------------------------------------------  */
@@ -384,86 +410,6 @@ FinTranslatorMainWidget
 /*  ------------------------------------------------------------------------  */
 /*  QTabBar  */
 
-#FinTranslatorMainWidget QTabBar{
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-#FinTranslatorMainWidget QTabBar::tab {
-  color: #ffffff;
-  border: 0px;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:bottom,
-#FinTranslatorMainWidget QTabBar::tab:top{
-  padding: 0 16px;
-  height: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:left,
-#FinTranslatorMainWidget QTabBar::tab:right{
-  padding: 16px 0;
-  width: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:top:selected,
-#FinTranslatorMainWidget QTabBar::tab:top:hover {
-  color: #1de9b6;
-  border-bottom: 2px solid #1de9b6;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:bottom:selected,
-#FinTranslatorMainWidget QTabBar::tab:bottom:hover {
-  color: #1de9b6;
-  border-top: 2px solid #1de9b6;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:right:selected,
-#FinTranslatorMainWidget QTabBar::tab:right:hover {
-  color: #1de9b6;
-  border-left: 2px solid #1de9b6;
-}
-
-#FinTranslatorMainWidget QTabBar::tab:left:selected,
-#FinTranslatorMainWidget QTabBar::tab:left:hover {
-  color: #1de9b6;
-  border-right: 2px solid #1de9b6;
-}
-
-#FinTranslatorMainWidget QTabBar QToolButton:hover,
-#FinTranslatorMainWidget QTabBar QToolButton {
-  border: 0px;
-  background-color: #232629;
-  background: #232629;
-}
-
-#FinTranslatorMainWidget QTabBar QToolButton::up-arrow {
-  image: url(icon:/primary/uparrow2.svg);
-  width: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar QToolButton::down-arrow {
-  image: url(icon:/primary/downarrow2.svg);
-  width: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar QToolButton::right-arrow {
-  image: url(icon:/disabled/rightarrow2.svg);
-  height: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar QToolButton::left-arrow {
-  image: url(icon:/disabled/leftarrow2.svg);
-  height: 28px;
-}
-
-#FinTranslatorMainWidget QTabBar::close-button {
-  image: url(icon:/primary/tab_close.svg);
-}
-
-#FinTranslatorMainWidget QTabBar::close-button:hover {
-  image: url(icon:/primary/tab_close.svg);
-}
 
 /*  ------------------------------------------------------------------------  */
 /*  QGroupBox  */

@@ -67,7 +67,7 @@ void TranslateUnit::updateTranslatedText(const QString& translatedText)
 {
     if (translatedText.isEmpty() == false)
     {
-        if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
+        if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
         {
             translate_manager->setCacheText(originText, translatedText, targetLang);
         }

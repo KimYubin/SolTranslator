@@ -82,7 +82,7 @@ void TranslateManager::translateText(const FunctorContextType<Func>* inTextEdita
                                    , const LangType targetLang)
 {
     TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(this);
-    tranUnit->translateText(inTextEditableObj, std::forward<Func>(slotfunctor), text, sourceLang, targetLang);
+    tranUnit->executeTextTranslation(inTextEditableObj, std::forward<Func>(slotfunctor), text, sourceLang, targetLang);
 }
 
 #endif //TRANSLATEMANAGER_H

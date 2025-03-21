@@ -22,18 +22,18 @@ public:
     explicit TranslateUnit(TranslateManager* parent);
 
     template <typename Func>
-    void translateText(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
+    void executeTextTranslation(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
                      , Func&& slotfunctor
                      , const QString& text
                      , const LangType sourceLang
                      , const LangType targetLang)
     {
         connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
-        translateText_Impl(text, sourceLang, targetLang);
+        executeTextTranslation_Impl(text, sourceLang, targetLang);
     }
 
 private:
-    void translateText_Impl(const QString& inText
+    void executeTextTranslation_Impl(const QString& inText
                           , const LangType inSourceLang
                           , const LangType inTargetLang);
 
@@ -50,7 +50,7 @@ private slots:
 
 protected:
     /** 받은 응답에서 번역문을 추출합니다. */
-    virtual void replyTranslate(QNetworkReply* reply) = 0;
+    virtual void replyTranslateFinished(QNetworkReply* reply) = 0;
 
     /**
      * 추출 완료된 번역문에 대한 후처리를 합니다.

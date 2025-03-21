@@ -17,7 +17,7 @@ public:
 
 protected:
     virtual void requestTranslate() override;
-    virtual void replyTranslate(QNetworkReply* reply) override;
+    virtual void replyTranslateFinished(QNetworkReply* reply) override;
 
 };
 

@@ -48,7 +48,7 @@ void TranslateUnitOpenAI::requestTranslate()
     post(request, data);
 }
 
-void TranslateUnitOpenAI::replyTranslate(QNetworkReply* reply)
+void TranslateUnitOpenAI::replyTranslateFinished(QNetworkReply* reply)
 {
     const QByteArray responseData    = reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);

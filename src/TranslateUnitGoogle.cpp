@@ -24,7 +24,7 @@ void TranslateUnitGoogle::requestTranslate()
     get(request);
 }
 
-void TranslateUnitGoogle::replyTranslate(QNetworkReply* reply)
+void TranslateUnitGoogle::replyTranslateFinished(QNetworkReply* reply)
 {
     const QByteArray responseData    = reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);

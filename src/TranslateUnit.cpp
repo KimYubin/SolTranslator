@@ -15,7 +15,7 @@ TranslateUnit::TranslateUnit(TranslateManager* parent) : QNetworkAccessManager(p
     connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
 }
 
-void TranslateUnit::translateText_Impl(const QString& inText
+void TranslateUnit::executeTextTranslation_Impl(const QString& inText
                                      , const LangType inSourceLang
                                      , const LangType inTargetLang)
 {
@@ -52,7 +52,7 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
     if (reply->error() == QNetworkReply::NoError)
     {
         // to subclass
-        replyTranslate(reply);
+        replyTranslateFinished(reply);
     }
     else
     {

@@ -35,12 +35,12 @@ void TranslateUnitOpenAI::streamingTranslate()
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(sourceLang), Langs::GetEnglishName(targetLang));
+    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(trReqData.sourceLang), Langs::GetEnglishName(trReqData.targetLang));
     messages.append(systemMessage);
 
     QJsonObject userMessage;
     userMessage["role"] = "user";
-    userMessage["content"] = originText;
+    userMessage["content"] = trReqData.originText;
     messages.append(userMessage);
 
     json["messages"] = messages;
@@ -69,12 +69,12 @@ void TranslateUnitOpenAI::completeTranslate()
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(sourceLang), Langs::GetEnglishName(targetLang));
+    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(trReqData.sourceLang), Langs::GetEnglishName(trReqData.targetLang));
     messages.append(systemMessage);
 
     QJsonObject userMessage;
     userMessage["role"] = "user";
-    userMessage["content"] = originText;
+    userMessage["content"] = trReqData.originText;
     messages.append(userMessage);
 
     json["messages"] = messages;

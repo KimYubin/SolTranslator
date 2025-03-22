@@ -22,14 +22,6 @@ public:
     explicit TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                          , TranslateManager* parent);
 
-    template <typename Func>
-    void executeTextTranslation(const typename QtPrivate::ContextTypeForFunctor<Func>::ContextType* inTextEditableObj
-                     , Func&& slotfunctor)
-    {
-        connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
-        executeTextTranslation_Impl();
-    }
-    
     void executeTextTranslation();
 
 private:
@@ -41,7 +33,7 @@ protected:
 private:
 signals:
     /** 완료된 번역문을 등록된 슬롯에 적용합니다. */
-    void ApplyCompletedTranslate(const QString& TranslateText);
+    void onCompletedTranslate(const QString& TranslateText);
 
     /**  */
     void addStreamTranslatedText(const QString& TranslateText);
@@ -67,10 +59,7 @@ protected:
     void addTranslatedText(const QString& inTranslatedText);
 
 protected:
-    TranslateRequestInfo trRequestInfo;
-    QString originText;
-    LangType sourceLang;
-    LangType targetLang;
+    TranslateRequestInfo trReqData;
 
     QString translatedText;
 };

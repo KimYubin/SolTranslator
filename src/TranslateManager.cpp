@@ -1,15 +1,19 @@
 ﻿//
 // Created by YubinKim on 25/03/10 월.
 //
-
-#include "TranslateManager.h"
-
+#include <QCoreApplication>
+#include <QNetworkReply>
+#include <QJsonDocument>
 
 #include "ConfigManager.h"
 #include "FinHashQueue.h"
 #include "FinTypes.h"
 #include "SimpleTranslatePopup.h"
 #include "TranslateUnit.h"
+#include "TlUnitFactory.h"
+
+#include "TranslateManager.h"
+
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
@@ -22,12 +26,21 @@ void TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequ
     tranUnit->executeTextTranslation();
 }
 
-void TranslateManager::translateSimple(const QString& text
-                                     , const LangType sourceLang
-                                     , const LangType targetLang)
+void TranslateManager::translateSimple(const QString& inOrignText
+                                     , const LangType inSourceLang
+                                     , const LangType inTargetLang)
 {
     SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
-    translateText(simple, &SimpleTranslatePopup::showTranslationPopup, text, sourceLang, targetLang);
+
+    translateText(TranslateRequestInfo{
+        inOrignText
+      , inSourceLang
+      , inTargetLang
+      , simple
+      , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
+      , simple
+      , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
+    });
 }
 
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)

@@ -37,7 +37,15 @@ void TextEditTranslateWidget::on_findButton_clicked()
 
     const QString orignText = ui->plainTextEditOrigin->toPlainText();
 
-    finCore->getTranslateManager()->translateText(ui->plainTextEditTranslate, &QPlainTextEdit::setPlainText, orignText, LangType::en, LangType::ko);
+    finCore->getTranslateManager()->translateText(TranslateRequestInfo{
+        orignText
+      , LangType::en
+      , LangType::ko
+      , ui->plainTextEditTranslate
+      , [=](const QString& inStr) { ui->plainTextEditTranslate->setPlainText(inStr); }
+      , ui->plainTextEditTranslate
+      , [=](const QString& inStr) { ui->plainTextEditTranslate->setPlainText(inStr); }
+    });
 }
 
 void TextEditTranslateWidget::loadSettings()

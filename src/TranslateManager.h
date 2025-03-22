@@ -5,22 +5,14 @@
 #ifndef TRANSLATEMANAGER_H
 #define TRANSLATEMANAGER_H
 
-#include <QCoreApplication>
-#include <QNetworkReply>
-#include <QJsonDocument>
-#include <unordered_set>
 
 #include "AbstractManager.h"
 #include "FinHashQueue.h"
-#include "TlUnitFactory.h"
-#include "TranslateUnit.h"
+
 
 class QTextEdit;
 class TranslateUnit;
 class FinTranslatorCore;
-
-template <typename Func>
-using FunctorContextType = typename QtPrivate::ContextTypeForFunctor<Func>::ContextType;
 
 
 class TranslateManager : public AbstractManager
@@ -30,20 +22,11 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(FinTranslatorCore* parent);
 
-    template <typename Func>
-    void translateText(const FunctorContextType<Func>* inTextEditableObj
-                     , Func&& slotfunctor
-                     , const QString& text
-                     , const LangType sourceLang
-                     , const LangType targetLang);
-
-    // todo: 사용대기
     void translateText(const TranslateRequestInfo& inTranslateRequestInfo);
-
     
-    void translateSimple(const QString& text
-                       , const LangType sourceLang
-                       , const LangType targetLang);
+    void translateSimple(const QString& inOrignText
+                       , const LangType inSourceLang
+                       , const LangType inTargetLang);
 
 private slots:
 
@@ -77,17 +60,6 @@ private:
 };
 
 
-
-template <typename Func>
-void TranslateManager::translateText(const FunctorContextType<Func>* inTextEditableObj
-                                   , Func&& slotfunctor
-                                   , const QString& text
-                                   , const LangType sourceLang
-                                   , const LangType targetLang)
-{
-    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit({text, sourceLang, targetLang, [](const QString&) {}}, this);
-    tranUnit->executeTextTranslation(inTextEditableObj, std::forward<Func>(slotfunctor));
-}
 
 #endif //TRANSLATEMANAGER_H
 

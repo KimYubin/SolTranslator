@@ -6,11 +6,13 @@
 
 #include "SimpleTranslatePopup.h"
 
+#include <iostream>
+#include <QAbstractTextDocumentLayout>
 #include <qboxlayout.h>
 #include <qevent.h>
 #include <qscreen.h>
 #include <QGraphicsDropShadowEffect>
-
+#include <QPropertyAnimation>
 
 #include "../ui/ui_SimpleTranslatePopup.h"
 
@@ -36,7 +38,15 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    calculateTextEditMax();
 
+    // 애니메이션 설정
+    animation = new QPropertyAnimation(this, "textEditSize", this);
+    animation->setDuration(200);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+
+    connect(ui->resultText, &QTextEdit::textChanged, this, &SimpleTranslatePopup::animateResize);
+    
     showTranslationPopup(" ");
 
     show();
@@ -50,48 +60,11 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
 {
-    const int prevTextWidth = ui->resultText->document()->size().width();
-    const int prevTextHeight = ui->resultText->document()->size().height();
-    
     ui->resultText->setText(inTranslatedText);
 
     if (QScreen* screen = QGuiApplication::primaryScreen())
     {
-        const float screenWidthf  = static_cast<float>(screen->size().width());
-        const float screenHeightf = static_cast<float>(screen->size().height());
-        const float minScreenLength = std::min(screenWidthf, screenHeightf);
 
-        calculateTextEditSize();
-
-        if (prevTextWidth < maxTextEditSize.width())
-        {
-            ui->resultText->document()->adjustSize();
-
-            const int docWidth = ui->resultText->document()->size().width();
-            int desiredWidth   = qMax(prevTextWidth, qBound(minTextEditSize.width(), docWidth, maxTextEditSize.width()));
-            ui->resultText->setFixedWidth(desiredWidth);
-
-            ui->resultText->repaint();
-        }
-
-        if (prevTextHeight < maxTextEditSize.height())
-        {
-            // 너비 조정 후 높이 조정
-            const int docHeight     = ui->resultText->document()->size().height();
-            const int desiredHeight = qMax(prevTextHeight, qBound(minTextEditSize.height(), docHeight, maxTextEditSize.height()));
-            ui->resultText->setFixedHeight(desiredHeight);
-        }
-        QSize bgFrameSize = ui->resultText->size() + QSize{innerMargin.left() + innerMargin.right(), innerMargin.top() + innerMargin.bottom()};
-        QSize widgetSize  = bgFrameSize + QSize{outerMargin.left() + outerMargin.right(), outerMargin.top() + outerMargin.bottom()};
-
-        ui->bgFrame->setFixedSize(bgFrameSize);
-        setFixedSize(widgetSize);
-
-        QPoint targetCenter = QPoint(screenWidthf * xPosRatio, screenHeightf * yPosRatio);
-        QPoint recCenter    = rect().center();
-        QPoint targetPos    = targetCenter - recCenter;
-
-        move(targetPos);
     }
     else
     {
@@ -101,7 +74,7 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
     // QApplication::processEvents();
     // update();
     // 네트워크 대기로 인한 지연된 업데이트 탈출
-    repaint();
+    // repaint();
 }
 
 void SimpleTranslatePopup::addTranslationText(const QString& inTranslatedText)
@@ -110,6 +83,33 @@ void SimpleTranslatePopup::addTranslationText(const QString& inTranslatedText)
 }
 
 void SimpleTranslatePopup::completeText(const QString& inTranslatedText) {
+}
+
+void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
+{
+    QScreen* screen           = QGuiApplication::primaryScreen();
+    const float screenWidthf  = static_cast<float>(screen->size().width());
+    const float screenHeightf = static_cast<float>(screen->size().height());
+
+    ui->resultText->setFixedSize(inTextEditSize);
+    
+    QSize bgFrameSize = inTextEditSize + QSize{innerMargin.left() + innerMargin.right(), innerMargin.top() + innerMargin.bottom()};
+    QSize widgetSize  = bgFrameSize + QSize{outerMargin.left() + outerMargin.right(), outerMargin.top() + outerMargin.bottom()};
+
+    ui->bgFrame->setFixedSize(bgFrameSize);
+    setFixedSize(widgetSize);
+
+    QPoint targetCenter = QPoint(screenWidthf * xPosRatio, screenHeightf * yPosRatio);
+    QPoint recCenter    = rect().center();
+    QPoint targetPos    = targetCenter - recCenter;
+
+    move(targetPos);
+    ui->resultText->repaint();
+}
+
+void SimpleTranslatePopup::setTextEditPos(const QPoint& inTextEditPos)
+{
+    
 }
 
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
@@ -140,7 +140,43 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void SimpleTranslatePopup::calculateTextEditSize()
+void SimpleTranslatePopup::animateResize()
+{
+    QTextDocument* doc = ui->resultText->document();
+    
+    QSizeF docSize = ui->resultText->document()->size();
+    docSize.setWidth(qMax(docSize.width(), static_cast<qreal>(_prevSize.width())));
+    int targetWidth   = qBound(qMax(minTextEditSize.width(), _prevSize.width()), static_cast<int>(docSize.width()) + 10, maxTextEditSize.width());
+    // 2. 문서 레이아웃 강제 적용
+    doc->setTextWidth(targetWidth);  // 가로 기준으로 레이아웃 계산
+
+    // 3. 갱신된 세로 크기 계산
+     docSize = doc->size();
+    int targetHeight = qBound(minTextEditSize.height(),
+                              static_cast<int>(docSize.height()) + 10,
+                              maxTextEditSize.height());
+
+    // 4. 목표 크기 설정
+    QSize newSize(targetWidth, targetHeight);
+
+    newSize = calculateTextEditSize();
+
+    if (_prevSize == newSize)
+        return;
+    
+    _prevSize = newSize;
+    
+    // 5. 애니메이션 실행 (중복 방지 포함)
+    if (animation->state() == QAbstractAnimation::Running) {
+        // animation->stop();
+    }
+
+    animation->setStartValue(ui->resultText->size());
+    animation->setEndValue(newSize);
+    animation->start();
+}
+
+void SimpleTranslatePopup::calculateTextEditMax()
 {
     QScreen* screen = QGuiApplication::primaryScreen();
     if (screen == nullptr)
@@ -178,4 +214,30 @@ void SimpleTranslatePopup::calculateTextEditSize()
     ui->resultText->setMaximumWidth(maxTextEditSize.width());
     ui->resultText->setMaximumHeight(maxTextEditSize.height());
 
+}
+
+QSize SimpleTranslatePopup::calculateTextEditSize(int margin)
+{
+    QTextEdit* textEdit = ui->resultText;
+
+    const QString text = textEdit->toPlainText();
+    const QFont font   = textEdit->font();
+    const QFontMetrics fontMetrics(font);
+
+    const int strWidth    = fontMetrics.horizontalAdvance(text); // 전체 너비
+    const div_t lineCount = std::div(strWidth, minTextEditSize.width());
+
+    const int totalLines = lineCount.quot + (lineCount.rem == 0 ? 0 : 1);
+
+    const int lineHeight = fontMetrics.height();
+
+    // 6. 텍스트가 차지하는 세로 크기 계산
+    const int vMargin          = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
+    const int calculatedHeight = totalLines * lineHeight + vMargin;
+
+    // 7. 최종 크기 계산 (가로는 고정, 세로는 계산된 값)
+    const int finalWidth  = qBound(minTextEditSize.width(), maxTextEditSize.width(), maxTextEditSize.width()); // 가로는 maxWidth로 고정
+    const int finalHeight = qBound(minTextEditSize.height(), calculatedHeight, maxTextEditSize.height());      // 세로 크기 계산 후 최소, 최대 범위 적용
+
+    return QSize(finalWidth, finalHeight); // 최종 계산된 크기 반환
 }

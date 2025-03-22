@@ -30,7 +30,10 @@ public:
 
     ~SimpleTranslatePopup() override;
 
+
     void showTranslationPopup(const QString& inTranslatedText);
+    void addTranslationText(const QString& inTranslatedText);
+    void completeText(const QString& inTranslatedText);
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
@@ -38,8 +41,24 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
+
+    void calculateTextEditSize();
+    
     bool bIsDrag = false;
     QPoint dragPoint;
+
+
+    QMargins outerMargin;
+    QMargins innerMargin;
+    int frameLineWidth;
+    QSize minTextEditSize;
+    QSize maxTextEditSize;
+
+    
+    const float widthRatio  = 0.20f;
+    const float heightRatio = 0.6f;
+    const float xPosRatio   = 0.85f;
+    const float yPosRatio   = 0.35f;
 
 private:
     FinTranslatorCore* finCore;

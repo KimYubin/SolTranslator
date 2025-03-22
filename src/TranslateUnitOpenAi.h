@@ -17,11 +17,15 @@ public:
                                , TranslateManager* parent);
 
 protected:
+    void streamingTranslate();
+    void completeTranslate();
+
     virtual void requestTranslate() override;
+
+    void onReadyRead(QNetworkReply* reply);
+
     virtual void replyTranslateFinished(QNetworkReply* reply) override;
-
 };
-
 
 
 #endif //TRANSLATEUNITOPENAI_H

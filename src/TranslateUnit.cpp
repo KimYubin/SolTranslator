@@ -13,11 +13,22 @@
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)
     : QNetworkAccessManager(parent)
+    , trRequestInfo(inTranslateRequestInfo)
     , originText(inTranslateRequestInfo.originText)
     , sourceLang(inTranslateRequestInfo.sourceLang)
     , targetLang(inTranslateRequestInfo.targetLang)
 {
-    connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
+}
+
+void TranslateUnit::executeTextTranslation()
+{
+    if (trRequestInfo.callbackTranslateStreaming.has_value())
+    {
+        connect(this, &TranslateUnit::addStreamTranslatedText, this, std::move((*trRequestInfo.callbackTranslateStreaming)));
+    }
+
+    connect(this, &TranslateUnit::ApplyCompletedTranslate, this, std::move(trRequestInfo.callbackTranslateComplete));
+    executeTextTranslation_Impl();
 }
 
 void TranslateUnit::executeTextTranslation_Impl()
@@ -40,6 +51,7 @@ void TranslateUnit::executeTextTranslation_Impl()
         }
     }
 
+    connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
     // to subclass
     requestTranslate();
 
@@ -74,4 +86,11 @@ void TranslateUnit::updateTranslatedText(const QString& inTranslatedText)
     // 빈 문자열도 적용합니다.
     emit ApplyCompletedTranslate(inTranslatedText);
     deleteLater();
+}
+
+void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
+{
+    translatedText.append(inTranslatedText);
+    emit ApplyCompletedTranslate(translatedText);
+    // emit addStreamTranslatedText(inTranslatedText);
 }

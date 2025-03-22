@@ -16,6 +16,12 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
     SetEngineType(EngineType::OpenAI);
 }
 
+void TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
+{
+    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(inTranslateRequestInfo, this);
+    tranUnit->executeTextTranslation();
+}
+
 void TranslateManager::translateSimple(const QString& text
                                      , const LangType sourceLang
                                      , const LangType targetLang)

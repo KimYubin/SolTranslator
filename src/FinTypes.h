@@ -65,14 +65,21 @@ struct TranslateRequestInfo
 
     TranslateRequestInfo(const QString& inOriginText
                        , const LangType inSourceLang
-                       , const LangType inTargetLang)
+                       , const LangType inTargetLang
+                       , std::function<void(const QString&)>&& inCallbackTranslateComplete
+                       , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt)
         : originText(inOriginText)
         , sourceLang(inSourceLang)
-        , targetLang(inTargetLang) {}
+        , targetLang(inTargetLang)
+        , callbackTranslateComplete(inCallbackTranslateComplete)
+        , callbackTranslateStreaming(incallbackTranslateStreaming)
+    {}
 
     QString originText;
     LangType sourceLang;
     LangType targetLang;
+    std::function<void(const QString&)> callbackTranslateComplete;
+    std::optional<std::function<void(const QString&)>> callbackTranslateStreaming;
 };
 
 struct LangInfo

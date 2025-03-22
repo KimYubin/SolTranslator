@@ -37,6 +37,10 @@ public:
                      , const LangType sourceLang
                      , const LangType targetLang);
 
+    // todo: 사용대기
+    void translateText(const TranslateRequestInfo& inTranslateRequestInfo);
+
+    
     void translateSimple(const QString& text
                        , const LangType sourceLang
                        , const LangType targetLang);
@@ -81,7 +85,7 @@ void TranslateManager::translateText(const FunctorContextType<Func>* inTextEdita
                                    , const LangType sourceLang
                                    , const LangType targetLang)
 {
-    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit({text, sourceLang, targetLang}, this);
+    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit({text, sourceLang, targetLang, [](const QString&) {}}, this);
     tranUnit->executeTextTranslation(inTextEditableObj, std::forward<Func>(slotfunctor));
 }
 

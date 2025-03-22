@@ -29,6 +29,8 @@ public:
         connect(this, &TranslateUnit::ApplyCompletedTranslate, inTextEditableObj, std::forward<Func>(slotfunctor));
         executeTextTranslation_Impl();
     }
+    
+    void executeTextTranslation();
 
 private:
     void executeTextTranslation_Impl();
@@ -40,6 +42,9 @@ private:
 signals:
     /** 완료된 번역문을 등록된 슬롯에 적용합니다. */
     void ApplyCompletedTranslate(const QString& TranslateText);
+
+    /**  */
+    void addStreamTranslatedText(const QString& TranslateText);
 
 private slots:
     void onReplyFinished(QNetworkReply* reply);
@@ -60,10 +65,14 @@ protected:
     void updateTranslatedText(const QString& inTranslatedText);
 
     void addTranslatedText(const QString& inTranslatedText);
+
 protected:
+    TranslateRequestInfo trRequestInfo;
     QString originText;
     LangType sourceLang;
     LangType targetLang;
+
+    QString translatedText;
 };
 
 

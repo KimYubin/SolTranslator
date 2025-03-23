@@ -42,6 +42,7 @@ public:
     QSize getTextEditSize() const { return _textEditSize; };
     QPoint getTextEditPos() const { return _textEditPos; };
 
+    /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
     void setTextEditPos(const QPoint& inTextEditPos);
 
@@ -59,17 +60,17 @@ private:
     QSize calculateTextEditSize(int margin = 10);
 
     QPropertyAnimation* animation;
-    
+
     QSize _textEditSize;
     QPoint _textEditPos;
-    
+
     bool bIsDrag = false;
     QPoint dragPoint;
 
 
     QMargins outerMargin;
     QMargins innerMargin;
-    int frameLineWidth;
+
     QSize minTextEditSize;
     QSize maxTextEditSize;
 

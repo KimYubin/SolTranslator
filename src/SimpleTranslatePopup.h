@@ -41,11 +41,6 @@ public:
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
 
-protected:
-    virtual void mousePressEvent(QMouseEvent* event) override;
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
-    virtual void mouseReleaseEvent(QMouseEvent* event) override;
-
 private:
     void animateTextEditResize(const QSize& inNewSize);
     void calculateTextEditMax();
@@ -54,20 +49,26 @@ private:
      * inNewText의 에디터 크기를 계산합니다. 
      */
     QSize calculateTextEditSize(const QString& inNewText);
+    
+protected:
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
-    QPropertyAnimation* animation;
+
+    QPropertyAnimation* _animation;
 
     QSize _textEditSize;
 
-    bool bIsDrag = false;
-    QPoint dragPoint;
+    bool _bIsDrag = false;
+    QPoint _dragPoint;
 
 
-    QSize innerMarginSize;
-    QSize outerMarginSize;
+    QSize _innerMarginSize;
+    QSize _outerMarginSize;
 
-    QSize minEditSize;
-    QSize maxEditSize;
+    QSize _minEditSize;
+    QSize _maxEditSize;
 
     QSize _prevSize;
     int _lineBreakCount = 0;
@@ -77,9 +78,9 @@ private:
     const float xPosRatio   = 0.85f;
     const float yPosRatio   = 0.35f;
 
-private:
-    FinTranslatorCore* finCore;
+    FinTranslatorCore* _finCore;
 
+private:
     Ui::SimpleTranslatePopup* ui;
 };
 

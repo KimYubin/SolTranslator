@@ -19,7 +19,7 @@
 
 SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint)
-    , finCore(inFinCore)
+    , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
     ui->setupUi(this);
@@ -43,9 +43,9 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     // 애니메이션
     // 애니메이션 입력값으로 setTextEditSize 함수 호출 및 변경
-    animation = new QPropertyAnimation(this, "textEditSize", this);
-    animation->setDuration(250);
-    animation->setEasingCurve(QEasingCurve::OutCubic);
+    _animation = new QPropertyAnimation(this, "textEditSize", this);
+    _animation->setDuration(250);
+    _animation->setEasingCurve(QEasingCurve::OutCubic);
 
     showTranslationPopup(" ");
 
@@ -76,8 +76,8 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 
     ui->resultText->setFixedSize(inTextEditSize);
 
-    const QSize bgFrameSize = inTextEditSize + innerMarginSize;
-    const QSize widgetSize  = bgFrameSize + outerMarginSize;
+    const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
+    const QSize widgetSize  = bgFrameSize + _outerMarginSize;
 
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
@@ -94,17 +94,17 @@ void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
-        bIsDrag   = true;
+        _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        _bIsDrag   = true;
         event->accept();
     }
 }
 
 void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
 {
-    if (bIsDrag && (event->button() | Qt::LeftButton))
+    if (_bIsDrag && (event->button() | Qt::LeftButton))
     {
-        move(event->globalPosition().toPoint() - dragPoint);
+        move(event->globalPosition().toPoint() - _dragPoint);
         event->accept();
     }
 }
@@ -113,7 +113,7 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        bIsDrag = false;
+        _bIsDrag = false;
         event->accept();
     }
 }
@@ -126,9 +126,9 @@ void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
     }
     _prevSize = inNewSize;
 
-    animation->setStartValue(ui->resultText->size());
-    animation->setEndValue(inNewSize);
-    animation->start();
+    _animation->setStartValue(ui->resultText->size());
+    _animation->setEndValue(inNewSize); // setTextEditSize
+    _animation->start();
 }
 
 void SimpleTranslatePopup::calculateTextEditMax()
@@ -148,23 +148,23 @@ void SimpleTranslatePopup::calculateTextEditMax()
     QMargins innerMargins = ui->textVLayout->contentsMargins();
     QMargins outerMargins = ui->outerVLayout->contentsMargins();
 
-    innerMarginSize = QSize(innerMargins.left() + innerMargins.right(), innerMargins.top() + innerMargins.bottom());
-    outerMarginSize = QSize(outerMargins.left() + outerMargins.right(), outerMargins.top() + outerMargins.bottom());
+    _innerMarginSize = QSize(innerMargins.left() + innerMargins.right(), innerMargins.top() + innerMargins.bottom());
+    _outerMarginSize = QSize(outerMargins.left() + outerMargins.right(), outerMargins.top() + outerMargins.bottom());
 
     const int frameLineWidth = ui->bgFrame->lineWidth() * 2;
 
-    const QSize totalMarginSize = innerMarginSize + outerMarginSize;
+    const QSize totalMarginSize = _innerMarginSize + _outerMarginSize;
     const int widthMargin       = totalMarginSize.width() + frameLineWidth;
     const int heightMargin      = totalMarginSize.height() + frameLineWidth;
 
-    minEditSize = {minWidth - widthMargin, minHeight - heightMargin};
-    maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
+    _minEditSize = {minWidth - widthMargin, minHeight - heightMargin};
+    _maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
 
 
-    // ui->resultText->setMinimumWidth(minEditSize.width());
-    // ui->resultText->setMinimumHeight(minEditSize.height());
-    // ui->resultText->setMaximumWidth(maxEditSize.width());
-    // ui->resultText->setMaximumHeight(maxEditSize.height());
+    // ui->resultText->setMinimumWidth(_minEditSize.width());
+    // ui->resultText->setMinimumHeight(_minEditSize.height());
+    // ui->resultText->setMaximumWidth(_maxEditSize.width());
+    // ui->resultText->setMaximumHeight(_maxEditSize.height());
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
@@ -182,14 +182,14 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
     const QFontMetrics fntMetric = textEdit->fontMetrics();
 
     const int newStrWidth   = fntMetric.horizontalAdvance(inNewText);
-    const int realLineCount = (newStrWidth + maxEditSize.width() - 1) / maxEditSize.width(); // (str너비 / 최대너비) 올림
+    const int realLineCount = (newStrWidth + _maxEditSize.width() - 1) / _maxEditSize.width(); // (str너비 / 최대너비) 올림
     const int newLineCount  = realLineCount + _lineBreakCount + 1;
     const int lineHeight    = fntMetric.height();
     const int vMargin       = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
     const int newTextHeight = newLineCount * lineHeight + vMargin;
 
-    const int newWidth  = qBound(minEditSize.width(), newStrWidth, maxEditSize.width());
-    const int newHeight = qBound(minEditSize.height(), newTextHeight, maxEditSize.height());
+    const int newWidth  = qBound(_minEditSize.width(), newStrWidth, _maxEditSize.width());
+    const int newHeight = qBound(_minEditSize.height(), newTextHeight, _maxEditSize.height());
 
     return QSize(newWidth, newHeight);
 }

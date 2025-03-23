@@ -27,7 +27,6 @@ class SimpleTranslatePopup : public QWidget
     Q_OBJECT
 
     Q_PROPERTY(QSize textEditSize READ getTextEditSize WRITE setTextEditSize)
-    Q_PROPERTY(QPoint textEditPos READ getTextEditPos WRITE setTextEditPos)
 
 public:
     explicit SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
@@ -40,7 +39,6 @@ public:
     void completeText(const QString& inTranslatedText);
 
     QSize getTextEditSize() const { return _textEditSize; };
-    QPoint getTextEditPos() const { return _textEditPos; };
 
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
@@ -52,29 +50,34 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
 private slots:
-    void animateResize();
+    void animateTextEditResize(const QSize& inNewSize);
 
 private:
 
     void calculateTextEditMax();
-    QSize calculateTextEditSize(int margin = 10);
+
+    /**
+     * inNewText의 에디터 크기를 계산합니다. 
+     */
+    QSize calculateTextEditSize(const QString& inNewText);
 
     QPropertyAnimation* animation;
 
     QSize _textEditSize;
-    QPoint _textEditPos;
 
     bool bIsDrag = false;
     QPoint dragPoint;
 
 
-    QMargins outerMargin;
-    QMargins innerMargin;
+    QSize innerMarginSize;
+    QSize outerMarginSize;
 
-    QSize minTextEditSize;
-    QSize maxTextEditSize;
+    QSize minEditSize;
+    QSize maxEditSize;
 
     QSize _prevSize;
+    int _lineBreakCount = 0;
+
     const float widthRatio  = 0.20f;
     const float heightRatio = 0.6f;
     const float xPosRatio   = 0.85f;

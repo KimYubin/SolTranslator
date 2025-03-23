@@ -41,12 +41,11 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     calculateTextEditMax();
 
-    // 애니메이션 설정
+    // 애니메이션
+    // 애니메이션 입력값으로 setTextEditSize 함수 호출 및 변경
     animation = new QPropertyAnimation(this, "textEditSize", this);
-    animation->setDuration(200);
+    animation->setDuration(250);
     animation->setEasingCurve(QEasingCurve::OutCubic);
-
-    connect(ui->resultText, &QTextEdit::textChanged, this, &SimpleTranslatePopup::animateResize);
 
     showTranslationPopup(" ");
 
@@ -61,7 +60,9 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
 {
+    auto newSize = calculateTextEditSize(inTranslatedText);
     ui->resultText->setText(inTranslatedText);
+    animateTextEditResize(newSize);
 }
 
 void SimpleTranslatePopup::addTranslationText(const QString& inTranslatedText)
@@ -76,19 +77,22 @@ void SimpleTranslatePopup::completeText(const QString& inTranslatedText)
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 {
-    const QScreen* screen     = QGuiApplication::primaryScreen();
-    const float screenWidthf  = static_cast<float>(screen->size().width());
-    const float screenHeightf = static_cast<float>(screen->size().height());
+    if (screen() == nullptr)
+    {
+        qWarning()<<"not detected screen";
+    }
+
+    const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
 
     ui->resultText->setFixedSize(inTextEditSize);
 
-    const QSize bgFrameSize = inTextEditSize + QSize{innerMargin.left() + innerMargin.right(), innerMargin.top() + innerMargin.bottom()};
-    const QSize widgetSize  = bgFrameSize + QSize{outerMargin.left() + outerMargin.right(), outerMargin.top() + outerMargin.bottom()};
+    const QSize bgFrameSize = inTextEditSize + innerMarginSize;
+    const QSize widgetSize  = bgFrameSize + outerMarginSize;
 
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
 
-    const QPoint targetCenter = QPoint(screenWidthf * xPosRatio, screenHeightf * yPosRatio);
+    const QPoint targetCenter = QPoint(screenSize.width() * xPosRatio, screenSize.height() * yPosRatio);
     const QPoint recCenter    = rect().center();
     const QPoint targetPos    = targetCenter - recCenter;
 
@@ -129,15 +133,13 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void SimpleTranslatePopup::animateResize()
+void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
 {
-    QSize newSize = calculateTextEditSize();
-
-    if (_prevSize == newSize)
+    if (_prevSize == inNewSize)
     {
         return;
     }
-    _prevSize = newSize;
+    _prevSize = inNewSize;
 
     // 5. 애니메이션 실행 (중복 방지 포함)
     if (animation->state() == QAbstractAnimation::Running)
@@ -146,7 +148,7 @@ void SimpleTranslatePopup::animateResize()
     }
 
     animation->setStartValue(ui->resultText->size());
-    animation->setEndValue(newSize);
+    animation->setEndValue(inNewSize);
     animation->start();
 }
 
@@ -171,46 +173,52 @@ void SimpleTranslatePopup::calculateTextEditMax()
 
     // ~==========
     // text edit size
-    outerMargin = ui->outerVLayout->contentsMargins();
-    innerMargin = ui->textVLayout->contentsMargins();
+    QMargins innerMargins = ui->textVLayout->contentsMargins();
+    QMargins outerMargins = ui->outerVLayout->contentsMargins();
+
+    innerMarginSize = QSize(innerMargins.left() + innerMargins.right(), innerMargins.top() + innerMargins.bottom());
+    outerMarginSize = QSize(outerMargins.left() + outerMargins.right(), outerMargins.top() + outerMargins.bottom());
+
     int frameLineWidth = ui->bgFrame->lineWidth();
 
-    const QMargins totalMargin = outerMargin + innerMargin + (frameLineWidth * 2);
-    const int widthMargin      = (totalMargin.left() + totalMargin.right());
-    const int heightMargin     = (totalMargin.top() + totalMargin.bottom());
+    const QSize totalMarginSize = innerMarginSize + outerMarginSize;
+    const int widthMargin       = totalMarginSize.width() + frameLineWidth * 2;
+    const int heightMargin      = totalMarginSize.height() + frameLineWidth * 2;
 
-    minTextEditSize = {minWidth - widthMargin, minHeight - heightMargin};
-    maxTextEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
+    minEditSize = {minWidth - widthMargin, minHeight - heightMargin};
+    maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
 
 
-    ui->resultText->setMinimumWidth(minTextEditSize.width());
-    ui->resultText->setMinimumHeight(minTextEditSize.height());
-    ui->resultText->setMaximumWidth(maxTextEditSize.width());
-    ui->resultText->setMaximumHeight(maxTextEditSize.height());
+    ui->resultText->setMinimumWidth(minEditSize.width());
+    ui->resultText->setMinimumHeight(minEditSize.height());
+    ui->resultText->setMaximumWidth(maxEditSize.width());
+    ui->resultText->setMaximumHeight(maxEditSize.height());
 
 }
 
-QSize SimpleTranslatePopup::calculateTextEditSize(int margin)
+QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
 {
-    QTextEdit* textEdit = ui->resultText;
+    const QTextEdit* textEdit = ui->resultText;
 
-    const QString text = textEdit->toPlainText();
-    const QFont font   = textEdit->font();
-    const QFontMetrics fontMetrics(font);
+    // counting added string's line break
+    qsizetype idx = textEdit->toPlainText().length();
+    while ((idx = inNewText.indexOf("\n\n", idx)) != -1)
+    {
+        ++idx;
+        ++_lineBreakCount;
+    }
 
-    const int strWidth       = fontMetrics.horizontalAdvance(text); // 전체 너비
-    const div_t lineCountDiv = std::div(strWidth, minTextEditSize.width());
+    const QFontMetrics fntMetric = textEdit->fontMetrics();
 
-    
-    
-    const int totalLineCount = lineCountDiv.quot + (lineCountDiv.rem == 0 ? 0 : 1);
+    const int newStrWidth   = fntMetric.horizontalAdvance(inNewText);
+    const int realLineCount = (newStrWidth + minEditSize.width() - 1) / minEditSize.width();
+    const int newLineCount  = realLineCount + _lineBreakCount + 1;
+    const int lineHeight    = fntMetric.height();
+    const int vMargin       = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
+    const int newTextHeight = newLineCount * lineHeight + vMargin;
 
-    const int lineHeight       = fontMetrics.height();
-    const int vMargin          = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
-    const int calculatedHeight = totalLineCount * lineHeight + vMargin;
+    const int newWidth  = qBound(minEditSize.width(), newStrWidth, maxEditSize.width());
+    const int newHeight = qBound(minEditSize.height(), newTextHeight, maxEditSize.height());
 
-    const int finalWidth  = qBound(minTextEditSize.width(), maxTextEditSize.width(), maxTextEditSize.width());
-    const int finalHeight = qBound(minTextEditSize.height(), calculatedHeight, maxTextEditSize.height());
-
-    return QSize(finalWidth, finalHeight); // 최종 계산된 크기 반환
+    return QSize(newWidth, newHeight); // 최종 계산된 크기 반환
 }

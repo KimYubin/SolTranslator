@@ -90,32 +90,31 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     ui->resultText->repaint();
 }
 
-void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
+QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
 {
-    if (event->button() == Qt::LeftButton)
-    {
-        _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
-        _bIsDrag   = true;
-        event->accept();
-    }
-}
+    const QTextEdit* textEdit = ui->resultText;
 
-void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
-{
-    if (_bIsDrag && (event->button() | Qt::LeftButton))
+    // counting added string's line break
+    qsizetype idx = textEdit->toPlainText().length();
+    while ((idx = inNewText.indexOf("\n\n", idx)) != -1)
     {
-        move(event->globalPosition().toPoint() - _dragPoint);
-        event->accept();
+        ++idx;
+        ++_lineBreakCount;
     }
-}
 
-void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        _bIsDrag = false;
-        event->accept();
-    }
+    const QFontMetrics fntMetric = textEdit->fontMetrics();
+
+    const int newStrWidth   = fntMetric.horizontalAdvance(inNewText);
+    const int realLineCount = (newStrWidth + _maxEditSize.width() - 1) / _maxEditSize.width(); // (str너비 / 최대너비) 올림
+    const int newLineCount  = realLineCount + _lineBreakCount + 1;
+    const int lineHeight    = fntMetric.height();
+    const int vMargin       = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
+    const int newTextHeight = newLineCount * lineHeight + vMargin;
+
+    const int newWidth  = qBound(_minEditSize.width(), newStrWidth, _maxEditSize.width());
+    const int newHeight = qBound(_minEditSize.height(), newTextHeight, _maxEditSize.height());
+
+    return QSize(newWidth, newHeight);
 }
 
 void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
@@ -167,29 +166,30 @@ void SimpleTranslatePopup::calculateTextEditMax()
     // ui->resultText->setMaximumHeight(_maxEditSize.height());
 }
 
-QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
+void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
 {
-    const QTextEdit* textEdit = ui->resultText;
-
-    // counting added string's line break
-    qsizetype idx = textEdit->toPlainText().length();
-    while ((idx = inNewText.indexOf("\n\n", idx)) != -1)
+    if (event->button() == Qt::LeftButton)
     {
-        ++idx;
-        ++_lineBreakCount;
+        _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        _bIsDrag   = true;
+        event->accept();
     }
+}
 
-    const QFontMetrics fntMetric = textEdit->fontMetrics();
+void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
+{
+    if (_bIsDrag && (event->button() | Qt::LeftButton))
+    {
+        move(event->globalPosition().toPoint() - _dragPoint);
+        event->accept();
+    }
+}
 
-    const int newStrWidth   = fntMetric.horizontalAdvance(inNewText);
-    const int realLineCount = (newStrWidth + _maxEditSize.width() - 1) / _maxEditSize.width(); // (str너비 / 최대너비) 올림
-    const int newLineCount  = realLineCount + _lineBreakCount + 1;
-    const int lineHeight    = fntMetric.height();
-    const int vMargin       = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
-    const int newTextHeight = newLineCount * lineHeight + vMargin;
-
-    const int newWidth  = qBound(_minEditSize.width(), newStrWidth, _maxEditSize.width());
-    const int newHeight = qBound(_minEditSize.height(), newTextHeight, _maxEditSize.height());
-
-    return QSize(newWidth, newHeight);
+void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        _bIsDrag = false;
+        event->accept();
+    }
 }

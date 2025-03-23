@@ -33,7 +33,7 @@ public:
 
     ~SimpleTranslatePopup() override;
 
-
+    /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup(const QString& inTranslatedText);
 
     QSize getTextEditSize() const { return _textEditSize; };
@@ -42,14 +42,15 @@ public:
     void setTextEditSize(const QSize& inTextEditSize);
 
 private:
+    /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
+    QSize calculateTextEditSize(const QString& inNewText);
+
+    /** 입력된 사이즈를 목표로 애니메이션을 실행합니다. */
     void animateTextEditResize(const QSize& inNewSize);
+
+    /** text edit의 최대 규격 등을 계산합니다. */
     void calculateTextEditMax();
 
-    /**
-     * inNewText의 에디터 크기를 계산합니다. 
-     */
-    QSize calculateTextEditSize(const QString& inNewText);
-    
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;

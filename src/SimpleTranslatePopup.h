@@ -35,25 +35,19 @@ public:
 
 
     void showTranslationPopup(const QString& inTranslatedText);
-    void addTranslationText(const QString& inTranslatedText);
-    void completeText(const QString& inTranslatedText);
 
     QSize getTextEditSize() const { return _textEditSize; };
 
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
-    void setTextEditPos(const QPoint& inTextEditPos);
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
-private slots:
-    void animateTextEditResize(const QSize& inNewSize);
-
 private:
-
+    void animateTextEditResize(const QSize& inNewSize);
     void calculateTextEditMax();
 
     /**

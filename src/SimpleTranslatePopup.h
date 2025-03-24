@@ -61,10 +61,6 @@ protected:
 
     QSize _textEditSize;
 
-    bool _bIsDrag = false;
-    QPoint _dragPoint;
-
-
     QSize _innerMarginSize;
     QSize _outerMarginSize;
 
@@ -72,16 +68,21 @@ protected:
     QSize _maxEditSize;
 
     QSize _prevSize;
-    int _lineBreakCount = 0;
+
+    int _lineCount = 0;
+    int _lastLineLength = 0;
 
     const float widthRatio  = 0.20f;
     const float heightRatio = 0.6f;
     const float xPosRatio   = 0.85f;
     const float yPosRatio   = 0.35f;
 
-    FinTranslatorCore* _finCore;
+    bool _bIsDrag = false;
+    QPoint _dragPoint;
 
 private:
+    FinTranslatorCore* _finCore;
+
     Ui::SimpleTranslatePopup* ui;
 };
 

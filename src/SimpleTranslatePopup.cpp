@@ -1,4 +1,4 @@
-﻿//
+//
 // Created by YubinKim on 25/03/12 수.
 //
 
@@ -13,6 +13,9 @@
 #include <qscreen.h>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
+#include <qregularexpression.h>
+#include <QTextBoundaryFinder>
+#include <QScrollBar>
 
 #include "../ui/ui_SimpleTranslatePopup.h"
 
@@ -39,6 +42,9 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
+    // manual word wrap adjustsize 
+    ui->resultText->setLineWrapMode(QTextEdit::LineWrapMode::FixedPixelWidth);
+
     calculateTextEditMax();
 
     // 애니메이션
@@ -47,7 +53,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     _animation->setDuration(250);
     _animation->setEasingCurve(QEasingCurve::OutCubic);
 
-    showTranslationPopup(" ");
+    showTranslationPopup("");
 
     show();
 }
@@ -60,9 +66,14 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
 {
-    auto newSize = calculateTextEditSize(inTranslatedText);
+    if ((_prevSize.width() < _maxEditSize.width())
+        || (_prevSize.height() < _maxEditSize.height()))
+    {
+        const QSize newSize = calculateTextEditSize(inTranslatedText);
+        animateTextEditResize(newSize);
+    }
+
     ui->resultText->setText(inTranslatedText);
-    animateTextEditResize(newSize);
 }
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
@@ -75,6 +86,9 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
 
     ui->resultText->setFixedSize(inTextEditSize);
+
+    // soft wrap width without scrollbar area
+    ui->resultText->setLineWrapColumnOrWidth(ui->resultText->viewport()->size().width() - ui->resultText->verticalScrollBar()->width());
 
     const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
     const QSize widgetSize  = bgFrameSize + _outerMarginSize;
@@ -94,22 +108,58 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
 {
     const QTextEdit* textEdit = ui->resultText;
 
-    // counting added string's line break
-    qsizetype idx = textEdit->toPlainText().length();
-    while ((idx = inNewText.indexOf("\n\n", idx)) != -1)
-    {
-        ++idx;
-        ++_lineBreakCount;
-    }
-
     const QFontMetrics fntMetric = textEdit->fontMetrics();
 
-    const int newStrWidth   = fntMetric.horizontalAdvance(inNewText);
-    const int realLineCount = (newStrWidth + _maxEditSize.width() - 1) / _maxEditSize.width(); // (str너비 / 최대너비) 올림
-    const int newLineCount  = realLineCount + _lineBreakCount + 1;
-    const int lineHeight    = fntMetric.height();
-    const int vMargin       = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
-    const int newTextHeight = newLineCount * lineHeight + vMargin;
+    const int newStrWidth = fntMetric.horizontalAdvance(inNewText);
+
+    const int viewportMargin = ui->resultText->size().width() - ui->resultText->viewport()->size().width();
+
+    // pseudo Unicode line breaking
+    const int maxWidth = _maxEditSize.width() - textEdit->verticalScrollBar()->width() - viewportMargin;
+    if ((_lastLineLength + newStrWidth) >= maxWidth)
+    {
+        const int prevStrSize      = textEdit->toPlainText().length();
+        const QString addedSubStr  = inNewText.sliced(prevStrSize);
+        QTextBoundaryFinder textBF = {QTextBoundaryFinder::Word, addedSubStr};
+
+        const int addSubStrSize = addedSubStr.length();
+        qsizetype currentIdx    = textBF.position();
+        while (currentIdx < addSubStrSize)
+        {
+            const qsizetype prevIdx = currentIdx;
+            currentIdx              = textBF.toNextBoundary();
+
+            QString word = addedSubStr.sliced(prevIdx, currentIdx - prevIdx);
+            if (word == "\n")
+            {
+                ++_lineCount;
+                _lastLineLength = 0;
+                continue;
+            }
+
+            const int wordLen     = fntMetric.horizontalAdvance(word);
+            const int lastWordLen = (_lastLineLength + wordLen);
+            if (lastWordLen >= maxWidth)
+            {
+                // line over
+                ++_lineCount;
+
+                // single word spans more than two lines
+                auto [addLineCount, lastLineRem] = std::div(wordLen, maxWidth);
+                _lineCount += addLineCount;
+                _lastLineLength = lastLineRem;
+            }
+            else
+            {
+                _lastLineLength += wordLen;
+            }
+        }
+    }
+
+    const int lineHeight = fntMetric.height() * 1.1f;
+    const int vMargin    = textEdit->contentsMargins().bottom() + textEdit->contentsMargins().top();
+
+    const int newTextHeight = (_lineCount + (!!(_lastLineLength)) + 1) * lineHeight + vMargin;
 
     const int newWidth  = qBound(_minEditSize.width(), newStrWidth, _maxEditSize.width());
     const int newHeight = qBound(_minEditSize.height(), newTextHeight, _maxEditSize.height());

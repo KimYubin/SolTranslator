@@ -26,7 +26,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     , ui(new Ui::SimpleTranslatePopup)
 {
     ui->setupUi(this);
-    ui->bgFrame->setLayout(ui->textVLayout);
+    ui->bgFrame->setLayout(ui->textHLayout);
     setLayout(ui->outerVLayout);
 
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
@@ -127,7 +127,7 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
         while (currentIdx < addSubStrSize)
         {
             const qsizetype prevIdx = currentIdx;
-            currentIdx              = textBF.toNextBoundary();
+            currentIdx = textBF.toNextBoundary();
 
             QString word = addedSubStr.sliced(prevIdx, currentIdx - prevIdx);
             if (word == "\n")
@@ -137,21 +137,21 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
                 continue;
             }
 
-            const int wordLen     = fntMetric.horizontalAdvance(word);
-            const int lastWordLen = (_lastLineLength + wordLen);
+            const int wordWidth   = fntMetric.horizontalAdvance(word);
+            const int lastWordLen = (_lastLineLength + wordWidth);
             if (lastWordLen >= maxWidth)
             {
                 // line over
                 ++_lineCount;
 
                 // single word spans more than two lines
-                auto [addLineCount, lastLineRem] = std::div(wordLen, maxWidth);
+                auto [addLineCount, lastLineRem] = std::div(wordWidth, maxWidth);
                 _lineCount += addLineCount;
                 _lastLineLength = lastLineRem;
             }
             else
             {
-                _lastLineLength += wordLen;
+                _lastLineLength += wordWidth;
             }
         }
     }
@@ -194,7 +194,7 @@ void SimpleTranslatePopup::calculateTextEditMax()
     const int minWidth  = screenSize.width() * 0.15f;
     const int minHeight = screenSize.height() * 0.15f;
 
-    QMargins innerMargins = ui->textVLayout->contentsMargins();
+    QMargins innerMargins = ui->textHLayout->contentsMargins();
     QMargins outerMargins = ui->outerVLayout->contentsMargins();
 
     _innerMarginSize = QSize(innerMargins.left() + innerMargins.right(), innerMargins.top() + innerMargins.bottom());
@@ -210,10 +210,6 @@ void SimpleTranslatePopup::calculateTextEditMax()
     _maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
 
 
-    // ui->resultText->setMinimumWidth(_minEditSize.width());
-    // ui->resultText->setMinimumHeight(_minEditSize.height());
-    // ui->resultText->setMaximumWidth(_maxEditSize.width());
-    // ui->resultText->setMaximumHeight(_maxEditSize.height());
 }
 
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)

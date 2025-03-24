@@ -35,35 +35,46 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     // ~======================
     // tab button, instead of tab bar.
+
     // addTab에서 부모 추가되므로, 부모추가 금지.
     textEditTranslate = new TextEditTranslateWidget(finCore);
     settingsWidget    = new SettingsWidget(finCore);
 
-    const int textEditTabIdx = ui->mainTabWidget->addTab(textEditTranslate, tr("Text"));
-    const int settingTabIdx  = ui->mainTabWidget->addTab(settingsWidget, tr("Settings"));
+    // std::array<tabIdx, size>
+    const std::array tabIdxList = {
+        ui->mainTabWidget->addTab(textEditTranslate, tr("Text"))
+      , ui->mainTabWidget->addTab(new QWidget(), tr("dummy"))
+      , ui->mainTabWidget->addTab(settingsWidget, tr("Settings"))
+    };
+    // std::array<QPushButton*, size>
+    const std::array buttonList = {
+        ui->button_0_TextTab
+      , ui->button_1_dummy
+      , ui->button_9_setting
+    };
+    static_assert(tabIdxList.size() == buttonList.size(), "not matching buttons and widgets.");
 
-    QButtonGroup* buttonGroup = new QButtonGroup(this);
-    buttonGroup->setExclusive(true);
 
-    ui->button_0_TextTab->setCheckable(true);
-    ui->button_1->setCheckable(true);
-    ui->button_9_setting->setCheckable(true);
+    _buttonGroup = new QButtonGroup(this);
+    _buttonGroup->setExclusive(true);
 
-    buttonGroup->addButton(ui->button_0_TextTab, 0);
-    buttonGroup->addButton(ui->button_1, 1);
-    buttonGroup->addButton(ui->button_9_setting, 9);
+    for (int idx = 0; idx < tabIdxList.size(); ++idx)
+    {
+        buttonList[idx]->setCheckable(true);
+        // 비순서 임의 id 지정가능.
+        _buttonGroup->addButton(buttonList[idx], tabIdxList[idx]);
+    }
 
-    connect(ui->button_0_TextTab, &QPushButton::clicked, this, [=]() { ui->mainTabWidget->setCurrentIndex(textEditTabIdx); });
-    connect(ui->button_9_setting, &QPushButton::clicked, this, [=]() { ui->mainTabWidget->setCurrentIndex(settingTabIdx); });
-
+    connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
+    {
+        ui->mainTabWidget->setCurrentIndex(inButtonId);
+    });
 
     // ~====================
     // tray icon
     createActions();
     createTrayIcon();
     connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
-
-    setIcon();
 
     trayIcon->show();
 
@@ -118,7 +129,7 @@ void FinTranslatorMainWidget::applyTheme()
     }
     else
     {
-        printf("Unable to set stylesheet, file not found\n");
+        qDebug()<<"Unable to set stylesheet, file not found\n";
     }
 }
 
@@ -186,6 +197,7 @@ void FinTranslatorMainWidget::createTrayIcon()
     trayIconMenu->addAction(quitAction);
 
     trayIcon = new QSystemTrayIcon(this);
+    setIcon();
     trayIcon->setContextMenu(trayIconMenu);
     trayIcon->setVisible(true);
     trayIcon->setToolTip(tr("FinTranslator"));

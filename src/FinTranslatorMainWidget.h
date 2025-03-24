@@ -9,6 +9,7 @@
 #include <QWidget>
 
 
+class QButtonGroup;
 class SettingsWidget;
 class TextEditTranslateWidget;
 class FinTranslatorCore;
@@ -56,10 +57,11 @@ private:
 
     Ui::FinTranslatorMainWidget* ui;
 
+    
     // ~==============
     // sub widgets
+    QButtonGroup* _buttonGroup;
     TextEditTranslateWidget* textEditTranslate;
-
     SettingsWidget* settingsWidget;
     
 

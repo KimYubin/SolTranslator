@@ -83,13 +83,8 @@
        <enum>QTabWidget::TabShape::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>-1</number>
       </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string/>
-       </attribute>
-      </widget>
      </widget>
     </item>
     <item row="0" column="0">
@@ -108,7 +103,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button_1">
+       <widget class="QPushButton" name="button_1_dummy">
         <property name="text">
          <string>PushButton</string>
         </property>

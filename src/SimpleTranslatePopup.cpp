@@ -13,9 +13,11 @@
 #include <qscreen.h>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
+#include <QPushButton>
 #include <qregularexpression.h>
 #include <QTextBoundaryFinder>
 #include <QScrollBar>
+#include <QSizeGrip>
 
 #include "../ui/ui_SimpleTranslatePopup.h"
 
@@ -26,24 +28,34 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     , ui(new Ui::SimpleTranslatePopup)
 {
     ui->setupUi(this);
-    ui->bgFrame->setLayout(ui->textHLayout);
-    setLayout(ui->outerVLayout);
 
+    ui->bgFrame->setLayout(ui->mainLayout);
+    setLayout(ui->outerLayout);
+
+    // bgFrame shadow
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
     shadow->setBlurRadius(14);
     shadow->setOffset(1, 1);
     shadow->setColor(QColor(0, 0, 0, 180));
-
     ui->bgFrame->setGraphicsEffect(shadow);
+
+    // close button
+    connect(ui->closeButton, &QPushButton::clicked, this, &QWidget::close);
+    ui->closeButton->setFlat(true);
+
+    // bottom grip
+    _sizeGrip = new QSizeGrip(this);
+    ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
+    ui->statusLayout->setContentsMargins(0, 0, 4, 4);
+    
 
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // ~======================
-    // scroll bar
+    // resultText & scroll bar
     // 기본 스크롤바 숨김
     ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -67,7 +79,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     {
         syncInOutScrollbar();
     });
-
+    ui->resultText->installEventFilter(this);
 
     // 애니메이션 setTextEditSize 함수 연결
     _animation = new QPropertyAnimation(this, "textEditSize", this);
@@ -108,11 +120,10 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 
     const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
 
-    ui->resultText->setFixedSize(inTextEditSize);
-
     const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
     const QSize widgetSize  = bgFrameSize + _outerMarginSize;
 
+    ui->resultText->setFixedSize(inTextEditSize);
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
 
@@ -121,10 +132,54 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 
     QPoint targetPos    = targetCenter - recCenter;
     targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - widgetSize.width()));
-    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* yPosMaxRatio));
+    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* _yPosMaxRatio));
     
     move(targetPos);
     ui->resultText->repaint();
+}
+
+void SimpleTranslatePopup::changeFixedMode()
+{
+    if (_bNonPopupMode)
+    {
+        return;
+    }
+    _bNonPopupMode = true;
+    
+    // ~==================
+    // 창 종류 변경
+    Qt::WindowFlags wflags = windowFlags();
+    wflags &= ~Qt::Popup;
+    setWindowFlags(wflags);
+    show();
+
+    // ~==================
+    // 위젯 사이즈 변경 애니메이션 정지 및 해제
+    _animation->stop();
+    _animation->setPropertyName("");
+
+    // ~==================
+    // 위젯 사이즈 정책 변경
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
+
+    const QSize widgetMin = QSize(screenSize.width() * _minSizeRatio.width(), screenSize.height() * _minSizeRatio.height());
+    const QSize widgetMax = QSize(screenSize.width() * _fullSizeRatio.width(), screenSize.height() * _fullSizeRatio.height());
+
+    const QSize bgFrameMin = widgetMin - _outerMarginSize;
+    const QSize bgFrameMax = widgetMax - _outerMarginSize;
+
+    const QSize textMin = bgFrameMin - _innerMarginSize;
+    const QSize textMax = bgFrameMax - _innerMarginSize;
+
+    setMinimumSize(widgetMin);
+    setMaximumSize(widgetMax);
+    ui->bgFrame->setMinimumSize(bgFrameMin);
+    ui->bgFrame->setMaximumSize(bgFrameMax);
+    ui->resultText->setMinimumSize(textMin);
+    ui->resultText->setMaximumSize(textMax);
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
@@ -209,7 +264,7 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     // ~==============================
     // 외부 스크롤바 마진 적용.
     // 텍스트와 스크롤바가 겹치지 않게 합니다.
-    ui->textHLayout->activate();
+    ui->textLayout->activate();
     const qreal docMargin    = ui->resultText->document()->documentMargin();
     const int vScrollWidth   = ui->outerVScrollBar->width();
     const qreal newDocMargin = vScrollWidth > docMargin ? vScrollWidth : docMargin;
@@ -230,8 +285,13 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     const int maxWidth  = screenSize.width() * _maxSizeRatio.width();
     const int maxHeight = screenSize.height() * _maxSizeRatio.height();
 
-    const QMargins inMargins = ui->textHLayout->contentsMargins();
-    const QMargins outMargins = ui->outerVLayout->contentsMargins();
+
+    const QMargins inMargins = ui->textLayout->contentsMargins()
+            + ui->mainLayout->contentsMargins()                         // 메인 컨텐츠 레이아웃 마진
+            + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)   // 상단 타이틀바 레이아웃 높이
+            + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()); // 하단 상태표시 레이아웃 높이
+
+    const QMargins outMargins = ui->outerLayout->contentsMargins();
 
     _innerMarginSize = QSize(inMargins.left() + inMargins.right(), inMargins.top() + inMargins.bottom());
     _outerMarginSize = QSize(outMargins.left() + outMargins.right(), outMargins.top() + outMargins.bottom());
@@ -283,6 +343,10 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
     {
         move(event->globalPosition().toPoint() - _dragPoint);
         event->accept();
+        if (underMouse())
+        {
+            changeFixedMode();
+        }
     }
 }
 
@@ -293,4 +357,14 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
         _bIsDrag = false;
         event->accept();
     }
+}
+
+bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == ui->resultText && event->type() == QEvent::MouseButtonPress)
+    {
+        mousePressEvent(static_cast<QMouseEvent*>(event));
+        return true;
+    }
+    return QWidget::eventFilter(obj, event);
 }

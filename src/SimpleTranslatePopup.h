@@ -7,6 +7,7 @@
 
 #include <QWidget>
 
+class QSizeGrip;
 class QScrollBar;
 class QPropertyAnimation;
 class FinTranslatorCore;
@@ -42,6 +43,7 @@ public:
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
 
+    void changeFixedMode();
 private:
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
     QSize calculateTextEditSize(const QString& inNewText);
@@ -63,8 +65,10 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
     QPropertyAnimation* _animation;
+    bool _bNonPopupMode = false;
 
     QSize _textEditSize;
 
@@ -82,9 +86,10 @@ protected:
     // ~================
     const QSizeF  _minSizeRatio   = {0.15f, 0.15f};
     const QSizeF  _maxSizeRatio   = {0.2f, 0.65f};
-    const QPointF _centerPosRatio = {0.85f, 0.33f};
+    const QSizeF  _fullSizeRatio  = {0.95f, 0.95f};
 
-    const float yPosMaxRatio = 0.175f;
+    const QPointF _centerPosRatio = {0.85f, 0.33f};
+    const float _yPosMaxRatio = 0.175f;
 
     bool _bIsDrag = false;
     QPoint _dragPoint;
@@ -93,6 +98,7 @@ private:
     FinTranslatorCore* _finCore;
 
     Ui::SimpleTranslatePopup* ui;
+    QSizeGrip* _sizeGrip;
 };
 
 

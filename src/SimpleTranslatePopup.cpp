@@ -225,10 +225,10 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     const QSizeF screenSize  = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
     const float minScreenLen = std::min(screenSize.width(), screenSize.height());
 
+    const int minWidth  = screenSize.width() * _minSizeRatio.width();
+    const int minHeight = screenSize.height() * _minSizeRatio.height();
     const int maxWidth  = screenSize.width() * _maxSizeRatio.width();
     const int maxHeight = screenSize.height() * _maxSizeRatio.height();
-    const int minWidth  = screenSize.width() * 0.15f;
-    const int minHeight = screenSize.height() * 0.15f;
 
     const QMargins inMargins = ui->textHLayout->contentsMargins();
     const QMargins outMargins = ui->outerVLayout->contentsMargins();

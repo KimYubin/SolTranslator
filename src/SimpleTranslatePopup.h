@@ -80,9 +80,11 @@ protected:
     int _lastLineLength = 0;
 
     // ~================
-    const QSizeF  _maxSizeRatio   = {0.2f, 0.6f};
-    const QPointF _centerPosRatio = {0.85f, 0.35f};
-    const float yPosMaxRatio = 0.11f;
+    const QSizeF  _minSizeRatio   = {0.15f, 0.15f};
+    const QSizeF  _maxSizeRatio   = {0.2f, 0.65f};
+    const QPointF _centerPosRatio = {0.85f, 0.33f};
+
+    const float yPosMaxRatio = 0.175f;
 
     bool _bIsDrag = false;
     QPoint _dragPoint;

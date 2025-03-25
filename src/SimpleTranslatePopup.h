@@ -79,10 +79,10 @@ protected:
     int _lineCount = 0;
     int _lastLineLength = 0;
 
-    const float widthRatio  = 0.20f;
-    const float heightRatio = 0.6f;
-    const float xPosRatio   = 0.85f;
-    const float yPosRatio   = 0.35f;
+    // ~================
+    const QSizeF  _maxSizeRatio   = {0.2f, 0.6f};
+    const QPointF _centerPosRatio = {0.85f, 0.35f};
+    const float yPosMaxRatio = 0.11f;
 
     bool _bIsDrag = false;
     QPoint _dragPoint;

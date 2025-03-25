@@ -116,10 +116,13 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
 
-    const QPoint targetCenter = QPoint(screenSize.width() * xPosRatio, screenSize.height() * yPosRatio);
+    const QPoint targetCenter = QPoint(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y());
     const QPoint recCenter    = rect().center();
-    const QPoint targetPos    = targetCenter - recCenter;
 
+    QPoint targetPos    = targetCenter - recCenter;
+    targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - widgetSize.width()));
+    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* yPosMaxRatio));
+    
     move(targetPos);
     ui->resultText->repaint();
 }
@@ -222,8 +225,8 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     const QSizeF screenSize  = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
     const float minScreenLen = std::min(screenSize.width(), screenSize.height());
 
-    const int maxWidth  = screenSize.width() * widthRatio;
-    const int maxHeight = screenSize.height() * heightRatio;
+    const int maxWidth  = screenSize.width() * _maxSizeRatio.width();
+    const int maxHeight = screenSize.height() * _maxSizeRatio.height();
     const int minWidth  = screenSize.width() * 0.15f;
     const int minHeight = screenSize.height() * 0.15f;
 

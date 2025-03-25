@@ -21,6 +21,52 @@
   font-size:15pt;
 }
 
+#SimpleTranslatePopup QScrollBar:horizontal
+{
+  border: 0;
+  background: #232629;
+  height: 8px;
+}
+
+#SimpleTranslatePopup QScrollBar:vertical
+{
+  border: 0;
+  background: #98a5b3;
+  width: 8px;
+}
+
+#SimpleTranslatePopup QScrollBar::handle
+{
+  background: rgba(29, 233, 182, 0.1);
+}
+
+#SimpleTranslatePopup QScrollBar::handle:horizontal
+{
+  min-width: 24px;
+}
+
+#SimpleTranslatePopup QScrollBar::handle:vertical
+{
+  min-height: 24px;
+}
+
+#SimpleTranslatePopup QScrollBar::handle:vertical:hover,
+#SimpleTranslatePopup QScrollBar::handle:horizontal:hover
+{
+  background: #1de9b6;
+}
+
+#SimpleTranslatePopup QScrollBar::add-line:vertical,
+#SimpleTranslatePopup QScrollBar::sub-line:vertical,
+#SimpleTranslatePopup QScrollBar::add-line:horizontal,
+#SimpleTranslatePopup QScrollBar::sub-line:horizontal
+{
+  border: 0;
+  background: transparent;
+  width: 0px;
+  height: 0px;
+}
+
 
 
 /*  ------------------------------------------------------------------------  */
@@ -790,7 +836,7 @@ FinTranslatorMainWidget
 
 #FinTranslatorMainWidget QScrollBar:vertical {
   border: 0;
-  background: #232629;
+  background: #6298a5b3;
   width: 8px;
 }
 

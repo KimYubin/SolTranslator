@@ -7,6 +7,7 @@
 
 #include <QWidget>
 
+class QScrollBar;
 class QPropertyAnimation;
 class FinTranslatorCore;
 class QVBoxLayout;
@@ -48,8 +49,14 @@ private:
     /** 입력된 사이즈를 목표로 애니메이션을 실행합니다. */
     void animateTextEditResize(const QSize& inNewSize);
 
-    /** text edit의 최대 규격 등을 계산합니다. */
-    void calculateTextEditMax();
+    /** 수동 사이즈 계산에 필요한 text edit와 관련된 레이아웃 정보들을 계산합니다. */
+    void calculateTextEditLayoutInfo();
+
+    /**
+     * 내부 스크롤바 값 변경 시, 외부 스크롤바에 이를 반영합니다.
+     * Range, PageStep, Value 등을 동기화에 필요한 데이터를 적용합니다.
+     */
+    void syncInOutScrollbar();
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;

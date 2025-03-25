@@ -42,16 +42,39 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    // manual word wrap adjustsize 
-    ui->resultText->setLineWrapMode(QTextEdit::LineWrapMode::FixedPixelWidth);
+    // ~======================
+    // scroll bar
+    // 기본 스크롤바 숨김
+    ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    calculateTextEditMax();
+    // 외부 스크롤바 -> 내부 스크롤바 제어
+    connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [=](const int value)
+    {
+        ui->resultText->verticalScrollBar()->setValue(value);
+    });
 
-    // 애니메이션
-    // 애니메이션 입력값으로 setTextEditSize 함수 호출 및 변경
+    // 내부 스크롤바 값 -> 외부 스크롤바에 반영
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=](int, int)
+    {
+        syncInOutScrollbar();
+    });
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int)
+    {
+        syncInOutScrollbar();
+    });
+    // 문서 정보 반영
+    connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [=]()
+    {
+        syncInOutScrollbar();
+    });
+
+
+    // 애니메이션 setTextEditSize 함수 연결
     _animation = new QPropertyAnimation(this, "textEditSize", this);
     _animation->setDuration(250);
-    _animation->setEasingCurve(QEasingCurve::OutCubic);
+    _animation->setEasingCurve(QEasingCurve::OutQuad);
+
+    calculateTextEditLayoutInfo();
 
     showTranslationPopup("");
 
@@ -87,9 +110,6 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 
     ui->resultText->setFixedSize(inTextEditSize);
 
-    // soft wrap width without scrollbar area
-    ui->resultText->setLineWrapColumnOrWidth(ui->resultText->viewport()->size().width() - ui->resultText->verticalScrollBar()->width());
-
     const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
     const QSize widgetSize  = bgFrameSize + _outerMarginSize;
 
@@ -112,10 +132,11 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
 
     const int newStrWidth = fntMetric.horizontalAdvance(inNewText);
 
-    const int viewportMargin = ui->resultText->size().width() - ui->resultText->viewport()->size().width();
-
+    const int docMarginTwice = static_cast<int>(textEdit->document()->documentMargin() * 2.0);
+    const int viewportMargin = textEdit->size().width() - textEdit->viewport()->size().width();
+    
     // pseudo Unicode line breaking
-    const int maxWidth = _maxEditSize.width() - textEdit->verticalScrollBar()->width() - viewportMargin;
+    const int maxWidth = _maxEditSize.width() - viewportMargin - docMarginTwice;
     if ((_lastLineLength + newStrWidth) >= maxWidth)
     {
         const int prevStrSize      = textEdit->toPlainText().length();
@@ -161,8 +182,8 @@ QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText)
 
     const int newTextHeight = (_lineCount + (!!(_lastLineLength)) + 1) * lineHeight + vMargin;
 
-    const int newWidth  = qBound(_minEditSize.width(), newStrWidth, _maxEditSize.width());
-    const int newHeight = qBound(_minEditSize.height(), newTextHeight, _maxEditSize.height());
+    const int newWidth  = qBound(_minEditSize.width(), newStrWidth + docMarginTwice, _maxEditSize.width());
+    const int newHeight = qBound(_minEditSize.height(), newTextHeight + docMarginTwice, _maxEditSize.height());
 
     return QSize(newWidth, newHeight);
 }
@@ -180,8 +201,20 @@ void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
     _animation->start();
 }
 
-void SimpleTranslatePopup::calculateTextEditMax()
+void SimpleTranslatePopup::calculateTextEditLayoutInfo()
 {
+    // ~==============================
+    // 외부 스크롤바 마진 적용.
+    // 텍스트와 스크롤바가 겹치지 않게 합니다.
+    ui->textHLayout->activate();
+    const qreal docMargin    = ui->resultText->document()->documentMargin();
+    const int vScrollWidth   = ui->outerVScrollBar->width();
+    const qreal newDocMargin = vScrollWidth > docMargin ? vScrollWidth : docMargin;
+    ui->resultText->document()->setDocumentMargin(newDocMargin + 1);
+
+
+    // ~==============================
+    // 단계별 마진 및 최소/최대 크기 계산
     if (screen() == nullptr)
     {
         qWarning() << "not detected screen";
@@ -194,11 +227,11 @@ void SimpleTranslatePopup::calculateTextEditMax()
     const int minWidth  = screenSize.width() * 0.15f;
     const int minHeight = screenSize.height() * 0.15f;
 
-    QMargins innerMargins = ui->textHLayout->contentsMargins();
-    QMargins outerMargins = ui->outerVLayout->contentsMargins();
+    const QMargins inMargins = ui->textHLayout->contentsMargins();
+    const QMargins outMargins = ui->outerVLayout->contentsMargins();
 
-    _innerMarginSize = QSize(innerMargins.left() + innerMargins.right(), innerMargins.top() + innerMargins.bottom());
-    _outerMarginSize = QSize(outerMargins.left() + outerMargins.right(), outerMargins.top() + outerMargins.bottom());
+    _innerMarginSize = QSize(inMargins.left() + inMargins.right(), inMargins.top() + inMargins.bottom());
+    _outerMarginSize = QSize(outMargins.left() + outMargins.right(), outMargins.top() + outMargins.bottom());
 
     const int frameLineWidth = ui->bgFrame->lineWidth() * 2;
 
@@ -208,8 +241,27 @@ void SimpleTranslatePopup::calculateTextEditMax()
 
     _minEditSize = {minWidth - widthMargin, minHeight - heightMargin};
     _maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
+}
 
+void SimpleTranslatePopup::syncInOutScrollbar()
+{
+    const QScrollBar* textScroll = ui->resultText->verticalScrollBar();
 
+    const int min = textScroll->minimum();
+    const int max = textScroll->maximum();
+    const int pageStep = textScroll->pageStep();
+
+    if (min == max)
+    {
+        ui->outerVScrollBar->hide();
+    }
+    else
+    {
+        ui->outerVScrollBar->setRange(min, max);
+        ui->outerVScrollBar->setPageStep(pageStep);
+        ui->outerVScrollBar->setValue(textScroll->value());
+        ui->outerVScrollBar->show();
+    }
 }
 
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)

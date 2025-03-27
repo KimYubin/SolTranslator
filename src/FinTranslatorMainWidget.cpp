@@ -80,7 +80,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     applyTheme();
 
-    connect(ui->pushButton, &QPushButton::clicked, this, &FinTranslatorMainWidget::applyTheme);
+    // connect(ui->pushButton, &QPushButton::clicked, this, &FinTranslatorMainWidget::applyTheme);
     
     setWindowTitle(tr("FinTranslator"));
 }

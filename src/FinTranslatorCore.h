@@ -23,16 +23,18 @@ public:
 public:
     void onSimpleTranslate(const QString& InOriginText);
 
-    DataManager* getDataManager() const { return dataManager; }
-    TranslateManager* getTranslateManager() const { return translateManager; }
-    GlobalHotKeyManager* getGlobalHotKeyManager() const { return globalHotKeyManager; }
+    FinTranslatorMainWidget* getFinMainWidget() { return _finMainWidget; }
+
+    DataManager* getDataManager() const { return _dataManager; }
+    TranslateManager* getTranslateManager() const { return _translateManager; }
+    GlobalHotKeyManager* getGlobalHotKeyManager() const { return _globalHotKeyManager; }
 
 private:
-    FinTranslatorMainWidget* finMainWidget;
+    FinTranslatorMainWidget* _finMainWidget;
 
-    DataManager* dataManager;
-    TranslateManager* translateManager;
-    GlobalHotKeyManager* globalHotKeyManager;
+    DataManager* _dataManager;
+    TranslateManager* _translateManager;
+    GlobalHotKeyManager* _globalHotKeyManager;
 };
 
 

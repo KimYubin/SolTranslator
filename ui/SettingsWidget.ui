@@ -18,7 +18,7 @@
     <rect>
      <x>40</x>
      <y>20</y>
-     <width>641</width>
+     <width>591</width>
      <height>481</height>
     </rect>
    </property>
@@ -154,6 +154,13 @@
     <item row="2" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QPushButton" name="themeButton">
+        <property name="text">
+         <string>theme</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Orientation::Horizontal</enum>
@@ -167,9 +174,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="saveButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>Save</string>
         </property>
        </widget>
       </item>

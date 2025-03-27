@@ -6,6 +6,15 @@
 
 #include "SettingsWidget.h"
 #include "../ui/ui_SettingsWidget.h"
+#include <QPushButton>
+#include <QListView>
+#include <QStyledItemDelegate>
+#include <QScrollBar>
+#include <QPointer>
+
+#include "FinTranslatorCore.h"
+#include "FinTranslatorMainWidget.h"
+
 
 
 SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
@@ -15,9 +24,23 @@ SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
+
+    connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
 }
 
 SettingsWidget::~SettingsWidget()
 {
     delete ui;
+}
+
+void SettingsWidget::applyTheme()
+{
+    if (finCore->getFinMainWidget())
+    {
+        finCore->getFinMainWidget()->applyTheme();
+    }
+    else
+    {
+        qDebug()<<"finMainWidget is invalid";
+    }
 }

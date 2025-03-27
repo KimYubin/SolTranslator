@@ -8,6 +8,10 @@
 #include <QWidget>
 
 
+class CategoryListView;
+class QLabel;
+class QListView;
+class QCheckBox;
 class FinTranslatorCore;
 QT_BEGIN_NAMESPACE
 
@@ -27,9 +31,13 @@ public:
     ~SettingsWidget() override;
 
 private:
+    void applyTheme();
+    
     FinTranslatorCore* finCore;
 
     Ui::SettingsWidget* ui;
+
+    
 };
 
 

@@ -12,24 +12,24 @@
 
 FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 {
-    dataManager         = new DataManager(this);
-    translateManager    = new TranslateManager(this);
-    globalHotKeyManager = new GlobalHotKeyManager(this);
+    _dataManager         = new DataManager(this);
+    _translateManager    = new TranslateManager(this);
+    _globalHotKeyManager = new GlobalHotKeyManager(this);
 
     // 캐시 로드
-    translateManager->updateNewCacheQueue(dataManager->loadTranslateCache());
+    _translateManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
 
-    finMainWidget = new FinTranslatorMainWidget(this);
-    finMainWidget->show();
+    _finMainWidget = new FinTranslatorMainWidget(this);
+    _finMainWidget->show();
 }
 
 FinTranslatorCore::~FinTranslatorCore()
 {
     // 캐시 저장
-    dataManager->saveTranslateCache(translateManager->getCacheQueue());
+    _dataManager->saveTranslateCache(_translateManager->getCacheQueue());
 }
 
 void FinTranslatorCore::onSimpleTranslate(const QString& InOriginText)
 {
-    translateManager->translateSimple(InOriginText, LangType::AUTO, LangType::ko);
+    _translateManager->translateSimple(InOriginText, LangType::AUTO, LangType::ko);
 }

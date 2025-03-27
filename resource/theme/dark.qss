@@ -90,6 +90,8 @@
   font-size:15pt;
 }
 
+/* -------------------- */
+/* SimpleTranslatePopup QScrollBar */
 #SimpleTranslatePopup QScrollBar:horizontal
 {
   border: 0;
@@ -100,13 +102,20 @@
 #SimpleTranslatePopup QScrollBar:vertical
 {
   border: 0;
-  background: #98a5b3;
+  background: #424242;
+  border-radius : 4px;
   width: 8px;
 }
 
 #SimpleTranslatePopup QScrollBar::handle
 {
-  background: rgba(29, 233, 182, 0.1);
+  background: #a0a0a0;
+  border-radius : 4px;
+}
+#SimpleTranslatePopup QScrollBar::handle:vertical:hover,
+#SimpleTranslatePopup QScrollBar::handle:horizontal:hover
+{
+  background: #dbdbdb;
 }
 
 #SimpleTranslatePopup QScrollBar::handle:horizontal
@@ -119,11 +128,6 @@
   min-height: 24px;
 }
 
-#SimpleTranslatePopup QScrollBar::handle:vertical:hover,
-#SimpleTranslatePopup QScrollBar::handle:horizontal:hover
-{
-  background: #1de9b6;
-}
 
 #SimpleTranslatePopup QScrollBar::add-line:vertical,
 #SimpleTranslatePopup QScrollBar::sub-line:vertical,
@@ -131,12 +135,19 @@
 #SimpleTranslatePopup QScrollBar::sub-line:horizontal
 {
   border: 0;
+  background: #111111;
+  /* width: 0px; */
+  /* height: 0px; */
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical 
+{
+  border: 0;
   background: transparent;
   width: 0px;
   height: 0px;
 }
-
-
 
 /*  ------------------------------------------------------------------------  */
 /*  FinTranslatorMainWidget */
@@ -384,7 +395,7 @@ FinTranslatorMainWidget
   margin-right: 12px;
 }
 
-#FinTranslatorMainWidgetQComboBox::down-arrow:focus {
+#FinTranslatorMainWidget QComboBox::down-arrow:focus {
   image: url(icon:/primary/downarrow.svg);
   margin-right: 12px;
 }
@@ -406,7 +417,7 @@ FinTranslatorMainWidget
   border: 1px solid transparent;
 }
 
-#FinTranslatorMainWidgetQComboBox[frame='false']:disabled {
+#FinTranslatorMainWidget QComboBox[frame='false']:disabled {
   color: rgba(255, 255, 255, 0.2);
 }
 

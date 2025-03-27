@@ -46,10 +46,13 @@ public:
     void changeFixedMode();
 private:
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
-    QSize calculateTextEditSize(const QString& inNewText);
+    QSize calculateTextEditSize(const QString& inNewText) const;
 
     /** 입력된 사이즈를 목표로 애니메이션을 실행합니다. */
     void animateTextEditResize(const QSize& inNewSize);
+
+    /** 애니메이션 종료 후, 적정 크기인지 확인합니다. */
+    void adjustSizeAfterAnimationFinished();
 
     /** 수동 사이즈 계산에 필요한 text edit와 관련된 레이아웃 정보들을 계산합니다. */
     void calculateTextEditLayoutInfo();
@@ -61,6 +64,7 @@ private:
     void syncInOutScrollbar();
 
 protected:
+    virtual void focusOutEvent(QFocusEvent *event) override;
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
@@ -84,9 +88,9 @@ protected:
     int _lastLineLength = 0;
 
     // ~================
-    const QSizeF  _minSizeRatio   = {0.15f, 0.15f};
-    const QSizeF  _maxSizeRatio   = {0.2f, 0.65f};
-    const QSizeF  _fullSizeRatio  = {0.95f, 0.95f};
+    const QSizeF _minSizeRatio  = {0.15f, 0.15f};
+    const QSizeF _maxSizeRatio  = {0.2f, 0.65f};
+    const QSizeF _fullSizeRatio = {0.95f, 0.95f};
 
     const QPointF _centerPosRatio = {0.85f, 0.33f};
     const float _yPosMaxRatio = 0.175f;

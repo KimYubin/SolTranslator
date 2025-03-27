@@ -43,7 +43,7 @@ public:
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
 
-    void changeFixedMode();
+    void changeNonPopupMode();
 private:
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
     QSize calculateTextEditSize(const QString& inNewText) const;
@@ -64,7 +64,13 @@ private:
     void syncInOutScrollbar();
 
 protected:
-    virtual void focusOutEvent(QFocusEvent *event) override;
+    /** 위젯을 수동으로 닫습니다. 팝업모드가 아닐 때에도 닫습니다. */
+    void onCloseWithManual();
+
+    /** 포커스 변경시 발동합니다.  */
+    void onCloseWithFocusChanged(QWidget* old, QWidget* now);
+
+    virtual void closeEvent(QCloseEvent* event) override;
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
@@ -72,8 +78,10 @@ protected:
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
     QPropertyAnimation* _animation;
-    bool _bNonPopupMode = false;
 
+    bool _bPopupMode   = true;
+    bool _bManualClose = false;
+    
     QSize _textEditSize;
 
     QSize _innerMarginSize;

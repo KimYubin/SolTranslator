@@ -23,7 +23,7 @@
 
 
 SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::Popup | Qt::NoDropShadowWindowHint)
+    : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
@@ -44,15 +44,18 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     ui->bgFrame->setGraphicsEffect(shadow);
 
     // close button
-    connect(ui->closeButton, &QPushButton::clicked, this, &QWidget::close);
     ui->closeButton->setFlat(true);
+
+    connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
+    connect(qApp, &QApplication::focusChanged, this, &SimpleTranslatePopup::onCloseWithFocusChanged);
+    qApp->installEventFilter(this);
 
     // bottom grip
     _sizeGrip = new QSizeGrip(this);
     ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
     ui->statusLayout->setContentsMargins(0, 0, 4, 4);
-    
 
+    setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -83,7 +86,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     {
         syncInOutScrollbar();
     });
-    ui->resultText->installEventFilter(this);
+
 
     // ~======================
     // 애니메이션
@@ -98,10 +101,13 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     showTranslationPopup("");
 
     show();
+    raise();
+    activateWindow();
 }
 
 SimpleTranslatePopup::~SimpleTranslatePopup()
 {
+    qApp->removeEventFilter(this);
     delete ui;
 }
 
@@ -145,18 +151,15 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     ui->resultText->repaint();
 }
 
-void SimpleTranslatePopup::changeFixedMode()
+void SimpleTranslatePopup::changeNonPopupMode()
 {
-    if (_bNonPopupMode)
+    // ~==================
+    // 팝업 모드
+    if (_bPopupMode == false)
     {
         return;
     }
-    _bNonPopupMode = true;
-    
-    // ~==================
-    // 창 종류 변경
-    setWindowFlag(Qt::Popup, false);
-    show();
+    _bPopupMode = false;
 
     // ~==================
     // 위젯 사이즈 변경 애니메이션 정지 및 해제
@@ -308,9 +311,41 @@ void SimpleTranslatePopup::syncInOutScrollbar()
     }
 }
 
-void SimpleTranslatePopup::focusOutEvent(QFocusEvent* event)
+void SimpleTranslatePopup::onCloseWithManual()
 {
-    QWidget::focusOutEvent(event);
+    _bManualClose = true;
+    close();
+}
+
+void SimpleTranslatePopup::onCloseWithFocusChanged(QWidget* old, QWidget* now)
+{
+    if (old == now)
+    {
+        return;
+    }
+
+    QWidget* oldParent = old;
+    while (oldParent != nullptr)
+    {
+        if (oldParent == this)
+        {
+            // close();
+            break;
+        }
+        oldParent = oldParent->parentWidget();
+    }
+}
+
+void SimpleTranslatePopup::closeEvent(QCloseEvent* event)
+{
+    if (_bPopupMode || _bManualClose)
+    {
+        QWidget::closeEvent(event);
+    }
+    else
+    {
+        event->ignore();
+    }
 }
 
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
@@ -331,7 +366,7 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
         event->accept();
         if (underMouse())
         {
-            changeFixedMode();
+            changeNonPopupMode();
         }
     }
 }
@@ -347,10 +382,16 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
 
 bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
 {
-    if (obj == ui->resultText && event->type() == QEvent::MouseButtonPress)
+    if (_bPopupMode && event->type() == QEvent::ApplicationStateChange)
     {
-        mousePressEvent(static_cast<QMouseEvent*>(event));
+        Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
+        if (changeState != Qt::ApplicationActive)
+        {
+            close();
+        }
+        // setWindowFlag(Qt::WindowStaysOnTopHint);
         return true;
     }
+
     return QWidget::eventFilter(obj, event);
 }

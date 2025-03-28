@@ -140,9 +140,6 @@ void SimpleTranslatePopup::changePopupMode()
     _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
     _keepPinButton->setChecked(false);
 
-    // 사이즈 변경 불가
-    _sizeGrip->hide();
-
     // 팝업모드에서 자동 닫기 기능 등록
     qApp->installEventFilter(this);
 
@@ -155,9 +152,6 @@ void SimpleTranslatePopup::changeAlwaysOnMode()
     // 팝업 모드 해제
     _keepPinButton->setIcon(QIcon(":/img/keep_pin_v"));
     _keepPinButton->setChecked(true);
-
-    // 사이즈 변경 가능
-    _sizeGrip->show();
 
     // 팝업모드에서 자동 닫기 기능 해제
     qApp->removeEventFilter(this);
@@ -243,6 +237,8 @@ void SimpleTranslatePopup::setupUI()
     _sizeGrip = new QSizeGrip(this);
     ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
     ui->statusLayout->setContentsMargins(0, 0, 4, 4);
+    _sizeGrip->show();
+    _sizeGrip->installEventFilter(this);
 
 }
 
@@ -431,6 +427,7 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
 
 bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
 {
+    // 팝업모드에서 자동 종료
     if (obj == qApp
         && _bPopupMode
         && event->type() == QEvent::ApplicationStateChange)
@@ -441,10 +438,13 @@ bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
             close();
         }
         return true;
-    }
-    if (obj == _sizeGrip)
+    } // 사이즈 조절 가능 모드로 전환
+    else if (obj == _sizeGrip
+        && event->type() == QEvent::MouseButtonPress)
     {
-        
+        manualSizeMode();
+        _sizeGrip->removeEventFilter(this);
+        return false; // no consume
     }
 
     return QWidget::eventFilter(obj, event);

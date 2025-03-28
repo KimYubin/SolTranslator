@@ -74,6 +74,27 @@
   background-color: rgba(29, 233, 182, 0.2);
 }
 
+/*  ------------------------------------------------------------------------  */
+/*  keepPinButton */
+
+#SimpleTranslatePopup QPushButton
+{
+  border: none;
+
+}
+#SimpleTranslatePopup QPushButton#keepPinButton:checked,
+#SimpleTranslatePopup QPushButton#keepPinButton:pressed {
+  border: none;
+  background-color: #ADAAFF;
+  /* image: url(:/img/keep_pin_v); */
+}
+
+#SimpleTranslatePopup QPushButton#keepPinButton:flat {
+  border: none;
+  /* image: url(:/img/keep_pin_clock45d); */
+  /* background-color: #cc1de9b6; */  
+}
+
 
 #SimpleTranslatePopup QFrame
 , #SimpleTranslatePopup QTextEdit

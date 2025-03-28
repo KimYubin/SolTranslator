@@ -2,5 +2,9 @@
     <qresource prefix="/img">
         <file alias="icon_img.png">icon.png</file>
         <file alias="icon_img.svg">translate_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
+        
+        <file alias="keep_pin_v">keep_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
+        <file alias="keep_pin_clock45d">keep_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48_45dgree.svg</file>
+        
     </qresource>
 </RCC>

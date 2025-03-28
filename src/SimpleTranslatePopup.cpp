@@ -18,6 +18,7 @@
 #include <QTextBoundaryFinder>
 #include <QScrollBar>
 #include <QSizeGrip>
+#include <QCheckBox>
 
 #include "../ui/ui_SimpleTranslatePopup.h"
 
@@ -43,18 +44,42 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     shadow->setColor(QColor(0, 0, 0, 250));
     ui->bgFrame->setGraphicsEffect(shadow);
 
+    // ~===========
     // close button
     ui->closeButton->setFlat(true);
 
+    // 수동 닫기 기능 연결
     connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
-    connect(qApp, &QApplication::focusChanged, this, &SimpleTranslatePopup::onCloseWithFocusChanged);
+    // 팝업모드에서 자동 닫기 기능 등록
     qApp->installEventFilter(this);
 
+    // ~===========
+    // keepPinButton
+    _keepPinButton = new QPushButton(this);
+    _keepPinButton->setCheckable(true);
+    ui->titleLayout->addWidget(_keepPinButton, 0, 0, Qt::AlignTop | Qt::AlignLeft);
+    _keepPinButton->setObjectName("keepPinButton");
+    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(_keepPinButton->sizePolicy().hasHeightForWidth());
+    _keepPinButton->setSizePolicy(sizePolicy);
+    _keepPinButton->setMinimumSize(QSize(24, 24));
+    _keepPinButton->setMaximumSize(QSize(24, 24));
+    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+    _keepPinButton->setFlat(true);
+    connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+
+    // ~===========
     // bottom grip
     _sizeGrip = new QSizeGrip(this);
     ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
     ui->statusLayout->setContentsMargins(0, 0, 4, 4);
+    _sizeGrip->hide();
 
+    // ~===========
+    // config
+    setWindowFlag(Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -94,7 +119,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     _animation->setDuration(250);
     _animation->setEasingCurve(QEasingCurve::OutQuad);
     connect(_animation, &QAbstractAnimation::finished, this, &SimpleTranslatePopup::adjustSizeAfterAnimationFinished);
-    
+
 
     calculateTextEditLayoutInfo();
 
@@ -154,7 +179,7 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 void SimpleTranslatePopup::changeNonPopupMode()
 {
     // ~==================
-    // 팝업 모드
+    // 팝업 모드 해제
     if (_bPopupMode == false)
     {
         return;
@@ -188,6 +213,11 @@ void SimpleTranslatePopup::changeNonPopupMode()
     ui->bgFrame->setMaximumSize(bgFrameMax);
     ui->resultText->setMinimumSize(textMin);
     ui->resultText->setMaximumSize(textMax);
+}
+
+void SimpleTranslatePopup::setupUI()
+{
+    
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText) const
@@ -311,29 +341,28 @@ void SimpleTranslatePopup::syncInOutScrollbar()
     }
 }
 
+void SimpleTranslatePopup::onKeepPinButtonToggle(bool checked)
+{
+    QString iconURL;
+    if (checked)
+    {
+        changeNonPopupMode();
+        _sizeGrip->show();
+
+        iconURL = ":/img/keep_pin_v";
+    }
+    else
+    {
+        _bPopupMode = true;
+        iconURL = ":/img/keep_pin_clock45d";
+    }
+    _keepPinButton->setIcon(QIcon(iconURL));
+}
+
 void SimpleTranslatePopup::onCloseWithManual()
 {
     _bManualClose = true;
     close();
-}
-
-void SimpleTranslatePopup::onCloseWithFocusChanged(QWidget* old, QWidget* now)
-{
-    if (old == now)
-    {
-        return;
-    }
-
-    QWidget* oldParent = old;
-    while (oldParent != nullptr)
-    {
-        if (oldParent == this)
-        {
-            // close();
-            break;
-        }
-        oldParent = oldParent->parentWidget();
-    }
 }
 
 void SimpleTranslatePopup::closeEvent(QCloseEvent* event)
@@ -389,7 +418,6 @@ bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
         {
             close();
         }
-        // setWindowFlag(Qt::WindowStaysOnTopHint);
         return true;
     }
 

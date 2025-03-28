@@ -7,6 +7,7 @@
 
 #include <QWidget>
 
+class QPushButton;
 class QSizeGrip;
 class QScrollBar;
 class QPropertyAnimation;
@@ -45,6 +46,7 @@ public:
 
     void changeNonPopupMode();
 private:
+    void setupUI();
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
     QSize calculateTextEditSize(const QString& inNewText) const;
 
@@ -64,11 +66,10 @@ private:
     void syncInOutScrollbar();
 
 protected:
-    /** 위젯을 수동으로 닫습니다. 팝업모드가 아닐 때에도 닫습니다. */
-    void onCloseWithManual();
+    void onKeepPinButtonToggle(bool checked);
 
-    /** 포커스 변경시 발동합니다.  */
-    void onCloseWithFocusChanged(QWidget* old, QWidget* now);
+    /** 위젯을 수동으로 닫습니다. 팝업모드가 아닐 때에도 닫을 수 있습니다. */
+    void onCloseWithManual();
 
     virtual void closeEvent(QCloseEvent* event) override;
     virtual void mousePressEvent(QMouseEvent* event) override;
@@ -110,6 +111,7 @@ private:
     FinTranslatorCore* _finCore;
 
     Ui::SimpleTranslatePopup* ui;
+    QPushButton* _keepPinButton;
     QSizeGrip* _sizeGrip;
 };
 

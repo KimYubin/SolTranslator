@@ -32,10 +32,6 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setWindowIcon(icon);
     setWindowTitle(tr("fin"));
 
-    setupUI();
-
-    changePopupMode();
-
     // ~===========
     // config
     setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -43,34 +39,12 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    // ~======================
-    // resultText & scroll bar
-    // 기본 스크롤바 숨김
-    ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // ~===========
+    // ui
+    setupUI();
 
-    // 외부 스크롤바 -> 내부 스크롤바 제어
-    connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [=](const int value)
-    {
-        ui->resultText->verticalScrollBar()->setValue(value);
-    });
-
-    // 내부 스크롤바 값 -> 외부 스크롤바에 반영
-    connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=](int, int)
-    {
-        syncInOutScrollbar();
-    });
-    connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int)
-    {
-        syncInOutScrollbar();
-    });
-    // 문서 정보 반영
-    connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [=]()
-    {
-        syncInOutScrollbar();
-    });
-
+    changePopupMode();
 
     // ~======================
     // 애니메이션
@@ -240,6 +214,33 @@ void SimpleTranslatePopup::setupUI()
     _sizeGrip->show();
     _sizeGrip->installEventFilter(this);
 
+    // ~======================
+    // resultText & scroll bar
+    ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    // 기본 스크롤바 숨김
+    ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // 외부 스크롤바 -> 내부 스크롤바 제어
+    connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [=](const int value)
+    {
+        ui->resultText->verticalScrollBar()->setValue(value);
+    });
+
+    // 내부 스크롤바 값 -> 외부 스크롤바에 반영
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=](int, int)
+    {
+        syncInOutScrollbar();
+    });
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int)
+    {
+        syncInOutScrollbar();
+    });
+    // 문서 정보 반영
+    connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [=]()
+    {
+        syncInOutScrollbar();
+    });
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText) const

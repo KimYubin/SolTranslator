@@ -34,6 +34,8 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     setupUI();
 
+    changePopupMode();
+
     // ~===========
     // config
     setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -133,16 +135,44 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     ui->resultText->repaint();
 }
 
-void SimpleTranslatePopup::changeNonPopupMode()
+void SimpleTranslatePopup::changePopupMode()
+{
+    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+    _keepPinButton->setChecked(false);
+
+    // 사이즈 변경 불가
+    _sizeGrip->hide();
+
+    // 팝업모드에서 자동 닫기 기능 등록
+    qApp->installEventFilter(this);
+
+    _bPopupMode = true;
+}
+
+void SimpleTranslatePopup::changeAlwaysOnMode()
 {
     // ~==================
     // 팝업 모드 해제
+    _keepPinButton->setIcon(QIcon(":/img/keep_pin_v"));
+    _keepPinButton->setChecked(true);
+
+    // 사이즈 변경 가능
+    _sizeGrip->show();
+
+    // 팝업모드에서 자동 닫기 기능 해제
+    qApp->removeEventFilter(this);
+
     if (_bPopupMode == false)
     {
         return;
     }
     _bPopupMode = false;
 
+    manualSizeMode();
+}
+
+void SimpleTranslatePopup::manualSizeMode()
+{
     // ~==================
     // 위젯 사이즈 변경 애니메이션 정지 및 해제
     _animation->stop();
@@ -172,7 +202,6 @@ void SimpleTranslatePopup::changeNonPopupMode()
     ui->resultText->setMaximumSize(textMax);
 }
 
-
 void SimpleTranslatePopup::setupUI()
 {
     ui->setupUi(this);
@@ -191,7 +220,6 @@ void SimpleTranslatePopup::setupUI()
     // close button
     ui->closeButton->setFlat(true);
     connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
-    qApp->installEventFilter(this); // 팝업모드에서 자동 닫기 기능 등록
 
     // ~===========
     // keepPinButton
@@ -215,7 +243,6 @@ void SimpleTranslatePopup::setupUI()
     _sizeGrip = new QSizeGrip(this);
     ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
     ui->statusLayout->setContentsMargins(0, 0, 4, 4);
-    _sizeGrip->hide();
 
 }
 
@@ -342,20 +369,14 @@ void SimpleTranslatePopup::syncInOutScrollbar()
 
 void SimpleTranslatePopup::onKeepPinButtonToggle(bool checked)
 {
-    QString iconURL;
     if (checked)
     {
-        changeNonPopupMode();
-        _sizeGrip->show();
-
-        iconURL = ":/img/keep_pin_v";
+        changeAlwaysOnMode();
     }
     else
     {
-        _bPopupMode = true;
-        iconURL = ":/img/keep_pin_clock45d";
+        changePopupMode();
     }
-    _keepPinButton->setIcon(QIcon(iconURL));
 }
 
 void SimpleTranslatePopup::onCloseWithManual()
@@ -394,7 +415,7 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
         event->accept();
         if (underMouse())
         {
-            changeNonPopupMode();
+            changeAlwaysOnMode();
         }
     }
 }
@@ -410,7 +431,9 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
 
 bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
 {
-    if (_bPopupMode && event->type() == QEvent::ApplicationStateChange)
+    if (obj == qApp
+        && _bPopupMode
+        && event->type() == QEvent::ApplicationStateChange)
     {
         Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
         if (changeState != Qt::ApplicationActive)
@@ -418,6 +441,10 @@ bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
             close();
         }
         return true;
+    }
+    if (obj == _sizeGrip)
+    {
+        
     }
 
     return QWidget::eventFilter(obj, event);

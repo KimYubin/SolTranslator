@@ -44,8 +44,13 @@ public:
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
 
-    void changeNonPopupMode();
 private:
+    void changePopupMode();
+
+    void changeAlwaysOnMode();
+
+    void manualSizeMode();
+
     void setupUI();
 
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */

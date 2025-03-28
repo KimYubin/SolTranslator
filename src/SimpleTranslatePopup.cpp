@@ -28,54 +28,11 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
-    ui->setupUi(this);
-
-    ui->bgFrame->setLayout(ui->mainLayout);
-    setLayout(ui->outerLayout);
-
     QIcon icon = QIcon(":/img/icon_img.png");
     setWindowIcon(icon);
     setWindowTitle(tr("fin"));
 
-    // bgFrame shadow
-    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
-    shadow->setBlurRadius(15);
-    shadow->setOffset(0.5);
-    shadow->setColor(QColor(0, 0, 0, 250));
-    ui->bgFrame->setGraphicsEffect(shadow);
-
-    // ~===========
-    // close button
-    ui->closeButton->setFlat(true);
-
-    // 수동 닫기 기능 연결
-    connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
-    // 팝업모드에서 자동 닫기 기능 등록
-    qApp->installEventFilter(this);
-
-    // ~===========
-    // keepPinButton
-    _keepPinButton = new QPushButton(this);
-    _keepPinButton->setCheckable(true);
-    ui->titleLayout->addWidget(_keepPinButton, 0, 0, Qt::AlignTop | Qt::AlignLeft);
-    _keepPinButton->setObjectName("keepPinButton");
-    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(_keepPinButton->sizePolicy().hasHeightForWidth());
-    _keepPinButton->setSizePolicy(sizePolicy);
-    _keepPinButton->setMinimumSize(QSize(24, 24));
-    _keepPinButton->setMaximumSize(QSize(24, 24));
-    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
-    _keepPinButton->setFlat(true);
-    connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
-
-    // ~===========
-    // bottom grip
-    _sizeGrip = new QSizeGrip(this);
-    ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
-    ui->statusLayout->setContentsMargins(0, 0, 4, 4);
-    _sizeGrip->hide();
+    setupUI();
 
     // ~===========
     // config
@@ -215,9 +172,51 @@ void SimpleTranslatePopup::changeNonPopupMode()
     ui->resultText->setMaximumSize(textMax);
 }
 
+
 void SimpleTranslatePopup::setupUI()
 {
-    
+    ui->setupUi(this);
+
+    ui->bgFrame->setLayout(ui->mainLayout);
+    setLayout(ui->outerLayout);
+
+    // bgFrame shadow
+    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
+    shadow->setBlurRadius(15);
+    shadow->setOffset(0.5);
+    shadow->setColor(QColor(0, 0, 0, 250));
+    ui->bgFrame->setGraphicsEffect(shadow);
+
+    // ~===========
+    // close button
+    ui->closeButton->setFlat(true);
+    connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
+    qApp->installEventFilter(this); // 팝업모드에서 자동 닫기 기능 등록
+
+    // ~===========
+    // keepPinButton
+    _keepPinButton = new QPushButton(this);
+    _keepPinButton->setCheckable(true);
+    ui->titleLayout->addWidget(_keepPinButton, 0, 0, Qt::AlignTop | Qt::AlignLeft);
+    _keepPinButton->setObjectName("keepPinButton");
+    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(_keepPinButton->sizePolicy().hasHeightForWidth());
+    _keepPinButton->setSizePolicy(sizePolicy);
+    _keepPinButton->setMinimumSize(QSize(24, 24));
+    _keepPinButton->setMaximumSize(QSize(24, 24));
+    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+    _keepPinButton->setFlat(true);
+    connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+
+    // ~===========
+    // bottom grip
+    _sizeGrip = new QSizeGrip(this);
+    ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
+    ui->statusLayout->setContentsMargins(0, 0, 4, 4);
+    _sizeGrip->hide();
+
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText) const

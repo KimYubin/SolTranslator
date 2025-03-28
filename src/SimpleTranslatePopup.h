@@ -47,6 +47,7 @@ public:
     void changeNonPopupMode();
 private:
     void setupUI();
+
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
     QSize calculateTextEditSize(const QString& inNewText) const;
 

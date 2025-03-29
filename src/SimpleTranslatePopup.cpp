@@ -38,12 +38,15 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // ~===========
     // ui
     setupUI();
 
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    
     changePopupMode();
 
     // ~======================
@@ -92,6 +95,7 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
     const QSize widgetSize  = bgFrameSize + _outerMarginSize;
 
+    // text edit 폭 줄어드는 현상 방지.
     ui->resultText->setFixedSize(inTextEditSize);
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
@@ -106,7 +110,8 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* _yPosMaxRatio));
     
     move(targetPos);
-    ui->resultText->repaint();
+
+    update();
 }
 
 void SimpleTranslatePopup::changePopupMode()
@@ -176,6 +181,7 @@ void SimpleTranslatePopup::manualSizeMode()
     // ~==================
     // 위젯 사이즈 정책 변경
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
@@ -216,46 +222,47 @@ void SimpleTranslatePopup::setupUI()
 
     constexpr QSize topButtonsSize{24, 24};
     auto getTitleLastColumn = [&]() { return ui->titleLayout->columnCount(); };
-
-    auto setupTitleButton = [=](QPushButton* inWidget)
+    auto setupTitleButton   = [=](QPushButton* inButton)
     {
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(inWidget->sizePolicy().hasHeightForWidth());
-        inWidget->setSizePolicy(sizePolicy);
-        inWidget->setMinimumSize(topButtonsSize);
-        inWidget->setMaximumSize(topButtonsSize);
-        inWidget->setFixedSize(topButtonsSize);
+        sizePolicy.setHeightForWidth(inButton->sizePolicy().hasHeightForWidth());
+        inButton->setSizePolicy(sizePolicy);
+        inButton->setMinimumSize(topButtonsSize);
+        inButton->setMaximumSize(topButtonsSize);
+        inButton->setFixedSize(topButtonsSize);
 
-        // inWidget->setFlat(true);
+        inButton->setFocusPolicy(Qt::TabFocus);
+        inButton->setFlat(true);
 
-        ui->titleLayout->addWidget(inWidget, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
+        ui->titleLayout->addWidget(inButton, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
     };
+
     // ~===========
     // keepPinButton
-    {
-        _keepPinButton = new QPushButton(this);
-        _keepPinButton->setCheckable(true);
-        _keepPinButton->setObjectName("keepPinButton");
-        _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+    _keepPinButton = new QPushButton(this);
+    _keepPinButton->setCheckable(true);
+    _keepPinButton->setObjectName("keepPinButton");
+    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
 
-        setupTitleButton(_keepPinButton);
+    setupTitleButton(_keepPinButton);
 
-        connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
-    }
+    connect(_keepPinButton, &QPushButton::toggled
+          , this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+
     // ~==========
     // windowModeButton
-    {
-        _windowModeButton = new QPushButton(this);
-        _windowModeButton->setCheckable(true);
-        _windowModeButton->setObjectName("windowModeButton");
-        _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
+    _windowModeButton = new QPushButton(this);
+    _windowModeButton->setCheckable(true);
+    _windowModeButton->setObjectName("windowModeButton");
+    _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
 
-        setupTitleButton(_windowModeButton);
+    setupTitleButton(_windowModeButton);
 
-        connect(_windowModeButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
-    }
+    connect(_windowModeButton, &QPushButton::toggled
+          , this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+
 
     // ~==========
     // windowModeButton
@@ -264,15 +271,14 @@ void SimpleTranslatePopup::setupUI()
 
     // ~===========
     // close button
-    {
-        _closeButton = new QPushButton(this);
-        _closeButton->setObjectName("closeButton");
-        _closeButton->setText("x");
+    _closeButton = new QPushButton(this);
+    _closeButton->setObjectName("closeButton");
+    _closeButton->setText("x");
 
-        setupTitleButton(_closeButton);
+    setupTitleButton(_closeButton);
 
-        connect(_closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
-    }
+    connect(_closeButton, &QPushButton::clicked
+          , this, &SimpleTranslatePopup::onCloseWithManual);
 
     // top title layout end
     // ~===========
@@ -401,17 +407,15 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
 
     const QMargins outMargins = ui->outerLayout->contentsMargins();
 
-    _innerMarginSize = QSize(inMargins.left() + inMargins.right(), inMargins.top() + inMargins.bottom());
+    _innerMarginSize = QSize(inMargins.left() + inMargins.right() + ui->bgFrame->lineWidth()
+                           , inMargins.top() + inMargins.bottom() + ui->bgFrame->lineWidth());
     _outerMarginSize = QSize(outMargins.left() + outMargins.right(), outMargins.top() + outMargins.bottom());
 
-    const int frameLineWidth = ui->bgFrame->lineWidth() * 2;
 
     const QSize totalMarginSize = _innerMarginSize + _outerMarginSize;
-    const int widthMargin       = totalMarginSize.width() + frameLineWidth;
-    const int heightMargin      = totalMarginSize.height() + frameLineWidth;
 
-    _minEditSize = {minWidth - widthMargin, minHeight - heightMargin};
-    _maxEditSize = {maxWidth - widthMargin, maxHeight - heightMargin};
+    _minEditSize = {minWidth - totalMarginSize.width(), minHeight - totalMarginSize.height()};
+    _maxEditSize = {maxWidth - totalMarginSize.width(), maxHeight - totalMarginSize.height()};
 }
 
 void SimpleTranslatePopup::syncInOutScrollbar()

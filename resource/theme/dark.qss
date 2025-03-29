@@ -6,95 +6,69 @@
 /*  ------------------------------------------------------------------------  */
 /*  SimpleTranslatePopup */
 
-#SimpleTranslatePopup QPushButton#closeButton
-{
-  background-color: rgb(40, 40, 40);
-  color : #e7e7e7;
-  border-radius : 6px;
+
+/* ----------------------------------------------------- */
+/* QPushButton */
+
+#SimpleTranslatePopup
+*:focus {
+   outline: none;
 }
-#SimpleTranslatePopup QPushButton#closeButton {
-  text-transform: uppercase;
-  /* margin: 0px;
-  padding: 1px 16px;
-  height: 32px; */
-  font-weight: bold;  
-}
-
-
-#SimpleTranslatePopup QPushButton#closeButton:flat {
-  border: none;
-  background-color: transparent;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:flat:hover {
-  background-color: #e81123;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:flat:pressed,
-#SimpleTranslatePopup QPushButton#closeButton:flat:checked {
-  background-color: #e81123;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:disabled {
-  color: rgba(79, 91, 98, 0.75);
-  background-color: transparent;
-  border-color:  #4f5b62;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:flat:disabled {
-  color: rgba(79, 91, 98, 0.75);
-  background-color: rgba(79, 91, 98, 0.25);
-
-  border: none;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:disabled {
-  border: 2px solid rgba(79, 91, 98, 0.75);
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:checked:disabled {
-  color: #232629;
-  background-color: #4f5b62;
-  border-color:  #4f5b62;
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:focus {
-  background-color: rgba(29, 233, 182, 0.2);
-    border-color:  #4f5b62;
-
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:checked:focus,
-#SimpleTranslatePopup QPushButton#closeButton:pressed:focus {
-  background-color: rgba(29, 233, 182, 0.8);
-}
-
-#SimpleTranslatePopup QPushButton#closeButton:flat:focus {
-  border: none;
-  background-color: rgba(29, 233, 182, 0.2);
-}
-
-/*  ------------------------------------------------------------------------  */
-/*  keepPinButton */
-
 #SimpleTranslatePopup QPushButton
 {
   border: none;
-
+  border-radius : 6px;
 }
+
+#SimpleTranslatePopup QPushButton:focus,
+#SimpleTranslatePopup QPushButton:flat:focus
+{
+    outline: 2px;
+    outline-color: rgb(255, 255, 0);
+    outline-style: none none solid none;
+    outline-style: solid;
+    outline-offset: 8px;
+    /* outline-offset:8px; */
+    outline-radius: 6px;
+}
+
+/* ----------------------------------------------------- */
+/* QPushButton # closeButton */
+#SimpleTranslatePopup QPushButton#closeButton
+{
+  background-color: transparent;
+  color : #e7e7e7;
+  font-weight: bold;
+}
+
+#SimpleTranslatePopup QPushButton#closeButton:hover
+{
+  background-color: #e81123;
+}
+
+#SimpleTranslatePopup QPushButton#closeButton:pressed,
+#SimpleTranslatePopup QPushButton#closeButton:checked {
+  background-color: #94141f;
+}
+
+
+/* ----------------------------------------------------- */
+/* QPushButton # keepPinButton */
+
+#SimpleTranslatePopup QPushButton#keepPinButton 
+{
+  border: none;
+}
+
 #SimpleTranslatePopup QPushButton#keepPinButton:checked,
 #SimpleTranslatePopup QPushButton#keepPinButton:pressed {
   border: none;
   background-color: #ADAAFF;
-  /* image: url(:/img/keep_pin_v); */
 }
 
-#SimpleTranslatePopup QPushButton#keepPinButton:flat {
-  border: none;
-  /* image: url(:/img/keep_pin_clock45d); */
-  /* background-color: #cc1de9b6; */  
-}
 
+/* ----------------------------------------------------- */
+/* QPushButton # QTextEdit */
 
 #SimpleTranslatePopup QFrame
 , #SimpleTranslatePopup QTextEdit

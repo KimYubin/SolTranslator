@@ -62,6 +62,9 @@
       <property name="frameShadow">
        <enum>QFrame::Shadow::Raised</enum>
       </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="gridLayoutWidget">
        <property name="geometry">
         <rect>
@@ -88,9 +91,6 @@
           </property>
           <property name="rightMargin">
            <number>5</number>
-          </property>
-          <property name="bottomMargin">
-           <number>1</number>
           </property>
           <property name="spacing">
            <number>0</number>

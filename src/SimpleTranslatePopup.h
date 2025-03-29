@@ -7,6 +7,8 @@
 
 #include <QWidget>
 
+#include "FinTypes.h"
+
 class QPushButton;
 class QSizeGrip;
 class QScrollBar;
@@ -48,6 +50,9 @@ private:
     void changePopupMode();
 
     void changeAlwaysOnMode();
+    void changeAlwaysOnOffMode();
+
+    void changeNormalWindowMode();
 
     void manualSizeMode();
 
@@ -86,7 +91,8 @@ protected:
 
     QPropertyAnimation* _animation;
 
-    bool _bPopupMode   = true;
+    FinWidgetModeFlags _widgetModeFlags; 
+
     bool _bManualClose = false;
     
     QSize _textEditSize;
@@ -117,7 +123,11 @@ private:
     FinTranslatorCore* _finCore;
 
     Ui::SimpleTranslatePopup* ui;
+
     QPushButton* _keepPinButton;
+    QPushButton* _windowModeButton;
+    QPushButton* _closeButton;
+
     QSizeGrip* _sizeGrip;
 };
 

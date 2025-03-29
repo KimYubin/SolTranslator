@@ -126,6 +126,16 @@ enum class LangType
   , szl, sd, si, sk, sl, so, es, su, sw, ss, sv, tg, ta, tt, te, tet, th, ti, ts, tn, tr, tk, ak, uk, ur, ug, uz, vi, cy, xh, yi, yo, yua, zu, SIZE
 };
 
+enum FinWidgetMode
+{
+    None         = 0x00000000
+  , PopupMode    = 0x00000001
+  // , NormalWindow = 0x00000002
+  , AlwaysOn     = 0x00000004
+};
+
+Q_DECLARE_FLAGS(FinWidgetModeFlags, FinWidgetMode)
+Q_DECLARE_OPERATORS_FOR_FLAGS(FinWidgetModeFlags)
 
 
 #endif //FINTYPES_H

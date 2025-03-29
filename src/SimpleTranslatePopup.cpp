@@ -112,12 +112,15 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 void SimpleTranslatePopup::changePopupMode()
 {
     _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
-    _keepPinButton->setChecked(false);
+    if (_keepPinButton->isChecked())
+    {
+        _keepPinButton->setChecked(false);
+    }
 
     // 팝업모드에서 자동 닫기 기능 등록
     qApp->installEventFilter(this);
 
-    _bPopupMode = true;
+    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
 }
 
 void SimpleTranslatePopup::changeAlwaysOnMode()
@@ -125,18 +128,42 @@ void SimpleTranslatePopup::changeAlwaysOnMode()
     // ~==================
     // 팝업 모드 해제
     _keepPinButton->setIcon(QIcon(":/img/keep_pin_v"));
-    _keepPinButton->setChecked(true);
+    if (_keepPinButton->isChecked() == false)
+    {
+        _keepPinButton->setChecked(true);
+    }
 
     // 팝업모드에서 자동 닫기 기능 해제
-    qApp->removeEventFilter(this);
+    // qApp->removeEventFilter(this);
 
-    if (_bPopupMode == false)
+    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode) == false)
     {
         return;
     }
-    _bPopupMode = false;
+    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
 
     manualSizeMode();
+}
+
+void SimpleTranslatePopup::changeAlwaysOnOffMode()
+{
+    setWindowFlag(Qt::WindowStaysOnTopHint, false);
+    show();
+}
+
+void SimpleTranslatePopup::changeNormalWindowMode()
+{
+    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode) == false)
+    {
+        return;
+    }
+    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
+
+    // 자동닫기 해제
+    qApp->removeEventFilter(this);
+
+    manualSizeMode();
+    
 }
 
 void SimpleTranslatePopup::manualSizeMode()
@@ -185,26 +212,70 @@ void SimpleTranslatePopup::setupUI()
     ui->bgFrame->setGraphicsEffect(shadow);
 
     // ~===========
-    // close button
-    ui->closeButton->setFlat(true);
-    connect(ui->closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
+    // top title layout
 
+    constexpr QSize topButtonsSize{24, 24};
+    auto getTitleLastColumn = [&]() { return ui->titleLayout->columnCount(); };
+
+    auto setupTitleButton = [=](QPushButton* inWidget)
+    {
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(inWidget->sizePolicy().hasHeightForWidth());
+        inWidget->setSizePolicy(sizePolicy);
+        inWidget->setMinimumSize(topButtonsSize);
+        inWidget->setMaximumSize(topButtonsSize);
+        inWidget->setFixedSize(topButtonsSize);
+
+        // inWidget->setFlat(true);
+
+        ui->titleLayout->addWidget(inWidget, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
+    };
     // ~===========
     // keepPinButton
-    _keepPinButton = new QPushButton(this);
-    _keepPinButton->setCheckable(true);
-    ui->titleLayout->addWidget(_keepPinButton, 0, 0, Qt::AlignTop | Qt::AlignLeft);
-    _keepPinButton->setObjectName("keepPinButton");
-    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(_keepPinButton->sizePolicy().hasHeightForWidth());
-    _keepPinButton->setSizePolicy(sizePolicy);
-    _keepPinButton->setMinimumSize(QSize(24, 24));
-    _keepPinButton->setMaximumSize(QSize(24, 24));
-    _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
-    _keepPinButton->setFlat(true);
-    connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+    {
+        _keepPinButton = new QPushButton(this);
+        _keepPinButton->setCheckable(true);
+        _keepPinButton->setObjectName("keepPinButton");
+        _keepPinButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+
+        setupTitleButton(_keepPinButton);
+
+        connect(_keepPinButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+    }
+    // ~==========
+    // windowModeButton
+    {
+        _windowModeButton = new QPushButton(this);
+        _windowModeButton->setCheckable(true);
+        _windowModeButton->setObjectName("windowModeButton");
+        _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
+
+        setupTitleButton(_windowModeButton);
+
+        connect(_windowModeButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onKeepPinButtonToggle);
+    }
+
+    // ~==========
+    // windowModeButton
+    QSpacerItem* topCenterSpacer = new QSpacerItem(150, 24, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    ui->titleLayout->addItem(topCenterSpacer, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
+
+    // ~===========
+    // close button
+    {
+        _closeButton = new QPushButton(this);
+        _closeButton->setObjectName("closeButton");
+        _closeButton->setText("x");
+
+        setupTitleButton(_closeButton);
+
+        connect(_closeButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onCloseWithManual);
+    }
+
+    // top title layout end
+    // ~===========
 
     // ~===========
     // bottom grip
@@ -384,7 +455,8 @@ void SimpleTranslatePopup::onCloseWithManual()
 
 void SimpleTranslatePopup::closeEvent(QCloseEvent* event)
 {
-    if (_bPopupMode || _bManualClose)
+    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode)
+        || _bManualClose)
     {
         QWidget::closeEvent(event);
     }
@@ -430,7 +502,7 @@ bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)
 {
     // 팝업모드에서 자동 종료
     if (obj == qApp
-        && _bPopupMode
+        && _widgetModeFlags.testFlag(FinWidgetMode::PopupMode)
         && event->type() == QEvent::ApplicationStateChange)
     {
         Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();

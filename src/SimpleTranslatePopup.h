@@ -47,12 +47,6 @@ public:
     void setTextEditSize(const QSize& inTextEditSize);
 
 private:
-    void changePopupMode();
-    void changeNormalWindowMode();
-
-    void changeAlwaysOnMode();
-    void changeAlwaysOnOffMode();
-
     void manualSizeMode();
 
     void setupUI();
@@ -79,6 +73,8 @@ protected:
     void onAlwaysOnToggle(bool checked);
     void onWindowModeToggle(bool checked);
 
+    void changeNormalWindowMode();
+    void changePopupMode();
 
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;

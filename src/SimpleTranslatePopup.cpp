@@ -114,63 +114,6 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     update();
 }
 
-void SimpleTranslatePopup::changePopupMode()
-{
-    // 팝업모드에서 자동 닫기 기능 등록
-    qApp->installEventFilter(this);
-
-    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
-}
-
-void SimpleTranslatePopup::changeAlwaysOnMode()
-{
-    if (_AlwaysOnButton->isChecked() == false)
-    {
-        _AlwaysOnButton->setChecked(true);
-    }
-
-    _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_v"));
-
-    if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) == false)
-    {
-        setWindowFlag(Qt::WindowStaysOnTopHint);
-        show();
-    }
-
-    manualSizeMode();
-}
-
-void SimpleTranslatePopup::changeAlwaysOnOffMode()
-{
-    if (_AlwaysOnButton->isChecked())
-    {
-        _AlwaysOnButton->setChecked(false);
-    }
-
-    _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
-
-    if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) == true)
-    {
-        setWindowFlag(Qt::WindowStaysOnTopHint, false);
-        show();
-    }
-
-    manualSizeMode();
-}
-
-void SimpleTranslatePopup::changeNormalWindowMode()
-{
-    // 자동닫기 해제
-    qApp->removeEventFilter(this);
-
-    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode) == false)
-    {
-        return;
-    }
-    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
-    manualSizeMode();
-}
-
 void SimpleTranslatePopup::manualSizeMode()
 {
     // 매뉴얼 사이즈 모드를 위해 등록된 사이즈 그립 이벤트 필터 해제
@@ -443,14 +386,27 @@ void SimpleTranslatePopup::syncInOutScrollbar()
 
 void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
 {
+    if (_AlwaysOnButton->isChecked() != checked)
+    {
+        _AlwaysOnButton->setChecked(checked);
+    }
+
+    if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != checked)
+    {
+        setWindowFlag(Qt::WindowStaysOnTopHint, checked);
+        show();
+    }
+
     if (checked)
     {
-        changeAlwaysOnMode();
+        _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_fill_v"));
     }
     else
     {
-        changeAlwaysOnOffMode();
+        _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
     }
+
+    manualSizeMode();
 }
 
 void SimpleTranslatePopup::onWindowModeToggle(bool checked)
@@ -463,6 +419,27 @@ void SimpleTranslatePopup::onWindowModeToggle(bool checked)
     {
         changePopupMode();
     }
+}
+
+void SimpleTranslatePopup::changeNormalWindowMode()
+{
+    // 자동닫기 해제
+    qApp->removeEventFilter(this);
+
+    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode) == false)
+    {
+        return;
+    }
+    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
+    manualSizeMode();
+}
+
+void SimpleTranslatePopup::changePopupMode()
+{
+    // 팝업모드에서 자동 닫기 기능 등록
+    qApp->installEventFilter(this);
+
+    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
 }
 
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)

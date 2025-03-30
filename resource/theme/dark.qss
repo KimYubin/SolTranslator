@@ -19,12 +19,19 @@
   border: none;
   border-radius : 6px;
 }
+#SimpleTranslatePopup QPushButton:checked,
+#SimpleTranslatePopup QPushButton:pressed 
+{
+  border: none;
+  background-color: #ADAAFF;
+}
 
 #SimpleTranslatePopup QPushButton:focus,
 #SimpleTranslatePopup QPushButton:flat:focus
 {
     outline: 2px;
     outline-color: rgb(255, 255, 0);
+    outline-color: rgb(255, 255, 255);
     outline-style: none none solid none;
     outline-style: solid;
     outline-offset: 8px;
@@ -55,15 +62,9 @@
 /* ----------------------------------------------------- */
 /* QPushButton # keepPinButton */
 
-#SimpleTranslatePopup QPushButton#keepPinButton 
+#SimpleTranslatePopup QPushButton#alwaysOnButton 
 {
   border: none;
-}
-
-#SimpleTranslatePopup QPushButton#keepPinButton:checked,
-#SimpleTranslatePopup QPushButton#keepPinButton:pressed {
-  border: none;
-  background-color: #ADAAFF;
 }
 
 

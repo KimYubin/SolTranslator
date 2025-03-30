@@ -48,11 +48,10 @@ public:
 
 private:
     void changePopupMode();
+    void changeNormalWindowMode();
 
     void changeAlwaysOnMode();
     void changeAlwaysOnOffMode();
-
-    void changeNormalWindowMode();
 
     void manualSizeMode();
 
@@ -77,12 +76,10 @@ private:
     void syncInOutScrollbar();
 
 protected:
-    void onKeepPinButtonToggle(bool checked);
+    void onAlwaysOnToggle(bool checked);
+    void onWindowModeToggle(bool checked);
 
-    /** 위젯을 수동으로 닫습니다. 팝업모드가 아닐 때에도 닫을 수 있습니다. */
-    void onCloseWithManual();
 
-    virtual void closeEvent(QCloseEvent* event) override;
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
@@ -93,8 +90,7 @@ protected:
 
     FinWidgetModeFlags _widgetModeFlags; 
 
-    bool _bManualClose = false;
-    
+
     QSize _textEditSize;
 
     QSize _innerMarginSize;
@@ -124,7 +120,7 @@ private:
 
     Ui::SimpleTranslatePopup* ui;
 
-    QPushButton* _keepPinButton;
+    QPushButton* _AlwaysOnButton;
     QPushButton* _windowModeButton;
     QPushButton* _closeButton;
 

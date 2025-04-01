@@ -20,6 +20,8 @@
 #include <QSizeGrip>
 #include <QCheckBox>
 
+#include "FinTranslatorCore.h"
+#include "FinTranslatorMainWidget.h"
 #include "../ui/ui_SimpleTranslatePopup.h"
 
 
@@ -34,7 +36,6 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     // ~===========
     // config
-    // setWindowFlag(Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_TranslucentBackground);

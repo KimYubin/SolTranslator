@@ -20,6 +20,10 @@ TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void TranslateUnit::executeTextTranslation()
 {
+    if (trReqData.originText.isEmpty())
+    {
+        qDebug()<<"translate request text is empty";
+    }
     if (trReqData.callbackTranslateStreaming.has_value())
     {
         connect(this, &TranslateUnit::addStreamTranslatedText, trReqData.streamContext, std::move((*trReqData.callbackTranslateStreaming)));

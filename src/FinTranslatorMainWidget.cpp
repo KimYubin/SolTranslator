@@ -27,7 +27,7 @@
 #include "TranslateManager.h"
 
 FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
-    : QWidget(parent), finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
+    : QWidget(parent), _finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
 {
     ui->setupUi(this);
 
@@ -37,14 +37,14 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     // tab button, instead of tab bar.
 
     // addTab에서 부모 추가되므로, 부모추가 금지.
-    textEditTranslate = new TextEditTranslateWidget(finCore);
-    settingsWidget    = new SettingsWidget(finCore);
+    _textEditTranslate = new TextEditTranslateWidget(_finCore);
+    _settingsWidget    = new SettingsWidget(_finCore);
 
     // std::array<tabIdx, size>
     const std::array tabIdxList = {
-        ui->mainTabWidget->addTab(textEditTranslate, tr("Text"))
+        ui->mainTabWidget->addTab(_textEditTranslate, tr("Text"))
       , ui->mainTabWidget->addTab(new QWidget(), tr("dummy"))
-      , ui->mainTabWidget->addTab(settingsWidget, tr("Settings"))
+      , ui->mainTabWidget->addTab(_settingsWidget, tr("Settings"))
     };
     // std::array<QPushButton*, size>
     const std::array buttonList = {
@@ -74,9 +74,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     // tray icon
     createActions();
     createTrayIcon();
-    connect(trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
+    connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
 
-    trayIcon->show();
+    _trayIcon->show();
 
     applyTheme();
 
@@ -97,8 +97,8 @@ void FinTranslatorMainWidget::setVisible(bool visible)
         activateWindow();
     }
 
-    miniToTrayAction->setEnabled(visible);
-    restoreAction->setEnabled(visible == false);
+    _miniToTrayAction->setEnabled(visible);
+    _restoreAction->setEnabled(visible == false);
 
     QWidget::setVisible(visible);
 }
@@ -149,7 +149,7 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
     {
         return;
     }
-    if (trayIcon->isVisible())
+    if (_trayIcon->isVisible())
     {
         hide();
         event->ignore();
@@ -178,34 +178,34 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
 
 void FinTranslatorMainWidget::createActions()
 {
-    miniToTrayAction = new QAction(tr("Mi&nimize"), this);
-    connect(miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
+    _miniToTrayAction = new QAction(tr("Mi&nimize"), this);
+    connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
 
-    restoreAction = new QAction(tr("&Restore"), this);
-    connect(restoreAction, &QAction::triggered, this, &QWidget::showNormal);
+    _restoreAction = new QAction(tr("&Restore"), this);
+    connect(_restoreAction, &QAction::triggered, this, &QWidget::showNormal);
 
-    quitAction = new QAction(tr("&Quit"), this);
-    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    _quitAction = new QAction(tr("&Quit"), this);
+    connect(_quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 }
 
 void FinTranslatorMainWidget::createTrayIcon()
 {
-    trayIconMenu = new QMenu(this);
-    trayIconMenu->addAction(miniToTrayAction);
-    trayIconMenu->addAction(restoreAction);
-    trayIconMenu->addSeparator();
-    trayIconMenu->addAction(quitAction);
+    _trayIconMenu = new QMenu(this);
+    _trayIconMenu->addAction(_miniToTrayAction);
+    _trayIconMenu->addAction(_restoreAction);
+    _trayIconMenu->addSeparator();
+    _trayIconMenu->addAction(_quitAction);
 
-    trayIcon = new QSystemTrayIcon(this);
+    _trayIcon = new QSystemTrayIcon(this);
     setIcon();
-    trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setVisible(true);
-    trayIcon->setToolTip(tr("FinTranslator"));
+    _trayIcon->setContextMenu(_trayIconMenu);
+    _trayIcon->setVisible(true);
+    _trayIcon->setToolTip(tr("FinTranslator"));
 }
 
 void FinTranslatorMainWidget::setIcon()
 {
     QIcon icon = QIcon(":/img/icon_img.png");
-    trayIcon->setIcon(icon);
+    _trayIcon->setIcon(icon);
     setWindowIcon(icon);
 }

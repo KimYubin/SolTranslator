@@ -12,7 +12,7 @@ AbstractManager::AbstractManager(FinTranslatorCore* parent) : QObject(parent)
 
 FinTranslatorCore* AbstractManager::getFinCore() const
 {
-    if (FinTranslatorCore* Fin = dynamic_cast<FinTranslatorCore*>(parent()))
+    if (FinTranslatorCore* Fin = qobject_cast<FinTranslatorCore*>(parent()))
     {
         return Fin;
     }

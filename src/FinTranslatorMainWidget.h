@@ -53,7 +53,7 @@ private:
     void createTrayIcon();
     void setIcon();
 
-    FinTranslatorCore* finCore;
+    FinTranslatorCore* _finCore;
 
     Ui::FinTranslatorMainWidget* ui;
 
@@ -61,18 +61,18 @@ private:
     // ~==============
     // sub widgets
     QButtonGroup* _buttonGroup;
-    TextEditTranslateWidget* textEditTranslate;
-    SettingsWidget* settingsWidget;
+    TextEditTranslateWidget* _textEditTranslate;
+    SettingsWidget* _settingsWidget;
     
 
     // ~==============
     // trayIcon
-    QAction* miniToTrayAction;
-    QAction* restoreAction;
-    QAction* quitAction;
+    QAction* _miniToTrayAction;
+    QAction* _restoreAction;
+    QAction* _quitAction;
 
-    QSystemTrayIcon* trayIcon;
-    QMenu* trayIconMenu;
+    QSystemTrayIcon* _trayIcon;
+    QMenu* _trayIconMenu;
 };
 
 

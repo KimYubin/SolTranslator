@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>885</width>
-    <height>542</height>
+    <width>829</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>861</width>
+     <width>811</width>
      <height>511</height>
     </rect>
    </property>
@@ -46,19 +46,6 @@
     </property>
     <item row="2" column="0">
      <layout class="QHBoxLayout" name="statusLayout"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QTabWidget" name="mainTabWidget">
-      <property name="tabPosition">
-       <enum>QTabWidget::TabPosition::North</enum>
-      </property>
-      <property name="tabShape">
-       <enum>QTabWidget::TabShape::Rounded</enum>
-      </property>
-      <property name="currentIndex">
-       <number>-1</number>
-      </property>
-     </widget>
     </item>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="tabBarLayout">
@@ -113,6 +100,9 @@
        </layout>
       </item>
      </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QStackedWidget" name="mainStackedWidget"/>
     </item>
    </layout>
   </widget>

@@ -17,7 +17,7 @@
 #SimpleTranslatePopup QPushButton
 {
   border: none;
-  border-radius : 6px;
+  border-radius : 4px;
 }
 #SimpleTranslatePopup QPushButton:checked,
 #SimpleTranslatePopup QPushButton:pressed 
@@ -36,7 +36,7 @@
     outline-style: solid;
     outline-offset: 8px;
     /* outline-offset:8px; */
-    outline-radius: 6px;
+    outline-radius: 4px;
 }
 
 /* ----------------------------------------------------- */
@@ -75,7 +75,7 @@
 , #SimpleTranslatePopup QTextEdit
 {
   background-color: rgb(40, 40, 40);
-  border-radius : 10px;
+  border-radius : 8px;
 }
 
 #SimpleTranslatePopup QLabel
@@ -147,24 +147,6 @@ QScrollBar::sub-page:vertical
 
 /*  ------------------------------------------------------------------------  */
 /*  FinTranslatorMainWidget */
-
-#FinTranslatorMainWidget QTabBar::tab 
-{
-  width: 0px;
-  height : 0px; /* 28px */
-  color: transparent;
-  background: transparent;
-  /* color: #ffffff;*/
-  border: 0px;
-  font-size:0;
-
-  padding: 0 0px; /* 16px */
-}
-
-#FinTranslatorMainWidget QTabBar{
-  /* text-transform: uppercase; */
-  /* font-weight: bold; */
-}
 
 
 
@@ -253,7 +235,7 @@ QScrollBar::sub-page:vertical
 /*  ------------------------------------------------------------------------  */
 /*  Basic widgets  */
 
-FinTranslatorMainWidget
+#FinTranslatorMainWidget
 {
   background-color: #31363b;
 }

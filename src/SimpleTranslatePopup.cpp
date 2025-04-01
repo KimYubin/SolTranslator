@@ -117,6 +117,12 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 
 void SimpleTranslatePopup::manualSizeMode()
 {
+    if (_bManualSizeMode)
+    {
+        return;
+    }
+    _bManualSizeMode = true;
+
     // 매뉴얼 사이즈 모드를 위해 등록된 사이즈 그립 이벤트 필터 해제
     _sizeGrip->removeEventFilter(this);
 
@@ -157,11 +163,12 @@ void SimpleTranslatePopup::setupUI()
     ui->bgFrame->setLayout(ui->mainLayout);
     setLayout(ui->outerLayout);
 
+    // ~===========
     // bgFrame shadow
     QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
-    shadow->setBlurRadius(15);
+    shadow->setBlurRadius(12);
     shadow->setOffset(0.5);
-    shadow->setColor(QColor(0, 0, 0, 250));
+    shadow->setColor(QColor(0, 0, 0, 255));
     ui->bgFrame->setGraphicsEffect(shadow);
 
     // ~===========
@@ -458,6 +465,7 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
     if (_bIsDrag && (event->button() | Qt::LeftButton))
     {
         move(event->globalPosition().toPoint() - _dragPoint);
+        manualSizeMode();
         event->accept();
     }
 }

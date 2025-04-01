@@ -108,6 +108,8 @@ protected:
     const QPointF _centerPosRatio = {0.85f, 0.33f};
     const float _yPosMaxRatio = 0.175f;
 
+    bool _bManualSizeMode = false;
+
     bool _bIsDrag = false;
     QPoint _dragPoint;
 

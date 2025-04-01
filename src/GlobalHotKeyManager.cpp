@@ -44,8 +44,8 @@ void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySe
 
 void GlobalHotKeyManager::FireSimpleTranslate()
 {
-    const QMimeData* prevMime   = QApplication::clipboard()->mimeData();
-    QStringList formatsList     = prevMime->formats();
+    const QMimeData* prevMime = QApplication::clipboard()->mimeData();
+    QStringList formatsList   = prevMime->formats();
 
     std::unique_ptr<QMimeData> prevMimePtr = std::make_unique<QMimeData>();
 

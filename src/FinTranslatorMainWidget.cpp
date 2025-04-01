@@ -34,40 +34,38 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     setLayout(ui->mainLayout);
 
     // ~======================
-    // tab button, instead of tab bar.
+    // button binding
 
     // addTab에서 부모 추가되므로, 부모추가 금지.
     _textEditTranslate = new TextEditTranslateWidget(_finCore);
     _settingsWidget    = new SettingsWidget(_finCore);
 
-    // std::array<tabIdx, size>
-    const std::array tabIdxList = {
-        ui->mainTabWidget->addTab(_textEditTranslate, tr("Text"))
-      , ui->mainTabWidget->addTab(new QWidget(), tr("dummy"))
-      , ui->mainTabWidget->addTab(_settingsWidget, tr("Settings"))
+    const std::array stkIdxList = {     // std::array<idx, size>
+        ui->mainStackedWidget->addWidget(_textEditTranslate)
+      , ui->mainStackedWidget->addWidget(new QWidget())
+      , ui->mainStackedWidget->addWidget(_settingsWidget)
     };
-    // std::array<QPushButton*, size>
-    const std::array buttonList = {
+    const std::array buttonList = {    // std::array<QPushButton*, size>
         ui->button_0_TextTab
       , ui->button_1_dummy
       , ui->button_9_setting
     };
-    static_assert(tabIdxList.size() == buttonList.size(), "not matching buttons and widgets.");
+    static_assert(stkIdxList.size() == buttonList.size(), "not matching buttons and widgets.");
 
 
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    for (int idx = 0; idx < tabIdxList.size(); ++idx)
+    for (int idx = 0; idx < stkIdxList.size(); ++idx)
     {
         buttonList[idx]->setCheckable(true);
         // 비순서 임의 id 지정가능.
-        _buttonGroup->addButton(buttonList[idx], tabIdxList[idx]);
+        _buttonGroup->addButton(buttonList[idx], stkIdxList[idx]);
     }
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
     {
-        ui->mainTabWidget->setCurrentIndex(inButtonId);
+        ui->mainStackedWidget->setCurrentIndex(inButtonId);
     });
 
     // ~====================
@@ -80,8 +78,6 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
 
     applyTheme();
 
-    // connect(ui->pushButton, &QPushButton::clicked, this, &FinTranslatorMainWidget::applyTheme);
-    
     setWindowTitle(tr("FinTranslator"));
 }
 

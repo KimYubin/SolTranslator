@@ -22,7 +22,7 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(FinTranslatorCore* parent);
 
-    void translateText(const TranslateRequestInfo& inTranslateRequestInfo);
+    QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
     
     void translateSimple(const QString& inOrignText
                        , const LangType inSourceLang

@@ -20,10 +20,12 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
     SetEngineType(EngineType::OpenAI);
 }
 
-void TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
+QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
 {
     TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(inTranslateRequestInfo, this);
     tranUnit->executeTextTranslation();
+
+    return QPointer<TranslateUnit>{tranUnit};
 }
 
 void TranslateManager::translateSimple(const QString& inOrignText
@@ -32,14 +34,21 @@ void TranslateManager::translateSimple(const QString& inOrignText
 {
     SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
 
-    translateText(TranslateRequestInfo{
         inOrignText
+    QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
       , inSourceLang
       , inTargetLang
       , simple
       , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
       , simple
       , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
+    connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()
+    {
+        if (transUnit.isNull())
+        {
+            return;
+        }
+        transUnit->abortTranslate();
     });
 }
 

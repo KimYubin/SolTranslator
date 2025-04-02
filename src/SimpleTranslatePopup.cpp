@@ -70,6 +70,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 SimpleTranslatePopup::~SimpleTranslatePopup()
 {
     qApp->removeEventFilter(this);
+    emit abortTranslateReq();
     delete ui;
 }
 

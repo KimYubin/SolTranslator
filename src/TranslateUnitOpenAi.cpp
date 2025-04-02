@@ -50,11 +50,11 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
     QJsonDocument doc(json);
     QByteArray data = doc.toJson();
 
-    QNetworkReply* reply = post(request, data);
+    _reply = post(request, data);
 
     if (bIsStreaming)
     {
-        connect(reply, &QIODevice::readyRead, this, [=]() { onReadyRead(reply); });
+        connect(_reply.data(), &QIODevice::readyRead, this, [=]() { onReadyRead(_reply); });
     }
 }
 
@@ -109,5 +109,5 @@ void TranslateUnitOpenAI::replyTranslateFinished(QNetworkReply* reply)
         const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
         translatedText.append(lastTranslatedText);
     }
-    updateTranslatedText(translatedText);
+    completeTranslatedText(translatedText);
 }

@@ -35,7 +35,7 @@ void TranslateUnitGoogle::replyTranslateFinished(QNetworkReply* reply)
     {
         const QString replyTranslatedText = jsonArr[0].toArray()[0].toArray()[0].toString();
 
-        updateTranslatedText(replyTranslatedText);
+        completeTranslatedText(replyTranslatedText);
     }
     else
     {

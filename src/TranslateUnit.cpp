@@ -30,6 +30,9 @@ void TranslateUnit::executeTextTranslation()
     }
 
     connect(this, &TranslateUnit::onCompletedTranslate, trReqData.completeContext, std::move(trReqData.callbackTranslateComplete));
+
+    connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
+    
     executeTextTranslation_Impl();
 }
 
@@ -37,7 +40,7 @@ void TranslateUnit::executeTextTranslation_Impl()
 {
     if (trReqData.originText.isEmpty())
     {
-        updateTranslatedText(trReqData.originText);
+        completeTranslatedText(trReqData.originText);
         return;
     }
 
@@ -48,15 +51,13 @@ void TranslateUnit::executeTextTranslation_Impl()
         {
             // 캐싱되어있다면 업데이트 합니다.
             // 내부에서 캐시의 순서를 최신으로 변경합니다.
-            updateTranslatedText(findCache);
+            completeTranslatedText(findCache);
             return;
         }
     }
 
-    connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
     // to subclass
     requestTranslate();
-
 }
 
 void TranslateUnit::onReplyFinished(QNetworkReply* reply)
@@ -75,7 +76,21 @@ void TranslateUnit::onReplyFinished(QNetworkReply* reply)
     deleteLater();
 }
 
-void TranslateUnit::updateTranslatedText(const QString& inTranslatedText)
+void TranslateUnit::abortTranslate()
+{
+    if (_reply.isNull() == false)
+    {
+        _reply->abort();
+    }
+}
+
+void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
+{
+    translatedText.append(inTranslatedText);
+    emit addStreamTranslatedText(translatedText);
+}
+
+void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
 {
     if (inTranslatedText.isEmpty() == false)
     {
@@ -88,10 +103,4 @@ void TranslateUnit::updateTranslatedText(const QString& inTranslatedText)
     // 빈 문자열도 적용합니다.
     emit onCompletedTranslate(inTranslatedText);
     deleteLater();
-}
-
-void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
-{
-    translatedText.append(inTranslatedText);
-    emit addStreamTranslatedText(translatedText);
 }

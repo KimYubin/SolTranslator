@@ -60,6 +60,9 @@ void TranslateManager::setCacheText(const QString& originText, const QString& tr
     {
         cachingTranslateText.pop();
     }
+
+    // 캐시 저장
+    getFinCore()->asyncSaveCache();
 }
 
 std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const LangType targetLang)

@@ -19,10 +19,10 @@ public:
     explicit DataManager(FinTranslatorCore* parent);
 
     cache_queue loadTranslateCache();
-    bool saveTranslateCache(const cache_queue& CacheTextQueue);
+    bool asyncSaveTranslateCache(const cache_queue& CacheTextQueue);
 
 private:
-    QJsonObject convertCacheToJson(const cache_queue& CacheTextQueue);
+    static QJsonObject convertCacheToJson(const cache_queue& CacheTextQueue);
     cache_queue convertJsonToCache(const QJsonObject& CacheJson);
 };
 

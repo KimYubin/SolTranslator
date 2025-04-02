@@ -5,8 +5,12 @@
 #ifndef FINTRANSLATORCORE_H
 #define FINTRANSLATORCORE_H
 #include <QObject>
+#include <QPointer>
+
+#include "FinTypes.h"
 
 
+class QMimeData;
 class FinTranslatorMainWidget;
 class GlobalHotKeyManager;
 class TranslateManager;
@@ -21,7 +25,9 @@ public:
     ~FinTranslatorCore() override;
 
 public:
-    void onSimpleTranslate(const QString& InOriginText);
+    void loadCache();
+    void asyncSaveCache();
+    void onSimpleTranslate(const QMimeData* inMimeData);
 
     FinTranslatorMainWidget* getFinMainWidget() { return _finMainWidget; }
 

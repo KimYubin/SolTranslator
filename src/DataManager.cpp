@@ -9,6 +9,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QString>
+#include <QFuture>
+#include <QtConcurrent>
+// #include <>
+// #include <>
+// #include <>
+
 
 #include "magic_enum.hpp"
 
@@ -34,18 +40,37 @@ cache_queue DataManager::loadTranslateCache()
     return convertJsonToCache(loadDoc.object());
 }
 
-bool DataManager::saveTranslateCache(const cache_queue& CacheTextQueue)
+bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
 {
     QFile saveFile(StaticPath::CACHE_QUEUE_SAVE_PATH);
 
-    if (saveFile.open(QIODevice::WriteOnly) == false)
+    QFutureWatcher<bool>* dataWatcher = new QFutureWatcher<bool>(this);
+    connect(dataWatcher, &QFutureWatcher<bool>::finished, this, [dataWatcher]
     {
-        qWarning("Couldn't open save file.");
-        return false;
-    }
+        if (dataWatcher->future().result() == false)
+        {
+            qDebug() << "failed to save cache";
+        }
+        dataWatcher->deleteLater();
+    });
 
-    QJsonObject cacheObject = convertCacheToJson(CacheTextQueue);
-    saveFile.write(QJsonDocument(cacheObject).toJson());
+    QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
+    {
+        QFile saveFile(StaticPath::CACHE_QUEUE_SAVE_PATH);
+        if (saveFile.open(QIODevice::WriteOnly) == false)
+        {
+            qWarning("Couldn't open save file.");
+            return false;
+        }
+
+        QJsonObject cacheObject = convertCacheToJson(CacheTextQueue);
+        QJsonDocument cacheDoc  = QJsonDocument(cacheObject);
+        QByteArray cacheJson    = cacheDoc.toJson();
+        saveFile.write(cacheJson);
+        return true;
+    });
+
+    dataWatcher->setFuture(future);
 
     return true;
 }

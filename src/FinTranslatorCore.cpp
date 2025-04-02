@@ -4,6 +4,8 @@
 
 #include "FinTranslatorCore.h"
 
+#include <QMimeData>
+
 #include "DataManager.h"
 #include "FinTranslatorMainWidget.h"
 #include "TranslateManager.h"
@@ -16,8 +18,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
     _translateManager    = new TranslateManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);
 
-    // 캐시 로드
-    _translateManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
+    loadCache();
 
     _finMainWidget = new FinTranslatorMainWidget(this);
     _finMainWidget->show();
@@ -25,11 +26,22 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
 FinTranslatorCore::~FinTranslatorCore()
 {
-    // 캐시 저장
-    _dataManager->saveTranslateCache(_translateManager->getCacheQueue());
+    asyncSaveCache();
 }
 
-void FinTranslatorCore::onSimpleTranslate(const QString& InOriginText)
+void FinTranslatorCore::loadCache()
 {
-    _translateManager->translateSimple(InOriginText, LangType::AUTO, LangType::ko);
+    // 캐시 로드
+    _translateManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
+}
+
+void FinTranslatorCore::asyncSaveCache()
+{
+    // 캐시 저장
+    _dataManager->asyncSaveTranslateCache(_translateManager->getCacheQueue());
+}
+
+void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
+{
+    _translateManager->translateSimple(inMimeData, LangType::AUTO, LangType::ko);
 }

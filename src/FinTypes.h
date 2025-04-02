@@ -59,11 +59,21 @@ enum class EngineType
   , Size
 };
 
+enum class TextStyle
+{
+    None
+  , PlainText
+  , Html
+  , MarkDown
+  , Size
+};
+
 struct TranslateRequestInfo
 {
     TranslateRequestInfo() = default;
 
     TranslateRequestInfo(const QString& inOriginText
+                       , const TextStyle inTextFormat
                        , const LangType inSourceLang
                        , const LangType inTargetLang
                        , QObject* inCompleteContext
@@ -71,6 +81,7 @@ struct TranslateRequestInfo
                        , QObject* inStreamContext = nullptr
                        , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt)
         : originText(inOriginText)
+        , textFormat(inTextFormat)
         , sourceLang(inSourceLang)
         , targetLang(inTargetLang)
         , completeContext(inCompleteContext)
@@ -80,6 +91,7 @@ struct TranslateRequestInfo
     {}
 
     QString originText;
+    TextStyle textFormat;
     LangType sourceLang;
     LangType targetLang;
     QObject* completeContext;

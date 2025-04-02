@@ -17,8 +17,7 @@ public:
                                , TranslateManager* parent);
 
 protected:
-    void streamingTranslate();
-    void completeTranslate();
+    void chatTranslate(const bool bIsStreaming);
 
     virtual void requestTranslate() override;
 

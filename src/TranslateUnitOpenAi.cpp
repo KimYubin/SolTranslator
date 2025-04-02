@@ -19,7 +19,7 @@ TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslate
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
-void TranslateUnitOpenAI::streamingTranslate()
+void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
 {
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
@@ -27,10 +27,12 @@ void TranslateUnitOpenAI::streamingTranslate()
     request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPI()).toStdString().c_str());
 
     QJsonObject json;
-    json["model"]  = "gpt-4o-mini";
-    json["stream"] = true; // streaming
+    json["model"] = "gpt-4o-mini";
+    if (bIsStreaming)
+    {
+        json["stream"] = bIsStreaming; // streaming
+    }
 
-    
     QJsonArray messages;
 
     QJsonObject systemMessage;
@@ -47,48 +49,18 @@ void TranslateUnitOpenAI::streamingTranslate()
 
     QJsonDocument doc(json);
     QByteArray data = doc.toJson();
-
 
     QNetworkReply* reply = post(request, data);
 
-    connect(reply, &QIODevice::readyRead, this, [=]() { onReadyRead(reply); });
-}
-
-void TranslateUnitOpenAI::completeTranslate()
-{   
-    QUrl url("https://api.openai.com/v1/chat/completions");
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPI()).toStdString().c_str());
-
-
-    QJsonObject json;
-    json["model"] = "gpt-4o-mini";
-
-    QJsonArray messages;
-
-    QJsonObject systemMessage;
-    systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(trReqData.sourceLang), Langs::GetEnglishName(trReqData.targetLang));
-    messages.append(systemMessage);
-
-    QJsonObject userMessage;
-    userMessage["role"] = "user";
-    userMessage["content"] = trReqData.originText;
-    messages.append(userMessage);
-
-    json["messages"] = messages;
-
-    QJsonDocument doc(json);
-    QByteArray data = doc.toJson();
-
-    post(request, data);
+    if (bIsStreaming)
+    {
+        connect(reply, &QIODevice::readyRead, this, [=]() { onReadyRead(reply); });
+    }
 }
 
 void TranslateUnitOpenAI::requestTranslate()
 {
-    // completeTranslate();
-    streamingTranslate();
+    chatTranslate(true);
 }
 
 void TranslateUnitOpenAI::onReadyRead(QNetworkReply* reply)

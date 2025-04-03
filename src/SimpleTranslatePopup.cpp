@@ -19,6 +19,8 @@
 #include <QScrollBar>
 #include <QSizeGrip>
 #include <QCheckBox>
+#include <QFuturewatcher>
+#include <qtconcurrentrun.h>
 
 #include "FinTranslatorCore.h"
 #include "FinTranslatorMainWidget.h"
@@ -96,59 +98,121 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     case TextStyle::MarkDown:
     {
-        ui->resultText->setMarkdown(inTranslatedText);
-
-        // hyperlink, 모든 <span> 내부 color 교체
-        const QString hyperLinkColor = QString("#6ba7f7");
-        // const QString pattern        = "(<span[^>]*?style=[\"'][^>]*?)(;|\\s|\")color:\\s*#([0-9a-fA-F]{3,6})";
-        // const QString replacement    = "\\1\\2color: " + hyperLinkColor;
+        // QFutureWatcher<QTextDocument*>* dataWatcher = new QFutureWatcher<QTextDocument*>(this);
+        // connect(dataWatcher, &QFutureWatcher<QTextDocument*>::finished, this, [this, dataWatcher]
+        // {
+        //     QTextDocument* resDoc = dataWatcher->future().result();
+        //     // ui->resultText->setDocument(resDoc);
+        //     // dataWatcher->deleteLater();
+        //     
+        //     QMetaObject::invokeMethod(this, [this, resDoc, dataWatcher]()
+        //     {
+        //         ui->resultText->setDocument(resDoc);
+        //         dataWatcher->deleteLater();
+        //     }, Qt::QueuedConnection);
+        // });
         //
-        // QString resultHtml = ui->resultText->toHtml();
-        // ui->resultText->setHtml(resultHtml.replace(QRegularExpression(pattern), replacement));
-        // qDebug()<< ui->resultText->toHtml();
+        // QFuture<QTextDocument*> future = QtConcurrent::run([ inTranslatedText]()
+        // {
+        //     QTextDocument* asyncDoc = new QTextDocument;
+        //     asyncDoc->setMarkdown(inTranslatedText);
+        //
+        //     // 링크 색상 변경
+        //     const QString hyperLinkColor = QString("#6ba7f7");
+        //
+        //     QTextCursor cursor(asyncDoc);
+        //     cursor.movePosition(QTextCursor::Start);
+        //
+        //     int lowIdx = 0;
+        //     int hiIdx  = 0;
+        //     while (!cursor.isNull() && !cursor.atEnd())
+        //     {
+        //         if (cursor.charFormat().isAnchor())
+        //         {
+        //             hiIdx = cursor.position();
+        //         }
+        //         else
+        //         {
+        //             if (lowIdx < hiIdx)
+        //             {
+        //                 // word 내부 부분 링크 대응
+        //                 cursor.setPosition(lowIdx);
+        //                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
+        //
+        //                 QTextCharFormat prevLinkFormat = cursor.charFormat();
+        //                 prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
+        //                 cursor.mergeCharFormat(prevLinkFormat);
+        //             }
+        //
+        //             lowIdx = cursor.position();
+        //             hiIdx  = lowIdx;
+        //         }
+        //
+        //         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+        //     }
+        //     asyncDoc->moveToThread(QApplication::instance()->thread());
+        //     return asyncDoc;
+        // });
+        //
+        // dataWatcher->setFuture(future);
+        
+        
+        // ui->resultText->setMarkdown(inTranslatedText);
+
+        // 링크 색상 변경
+        const QString hyperLinkColor = QString("#6ba7f7");
+        
 
         QTextDocument* doc = ui->resultText->document();
-        
+        // doc->setMarkdown(inTranslatedText);
+
         QTextCursor cursor(doc);
 
-        // 추가된 분량만 탐색
-        cursor.movePosition(QTextCursor::Start);
+        QString addedStr = inTranslatedText.sliced(_prevText.size());
 
+        qDebug()<<cursor.position();
+        cursor.movePosition(QTextCursor::End);
+        qDebug()<<cursor.position();
+        cursor.insertMarkdown(addedStr);
+        qDebug()<<cursor.position();
+        
+        qDebug()<<_prevText;
+        qDebug()<<inTranslatedText;
+        qDebug()<<addedStr;
+        qDebug()<<"";
+        
+        _prevText = inTranslatedText;
+
+
+        // cursor.movePosition(QTextCursor::Start);
+
+        int lowIdx = 0;
+        int hiIdx  = 0;
         while (!cursor.isNull() && !cursor.atEnd())
         {
-            cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-
-            // 커서 앞 문자가 링크인지 확인
             if (cursor.charFormat().isAnchor())
             {
-                QTextCharFormat prevLinkFormat = cursor.charFormat();
-                prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor))); // 링크 색상 변경
-                cursor.mergeCharFormat(prevLinkFormat);
+                hiIdx = cursor.position();
+            }
+            else
+            {
+                if (lowIdx < hiIdx)
+                {
+                    // word 내부 부분 링크 대응
+                    cursor.setPosition(lowIdx);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
+                    QTextCharFormat prevLinkFormat = cursor.charFormat();
+                    prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
+                    cursor.mergeCharFormat(prevLinkFormat);
+                }
+
+                lowIdx = cursor.position();
+                hiIdx  = lowIdx;
             }
 
-            cursor.clearSelection();
-
-
-            // cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            //
-            // // 커서 앞 문자가 링크인지 확인
-            // if (cursor.charFormat().isAnchor())
-            // {
-            //     bIsPrevLink = true;
-            // }
-            // else
-            // {
-            //     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-            //     if (bIsPrevLink)
-            //     {
-            //         QTextCharFormat prevLinkFormat = cursor.charFormat();
-            //         prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor))); // 링크 색상 변경
-            //         cursor.mergeCharFormat(prevLinkFormat);
-            //     }
-            //     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-            //     bIsPrevLink = false;
-            // }
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }
+
         break;
     }
     case TextStyle::Size:

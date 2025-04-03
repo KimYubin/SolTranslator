@@ -84,7 +84,77 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         animateTextEditResize(newSize);
     }
 
-    ui->resultText->setText(inTranslatedText);
+    switch (inTextStyle)
+    {
+    case TextStyle::None:
+        break;
+    case TextStyle::PlainText:
+        ui->resultText->setText(inTranslatedText);
+        break;
+    case TextStyle::Html:
+        ui->resultText->setHtml(inTranslatedText);
+        break;
+    case TextStyle::MarkDown:
+    {
+        ui->resultText->setMarkdown(inTranslatedText);
+
+        // hyperlink, 모든 <span> 내부 color 교체
+        const QString hyperLinkColor = QString("#6ba7f7");
+        // const QString pattern        = "(<span[^>]*?style=[\"'][^>]*?)(;|\\s|\")color:\\s*#([0-9a-fA-F]{3,6})";
+        // const QString replacement    = "\\1\\2color: " + hyperLinkColor;
+        //
+        // QString resultHtml = ui->resultText->toHtml();
+        // ui->resultText->setHtml(resultHtml.replace(QRegularExpression(pattern), replacement));
+        // qDebug()<< ui->resultText->toHtml();
+
+        QTextDocument* doc = ui->resultText->document();
+        
+        QTextCursor cursor(doc);
+
+        // 추가된 분량만 탐색
+        cursor.movePosition(QTextCursor::Start);
+
+        while (!cursor.isNull() && !cursor.atEnd())
+        {
+            cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+
+            // 커서 앞 문자가 링크인지 확인
+            if (cursor.charFormat().isAnchor())
+            {
+                QTextCharFormat prevLinkFormat = cursor.charFormat();
+                prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor))); // 링크 색상 변경
+                cursor.mergeCharFormat(prevLinkFormat);
+            }
+
+            cursor.clearSelection();
+
+
+            // cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            //
+            // // 커서 앞 문자가 링크인지 확인
+            // if (cursor.charFormat().isAnchor())
+            // {
+            //     bIsPrevLink = true;
+            // }
+            // else
+            // {
+            //     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            //     if (bIsPrevLink)
+            //     {
+            //         QTextCharFormat prevLinkFormat = cursor.charFormat();
+            //         prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor))); // 링크 색상 변경
+            //         cursor.mergeCharFormat(prevLinkFormat);
+            //     }
+            //     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+            //     bIsPrevLink = false;
+            // }
+        }
+        break;
+    }
+    case TextStyle::Size:
+        break;
+    default: ;
+    }
 }
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
@@ -247,6 +317,17 @@ void SimpleTranslatePopup::setupUI()
 
     // ~======================
     // resultText & scroll bar
+    QFont font = ui->resultText->font();
+    font.setHintingPreference(QFont::PreferNoHinting);
+    ui->resultText->setFont(font);
+    Qt::TextInteractionFlags interactionFlags = ui->resultText->textInteractionFlags();
+    interactionFlags.setFlag(Qt::TextInteractionFlag::TextSelectableByMouse);
+    interactionFlags.setFlag(Qt::TextInteractionFlag::TextSelectableByKeyboard);
+    interactionFlags.setFlag(Qt::TextInteractionFlag::LinksAccessibleByMouse);
+    interactionFlags.setFlag(Qt::TextInteractionFlag::LinksAccessibleByKeyboard);
+    ui->resultText->setTextInteractionFlags(interactionFlags);
+    ui->resultText->ensureCursorVisible();
+
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // 기본 스크롤바 숨김
@@ -272,6 +353,11 @@ void SimpleTranslatePopup::setupUI()
     {
         syncInOutScrollbar();
     });
+
+
+    // 탭순서
+    setTabOrder({_windowModeButton, _closeButton, _AlwaysOnButton, ui->resultText, _sizeGrip});
+    _sizeGrip->setFocus();
 }
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText) const

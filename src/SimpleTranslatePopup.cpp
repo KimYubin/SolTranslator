@@ -60,7 +60,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
 
     calculateTextEditLayoutInfo();
 
-    showTranslationPopup("");
+    showTranslationPopup("", TextStyle::PlainText);
 
     show();
     raise();
@@ -75,7 +75,7 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 }
 
 
-void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText)
+void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
     if ((_prevSize.width() < _maxEditSize.width())
         || (_prevSize.height() < _maxEditSize.height()))

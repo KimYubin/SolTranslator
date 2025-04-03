@@ -13,6 +13,8 @@
 #include <QClipboard>
 #include <QThread>
 #include <QMimeData>
+#include <qregularexpression.h>
+#include <qtextdocument.h>
 #include <QTimer>
 
 #include "FinTranslatorCore.h"
@@ -57,7 +59,9 @@ void GlobalHotKeyManager::FireSimpleTranslate()
     // 클립보드 갱신(복사) 대기
     connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimePtrChanged = std::move(prevMimePtr)](QClipboard::Mode mode) mutable
     {
-        if (QApplication::clipboard()->mimeData(mode)->hasText() == false)
+        const QMimeData* selectedMime  = QApplication::clipboard()->mimeData(mode);
+
+        if (selectedMime->hasText() == false)
         {
             return;
         }
@@ -67,13 +71,12 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             // 번역 실행
-            const QString selectedText = QApplication::clipboard()->text();
             if (FinTranslatorCore* Fin = getFinCore())
             {
-                Fin->onSimpleTranslate(selectedText);
+                Fin->onSimpleTranslate(selectedMime);
             }
 
-            if (prevMimePtrChanged->text() == selectedText)
+            if (prevMimePtrChanged->text() == selectedMime->text())
             {
                 break;
             }

@@ -39,6 +39,7 @@ void TextEditTranslateWidget::on_findButton_clicked()
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
+      , TextStyle::PlainText
       , LangType::en
       , LangType::ko
       , ui->plainTextEditTranslate

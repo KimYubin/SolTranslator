@@ -14,6 +14,10 @@
 
 #include "TranslateManager.h"
 
+#include <QMimeData>
+
+#include "FinTranslatorCore.h"
+
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
@@ -28,20 +32,47 @@ QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestIn
     return QPointer<TranslateUnit>{tranUnit};
 }
 
-void TranslateManager::translateSimple(const QString& inOrignText
+void TranslateManager::translateSimple(const QMimeData* inMimeData
                                      , const LangType inSourceLang
                                      , const LangType inTargetLang)
 {
     SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
 
-        inOrignText
+    // 마크다운 변환
+    QString originText;
+    TextStyle textStyle;
+
+    if (inMimeData->hasText() == false)
+    {
+        return;
+    }
+
+    if (inMimeData->hasHtml())
+    {
+        QTextDocument txtDoc;
+        // list 무시하는 문법 제거.
+        txtDoc.setHtml(inMimeData->html().replace(QRegularExpression(R"(list-style: none)"), ""));
+        originText = txtDoc.toMarkdown();
+        textStyle  = TextStyle::MarkDown;
+    }
+    else
+    {
+        originText = inMimeData->text();
+        textStyle  = TextStyle::PlainText;
+    }
+
+
     QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
+        originText
+      , textStyle
       , inSourceLang
       , inTargetLang
       , simple
-      , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
+      , [=](const QString& inStr) { simple->showTranslationPopup(inStr, textStyle); }
       , simple
-      , [=](const QString& inStr) { simple->showTranslationPopup(inStr); }
+      , [=](const QString& inStr) { simple->showTranslationPopup(inStr, textStyle); }
+    });
+
     connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()
     {
         if (transUnit.isNull())

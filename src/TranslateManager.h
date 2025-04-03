@@ -13,6 +13,7 @@
 class QTextEdit;
 class TranslateUnit;
 class FinTranslatorCore;
+class QMimeData;
 
 
 class TranslateManager : public AbstractManager
@@ -24,7 +25,7 @@ public:
 
     QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
     
-    void translateSimple(const QString& inOrignText
+    void translateSimple(const QMimeData* inMimeData
                        , const LangType inSourceLang
                        , const LangType inTargetLang);
 

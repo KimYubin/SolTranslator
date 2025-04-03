@@ -98,93 +98,14 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     case TextStyle::MarkDown:
     {
-        // QFutureWatcher<QTextDocument*>* dataWatcher = new QFutureWatcher<QTextDocument*>(this);
-        // connect(dataWatcher, &QFutureWatcher<QTextDocument*>::finished, this, [this, dataWatcher]
-        // {
-        //     QTextDocument* resDoc = dataWatcher->future().result();
-        //     // ui->resultText->setDocument(resDoc);
-        //     // dataWatcher->deleteLater();
-        //     
-        //     QMetaObject::invokeMethod(this, [this, resDoc, dataWatcher]()
-        //     {
-        //         ui->resultText->setDocument(resDoc);
-        //         dataWatcher->deleteLater();
-        //     }, Qt::QueuedConnection);
-        // });
-        //
-        // QFuture<QTextDocument*> future = QtConcurrent::run([ inTranslatedText]()
-        // {
-        //     QTextDocument* asyncDoc = new QTextDocument;
-        //     asyncDoc->setMarkdown(inTranslatedText);
-        //
-        //     // 링크 색상 변경
-        //     const QString hyperLinkColor = QString("#6ba7f7");
-        //
-        //     QTextCursor cursor(asyncDoc);
-        //     cursor.movePosition(QTextCursor::Start);
-        //
-        //     int lowIdx = 0;
-        //     int hiIdx  = 0;
-        //     while (!cursor.isNull() && !cursor.atEnd())
-        //     {
-        //         if (cursor.charFormat().isAnchor())
-        //         {
-        //             hiIdx = cursor.position();
-        //         }
-        //         else
-        //         {
-        //             if (lowIdx < hiIdx)
-        //             {
-        //                 // word 내부 부분 링크 대응
-        //                 cursor.setPosition(lowIdx);
-        //                 cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
-        //
-        //                 QTextCharFormat prevLinkFormat = cursor.charFormat();
-        //                 prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
-        //                 cursor.mergeCharFormat(prevLinkFormat);
-        //             }
-        //
-        //             lowIdx = cursor.position();
-        //             hiIdx  = lowIdx;
-        //         }
-        //
-        //         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-        //     }
-        //     asyncDoc->moveToThread(QApplication::instance()->thread());
-        //     return asyncDoc;
-        // });
-        //
-        // dataWatcher->setFuture(future);
-        
-        
-        // ui->resultText->setMarkdown(inTranslatedText);
-
         // 링크 색상 변경
         const QString hyperLinkColor = QString("#6ba7f7");
-        
 
         QTextDocument* doc = ui->resultText->document();
-        // doc->setMarkdown(inTranslatedText);
+        doc->setMarkdown(inTranslatedText);
 
         QTextCursor cursor(doc);
-
-        QString addedStr = inTranslatedText.sliced(_prevText.size());
-
-        qDebug()<<cursor.position();
-        cursor.movePosition(QTextCursor::End);
-        qDebug()<<cursor.position();
-        cursor.insertMarkdown(addedStr);
-        qDebug()<<cursor.position();
-        
-        qDebug()<<_prevText;
-        qDebug()<<inTranslatedText;
-        qDebug()<<addedStr;
-        qDebug()<<"";
-        
-        _prevText = inTranslatedText;
-
-
-        // cursor.movePosition(QTextCursor::Start);
+        cursor.movePosition(QTextCursor::Start);
 
         int lowIdx = 0;
         int hiIdx  = 0;

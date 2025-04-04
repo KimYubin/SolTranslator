@@ -76,6 +76,28 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
     delete ui;
 }
 
+void SimpleTranslatePopup::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+{
+    if (inTranslatedText.size() < 80)
+    {
+        showTranslationPopup(inTranslatedText, inTextStyle);
+        return;
+    }
+
+    qsizetype lineBreakIdx = inTranslatedText.indexOf(QRegularExpression("\\.\\s|\\n|\\,"), _prevString.size());
+    if (lineBreakIdx == -1)
+    {
+        return;
+    }
+
+    showTranslationPopup(inTranslatedText.sliced(0, lineBreakIdx + 1), inTextStyle);
+}
+
+void SimpleTranslatePopup::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+{
+    showTranslationPopup(inTranslatedText, inTextStyle);
+}
+
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
@@ -140,6 +162,7 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     default: ;
     }
+    _prevString = inTranslatedText;
 }
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)

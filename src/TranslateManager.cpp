@@ -68,9 +68,9 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
       , inSourceLang
       , inTargetLang
       , simple
-      , [=](const QString& inStr) { simple->showTranslationPopup(inStr, textStyle); }
+      , [=](const QString& inStr) { simple->completeTransText(inStr, textStyle); }
       , simple
-      , [=](const QString& inStr) { simple->showTranslationPopup(inStr, textStyle); }
+      , [=](const QString& inStr) { simple->streamTransText(inStr, textStyle); }
     });
 
     connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()

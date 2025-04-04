@@ -38,6 +38,11 @@ public:
 
     ~SimpleTranslatePopup() override;
 
+    void streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
+
+    void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
+
+protected:
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle);
 
@@ -102,6 +107,8 @@ protected:
 
     int _lineCount = 0;
     int _lastLineLength = 0;
+
+    QString _prevString;
 
     // ~================
     const QSizeF _minSizeRatio  = {0.15f, 0.15f};

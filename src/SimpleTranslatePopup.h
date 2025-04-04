@@ -46,6 +46,8 @@ protected:
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle);
 
+    void setMarkdown(const QString& inMarkdownStr);
+
     QSize getTextEditSize() const { return _textEditSize; };
 
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
@@ -123,6 +125,7 @@ protected:
     bool _bIsDrag = false;
     QPoint _dragPoint;
 
+    qreal _fontSize = 14.0f;
 private:
     FinTranslatorCore* _finCore;
 

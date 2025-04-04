@@ -120,42 +120,7 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     case TextStyle::MarkDown:
     {
-        // 링크 색상 변경
-        const QString hyperLinkColor = QString("#6ba7f7");
-
-        QTextDocument* doc = ui->resultText->document();
-        doc->setMarkdown(inTranslatedText);
-
-        QTextCursor cursor(doc);
-        cursor.movePosition(QTextCursor::Start);
-
-        int lowIdx = 0;
-        int hiIdx  = 0;
-        while (!cursor.isNull() && !cursor.atEnd())
-        {
-            if (cursor.charFormat().isAnchor())
-            {
-                hiIdx = cursor.position();
-            }
-            else
-            {
-                if (lowIdx < hiIdx)
-                {
-                    // word 내부 부분 링크 대응
-                    cursor.setPosition(lowIdx);
-                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
-                    QTextCharFormat prevLinkFormat = cursor.charFormat();
-                    prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
-                    cursor.mergeCharFormat(prevLinkFormat);
-                }
-
-                lowIdx = cursor.position();
-                hiIdx  = lowIdx;
-            }
-
-            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-        }
-
+        setMarkdown(inTranslatedText);
         break;
     }
     case TextStyle::Size:
@@ -163,6 +128,45 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
     default: ;
     }
     _prevString = inTranslatedText;
+}
+
+void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
+{
+    // 링크 색상 변경
+    const QString hyperLinkColor = QString("#6ba7f7");
+
+    QTextDocument* doc = ui->resultText->document();
+    doc->setMarkdown(inMarkdownStr);
+
+    QTextCursor cursor(doc);
+    cursor.movePosition(QTextCursor::Start);
+
+    int lowIdx = 0;
+    int hiIdx  = 0;
+    while (cursor.isNull() == false && cursor.atEnd() == false)
+    {
+        if (cursor.charFormat().isAnchor())
+        {
+            hiIdx = cursor.position();
+        }
+        else
+        {
+            if (lowIdx < hiIdx)
+            {
+                // word 내부 부분 링크 대응
+                cursor.setPosition(lowIdx);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
+                QTextCharFormat prevLinkFormat = cursor.charFormat();
+                prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
+                cursor.mergeCharFormat(prevLinkFormat);
+            }
+
+            lowIdx = cursor.position();
+            hiIdx  = lowIdx;
+        }
+
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+    }
 }
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
@@ -327,6 +331,7 @@ void SimpleTranslatePopup::setupUI()
     // resultText & scroll bar
     QFont font = ui->resultText->font();
     font.setHintingPreference(QFont::PreferNoHinting);
+    font.setPointSizeF(_fontSize);
     ui->resultText->setFont(font);
     Qt::TextInteractionFlags interactionFlags = ui->resultText->textInteractionFlags();
     interactionFlags.setFlag(Qt::TextInteractionFlag::TextSelectableByMouse);
@@ -338,7 +343,8 @@ void SimpleTranslatePopup::setupUI()
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    // 기본 스크롤바 숨김
+    ui->resultText->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+    // 기본 수직 스크롤바를 외부 스크롤바로 대체
     ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // 외부 스크롤바 -> 내부 스크롤바 제어
@@ -396,7 +402,7 @@ void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
 {
     if (_prevSize == inNewSize)
     {
-        return;
+        // return;
     }
     _prevSize = inNewSize;
 

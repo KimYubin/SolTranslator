@@ -32,10 +32,8 @@
     outline: 2px;
     outline-color: rgb(255, 255, 0);
     outline-color: rgb(255, 255, 255);
-    outline-style: none none solid none;
     outline-style: solid;
     outline-offset: 8px;
-    /* outline-offset:8px; */
     outline-radius: 4px;
 }
 
@@ -88,18 +86,21 @@
 
 /* -------------------- */
 /* SimpleTranslatePopup QScrollBar */
+
+#SimpleTranslatePopup QScrollBar:vertical,
 #SimpleTranslatePopup QScrollBar:horizontal
 {
   border: 0;
-  background: #232629;
+  background: #424242;
+  border-radius : 4px;
+}
+#SimpleTranslatePopup QScrollBar:horizontal
+{
   height: 8px;
 }
 
 #SimpleTranslatePopup QScrollBar:vertical
 {
-  border: 0;
-  background: #424242;
-  border-radius : 4px;
   width: 8px;
 }
 
@@ -136,8 +137,8 @@
   /* height: 0px; */
 }
 
-QScrollBar::add-page:vertical,
-QScrollBar::sub-page:vertical 
+QScrollBar::add-page,
+QScrollBar::sub-page 
 {
   border: 0;
   background: transparent;

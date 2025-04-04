@@ -46,6 +46,9 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     // ui
     setupUI();
 
+    // 포커스 변경에 따른 그림자 on/off 제어. (그림자 성능)
+    connect(qApp, &QApplication::focusChanged, this, &SimpleTranslatePopup::detectFocusInOut);
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -551,6 +554,68 @@ void SimpleTranslatePopup::changePopupMode()
     _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
 }
 
+void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)
+{
+    ui->bgFrame->graphicsEffect()->setEnabled(bIsEnable);
+}
+
+void SimpleTranslatePopup::detectFocusInOut(QWidget* old, QWidget* now)
+{
+    // 위젯 부모가 this인지 재귀적으로 확인합니다.
+    auto isThis = [this](QWidget* inWidget)
+    {
+        bool bIsWidgetThis = false;
+        // if (inWidget != nullptr)
+        // {
+        //     if (inWidget == this)
+        //     {
+        //         bIsWidgetThis = true;
+        //     }
+        //     else
+        //     {
+        //         QObject* inWidgetParent = inWidget->parent();
+        //         while (inWidgetParent != nullptr)
+        //         {
+        //             if (inWidgetParent == this)
+        //             {
+        //                 bIsWidgetThis = true;
+        //                 break;
+        //             }
+        //             inWidgetParent = inWidgetParent->parent();
+        //         }
+        //     }
+        // }
+        QObject* inWidgetParent = inWidget;
+        while (inWidgetParent != nullptr)
+        {
+            if (inWidgetParent == this)
+            {
+                bIsWidgetThis = true;
+                break;
+            }
+            inWidgetParent = inWidgetParent->parent();
+        }
+        return bIsWidgetThis;
+    };
+
+    if (isThis(old))
+    {
+        if (isThis(now))
+        {
+            return;
+        }
+        else
+        {
+            setShadowEffectEnabled(false);
+            return;
+        }
+    }
+    if (isThis(now))
+    {
+        setShadowEffectEnabled(true);
+    }
+}
+
 void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
@@ -578,6 +643,38 @@ void SimpleTranslatePopup::mouseReleaseEvent(QMouseEvent* event)
         _bIsDrag = false;
         event->accept();
     }
+}
+
+void SimpleTranslatePopup::enterEvent(QEnterEvent* event)
+{
+    setShadowEffectEnabled(true);
+
+    QWidget::enterEvent(event);
+}
+
+void SimpleTranslatePopup::leaveEvent(QEvent* event)
+{
+    bool hasChildFocus = hasFocus();
+
+    const QList<QWidget*> childList = findChildren<QWidget*>();
+    for (QWidget* childWidget : childList)
+    {
+        if (hasChildFocus)
+        {
+            break;
+        }
+        if (childWidget->hasFocus())
+        {
+            hasChildFocus = true;
+        }
+    }
+
+    if (hasChildFocus == false)
+    {
+        setShadowEffectEnabled(false);
+    }
+
+    QWidget::leaveEvent(event);
 }
 
 bool SimpleTranslatePopup::eventFilter(QObject* obj, QEvent* event)

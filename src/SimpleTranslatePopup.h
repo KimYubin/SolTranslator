@@ -86,9 +86,18 @@ protected:
     void changeNormalWindowMode();
     void changePopupMode();
 
+    void setShadowEffectEnabled(const bool bIsEnable);
+
+protected slots:
+    void detectFocusInOut(QWidget* old, QWidget* now);
+
+protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
+
+    virtual void enterEvent(QEnterEvent* event) override;
+    virtual void leaveEvent(QEvent* event) override;
 
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
 

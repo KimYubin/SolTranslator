@@ -19,11 +19,16 @@
   border: none;
   border-radius : 4px;
 }
+#SimpleTranslatePopup QPushButton:hover
+{
+  border: none;
+  background-color:rgba(173, 170, 255, 0.36);
+}
 #SimpleTranslatePopup QPushButton:checked,
 #SimpleTranslatePopup QPushButton:pressed 
 {
   border: none;
-  background-color: #ADAAFF;
+  /* background-color: #ADAAFF; */
 }
 
 #SimpleTranslatePopup QPushButton:focus,
@@ -36,11 +41,27 @@
     outline-offset: 8px;
     outline-radius: 4px;
 }
+#SimpleTranslatePopup QPushButton#alwaysOnButton
+{
+  icon: url(:/img/keep_pin_clock45d);
+  icon-size: 20px;
+}
+#SimpleTranslatePopup QPushButton#alwaysOnButton:pressed,
+#SimpleTranslatePopup QPushButton#alwaysOnButton:checked
+{
+  icon: url(../resource/image/keep_48dp_E3E3E3_FILL1_wght700_GRAD200_opsz48_color.svg);
+}
 
+#SimpleTranslatePopup QPushButton#windowModeButton
+{
+  /* icon: url(:/img/window_mode_img); */
+}
 /* ----------------------------------------------------- */
 /* QPushButton # closeButton */
 #SimpleTranslatePopup QPushButton#closeButton
 {
+  icon: url(:/img/close_button_img);
+  icon-size: 24px;
   background-color: transparent;
   color : #e7e7e7;
   font-weight: bold;
@@ -52,7 +73,8 @@
 }
 
 #SimpleTranslatePopup QPushButton#closeButton:pressed,
-#SimpleTranslatePopup QPushButton#closeButton:checked {
+#SimpleTranslatePopup QPushButton#closeButton:checked 
+{
   background-color: #94141f;
 }
 
@@ -69,19 +91,28 @@
 /* ----------------------------------------------------- */
 /* QPushButton # QTextEdit */
 
-#SimpleTranslatePopup QFrame
-, #SimpleTranslatePopup QTextEdit
+#SimpleTranslatePopup QFrame,
+#SimpleTranslatePopup QTextEdit
 {
   background-color: rgb(40, 40, 40);
   border-radius : 8px;
 }
-
+#SimpleTranslatePopup a,
+#SimpleTranslatePopup span
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+#SimpleTranslatePopup body
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
 #SimpleTranslatePopup QLabel
 , #SimpleTranslatePopup QTextEdit
 {
  	color: rgb(250, 250, 250);
-  /* background-color:transparent; */
-  font-size:15pt;
+  font-size: 14pt;
 }
 
 /* -------------------- */
@@ -92,7 +123,7 @@
 {
   border: 0;
   background: #424242;
-  border-radius : 4px;
+  /* border-radius : 4px; */
 }
 #SimpleTranslatePopup QScrollBar:horizontal
 {
@@ -125,16 +156,52 @@
   min-height: 24px;
 }
 
-
+#SimpleTranslatePopup QScrollBar:horizontal
+{
+  margin: 0px 8px 0px 8px;
+}
+#SimpleTranslatePopup QScrollBar:vertical
+{
+  margin: 8px 0px 8px 0px;
+}
 #SimpleTranslatePopup QScrollBar::add-line:vertical,
 #SimpleTranslatePopup QScrollBar::sub-line:vertical,
 #SimpleTranslatePopup QScrollBar::add-line:horizontal,
 #SimpleTranslatePopup QScrollBar::sub-line:horizontal
 {
   border: 0;
-  background: #111111;
+  /* background: #111111; */
   /* width: 0px; */
   /* height: 0px; */
+}
+#SimpleTranslatePopup QScrollBar::sub-line:vertical
+{
+    /* background: #32CC99; */
+    
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: top;
+}
+#SimpleTranslatePopup QScrollBar::add-line:vertical
+{
+    /* background: #32CC99; */
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+}
+#SimpleTranslatePopup QScrollBar::sub-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: left;
+}
+#SimpleTranslatePopup QScrollBar::add-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: right;
 }
 
 QScrollBar::add-page,

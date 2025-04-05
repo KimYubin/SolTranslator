@@ -6,6 +6,10 @@
 
 #include "SimpleTranslatePopup.h"
 
+#ifdef _WIN32
+#include <qt_windows.h>
+#endif
+
 #include <iostream>
 #include <QAbstractTextDocumentLayout>
 #include <qboxlayout.h>
@@ -32,7 +36,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
-    QIcon icon = QIcon(":/img/icon_img.png");
+    QIcon icon = QIcon(":/img/icon_img");
     setWindowIcon(icon);
     setWindowTitle(tr("fin"));
 
@@ -284,7 +288,11 @@ void SimpleTranslatePopup::setupUI()
     _AlwaysOnButton = new QPushButton(this);
     _AlwaysOnButton->setCheckable(true);
     _AlwaysOnButton->setObjectName("alwaysOnButton");
-    _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+    QIcon alwaysIcon;
+    alwaysIcon.addFile(":/img/keep_pin_clock45d", QSize(), QIcon::Normal, QIcon::Off);
+    alwaysIcon.addFile(":/img/keep_pin_fill_v", QSize(), QIcon::Normal, QIcon::On);
+    _AlwaysOnButton->setIcon(alwaysIcon);
+    _AlwaysOnButton->hide();
 
     setupTitleButton(_AlwaysOnButton);
 
@@ -305,7 +313,7 @@ void SimpleTranslatePopup::setupUI()
 
 
     // ~==========
-    // windowModeButton
+    // spacer
     QSpacerItem* topCenterSpacer = new QSpacerItem(150, 24, QSizePolicy::Expanding, QSizePolicy::Minimum);
     ui->titleLayout->addItem(topCenterSpacer, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
 
@@ -313,7 +321,8 @@ void SimpleTranslatePopup::setupUI()
     // close button
     _closeButton = new QPushButton(this);
     _closeButton->setObjectName("closeButton");
-    _closeButton->setText("x");
+    // _closeButton->setIcon(QIcon(":/img/close_button_img"));
+    _closeButton->setShortcut(tr("ESC"));
 
     setupTitleButton(_closeButton);
 
@@ -505,17 +514,15 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
 
     if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != checked)
     {
+#ifdef _WIN32
+        SetWindowPos(reinterpret_cast<HWND>(winId())
+                   , checked ? HWND_TOPMOST : HWND_NOTOPMOST
+                   , 0, 0, 0, 0
+                   , SWP_NOMOVE | SWP_NOSIZE);
+#else
         setWindowFlag(Qt::WindowStaysOnTopHint, checked);
         show();
-    }
-
-    if (checked)
-    {
-        _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_fill_v"));
-    }
-    else
-    {
-        _AlwaysOnButton->setIcon(QIcon(":/img/keep_pin_clock45d"));
+#endif
     }
 
     manualSizeMode();
@@ -544,6 +551,12 @@ void SimpleTranslatePopup::changeNormalWindowMode()
     }
     _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
     manualSizeMode();
+
+    _windowModeButton->hide();
+    if (_AlwaysOnButton->isHidden())
+    {
+        _AlwaysOnButton->show();
+    }
 }
 
 void SimpleTranslatePopup::changePopupMode()
@@ -552,6 +565,11 @@ void SimpleTranslatePopup::changePopupMode()
     qApp->installEventFilter(this);
 
     _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
+
+    if (_AlwaysOnButton->isHidden() == false)
+    {
+        _AlwaysOnButton->hide();
+    }
 }
 
 void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)
@@ -561,39 +579,19 @@ void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)
 
 void SimpleTranslatePopup::detectFocusInOut(QWidget* old, QWidget* now)
 {
-    // 위젯 부모가 this인지 재귀적으로 확인합니다.
+    // 위젯과 그 부모가 this인지 재귀적으로 확인합니다.
     auto isThis = [this](QWidget* inWidget)
     {
         bool bIsWidgetThis = false;
-        // if (inWidget != nullptr)
-        // {
-        //     if (inWidget == this)
-        //     {
-        //         bIsWidgetThis = true;
-        //     }
-        //     else
-        //     {
-        //         QObject* inWidgetParent = inWidget->parent();
-        //         while (inWidgetParent != nullptr)
-        //         {
-        //             if (inWidgetParent == this)
-        //             {
-        //                 bIsWidgetThis = true;
-        //                 break;
-        //             }
-        //             inWidgetParent = inWidgetParent->parent();
-        //         }
-        //     }
-        // }
-        QObject* inWidgetParent = inWidget;
-        while (inWidgetParent != nullptr)
+        QObject* parentObj = inWidget;
+        while (parentObj != nullptr)
         {
-            if (inWidgetParent == this)
+            if (parentObj == this)
             {
                 bIsWidgetThis = true;
                 break;
             }
-            inWidgetParent = inWidgetParent->parent();
+            parentObj = parentObj->parent();
         }
         return bIsWidgetThis;
     };

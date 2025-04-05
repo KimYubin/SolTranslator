@@ -59,8 +59,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     for (int idx = 0; idx < stkIdxList.size(); ++idx)
     {
         buttonList[idx]->setCheckable(true);
-        // 비순서 임의 id 지정가능.
-        _buttonGroup->addButton(buttonList[idx], stkIdxList[idx]);
+        _buttonGroup->addButton(buttonList[idx], stkIdxList[idx]); // 비순서 임의 id 지정가능.
     }
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
@@ -68,6 +67,10 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
         ui->mainStackedWidget->setCurrentIndex(inButtonId);
     });
 
+    // ~====================
+    // button icon
+    ui->button_9_setting->setIcon(QIcon(":/img/settings_gear_img"));
+    
     // ~====================
     // tray icon
     createActions();
@@ -201,7 +204,7 @@ void FinTranslatorMainWidget::createTrayIcon()
 
 void FinTranslatorMainWidget::setIcon()
 {
-    QIcon icon = QIcon(":/img/icon_img.png");
+    QIcon icon = QIcon(":/img/icon_img");
     _trayIcon->setIcon(icon);
     setWindowIcon(icon);
 }

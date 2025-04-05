@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" >
+  <defs>
+    <linearGradient id="Gradient_Left" x1="0" y1="-960" x2="960" y2="-300" gradientUnits="userSpaceOnUse">
+      <stop offset="50%" stop-color="#ADAAFF" />
+      <stop offset="75%" stop-color="#fabadb" />
+    </linearGradient>
+    <linearGradient id="Gradient_Right" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ADAAFF" />
+      <stop offset="40%" stop-color="#fabadb" />
+    </linearGradient>
+  </defs>
+  <style>
+    #moon
+    {
+      fill: url(#Gradient_Left);
+    }
+    #alpha
+    {
+      fill: url(#Gradient_Left);
+    }
+  </style>
+<path id="moon"
+d="
+M 153 -173 l -64 -64 l 198 -197 q -56 -60 -92.5 -114.5 T 142 -650 h 105 q 10 32 37 69 t 69 81 q 42 -46 79 -111.5 T 481 -730 H 15 v -92 h 288 v -80 h 92 v 80 h 289 v 92 H 581 q -17 74 -63 154.5 T 416 -434 l 67 68 l -36 99 l -98 -101 l -196 195 Z
+"
+/>
+<!-- fill="#ADAAFF"-->
+<path id="alpha"
+d="
+m 449 -59 l 187 -508 h 126 L 947 -59 h -99 l -34 -87 H 581 l -34 87 h -98 Z
+M 612 -233 H 783 L 697 -462 L 612 -233 Z
+" 
+/>
+<!-- fill="#FF9ED0" -->
+</svg>

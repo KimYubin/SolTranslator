@@ -75,10 +75,16 @@ public:
 
     void push(const _Kty& key, const _Valty& value)
     {
-        // 순서 유지를 위해, 이미 존재할 경우 삭제 후 다시 삽입
-        if (keyListHash.contains(key))
+        auto findHashIt = keyListHash.find(key);
+        if (findHashIt != keyListHash.end())
         {
-            erase(key);
+            if (findHashIt->second->second != value)
+            {
+                findHashIt->second->second = value;
+            }
+
+            keyValQueue.splice(keyValQueue.end(), keyValQueue, findHashIt->second);
+            return;
         }
 
         // 리스트에 삽입 및 해시 테이블에 위치 저장
@@ -130,6 +136,19 @@ public:
         return &(findIt->second->second);
     }
 
+    /** 키를 조회합니다. key가 있다면 순서를 갱신합니다. */
+    _Valty* look_up(const _Kty& key)
+    {
+        const auto findIt = keyListHash.find(key);
+        if (findIt == keyListHash.end())
+        {
+            return nullptr;
+        }
+
+        keyValQueue.splice(keyValQueue.end(), keyValQueue, findIt->second);
+        return &(findIt->second->second);
+    }
+
     bool empty()
     {
         return keyValQueue.empty();
@@ -142,7 +161,6 @@ public:
 
     //~ =====================
     // 반복자
-    // 반복자 타입 정의
     using iterator       = typename pair_list::iterator;
     using const_iterator = typename pair_list::const_iterator;
 

@@ -512,18 +512,22 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
         _AlwaysOnButton->setChecked(checked);
     }
 
+#ifdef _WIN32
+    BOOL bIsSet = SetWindowPos(reinterpret_cast<HWND>(winId())
+                             , checked ? HWND_TOPMOST : HWND_NOTOPMOST
+                             , 0, 0, 0, 0
+                             , SWP_NOMOVE | SWP_NOSIZE);
+    if (bIsSet == false)
+    {
+        qDebug() << "AlwaysOn" << (checked ? "Top" : "NoTop") << "set failed";
+    }
+#else
     if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != checked)
     {
-#ifdef _WIN32
-        SetWindowPos(reinterpret_cast<HWND>(winId())
-                   , checked ? HWND_TOPMOST : HWND_NOTOPMOST
-                   , 0, 0, 0, 0
-                   , SWP_NOMOVE | SWP_NOSIZE);
-#else
         setWindowFlag(Qt::WindowStaysOnTopHint, checked);
         show();
-#endif
     }
+#endif
 
     manualSizeMode();
 }

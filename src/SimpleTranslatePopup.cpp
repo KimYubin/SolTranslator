@@ -143,12 +143,43 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     const QString colorHex = QString("#6ba7f7");
     const QColor hyperLinkColor = QColor(colorHex);
 
+    QString md = inMarkdownStr;
+
+    const QRegularExpression codeQuotingPattern(
+        "```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
+    const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
+
+    QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(inMarkdownStr);
+    while (it.hasNext())
+    {
+        QRegularExpressionMatch match = it.next();
+
+        QString original  = match.captured(0); // 전체 패턴 일치
+        QString codeBlock = match.captured(1); // 백틱 내부
+
+        // html 스타일 링크로 변경
+        QString modified = codeBlock.toHtmlEscaped();
+        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code>\\1</code></a>");
+
+        // 원래 코드 블록 전체를 수정된 내용으로 대체
+        // 백틱을 html 스타일 코드 인용으로 변경
+        md.replace(original, "\n<pre style=\"white-space: pre-wrap;\">\n" + modified + "</pre>");
+    }
+
+    /*
+    md.replace(
+        QRegularExpression("```(.*?)```", QRegularExpression::DotMatchesEverythingOption)
+      , "<pre style=\"white-space: pre-wrap;\">\n\\1\n</pre>");
+      */
+
+
     QTextDocument* doc = ui->resultText->document();
-    doc->setMarkdown(inMarkdownStr);
+    doc->setMarkdown(md);
 
     QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
 
+    // 링크 색상 변경
     int loIdx = 0;
     int hiIdx = 0;
     while (cursor.atEnd() == false)
@@ -342,6 +373,8 @@ void SimpleTranslatePopup::setupUI()
 
     // ~======================
     // resultText & scroll bar
+    ui->textLayout->setContentsMargins(20, 0, 10, 20);
+
     QFont font = ui->resultText->font();
     font.setHintingPreference(QFont::PreferNoHinting);
     font.setPointSizeF(_fontSize);
@@ -353,6 +386,8 @@ void SimpleTranslatePopup::setupUI()
     interactionFlags.setFlag(Qt::TextInteractionFlag::LinksAccessibleByKeyboard);
     ui->resultText->setTextInteractionFlags(interactionFlags);
     ui->resultText->ensureCursorVisible();
+    ui->resultText->setOpenExternalLinks(true);
+    ui->resultText->setOpenLinks(true);
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 

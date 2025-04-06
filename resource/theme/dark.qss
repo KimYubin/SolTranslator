@@ -437,17 +437,17 @@ QScrollBar::sub-page
 }
 
 #FinTranslatorMainWidget QComboBox::down-arrow {
-  image: url(icon:/active/downarrow.svg);
+  /* image: url(icon:/active/downarrow.svg); */
   margin-right: 12px;
 }
 
 #FinTranslatorMainWidget QComboBox::down-arrow:focus {
-  image: url(icon:/primary/downarrow.svg);
+  /* image: url(icon:/primary/downarrow.svg); */
   margin-right: 12px;
 }
 
 #FinTranslatorMainWidget QComboBox::down-arrow:disabled {
-  image: url(icon:/disabled/downarrow.svg);
+  /* image: url(icon:/disabled/downarrow.svg); */
   margin-right: 12px;
 }
 
@@ -476,7 +476,7 @@ QScrollBar::sub-page
   subcontrol-origin: border;
   subcontrol-position: top right;
   width: 20px;
-  image: url(icon:/active/uparrow.svg);
+  /* image: url(icon:/active/uparrow.svg); */
   border-width: 0px;
   margin-right: 5px;
 }
@@ -484,7 +484,7 @@ QScrollBar::sub-page
 #FinTranslatorMainWidget QDateTimeEdit::up-button:disabled,
 #FinTranslatorMainWidget QDoubleSpinBox::up-button:disabled,
 #FinTranslatorMainWidget QSpinBox::up-button:disabled {
-  image: url(icon:/disabled/uparrow.svg);
+  /* image: url(icon:/disabled/uparrow.svg); */
 }
 
 #FinTranslatorMainWidget QDateTimeEdit::down-button,
@@ -493,7 +493,7 @@ QScrollBar::sub-page
   subcontrol-origin: border;
   subcontrol-position: bottom right;
   width: 20px;
-  image: url(icon:/active/downarrow.svg);
+  /* image: url(icon:/active/downarrow.svg); */
   border-width: 0px;
   border-top-width: 0;
   margin-right: 5px;
@@ -502,7 +502,7 @@ QScrollBar::sub-page
 #FinTranslatorMainWidget QDateTimeEdit::down-button:disabled,
 #FinTranslatorMainWidget QDoubleSpinBox::down-button:disabled,
 #FinTranslatorMainWidget QSpinBox::down-button:disabled {
-  image: url(icon:/disabled/downarrow.svg);
+  /* image: url(icon:/disabled/downarrow.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -647,29 +647,29 @@ QScrollBar::sub-page
  #FinTranslatorMainWidget QListView::indicator:checked,
 #FinTranslatorMainWidget QListView::indicator:checked:selected,
 #FinTranslatorMainWidget QListView::indicator:checked:focus {
-  image: url(icon:/primary/checklist.svg);
+  /* image: url(icon:/primary/checklist.svg); */
 }
 
 #FinTranslatorMainWidget QListView::indicator:checked:selected:active {
-  image: url(icon:/primary/checklist_invert.svg);
+  /* image: url(icon:/primary/checklist_invert.svg); */
 }
 
 #FinTranslatorMainWidget QListView::indicator:checked:disabled {
-  image: url(icon:/disabled/checklist.svg);
+  /* image: url(icon:/disabled/checklist.svg); */
 }
 
 #FinTranslatorMainWidget QListView::indicator:indeterminate,
 #FinTranslatorMainWidget QListView::indicator:indeterminate:selected,
 #FinTranslatorMainWidget QListView::indicator:indeterminate:focus {
-  image: url(icon:/primary/checklist_indeterminate.svg);
+  /* image: url(icon:/primary/checklist_indeterminate.svg); */
 }
 
 #FinTranslatorMainWidget QListView::indicator:indeterminate:selected:active {
-  image: url(icon:/primary/checklist_indeterminate_invert.svg);
+  /* image: url(icon:/primary/checklist_indeterminate_invert.svg); */
 }
 
 #FinTranslatorMainWidget QListView::indicator:indeterminate:disabled {
-  image: url(icon:/disabled/checklist_indeterminate.svg);
+  /* image: url(icon:/disabled/checklist_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -678,49 +678,49 @@ QScrollBar::sub-page
 #FinTranslatorMainWidget QTableView::indicator:enabled:checked,
 #FinTranslatorMainWidget QTableView::indicator:enabled:checked:selected,
 #FinTranslatorMainWidget QTableView::indicator:enabled:checked:focus {
-  image: url(icon:/primary/checkbox_checked.svg);
+  /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:checked:selected:active {
-  image: url(icon:/primary/checkbox_checked_invert.svg);
+  /* image: url(icon:/primary/checkbox_checked_invert.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:disabled:checked,
 #FinTranslatorMainWidget QTableView::indicator:disabled:checked:selected,
 #FinTranslatorMainWidget QTableView::indicator:disabled:checked:focus {
-  image: url(icon:/disabled/checkbox_checked.svg);
+  /* image: url(icon:/disabled/checkbox_checked.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:enabled:unchecked,
 #FinTranslatorMainWidget QTableView::indicator:enabled:unchecked:selected,
 #FinTranslatorMainWidget QTableView::indicator:enabled:unchecked:focus {
-  image: url(icon:/primary/checkbox_unchecked.svg);
+  /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:unchecked:selected:active {
-  image: url(icon:/primary/checkbox_unchecked_invert.svg);
+  /* image: url(icon:/primary/checkbox_unchecked_invert.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:disabled:unchecked,
 #FinTranslatorMainWidget QTableView::indicator:disabled:unchecked:selected,
 #FinTranslatorMainWidget QTableView::indicator:disabled:unchecked:focus {
-  image: url(icon:/disabled/checkbox_unchecked.svg);
+  /* image: url(icon:/disabled/checkbox_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate,
 #FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate:selected,
 #FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate:focus {
-  image: url(icon:/primary/checkbox_indeterminate.svg);
+  /* image: url(icon:/primary/checkbox_indeterminate.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:indeterminate:selected:active {
-  image: url(icon:/primary/checkbox_indeterminate_invert.svg);
+  /* image: url(icon:/primary/checkbox_indeterminate_invert.svg); */
 }
 
 #FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate,
 #FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate:selected,
 #FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate:focus {
-  image: url(icon:/disabled/checkbox_indeterminate.svg);
+  /* image: url(icon:/disabled/checkbox_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -728,51 +728,51 @@ QScrollBar::sub-page
 
 #FinTranslatorMainWidget QCheckBox::indicator:checked,
 #FinTranslatorMainWidget QGroupBox::indicator:checked {
-  image: url(icon:/primary/checkbox_checked.svg);
+  /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
 #FinTranslatorMainWidget QCheckBox::indicator:unchecked,
 #FinTranslatorMainWidget QGroupBox::indicator:unchecked {
-  image: url(icon:/primary/checkbox_unchecked.svg);
+  /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QCheckBox::indicator:indeterminate,
 #FinTranslatorMainWidget QGroupBox::indicator:indeterminate {
-  image: url(icon:/primary/checkbox_indeterminate.svg);
+  /* image: url(icon:/primary/checkbox_indeterminate.svg); */
 }
 
 #FinTranslatorMainWidget QCheckBox::indicator:checked:disabled,
 #FinTranslatorMainWidget QGroupBox::indicator:checked:disabled {
-  image: url(icon:/disabled/checkbox_checked.svg);
+  /* image: url(icon:/disabled/checkbox_checked.svg); */
 }
 
 #FinTranslatorMainWidget QCheckBox::indicator:unchecked:disabled,
 #FinTranslatorMainWidget QGroupBox::indicator:unchecked:disabled {
-  image: url(icon:/disabled/checkbox_unchecked.svg);
+  /* image: url(icon:/disabled/checkbox_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QCheckBox::indicator:indeterminate:disabled,
 #FinTranslatorMainWidget QGroupBox::indicator:indeterminate:disabled {
-  image: url(icon:/disabled/checkbox_indeterminate.svg);
+  /* image: url(icon:/disabled/checkbox_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QRadioButton Indicator  */
 
 #FinTranslatorMainWidget QRadioButton::indicator:checked {
-  image: url(icon:/primary/radiobutton_checked.svg);
+  /* image: url(icon:/primary/radiobutton_checked.svg); */
 }
 
 #FinTranslatorMainWidget QRadioButton::indicator:unchecked {
-  image: url(icon:/primary/radiobutton_unchecked.svg);
+  /* image: url(icon:/primary/radiobutton_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QRadioButton::indicator:checked:disabled {
-  image: url(icon:/disabled/radiobutton_checked.svg);
+  /* image: url(icon:/disabled/radiobutton_checked.svg); */
 }
 
 #FinTranslatorMainWidget QRadioButton::indicator:unchecked:disabled {
-  image: url(icon:/disabled/radiobutton_unchecked.svg);
+  /* image: url(icon:/disabled/radiobutton_unchecked.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -798,11 +798,11 @@ QScrollBar::sub-page
 /*  QComboBox indicator  */
 
 #FinTranslatorMainWidget QComboBox::indicator:checked {
-  image: url(icon:/primary/checklist.svg);
+  /* image: url(icon:/primary/checklist.svg); */
 }
 
 #FinTranslatorMainWidget QComboBox::indicator:checked:selected {
-  image: url(icon:/primary/checklist_invert.svg);
+  /* image: url(icon:/primary/checklist_invert.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -859,45 +859,45 @@ QScrollBar::sub-page
 }
 
 #FinTranslatorMainWidget QMenu::right-arrow{
-  image: url(icon:/primary/rightarrow.svg);
+  /* image: url(icon:/primary/rightarrow.svg); */
   width: 16px;
   height: 16px;
 }
 
 #FinTranslatorMainWidget QMenu::right-arrow:selected{
-  image: url(icon:/disabled/rightarrow.svg);
+  /* image: url(icon:/disabled/rightarrow.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:non-exclusive:unchecked {
-  image: url(icon:/primary/checkbox_unchecked.svg);
+  /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:non-exclusive:unchecked:selected {
-  image: url(icon:/primary/checkbox_unchecked_invert.svg);
+  /* image: url(icon:/primary/checkbox_unchecked_invert.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:non-exclusive:checked {
-  image: url(icon:/primary/checkbox_checked.svg);
+  /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:non-exclusive:checked:selected {
-  image: url(icon:/primary/checkbox_checked_invert.svg);
+  /* image: url(icon:/primary/checkbox_checked_invert.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:exclusive:unchecked {
-  image: url(icon:/primary/radiobutton_unchecked.svg);
+  /* image: url(icon:/primary/radiobutton_unchecked.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:exclusive:unchecked:selected {
-  image: url(icon:/primary/radiobutton_unchecked_invert.svg);
+  /* image: url(icon:/primary/radiobutton_unchecked_invert.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:exclusive:checked {
-  image: url(icon:/primary/radiobutton_checked.svg);
+  /* image: url(icon:/primary/radiobutton_checked.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:exclusive:checked:selected {
-  image: url(icon:/primary/radiobutton_checked_invert.svg);
+  /* image: url(icon:/primary/radiobutton_checked_invert.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
@@ -1059,14 +1059,14 @@ QScrollBar::sub-page
 }
 
 #FinTranslatorMainWidget QSlider::handle:horizontal {
-  image: url(icon:/primary/slider.svg);
+  /* image: url(icon:/primary/slider.svg); */
   width: 24px;
   height: 24px;
   margin: -24px -12px;
 }
 
 #FinTranslatorMainWidget QSlider::handle:vertical {
-  image: url(icon:/primary/slider.svg);
+  /* image: url(icon:/primary/slider.svg); */
   border-radius: 24px;
   width: 24px;
   height: 24px;
@@ -1129,11 +1129,11 @@ background: #1de9b6;
 }
 
 #FinTranslatorMainWidget QToolBar::handle:horizontal {
-  image: url(icon:/primary/toolbar-handle-horizontal.svg);
+  /* image: url(icon:/primary/toolbar-handle-horizontal.svg); */
 }
 
 #FinTranslatorMainWidget QToolBar::handle:vertical {
-  image: url(icon:/primary/toolbar-handle-vertical.svg);
+  /* image: url(icon:/primary/toolbar-handle-vertical.svg); */
 }
 
 #FinTranslatorMainWidget QToolBar::separator:horizontal {
@@ -1252,25 +1252,25 @@ background: #1de9b6;
 
 #FinTranslatorMainWidget QTreeView::branch:closed:has-children:has-siblings,
 #FinTranslatorMainWidget QTreeView::branch:closed:has-children:!has-siblings {
-  image: url(icon:/primary/branch-closed.svg);
+  /* image: url(icon:/primary/branch-closed.svg); */
 }
 
 #FinTranslatorMainWidget QTreeView::branch:open:has-children:!has-siblings,
 #FinTranslatorMainWidget QTreeView::branch:open:has-children:has-siblings {
-  image: url(icon:/primary/branch-open.svg);
+  /* image: url(icon:/primary/branch-open.svg); */
 }
 
 #FinTranslatorMainWidget QTreeView::branch:has-siblings:!adjoins-item {
-  border-image: url(icon:/disabled/vline.svg) 0;
+  /* border-image: url(icon:/disabled/vline.svg) 0; */
 }
 
 #FinTranslatorMainWidget QTreeView::branch:has-siblings:adjoins-item {
-    border-image: url(icon:/disabled/branch-more.svg) 0;
+    /* border-image: url(icon:/disabled/branch-more.svg) 0; */
 }
 
 #FinTranslatorMainWidget QTreeView::branch:!has-children:!has-siblings:adjoins-item,
 #FinTranslatorMainWidget QTreeView::branch:has-children:!has-siblings:adjoins-item {
-    border-image: url(icon:/disabled/branch-end.svg) 0;
+    /* border-image: url(icon:/disabled/branch-end.svg) 0; */
 }
 
 #FinTranslatorMainWidget QTreeView QHeaderView::section {
@@ -1465,16 +1465,16 @@ background: #1de9b6;
 
 #FinTranslatorMainWidget QMainWindow::separator:vertical,
 #FinTranslatorMainWidget QSplitter::handle:horizontal {
-  image: url(icon:/primary/splitter-horizontal.svg);
+  /* image: url(icon:/primary/splitter-horizontal.svg); */
 }
 
 #FinTranslatorMainWidget QMainWindow::separator:horizontal,
 #FinTranslatorMainWidget QSplitter::handle:vertical {
-  image: url(icon:/primary/splitter-vertical.svg);
+  /* image: url(icon:/primary/splitter-vertical.svg); */
 }
 
 #FinTranslatorMainWidget QSizeGrip {
-  image: url(icon:/primary/sizegrip.svg);
+  /* image: url(icon:/primary/sizegrip.svg); */
   background-color: transparent;
 }
 
@@ -1483,7 +1483,7 @@ background: #1de9b6;
 #FinTranslatorMainWidget QMenuBar QToolButton {
   border-width: 0;
   border-left: 10px;
-  border-image: url(icon:/primary/rightarrow2.svg);
+  /* border-image: url(icon:/primary/rightarrow2.svg); */
   background-color: transparent;
 }
 
@@ -1504,13 +1504,13 @@ background: #1de9b6;
 #FinTranslatorMainWidget QDateTimeEdit::up-button:focus,
 #FinTranslatorMainWidget QDoubleSpinBox::up-button:focus,
 #FinTranslatorMainWidget QSpinBox::up-button:focus {
-  image: url(icon:/primary/uparrow.svg);
+  /* image: url(icon:/primary/uparrow.svg); */
 }
 
 #FinTranslatorMainWidget QDateTimeEdit::down-button:focus,
 #FinTranslatorMainWidget QDoubleSpinBox::down-button:focus,
 #FinTranslatorMainWidget QSpinBox::down-button:focus {
-  image: url(icon:/primary/downarrow.svg);
+  /* image: url(icon:/primary/downarrow.svg); */
 }
 
 #FinTranslatorMainWidget QMenu::indicator:focus,

@@ -2,8 +2,6 @@
 // Created by YubinKim on 25/03/12 수.
 //
 
-// You may need to build the project (run Qt uic code generator) to get "ui_SimpleTranslatePopup.h" resolved
-
 #include "SimpleTranslatePopup.h"
 
 #ifdef _WIN32
@@ -11,20 +9,19 @@
 #endif
 
 #include <iostream>
+
 #include <QAbstractTextDocumentLayout>
-#include <qboxlayout.h>
+#include <QBoxLayout>
 #include <qevent.h>
-#include <qscreen.h>
+#include <QScreen>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
 #include <QPushButton>
-#include <qregularexpression.h>
-#include <QTextBoundaryFinder>
-#include <QScrollBar>
+#include <QRegularExpression>
 #include <QSizeGrip>
 #include <QCheckBox>
 #include <QFuturewatcher>
-#include <qtconcurrentrun.h>
+#include <QtConcurrentRun>
 
 #include "FinTranslatorCore.h"
 #include "FinTranslatorMainWidget.h"
@@ -139,8 +136,10 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
 
 void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 {
+    QTextDocument* doc = ui->resultText->document();
+
     // 링크 색상 변경
-    const QString colorHex = QString("#6ba7f7");
+    const QString colorHex      = QString("#6ba7f7");
     const QColor hyperLinkColor = QColor(colorHex);
 
     QString md = inMarkdownStr;
@@ -148,6 +147,19 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     const QRegularExpression codeQuotingPattern(
         "```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
+
+    QStringList monoFontList = doc->defaultFont().families();
+    if (monoFontList.size()>=2)
+    {
+        monoFontList.swapItemsAt(0, 1);
+    }
+
+    QString codeFontFamilies = " font-family: ";
+    for (QString& font : monoFontList)
+    {
+        codeFontFamilies += "\'" + font + "\', ";
+    }
+    codeFontFamilies += ";";
 
     QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(inMarkdownStr);
     while (it.hasNext())
@@ -159,21 +171,13 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
         // html 스타일 링크로 변경
         QString modified = codeBlock.toHtmlEscaped();
-        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code>\\1</code></a>");
+        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
 
         // 원래 코드 블록 전체를 수정된 내용으로 대체
         // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original, "\n<pre style=\"white-space: pre-wrap;\">\n" + modified + "</pre>");
+        md.replace(original, "\n<pre style=\"white-space: pre-wrap;" + codeFontFamilies + " \">\n" + modified + "</pre>");
     }
 
-    /*
-    md.replace(
-        QRegularExpression("```(.*?)```", QRegularExpression::DotMatchesEverythingOption)
-      , "<pre style=\"white-space: pre-wrap;\">\n\\1\n</pre>");
-      */
-
-
-    QTextDocument* doc = ui->resultText->document();
     doc->setMarkdown(md);
 
     QTextCursor cursor(doc);
@@ -417,8 +421,9 @@ void SimpleTranslatePopup::setupUI()
     });
 
 
-    // 탭순서
-    setTabOrder({_windowModeButton, _closeButton, _AlwaysOnButton, ui->resultText, _sizeGrip});
+    setTabOrder({_windowModeButton, _AlwaysOnButton, _closeButton, ui->resultText, _sizeGrip});
+    // 탭 포커스가 안보이는 상태로 시작할 수 있도록 하기 위함.
+    _sizeGrip->setFocusPolicy(Qt::TabFocus);
     _sizeGrip->setFocus();
 }
 
@@ -590,12 +595,20 @@ void SimpleTranslatePopup::changeNormalWindowMode()
         return;
     }
     _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
+
     manualSizeMode();
 
+    const bool bHasWModeBtnFocus = _windowModeButton->hasFocus();
     _windowModeButton->hide();
     if (_AlwaysOnButton->isHidden())
     {
         _AlwaysOnButton->show();
+    }
+
+    // 대체되는 버튼에 포커스 이동.
+    if (bHasWModeBtnFocus)
+    {
+        _AlwaysOnButton->setFocus(Qt::TabFocusReason);
     }
 }
 

@@ -140,7 +140,8 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
 void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 {
     // 링크 색상 변경
-    const QString hyperLinkColor = QString("#6ba7f7");
+    const QString colorHex = QString("#6ba7f7");
+    const QColor hyperLinkColor = QColor(colorHex);
 
     QTextDocument* doc = ui->resultText->document();
     doc->setMarkdown(inMarkdownStr);
@@ -148,31 +149,31 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
 
-    int lowIdx = 0;
-    int hiIdx  = 0;
-    while (cursor.isNull() == false && cursor.atEnd() == false)
+    int loIdx = 0;
+    int hiIdx = 0;
+    while (cursor.atEnd() == false)
     {
-        if (cursor.charFormat().isAnchor())
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
+        const bool bIsAnchor = cursor.charFormat().isAnchor();
+        if (bIsAnchor)
         {
             hiIdx = cursor.position();
         }
-        else
+        if (bIsAnchor == false || cursor.atEnd() == false)
         {
-            if (lowIdx < hiIdx)
+            if (loIdx < hiIdx)
             {
                 // word 내부 부분 링크 대응
-                cursor.setPosition(lowIdx);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - lowIdx);
+                cursor.setPosition(loIdx);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - loIdx);
                 QTextCharFormat prevLinkFormat = cursor.charFormat();
-                prevLinkFormat.setForeground(QBrush(QColor(hyperLinkColor)));
+                prevLinkFormat.setForeground(QBrush(hyperLinkColor));
                 cursor.mergeCharFormat(prevLinkFormat);
             }
 
-            lowIdx = cursor.position();
-            hiIdx  = lowIdx;
+            loIdx = cursor.position();
+            hiIdx = loIdx;
         }
-
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
     }
 }
 
@@ -512,6 +513,8 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
         _AlwaysOnButton->setChecked(checked);
     }
 
+    manualSizeMode();
+
 #ifdef _WIN32
     BOOL bIsSet = SetWindowPos(reinterpret_cast<HWND>(winId())
                              , checked ? HWND_TOPMOST : HWND_NOTOPMOST
@@ -528,8 +531,6 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
         show();
     }
 #endif
-
-    manualSizeMode();
 }
 
 void SimpleTranslatePopup::onWindowModeToggle(bool checked)

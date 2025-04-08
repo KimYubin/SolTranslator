@@ -1,0 +1,8 @@
+#SimpleTranslatePopup
+{
+  border: none;
+}
+#SimpleTranslatePopup
+*:focus {
+   outline: none;
+}

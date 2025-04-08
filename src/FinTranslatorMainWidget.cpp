@@ -21,6 +21,7 @@
 #include <qstyle.h>
 #include <qtabbar.h>
 #include <QButtonGroup>
+#include <qdir.h>
 
 #include "SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
@@ -102,33 +103,60 @@ void FinTranslatorMainWidget::setVisible(bool visible)
     QWidget::setVisible(visible);
 }
 
-void FinTranslatorMainWidget::applyTheme()
+void FinTranslatorMainWidget::applyTheme(const QString& inThemeName)
 {
-    QFile theme("../resource/theme/dark.qss");
-    if (theme.exists() == false)
+    QString rtPrefixPath = "../resource/theme/" + inThemeName;
+    const QDir rtThemeDir(rtPrefixPath, {"*.qss"}, QDir::Name, QDir::Files);
+    if (rtThemeDir.exists() == false)
     {
-        theme.setFileName(":/theme/dark.qss");
+        qDebug() << "no rt theme" << rtPrefixPath;
     }
+    QStringList rtFiles = rtThemeDir.entryList();
 
-    if (theme.exists())
+
+    QString qrcPrefixPath = ":/theme/" + inThemeName;
+    const QDir qrcThemeDir(qrcPrefixPath, {"*.qss"}, QDir::Name, QDir::Files);
+    if (qrcThemeDir.exists() == false)
     {
-        theme.open(QFile::ReadOnly | QFile::Text);
+        qWarning() << "qrc theme path is not valid" << qrcPrefixPath;
+    }
+    QStringList qrcFiles = qrcThemeDir.entryList();
 
-        QTextStream themeStream(&theme);
-        const QString themeString = themeStream.readAll();
-        if (themeString.isEmpty() == false)
-        {
-            qApp->setStyleSheet(themeString);
-        }
 
-        for (QWidget* childWidget : qApp->allWidgets())
-        {
-            childWidget->repaint();
-        }
+    // 런타임 테마가 있다면 해당 테마 우선 사용.
+    QString prefixPath;
+    QStringList sheetFileList;
+    if (qrcFiles == rtFiles)
+    {
+        prefixPath    = std::move(rtPrefixPath);
+        sheetFileList = std::move(rtFiles);
     }
     else
     {
-        qDebug()<<"Unable to set stylesheet, file not found\n";
+        qDebug() << "rt theme list is different from the existing theme list." << rtPrefixPath;
+        prefixPath    = std::move(qrcPrefixPath);
+        sheetFileList = std::move(qrcFiles);
+    }
+
+    QString newStyleSheet;
+    for (const QString& sheetFileName : sheetFileList)
+    {
+        QFile file(prefixPath + "/" + sheetFileName);
+        if (file.open(QFile::ReadOnly | QFile::Text))
+        {
+            QTextStream stream(&file);
+            newStyleSheet += stream.readAll() + "\n";
+            file.close();
+        }
+    }
+    if (newStyleSheet.isEmpty() == false)
+    {
+        qApp->setStyleSheet(newStyleSheet);
+        QWidgetList allWidgetList = qApp->allWidgets();
+        for (QWidget* childWidget : allWidgetList)
+        {
+            childWidget->repaint();
+        }
     }
 }
 

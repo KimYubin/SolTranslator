@@ -42,8 +42,6 @@ cache_queue DataManager::loadTranslateCache()
 
 bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
 {
-    QFile saveFile(StaticPath::CACHE_QUEUE_SAVE_PATH);
-
     QFutureWatcher<bool>* dataWatcher = new QFutureWatcher<bool>(this);
     connect(dataWatcher, &QFutureWatcher<bool>::finished, this, [dataWatcher]
     {
@@ -63,9 +61,9 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
             return false;
         }
 
-        QJsonObject cacheObject = convertCacheToJson(CacheTextQueue);
-        QJsonDocument cacheDoc  = QJsonDocument(cacheObject);
-        QByteArray cacheJson    = cacheDoc.toJson();
+        const QJsonObject cacheObject = convertCacheToJson(CacheTextQueue);
+        const QJsonDocument cacheDoc  = QJsonDocument(cacheObject);
+        const QByteArray cacheJson    = cacheDoc.toJson();
         saveFile.write(cacheJson);
         return true;
     });

@@ -1,5 +1,9 @@
 ﻿<RCC>
     <qresource prefix="/theme">
-        <file>dark.qss</file>
+        <file>dark/FinTranslatorMainWidget_Main.qss</file>
+        <file>dark/SimpleTranslate_Main.qss</file>
+        <file>dark/SimpleTranslate_PushButton.qss</file>
+        <file>dark/SimpleTranslate_TextEdit.qss</file>
     </qresource>
+
 </RCC>

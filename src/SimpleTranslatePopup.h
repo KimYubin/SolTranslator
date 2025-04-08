@@ -86,6 +86,10 @@ protected:
     void changeNormalWindowMode();
     void changePopupMode();
 
+    void setMaxNormal(const bool bMaximize);
+    void onMaxNormalToggle(const bool bMaximize);
+
+
     void setShadowEffectEnabled(const bool bIsEnable);
 
 protected slots:
@@ -93,6 +97,7 @@ protected slots:
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void mouseReleaseEvent(QMouseEvent* event) override;
 
@@ -107,6 +112,8 @@ protected:
 
 
     QSize _textEditSize;
+
+    QMargins _outMargins;
 
     QSize _innerMarginSize;
     QSize _outerMarginSize;
@@ -131,6 +138,8 @@ protected:
 
     bool _bManualSizeMode = false;
 
+    bool _bMaximizedMode = false;
+
     bool _bIsDrag = false;
     QPoint _dragPoint;
 
@@ -142,6 +151,7 @@ private:
 
     QPushButton* _AlwaysOnButton;
     QPushButton* _windowModeButton;
+    QPushButton* _maxRestoreButton;
     QPushButton* _closeButton;
 
     QSizeGrip* _sizeGrip;

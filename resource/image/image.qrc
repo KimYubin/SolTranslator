@@ -10,6 +10,11 @@
 
         <file alias="settings_gear_img">settings_48dp_E3E3E3_FILL1_wght400_GRAD200_opsz48.svg</file>
 
+        <file alias="minimize_button_img">minimize_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
+
+        <file alias="maximize_button_img">crop_square_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
+        <file alias="restore_button_img">restore.svg</file>
+
         <file alias="close_button_img">close_48dp_E3E3E3_FILL0_wght300_GRAD0_opsz48.svg</file>
     
     </qresource>

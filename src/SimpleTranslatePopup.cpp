@@ -30,6 +30,7 @@
 
 SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+      // , Qt::Window | /*Qt::FramelessWindowHint |*/ Qt::NoDropShadowWindowHint | Qt::ExpandedClientAreaHint | Qt::NoTitleBarBackgroundHint)
     , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
@@ -275,10 +276,12 @@ void SimpleTranslatePopup::manualSizeMode()
 
     setMinimumSize(widgetMin);
     setMaximumSize(widgetMax);
-    ui->bgFrame->setMinimumSize(bgFrameMin);
-    ui->bgFrame->setMaximumSize(bgFrameMax);
-    ui->resultText->setMinimumSize(textMin);
-    ui->resultText->setMaximumSize(textMax);
+    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+
+    ui->bgFrame->setMinimumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    ui->bgFrame->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    ui->resultText->setMinimumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    ui->resultText->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 void SimpleTranslatePopup::setupUI()
@@ -353,6 +356,19 @@ void SimpleTranslatePopup::setupUI()
     ui->titleLayout->addItem(topCenterSpacer, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
 
     // ~===========
+    // max button
+    _maxRestoreButton = new QPushButton(this);
+    _maxRestoreButton->setCheckable(true);
+    _maxRestoreButton->setObjectName("maximizeButton");
+    QIcon maxRestoreIcon;
+    maxRestoreIcon.addFile(":/img/maximize_button_img", QSize(), QIcon::Normal, QIcon::Off);
+    maxRestoreIcon.addFile(":/img/restore_button_img", QSize(), QIcon::Normal, QIcon::On);
+    _maxRestoreButton->setIcon(maxRestoreIcon);
+
+    setupTitleButton(_maxRestoreButton);
+    connect(_maxRestoreButton, &QPushButton::toggled, this,&SimpleTranslatePopup::onMaxNormalToggle);
+
+    // ~===========
     // close button
     _closeButton = new QPushButton(this);
     _closeButton->setObjectName("closeButton");
@@ -420,7 +436,7 @@ void SimpleTranslatePopup::setupUI()
     });
 
 
-    setTabOrder({_windowModeButton, _AlwaysOnButton, _closeButton, ui->resultText, _sizeGrip});
+    setTabOrder({_windowModeButton, _AlwaysOnButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
     // 탭 포커스가 안보이는 상태로 시작할 수 있도록 하기 위함.
     _sizeGrip->setFocusPolicy(Qt::TabFocus);
     _sizeGrip->setFocus();
@@ -511,11 +527,11 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
             + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)   // 상단 타이틀바 레이아웃 높이
             + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()); // 하단 상태표시 레이아웃 높이
 
-    const QMargins outMargins = ui->outerLayout->contentsMargins();
+    _outMargins = ui->outerLayout->contentsMargins();
 
     _innerMarginSize = QSize(inMargins.left() + inMargins.right() + ui->bgFrame->lineWidth()
                            , inMargins.top() + inMargins.bottom() + ui->bgFrame->lineWidth());
-    _outerMarginSize = QSize(outMargins.left() + outMargins.right(), outMargins.top() + outMargins.bottom());
+    _outerMarginSize = QSize(_outMargins.left() + _outMargins.right(), _outMargins.top() + _outMargins.bottom());
 
 
     const QSize totalMarginSize = _innerMarginSize + _outerMarginSize;
@@ -624,6 +640,37 @@ void SimpleTranslatePopup::changePopupMode()
     }
 }
 
+void SimpleTranslatePopup::setMaxNormal(const bool bMaximize)
+{
+    _maxRestoreButton->setChecked(bMaximize);
+}
+
+void SimpleTranslatePopup::onMaxNormalToggle(const bool bMaximize)
+{
+    if (_bMaximizedMode == bMaximize)
+    {
+        return;
+    }
+
+    if (bMaximize)
+    {
+        manualSizeMode();
+        changeNormalWindowMode();
+        if (_bMaximizedMode == false)
+        {
+            showMaximized();
+        }
+    }
+    else
+    {
+        if (_bMaximizedMode)
+        {
+            showNormal();
+        }
+    }
+    _bMaximizedMode = bMaximize;
+}
+
 void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)
 {
     ui->bgFrame->graphicsEffect()->setEnabled(bIsEnable);
@@ -676,11 +723,111 @@ void SimpleTranslatePopup::mousePressEvent(QMouseEvent* event)
     }
 }
 
+void SimpleTranslatePopup::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        setMaxNormal(!_bMaximizedMode);
+
+        event->accept();
+    }
+    
+    QWidget::mouseDoubleClickEvent(event);  
+}
+
 void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
 {
     if (_bIsDrag && (event->button() | Qt::LeftButton))
     {
-        move(event->globalPosition().toPoint() - _dragPoint);
+        const QPoint eventPoint = event->globalPosition().toPoint();
+        if (isMaximized())
+        {
+            const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
+            const QPoint frameTopLeft = frameGeometry().topLeft() + outMarginTopLeft; // 내부 QFrame의 절대좌표
+            const QPointF dragPointF  = (event->globalPosition().toPoint() - frameTopLeft).toPointF();  // 내부 QFrame에 대한 마우스 상대좌표
+
+            // frame 기준 사이즈
+            const QSizeF maxFrameSizeF   = frameGeometry().size().toSizeF() - _outerMarginSize;
+            const QSizeF normalSizeF     = normalGeometry().size().toSizeF() - _outerMarginSize;
+            const QSizeF halfNormalSizeF = normalSizeF / 2.0;
+
+            const qreal leftInterval   = dragPointF.x();
+            const qreal rightInterval  = maxFrameSizeF.width() - dragPointF.x();
+            const qreal topInterval    = dragPointF.y();
+            const qreal bottomInterval = maxFrameSizeF.height() - dragPointF.y();
+
+            QPoint normalRelMousePoint;
+            // if (leftInterval > halfNormalSizeF.width() && rightInterval > halfNormalSizeF.width())
+            // {
+            //     const float dragPointRatioX = dragPointF.x() / maxFrameSizeF.width();
+            //     normalRelMousePoint.rx() = normalSizeF.width() * dragPointRatioX;
+            // }
+            // else
+            // {
+            //     if (leftInterval < rightInterval)
+            //     {
+            //         normalRelMousePoint.rx() = leftInterval;
+            //     }
+            //     else
+            //     {
+            //         normalRelMousePoint.rx() = normalSizeF.width() - rightInterval;
+            //     }
+            // }
+            if (leftInterval <= halfNormalSizeF.width())
+            {
+                normalRelMousePoint.rx() = leftInterval;
+            }
+            else if (rightInterval <= halfNormalSizeF.width())
+            {
+                normalRelMousePoint.rx() = normalSizeF.width() - rightInterval;
+            }
+            else
+            {
+                normalRelMousePoint.rx() = halfNormalSizeF.width();
+            }
+            
+            if (topInterval > halfNormalSizeF.height() && bottomInterval > halfNormalSizeF.height())
+            {
+                const float dragPointRatioY = dragPointF.y() / maxFrameSizeF.height();
+                normalRelMousePoint.ry() = normalSizeF.height() * dragPointRatioY;
+            }
+            else
+            {
+                if (topInterval < bottomInterval)
+                {
+                    normalRelMousePoint.ry() = topInterval;
+                }
+                else
+                {
+                    normalRelMousePoint.ry() = normalSizeF.height() - bottomInterval;
+                }
+            }
+
+            /*
+            const QPointF dragPointRatio = QPointF(dragPointF.x() / maxFrameSizeF.width()
+                                                 , dragPointF.y() / maxFrameSizeF.height());
+
+            const QPointF normalRelMousePoint = QPointF(normalSizeF.width() * dragPointRatio.x()
+                                                      , normalSizeF.height() * dragPointRatio.y());
+            const QPoint newNormalWindowPos = QPoint(eventPoint.x() - normalRelMousePoint.x()
+                                                   , eventPoint.y() - normalRelMousePoint.y()) - outMarginTopLeft;
+
+
+            move(newNormalWindowPos);
+            _dragPoint = eventPoint - newNormalWindowPos;
+            */
+
+            
+            const QPoint newNormalWindowPos = QPoint(eventPoint.x() - normalRelMousePoint.x()
+                                                   , eventPoint.y() - normalRelMousePoint.y()) - outMarginTopLeft;
+            setMaxNormal(false);
+            move(newNormalWindowPos);
+            _dragPoint = eventPoint - newNormalWindowPos;
+            return;
+        }
+
+
+        move(eventPoint - _dragPoint);
         manualSizeMode();
         event->accept();
     }

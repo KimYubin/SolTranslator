@@ -95,6 +95,16 @@ else()
     endif()
 endif()
 
+################
+# Your-external "mylib", add GLOBAL if the imported library is located in directories above the current.
+# 외부 "mylib"를 추가하시오. 현재 디렉토리 위의 디렉토리에 있는 경우 GLOBAL을 추가하십시오.
+add_library( Qt SHARED IMPORTED )
+# You can define two import-locations: one for debug and one for release.
+# 디버그용과 릴리스용으로 두 개의 가져오기 위치를 정의할 수 있습니다.
+set_target_properties( Qt PROPERTIES IMPORTED_LOCATION ${QTDIR}/bin )
+################
+
+
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)

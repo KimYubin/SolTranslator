@@ -406,12 +406,15 @@ void SimpleTranslatePopup::setupUI()
     ui->resultText->ensureCursorVisible();
     ui->resultText->setOpenExternalLinks(true);
     ui->resultText->setOpenLinks(true);
-
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    ui->resultText->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
     // 기본 수직 스크롤바를 외부 스크롤바로 대체
+    ui->resultText->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
     ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    QSizePolicy scrollSizePolicy = ui->outerVScrollBar->sizePolicy();
+    scrollSizePolicy.setRetainSizeWhenHidden(true);
+    ui->outerVScrollBar->setSizePolicy(scrollSizePolicy);
 
     // 외부 스크롤바 -> 내부 스크롤바 제어
     connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [=](const int value)
@@ -497,16 +500,6 @@ void SimpleTranslatePopup::adjustSizeAfterAnimationFinished()
 void SimpleTranslatePopup::calculateTextEditLayoutInfo()
 {
     // ~==============================
-    // 외부 스크롤바 마진 적용.
-    // 텍스트와 스크롤바가 겹치지 않게 합니다.
-    ui->textLayout->activate();
-    const qreal docMargin    = ui->resultText->document()->documentMargin();
-    const int vScrollWidth   = ui->outerVScrollBar->width();
-    const qreal newDocMargin = vScrollWidth > docMargin ? vScrollWidth : docMargin;
-    ui->resultText->document()->setDocumentMargin(newDocMargin + 1);
-
-
-    // ~==============================
     // 단계별 마진 및 최소/최대 크기 계산
     if (screen() == nullptr)
     {
@@ -520,11 +513,12 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     const int maxWidth  = screenSize.width() * _maxSizeRatio.width();
     const int maxHeight = screenSize.height() * _maxSizeRatio.height();
 
-
+    ui->textLayout->activate();
     const QMargins inMargins = ui->textLayout->contentsMargins()
-            + ui->mainLayout->contentsMargins()                         // 메인 컨텐츠 레이아웃 마진
-            + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)   // 상단 타이틀바 레이아웃 높이
-            + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()); // 하단 상태표시 레이아웃 높이
+            + ui->mainLayout->contentsMargins()                        // 메인 컨텐츠 레이아웃 마진
+            + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)  // 상단 타이틀바 레이아웃 높이
+            + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()) // 하단 상태표시 레이아웃 높이
+            + QMargins(0, 0, ui->outerVScrollBar->width(), 0);         // 우측 외부 스크롤바
 
     _outMargins = ui->outerLayout->contentsMargins();
 

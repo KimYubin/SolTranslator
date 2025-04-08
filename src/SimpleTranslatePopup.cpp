@@ -30,7 +30,6 @@
 
 SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
-      // , Qt::Window | /*Qt::FramelessWindowHint |*/ Qt::NoDropShadowWindowHint | Qt::ExpandedClientAreaHint | Qt::NoTitleBarBackgroundHint)
     , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
@@ -740,11 +739,11 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
     if (_bIsDrag && (event->button() | Qt::LeftButton))
     {
         const QPoint eventPoint = event->globalPosition().toPoint();
-        if (isMaximized())
+        if (_bMaximizedMode)
         {
             const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
-            const QPoint frameTopLeft = frameGeometry().topLeft() + outMarginTopLeft; // 내부 QFrame의 절대좌표
-            const QPointF dragPointF  = (event->globalPosition().toPoint() - frameTopLeft).toPointF();  // 내부 QFrame에 대한 마우스 상대좌표
+            const QPoint frameTopLeft     = frameGeometry().topLeft() + outMarginTopLeft;                  // 내부 QFrame의 절대좌표
+            const QPointF dragPointF      = (event->globalPosition().toPoint() - frameTopLeft).toPointF(); // 내부 QFrame에 대한 마우스 상대좌표
 
             // frame 기준 사이즈
             const QSizeF maxFrameSizeF   = frameGeometry().size().toSizeF() - _outerMarginSize;
@@ -757,22 +756,6 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
             const qreal bottomInterval = maxFrameSizeF.height() - dragPointF.y();
 
             QPoint normalRelMousePoint;
-            // if (leftInterval > halfNormalSizeF.width() && rightInterval > halfNormalSizeF.width())
-            // {
-            //     const float dragPointRatioX = dragPointF.x() / maxFrameSizeF.width();
-            //     normalRelMousePoint.rx() = normalSizeF.width() * dragPointRatioX;
-            // }
-            // else
-            // {
-            //     if (leftInterval < rightInterval)
-            //     {
-            //         normalRelMousePoint.rx() = leftInterval;
-            //     }
-            //     else
-            //     {
-            //         normalRelMousePoint.rx() = normalSizeF.width() - rightInterval;
-            //     }
-            // }
             if (leftInterval <= halfNormalSizeF.width())
             {
                 normalRelMousePoint.rx() = leftInterval;
@@ -785,41 +768,22 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
             {
                 normalRelMousePoint.rx() = halfNormalSizeF.width();
             }
-            
-            if (topInterval > halfNormalSizeF.height() && bottomInterval > halfNormalSizeF.height())
+
+            if (topInterval <= halfNormalSizeF.height())
             {
-                const float dragPointRatioY = dragPointF.y() / maxFrameSizeF.height();
-                normalRelMousePoint.ry() = normalSizeF.height() * dragPointRatioY;
+                normalRelMousePoint.ry() = topInterval;
+            }
+            else if (bottomInterval <= halfNormalSizeF.height())
+            {
+                normalRelMousePoint.ry() = normalSizeF.height() - bottomInterval;
             }
             else
             {
-                if (topInterval < bottomInterval)
-                {
-                    normalRelMousePoint.ry() = topInterval;
-                }
-                else
-                {
-                    normalRelMousePoint.ry() = normalSizeF.height() - bottomInterval;
-                }
+                normalRelMousePoint.ry() = halfNormalSizeF.height();
             }
 
-            /*
-            const QPointF dragPointRatio = QPointF(dragPointF.x() / maxFrameSizeF.width()
-                                                 , dragPointF.y() / maxFrameSizeF.height());
 
-            const QPointF normalRelMousePoint = QPointF(normalSizeF.width() * dragPointRatio.x()
-                                                      , normalSizeF.height() * dragPointRatio.y());
-            const QPoint newNormalWindowPos = QPoint(eventPoint.x() - normalRelMousePoint.x()
-                                                   , eventPoint.y() - normalRelMousePoint.y()) - outMarginTopLeft;
-
-
-            move(newNormalWindowPos);
-            _dragPoint = eventPoint - newNormalWindowPos;
-            */
-
-            
-            const QPoint newNormalWindowPos = QPoint(eventPoint.x() - normalRelMousePoint.x()
-                                                   , eventPoint.y() - normalRelMousePoint.y()) - outMarginTopLeft;
+            const QPoint newNormalWindowPos = eventPoint - normalRelMousePoint - outMarginTopLeft;
             setMaxNormal(false);
             move(newNormalWindowPos);
             _dragPoint = eventPoint - newNormalWindowPos;

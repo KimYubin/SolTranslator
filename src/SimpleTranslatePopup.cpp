@@ -738,22 +738,25 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
 {
     if (_bIsDrag && (event->button() | Qt::LeftButton))
     {
+        manualSizeMode();
+
         const QPoint eventPoint = event->globalPosition().toPoint();
         if (_bMaximizedMode)
         {
+            // 내부 QFrame의 절대 좌표와, QFrame 기준 상대 좌표 계산
             const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
-            const QPoint frameTopLeft     = frameGeometry().topLeft() + outMarginTopLeft;                  // 내부 QFrame의 절대좌표
-            const QPointF dragPointF      = (event->globalPosition().toPoint() - frameTopLeft).toPointF(); // 내부 QFrame에 대한 마우스 상대좌표
+            const QPoint frameTopLeft     = frameGeometry().topLeft() + outMarginTopLeft;
+            const QPointF mouseRelPointF  = (event->globalPosition().toPoint() - frameTopLeft).toPointF();
 
             // frame 기준 사이즈
             const QSizeF maxFrameSizeF   = frameGeometry().size().toSizeF() - _outerMarginSize;
             const QSizeF normalSizeF     = normalGeometry().size().toSizeF() - _outerMarginSize;
             const QSizeF halfNormalSizeF = normalSizeF / 2.0;
 
-            const qreal leftInterval   = dragPointF.x();
-            const qreal rightInterval  = maxFrameSizeF.width() - dragPointF.x();
-            const qreal topInterval    = dragPointF.y();
-            const qreal bottomInterval = maxFrameSizeF.height() - dragPointF.y();
+            const qreal leftInterval   = mouseRelPointF.x();
+            const qreal rightInterval  = maxFrameSizeF.width() - mouseRelPointF.x();
+            const qreal topInterval    = mouseRelPointF.y();
+            const qreal bottomInterval = maxFrameSizeF.height() - mouseRelPointF.y();
 
             QPoint normalRelMousePoint;
             if (leftInterval <= halfNormalSizeF.width())
@@ -787,12 +790,12 @@ void SimpleTranslatePopup::mouseMoveEvent(QMouseEvent* event)
             setMaxNormal(false);
             move(newNormalWindowPos);
             _dragPoint = eventPoint - newNormalWindowPos;
-            return;
+        }
+        else
+        {
+            move(eventPoint - _dragPoint);
         }
 
-
-        move(eventPoint - _dragPoint);
-        manualSizeMode();
         event->accept();
     }
 }

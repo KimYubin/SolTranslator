@@ -15,6 +15,7 @@
 #include "TranslateManager.h"
 
 #include <QMimeData>
+#include <QRegularExpression>
 
 #include "FinTranslatorCore.h"
 

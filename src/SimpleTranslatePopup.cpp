@@ -144,8 +144,7 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
     QString md = inMarkdownStr;
 
-    const QRegularExpression codeQuotingPattern(
-        "```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
+    const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
     QStringList monoFontList = doc->defaultFont().families();

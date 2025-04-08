@@ -38,7 +38,7 @@ public:
 
     // ~=================
     // theme
-    void applyTheme();
+    void applyTheme(const QString& inThemeName = "dark");
     
     QString applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors);
     

@@ -1,0 +1,82 @@
+/* ----------------------------------------------------- */
+/* QPushButton */
+
+#SimpleTranslatePopup QPushButton
+{
+  border: none;
+  border-radius : 4px;
+}
+#SimpleTranslatePopup QPushButton:hover
+{
+  border: none;
+  background-color:rgba(173, 170, 255, 0.36);
+}
+#SimpleTranslatePopup QPushButton:checked,
+#SimpleTranslatePopup QPushButton:pressed 
+{
+  border: none;
+  /* background-color: #ADAAFF; */
+}
+
+#SimpleTranslatePopup QPushButton:focus,
+#SimpleTranslatePopup QPushButton:flat:focus
+{
+    outline: 2px;
+    outline-color: rgb(255, 255, 0);
+    outline-color: rgb(255, 255, 255);
+    outline-style: solid;
+    outline-offset: 8px;
+    outline-radius: 4px;
+}
+#SimpleTranslatePopup QPushButton#alwaysOnButton
+{
+  icon: url(:/img/keep_pin_clock45d);
+  icon-size: 20px;
+}
+#SimpleTranslatePopup QPushButton#alwaysOnButton:pressed,
+#SimpleTranslatePopup QPushButton#alwaysOnButton:checked
+{
+  icon: url(../resource/image/keep_48dp_E3E3E3_FILL1_wght700_GRAD200_opsz48_color.svg);
+}
+
+#SimpleTranslatePopup QPushButton#windowModeButton
+{
+  /* icon: url(:/img/window_mode_img); */
+}
+/* ----------------------------------------------------- */
+/* QPushButton # closeButton */
+#SimpleTranslatePopup QPushButton#closeButton
+{
+  icon: url(:/img/close_button_img);
+  icon-size: 24px;
+  background-color: transparent;
+  color : #e7e7e7;
+  font-weight: bold;
+}
+#SimpleTranslatePopup QPushButton#closeButton:focus,
+#SimpleTranslatePopup QPushButton#closeButton:flat:focus
+{
+  background-color:rgba(232, 17, 35, 0.54);
+}
+#SimpleTranslatePopup QPushButton#closeButton:focus:hover,
+#SimpleTranslatePopup QPushButton#closeButton:flat:focus:hover,
+#SimpleTranslatePopup QPushButton#closeButton:hover
+{
+  background-color: #e81123;
+}
+
+#SimpleTranslatePopup QPushButton#closeButton:pressed,
+#SimpleTranslatePopup QPushButton#closeButton:checked 
+{
+  background-color: #94141f;
+}
+
+
+/* ----------------------------------------------------- */
+/* QPushButton # keepPinButton */
+
+#SimpleTranslatePopup QPushButton#alwaysOnButton 
+{
+  border: none;
+}
+

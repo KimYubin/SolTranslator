@@ -1,0 +1,130 @@
+/* ----------------------------------------------------- */
+/* QPushButton # QTextEdit */
+#SimpleTranslatePopup QFrame#bgFrame
+{
+  border-radius : 8px;
+  /* background-color: rgba(235, 235, 235, 0.98); */
+  background-color: rgba(40, 40, 40, 0.98);
+
+}
+#SimpleTranslatePopup QTextEdit
+{
+  border: none;
+  background-color: transparent;
+}
+#SimpleTranslatePopup a,
+#SimpleTranslatePopup span
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+#SimpleTranslatePopup body
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+#SimpleTranslatePopup QLabel
+, #SimpleTranslatePopup QTextEdit
+{
+ 	color: rgb(250, 250, 250);
+  font-size: 14pt;
+  font-family: '맑은 고딕', 'Cascadia Mono', Consolas, monospace;
+}
+
+/* -------------------- */
+/* SimpleTranslatePopup QScrollBar */
+
+#SimpleTranslatePopup QScrollBar:vertical,
+#SimpleTranslatePopup QScrollBar:horizontal
+{
+  border: 0;
+  background: #424242;
+  /* border-radius : 4px; */
+}
+#SimpleTranslatePopup QScrollBar:horizontal
+{
+  height: 8px;
+}
+
+#SimpleTranslatePopup QScrollBar:vertical
+{
+  width: 8px;
+}
+
+#SimpleTranslatePopup QScrollBar::handle
+{
+  background: #a0a0a0;
+  border-radius : 4px;
+}
+#SimpleTranslatePopup QScrollBar::handle:vertical:hover,
+#SimpleTranslatePopup QScrollBar::handle:horizontal:hover
+{
+  background: #dbdbdb;
+}
+
+#SimpleTranslatePopup QScrollBar::handle:horizontal
+{
+  min-width: 24px;
+}
+
+#SimpleTranslatePopup QScrollBar::handle:vertical
+{
+  min-height: 24px;
+}
+
+#SimpleTranslatePopup QScrollBar:horizontal
+{
+  margin: 0px 8px 0px 8px;
+}
+#SimpleTranslatePopup QScrollBar:vertical
+{
+  margin: 8px 0px 8px 0px;
+}
+#SimpleTranslatePopup QScrollBar::add-line:vertical,
+#SimpleTranslatePopup QScrollBar::sub-line:vertical,
+#SimpleTranslatePopup QScrollBar::add-line:horizontal,
+#SimpleTranslatePopup QScrollBar::sub-line:horizontal
+{
+  border: 0;
+  /* background: #111111; */
+  /* width: 0px; */
+  /* height: 0px; */
+}
+#SimpleTranslatePopup QScrollBar::sub-line:vertical
+{
+    /* background: #32CC99; */
+    
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: top;
+}
+#SimpleTranslatePopup QScrollBar::add-line:vertical
+{
+    /* background: #32CC99; */
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+}
+#SimpleTranslatePopup QScrollBar::sub-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: left;
+}
+#SimpleTranslatePopup QScrollBar::add-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: right;
+}
+
+QScrollBar::add-page,
+QScrollBar::sub-page 
+{
+  border: 0;
+  background: transparent;
+  width: 0px;
+  height: 0px;
+}

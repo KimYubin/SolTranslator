@@ -14,8 +14,10 @@
 
 #include "TranslateManager.h"
 
+#include <QFutureWatcher>
 #include <QMimeData>
 #include <QRegularExpression>
+#include <QtConcurrentRun>
 
 #include "FinTranslatorCore.h"
 
@@ -37,51 +39,68 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
                                      , const LangType inSourceLang
                                      , const LangType inTargetLang)
 {
-    SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
-
-    // 마크다운 변환
-    QString originText;
-    TextStyle textStyle;
-
     if (inMimeData->hasText() == false)
     {
         return;
     }
 
+    auto runSimpleTranslate = [=](const QString& inOriginText, const TextStyle inTextStyle)
+    {
+        SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
+
+        QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
+            inOriginText
+          , inTextStyle
+          , inSourceLang
+          , inTargetLang
+          , simple
+          , [=](const QString& inStr) { simple->completeTransText(inStr, inTextStyle); }
+          , simple
+          , [=](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
+        });
+
+        connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()
+        {
+            if (transUnit.isNull())
+            {
+                return;
+            }
+            transUnit->abortTranslate();
+        });
+    };
+
+
     if (inMimeData->hasHtml())
     {
-        QTextDocument txtDoc;
-        // list 무시하는 문법 제거.
-        txtDoc.setHtml(inMimeData->html().replace(QRegularExpression(R"(list-style: none)"), ""));
-        originText = txtDoc.toMarkdown();
-        textStyle  = TextStyle::MarkDown;
+        // 비동기 문법 개선 및 마크다운 변환 작업
+        QFuture<QString> future = QtConcurrent::run([=, htmlStr = std::move(inMimeData->html())]() mutable
+        {
+            // list 무시하는 문법 제거.
+            QTextDocument txtDoc;
+            txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
+
+            return txtDoc.toMarkdown();
+            // 메인 스레드로 복귀
+            QMetaObject::invokeMethod(qApp, [=, originText = std::move(txtDoc.toMarkdown())]()
+            {
+                runSimpleTranslate(originText, TextStyle::MarkDown);
+            }, Qt::QueuedConnection);
+        });
+
+        QFutureWatcher<QString>* dataWatcher = new QFutureWatcher<QString>(this);
+        connect(dataWatcher, &QFutureWatcher<QString>::finished, this, [=]
+        {
+            runSimpleTranslate(dataWatcher->future().result(), TextStyle::MarkDown);
+            dataWatcher->deleteLater();
+        });
+
+        dataWatcher->setFuture(future);
+
     }
     else
     {
-        originText = inMimeData->text();
-        textStyle  = TextStyle::PlainText;
+        runSimpleTranslate(inMimeData->text(), TextStyle::PlainText);
     }
-
-
-    QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
-        originText
-      , textStyle
-      , inSourceLang
-      , inTargetLang
-      , simple
-      , [=](const QString& inStr) { simple->completeTransText(inStr, textStyle); }
-      , simple
-      , [=](const QString& inStr) { simple->streamTransText(inStr, textStyle); }
-    });
-
-    connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()
-    {
-        if (transUnit.isNull())
-        {
-            return;
-        }
-        transUnit->abortTranslate();
-    });
 }
 
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)

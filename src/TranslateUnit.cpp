@@ -80,6 +80,7 @@ void TranslateUnit::abortTranslate()
 {
     if (_reply.isNull() == false)
     {
+        qDebug() << "abort translate request";
         _reply->abort();
     }
 }

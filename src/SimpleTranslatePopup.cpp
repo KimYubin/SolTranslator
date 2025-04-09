@@ -355,10 +355,19 @@ void SimpleTranslatePopup::setupUI()
     ui->titleLayout->addItem(topCenterSpacer, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
 
     // ~===========
+    // minimaize button    
+    _minimizedButton = new QPushButton(this);
+    _minimizedButton->setObjectName("minimizedButton");
+    _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
+
+    setupTitleButton(_minimizedButton);
+    connect(_minimizedButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onMinimized);
+
+    // ~===========
     // max button
     _maxRestoreButton = new QPushButton(this);
     _maxRestoreButton->setCheckable(true);
-    _maxRestoreButton->setObjectName("maximizeButton");
+    _maxRestoreButton->setObjectName("maxRestoreButton");
     QIcon maxRestoreIcon;
     maxRestoreIcon.addFile(":/img/maximize_button_img", QSize(), QIcon::Normal, QIcon::Off);
     maxRestoreIcon.addFile(":/img/restore_button_img", QSize(), QIcon::Normal, QIcon::On);
@@ -438,7 +447,7 @@ void SimpleTranslatePopup::setupUI()
     });
 
 
-    setTabOrder({_windowModeButton, _AlwaysOnButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
+    setTabOrder({_windowModeButton, _AlwaysOnButton, _minimizedButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
     // 탭 포커스가 안보이는 상태로 시작할 수 있도록 하기 위함.
     _sizeGrip->setFocusPolicy(Qt::TabFocus);
     _sizeGrip->setFocus();
@@ -662,6 +671,13 @@ void SimpleTranslatePopup::onMaxNormalToggle(const bool bMaximize)
         }
     }
     _bMaximizedMode = bMaximize;
+}
+
+void SimpleTranslatePopup::onMinimized()
+{
+    manualSizeMode();
+    changeNormalWindowMode();
+    showMinimized();
 }
 
 void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)

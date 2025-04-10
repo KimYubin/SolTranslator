@@ -127,7 +127,8 @@ protected:
     int _lastLineLength = 0;
 
     QString _prevString;
-
+    TextStyle _prevTextStyle;
+    QTimer* _updateStreamStrTimer;
     // ~================
     const QSizeF _minSizeRatio  = {0.15f, 0.15f};
     const QSizeF _maxSizeRatio  = {0.2f, 0.65f};

@@ -22,6 +22,7 @@
 #include <QCheckBox>
 #include <QFuturewatcher>
 #include <QtConcurrentRun>
+#include <QTimer>
 
 #include "FinTranslatorCore.h"
 #include "FinTranslatorMainWidget.h"
@@ -63,6 +64,13 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     _animation->setEasingCurve(QEasingCurve::OutQuad);
     connect(_animation, &QAbstractAnimation::finished, this, &SimpleTranslatePopup::adjustSizeAfterAnimationFinished);
 
+    _updateStreamStrTimer = new QTimer(this);
+    _updateStreamStrTimer->setInterval(100);
+    _updateStreamStrTimer->setSingleShot(true);
+    connect(_updateStreamStrTimer, &QTimer::timeout, this, [this]()
+    {
+        showTranslationPopup(_prevString, _prevTextStyle);
+    });
 
     calculateTextEditLayoutInfo();
 
@@ -82,19 +90,9 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
 
 void SimpleTranslatePopup::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
-    if (inTranslatedText.size() < 80)
-    {
-        showTranslationPopup(inTranslatedText, inTextStyle);
-        return;
-    }
-
-    qsizetype lineBreakIdx = inTranslatedText.indexOf(QRegularExpression("\\.\\s|\\n|\\,"), _prevString.size());
-    if (lineBreakIdx == -1)
-    {
-        return;
-    }
-
-    showTranslationPopup(inTranslatedText.sliced(0, lineBreakIdx + 1), inTextStyle);
+    _prevString    = inTranslatedText;
+    _prevTextStyle = inTextStyle;
+    _updateStreamStrTimer->start();
 }
 
 void SimpleTranslatePopup::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)

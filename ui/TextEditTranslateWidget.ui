@@ -82,14 +82,29 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEditOrigin"/>
+         <widget class="QPlainTextEdit" name="textOrigin">
+          <property name="font">
+           <font>
+            <hintingpreference>PreferNoHinting</hintingpreference>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEditTranslate"/>
+         <widget class="QTextBrowser" name="textTranslate">
+          <property name="font">
+           <font>
+            <hintingpreference>PreferNoHinting</hintingpreference>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -259,8 +274,8 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>plainTextEditOrigin</tabstop>
-  <tabstop>plainTextEditTranslate</tabstop>
+  <tabstop>textOrigin</tabstop>
+  <tabstop>textTranslate</tabstop>
   <tabstop>findButton</tabstop>
   <tabstop>lineEdit_api</tabstop>
  </tabstops>

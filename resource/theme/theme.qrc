@@ -4,6 +4,7 @@
         <file>dark/SimpleTranslate_Main.qss</file>
         <file>dark/SimpleTranslate_PushButton.qss</file>
         <file>dark/SimpleTranslate_TextEdit.qss</file>
+        <file>dark/TextEditTranslate.qss</file>
     </qresource>
 
 </RCC>

@@ -1,0 +1,149 @@
+/* ----------------------------------------------------- */
+#TextEditTranslateWidget QTextEdit
+{
+
+}
+#TextEditTranslateWidget QLabel
+{
+  
+}
+#TextEditTranslateWidget QTextEdit,
+#TextEditTranslateWidget QPlainTextEdit
+{
+  
+  padding: 16px;
+  padding-right: 4px;
+  border: none;
+  border-radius : 6px;
+  background-color: rgb(48, 48, 48);
+ 	color: rgb(250, 250, 250);
+  font-size: 14pt;
+  font-family: '맑은 고딕', 'Cascadia Mono', Consolas, monospace;
+}
+#TextEditTranslateWidget QTextEdit:focus,
+#TextEditTranslateWidget QPlainTextEdit:focus
+{
+  border: 1px solid rgb(182, 182, 182);
+
+  border-radius : 6px;
+}
+#TextEditTranslateWidget QTextEdit#originTranslate,
+#TextEditTranslateWidget QPlainTextEdit#originTranslate
+{
+  margin-right : 8px;
+}
+#TextEditTranslateWidget QTextEdit#textTranslate,
+#TextEditTranslateWidget QPlainTextEdit#textTranslate
+{
+  margin-left : 8px;
+  background-color: rgb(37, 37, 37);
+}
+#TextEditTranslateWidget a,
+#TextEditTranslateWidget span
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+#TextEditTranslateWidget body
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+
+/* -------------------- */
+/* TextEditTranslateWidget QScrollBar */
+
+#TextEditTranslateWidget QScrollBar:vertical,
+#TextEditTranslateWidget QScrollBar:horizontal
+{
+  border: 0;
+  background: #424242;
+  /* border-radius : 4px; */
+}
+#TextEditTranslateWidget QScrollBar:horizontal
+{
+  height: 8px;
+}
+
+#TextEditTranslateWidget QScrollBar:vertical
+{
+  width: 8px;
+}
+
+#TextEditTranslateWidget QScrollBar::handle
+{
+  background: #a0a0a0;
+  border-radius : 4px;
+}
+#TextEditTranslateWidget QScrollBar::handle:vertical:hover,
+#TextEditTranslateWidget QScrollBar::handle:horizontal:hover
+{
+  background: #dbdbdb;
+}
+
+#TextEditTranslateWidget QScrollBar::handle:horizontal
+{
+  min-width: 24px;
+}
+
+#TextEditTranslateWidget QScrollBar::handle:vertical
+{
+  min-height: 24px;
+}
+
+#TextEditTranslateWidget QScrollBar:horizontal
+{
+  margin: 0px 8px 0px 8px;
+}
+#TextEditTranslateWidget QScrollBar:vertical
+{
+  margin: 8px 0px 8px 0px;
+}
+#TextEditTranslateWidget QScrollBar::add-line:vertical,
+#TextEditTranslateWidget QScrollBar::sub-line:vertical,
+#TextEditTranslateWidget QScrollBar::add-line:horizontal,
+#TextEditTranslateWidget QScrollBar::sub-line:horizontal
+{
+  border: 0;
+  /* background: #111111; */
+  /* width: 0px; */
+  /* height: 0px; */
+}
+#TextEditTranslateWidget QScrollBar::sub-line:vertical
+{
+    /* background: #32CC99; */
+    
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: top;
+}
+#TextEditTranslateWidget QScrollBar::add-line:vertical
+{
+    /* background: #32CC99; */
+    height: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+}
+#TextEditTranslateWidget QScrollBar::sub-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: left;
+}
+#TextEditTranslateWidget QScrollBar::add-line:horizontal
+{
+    /* background: #32CC99; */
+    width: 8px;
+    subcontrol-origin: margin;
+    subcontrol-position: right;
+}
+
+QScrollBar::add-page,
+QScrollBar::sub-page 
+{
+  border: 0;
+  background: transparent;
+  width: 0px;
+  height: 0px;
+}

@@ -35,17 +35,17 @@ void TextEditTranslateWidget::on_findButton_clicked()
 {
     loadAPI();
 
-    const QString orignText = ui->plainTextEditOrigin->toPlainText();
+    const QString orignText = ui->textOrigin->toPlainText();
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
       , LangType::en
       , LangType::ko
-      , ui->plainTextEditTranslate
-      , [=](const QString& inStr) { ui->plainTextEditTranslate->setPlainText(inStr); }
-      , ui->plainTextEditTranslate
-      , [=](const QString& inStr) { ui->plainTextEditTranslate->setPlainText(inStr); }
+      , ui->textTranslate
+      , [=](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
+      , ui->textTranslate
+      , [=](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
     });
 }
 

@@ -152,7 +152,9 @@ private:
 
     QPushButton* _AlwaysOnButton;
     QPushButton* _windowModeButton;
+
     QPushButton* _maxRestoreButton;
+    QPushButton* _minimizedButton;
     QPushButton* _closeButton;
 
     QSizeGrip* _sizeGrip;

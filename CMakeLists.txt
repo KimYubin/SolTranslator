@@ -62,6 +62,8 @@ set(PROJECT_SOURCES
         src/SettingsWidget.cpp
         src/SettingsWidget.h
         ui/SettingsWidget.ui
+        src/AsyncManager.cpp
+        src/AsyncManager.h
 
 )
 

@@ -19,6 +19,7 @@
 #include <QRegularExpression>
 #include <QtConcurrentRun>
 
+#include "AsyncManager.h"
 #include "FinTranslatorCore.h"
 
 
@@ -72,6 +73,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
 
     if (inMimeData->hasHtml())
     {
+        /*
         // 비동기 문법 개선 및 마크다운 변환 작업
         QFuture<QString> future = QtConcurrent::run([=, htmlStr = std::move(inMimeData->html())]() mutable
         {
@@ -80,22 +82,46 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
             txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
 
             return txtDoc.toMarkdown();
-            // 메인 스레드로 복귀
-            QMetaObject::invokeMethod(qApp, [=, originText = std::move(txtDoc.toMarkdown())]()
-            {
-                runSimpleTranslate(originText, TextStyle::MarkDown);
-            }, Qt::QueuedConnection);
         });
 
         QFutureWatcher<QString>* dataWatcher = new QFutureWatcher<QString>(this);
-        connect(dataWatcher, &QFutureWatcher<QString>::finished, this, [=]
+        connect(dataWatcher, &QFutureWatcher<QString>::finished, this, [=]()
         {
             runSimpleTranslate(dataWatcher->future().result(), TextStyle::MarkDown);
             dataWatcher->deleteLater();
         });
 
         dataWatcher->setFuture(future);
+*/
+        AsyncManager::asyncLaunch<QString>(
+            this,
+            [=, htmlStr = std::move(inMimeData->html())]() mutable
+            {
+                // list 무시하는 문법 제거.
+                QTextDocument txtDoc;
+                txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
 
+                return txtDoc.toMarkdown();
+            },
+            [=](const QString& in)
+            {
+                runSimpleTranslate(in, TextStyle::MarkDown);
+            });
+        //
+        // getFinCore()->getAsyncManager()->asyncTask<QString>(
+        //     [=, htmlStr = std::move(inMimeData->html())]() mutable
+        //     {
+        //         // list 무시하는 문법 제거.
+        //         QTextDocument txtDoc;
+        //         txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
+        //
+        //         return txtDoc.toMarkdown();
+        //     }
+        //   , this
+        //   , [=](const QString& in)
+        //     {
+        //         runSimpleTranslate(in, TextStyle::MarkDown);
+        //     });
     }
     else
     {

@@ -6,6 +6,7 @@
 
 #include <QMimeData>
 
+#include "AsyncManager.h"
 #include "DataManager.h"
 #include "FinTranslatorMainWidget.h"
 #include "TranslateManager.h"
@@ -17,6 +18,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
     _dataManager         = new DataManager(this);
     _translateManager    = new TranslateManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);
+    _asyncManager        = new AsyncManager(this);
 
     loadCache();
 

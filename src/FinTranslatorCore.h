@@ -10,6 +10,7 @@
 #include "FinTypes.h"
 
 
+class AsyncManager;
 class QMimeData;
 class FinTranslatorMainWidget;
 class GlobalHotKeyManager;
@@ -34,6 +35,7 @@ public:
     DataManager* getDataManager() const { return _dataManager; }
     TranslateManager* getTranslateManager() const { return _translateManager; }
     GlobalHotKeyManager* getGlobalHotKeyManager() const { return _globalHotKeyManager; }
+    AsyncManager* getAsyncManager() const {return _asyncManager;};
 
 private:
     FinTranslatorMainWidget* _finMainWidget;
@@ -41,6 +43,7 @@ private:
     DataManager* _dataManager;
     TranslateManager* _translateManager;
     GlobalHotKeyManager* _globalHotKeyManager;
+    AsyncManager* _asyncManager;
 };
 
 

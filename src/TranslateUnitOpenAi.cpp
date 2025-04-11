@@ -4,14 +4,13 @@
 
 #include "TranslateUnitOpenAi.h"
 
-#include <iostream>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
 
-#include "ConfigManager.h"
 #include "FinTypes.h"
+#include "ConfigManager.h"
 #include "TranslateManager.h"
 
 TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo

@@ -5,17 +5,16 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_SettingsWidget.h" resolved
 
 #include "SettingsWidget.h"
-#include "../ui/ui_SettingsWidget.h"
-#include <QPushButton>
+
 #include <QListView>
-#include <QStyledItemDelegate>
+#include <QPushButton>
 #include <QScrollBar>
-#include <QPointer>
+#include <QStyledItemDelegate>
 
 #include "FinTranslatorCore.h"
 #include "FinTranslatorMainWidget.h"
 
-
+#include "../ui/ui_SettingsWidget.h"
 
 SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent)

@@ -5,8 +5,9 @@
 #ifndef FINHASHQUEUE_H
 #define FINHASHQUEUE_H
 #include <unordered_map>
+
 #include <QString>
-#include <QCoreApplication>
+#include <QHashFunctions>
 
 #include "FinTypes.h"
 

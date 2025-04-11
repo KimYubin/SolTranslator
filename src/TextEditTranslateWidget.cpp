@@ -6,10 +6,10 @@
 
 #include "TextEditTranslateWidget.h"
 
+#include "FinTypes.h"
 #include "ConfigManager.h"
 #include "FinTranslatorCore.h"
 #include "TranslateManager.h"
-#include "FinTypes.h"
 
 #include "../ui/ui_TextEditTranslateWidget.h"
 

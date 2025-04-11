@@ -5,15 +5,12 @@
 #include "DataManager.h"
 
 #include <QFile>
+#include <QFuture>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QString>
-#include <QFuture>
 #include <QtConcurrent>
-// #include <>
-// #include <>
-// #include <>
 
 
 #include "magic_enum.hpp"

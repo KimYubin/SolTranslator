@@ -1,26 +1,20 @@
 ﻿//
 // Created by YubinKim on 25/03/10 월.
 //
-#include <QCoreApplication>
-#include <QNetworkReply>
-#include <QJsonDocument>
-
-#include "ConfigManager.h"
-#include "FinHashQueue.h"
-#include "FinTypes.h"
-#include "SimpleTranslatePopup.h"
-#include "TranslateUnit.h"
-#include "TlUnitFactory.h"
 
 #include "TranslateManager.h"
 
-#include <QFutureWatcher>
 #include <QMimeData>
+#include <QNetworkReply>
 #include <QRegularExpression>
-#include <QtConcurrentRun>
 
 #include "AsyncManager.h"
+#include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
+#include "FinTypes.h"
+#include "SimpleTranslatePopup.h"
+#include "TlUnitFactory.h"
+#include "TranslateUnit.h"
 
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)

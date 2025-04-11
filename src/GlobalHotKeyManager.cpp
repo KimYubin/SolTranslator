@@ -4,18 +4,17 @@
 
 #include "GlobalHotKeyManager.h"
 
-#include <iostream>
 #include <QApplication>
+#include <QClipboard>
 #include <QKeyEvent>
+#include <QMimeData>
+#include <QRegularExpression>
+#include <QTextDocument>
+#include <QThread>
+#include <QTimer>
 #include <QWindow>
 
 #include "qhotkey.h"
-#include <QClipboard>
-#include <QThread>
-#include <QMimeData>
-#include <qregularexpression.h>
-#include <qtextdocument.h>
-#include <QTimer>
 
 #include "FinTranslatorCore.h"
 #include "RunCopKey.h"

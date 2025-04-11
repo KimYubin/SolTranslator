@@ -4,9 +4,9 @@
 
 #include "TlUnitFactory.h"
 
-#include <iostream>
 
 #include "magic_enum.hpp"
+
 #include "TranslateManager.h"
 #include "TranslateUnit.h"
 #include "TranslateUnitGoogle.h"
@@ -47,7 +47,7 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
     }
     if (bValid == false)
     {
-        std::cout << "Invalid engine type" << std::endl;
+        qDebug() << "Invalid engine type";
     }
     
     return tlUnit;

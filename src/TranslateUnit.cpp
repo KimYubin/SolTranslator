@@ -4,11 +4,10 @@
 
 #include "TranslateUnit.h"
 
-#include <iostream>
 #include <QNetworkReply>
 
-#include "ConfigManager.h"
 #include "FinTypes.h"
+#include "ConfigManager.h"
 #include "TranslateManager.h"
 
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo

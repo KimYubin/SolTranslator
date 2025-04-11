@@ -8,24 +8,21 @@
 #include <qt_windows.h>
 #endif
 
-#include <iostream>
-
 #include <QAbstractTextDocumentLayout>
 #include <QBoxLayout>
-#include <qevent.h>
-#include <QScreen>
+#include <QCheckBox>
+#include <QFuturewatcher>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
+#include <QScreen>
 #include <QSizeGrip>
-#include <QCheckBox>
-#include <QFuturewatcher>
 #include <QtConcurrentRun>
 #include <QTimer>
+#include <qevent.h>
 
 #include "FinTranslatorCore.h"
-#include "FinTranslatorMainWidget.h"
 #include "../ui/ui_SimpleTranslatePopup.h"
 
 

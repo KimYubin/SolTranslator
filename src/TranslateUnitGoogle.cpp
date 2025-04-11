@@ -4,7 +4,6 @@
 
 #include "TranslateUnitGoogle.h"
 
-#include <iostream>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkReply>
@@ -39,6 +38,6 @@ void TranslateUnitGoogle::replyTranslateFinished(QNetworkReply* reply)
     }
     else
     {
-        std::cout<<"invalid reply"<<std::endl;
+        qDebug() << "invalid reply";
     }
 }

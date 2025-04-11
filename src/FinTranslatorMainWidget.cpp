@@ -6,26 +6,23 @@
 
 #include "FinTranslatorMainWidget.h"
 
-#include <iostream>
-
-#include "../ui/ui_FinTranslatorMainWidget.h"
-
+#include <QButtonGroup>
+#include <QDir>
 #include <QFile>
-#include <QTextStream>
-#include <QMessageBox>
 #include <QMenu>
-
+#include <QMessageBox>
+#include <QStyle>
+#include <QTextStream>
+#include <qevent.h>
+#include <qtabbar.h>
 
 #include "ConfigManager.h"
-#include <qevent.h>
-#include <qstyle.h>
-#include <qtabbar.h>
-#include <QButtonGroup>
-#include <qdir.h>
-
 #include "SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
 #include "TranslateManager.h"
+
+#include "../ui/ui_FinTranslatorMainWidget.h"
+
 
 FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent), _finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)

@@ -62,7 +62,7 @@ SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget
     connect(_animation, &QAbstractAnimation::finished, this, &SimpleTranslatePopup::adjustSizeAfterAnimationFinished);
 
     _updateStreamStrTimer = new QTimer(this);
-    _updateStreamStrTimer->setInterval(100);
+    _updateStreamStrTimer->setInterval(50);
     _updateStreamStrTimer->setSingleShot(true);
     connect(_updateStreamStrTimer, &QTimer::timeout, this, [this]()
     {
@@ -94,6 +94,7 @@ void SimpleTranslatePopup::streamTransText(const QString& inTranslatedText, cons
 
 void SimpleTranslatePopup::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
+    _updateStreamStrTimer->stop();
     showTranslationPopup(inTranslatedText, inTextStyle);
 }
 
@@ -126,7 +127,6 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     default: ;
     }
-    _prevString = inTranslatedText;
 }
 
 void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
@@ -398,7 +398,7 @@ void SimpleTranslatePopup::setupUI()
     ui->textLayout->setContentsMargins(20, 0, 10, 20);
 
     QFont font = ui->resultText->font();
-    font.setHintingPreference(QFont::PreferNoHinting);
+    // font.setHintingPreference(QFont::PreferNoHinting);
     font.setPointSizeF(_fontSize);
     ui->resultText->setFont(font);
     Qt::TextInteractionFlags interactionFlags = ui->resultText->textInteractionFlags();
@@ -480,6 +480,7 @@ void SimpleTranslatePopup::animateTextEditResize(const QSize& inNewSize)
     }
     _prevSize = inNewSize;
 
+    _animation->stop();
     _animation->setStartValue(ui->resultText->size());
     _animation->setEndValue(inNewSize); // setTextEditSize()
     _animation->start();

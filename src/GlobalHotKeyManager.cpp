@@ -56,9 +56,10 @@ void GlobalHotKeyManager::FireSimpleTranslate()
     }
 
     // 클립보드 갱신(복사) 대기
-    connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimePtrChanged = std::move(prevMimePtr)](QClipboard::Mode mode) mutable
+    QMetaObject::Connection clipboardConnection
+        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimePtrChanged = std::move(prevMimePtr)](QClipboard::Mode mode) mutable
     {
-        const QMimeData* selectedMime  = QApplication::clipboard()->mimeData(mode);
+        const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
 
         if (selectedMime->hasText() == false)
         {
@@ -108,6 +109,13 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         default: ;
         }
     }, Qt::SingleShotConnection);
+
+    // 연결 대기 시간 제한.
+    // 비어있는 복사와 무제한 대기를 방지합니다.
+    QTimer::singleShot(500, this, [clipboardConnection]()
+    {
+        disconnect(clipboardConnection);
+    });
 
     // 복사 실행
     RunCopKey::DoCopy();

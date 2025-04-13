@@ -5,6 +5,7 @@
 #ifndef FINTYPES_H
 #define FINTYPES_H
 #include <QString>
+#include <QObject>
 
 
 enum class LangType;

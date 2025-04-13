@@ -89,6 +89,7 @@ protected:
     void setMaxNormal(const bool bMaximize);
     void onMaxNormalToggle(const bool bMaximize);
 
+    void onMinimized();
 
     void setShadowEffectEnabled(const bool bIsEnable);
 

@@ -27,6 +27,8 @@
 FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent), _finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
 {
+    qApp->setQuitOnLastWindowClosed(false);
+
     ui->setupUi(this);
 
     setLayout(ui->mainLayout);

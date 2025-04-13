@@ -55,7 +55,7 @@ void RunCopKey::DoCopy()
 {
     ReleaseAllKeysOnPressedControlKey();
 
-    std::vector<INPUT> inputs(4);
+    std::array<INPUT, 4> inputs;
 
     inputs[0] = make_INPUT(INPUT_KEYBOARD, VK_CONTROL);
     inputs[1] = make_INPUT(INPUT_KEYBOARD, VK_INSERT);

@@ -17,14 +17,19 @@
 #include "../ui/ui_SettingsWidget.h"
 
 SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)
     , finCore(inFinCore)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
+
+    show();
+    activateWindow();
 }
 
 SettingsWidget::~SettingsWidget()

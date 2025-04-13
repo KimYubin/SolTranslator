@@ -36,36 +36,33 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     // ~======================
     // button binding
 
-    // addTab에서 부모 추가되므로, 부모추가 금지.
     _textEditTranslate = new TextEditTranslateWidget(_finCore);
-    _settingsWidget    = new SettingsWidget(_finCore);
 
-    const std::array stkIdxList = {     // std::array<idx, size>
-        ui->mainStackedWidget->addWidget(_textEditTranslate)
-      , ui->mainStackedWidget->addWidget(new QWidget())
-      , ui->mainStackedWidget->addWidget(_settingsWidget)
+    //<QPushButton*, size>
+    const std::array buttonList = {
+        std::pair{ui->button_0_TextTab, static_cast<QWidget*>(_textEditTranslate)}
+      , std::pair{ui->button_1_dummy, new QWidget()}
     };
-    const std::array buttonList = {    // std::array<QPushButton*, size>
-        ui->button_0_TextTab
-      , ui->button_1_dummy
-      , ui->button_9_setting
-    };
-    static_assert(stkIdxList.size() == buttonList.size(), "not matching buttons and widgets.");
-
 
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    for (int idx = 0; idx < stkIdxList.size(); ++idx)
+    for (const auto& [button, childWidget] : buttonList)
     {
-        buttonList[idx]->setCheckable(true);
-        _buttonGroup->addButton(buttonList[idx], stkIdxList[idx]); // 비순서 임의 id 지정가능.
+        button->setCheckable(true);
+
+        const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
+        _buttonGroup->addButton(button, stkIdx);
     }
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
     {
         ui->mainStackedWidget->setCurrentIndex(inButtonId);
     });
+
+    // ~====================
+    // setting button
+    connect(ui->button_9_setting, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
 
     // ~====================
     // button icon
@@ -99,7 +96,27 @@ void FinTranslatorMainWidget::setVisible(bool visible)
     _miniToTrayAction->setEnabled(visible);
     _restoreAction->setEnabled(visible == false);
 
+    if (_settingsWidget.isNull() == false)
+    {
+        _settingsWidget->setVisible(visible);
+    }
     QWidget::setVisible(visible);
+}
+
+void FinTranslatorMainWidget::showSettingsWidget()
+{
+    if (_settingsWidget.isNull())
+    {
+        _settingsWidget = new SettingsWidget(_finCore, this);
+    }
+    else
+    {
+        if (_settingsWidget->isMinimized())
+        {
+            _settingsWidget->showNormal();
+        }
+        _settingsWidget->show();
+    }
 }
 
 void FinTranslatorMainWidget::applyTheme(const QString& inThemeName)
@@ -189,7 +206,21 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
     case QSystemTrayIcon::Trigger:
         break;
     case QSystemTrayIcon::DoubleClick:
-        show();
+        if (isMinimized())
+        {
+            if (isMaximized())
+            {
+                showMaximized();
+            }
+            else
+            {
+                showNormal();
+            }
+        }
+        else
+        {
+            show();
+        }
         break;
     case QSystemTrayIcon::MiddleClick:
         break;
@@ -204,11 +235,11 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
 
 void FinTranslatorMainWidget::createActions()
 {
-    _miniToTrayAction = new QAction(tr("Mi&nimize"), this);
+    _miniToTrayAction = new QAction(tr("Mi&nimize To Tray"), this);
     connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
 
     _restoreAction = new QAction(tr("&Restore"), this);
-    connect(_restoreAction, &QAction::triggered, this, &QWidget::showNormal);
+    connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
 
     _quitAction = new QAction(tr("&Quit"), this);
     connect(_quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);

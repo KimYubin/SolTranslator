@@ -5,6 +5,7 @@
 #ifndef FINTRANSLATORMAINWIDGET_H
 #define FINTRANSLATORMAINWIDGET_H
 
+#include <QPointer>
 #include <QSystemTrayIcon>
 #include <QWidget>
 
@@ -36,6 +37,8 @@ public:
 
     virtual void setVisible(bool visible) override;
 
+    void showSettingsWidget();
+
     // ~=================
     // theme
     void applyTheme(const QString& inThemeName = "dark");
@@ -62,7 +65,7 @@ private:
     // sub widgets
     QButtonGroup* _buttonGroup;
     TextEditTranslateWidget* _textEditTranslate;
-    SettingsWidget* _settingsWidget;
+    QPointer<SettingsWidget> _settingsWidget;
     
 
     // ~==============

@@ -18,7 +18,7 @@
 
 SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)
-    , finCore(inFinCore)
+    , _finCore(inFinCore)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
@@ -38,9 +38,9 @@ SettingsWidget::~SettingsWidget()
 
 void SettingsWidget::applyTheme()
 {
-    if (finCore->getFinMainWidget())
+    if (_finCore->getFinMainWidget())
     {
-        finCore->getFinMainWidget()->applyTheme();
+        _finCore->getFinMainWidget()->applyTheme();
     }
     else
     {

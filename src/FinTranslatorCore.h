@@ -17,6 +17,8 @@ class GlobalHotKeyManager;
 class TranslateManager;
 class DataManager;
 
+#define finCore FinTranslatorCore::instance()
+
 class FinTranslatorCore : public QObject
 {
     Q_OBJECT
@@ -24,6 +26,8 @@ class FinTranslatorCore : public QObject
 public:
     explicit FinTranslatorCore(QObject* parent = nullptr);
     ~FinTranslatorCore() override;
+
+    static FinTranslatorCore* instance() noexcept { return _self; }
 
 public:
     void loadCache();
@@ -35,9 +39,10 @@ public:
     DataManager* getDataManager() const { return _dataManager; }
     TranslateManager* getTranslateManager() const { return _translateManager; }
     GlobalHotKeyManager* getGlobalHotKeyManager() const { return _globalHotKeyManager; }
-    AsyncManager* getAsyncManager() const {return _asyncManager;};
+    AsyncManager* getAsyncManager() const { return _asyncManager; };
 
 private:
+    static FinTranslatorCore* _self;
     FinTranslatorMainWidget* _finMainWidget;
 
     DataManager* _dataManager;

@@ -16,7 +16,7 @@
 
 TextEditTranslateWidget::TextEditTranslateWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent)
-    , finCore(inFinCore)
+    , _finCore(inFinCore)
     , ui(new Ui::TextEditTranslateWidget)
 {
     ui->setupUi(this);
@@ -37,7 +37,7 @@ void TextEditTranslateWidget::on_findButton_clicked()
 
     const QString orignText = ui->textOrigin->toPlainText();
 
-    finCore->getTranslateManager()->translateText(TranslateRequestInfo{
+    _finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
       , LangType::en

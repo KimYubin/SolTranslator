@@ -33,7 +33,7 @@ public:
 private:
     void applyTheme();
     
-    FinTranslatorCore* finCore;
+    FinTranslatorCore* _finCore;
 
     Ui::SettingsWidget* ui;
 

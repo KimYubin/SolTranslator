@@ -35,7 +35,7 @@ private:
     void loadAPI();
     
 private:
-    FinTranslatorCore* finCore;
+    FinTranslatorCore* _finCore;
 
     Ui::TextEditTranslateWidget* ui;
 };

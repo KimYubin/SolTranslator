@@ -34,7 +34,7 @@ class SimpleTranslatePopup : public QWidget
     Q_PROPERTY(QSize textEditSize READ getTextEditSize WRITE setTextEditSize)
 
 public:
-    explicit SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    explicit SimpleTranslatePopup(QWidget* parent = nullptr);
 
     ~SimpleTranslatePopup() override;
 
@@ -146,9 +146,8 @@ protected:
     QPoint _dragPoint;
 
     qreal _fontSize = 14.0f;
-private:
-    FinTranslatorCore* _finCore;
 
+private:
     Ui::SimpleTranslatePopup* ui;
 
     QPushButton* _AlwaysOnButton;

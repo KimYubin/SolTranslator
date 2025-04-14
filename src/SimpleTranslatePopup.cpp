@@ -26,9 +26,8 @@
 #include "../ui/ui_SimpleTranslatePopup.h"
 
 
-SimpleTranslatePopup::SimpleTranslatePopup(FinTranslatorCore* inFinCore, QWidget* parent)
+SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
-    , _finCore(inFinCore)
     , ui(new Ui::SimpleTranslatePopup)
 {
     QIcon icon = QIcon(":/img/icon_img");

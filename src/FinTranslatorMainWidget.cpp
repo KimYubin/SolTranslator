@@ -26,8 +26,9 @@
 #include "../ui/ui_FinTranslatorMainWidget.h"
 
 
-FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent)
-    : QWidget(parent), _finCore(inFinCore), ui(new Ui::FinTranslatorMainWidget)
+FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
+    : QWidget(parent)
+    , ui(new Ui::FinTranslatorMainWidget)
 {
     qApp->setQuitOnLastWindowClosed(false);
 
@@ -38,7 +39,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     // ~======================
     // button binding
 
-    _textEditTranslate = new TextEditTranslateWidget(finCore);
+    _textEditTranslate = new TextEditTranslateWidget();
 
     //<QPushButton*, size>
     const std::array buttonList = {
@@ -109,7 +110,7 @@ void FinTranslatorMainWidget::showSettingsWidget()
 {
     if (_settingsWidget.isNull())
     {
-        _settingsWidget = new SettingsWidget(finCore, this);
+        _settingsWidget = new SettingsWidget(this);
     }
     else
     {

@@ -32,7 +32,7 @@ class FinTranslatorMainWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FinTranslatorMainWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    explicit FinTranslatorMainWidget(QWidget* parent = nullptr);
     ~FinTranslatorMainWidget() override;
 
     virtual void setVisible(bool visible) override;
@@ -56,11 +56,9 @@ private:
     void createTrayIcon();
     void setIcon();
 
-    FinTranslatorCore* _finCore;
 
     Ui::FinTranslatorMainWidget* ui;
 
-    
     // ~==============
     // sub widgets
     QButtonGroup* _buttonGroup;

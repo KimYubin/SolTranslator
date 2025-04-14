@@ -27,17 +27,14 @@ class SettingsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() override;
 
 private:
     void applyTheme();
-    
-    FinTranslatorCore* _finCore;
+
 
     Ui::SettingsWidget* ui;
-
-    
 };
 
 

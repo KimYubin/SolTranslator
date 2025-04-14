@@ -6,6 +6,8 @@
 
 #include "TextEditTranslateWidget.h"
 
+#include <QPointer>
+
 #include "FinTypes.h"
 #include "ConfigManager.h"
 #include "FinTranslatorCore.h"
@@ -14,9 +16,8 @@
 #include "../ui/ui_TextEditTranslateWidget.h"
 
 
-TextEditTranslateWidget::TextEditTranslateWidget(FinTranslatorCore* inFinCore, QWidget* parent)
+TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     : QWidget(parent)
-    , _finCore(inFinCore)
     , ui(new Ui::TextEditTranslateWidget)
 {
     ui->setupUi(this);

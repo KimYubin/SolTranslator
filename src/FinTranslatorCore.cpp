@@ -17,7 +17,6 @@ FinTranslatorCore* FinTranslatorCore::_self = nullptr;
 FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 {
     Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one application object");
-
     _self = this;
 
     qApp->setOrganizationDomain("fin");
@@ -30,7 +29,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     loadCache();
 
-    _finMainWidget = new FinTranslatorMainWidget(this);
+    _finMainWidget = new FinTranslatorMainWidget();
     _finMainWidget->show();
 }
 

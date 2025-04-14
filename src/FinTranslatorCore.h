@@ -5,7 +5,6 @@
 #ifndef FINTRANSLATORCORE_H
 #define FINTRANSLATORCORE_H
 #include <QObject>
-#include <QPointer>
 
 #include "FinTypes.h"
 
@@ -34,21 +33,22 @@ public:
     void asyncSaveCache();
     void onSimpleTranslate(const QMimeData* inMimeData);
 
-    FinTranslatorMainWidget* getFinMainWidget() const { return _finMainWidget; }
-
     DataManager* getDataManager() const { return _dataManager; }
     TranslateManager* getTranslateManager() const { return _translateManager; }
     GlobalHotKeyManager* getGlobalHotKeyManager() const { return _globalHotKeyManager; }
     AsyncManager* getAsyncManager() const { return _asyncManager; };
 
+    FinTranslatorMainWidget* getFinMainWidget() const { return _finMainWidget; }
+
 private:
     static FinTranslatorCore* _self;
-    FinTranslatorMainWidget* _finMainWidget;
 
     DataManager* _dataManager;
     TranslateManager* _translateManager;
     GlobalHotKeyManager* _globalHotKeyManager;
     AsyncManager* _asyncManager;
+
+    FinTranslatorMainWidget* _finMainWidget;
 };
 
 

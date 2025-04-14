@@ -23,9 +23,8 @@ class TextEditTranslateWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TextEditTranslateWidget(FinTranslatorCore* inFinCore, QWidget* parent = nullptr);
+    explicit TextEditTranslateWidget(QWidget* parent = nullptr);
     ~TextEditTranslateWidget() override;
-
 
 private slots:
     void on_findButton_clicked();
@@ -33,10 +32,8 @@ private slots:
 private:
     void loadSettings();
     void loadAPI();
-    
-private:
-    FinTranslatorCore* _finCore;
 
+private:
     Ui::TextEditTranslateWidget* ui;
 };
 

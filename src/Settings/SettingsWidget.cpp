@@ -25,7 +25,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
+    // connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
 
     show();
 }

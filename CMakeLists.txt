@@ -59,11 +59,15 @@ set(PROJECT_SOURCES
         src/TextEditTranslateWidget.cpp
         src/TextEditTranslateWidget.h
         ui/TextEditTranslateWidget.ui
-        src/SettingsWidget.cpp
-        src/SettingsWidget.h
-        ui/SettingsWidget.ui
         src/AsyncManager.cpp
         src/AsyncManager.h
+        src/Settings/SettingsWidget.cpp
+        src/Settings/SettingsWidget.h
+        ui/SettingsWidget.ui
+        src/Settings/IOptionWidget.cpp
+        src/Settings/IOptionWidget.h
+        src/Settings/EngineOptionWidget.cpp
+        src/Settings/EngineOptionWidget.h
 
 )
 

@@ -17,7 +17,7 @@
 #include <qtabbar.h>
 
 #include "ConfigManager.h"
-#include "SettingsWidget.h"
+#include "Settings/SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
 #include "TranslateManager.h"
 

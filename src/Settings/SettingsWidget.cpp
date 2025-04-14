@@ -11,10 +11,10 @@
 #include <QScrollBar>
 #include <QStyledItemDelegate>
 
-#include "FinTranslatorCore.h"
-#include "FinTranslatorMainWidget.h"
+#include "../FinTranslatorCore.h"
+#include "../FinTranslatorMainWidget.h"
 
-#include "../ui/ui_SettingsWidget.h"
+#include "../../ui/ui_SettingsWidget.h"
 
 SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)

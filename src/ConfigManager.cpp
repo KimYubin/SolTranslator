@@ -20,5 +20,5 @@ QString ConfigManager::getAPI()
 
 QSettings ConfigManager::GetAPISetting()
 {
-    return QSettings{StaticPath::API_KEY_PATH, QSettings::IniFormat};
+    return QSettings{FinPaths::getApiKeyPath(), QSettings::IniFormat};
 }

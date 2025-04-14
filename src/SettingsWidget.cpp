@@ -29,7 +29,6 @@ SettingsWidget::SettingsWidget(FinTranslatorCore* inFinCore, QWidget* parent)
     connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
 
     show();
-    activateWindow();
 }
 
 SettingsWidget::~SettingsWidget()

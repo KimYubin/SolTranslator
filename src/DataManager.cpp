@@ -22,11 +22,11 @@ DataManager::DataManager(FinTranslatorCore* parent): AbstractManager(parent)
 
 cache_queue DataManager::loadTranslateCache()
 {
-    QFile loadFile(StaticPath::CACHE_QUEUE_SAVE_PATH);
+    QFile loadFile(FinPaths::getTranslateHistoryFilePath());
 
     if (loadFile.open(QIODevice::ReadOnly) == false)
     {
-        qWarning("Couldn't open save file.");
+        qWarning() << "cannot open history file.";
         return {};
     }
 
@@ -51,10 +51,10 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
 
     QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
     {
-        QFile saveFile(StaticPath::CACHE_QUEUE_SAVE_PATH);
+        QFile saveFile(FinPaths::getTranslateHistoryFilePath());
         if (saveFile.open(QIODevice::WriteOnly) == false)
         {
-            qWarning("Couldn't open save file.");
+            qWarning() << "cannot open history file.";
             return false;
         }
 

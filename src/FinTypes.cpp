@@ -4,15 +4,21 @@
 
 #include "FinTypes.h"
 
+#include <QDir>
+
+#include <qstandardpaths.h>
+
 #include "magic_enum.hpp"
 
 
 const QString EngineName::OPEN_AI = "openai";
 
 
+const QString FinPaths::FinDirName::SAVE = "save";
+const QString FinPaths::FinDirName::HISTORY = "history";
 
-const QString StaticPath::API_KEY_PATH = "./save/api";
-const QString StaticPath::CACHE_QUEUE_SAVE_PATH = "./save/Translate_History.json";
+const QString FinPaths::FinFileName::API_KEY = "api";
+const QString FinPaths::FinFileName::TRANSLATE_HISTORY = "Translate_History.json";
 
 
 const QString StaticPrompt::OPEN_AI_PROMPT =
@@ -27,6 +33,39 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
 };
+
+QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath)
+{
+    const QString appPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation	);
+    if (appPath.isEmpty())
+    {
+        qFatal() << "Cannot determine settings storage location";
+        return "";
+    }
+
+    const QDir secondaryDir{appPath + "/" + inSecondaryDir + "/"};
+
+    if (secondaryDir.exists() == false)
+    {
+        if (secondaryDir.mkpath(".") == false)
+        {
+            qFatal() << "Invalid secondary directory path: " << inSecondaryDir;
+            return "";
+        }
+    }
+
+    return secondaryDir.absoluteFilePath(inFilePath);
+}
+
+QString FinPaths::getApiKeyPath()
+{
+    return getFinAppPath(FinDirName::SAVE, FinFileName::API_KEY);
+}
+
+QString FinPaths::getTranslateHistoryFilePath()
+{
+    return getFinAppPath(FinDirName::HISTORY, FinFileName::TRANSLATE_HISTORY);
+}
 
 LangInfo Langs::GetLangInfo(const LangType inLangType)
 {

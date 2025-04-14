@@ -21,14 +21,30 @@ public:
 };
 
 
-/** 보편 경로 */
-struct StaticPath
+/** 유저 파일 경로 */
+struct FinPaths
 {
-public:
-    static const QString API_KEY_PATH;
+private:
+    static QString getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath);
 
-    static const QString CACHE_QUEUE_SAVE_PATH;
+public:
+    static QString getApiKeyPath();
+    static QString getTranslateHistoryFilePath();
+
+private:
+    struct FinDirName
+    {
+        static const QString SAVE;
+        static const QString HISTORY;
+    };
+
+    struct FinFileName
+    {
+        static const QString API_KEY;
+        static const QString TRANSLATE_HISTORY;
+    };
 };
+
 
 struct StaticPrompt
 {

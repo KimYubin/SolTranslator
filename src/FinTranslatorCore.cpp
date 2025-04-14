@@ -15,6 +15,9 @@
 
 FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 {
+    qApp->setOrganizationDomain("fin");
+    qApp->setApplicationName("FinTranslator");
+
     _dataManager         = new DataManager(this);
     _translateManager    = new TranslateManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);

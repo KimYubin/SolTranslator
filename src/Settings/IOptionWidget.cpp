@@ -10,7 +10,7 @@ static QList<IOptionPage*>& optionsPages()
     return staticOptionPages;
 }
 
-IOptionWidget::IOptionWidget()
+IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {
 }
 

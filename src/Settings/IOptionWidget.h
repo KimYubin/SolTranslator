@@ -9,12 +9,14 @@
 #include <QPointer>
 #include <QWidget>
 
+class FinTranslatorCore;
+
 class IOptionWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    IOptionWidget();
+    explicit IOptionWidget(QWidget* parent = nullptr);
     ~IOptionWidget() override;
 
 protected:
@@ -22,6 +24,8 @@ protected:
     virtual void apply();
     virtual void cancel();
     virtual void finish();
+
+private:
 };
 
 class IOptionPage : public QObject

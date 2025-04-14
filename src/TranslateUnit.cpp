@@ -13,22 +13,22 @@
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)
     : QNetworkAccessManager(parent)
-    , trReqData(inTranslateRequestInfo)
+    , _trReqData(inTranslateRequestInfo)
 {
 }
 
 void TranslateUnit::executeTextTranslation()
 {
-    if (trReqData.originText.isEmpty())
+    if (_trReqData.originText.isEmpty())
     {
         qDebug()<<"translate request text is empty";
     }
-    if (trReqData.callbackTranslateStreaming.has_value())
+    if (_trReqData.callbackTranslateStreaming.has_value())
     {
-        connect(this, &TranslateUnit::addStreamTranslatedText, trReqData.streamContext, std::move((*trReqData.callbackTranslateStreaming)));
+        connect(this, &TranslateUnit::addStreamTranslatedText, _trReqData.streamContext, std::move((*_trReqData.callbackTranslateStreaming)));
     }
 
-    connect(this, &TranslateUnit::onCompletedTranslate, trReqData.completeContext, std::move(trReqData.callbackTranslateComplete));
+    connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, std::move(_trReqData.callbackTranslateComplete));
 
     connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
     
@@ -37,15 +37,15 @@ void TranslateUnit::executeTextTranslation()
 
 void TranslateUnit::executeTextTranslation_Impl()
 {
-    if (trReqData.originText.isEmpty())
+    if (_trReqData.originText.isEmpty())
     {
-        completeTranslatedText(trReqData.originText);
+        completeTranslatedText(_trReqData.originText);
         return;
     }
 
     if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
     {
-        auto [bIsFind, findCache] = translate_manager->findCachingText(trReqData.originText, trReqData.targetLang);
+        auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.originText, _trReqData.targetLang);
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
@@ -86,8 +86,8 @@ void TranslateUnit::abortTranslate()
 
 void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
 {
-    translatedText.append(inTranslatedText);
-    emit addStreamTranslatedText(translatedText);
+    _translatedText.append(inTranslatedText);
+    emit addStreamTranslatedText(_translatedText);
 }
 
 void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
@@ -96,7 +96,7 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
     {
         if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
         {
-            translate_manager->setCacheText(trReqData.originText, inTranslatedText, trReqData.targetLang);
+            translate_manager->setCacheText(_trReqData.originText, inTranslatedText, _trReqData.targetLang);
         }
     }
 

@@ -42,22 +42,22 @@ public:
     void updateNewCacheQueue(cache_queue&& newCache);
     const cache_queue& getCacheQueue() const; 
     
-    void SetEngineType(EngineType inEngine) { currentEngine = inEngine; }
-    EngineType GetCurrentEngineType() const { return currentEngine; };
+    void SetEngineType(EngineType inEngine) { _currentEngine = inEngine; }
+    EngineType GetCurrentEngineType() const { return _currentEngine; };
 
 private:
-    EngineType currentEngine;
+    EngineType _currentEngine;
 
     // ~===========
     // cache
-    int maxCacheLength = 100;
+    int _maxCacheLength = 100;
 
     /**
      * 캐시된 번역문을 관리합니다.
      * 원문, 엔진, 목표언어를 key로 사용합니다.
      * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
      */
-    cache_queue cachingTranslateText;
+    cache_queue _cachingTranslateText;
 };
 
 

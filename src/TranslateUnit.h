@@ -65,9 +65,9 @@ protected:
 protected:
     QPointer<QNetworkReply> _reply;
 
-    TranslateRequestInfo trReqData;
+    TranslateRequestInfo _trReqData;
 
-    QString translatedText;
+    QString _translatedText;
 };
 
 

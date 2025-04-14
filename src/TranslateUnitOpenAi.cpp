@@ -36,12 +36,12 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(trReqData.sourceLang), Langs::GetEnglishName(trReqData.targetLang));
+    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
     messages.append(systemMessage);
 
     QJsonObject userMessage;
     userMessage["role"] = "user";
-    userMessage["content"] = trReqData.originText;
+    userMessage["content"] = _trReqData.originText;
     messages.append(userMessage);
 
     json["messages"] = messages;
@@ -106,7 +106,7 @@ void TranslateUnitOpenAI::replyTranslateFinished(QNetworkReply* reply)
     if (choices.isEmpty() == false)
     {
         const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
-        translatedText.append(lastTranslatedText);
+        _translatedText.append(lastTranslatedText);
     }
-    completeTranslatedText(translatedText);
+    completeTranslatedText(_translatedText);
 }

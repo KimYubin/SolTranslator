@@ -90,10 +90,10 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
 {
     // 중복은 순서 최신화
-    cachingTranslateText.push({originText, currentEngine, targetLang}, translateText);
-    if (cachingTranslateText.size() > maxCacheLength)
+    _cachingTranslateText.push({originText, _currentEngine, targetLang}, translateText);
+    if (_cachingTranslateText.size() > _maxCacheLength)
     {
-        cachingTranslateText.pop();
+        _cachingTranslateText.pop();
     }
 
     // 캐시 저장
@@ -104,8 +104,8 @@ std::tuple<bool, QString> TranslateManager::findCachingText(const QString& origi
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    const TextCacheKey findCacheKey = TextCacheKey{originText, currentEngine, targetLang};
-    if (const QString* text_cache = cachingTranslateText.find(findCacheKey))
+    const TextCacheKey findCacheKey = TextCacheKey{originText, _currentEngine, targetLang};
+    if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
     {
         res = {true, *text_cache};
     }
@@ -115,11 +115,11 @@ std::tuple<bool, QString> TranslateManager::findCachingText(const QString& origi
 
 void TranslateManager::updateNewCacheQueue(cache_queue&& newCache)
 {
-    cachingTranslateText = std::move(newCache);
+    _cachingTranslateText = std::move(newCache);
 }
 
 const cache_queue& TranslateManager::getCacheQueue() const
 {
-    return cachingTranslateText;
+    return _cachingTranslateText;
 }
 

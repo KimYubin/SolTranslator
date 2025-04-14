@@ -39,7 +39,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
         return;
     }
 
-    SimpleTranslatePopup* simple = new SimpleTranslatePopup(getFinCore());
+    SimpleTranslatePopup* simple = new SimpleTranslatePopup(finCore);
     auto runSimpleTranslate = [=](const QString& inOriginText, const TextStyle inTextStyle)
     {
         QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
@@ -97,7 +97,7 @@ void TranslateManager::setCacheText(const QString& originText, const QString& tr
     }
 
     // 캐시 저장
-    getFinCore()->asyncSaveCache();
+    finCore->asyncSaveCache();
 }
 
 std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const LangType targetLang)

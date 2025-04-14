@@ -17,6 +17,8 @@
 #include <qtabbar.h>
 
 #include "ConfigManager.h"
+#include "FinTranslatorCore.h"
+
 #include "Settings/SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
 #include "TranslateManager.h"
@@ -36,7 +38,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(FinTranslatorCore* inFinCore, Q
     // ~======================
     // button binding
 
-    _textEditTranslate = new TextEditTranslateWidget(_finCore);
+    _textEditTranslate = new TextEditTranslateWidget(finCore);
 
     //<QPushButton*, size>
     const std::array buttonList = {
@@ -107,7 +109,7 @@ void FinTranslatorMainWidget::showSettingsWidget()
 {
     if (_settingsWidget.isNull())
     {
-        _settingsWidget = new SettingsWidget(_finCore, this);
+        _settingsWidget = new SettingsWidget(finCore, this);
     }
     else
     {

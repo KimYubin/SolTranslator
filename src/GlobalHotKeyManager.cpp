@@ -71,10 +71,7 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             // 번역 실행
-            if (FinTranslatorCore* Fin = getFinCore())
-            {
-                Fin->onSimpleTranslate(selectedMime);
-            }
+            finCore->onSimpleTranslate(selectedMime);
 
             if (prevMimePtrChanged->text() == selectedMime->text())
             {

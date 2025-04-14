@@ -34,7 +34,7 @@ public:
     void asyncSaveCache();
     void onSimpleTranslate(const QMimeData* inMimeData);
 
-    FinTranslatorMainWidget* getFinMainWidget() { return _finMainWidget; }
+    FinTranslatorMainWidget* getFinMainWidget() const { return _finMainWidget; }
 
     DataManager* getDataManager() const { return _dataManager; }
     TranslateManager* getTranslateManager() const { return _translateManager; }

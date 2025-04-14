@@ -38,9 +38,9 @@ SettingsWidget::~SettingsWidget()
 
 void SettingsWidget::applyTheme()
 {
-    if (_finCore->getFinMainWidget())
+    if (finCore->getFinMainWidget())
     {
-        _finCore->getFinMainWidget()->applyTheme();
+        finCore->getFinMainWidget()->applyTheme();
     }
     else
     {

@@ -37,7 +37,7 @@ void TextEditTranslateWidget::on_findButton_clicked()
 
     const QString orignText = ui->textOrigin->toPlainText();
 
-    _finCore->getTranslateManager()->translateText(TranslateRequestInfo{
+    finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
       , LangType::en

@@ -28,8 +28,12 @@ protected:
     virtual void cancel() override;
     virtual void finish() override;
 
+    void applyTheme();
+
     Ui::EngineOptionWidget* ui;
 };
+
+
 
 class EngineOption : public IOptionPage
 {

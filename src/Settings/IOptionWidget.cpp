@@ -55,6 +55,11 @@ QString IOptionPage::getIconPath() const
     return _iconPath;
 }
 
+QIcon IOptionPage::getIcon() const
+{
+    return QIcon(_iconPath);
+}
+
 QWidget* IOptionPage::getOptionWidget()
 {
     if (_optionWidget.isNull())

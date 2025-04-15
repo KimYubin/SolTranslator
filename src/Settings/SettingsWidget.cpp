@@ -6,10 +6,13 @@
 
 #include "SettingsWidget.h"
 
+#include <QButtonGroup>
 #include <QListView>
 #include <QPushButton>
 #include <QScrollBar>
 #include <QStyledItemDelegate>
+
+#include "IOptionWidget.h"
 
 #include "../FinTranslatorCore.h"
 #include "../FinTranslatorMainWidget.h"
@@ -25,7 +28,32 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    // connect(ui->themeButton, &QPushButton::clicked, this, &SettingsWidget::applyTheme);
+    ui->findEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    ui->optionNameEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    _buttonGroup = new QButtonGroup(this);
+    _buttonGroup->setExclusive(true);
+
+    QList<IOptionPage*> options = IOptionPage::allOptionsPages();
+    for (IOptionPage* option : options)
+    {
+        QPushButton* newButton = new QPushButton(option->getIcon(), option->getDisplayName(), this);
+        newButton->setCheckable(true);
+        newButton->setFocusPolicy(Qt::TabFocus);
+        newButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        const int stkIdx = ui->optionStackedWidget->addWidget(option->getOptionWidget());
+        _buttonGroup->addButton(newButton, stkIdx);
+        ui->buttonLayout->addWidget(newButton);
+        ui->buttonLayout->setAlignment(newButton, Qt::AlignTop);
+    }
+    connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
+    {
+        ui->optionStackedWidget->setCurrentIndex(inButtonId);
+    });
+
+    _buttonGroup->button(0)->click();
+
 
     show();
 }

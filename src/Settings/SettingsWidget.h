@@ -8,6 +8,7 @@
 #include <QWidget>
 
 
+class QButtonGroup;
 class CategoryListView;
 class QLabel;
 class QListView;
@@ -33,7 +34,7 @@ public:
 private:
     void applyTheme();
 
-
+    QButtonGroup* _buttonGroup;
     Ui::SettingsWidget* ui;
 };
 

@@ -40,6 +40,7 @@ public:
 
     QString getDisplayName() const;
     QString getIconPath() const;
+    QIcon getIcon() const;
 
     virtual QWidget* getOptionWidget();
     virtual void apply();

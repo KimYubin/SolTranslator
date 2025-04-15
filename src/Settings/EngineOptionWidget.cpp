@@ -5,6 +5,7 @@
 
 #include "EngineOptionWidget.h"
 
+#include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
 #include "../FinTranslatorMainWidget.h"
 
@@ -18,6 +19,16 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     setLayout(ui->mainLayout);
 
     ui->themeButton->setCheckable(false);
+    QString api = ConfigManager::get().getAPI();
+    if (api.isEmpty() == false)
+    {
+        QString asterisk = QString(api.size(), '*');
+        ui->apiInputLine->setPlaceholderText(asterisk);
+    }
+    connect(ui->apiInputLine, &QLineEdit::textEdited, this, [](const QString& inStr)
+    {
+        ConfigManager::get().setAPI(inStr);
+    });
 
     connect(ui->themeButton, &QPushButton::clicked, this, &EngineOptionWidget::applyTheme);
 }

@@ -32,10 +32,6 @@ private slots:
     void on_findButton_clicked();
 
 private:
-    void loadSettings();
-    void loadAPI();
-
-private:
     Ui::TextEditTranslateWidget* ui;
 };
 

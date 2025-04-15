@@ -38,8 +38,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         Qt::LinksAccessibleByKeyboard |
         Qt::TextEditable
     );
-    
-    loadSettings();
+
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()
@@ -54,8 +53,6 @@ void TextEditTranslateWidget::focusTextOrigin()
 
 void TextEditTranslateWidget::on_findButton_clicked()
 {
-    loadAPI();
-
     const QString orignText = ui->textOrigin->toPlainText();
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
@@ -70,28 +67,3 @@ void TextEditTranslateWidget::on_findButton_clicked()
     });
 }
 
-void TextEditTranslateWidget::loadSettings()
-{
-    loadAPI();
-}
-
-void TextEditTranslateWidget::loadAPI()
-{
-    QString newAPI = ui->lineEdit_api->text();
-    if (newAPI.isEmpty())
-    {
-        QString oldAPI = ConfigManager::get().getAPI();
-        if (oldAPI.isEmpty() == false)
-        {
-            QString asteriskAPI = oldAPI.first(3) + "***...";
-            ui->lineEdit_api->setText(asteriskAPI);
-        }
-    }
-    else
-    {
-        if (newAPI.last(6) != "***...")
-        {
-            ConfigManager::get().setAPI(newAPI);
-        }
-    }
-}

@@ -31,6 +31,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     ui->findEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     ui->optionNameEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
+    // ~=====================
+    // option setup
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 

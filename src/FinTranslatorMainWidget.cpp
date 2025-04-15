@@ -32,6 +32,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 {
     qApp->setQuitOnLastWindowClosed(false);
 
+    setWindowTitle(tr("FinTranslator"));
+
     ui->setupUi(this);
 
     setLayout(ui->mainLayout);
@@ -53,6 +55,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     for (const auto& [button, childWidget] : buttonList)
     {
         button->setCheckable(true);
+        button->setFocusPolicy(Qt::TabFocus);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
@@ -62,15 +65,18 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     {
         ui->mainStackedWidget->setCurrentIndex(inButtonId);
     });
+    _buttonGroup->button(0)->click();
+    _textEditTranslate->focusTextOrigin();
+
 
     // ~====================
     // setting button
+    ui->button_9_setting->setCheckable(false);
+    ui->button_9_setting->setFocusPolicy(Qt::TabFocus);
     connect(ui->button_9_setting, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
-
-    // ~====================
-    // button icon
     ui->button_9_setting->setIcon(QIcon(":/img/settings_gear_img"));
-    
+
+
     // ~====================
     // tray icon
     createActions();
@@ -81,7 +87,6 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     applyTheme();
 
-    setWindowTitle(tr("FinTranslator"));
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()

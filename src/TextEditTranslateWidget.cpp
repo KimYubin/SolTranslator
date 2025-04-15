@@ -24,12 +24,32 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     
     setLayout(ui->mainLayout);
 
+    ui->textOrigin->setTabChangesFocus(true);
+    ui->textTranslate->setTabChangesFocus(true);
+    ui->textTranslate->setReadOnly(true);
+    ui->textTranslate->setMouseTracking(false);
+    QFont textFont = ui->textTranslate->font();
+    textFont.setHintingPreference(QFont::PreferDefaultHinting);
+    ui->textTranslate->setFont(textFont);
+    ui->textTranslate->setTextInteractionFlags(
+        Qt::TextSelectableByMouse |
+        Qt::TextSelectableByKeyboard |
+        Qt::LinksAccessibleByMouse |
+        Qt::LinksAccessibleByKeyboard |
+        Qt::TextEditable
+    );
+    
     loadSettings();
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()
 {
     delete ui;
+}
+
+void TextEditTranslateWidget::focusTextOrigin()
+{
+    ui->textOrigin->setFocus();
 }
 
 void TextEditTranslateWidget::on_findButton_clicked()

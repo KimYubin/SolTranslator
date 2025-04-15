@@ -26,6 +26,8 @@ public:
     explicit TextEditTranslateWidget(QWidget* parent = nullptr);
     ~TextEditTranslateWidget() override;
 
+    void focusTextOrigin();
+
 private slots:
     void on_findButton_clicked();
 

@@ -26,7 +26,7 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
     request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPI()).toStdString().c_str());
 
     QJsonObject json;
-    json["model"] = "gpt-4o-mini";
+    json["model"] = "gpt-4.1-nano"; //"gpt-4o-mini";
     if (bIsStreaming)
     {
         json["stream"] = bIsStreaming; // streaming

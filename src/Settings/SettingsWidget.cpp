@@ -29,25 +29,26 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui->findEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    ui->optionNameEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    ui->optionLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     // ~=====================
     // option setup
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    QList<IOptionPage*> options = IOptionPage::allOptionsPages();
+    std::unordered_set<IOptionPage*> options = IOptionPage::allOptionsPages();
     for (IOptionPage* option : options)
     {
-        QPushButton* newButton = new QPushButton(option->getIcon(), option->getDisplayName(), this);
-        newButton->setCheckable(true);
-        newButton->setFocusPolicy(Qt::TabFocus);
-        newButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        QPushButton* selectButton = new QPushButton(option->getIcon(), option->getDisplayName(), this);
+        selectButton->setProperty("selectButton", true);
+        selectButton->setCheckable(true);
+        selectButton->setFocusPolicy(Qt::TabFocus);
+        selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
         const int stkIdx = ui->optionStackedWidget->addWidget(option->getOptionWidget());
-        _buttonGroup->addButton(newButton, stkIdx);
-        ui->buttonLayout->addWidget(newButton);
-        ui->buttonLayout->setAlignment(newButton, Qt::AlignTop);
+        _buttonGroup->addButton(selectButton, stkIdx);
+        ui->buttonLayout->addWidget(selectButton);
+        ui->buttonLayout->setAlignment(selectButton, Qt::AlignTop);
     }
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
     {

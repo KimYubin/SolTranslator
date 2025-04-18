@@ -23,6 +23,8 @@
 #SimpleTranslatePopup QTextEdit
 {
  	color: rgb(250, 250, 250);
+  color: rgb(212, 212, 212);
+  color: rgb(225, 225, 225);
   font-size: 14pt;
   font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
 }

@@ -36,7 +36,7 @@ public:
     IOptionPage();
     ~IOptionPage() override;
 
-    static const QList<IOptionPage*> allOptionsPages();
+    static const std::unordered_set<IOptionPage*> allOptionsPages();
 
     QString getDisplayName() const;
     QString getIconPath() const;

@@ -2,22 +2,10 @@
 /* QtMaterial - https://github.com/UN-GCPDS/qt-material
 /* By Yeison Cardona - GCPDS
 /*  ------------------------------------------------------------------------  */
-#FinTranslatorMainWidget
 *{
-  color: #111111;
-
-  font-family: Roboto;
-
-
-  font-size: 13px;
-
-
-
-  line-height: 13px;
-
-
-  selection-background-color: #6effe8;
-  selection-color: #000000;
+  color:rgb(22, 22, 22);
+  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  font-size: 14px;
 }
 
 
@@ -26,6 +14,73 @@
    outline: none;
 }
 
+/*  ------------------------------------------------------------------------  */
+/*  QPushButton  */
+
+QPushButton {
+  margin: 0px;
+  padding: 1px 16px;
+  height: 32px;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color:#6fc5ff;
+}
+
+QPushButton:checked,
+QPushButton:pressed {
+  color: #31363b;
+  background-color:#6fc5ff;
+}
+
+QPushButton:flat {
+  margin: 0px;
+  color: #6fc5ff;
+  border: none;
+  background-color: transparent;
+}
+
+QPushButton:flat:hover {
+  background-color:rgb(179, 225, 255);
+}
+QPushButton:flat:pressed,
+QPushButton:flat:checked {
+  background-color: rgb(179, 225, 255);
+}
+QPushButton:flat:disabled {
+  color: rgb(49, 51, 53);
+  background-color: rgb(84, 99, 107);
+  border: none;
+}
+
+QPushButton:disabled {
+  border: 2px solid rgb(49, 51, 53);
+}
+
+QPushButton:disabled {
+  color: rgba(79, 91, 98, 0.75);
+  border-color:  #4f5b62;
+}
+
+QPushButton:checked:disabled {
+  color: #232629;
+  background-color: #4f5b62;
+  border-color:  #4f5b62;
+}
+
+QToolButton:focus,
+QPushButton:focus {
+  background-color: rgba(29, 233, 182, 0.2);
+}
+
+QPushButton:checked:focus,
+QPushButton:pressed:focus {
+  background-color: rgba(29, 233, 182, 0.8);
+}
+
+QPushButton:flat:focus {
+  border: none;
+  background-color: rgba(29, 233, 182, 0.2);
+}
 /*  ------------------------------------------------------------------------  */
 /*  Custom colors  */
 
@@ -134,9 +189,9 @@
 #FinTranslatorMainWidget QTextEdit,
 #FinTranslatorMainWidget QLineEdit,
 #FinTranslatorMainWidget QPushButton {
-  color: #1de9b6;
-  background-color: #31363b;
-  border: 2px solid #1de9b6;
+  
+  background-color: rgb(179, 225, 255);
+  border: 2px solid rgb(179, 225, 255);
   border-radius: 4px;
   height: 32px;
 }
@@ -285,79 +340,6 @@
   /* image: url(icon:/disabled/downarrow.svg); */
 }
 
-/*  ------------------------------------------------------------------------  */
-/*  QPushButton  */
-
-#FinTranslatorMainWidget QPushButton {
-  text-transform: uppercase;
-  margin: 0px;
-  padding: 1px 16px;
-  height: 32px;
-  font-weight: bold;
-
-  
-    border-radius: 4px;
-  
-}
-
-#FinTranslatorMainWidget QPushButton:checked,
-#FinTranslatorMainWidget QPushButton:pressed {
-  color: #31363b;
-  background-color: #1de9b6;
-}
-
-#FinTranslatorMainWidget QPushButton:flat {
-  margin: 0px;
-  color: #1de9b6;
-  border: none;
-  background-color: transparent;
-}
-
-#FinTranslatorMainWidget QPushButton:flat:hover {
-  background-color: rgba(29, 233, 182, 0.1);
-}
-
-#FinTranslatorMainWidget QPushButton:flat:pressed,
-#FinTranslatorMainWidget QPushButton:flat:checked {
-  background-color: rgba(29, 233, 182, 0.1);
-}
-
-#FinTranslatorMainWidget QPushButton:disabled {
-  color: rgba(79, 91, 98, 0.75);
-  background-color: transparent;
-  border-color:  #4f5b62;
-}
-
-#FinTranslatorMainWidget QPushButton:flat:disabled {
-  color: rgba(79, 91, 98, 0.75);
-  background-color: rgba(79, 91, 98, 0.25);
-  border: none;
-}
-
-#FinTranslatorMainWidget QPushButton:disabled {
-  border: 2px solid rgba(79, 91, 98, 0.75);
-}
-
-#FinTranslatorMainWidget QPushButton:checked:disabled {
-  color: #232629;
-  background-color: #4f5b62;
-  border-color:  #4f5b62;
-}
-
-#FinTranslatorMainWidget QToolButton:focus,
-#FinTranslatorMainWidget QPushButton:focus {
-  background-color: rgba(29, 233, 182, 0.2);
-}
-
-#FinTranslatorMainWidget QPushButton:checked:focus,
-#FinTranslatorMainWidget QPushButton:pressed:focus {
-  background-color: rgba(29, 233, 182, 0.8);
-}
-
-#FinTranslatorMainWidget QPushButton:flat:focus {
-  border: none;
-  background-color: rgba(29, 233, 182, 0.2);
-}
 
 /*  ------------------------------------------------------------------------  */
 /*  QTabBar  */

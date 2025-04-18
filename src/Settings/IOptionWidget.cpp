@@ -4,9 +4,11 @@
 
 #include "IOptionWidget.h"
 
-static QList<IOptionPage*>& optionsPages()
+#include <unordered_set>
+
+static std::unordered_set<IOptionPage*>& optionsPages()
 {
-    static QList<IOptionPage*> staticOptionPages;
+    static std::unordered_set<IOptionPage*> staticOptionPages;
     return staticOptionPages;
 }
 
@@ -32,15 +34,15 @@ void IOptionWidget::finish()
 
 IOptionPage::IOptionPage()
 {
-    optionsPages().append(this);
+    optionsPages().emplace(this);
 }
 
 IOptionPage::~IOptionPage()
 {
-    optionsPages().removeOne(this);
+    optionsPages().erase(this);
 }
 
-const QList<IOptionPage*> IOptionPage::allOptionsPages()
+const std::unordered_set<IOptionPage*> IOptionPage::allOptionsPages()
 {
     return optionsPages();
 }

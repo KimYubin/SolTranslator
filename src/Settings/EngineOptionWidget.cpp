@@ -35,7 +35,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 
 EngineOptionWidget::~EngineOptionWidget()
 {
-    
+    delete ui;
 }
 
 void EngineOptionWidget::apply()

@@ -8,6 +8,7 @@
 #include <QObject>
 
 
+enum class EngineType;
 enum class LangType;
 
 class FinTypes
@@ -17,7 +18,7 @@ class FinTypes
 struct EngineName
 {
 public:
-    static const QString OPEN_AI;
+    static QString getName(EngineType inEngineType);
 };
 
 

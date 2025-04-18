@@ -9,6 +9,7 @@
 #include <QRegularExpression>
 
 #include "AsyncManager.h"
+#include "ConfigManager.h"
 #include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
@@ -19,7 +20,7 @@
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
-    SetEngineType(EngineType::OpenAI);
+    
 }
 
 QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
@@ -90,7 +91,8 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
 {
     // 중복은 순서 최신화
-    _cachingTranslateText.push({originText, _currentEngine, targetLang}, translateText);
+    const EngineType engineType = ConfigManager::get().getCurrentEngineType();
+    _cachingTranslateText.push({originText, engineType, targetLang}, translateText);
     if (_cachingTranslateText.size() > _maxCacheLength)
     {
         _cachingTranslateText.pop();
@@ -104,7 +106,8 @@ std::tuple<bool, QString> TranslateManager::findCachingText(const QString& origi
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    const TextCacheKey findCacheKey = TextCacheKey{originText, _currentEngine, targetLang};
+    const EngineType engineType = ConfigManager::get().getCurrentEngineType();
+    const TextCacheKey findCacheKey = TextCacheKey{originText, engineType, targetLang};
     if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
     {
         res = {true, *text_cache};

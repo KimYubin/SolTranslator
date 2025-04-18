@@ -19,7 +19,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     setLayout(ui->mainLayout);
 
     ui->themeButton->setCheckable(false);
-    QString api = ConfigManager::get().getAPI();
+    QString api = ConfigManager::get().getAPIKey(EngineType::OpenAI);
     if (api.isEmpty() == false)
     {
         QString asterisk = QString(api.size(), '*');
@@ -27,7 +27,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     }
     connect(ui->apiInputLine, &QLineEdit::textEdited, this, [](const QString& inStr)
     {
-        ConfigManager::get().setAPI(inStr);
+        ConfigManager::get().setAPIKey(EngineType::OpenAI, inStr);
     });
 
     connect(ui->themeButton, &QPushButton::clicked, this, &EngineOptionWidget::applyTheme);

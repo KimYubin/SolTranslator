@@ -8,17 +8,44 @@
 
 #include "FinTypes.h"
 
-void ConfigManager::setAPI(const QString& inAPI)
+const QString Engine_Type = "Engine_Type";
+const QString API_Key     = "API_Key/";
+
+ConfigManager::ConfigManager()
 {
-    GetAPISetting().setValue(EngineName::OPEN_AI, inAPI);
+    _settings = new QSettings(FinPaths::getApiKeyPath(), QSettings::IniFormat, this);
 }
 
-QString ConfigManager::getAPI()
+
+void ConfigManager::setCurrentEngineType(EngineType inEngineType)
 {
-    return GetAPISetting().value(EngineName::OPEN_AI).toString();
+    _settings->setValue(Engine_Type, EnumToInt(inEngineType));
 }
 
-QSettings ConfigManager::GetAPISetting()
+EngineType ConfigManager::getCurrentEngineType()
 {
-    return QSettings{FinPaths::getApiKeyPath(), QSettings::IniFormat};
+    return static_cast<EngineType>(_settings->value(Engine_Type, EnumToInt(EngineType::OpenAI)).toInt());
+}
+
+
+void ConfigManager::setAPIKey(EngineType inEngineType, const QString& inAPIKey)
+{
+    _settings->setValue(API_Key + EngineName::getName(inEngineType), inAPIKey);
+    _settings->sync();
+}
+
+QString ConfigManager::getAPIKey(EngineType inEngineType)
+{
+    return _settings->value(API_Key + EngineName::getName(inEngineType)).toString();
+}
+
+
+void ConfigManager::setOpenAIModel(const QString& inModelName)
+{
+    _settings->setValue("openai_model", inModelName);
+}
+
+QString ConfigManager::getOpenAIModel()
+{
+    return _settings->value("openai_model", "gpt-4o-mini").toString();
 }

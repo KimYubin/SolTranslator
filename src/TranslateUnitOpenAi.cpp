@@ -23,10 +23,10 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPI()).toStdString().c_str());
+    request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPIKey(EngineType::OpenAI)).toStdString().c_str());
 
     QJsonObject json;
-    json["model"] = "gpt-4.1-nano"; //"gpt-4o-mini";
+    json["model"] = ConfigManager::get().getOpenAIModel();
     if (bIsStreaming)
     {
         json["stream"] = bIsStreaming; // streaming

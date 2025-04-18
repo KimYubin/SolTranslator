@@ -11,9 +11,6 @@
 #include "magic_enum.hpp"
 
 
-const QString EngineName::OPEN_AI = "openai";
-
-
 const QString FinPaths::FinDirName::SAVE = "save";
 const QString FinPaths::FinDirName::HISTORY = "history";
 
@@ -33,6 +30,23 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
 };
+
+QString EngineName::getName(EngineType inEngineType)
+{
+    switch (inEngineType)
+    {
+    case EngineType::None:
+        break;
+    case EngineType::Google:
+        break;
+    case EngineType::OpenAI:
+        break;
+    case EngineType::Size:
+        break;
+    default: ;
+    }
+    return QString{magic_enum::enum_name(inEngineType).data()};
+}
 
 QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath)
 {

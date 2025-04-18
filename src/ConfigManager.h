@@ -7,10 +7,15 @@
 #include <QObject>
 #include <QSettings>
 
+#include "FinTypes.h"
+
 
 class ConfigManager : public QObject
 {
     Q_OBJECT
+
+private:
+    ConfigManager();
 
 public:
     static ConfigManager& get()
@@ -19,14 +24,17 @@ public:
         return *instance;
     }
 
-    void setAPI(const QString& inAPI);
+    void setCurrentEngineType(EngineType inEngineType);
+    EngineType getCurrentEngineType();
 
-    QString getAPI();
+    void setAPIKey(EngineType inEngineType, const QString& inAPIKey);
+    QString getAPIKey(EngineType inEngineType);
+
+    void setOpenAIModel(const QString& inModelName);
+    QString getOpenAIModel();
 
 private:
-    QSettings GetAPISetting();
-
-    ConfigManager() = default;
+    QSettings* _settings;
 };
 
 

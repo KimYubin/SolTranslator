@@ -5,6 +5,7 @@
 #include "TlUnitFactory.h"
 
 
+#include "ConfigManager.h"
 #include "magic_enum.hpp"
 
 #include "TranslateManager.h"
@@ -20,7 +21,7 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
                                              , TranslateManager* translateManager)
 {
     TranslateUnit* tlUnit = nullptr;
-    const EngineType currentEngine = translateManager->GetCurrentEngineType();
+    const EngineType currentEngine = ConfigManager::get().getCurrentEngineType();
     switch (currentEngine)
     {
     case EngineType::None:

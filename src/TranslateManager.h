@@ -40,14 +40,9 @@ public:
 
 
     void updateNewCacheQueue(cache_queue&& newCache);
-    const cache_queue& getCacheQueue() const; 
-    
-    void SetEngineType(EngineType inEngine) { _currentEngine = inEngine; }
-    EngineType GetCurrentEngineType() const { return _currentEngine; };
+    const cache_queue& getCacheQueue() const;
 
 private:
-    EngineType _currentEngine;
-
     // ~===========
     // cache
     int _maxCacheLength = 100;

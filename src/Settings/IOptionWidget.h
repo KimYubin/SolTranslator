@@ -58,6 +58,7 @@ private:
     QString _iconPath;
     std::function<IOptionWidget*()> _optionWidgetCtor;
 
+    int _optionStkId;
     Q_DISABLE_COPY_MOVE(IOptionPage)
 };
 

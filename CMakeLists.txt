@@ -68,6 +68,9 @@ set(PROJECT_SOURCES
         src/Settings/IOptionWidget.h
         src/Settings/EngineOptionWidget.cpp
         src/Settings/EngineOptionWidget.h
+        src/Settings/CommonOptionWidget.cpp
+        src/Settings/CommonOptionWidget.h
+        ui/CommonOptionWidget.ui
 
 )
 

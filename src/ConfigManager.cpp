@@ -47,5 +47,5 @@ void ConfigManager::setOpenAIModel(const QString& inModelName)
 
 QString ConfigManager::getOpenAIModel()
 {
-    return _settings->value("openai_model", "gpt-4o-mini").toString();
+    return _settings->value("openai_model", "gpt-4.1-mini").toString();
 }

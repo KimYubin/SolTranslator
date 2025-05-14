@@ -22,7 +22,7 @@
      <height>481</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="mainLayout" rowstretch="0,0,0">
+   <layout class="QGridLayout" name="mainLayout" rowstretch="0,0">
     <property name="leftMargin">
      <number>20</number>
     </property>

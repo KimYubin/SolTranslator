@@ -13,7 +13,7 @@
 #include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
-#include "SimpleTranslatePopup.h"
+#include "Widgets/SimpleTranslatePopup.h"
 #include "TlUnitFactory.h"
 #include "TranslateUnit.h"
 

@@ -7,9 +7,9 @@
 
 #include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
-#include "../FinTranslatorMainWidget.h"
+#include "../Widgets/FinTranslatorMainWidget.h"
 
-#include "../../ui/ui_EngineOptionWidget.h"
+#include "ui_EngineOptionWidget.h"
 
 EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)

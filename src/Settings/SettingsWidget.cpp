@@ -15,9 +15,9 @@
 #include "IOptionWidget.h"
 
 #include "../FinTranslatorCore.h"
-#include "../FinTranslatorMainWidget.h"
+#include "../Widgets/FinTranslatorMainWidget.h"
 
-#include "../../ui/ui_SettingsWidget.h"
+#include "ui_SettingsWidget.h"
 
 SettingsWidget::SettingsWidget(QWidget* parent)
     : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)

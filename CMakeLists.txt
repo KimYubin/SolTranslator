@@ -20,9 +20,9 @@ set(PROJECT_SOURCES
 
         src/FinTranslatorCore.cpp
         src/FinTranslatorCore.h
-        src/FinTranslatorMainWidget.cpp
-        src/FinTranslatorMainWidget.h
-        ui/FinTranslatorMainWidget.ui
+        src/Widgets/FinTranslatorMainWidget.cpp
+        src/Widgets/FinTranslatorMainWidget.h
+        src/Widgets/FinTranslatorMainWidget.ui
 
         src/TranslateManager.cpp
         src/TranslateManager.h
@@ -53,24 +53,24 @@ set(PROJECT_SOURCES
         src/DataManager.h
         src/AbstractManager.cpp
         src/AbstractManager.h
-        src/SimpleTranslatePopup.cpp
-        src/SimpleTranslatePopup.h
-        ui/SimpleTranslatePopup.ui
-        src/TextEditTranslateWidget.cpp
-        src/TextEditTranslateWidget.h
-        ui/TextEditTranslateWidget.ui
+        src/Widgets/SimpleTranslatePopup.cpp
+        src/Widgets/SimpleTranslatePopup.h
+        src/Widgets/SimpleTranslatePopup.ui
+        src/Widgets/TextEditTranslateWidget.cpp
+        src/Widgets/TextEditTranslateWidget.h
+        src/Widgets/TextEditTranslateWidget.ui
         src/AsyncManager.cpp
         src/AsyncManager.h
         src/Settings/SettingsWidget.cpp
         src/Settings/SettingsWidget.h
-        ui/SettingsWidget.ui
+        src/Settings/SettingsWidget.ui
         src/Settings/IOptionWidget.cpp
         src/Settings/IOptionWidget.h
         src/Settings/EngineOptionWidget.cpp
         src/Settings/EngineOptionWidget.h
         src/Settings/CommonOptionWidget.cpp
         src/Settings/CommonOptionWidget.h
-        ui/CommonOptionWidget.ui
+        src/Settings/CommonOptionWidget.ui
 
 )
 

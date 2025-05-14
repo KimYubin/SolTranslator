@@ -5,7 +5,7 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_CommonOptionWidget.h" resolved
 
 #include "CommonOptionWidget.h"
-#include "../../ui/ui_CommonOptionWidget.h"
+#include "ui_CommonOptionWidget.h"
 
 
 CommonOptionWidget::CommonOptionWidget(QWidget* parent)
@@ -13,6 +13,9 @@ CommonOptionWidget::CommonOptionWidget(QWidget* parent)
     , ui(new Ui::CommonOptionWidget)
 {
     ui->setupUi(this);
+    setLayout(ui->mainLayout);
+
+    
 }
 
 CommonOptionWidget::~CommonOptionWidget()

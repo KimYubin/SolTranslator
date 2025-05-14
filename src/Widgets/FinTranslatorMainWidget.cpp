@@ -16,14 +16,14 @@
 #include <qevent.h>
 #include <qtabbar.h>
 
-#include "ConfigManager.h"
-#include "FinTranslatorCore.h"
+#include "../ConfigManager.h"
+#include "../FinTranslatorCore.h"
 
-#include "Settings/SettingsWidget.h"
+#include "../Settings/SettingsWidget.h"
 #include "TextEditTranslateWidget.h"
-#include "TranslateManager.h"
+#include "../TranslateManager.h"
 
-#include "../ui/ui_FinTranslatorMainWidget.h"
+#include "Widgets/ui_FinTranslatorMainWidget.h"
 
 
 FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)

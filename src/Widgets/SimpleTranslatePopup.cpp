@@ -22,8 +22,8 @@
 #include <QTimer>
 #include <qevent.h>
 
-#include "FinTranslatorCore.h"
-#include "../ui/ui_SimpleTranslatePopup.h"
+#include "../FinTranslatorCore.h"
+#include "Widgets/ui_SimpleTranslatePopup.h"
 
 
 SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)

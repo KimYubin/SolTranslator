@@ -7,7 +7,7 @@
 
 #include <QWidget>
 
-#include "FinTypes.h"
+#include "../FinTypes.h"
 
 class QPushButton;
 class QSizeGrip;

@@ -8,12 +8,12 @@
 
 #include <QPointer>
 
-#include "FinTypes.h"
-#include "ConfigManager.h"
-#include "FinTranslatorCore.h"
-#include "TranslateManager.h"
+#include "../FinTypes.h"
+#include "../ConfigManager.h"
+#include "../FinTranslatorCore.h"
+#include "../TranslateManager.h"
 
-#include "../ui/ui_TextEditTranslateWidget.h"
+#include "Widgets/ui_TextEditTranslateWidget.h"
 
 
 TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)

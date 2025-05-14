@@ -8,7 +8,7 @@
 
 #include "AsyncManager.h"
 #include "DataManager.h"
-#include "FinTranslatorMainWidget.h"
+#include "Widgets/FinTranslatorMainWidget.h"
 #include "TranslateManager.h"
 #include "GlobalHotKeyManager.h"
 

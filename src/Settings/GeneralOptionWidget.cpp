@@ -5,7 +5,14 @@
 // You may need to build the project (run Qt uic code generator) to get "ui_GeneralOptionWidget.h" resolved
 
 #include "GeneralOptionWidget.h"
+
+#include <QPushButton>
+
 #include "ui_GeneralOptionWidget.h"
+
+#include "../FinTranslatorCore.h"
+
+#include "../Widgets/FinTranslatorMainWidget.h"
 
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
@@ -15,7 +22,21 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    
+    // 테마 적용 버튼
+    QPushButton* themeButton = new QPushButton("ThemeButton");
+    themeButton->setCheckable(false);
+    connect(themeButton, &QPushButton::clicked, this, []()
+    {
+        if (finCore->getFinMainWidget())
+        {
+            finCore->getFinMainWidget()->applyTheme();
+        }
+        else
+        {
+            qDebug() << "finMainWidget is invalid";
+        }
+    });
+    ui->mainLayout->addWidget(themeButton);
 }
 
 GeneralOptionWidget::~GeneralOptionWidget()
@@ -47,6 +68,7 @@ GeneralOption::GeneralOption()
     setDisplayName(tr("일반"));
     setIconPath(tr(""));
     setOptionWidgetCtor([]() { return new GeneralOptionWidget(); });
+    setPriority(OptionPriority::GeneralOption);
 }
 
 GeneralOption::~GeneralOption()

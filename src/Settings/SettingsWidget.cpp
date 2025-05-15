@@ -36,7 +36,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    std::unordered_set<IOptionPage*> options = IOptionPage::allOptionsPages();
+    const std::vector<IOptionPage*> options = IOptionPage::sortedOptionsPages();
     for (IOptionPage* option : options)
     {
         QPushButton* selectButton = new QPushButton(option->getIcon(), option->getDisplayName(), this);
@@ -63,6 +63,12 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
 SettingsWidget::~SettingsWidget()
 {
+    const std::unordered_set<IOptionPage*>& options = IOptionPage::allOptionsPages();
+    for (IOptionPage* option : options)
+    {
+        option->finish();
+    }
+    
     delete ui;
 }
 

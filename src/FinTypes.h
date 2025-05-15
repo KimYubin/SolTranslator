@@ -167,5 +167,18 @@ enum FinWidgetMode
 Q_DECLARE_FLAGS(FinWidgetModeFlags, FinWidgetMode)
 Q_DECLARE_OPERATORS_FOR_FLAGS(FinWidgetModeFlags)
 
+enum class OptionPriority
+{
+    None = 999'999
+
+  , GeneralOption = 0
+  , EngineOption
+
+  , AdvancedOption
+  
+  , Size
+};
+
+
 
 #endif //FINTYPES_H

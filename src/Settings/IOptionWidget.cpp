@@ -42,9 +42,24 @@ IOptionPage::~IOptionPage()
     optionsPages().erase(this);
 }
 
-const std::unordered_set<IOptionPage*> IOptionPage::allOptionsPages()
+const std::unordered_set<IOptionPage*>& IOptionPage::allOptionsPages()
 {
     return optionsPages();
+}
+
+std::vector<IOptionPage*> IOptionPage::sortedOptionsPages()
+{
+    std::vector<IOptionPage*> sortedOptionPages(optionsPages().begin(), optionsPages().end());
+    std::ranges::sort(sortedOptionPages, IOptionPage::compareOptionsPages);
+    
+    return sortedOptionPages;
+}
+
+bool IOptionPage::compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2)
+{
+    return (inPage1->_priority == inPage2->_priority)
+               ? (inPage1->getDisplayName() < inPage2->getDisplayName())
+               : (inPage1->_priority < inPage2->_priority);
 }
 
 QString IOptionPage::getDisplayName() const
@@ -88,6 +103,10 @@ void IOptionPage::cancel()
 
 void IOptionPage::finish()
 {
+    if (_optionWidget.isNull() == false)
+    {
+        _optionWidget->deleteLater();
+    }
 }
 
 void IOptionPage::setDisplayName(const QString& inDisplayName)
@@ -103,4 +122,9 @@ void IOptionPage::setIconPath(const QString& inIconPath)
 void IOptionPage::setOptionWidgetCtor(const std::function<IOptionWidget*()>& inOptionWidgetCtor)
 {
     _optionWidgetCtor = inOptionWidgetCtor;
+}
+
+void IOptionPage::setPriority(const OptionPriority inPriority)
+{
+    _priority = inPriority;
 }

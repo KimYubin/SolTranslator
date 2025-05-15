@@ -23,13 +23,14 @@ public:
     ~EngineOptionWidget() override;
 
 protected:
-    friend class EngineOption;
     virtual void apply() override;
     virtual void cancel() override;
     virtual void finish() override;
 
     void applyTheme();
 
+private:
+    friend class EngineOption;
     Ui::EngineOptionWidget* ui;
 };
 

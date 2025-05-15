@@ -9,6 +9,8 @@
 #include <QPointer>
 #include <QWidget>
 
+#include "../FinTypes.h"
+
 class FinTranslatorCore;
 
 class IOptionWidget : public QWidget
@@ -36,7 +38,9 @@ public:
     IOptionPage();
     ~IOptionPage() override;
 
-    static const std::unordered_set<IOptionPage*> allOptionsPages();
+    static const std::unordered_set<IOptionPage*>& allOptionsPages();
+    static std::vector<IOptionPage*> sortedOptionsPages();
+    static bool compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2);    
 
     QString getDisplayName() const;
     QString getIconPath() const;
@@ -51,12 +55,15 @@ protected:
     void setDisplayName(const QString& inDisplayName);
     void setIconPath(const QString& inIconPath);
     void setOptionWidgetCtor(const std::function<IOptionWidget*()>& inOptionWidgetCtor);
+    void setPriority(const OptionPriority inPriority);
 
 private:
     QPointer<IOptionWidget> _optionWidget;
+
     QString _displayName;
     QString _iconPath;
     std::function<IOptionWidget*()> _optionWidgetCtor;
+    OptionPriority _priority = OptionPriority::None; // 옵션 정렬 우선 순위
 
     int _optionStkId;
     Q_DISABLE_COPY_MOVE(IOptionPage)

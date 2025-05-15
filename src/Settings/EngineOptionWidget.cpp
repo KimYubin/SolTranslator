@@ -18,7 +18,6 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    ui->themeButton->setCheckable(false);
     QString api = ConfigManager::get().getAPIKey(EngineType::OpenAI);
     if (api.isEmpty() == false)
     {
@@ -30,7 +29,8 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         ConfigManager::get().setAPIKey(EngineType::OpenAI, inStr);
     });
 
-    connect(ui->themeButton, &QPushButton::clicked, this, &EngineOptionWidget::applyTheme);
+    // ui->themeButton->setCheckable(false);
+    // connect(ui->themeButton, &QPushButton::clicked, this, &EngineOptionWidget::applyTheme);
 }
 
 EngineOptionWidget::~EngineOptionWidget()
@@ -73,6 +73,7 @@ EngineOption::EngineOption()
     setDisplayName(tr("번역 엔진"));
     setIconPath(tr(""));
     setOptionWidgetCtor([]() { return new EngineOptionWidget(); });
+    setPriority(OptionPriority::EngineOption);
 }
 
 EngineOption::~EngineOption()

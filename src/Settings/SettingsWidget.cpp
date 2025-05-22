@@ -50,7 +50,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
         ui->buttonLayout->addWidget(selectButton);
         ui->buttonLayout->setAlignment(selectButton, Qt::AlignTop);
     }
-    connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
+    connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {
         ui->optionStackedWidget->setCurrentIndex(inButtonId);
     });

@@ -54,7 +54,7 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
 
     if (bIsStreaming)
     {
-        connect(_reply.data(), &QIODevice::readyRead, this, [=]() { onReadyRead(_reply); });
+        connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
     }
 }
 

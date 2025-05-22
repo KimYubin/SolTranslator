@@ -61,9 +61,9 @@ void TextEditTranslateWidget::on_findButton_clicked()
       , LangType::en
       , LangType::ko
       , ui->textTranslate
-      , [=](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
+      , [this](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
       , ui->textTranslate
-      , [=](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
+      , [this](const QString& inStr) { ui->textTranslate->setPlainText(inStr); }
     });
 }
 

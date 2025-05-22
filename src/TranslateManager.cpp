@@ -41,7 +41,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
     }
 
     SimpleTranslatePopup* simple = new SimpleTranslatePopup();
-    auto runSimpleTranslate = [=](const QString& inOriginText, const TextStyle inTextStyle)
+    auto runSimpleTranslate = [=, this](const QString& inOriginText, const TextStyle inTextStyle)
     {
         QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
             inOriginText

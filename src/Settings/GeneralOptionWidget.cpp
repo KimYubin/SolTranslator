@@ -24,7 +24,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     setLayout(ui->mainLayout);
 
     ui->startRunCheckBox->setChecked(ConfigManager::get().getStartRun());
-    connect(ui->startRunCheckBox, &QCheckBox::checkStateChanged, this, [=](Qt::CheckState inCheckState)
+    connect(ui->startRunCheckBox, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inCheckState)
     {
         ConfigManager::get().setStartRun(inCheckState == Qt::CheckState::Checked);
     });

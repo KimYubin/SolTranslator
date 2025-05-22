@@ -297,7 +297,7 @@ void SimpleTranslatePopup::setupUI()
 
     constexpr QSize topButtonsSize{24, 24};
     auto getTitleLastColumn = [&]() { return ui->titleLayout->columnCount(); };
-    auto setupTitleButton   = [=](QPushButton* inButton)
+    auto setupTitleButton   = [=, this](QPushButton* inButton)
     {
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -420,22 +420,22 @@ void SimpleTranslatePopup::setupUI()
     ui->outerVScrollBar->setSizePolicy(scrollSizePolicy);
 
     // 외부 스크롤바 -> 내부 스크롤바 제어
-    connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [=](const int value)
+    connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [this](const int value)
     {
         ui->resultText->verticalScrollBar()->setValue(value);
     });
 
     // 내부 스크롤바 값 -> 외부 스크롤바에 반영
-    connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [=](int, int)
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int, int)
     {
         syncInOutScrollbar();
     });
-    connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [=](int)
+    connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int)
     {
         syncInOutScrollbar();
     });
     // 문서 정보 반영
-    connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [=]()
+    connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [this]()
     {
         syncInOutScrollbar();
     });

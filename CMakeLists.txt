@@ -71,6 +71,8 @@ set(PROJECT_SOURCES
         src/Settings/GeneralOptionWidget.cpp
         src/Settings/GeneralOptionWidget.h
         src/Settings/GeneralOptionWidget.ui
+        src/FinConstants.cpp
+        src/FinConstants.h
 
 )
 

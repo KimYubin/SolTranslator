@@ -4,17 +4,20 @@
 
 #include "FinTranslatorCore.h"
 
+#include <QApplication>
 #include <QMimeData>
 
 #include "AsyncManager.h"
 #include "DataManager.h"
+#include "FinConstants.h"
+
 #include "Widgets/FinTranslatorMainWidget.h"
 #include "TranslateManager.h"
 #include "GlobalHotKeyManager.h"
 
 FinTranslatorCore* FinTranslatorCore::_self = nullptr;
 
-FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
+FinTranslatorCore::FinTranslatorCore(const QApplication& inQApp, QObject* parent): QObject(parent)
 {
     Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one application object");
     _self = this;
@@ -29,8 +32,22 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     loadCache();
 
+    // parsing
+    QCommandLineParser parser;
+    parser.addOption({Fin::Const::CommandLineOptions::START_UP_RUN.data(), "Started from Windows startup"});
+    parser.process(inQApp);
+
     _finMainWidget = new FinTranslatorMainWidget();
-    _finMainWidget->show();
+
+    // 시작 프로그램 실행시 시스템 트레이에서 실행 
+    if (parser.isSet(Fin::Const::CommandLineOptions::START_UP_RUN.data()))
+    {
+        _finMainWidget->hide();
+    }
+    else
+    {
+        _finMainWidget->show();
+    }
 }
 
 FinTranslatorCore::~FinTranslatorCore()

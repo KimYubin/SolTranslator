@@ -4,8 +4,11 @@
 
 #include "ConfigManager.h"
 
+#include <QCoreApplication>
+#include <QDir>
 #include <QSettings>
 
+#include "FinConstants.h"
 #include "FinTypes.h"
 
 const QString Engine_Type = "Engine_Type";
@@ -47,5 +50,30 @@ void ConfigManager::setOpenAIModel(const QString& inModelName)
 
 QString ConfigManager::getOpenAIModel()
 {
-    return _settings->value("openai_model", "gpt-4.1-mini").toString();
+    // gpt-4o-mini    // gpt-4.1-mini
+    return _settings->value("openai_model", "gpt-4o-mini").toString();
+}
+
+void ConfigManager::setStartRun(const bool inStartRun)
+{
+    _settings->setValue(Fin::Const::CommandLineOptions::START_UP_RUN, inStartRun);
+
+    const QString appName = QCoreApplication::applicationName();
+    const QString appPath = QCoreApplication::applicationFilePath();
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+                     , QSettings::NativeFormat);
+    
+    if (inStartRun)
+    {
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::Const::CommandLineOptions::START_UP_RUN.data());
+    }
+    else
+    {
+        settings.remove(appName);
+    }
+}
+
+bool ConfigManager::getStartRun()
+{
+    return _settings->value(Fin::Const::CommandLineOptions::START_UP_RUN, false).toBool();
 }

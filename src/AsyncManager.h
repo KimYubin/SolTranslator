@@ -5,7 +5,7 @@
 #ifndef ASYNCMANAGER_H
 #define ASYNCMANAGER_H
 
-#include "AbstractManager.h";
+#include "AbstractManager.h"
 
 #include <QtConcurrent>
 #include <QFuture>

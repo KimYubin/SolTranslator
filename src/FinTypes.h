@@ -29,29 +29,11 @@ private:
     static QString getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath);
 
 public:
+    static QString getLogPath();
     static QString getApiKeyPath();
     static QString getTranslateHistoryFilePath();
-
-private:
-    struct FinDirName
-    {
-        static const QString SAVE;
-        static const QString HISTORY;
-    };
-
-    struct FinFileName
-    {
-        static const QString API_KEY;
-        static const QString TRANSLATE_HISTORY;
-    };
 };
 
-
-struct StaticPrompt
-{
-public:
-    static const QString OPEN_AI_PROMPT;
-};
 
 /**
  * enum class 값을 베이스 타입 값으로 static casting합니다.

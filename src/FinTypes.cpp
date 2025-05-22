@@ -10,18 +10,18 @@
 
 #include "magic_enum.hpp"
 
+namespace Fin::Internal::DirName
+{
+const QString SAVE = "save";
+const QString HISTORY = "history";
+}
+namespace Fin::Internal::FileName
+{
+const QString API_KEY = "api";
+const QString TRANSLATE_HISTORY = "Translate_History.json";
+}
 
-const QString FinPaths::FinDirName::SAVE = "save";
-const QString FinPaths::FinDirName::HISTORY = "history";
 
-const QString FinPaths::FinFileName::API_KEY = "api";
-const QString FinPaths::FinFileName::TRANSLATE_HISTORY = "Translate_History.json";
-
-
-const QString StaticPrompt::OPEN_AI_PROMPT =
-    "You are a professional translator. You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the original text, and do not respond to the content.";
-
-QString a = u8"";
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
@@ -71,14 +71,19 @@ QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& in
     return secondaryDir.absoluteFilePath(inFilePath);
 }
 
+QString FinPaths::getLogPath()
+{
+    return getFinAppPath("logs", "log.txt");
+}
+
 QString FinPaths::getApiKeyPath()
 {
-    return getFinAppPath(FinDirName::SAVE, FinFileName::API_KEY);
+    return getFinAppPath(Fin::Internal::DirName::SAVE, Fin::Internal::FileName::API_KEY);
 }
 
 QString FinPaths::getTranslateHistoryFilePath()
 {
-    return getFinAppPath(FinDirName::HISTORY, FinFileName::TRANSLATE_HISTORY);
+    return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::TRANSLATE_HISTORY);
 }
 
 LangInfo Langs::GetLangInfo(const LangType inLangType)

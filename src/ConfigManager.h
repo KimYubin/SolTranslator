@@ -33,6 +33,9 @@ public:
     void setOpenAIModel(const QString& inModelName);
     QString getOpenAIModel();
 
+    void setStartRun(const bool inStartRun);
+    bool getStartRun();
+
 private:
     QSettings* _settings;
 };

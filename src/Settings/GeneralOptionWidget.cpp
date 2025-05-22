@@ -10,6 +10,7 @@
 
 #include "ui_GeneralOptionWidget.h"
 
+#include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
 
 #include "../Widgets/FinTranslatorMainWidget.h"
@@ -21,6 +22,12 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
+
+    ui->startRunCheckBox->setChecked(ConfigManager::get().getStartRun());
+    connect(ui->startRunCheckBox, &QCheckBox::checkStateChanged, this, [=](Qt::CheckState inCheckState)
+    {
+        ConfigManager::get().setStartRun(inCheckState == Qt::CheckState::Checked);
+    });
 
     // 테마 적용 버튼
     QPushButton* themeButton = new QPushButton("ThemeButton");

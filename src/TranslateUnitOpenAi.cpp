@@ -11,6 +11,7 @@
 
 #include "FinTypes.h"
 #include "ConfigManager.h"
+#include "FinConstants.h"
 #include "TranslateManager.h"
 
 TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
@@ -36,7 +37,7 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
 
     QJsonObject systemMessage;
     systemMessage["role"] = "system";
-    systemMessage["content"] = QString(StaticPrompt::OPEN_AI_PROMPT).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    systemMessage["content"] = QString(Fin::Const::Prompt::OPEN_AI.data()).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
     messages.append(systemMessage);
 
     QJsonObject userMessage;

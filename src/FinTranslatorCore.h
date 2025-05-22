@@ -5,6 +5,7 @@
 #ifndef FINTRANSLATORCORE_H
 #define FINTRANSLATORCORE_H
 #include <QObject>
+#include <QApplication>
 
 #include "FinTypes.h"
 
@@ -23,7 +24,7 @@ class FinTranslatorCore : public QObject
     Q_OBJECT
 
 public:
-    explicit FinTranslatorCore(QObject* parent = nullptr);
+    explicit FinTranslatorCore(const QApplication& inQApp, QObject* parent = nullptr);
     ~FinTranslatorCore() override;
 
     static FinTranslatorCore* instance() noexcept { return _self; }

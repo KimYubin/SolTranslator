@@ -12,6 +12,7 @@
 #include <QScrollBar>
 #include <QStyledItemDelegate>
 #include <QScrollArea>
+#include <QListWidget>
 
 #include "IOptionWidget.h"
 
@@ -19,6 +20,12 @@
 #include "../Widgets/FinTranslatorMainWidget.h"
 
 #include "ui_SettingsWidget.h"
+
+
+enum
+{
+    stackIndexRole = Qt::ItemDataRole::UserRole + 1 
+};
 
 SettingsWidget::SettingsWidget(QWidget* parent)
     : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)
@@ -34,46 +41,27 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     // ~=====================
     // option setup
-    // scrollArea
-    QWidget* container       = new QWidget();
-    QVBoxLayout* innerLayout = new QVBoxLayout(container);
-    QScrollArea* scrollArea  = new QScrollArea(this);
-    scrollArea->setWidget(container);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    scrollArea->setAlignment(Qt::AlignTop);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-    ui->buttonLayout->addWidget(scrollArea);
-
-
-    _buttonGroup = new QButtonGroup(this);
-    _buttonGroup->setExclusive(true);
+    ui->listWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    ui->listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+    ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 
     const std::vector<IOptionPage*> options = IOptionPage::sortedOptionsPages();
     for (IOptionPage* option : options)
     {
-        QPushButton* selectButton = new QPushButton(option->getIcon(), option->getDisplayName(), container);
-        selectButton->setProperty("selectButton", true);
-        selectButton->setCheckable(true);
-        selectButton->setFocusPolicy(Qt::TabFocus);
-        selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-
         const int stkIdx = ui->optionStackedWidget->addWidget(option->getOptionWidget());
-        _buttonGroup->addButton(selectButton, stkIdx);
-        innerLayout->addWidget(selectButton);
-        innerLayout->setAlignment(selectButton, Qt::AlignTop);
+
+        QListWidgetItem* listItem = new QListWidgetItem(option->getIcon()
+                                                      , option->getDisplayName()
+                                                      , ui->listWidget);
+        listItem->setData(stackIndexRole, stkIdx);
     }
 
-    // 맨 위 쪽으로 정렬하기 위해 하단에 Spacer 추가
-    innerLayout->addStretch(1);
-
-    connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
+    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](QListWidgetItem* current, QListWidgetItem* previous)
     {
-        ui->optionStackedWidget->setCurrentIndex(inButtonId);
+        ui->optionStackedWidget->setCurrentIndex(current->data(stackIndexRole).toInt());
     });
 
-    _buttonGroup->button(0)->click();
-
+    ui->listWidget->setCurrentRow(0);
 
     show();
 }

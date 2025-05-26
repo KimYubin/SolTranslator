@@ -12,7 +12,9 @@
   background-color:rgba(173, 170, 255, 0.36);
 }
 #SimpleTranslatePopup QPushButton:checked,
-#SimpleTranslatePopup QPushButton:pressed 
+#SimpleTranslatePopup QPushButton:pressed,
+#SimpleTranslatePopup QPushButton:flat:checked,
+#SimpleTranslatePopup QPushButton:flat:pressed
 {
   border: none;
   /* background-color: #ADAAFF; */
@@ -34,7 +36,9 @@
   icon-size: 20px;
 }
 #SimpleTranslatePopup QPushButton#alwaysOnButton:pressed,
-#SimpleTranslatePopup QPushButton#alwaysOnButton:checked
+#SimpleTranslatePopup QPushButton#alwaysOnButton:checked,
+#SimpleTranslatePopup QPushButton#alwaysOnButton:flat:pressed,
+#SimpleTranslatePopup QPushButton#alwaysOnButton:flat:checked
 {
   icon: url(../resource/image/keep_48dp_E3E3E3_FILL1_wght700_GRAD200_opsz48_color.svg);
 }

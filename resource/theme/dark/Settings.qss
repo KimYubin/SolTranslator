@@ -55,3 +55,79 @@
 {
   background-color:  #31363b;
 }
+
+
+
+#SettingsWidget QPushButton {
+  margin: 0px;
+  padding: 1px 16px;
+  height: 32px;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color:#6fc5ff;
+}
+
+#SettingsWidget QPushButton:flat {
+  margin: 0px;
+  color: #6fc5ff;
+  border: none;
+  background-color: transparent;
+}
+
+#SettingsWidget QPushButton:checked,
+#SettingsWidget QPushButton:pressed {
+  color: #31363b;
+  background-color:#6fc5ff;
+}
+
+
+#SettingsWidget QPushButton:flat:hover {
+  background-color:rgb(179, 225, 255);
+}
+#SettingsWidget QPushButton:flat:pressed,
+#SettingsWidget QPushButton:flat:checked {
+  background-color: rgb(179, 225, 255);
+}
+#SettingsWidget QPushButton:flat:disabled {
+  color: rgb(49, 51, 53);
+  background-color: rgb(84, 99, 107);
+  border: none;
+}
+
+#SettingsWidget QPushButton:disabled {
+  border: 2px solid rgb(49, 51, 53);
+}
+
+#SettingsWidget QPushButton:disabled {
+  color: rgba(79, 91, 98, 0.75);
+  border-color:  #4f5b62;
+}
+
+#SettingsWidget QPushButton:checked:disabled {
+  color: #232629;
+  background-color: #4f5b62;
+  border-color:  #4f5b62;
+}
+
+#SettingsWidget QToolButton:focus,
+#SettingsWidget QPushButton:focus {
+  background-color: rgba(29, 233, 182, 0.2);
+}
+
+#SettingsWidget QPushButton:checked:focus,
+#SettingsWidget QPushButton:pressed:focus {
+  background-color: rgba(29, 233, 182, 0.8);
+}
+
+#SettingsWidget QPushButton:flat:focus {
+  border: none;
+  background-color: rgba(29, 233, 182, 0.2);
+}
+
+#SettingsWidget QPushButton 
+{
+  background-color: rgb(179, 225, 255);
+  border: 2px solid rgb(179, 225, 255);
+  border-radius: 4px;
+  height: 32px;
+}

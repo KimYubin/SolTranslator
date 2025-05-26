@@ -9,7 +9,7 @@
 }
 
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 *:focus {
    outline: none;
 }
@@ -17,7 +17,7 @@
 /*  ------------------------------------------------------------------------  */
 /*  QPushButton  */
 
-QPushButton {
+#FinTranslatorMainWidget  QPushButton {
   margin: 0px;
   padding: 1px 16px;
   height: 32px;
@@ -26,111 +26,111 @@ QPushButton {
   background-color:#6fc5ff;
 }
 
-QPushButton:checked,
-QPushButton:pressed {
+#FinTranslatorMainWidget  QPushButton:checked,
+#FinTranslatorMainWidget  QPushButton:pressed {
   color: #31363b;
   background-color:#6fc5ff;
 }
 
-QPushButton:flat {
+#FinTranslatorMainWidget  QPushButton:flat {
   margin: 0px;
   color: #6fc5ff;
   border: none;
   background-color: transparent;
 }
 
-QPushButton:flat:hover {
+#FinTranslatorMainWidget  QPushButton:flat:hover {
   background-color:rgb(179, 225, 255);
 }
-QPushButton:flat:pressed,
-QPushButton:flat:checked {
+#FinTranslatorMainWidget  QPushButton:flat:pressed,
+#FinTranslatorMainWidget  QPushButton:flat:checked {
   background-color: rgb(179, 225, 255);
 }
-QPushButton:flat:disabled {
+#FinTranslatorMainWidget  QPushButton:flat:disabled {
   color: rgb(49, 51, 53);
   background-color: rgb(84, 99, 107);
   border: none;
 }
 
-QPushButton:disabled {
+#FinTranslatorMainWidget  QPushButton:disabled {
   border: 2px solid rgb(49, 51, 53);
 }
 
-QPushButton:disabled {
+#FinTranslatorMainWidget  QPushButton:disabled {
   color: rgba(79, 91, 98, 0.75);
   border-color:  #4f5b62;
 }
 
-QPushButton:checked:disabled {
+#FinTranslatorMainWidget  QPushButton:checked:disabled {
   color: #232629;
   background-color: #4f5b62;
   border-color:  #4f5b62;
 }
 
-QToolButton:focus,
-QPushButton:focus {
+#FinTranslatorMainWidget  QToolButton:focus,
+#FinTranslatorMainWidget  QPushButton:focus {
   background-color: rgba(29, 233, 182, 0.2);
 }
 
-QPushButton:checked:focus,
-QPushButton:pressed:focus {
+#FinTranslatorMainWidget  QPushButton:checked:focus,
+#FinTranslatorMainWidget  QPushButton:pressed:focus {
   background-color: rgba(29, 233, 182, 0.8);
 }
 
-QPushButton:flat:focus {
+#FinTranslatorMainWidget  QPushButton:flat:focus {
   border: none;
   background-color: rgba(29, 233, 182, 0.2);
 }
 /*  ------------------------------------------------------------------------  */
 /*  Custom colors  */
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .danger{
   color: #dc3545;
   background-color: transparent;
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .warning{
   color: #ffc107;
   background-color: transparent;
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .success{
   color: #17a2b8;
   background-color: transparent;
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .danger:disabled{
   color: rgba(220, 53, 69, 0.4);
   border-color: rgba(220, 53, 69, 0.4);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .warning:disabled{
   color: rgba(255, 193, 7, 0.4);
   border-color: rgba(255, 193, 7, 0.4);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .success:disabled{
   color: rgba(23, 162, 184, 0.4);
   border-color: rgba(23, 162, 184, 0.4);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .danger:flat:disabled{
   background-color: rgba(220, 53, 69, 0.1);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .warning:flat:disabled{
   background-color: rgba(255, 193, 7, 0.1);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 .success:flat:disabled{
   background-color: rgba(23, 162, 184, 0.1);
 }
@@ -143,52 +143,52 @@ QPushButton:flat:focus {
   background-color: #31363b;
 }
 
-/* #FinTranslatorMainWidget QGroupBox, */
-#FinTranslatorMainWidget QFrame {
+/* #FinTranslatorMainWidget  QGroupBox, */
+#FinTranslatorMainWidget  QFrame {
   background-color: #31363b;
   border: 2px solid #4f5b62;
   border-radius: 4px;
 }
 
-/* #FinTranslatorMainWidget QGroupBox.fill_background, */
-#FinTranslatorMainWidget QFrame.fill_background {
+/* #FinTranslatorMainWidget  QGroupBox.fill_background, */
+#FinTranslatorMainWidget  QFrame.fill_background {
   background-color: #232629;
   border: 2px solid #232629;
   border-radius: 4px;
 }
 
-#FinTranslatorMainWidget QSplitter {
+#FinTranslatorMainWidget  QSplitter {
   background-color: transparent;
   border: none
 }
 
-#FinTranslatorMainWidget QStatusBar {
+#FinTranslatorMainWidget  QStatusBar {
   color: #ffffff;
   background-color: rgba(79, 91, 98, 0.2);
   border-radius: 0px;
 }
 
-#FinTranslatorMainWidget QScrollArea,
-#FinTranslatorMainWidget QStackedWidget,
-#FinTranslatorMainWidget QWidget > QToolBox,
-#FinTranslatorMainWidget QToolBox > QWidget,
-#FinTranslatorMainWidget QTabWidget > QWidget {
+#FinTranslatorMainWidget  QScrollArea,
+#FinTranslatorMainWidget  QStackedWidget,
+#FinTranslatorMainWidget  QWidget > QToolBox,
+#FinTranslatorMainWidget  QToolBox > QWidget,
+#FinTranslatorMainWidget  QTabWidget > QWidget {
   border: none;
 }
 
-#FinTranslatorMainWidget QTabWidget::pane {
+#FinTranslatorMainWidget  QTabWidget::pane {
   border: none;
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  Inputs  */
 
-#FinTranslatorMainWidget QDateTimeEdit,
-#FinTranslatorMainWidget QSpinBox,
-#FinTranslatorMainWidget QDoubleSpinBox,
-#FinTranslatorMainWidget QTextEdit,
-#FinTranslatorMainWidget QLineEdit,
-#FinTranslatorMainWidget QPushButton {
+#FinTranslatorMainWidget  QDateTimeEdit,
+#FinTranslatorMainWidget  QSpinBox,
+#FinTranslatorMainWidget  QDoubleSpinBox,
+#FinTranslatorMainWidget  QTextEdit,
+#FinTranslatorMainWidget  QLineEdit,
+#FinTranslatorMainWidget  QPushButton {
   
   background-color: rgb(179, 225, 255);
   border: 2px solid rgb(179, 225, 255);
@@ -196,13 +196,13 @@ QPushButton:flat:focus {
   height: 32px;
 }
 
-#FinTranslatorMainWidget QDateTimeEdit,
-#FinTranslatorMainWidget QSpinBox,
-#FinTranslatorMainWidget QDoubleSpinBox,
-#FinTranslatorMainWidget QTreeView,
-#FinTranslatorMainWidget QListView,
-#FinTranslatorMainWidget QLineEdit,
-#FinTranslatorMainWidget QComboBox {
+#FinTranslatorMainWidget  QDateTimeEdit,
+#FinTranslatorMainWidget  QSpinBox,
+#FinTranslatorMainWidget  QDoubleSpinBox,
+#FinTranslatorMainWidget  QTreeView,
+#FinTranslatorMainWidget  QListView,
+#FinTranslatorMainWidget  QLineEdit,
+#FinTranslatorMainWidget  QComboBox {
   color: #000000;
   padding-left: 16px;
   border-radius: 0px;
@@ -215,24 +215,24 @@ QPushButton:flat:focus {
   border-width: 0 0 2px 0;
 }
 
-#FinTranslatorMainWidget QPlainTextEdit {
+#FinTranslatorMainWidget  QPlainTextEdit {
   border-radius: 4px;
   padding: 8px 16px;
   background-color: #31363b;
   border: 2px solid #4f5b62;
 }
 
-#FinTranslatorMainWidget QTextEdit {
+#FinTranslatorMainWidget  QTextEdit {
   padding: 8px 16px;
   border-radius: 4px;
   background-color: #232629;
 }
 
-#FinTranslatorMainWidget QDateTimeEdit:disabled,
-#FinTranslatorMainWidget QSpinBox:disabled,
-#FinTranslatorMainWidget QDoubleSpinBox:disabled,
-#FinTranslatorMainWidget QTextEdit:disabled,
-#FinTranslatorMainWidget QLineEdit:disabled {
+#FinTranslatorMainWidget  QDateTimeEdit:disabled,
+#FinTranslatorMainWidget  QSpinBox:disabled,
+#FinTranslatorMainWidget  QDoubleSpinBox:disabled,
+#FinTranslatorMainWidget  QTextEdit:disabled,
+#FinTranslatorMainWidget  QLineEdit:disabled {
   color: rgba(255, 255, 255, 0.2);
   background-color: rgba(35, 38, 41, 0.3);
   border: 2px solid #232629;
@@ -247,7 +247,7 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QComboBox  */
 
-#FinTranslatorMainWidget QComboBox {
+#FinTranslatorMainWidget  QComboBox {
   color: #000000;
   border: 2px solid #1de9b6;
   border-radius: 0px;
@@ -259,55 +259,55 @@ QPushButton:flat:focus {
   border-width: 0 0 2px 0;
 }
 
-#FinTranslatorMainWidget QComboBox:disabled {
+#FinTranslatorMainWidget  QComboBox:disabled {
   color: rgba(255, 255, 255, 0.2);
   background-color: rgba(35, 38, 41, 0.3);
   border-bottom: 2px solid #232629;
 }
 
-#FinTranslatorMainWidget QComboBox::drop-down {
+#FinTranslatorMainWidget  QComboBox::drop-down {
   border: none;
   color: #1de9b6;
   width: 20px;
 }
 
-#FinTranslatorMainWidget QComboBox::down-arrow {
+#FinTranslatorMainWidget  QComboBox::down-arrow {
   /* image: url(icon:/active/downarrow.svg); */
   margin-right: 12px;
 }
 
-#FinTranslatorMainWidget QComboBox::down-arrow:focus {
+#FinTranslatorMainWidget  QComboBox::down-arrow:focus {
   /* image: url(icon:/primary/downarrow.svg); */
   margin-right: 12px;
 }
 
-#FinTranslatorMainWidget QComboBox::down-arrow:disabled {
+#FinTranslatorMainWidget  QComboBox::down-arrow:disabled {
   /* image: url(icon:/disabled/downarrow.svg); */
   margin-right: 12px;
 }
 
-#FinTranslatorMainWidget QComboBox QAbstractItemView {
+#FinTranslatorMainWidget  QComboBox QAbstractItemView {
   background-color: #232629;
   border: 2px solid #4f5b62;
   border-radius: 4px;
 }
 
-#FinTranslatorMainWidget QComboBox[frame='false'] {
+#FinTranslatorMainWidget  QComboBox[frame='false'] {
   color: #ffffff;
   background-color: transparent;
   border: 1px solid transparent;
 }
 
-#FinTranslatorMainWidget QComboBox[frame='false']:disabled {
+#FinTranslatorMainWidget  QComboBox[frame='false']:disabled {
   color: rgba(255, 255, 255, 0.2);
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  Spin buttons  */
 
-#FinTranslatorMainWidget QDateTimeEdit::up-button,
-#FinTranslatorMainWidget QDoubleSpinBox::up-button,
-#FinTranslatorMainWidget QSpinBox::up-button {
+#FinTranslatorMainWidget  QDateTimeEdit::up-button,
+#FinTranslatorMainWidget  QDoubleSpinBox::up-button,
+#FinTranslatorMainWidget  QSpinBox::up-button {
   subcontrol-origin: border;
   subcontrol-position: top right;
   width: 20px;
@@ -316,15 +316,15 @@ QPushButton:flat:focus {
   margin-right: 5px;
 }
 
-#FinTranslatorMainWidget QDateTimeEdit::up-button:disabled,
-#FinTranslatorMainWidget QDoubleSpinBox::up-button:disabled,
-#FinTranslatorMainWidget QSpinBox::up-button:disabled {
+#FinTranslatorMainWidget  QDateTimeEdit::up-button:disabled,
+#FinTranslatorMainWidget  QDoubleSpinBox::up-button:disabled,
+#FinTranslatorMainWidget  QSpinBox::up-button:disabled {
   /* image: url(icon:/disabled/uparrow.svg); */
 }
 
-#FinTranslatorMainWidget QDateTimeEdit::down-button,
-#FinTranslatorMainWidget QDoubleSpinBox::down-button,
-#FinTranslatorMainWidget QSpinBox::down-button {
+#FinTranslatorMainWidget  QDateTimeEdit::down-button,
+#FinTranslatorMainWidget  QDoubleSpinBox::down-button,
+#FinTranslatorMainWidget  QSpinBox::down-button {
   subcontrol-origin: border;
   subcontrol-position: bottom right;
   width: 20px;
@@ -334,9 +334,9 @@ QPushButton:flat:focus {
   margin-right: 5px;
 }
 
-#FinTranslatorMainWidget QDateTimeEdit::down-button:disabled,
-#FinTranslatorMainWidget QDoubleSpinBox::down-button:disabled,
-#FinTranslatorMainWidget QSpinBox::down-button:disabled {
+#FinTranslatorMainWidget  QDateTimeEdit::down-button:disabled,
+#FinTranslatorMainWidget  QDoubleSpinBox::down-button:disabled,
+#FinTranslatorMainWidget  QSpinBox::down-button:disabled {
   /* image: url(icon:/disabled/downarrow.svg); */
 }
 
@@ -348,7 +348,7 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QGroupBox  */
 
-#FinTranslatorMainWidget QGroupBox {
+#FinTranslatorMainWidget  QGroupBox {
   padding-top:  16px;
   padding-left: 12px;
   margin-top: 0.5em;
@@ -359,7 +359,7 @@ QPushButton:flat:focus {
 
 }
 
-#FinTranslatorMainWidget QGroupBox::title {
+#FinTranslatorMainWidget  QGroupBox::title {
   color: rgba(255, 255, 255, 0.67);
   subcontrol-origin: margin;
 
@@ -368,8 +368,8 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QRadioButton and QCheckBox labels  */
 
-#FinTranslatorMainWidget QRadioButton,
-#FinTranslatorMainWidget QCheckBox {
+#FinTranslatorMainWidget  QRadioButton,
+#FinTranslatorMainWidget  QCheckBox {
   spacing: 12px;
   color: #ffffff;
   line-height: 14px;
@@ -378,25 +378,25 @@ QPushButton:flat:focus {
   spacing: 5px;
 }
 
-#FinTranslatorMainWidget QRadioButton:disabled,
-#FinTranslatorMainWidget QCheckBox:disabled {
+#FinTranslatorMainWidget  QRadioButton:disabled,
+#FinTranslatorMainWidget  QCheckBox:disabled {
   color: rgba(255, 255, 255, 0.3);
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  General Indicators  */
 
-/* #FinTranslatorMainWidget QGroupBox::indicator {
+/* #FinTranslatorMainWidget  QGroupBox::indicator {
   width: 24px;
   height: 24px;
   border-radius: 3px;
 } */
 
-#FinTranslatorMainWidget QMenu::indicator,
-#FinTranslatorMainWidget QListView::indicator,
-#FinTranslatorMainWidget QTableWidget::indicator,
-#FinTranslatorMainWidget QRadioButton::indicator
-/* ,#FinTranslatorMainWidget QCheckBox::indicator  */
+#FinTranslatorMainWidget  QMenu::indicator,
+#FinTranslatorMainWidget  QListView::indicator,
+#FinTranslatorMainWidget  QTableWidget::indicator,
+#FinTranslatorMainWidget  QRadioButton::indicator
+/* ,#FinTranslatorMainWidget  QCheckBox::indicator  */
 {
   width: 28px;
   height: 28px;
@@ -406,141 +406,141 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QListView Indicator  */
 
- #FinTranslatorMainWidget QListView::indicator:checked,
-#FinTranslatorMainWidget QListView::indicator:checked:selected,
-#FinTranslatorMainWidget QListView::indicator:checked:focus {
+ #FinTranslatorMainWidget  QListView::indicator:checked,
+#FinTranslatorMainWidget  QListView::indicator:checked:selected,
+#FinTranslatorMainWidget  QListView::indicator:checked:focus {
   /* image: url(icon:/primary/checklist.svg); */
 }
 
-#FinTranslatorMainWidget QListView::indicator:checked:selected:active {
+#FinTranslatorMainWidget  QListView::indicator:checked:selected:active {
   /* image: url(icon:/primary/checklist_invert.svg); */
 }
 
-#FinTranslatorMainWidget QListView::indicator:checked:disabled {
+#FinTranslatorMainWidget  QListView::indicator:checked:disabled {
   /* image: url(icon:/disabled/checklist.svg); */
 }
 
-#FinTranslatorMainWidget QListView::indicator:indeterminate,
-#FinTranslatorMainWidget QListView::indicator:indeterminate:selected,
-#FinTranslatorMainWidget QListView::indicator:indeterminate:focus {
+#FinTranslatorMainWidget  QListView::indicator:indeterminate,
+#FinTranslatorMainWidget  QListView::indicator:indeterminate:selected,
+#FinTranslatorMainWidget  QListView::indicator:indeterminate:focus {
   /* image: url(icon:/primary/checklist_indeterminate.svg); */
 }
 
-#FinTranslatorMainWidget QListView::indicator:indeterminate:selected:active {
+#FinTranslatorMainWidget  QListView::indicator:indeterminate:selected:active {
   /* image: url(icon:/primary/checklist_indeterminate_invert.svg); */
 }
 
-#FinTranslatorMainWidget QListView::indicator:indeterminate:disabled {
+#FinTranslatorMainWidget  QListView::indicator:indeterminate:disabled {
   /* image: url(icon:/disabled/checklist_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QTableView Indicator  */
 
-#FinTranslatorMainWidget QTableView::indicator:enabled:checked,
-#FinTranslatorMainWidget QTableView::indicator:enabled:checked:selected,
-#FinTranslatorMainWidget QTableView::indicator:enabled:checked:focus {
+#FinTranslatorMainWidget  QTableView::indicator:enabled:checked,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:checked:selected,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:checked:focus {
   /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:checked:selected:active {
+#FinTranslatorMainWidget  QTableView::indicator:checked:selected:active {
   /* image: url(icon:/primary/checkbox_checked_invert.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:disabled:checked,
-#FinTranslatorMainWidget QTableView::indicator:disabled:checked:selected,
-#FinTranslatorMainWidget QTableView::indicator:disabled:checked:focus {
+#FinTranslatorMainWidget  QTableView::indicator:disabled:checked,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:checked:selected,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:checked:focus {
   /* image: url(icon:/disabled/checkbox_checked.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:enabled:unchecked,
-#FinTranslatorMainWidget QTableView::indicator:enabled:unchecked:selected,
-#FinTranslatorMainWidget QTableView::indicator:enabled:unchecked:focus {
+#FinTranslatorMainWidget  QTableView::indicator:enabled:unchecked,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:unchecked:selected,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:unchecked:focus {
   /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:unchecked:selected:active {
+#FinTranslatorMainWidget  QTableView::indicator:unchecked:selected:active {
   /* image: url(icon:/primary/checkbox_unchecked_invert.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:disabled:unchecked,
-#FinTranslatorMainWidget QTableView::indicator:disabled:unchecked:selected,
-#FinTranslatorMainWidget QTableView::indicator:disabled:unchecked:focus {
+#FinTranslatorMainWidget  QTableView::indicator:disabled:unchecked,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:unchecked:selected,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:unchecked:focus {
   /* image: url(icon:/disabled/checkbox_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate,
-#FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate:selected,
-#FinTranslatorMainWidget QTableView::indicator:enabled:indeterminate:focus {
+#FinTranslatorMainWidget  QTableView::indicator:enabled:indeterminate,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:indeterminate:selected,
+#FinTranslatorMainWidget  QTableView::indicator:enabled:indeterminate:focus {
   /* image: url(icon:/primary/checkbox_indeterminate.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:indeterminate:selected:active {
+#FinTranslatorMainWidget  QTableView::indicator:indeterminate:selected:active {
   /* image: url(icon:/primary/checkbox_indeterminate_invert.svg); */
 }
 
-#FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate,
-#FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate:selected,
-#FinTranslatorMainWidget QTableView::indicator:disabled:indeterminate:focus {
+#FinTranslatorMainWidget  QTableView::indicator:disabled:indeterminate,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:indeterminate:selected,
+#FinTranslatorMainWidget  QTableView::indicator:disabled:indeterminate:focus {
   /* image: url(icon:/disabled/checkbox_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QCheckBox and QGroupBox Indicator  */
 
-#FinTranslatorMainWidget QCheckBox::indicator:checked,
-#FinTranslatorMainWidget QGroupBox::indicator:checked {
+#FinTranslatorMainWidget  QCheckBox::indicator:checked,
+#FinTranslatorMainWidget  QGroupBox::indicator:checked {
   /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
-#FinTranslatorMainWidget QCheckBox::indicator:unchecked,
-#FinTranslatorMainWidget QGroupBox::indicator:unchecked {
+#FinTranslatorMainWidget  QCheckBox::indicator:unchecked,
+#FinTranslatorMainWidget  QGroupBox::indicator:unchecked {
   /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QCheckBox::indicator:indeterminate,
-#FinTranslatorMainWidget QGroupBox::indicator:indeterminate {
+#FinTranslatorMainWidget  QCheckBox::indicator:indeterminate,
+#FinTranslatorMainWidget  QGroupBox::indicator:indeterminate {
   /* image: url(icon:/primary/checkbox_indeterminate.svg); */
 }
 
-#FinTranslatorMainWidget QCheckBox::indicator:checked:disabled,
-#FinTranslatorMainWidget QGroupBox::indicator:checked:disabled {
+#FinTranslatorMainWidget  QCheckBox::indicator:checked:disabled,
+#FinTranslatorMainWidget  QGroupBox::indicator:checked:disabled {
   /* image: url(icon:/disabled/checkbox_checked.svg); */
 }
 
-#FinTranslatorMainWidget QCheckBox::indicator:unchecked:disabled,
-#FinTranslatorMainWidget QGroupBox::indicator:unchecked:disabled {
+#FinTranslatorMainWidget  QCheckBox::indicator:unchecked:disabled,
+#FinTranslatorMainWidget  QGroupBox::indicator:unchecked:disabled {
   /* image: url(icon:/disabled/checkbox_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QCheckBox::indicator:indeterminate:disabled,
-#FinTranslatorMainWidget QGroupBox::indicator:indeterminate:disabled {
+#FinTranslatorMainWidget  QCheckBox::indicator:indeterminate:disabled,
+#FinTranslatorMainWidget  QGroupBox::indicator:indeterminate:disabled {
   /* image: url(icon:/disabled/checkbox_indeterminate.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QRadioButton Indicator  */
 
-#FinTranslatorMainWidget QRadioButton::indicator:checked {
+#FinTranslatorMainWidget  QRadioButton::indicator:checked {
   /* image: url(icon:/primary/radiobutton_checked.svg); */
 }
 
-#FinTranslatorMainWidget QRadioButton::indicator:unchecked {
+#FinTranslatorMainWidget  QRadioButton::indicator:unchecked {
   /* image: url(icon:/primary/radiobutton_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QRadioButton::indicator:checked:disabled {
+#FinTranslatorMainWidget  QRadioButton::indicator:checked:disabled {
   /* image: url(icon:/disabled/radiobutton_checked.svg); */
 }
 
-#FinTranslatorMainWidget QRadioButton::indicator:unchecked:disabled {
+#FinTranslatorMainWidget  QRadioButton::indicator:unchecked:disabled {
   /* image: url(icon:/disabled/radiobutton_unchecked.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QDockWidget  */
 
-#FinTranslatorMainWidget QDockWidget {
+#FinTranslatorMainWidget  QDockWidget {
   color: #ffffff;
   border: 2px solid #232629;
   titlebar-close-icon: url(icon:/primary/close.svg);
@@ -548,7 +548,7 @@ QPushButton:flat:focus {
   border-radius: 4px;
 }
 
-#FinTranslatorMainWidget QDockWidget::title {
+#FinTranslatorMainWidget  QDockWidget::title {
   text-align: left;
   padding-left: 36px;
   padding: 3px;
@@ -558,20 +558,20 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QComboBox indicator  */
 
-#FinTranslatorMainWidget QComboBox::indicator:checked {
+#FinTranslatorMainWidget  QComboBox::indicator:checked {
   /* image: url(icon:/primary/checklist.svg); */
 }
 
-#FinTranslatorMainWidget QComboBox::indicator:checked:selected {
+#FinTranslatorMainWidget  QComboBox::indicator:checked:selected {
   /* image: url(icon:/primary/checklist_invert.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  Menu Items  */
 
-#FinTranslatorMainWidget QComboBox::item,
-#FinTranslatorMainWidget QCalendarWidget QMenu::item,
-#FinTranslatorMainWidget QMenu::item {
+#FinTranslatorMainWidget  QComboBox::item,
+#FinTranslatorMainWidget  QCalendarWidget QMenu::item,
+#FinTranslatorMainWidget  QMenu::item {
   
     height: 28px;
   
@@ -579,8 +579,8 @@ QPushButton:flat:focus {
   color: #ffffff;
 }
 
-#FinTranslatorMainWidget QCalendarWidget QMenu::item,
-#FinTranslatorMainWidget QMenu::item {
+#FinTranslatorMainWidget  QCalendarWidget QMenu::item,
+#FinTranslatorMainWidget  QMenu::item {
   
     
       padding: 0px 24px 0px 8px;  /* pyside6 or pyqt6 */
@@ -588,96 +588,96 @@ QPushButton:flat:focus {
   
 }
 
-#FinTranslatorMainWidget QComboBox::item:selected,
-#FinTranslatorMainWidget QCalendarWidget QMenu::item:selected,
-#FinTranslatorMainWidget QMenu::item:selected {
+#FinTranslatorMainWidget  QComboBox::item:selected,
+#FinTranslatorMainWidget  QCalendarWidget QMenu::item:selected,
+#FinTranslatorMainWidget  QMenu::item:selected {
   color: #000000;
   background-color: #6effe8;
   border-radius: 0px;
 }
 
-#FinTranslatorMainWidget QComboBox::item:disabled,
-#FinTranslatorMainWidget QCalendarWidget QMenu::item:disabled,
-#FinTranslatorMainWidget QMenu::item:disabled {
+#FinTranslatorMainWidget  QComboBox::item:disabled,
+#FinTranslatorMainWidget  QCalendarWidget QMenu::item:disabled,
+#FinTranslatorMainWidget  QMenu::item:disabled {
   color: rgba(255, 255, 255, 0.3);
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QMenu  */
 
-#FinTranslatorMainWidget QCalendarWidget QMenu,
-#FinTranslatorMainWidget QMenu {
+#FinTranslatorMainWidget  QCalendarWidget QMenu,
+#FinTranslatorMainWidget  QMenu {
   background-color: #232629;
   border: 2px solid #4f5b62;
   border-radius: 4px;
 }
 
-#FinTranslatorMainWidget QMenu::separator {
+#FinTranslatorMainWidget  QMenu::separator {
   height: 2px;
   background-color: #4f5b62;
   margin-left: 2px;
   margin-right: 2px;
 }
 
-#FinTranslatorMainWidget QMenu::right-arrow{
+#FinTranslatorMainWidget  QMenu::right-arrow{
   /* image: url(icon:/primary/rightarrow.svg); */
   width: 16px;
   height: 16px;
 }
 
-#FinTranslatorMainWidget QMenu::right-arrow:selected{
+#FinTranslatorMainWidget  QMenu::right-arrow:selected{
   /* image: url(icon:/disabled/rightarrow.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:non-exclusive:unchecked {
+#FinTranslatorMainWidget  QMenu::indicator:non-exclusive:unchecked {
   /* image: url(icon:/primary/checkbox_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:non-exclusive:unchecked:selected {
+#FinTranslatorMainWidget  QMenu::indicator:non-exclusive:unchecked:selected {
   /* image: url(icon:/primary/checkbox_unchecked_invert.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:non-exclusive:checked {
+#FinTranslatorMainWidget  QMenu::indicator:non-exclusive:checked {
   /* image: url(icon:/primary/checkbox_checked.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:non-exclusive:checked:selected {
+#FinTranslatorMainWidget  QMenu::indicator:non-exclusive:checked:selected {
   /* image: url(icon:/primary/checkbox_checked_invert.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:exclusive:unchecked {
+#FinTranslatorMainWidget  QMenu::indicator:exclusive:unchecked {
   /* image: url(icon:/primary/radiobutton_unchecked.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:exclusive:unchecked:selected {
+#FinTranslatorMainWidget  QMenu::indicator:exclusive:unchecked:selected {
   /* image: url(icon:/primary/radiobutton_unchecked_invert.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:exclusive:checked {
+#FinTranslatorMainWidget  QMenu::indicator:exclusive:checked {
   /* image: url(icon:/primary/radiobutton_checked.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:exclusive:checked:selected {
+#FinTranslatorMainWidget  QMenu::indicator:exclusive:checked:selected {
   /* image: url(icon:/primary/radiobutton_checked_invert.svg); */
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QMenuBar  */
 
-#FinTranslatorMainWidget QMenuBar {
+#FinTranslatorMainWidget  QMenuBar {
   background-color: #232629;
   color: #ffffff;
 }
 
-#FinTranslatorMainWidget QMenuBar::item {
+#FinTranslatorMainWidget  QMenuBar::item {
   height: 32px;
   padding: 8px;
   background-color: transparent;
   color: #ffffff;
 }
 
-#FinTranslatorMainWidget QMenuBar::item:selected,
-#FinTranslatorMainWidget QMenuBar::item:pressed {
+#FinTranslatorMainWidget  QMenuBar::item:selected,
+#FinTranslatorMainWidget  QMenuBar::item:pressed {
   color: #000000;
   background-color: #6effe8;
 }
@@ -685,68 +685,68 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QToolBox  */
 
-#FinTranslatorMainWidget QToolBox::tab {
+#FinTranslatorMainWidget  QToolBox::tab {
   background-color: #232629;
   color: #ffffff;
   border-radius: 4px;
   padding-left: 15px;
 }
 
-#FinTranslatorMainWidget QToolBox::tab:selected,
-#FinTranslatorMainWidget QToolBox::tab:hover {
+#FinTranslatorMainWidget  QToolBox::tab:selected,
+#FinTranslatorMainWidget  QToolBox::tab:hover {
   background-color: rgba(29, 233, 182, 0.2);
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QProgressBar  */
 
-#FinTranslatorMainWidget QProgressBar {
+#FinTranslatorMainWidget  QProgressBar {
   border-radius: 0;
   background-color: #4f5b62;
   text-align: center;
   color: transparent;
 }
 
-#FinTranslatorMainWidget QProgressBar::chunk {
+#FinTranslatorMainWidget  QProgressBar::chunk {
   background-color: #1de9b6;
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QScrollBar  */
 
-#FinTranslatorMainWidget QScrollBar:horizontal {
+#FinTranslatorMainWidget  QScrollBar:horizontal {
   border: 0;
   background: #232629;
   height: 8px;
 }
 
-#FinTranslatorMainWidget QScrollBar:vertical {
+#FinTranslatorMainWidget  QScrollBar:vertical {
   border: 0;
   background: #6298a5b3;
   width: 8px;
 }
 
-#FinTranslatorMainWidget QScrollBar::handle {
+#FinTranslatorMainWidget  QScrollBar::handle {
   background: rgba(29, 233, 182, 0.1);
 }
 
-#FinTranslatorMainWidget QScrollBar::handle:horizontal {
+#FinTranslatorMainWidget  QScrollBar::handle:horizontal {
   min-width: 24px;
 }
 
-#FinTranslatorMainWidget QScrollBar::handle:vertical {
+#FinTranslatorMainWidget  QScrollBar::handle:vertical {
   min-height: 24px;
 }
 
-#FinTranslatorMainWidget QScrollBar::handle:vertical:hover,
-#FinTranslatorMainWidget QScrollBar::handle:horizontal:hover {
+#FinTranslatorMainWidget  QScrollBar::handle:vertical:hover,
+#FinTranslatorMainWidget  QScrollBar::handle:horizontal:hover {
   background: #1de9b6;
 }
 
-#FinTranslatorMainWidget QScrollBar::add-line:vertical,
-#FinTranslatorMainWidget QScrollBar::sub-line:vertical,
-#FinTranslatorMainWidget QScrollBar::add-line:horizontal,
-#FinTranslatorMainWidget QScrollBar::sub-line:horizontal {
+#FinTranslatorMainWidget  QScrollBar::add-line:vertical,
+#FinTranslatorMainWidget  QScrollBar::sub-line:vertical,
+#FinTranslatorMainWidget  QScrollBar::add-line:horizontal,
+#FinTranslatorMainWidget  QScrollBar::sub-line:horizontal {
   border: 0;
   background: transparent;
   width: 0px;
@@ -756,36 +756,36 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QScrollBar-Big  */
 
-#FinTranslatorMainWidget QScrollBar.big:horizontal {
+#FinTranslatorMainWidget  QScrollBar.big:horizontal {
   border: 0;
   background: #232629;
   height: 36px;
 }
 
-#FinTranslatorMainWidget QScrollBar.big:vertical {
+#FinTranslatorMainWidget  QScrollBar.big:vertical {
   border: 0;
   background: #232629;
   width: 36px;
 }
 
-#FinTranslatorMainWidget QScrollBar.big::handle,
-#FinTranslatorMainWidget QScrollBar.big::handle:vertical:hover,
-#FinTranslatorMainWidget QScrollBar.big::handle:horizontal:hover {
+#FinTranslatorMainWidget  QScrollBar.big::handle,
+#FinTranslatorMainWidget  QScrollBar.big::handle:vertical:hover,
+#FinTranslatorMainWidget  QScrollBar.big::handle:horizontal:hover {
   background: #1de9b6;
 }
 
-#FinTranslatorMainWidget QScrollBar.big::handle:horizontal {
+#FinTranslatorMainWidget  QScrollBar.big::handle:horizontal {
   min-width: 24px;
 }
 
-#FinTranslatorMainWidget QScrollBar.big::handle:vertical {
+#FinTranslatorMainWidget  QScrollBar.big::handle:vertical {
   min-height: 24px;
 }
 
-#FinTranslatorMainWidget QScrollBar.big::add-line:vertical,
-#FinTranslatorMainWidget QScrollBar.big::sub-line:vertical,
-#FinTranslatorMainWidget QScrollBar.big::add-line:horizontal,
-#FinTranslatorMainWidget QScrollBar.big::sub-line:horizontal {
+#FinTranslatorMainWidget  QScrollBar.big::add-line:vertical,
+#FinTranslatorMainWidget  QScrollBar.big::sub-line:vertical,
+#FinTranslatorMainWidget  QScrollBar.big::add-line:horizontal,
+#FinTranslatorMainWidget  QScrollBar.big::sub-line:horizontal {
   border: 0;
   background: transparent;
   width: 0px;
@@ -795,37 +795,37 @@ QPushButton:flat:focus {
 /*  ------------------------------------------------------------------------  */
 /*  QSlider  */
 
-#FinTranslatorMainWidget QSlider:horizontal {
+#FinTranslatorMainWidget  QSlider:horizontal {
   min-height: 24px;
   max-height: 24px;
 }
 
-#FinTranslatorMainWidget QSlider:vertical {
+#FinTranslatorMainWidget  QSlider:vertical {
   min-width: 24px;
   max-width: 24px;
 }
 
-#FinTranslatorMainWidget QSlider::groove:horizontal {
+#FinTranslatorMainWidget  QSlider::groove:horizontal {
   height: 4px;
   background: #393939;
   margin: 0 12px;
 }
 
-#FinTranslatorMainWidget QSlider::groove:vertical {
+#FinTranslatorMainWidget  QSlider::groove:vertical {
   width: 4px;
   background: #393939;
   margin: 12px 0;
   border-radius: 24px;
 }
 
-#FinTranslatorMainWidget QSlider::handle:horizontal {
+#FinTranslatorMainWidget  QSlider::handle:horizontal {
   /* image: url(icon:/primary/slider.svg); */
   width: 24px;
   height: 24px;
   margin: -24px -12px;
 }
 
-#FinTranslatorMainWidget QSlider::handle:vertical {
+#FinTranslatorMainWidget  QSlider::handle:vertical {
   /* image: url(icon:/primary/slider.svg); */
   border-radius: 24px;
   width: 24px;
@@ -833,76 +833,76 @@ QPushButton:flat:focus {
   margin: -12px -24px;
 }
 
-#FinTranslatorMainWidget QSlider::add-page {
+#FinTranslatorMainWidget  QSlider::add-page {
 background: #232629;
 }
 
-#FinTranslatorMainWidget QSlider::sub-page {
+#FinTranslatorMainWidget  QSlider::sub-page {
 background: #1de9b6;
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QLabel  */
 
-#FinTranslatorMainWidget QLabel {
+#FinTranslatorMainWidget  QLabel {
   border: none;
   background: transparent;
   color: #ffffff
 }
 
-#FinTranslatorMainWidget QLabel:disabled {
+#FinTranslatorMainWidget  QLabel:disabled {
   color: rgba(255, 255, 255, 0.2)
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  VLines and HLinex  */
 
-#FinTranslatorMainWidget QFrame[frameShape="4"] {
+#FinTranslatorMainWidget  QFrame[frameShape="4"] {
     border-width: 1px 0 0 0;
     background: none;
 }
 
-#FinTranslatorMainWidget QFrame[frameShape="5"] {
+#FinTranslatorMainWidget  QFrame[frameShape="5"] {
     border-width: 0 1px 0 0;
     background: none;
 }
 
-#FinTranslatorMainWidget QFrame[frameShape="4"],
-#FinTranslatorMainWidget QFrame[frameShape="5"] {
+#FinTranslatorMainWidget  QFrame[frameShape="4"],
+#FinTranslatorMainWidget  QFrame[frameShape="5"] {
   border-color: #4f5b62;
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QToolBar  */
 
-#FinTranslatorMainWidget QToolBar {
+#FinTranslatorMainWidget  QToolBar {
   background: #31363b;
   border: 0px solid;
 }
 
-#FinTranslatorMainWidget QToolBar:horizontal {
+#FinTranslatorMainWidget  QToolBar:horizontal {
   border-bottom: 1px solid #4f5b62;
 }
 
-#FinTranslatorMainWidget QToolBar:vertical {
+#FinTranslatorMainWidget  QToolBar:vertical {
   border-right: 1px solid #4f5b62;
 }
 
-#FinTranslatorMainWidget QToolBar::handle:horizontal {
+#FinTranslatorMainWidget  QToolBar::handle:horizontal {
   /* image: url(icon:/primary/toolbar-handle-horizontal.svg); */
 }
 
-#FinTranslatorMainWidget QToolBar::handle:vertical {
+#FinTranslatorMainWidget  QToolBar::handle:vertical {
   /* image: url(icon:/primary/toolbar-handle-vertical.svg); */
 }
 
-#FinTranslatorMainWidget QToolBar::separator:horizontal {
+#FinTranslatorMainWidget  QToolBar::separator:horizontal {
   border-right: 1px solid #4f5b62;
   border-left: 1px solid #4f5b62;
   width: 1px;
 }
 
-#FinTranslatorMainWidget QToolBar::separator:vertical {
+#FinTranslatorMainWidget  QToolBar::separator:vertical {
   border-top: 1px solid #4f5b62;
   border-bottom: 1px solid #4f5b62;
   height: 1px;
@@ -912,7 +912,7 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QToolButton  */
 
-#FinTranslatorMainWidget QToolButton {
+#FinTranslatorMainWidget  QToolButton {
   background: #31363b;
   border: 0px;
   height: 36px;
@@ -922,19 +922,19 @@ background: #1de9b6;
   border-left: 12px solid #31363b;
 }
 
-#FinTranslatorMainWidget QToolButton:hover {
+#FinTranslatorMainWidget  QToolButton:hover {
   background: #4f5b62;
   border-right: 12px solid #4f5b62;
   border-left: 12px solid #4f5b62;
 }
 
-#FinTranslatorMainWidget QToolButton:pressed {
+#FinTranslatorMainWidget  QToolButton:pressed {
   background: #232629;
   border-right: 12px solid #232629;
   border-left: 12px solid #232629;
 }
 
-#FinTranslatorMainWidget QToolButton:checked {
+#FinTranslatorMainWidget  QToolButton:checked {
   background: #4f5b62;
   border-left: 12px solid #4f5b62;
   border-right: 12px solid #1de9b6;
@@ -943,23 +943,23 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  General viewers  */
 
-#FinTranslatorMainWidget QTableView {
+#FinTranslatorMainWidget  QTableView {
   background-color: #31363b;
   border: 1px solid #232629;
   border-radius: 4px;
 }
 
-#FinTranslatorMainWidget QTreeView,
-#FinTranslatorMainWidget QListView {
+#FinTranslatorMainWidget  QTreeView,
+#FinTranslatorMainWidget  QListView {
   border-radius: 4px;
   padding: 4px;
   margin: 0px;
   border: 0px;
 }
 
-#FinTranslatorMainWidget QTableView::item,
-#FinTranslatorMainWidget QTreeView::item,
-#FinTranslatorMainWidget QListView::item {
+#FinTranslatorMainWidget  QTableView::item,
+#FinTranslatorMainWidget  QTreeView::item,
+#FinTranslatorMainWidget  QListView::item {
   padding: 4px;
   min-height: 32px;
   color: #ffffff;
@@ -970,33 +970,33 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  Items Selection */
 
-#FinTranslatorMainWidget QTableView::item:selected,
-#FinTranslatorMainWidget QTreeView::item:selected,
-#FinTranslatorMainWidget QListView::item:selected {
+#FinTranslatorMainWidget  QTableView::item:selected,
+#FinTranslatorMainWidget  QTreeView::item:selected,
+#FinTranslatorMainWidget  QListView::item:selected {
   background-color: rgba(29, 233, 182, 0.2);
   selection-background-color: rgba(29, 233, 182, 0.2);
   color: #ffffff;
   selection-color: #ffffff; /* For Windows */
 }
 
-#FinTranslatorMainWidget QTableView::item:selected:focus,
-#FinTranslatorMainWidget QTreeView::item:selected:focus,
-#FinTranslatorMainWidget QListView::item:selected:focus {
+#FinTranslatorMainWidget  QTableView::item:selected:focus,
+#FinTranslatorMainWidget  QTreeView::item:selected:focus,
+#FinTranslatorMainWidget  QListView::item:selected:focus {
   background-color: #1de9b6;
   selection-background-color: #1de9b6;
   color: #000000;
   selection-color: #000000; /* For Windows */
 }
 
-#FinTranslatorMainWidget QTableView {
+#FinTranslatorMainWidget  QTableView {
   selection-background-color: rgba(29, 233, 182, 0.2);
 }
 
-#FinTranslatorMainWidget QTableView:focus {
+#FinTranslatorMainWidget  QTableView:focus {
   selection-background-color: #1de9b6;
 }
 
-#FinTranslatorMainWidget QTableView::item:disabled {
+#FinTranslatorMainWidget  QTableView::item:disabled {
   color: rgba(255, 255, 255, 0.3);
   selection-color: rgba(255, 255, 255, 0.3);
   background-color: #232629;
@@ -1006,34 +1006,34 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QTreeView  */
 
-#FinTranslatorMainWidget QTreeView::branch{
+#FinTranslatorMainWidget  QTreeView::branch{
   background-color: #232629;
 }
 
-#FinTranslatorMainWidget QTreeView::branch:closed:has-children:has-siblings,
-#FinTranslatorMainWidget QTreeView::branch:closed:has-children:!has-siblings {
+#FinTranslatorMainWidget  QTreeView::branch:closed:has-children:has-siblings,
+#FinTranslatorMainWidget  QTreeView::branch:closed:has-children:!has-siblings {
   /* image: url(icon:/primary/branch-closed.svg); */
 }
 
-#FinTranslatorMainWidget QTreeView::branch:open:has-children:!has-siblings,
-#FinTranslatorMainWidget QTreeView::branch:open:has-children:has-siblings {
+#FinTranslatorMainWidget  QTreeView::branch:open:has-children:!has-siblings,
+#FinTranslatorMainWidget  QTreeView::branch:open:has-children:has-siblings {
   /* image: url(icon:/primary/branch-open.svg); */
 }
 
-#FinTranslatorMainWidget QTreeView::branch:has-siblings:!adjoins-item {
+#FinTranslatorMainWidget  QTreeView::branch:has-siblings:!adjoins-item {
   /* border-image: url(icon:/disabled/vline.svg) 0; */
 }
 
-#FinTranslatorMainWidget QTreeView::branch:has-siblings:adjoins-item {
+#FinTranslatorMainWidget  QTreeView::branch:has-siblings:adjoins-item {
     /* border-image: url(icon:/disabled/branch-more.svg) 0; */
 }
 
-#FinTranslatorMainWidget QTreeView::branch:!has-children:!has-siblings:adjoins-item,
-#FinTranslatorMainWidget QTreeView::branch:has-children:!has-siblings:adjoins-item {
+#FinTranslatorMainWidget  QTreeView::branch:!has-children:!has-siblings:adjoins-item,
+#FinTranslatorMainWidget  QTreeView::branch:has-children:!has-siblings:adjoins-item {
     /* border-image: url(icon:/disabled/branch-end.svg) 0; */
 }
 
-#FinTranslatorMainWidget QTreeView QHeaderView::section {
+#FinTranslatorMainWidget  QTreeView QHeaderView::section {
   border: none;
 }
 
@@ -1041,65 +1041,65 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  Custom buttons  */
 
-#FinTranslatorMainWidget QPushButton.danger {
+#FinTranslatorMainWidget  QPushButton.danger {
   border-color: #dc3545;
   color: #dc3545;
 }
 
-#FinTranslatorMainWidget QPushButton.danger:checked,
-#FinTranslatorMainWidget QPushButton.danger:pressed {
+#FinTranslatorMainWidget  QPushButton.danger:checked,
+#FinTranslatorMainWidget  QPushButton.danger:pressed {
   color: #31363b;
   background-color: #dc3545;
 }
 
-#FinTranslatorMainWidget QPushButton.warning{
+#FinTranslatorMainWidget  QPushButton.warning{
   border-color: #ffc107;
   color: #ffc107;
 }
 
-#FinTranslatorMainWidget QPushButton.warning:checked,
-#FinTranslatorMainWidget QPushButton.warning:pressed {
+#FinTranslatorMainWidget  QPushButton.warning:checked,
+#FinTranslatorMainWidget  QPushButton.warning:pressed {
   color: #31363b;
   background-color: #ffc107;
 }
 
-#FinTranslatorMainWidget QPushButton.success {
+#FinTranslatorMainWidget  QPushButton.success {
   border-color: #17a2b8;
   color: #17a2b8;
 }
 
-#FinTranslatorMainWidget QPushButton.success:checked,
-#FinTranslatorMainWidget QPushButton.success:pressed {
+#FinTranslatorMainWidget  QPushButton.success:checked,
+#FinTranslatorMainWidget  QPushButton.success:pressed {
   color: #31363b;
   background-color: #17a2b8;
 }
 
-#FinTranslatorMainWidget QPushButton.danger:flat:hover {
+#FinTranslatorMainWidget  QPushButton.danger:flat:hover {
   background-color: rgba(220, 53, 69, 0.2);
 }
 
-#FinTranslatorMainWidget QPushButton.danger:flat:pressed,
-#FinTranslatorMainWidget QPushButton.danger:flat:checked {
+#FinTranslatorMainWidget  QPushButton.danger:flat:pressed,
+#FinTranslatorMainWidget  QPushButton.danger:flat:checked {
   background-color: rgba(220, 53, 69, 0.1);
   color: #dc3545;
 }
 
-#FinTranslatorMainWidget QPushButton.warning:flat:hover {
+#FinTranslatorMainWidget  QPushButton.warning:flat:hover {
   background-color: rgba(255, 193, 7, 0.2);
 }
 
-#FinTranslatorMainWidget QPushButton.warning:flat:pressed,
-#FinTranslatorMainWidget QPushButton.warning:flat:checked {
+#FinTranslatorMainWidget  QPushButton.warning:flat:pressed,
+#FinTranslatorMainWidget  QPushButton.warning:flat:checked {
   background-color: rgba(255, 193, 7, 0.1);
   color: #ffc107;
 }
 
-#FinTranslatorMainWidget QPushButton.success:flat:hover {
+#FinTranslatorMainWidget  QPushButton.success:flat:hover {
   background-color: rgba(23, 162, 184, 0.2);
 }
 
-#FinTranslatorMainWidget QPushButton.success:flat:pressed,
-#FinTranslatorMainWidget QPushButton.success:flat:checked {
+#FinTranslatorMainWidget  QPushButton.success:flat:pressed,
+#FinTranslatorMainWidget  QPushButton.success:flat:checked {
   background-color: rgba(23, 162, 184, 0.1);
   color: #17a2b8;
 }
@@ -1107,7 +1107,7 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QTableView  */
 
-#FinTranslatorMainWidget QTableCornerButton::section {
+#FinTranslatorMainWidget  QTableCornerButton::section {
   background-color: #232629;
   border-radius: 0px;
   border-right: 1px solid;
@@ -1115,15 +1115,15 @@ background: #1de9b6;
   border-color: #31363b;
 }
 
-#FinTranslatorMainWidget QTableView {
+#FinTranslatorMainWidget  QTableView {
   alternate-background-color: rgba(35, 38, 41, 0.7);
 }
 
-#FinTranslatorMainWidget QHeaderView {
+#FinTranslatorMainWidget  QHeaderView {
   border: none;
 }
 
-#FinTranslatorMainWidget QHeaderView::section {
+#FinTranslatorMainWidget  QHeaderView::section {
   color: rgba(255, 255, 255, 0.7);
   background-color: #232629;
   padding: 0 24px;
@@ -1134,18 +1134,18 @@ background: #1de9b6;
   border-color: #31363b;
 }
 
-#FinTranslatorMainWidget QHeaderView::section:vertical {
+#FinTranslatorMainWidget  QHeaderView::section:vertical {
 
 }
 
-#FinTranslatorMainWidget QHeaderView::section:horizontal {
+#FinTranslatorMainWidget  QHeaderView::section:horizontal {
 
 }
 
 /*  ------------------------------------------------------------------------  */
 /*  QLCDNumber  */
 
-#FinTranslatorMainWidget QLCDNumber {
+#FinTranslatorMainWidget  QLCDNumber {
   color: #1de9b6;
   background-color:rgba(29, 233, 182, 0.1);
   border: 1px solid rgba(29, 233, 182, 0.3);
@@ -1155,12 +1155,12 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QCalendarWidget  */
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 #qt_calendar_prevmonth {
   qproperty-icon: url(icon:/primary/leftarrow.svg);
 }
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
 #qt_calendar_nextmonth {
   qproperty-icon: url(icon:/primary/rightarrow.svg);
 }
@@ -1168,9 +1168,9 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  Inline QLineEdit  */
 
-#FinTranslatorMainWidget QTreeView QLineEdit,
-#FinTranslatorMainWidget QTableView QLineEdit,
-#FinTranslatorMainWidget QListView QLineEdit {
+#FinTranslatorMainWidget  QTreeView QLineEdit,
+#FinTranslatorMainWidget  QTableView QLineEdit,
+#FinTranslatorMainWidget  QListView QLineEdit {
   color: #ffffff;
   background-color: #232629;
   border: 1px solid unset;
@@ -1186,7 +1186,7 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QToolTip  */
 
-#FinTranslatorMainWidget QToolTip {
+#FinTranslatorMainWidget  QToolTip {
   padding: 4px;
   border: 1px solid #31363b;
   border-radius: 4px;
@@ -1197,7 +1197,7 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QDialog  */
 
-#FinTranslatorMainWidget
+#FinTranslatorMainWidget 
   /* linux */
   QDialog QToolButton,
   QDialog QToolButton:hover,
@@ -1214,7 +1214,7 @@ background: #1de9b6;
     border-radius: 4px;
   }
   
-#FinTranslatorMainWidget QDialog QToolButton:disabled {
+#FinTranslatorMainWidget  QDialog QToolButton:disabled {
   background-color: #232629;
   color: #ffffff
 }
@@ -1222,24 +1222,24 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  Grips  */
 
-#FinTranslatorMainWidget QMainWindow::separator:vertical,
-#FinTranslatorMainWidget QSplitter::handle:horizontal {
+#FinTranslatorMainWidget  QMainWindow::separator:vertical,
+#FinTranslatorMainWidget  QSplitter::handle:horizontal {
   /* image: url(icon:/primary/splitter-horizontal.svg); */
 }
 
-#FinTranslatorMainWidget QMainWindow::separator:horizontal,
-#FinTranslatorMainWidget QSplitter::handle:vertical {
+#FinTranslatorMainWidget  QMainWindow::separator:horizontal,
+#FinTranslatorMainWidget  QSplitter::handle:vertical {
   /* image: url(icon:/primary/splitter-vertical.svg); */
 }
 
-#FinTranslatorMainWidget QSizeGrip {
+#FinTranslatorMainWidget  QSizeGrip {
   /* image: url(icon:/primary/sizegrip.svg); */
   background-color: transparent;
 }
 
-#FinTranslatorMainWidget QMenuBar QToolButton:hover,
-#FinTranslatorMainWidget QMenuBar QToolButton:pressed,
-#FinTranslatorMainWidget QMenuBar QToolButton {
+#FinTranslatorMainWidget  QMenuBar QToolButton:hover,
+#FinTranslatorMainWidget  QMenuBar QToolButton:pressed,
+#FinTranslatorMainWidget  QMenuBar QToolButton {
   border-width: 0;
   border-left: 10px;
   /* border-image: url(icon:/primary/rightarrow2.svg); */
@@ -1249,33 +1249,33 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  Focus  */
 
-#FinTranslatorMainWidget QDateTimeEdit:focus,
-#FinTranslatorMainWidget QSpinBox:focus,
-#FinTranslatorMainWidget QDoubleSpinBox:focus,
-#FinTranslatorMainWidget QLineEdit:focus,
-#FinTranslatorMainWidget QComboBox:focus {
+#FinTranslatorMainWidget  QDateTimeEdit:focus,
+#FinTranslatorMainWidget  QSpinBox:focus,
+#FinTranslatorMainWidget  QDoubleSpinBox:focus,
+#FinTranslatorMainWidget  QLineEdit:focus,
+#FinTranslatorMainWidget  QComboBox:focus {
   color: #1de9b6;
   border: 2px solid #1de9b6;
   border-width: 0 0 2px 0;
 
 }
 
-#FinTranslatorMainWidget QDateTimeEdit::up-button:focus,
-#FinTranslatorMainWidget QDoubleSpinBox::up-button:focus,
-#FinTranslatorMainWidget QSpinBox::up-button:focus {
+#FinTranslatorMainWidget  QDateTimeEdit::up-button:focus,
+#FinTranslatorMainWidget  QDoubleSpinBox::up-button:focus,
+#FinTranslatorMainWidget  QSpinBox::up-button:focus {
   /* image: url(icon:/primary/uparrow.svg); */
 }
 
-#FinTranslatorMainWidget QDateTimeEdit::down-button:focus,
-#FinTranslatorMainWidget QDoubleSpinBox::down-button:focus,
-#FinTranslatorMainWidget QSpinBox::down-button:focus {
+#FinTranslatorMainWidget  QDateTimeEdit::down-button:focus,
+#FinTranslatorMainWidget  QDoubleSpinBox::down-button:focus,
+#FinTranslatorMainWidget  QSpinBox::down-button:focus {
   /* image: url(icon:/primary/downarrow.svg); */
 }
 
-#FinTranslatorMainWidget QMenu::indicator:focus,
-#FinTranslatorMainWidget QListView::indicator:focus,
-#FinTranslatorMainWidget QTableWidget::indicator:focus,
-#FinTranslatorMainWidget QRadioButton::indicator:focus {
+#FinTranslatorMainWidget  QMenu::indicator:focus,
+#FinTranslatorMainWidget  QListView::indicator:focus,
+#FinTranslatorMainWidget  QTableWidget::indicator:focus,
+#FinTranslatorMainWidget  QRadioButton::indicator:focus {
   background-color: rgba(29, 233, 182, 0.2);
   border-radius: 14px;
  }

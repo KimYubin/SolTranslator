@@ -296,8 +296,8 @@ void SimpleTranslatePopup::setupUI()
     // top title layout
 
     constexpr QSize topButtonsSize{24, 24};
-    auto getTitleLastColumn = [&]() { return ui->titleLayout->columnCount(); };
-    auto setupTitleButton   = [=, this](QPushButton* inButton)
+    auto getTitleLastColumn = [this]() { return ui->titleLayout->columnCount(); };
+    auto setupTitleButton   = [=, this](QPushButton* inButton, const Qt::Alignment inAlignment)
     {
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -311,7 +311,7 @@ void SimpleTranslatePopup::setupUI()
         inButton->setFocusPolicy(Qt::TabFocus);
         inButton->setFlat(true);
 
-        ui->titleLayout->addWidget(inButton, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
+        ui->titleLayout->addWidget(inButton, 0, getTitleLastColumn(), inAlignment);
     };
 
     // ~===========
@@ -325,28 +325,29 @@ void SimpleTranslatePopup::setupUI()
     _AlwaysOnButton->setIcon(alwaysIcon);
     _AlwaysOnButton->hide();
 
-    setupTitleButton(_AlwaysOnButton);
+    setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_AlwaysOnButton, &QPushButton::toggled
           , this, &SimpleTranslatePopup::onAlwaysOnToggle);
 
-    // ~==========
+    // ~===========
     // windowModeButton
     _windowModeButton = new QPushButton(this);
     _windowModeButton->setCheckable(true);
     _windowModeButton->setObjectName("windowModeButton");
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
 
-    setupTitleButton(_windowModeButton);
+    setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_windowModeButton, &QPushButton::toggled
           , this, &SimpleTranslatePopup::onWindowModeToggle);
 
 
-    // ~==========
-    // spacer
-    QSpacerItem* topCenterSpacer = new QSpacerItem(150, 24, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    ui->titleLayout->addItem(topCenterSpacer, 0, getTitleLastColumn(), Qt::AlignTop | Qt::AlignCenter);
+    // 좌우 버튼 분리
+    ui->titleLayout->setColumnStretch(getTitleLastColumn() - 1, 1);
+
+    // ~===========
+    // right side
 
     // ~===========
     // minimaize button    
@@ -354,7 +355,7 @@ void SimpleTranslatePopup::setupUI()
     _minimizedButton->setObjectName("minimizedButton");
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
 
-    setupTitleButton(_minimizedButton);
+    setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
     connect(_minimizedButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onMinimized);
 
     // ~===========
@@ -367,7 +368,7 @@ void SimpleTranslatePopup::setupUI()
     maxRestoreIcon.addFile(":/img/restore_button_img", QSize(), QIcon::Normal, QIcon::On);
     _maxRestoreButton->setIcon(maxRestoreIcon);
 
-    setupTitleButton(_maxRestoreButton);
+    setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
     connect(_maxRestoreButton, &QPushButton::toggled, this,&SimpleTranslatePopup::onMaxNormalToggle);
 
     // ~===========
@@ -377,7 +378,7 @@ void SimpleTranslatePopup::setupUI()
     // _closeButton->setIcon(QIcon(":/img/close_button_img"));
     _closeButton->setShortcut(tr("ESC"));
 
-    setupTitleButton(_closeButton);
+    setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 

@@ -11,30 +11,48 @@ QFile logFile;
 QTextStream logStream;
 
 // 메시지 핸들러 함수
-void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-    QString timeStamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    QString logMessage;
+void finMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    QString logType;
 
-    switch (type) {
-    case QtDebugMsg:
-        logMessage = QString("[%1] Debug: %2").arg(timeStamp, msg);
+    switch (type)
+    {
+    case QtMsgType::QtDebugMsg:
+        logType = "Debug";
         break;
-    case QtInfoMsg:
-        logMessage = QString("[%1] Info: %2").arg(timeStamp, msg);
+    case QtMsgType::QtInfoMsg:
+        logType = "Info";
         break;
-    case QtWarningMsg:
-        logMessage = QString("[%1] Warning: %2").arg(timeStamp, msg);
+    case QtMsgType::QtWarningMsg:
+        logType = "Warning";
         break;
-    case QtCriticalMsg:
-        logMessage = QString("[%1] Critical: %2").arg(timeStamp, msg);
+    case QtMsgType::QtCriticalMsg:
+        logType = "Critical";
         break;
-    case QtFatalMsg:
-        logMessage = QString("[%1] Fatal: %2").arg(timeStamp, msg);
-        abort();
+    case QtMsgType::QtFatalMsg:
+        logType = "Fatal";
+        break;
     }
+    const QString timeStamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    const QString logStr    = QString("[%1] %2: %3").arg(timeStamp, logType, msg);
 
-    logStream << logMessage << Qt::endl;
+    logStream << logStr << Qt::endl;
     logStream.flush();
+}
+
+void setupLogFile()
+{
+    // 로그 파일 열기
+    logFile.setFileName(FinPaths::getLogPath());
+    if (!logFile.open(QIODevice::Append | QIODevice::Text))
+    {
+        qCritical() << "Cannot open the log file.";
+        return;
+    }
+    logStream.setDevice(&logFile);
+
+    // 메시지 핸들러 등록
+    qInstallMessageHandler(finMessageHandler);
 }
 
 int main(int argc, char* argv[])
@@ -42,22 +60,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     FinTranslatorCore finTranslatorCore(app);
 
-    // 로그 파일 열기
-    logFile.setFileName(FinPaths::getLogPath());
-    if (!logFile.open(QIODevice::Append | QIODevice::Text))
-    {
-        qCritical() << "로그 파일을 열 수 없습니다.";
-        return -1;
-    }
-    logStream.setDevice(&logFile);
-
-    // 메시지 핸들러 등록
-    qInstallMessageHandler(customMessageHandler);
-
-    // 예제 로그
-    qInfo() << argv;
-    qInfo() << "애플리케이션 시작";
-    qWarning() << "경고 메시지 예시";
+    // setupLogFile();
 
     return app.exec();
 }

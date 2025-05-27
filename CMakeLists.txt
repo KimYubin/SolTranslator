@@ -73,6 +73,10 @@ set(PROJECT_SOURCES
         src/Settings/GeneralOptionWidget.ui
         src/FinConstants.cpp
         src/FinConstants.h
+        src/SubWidgets/SwitchButton.cpp
+        src/SubWidgets/SwitchButton.h
+        src/SubWidgets/ToggleSwitchBox.cpp
+        src/SubWidgets/ToggleSwitchBox.h
 
 )
 

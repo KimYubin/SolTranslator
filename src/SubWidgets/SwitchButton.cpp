@@ -17,8 +17,6 @@ SwitchButton::SwitchButton(QWidget* parent)
     , _barCheckedBrush(QColor("#00B0FF").lighter())
     , _handleBrush(Qt::white)
     , _handleCheckedBrush(QColor("#00B0FF"))
-    , _pulseUncheckedBrush(QColor("#44999999"))
-    , _pulseCheckedBrush(QColor("#4400B0EE"))
     , _transparentPen(Qt::transparent)
     , _lightGreyPen(Qt::lightGray)
 {
@@ -28,14 +26,8 @@ SwitchButton::SwitchButton(QWidget* parent)
     _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);
     _handleAnimation->setDuration(300);
 
-    _pulseAnimation = new QPropertyAnimation(this, "pulseRadius", this);
-    _pulseAnimation->setDuration(350);
-    _pulseAnimation->setStartValue(10);
-    _pulseAnimation->setEndValue(20);
-
     _animationGroup = new QSequentialAnimationGroup(this);
     _animationGroup->addAnimation(_handleAnimation);
-    // _animationGroup->addAnimation(_pulseAnimation);
 
     connect(this, &QCheckBox::checkStateChanged, this, &SwitchButton::setupAnimation);
 }
@@ -62,9 +54,8 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    const float handleRadRatio = 0.24f;
+    const float handleRadRatio  = 0.24f;
     const float trackHightRatio = 0.55f;
-        
 
     const QRectF cntRectF = contentsRect().toRectF();
     const float handleRad = qRound(handleRadRatio * cntRectF.height());
@@ -79,12 +70,6 @@ void SwitchButton::paintEvent(QPaintEvent* event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(_transparentPen);
-
-    if (_pulseAnimation->state() == QAbstractAnimation::Running)
-    {
-        painter.setBrush(isChecked() ? _pulseCheckedBrush : _pulseUncheckedBrush);
-        painter.drawEllipse(handlePoint, _pulseRad, _pulseRad);
-    }
 
     if (isChecked())
     {
@@ -111,16 +96,5 @@ float SwitchButton::handlePosition() const
 void SwitchButton::setHandlePosition(const float position)
 {
     _handlePos = position;
-    update();
-}
-
-float SwitchButton::pulseRadius() const
-{
-    return _pulseRad;
-}
-
-void SwitchButton::setPulseRadius(const float radius)
-{
-    _pulseRad = radius;
     update();
 }

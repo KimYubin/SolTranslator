@@ -17,7 +17,6 @@ class SwitchButton : public QCheckBox
     Q_OBJECT
 
     Q_PROPERTY(float handlePosition READ handlePosition WRITE setHandlePosition)
-    Q_PROPERTY(float pulseRadius READ pulseRadius WRITE setPulseRadius)
 
 public:
     explicit SwitchButton(QWidget* parent = nullptr);
@@ -35,15 +34,10 @@ private:
     float handlePosition() const;
     void setHandlePosition(const float position);
 
-    float pulseRadius() const;
-    void setPulseRadius(const float radius);
-
     QBrush _barBrush;
     QBrush _barCheckedBrush;
     QBrush _handleBrush;
     QBrush _handleCheckedBrush;
-    QBrush _pulseUncheckedBrush;
-    QBrush _pulseCheckedBrush;
 
     QPen _transparentPen;
     QPen _lightGreyPen;
@@ -56,11 +50,8 @@ private:
     // animation
     QSequentialAnimationGroup* _animationGroup;
     QPropertyAnimation* _handleAnimation;
-    QPropertyAnimation* _pulseAnimation;
-    
-    float _handlePos = 0.0f;
-    float _pulseRad  = 0.0f;
 
+    float _handlePos = 0.0f;
 };
 
 

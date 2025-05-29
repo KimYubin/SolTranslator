@@ -25,8 +25,8 @@ SwitchButton::SwitchButton(QWidget* parent)
     setContentsMargins(8, 0, 8, 0);
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
-    _handleAnimation->setEasingCurve(QEasingCurve::InOutCubic);
-    _handleAnimation->setDuration(200);
+    _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    _handleAnimation->setDuration(300);
 
     _pulseAnimation = new QPropertyAnimation(this, "pulseRadius", this);
     _pulseAnimation->setDuration(350);
@@ -35,14 +35,15 @@ SwitchButton::SwitchButton(QWidget* parent)
 
     _animationGroup = new QSequentialAnimationGroup(this);
     _animationGroup->addAnimation(_handleAnimation);
-    _animationGroup->addAnimation(_pulseAnimation);
+    // _animationGroup->addAnimation(_pulseAnimation);
 
     connect(this, &QCheckBox::checkStateChanged, this, &SwitchButton::setupAnimation);
 }
 
 QSize SwitchButton::sizeHint() const
 {
-    return QSize(58, 45);
+    // w, 22
+    return QSize(58, 40);
 }
 
 bool SwitchButton::hitButton(const QPoint& pos) const
@@ -61,42 +62,45 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    const QRect contentRect = contentsRect();
-    const int handleRadius  = qRound(0.24 * contentRect.height());
+    const float handleRadRatio = 0.24f;
+    const float trackHightRatio = 0.55f;
+        
+
+    const QRectF cntRectF = contentsRect().toRectF();
+    const float handleRad = qRound(handleRadRatio * cntRectF.height());
+
+    QRectF trackRect(0, 0, cntRectF.width() - handleRad, cntRectF.height() * trackHightRatio);
+    const float trackRounding = trackRect.height() / 2.0f;
+
+    const float handleRailLength = (handleRad * 2) - cntRectF.width(); // 핸들이 움직일 거리
+    const float handleXPos       = (handleRailLength * _handlePos) + cntRectF.x() + handleRad;
+    const QPointF handlePoint    = QPointF(handleXPos, trackRect.center().y());
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(_transparentPen);
 
-    QRectF barRect(0, 0, contentRect.width() - handleRadius, 0.40 * contentRect.height());
-    barRect.moveCenter(contentRect.center().toPointF());
-
-    const float rounding    = barRect.height() / 2.0f;
-    const float trailLength = contentRect.width() - 2 * handleRadius;
-
-    const float xPos = contentRect.x() + handleRadius + trailLength * _handlePos;
-
     if (_pulseAnimation->state() == QAbstractAnimation::Running)
     {
         painter.setBrush(isChecked() ? _pulseCheckedBrush : _pulseUncheckedBrush);
-        painter.drawEllipse(QPointF(xPos, barRect.center().y()), _pulseRad, _pulseRad);
+        painter.drawEllipse(handlePoint, _pulseRad, _pulseRad);
     }
 
     if (isChecked())
     {
         painter.setBrush(_barCheckedBrush);
-        painter.drawRoundedRect(barRect, rounding, rounding);
+        painter.drawRoundedRect(trackRect, trackRounding, trackRounding);
         painter.setBrush(_handleCheckedBrush);
     }
     else
     {
         painter.setBrush(_barBrush);
-        painter.drawRoundedRect(barRect, rounding, rounding);
+        painter.drawRoundedRect(trackRect, trackRounding, trackRounding);
         painter.setPen(_lightGreyPen);
         painter.setBrush(_handleBrush);
     }
 
-    painter.drawEllipse(QPointF(xPos, barRect.center().y()), handleRadius, handleRadius);
+    painter.drawEllipse(handlePoint, handleRad, handleRad);
 }
 
 float SwitchButton::handlePosition() const

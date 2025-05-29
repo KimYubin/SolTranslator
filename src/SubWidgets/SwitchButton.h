@@ -48,12 +48,19 @@ private:
     QPen _transparentPen;
     QPen _lightGreyPen;
 
+    // size
+    QSize _size;             // sizeHint
+    float _handleRadRatio;   // 콘텐츠 사이즈 대비 핸들 반지름 비율
+    float _trackHeightRatio; // 콘텐츠 사이즈 대비 트랙 높이 비율
+
+    // animation
+    QSequentialAnimationGroup* _animationGroup;
+    QPropertyAnimation* _handleAnimation;
+    QPropertyAnimation* _pulseAnimation;
+    
     float _handlePos = 0.0f;
     float _pulseRad  = 0.0f;
 
-    QPropertyAnimation* _handleAnimation;
-    QPropertyAnimation* _pulseAnimation;
-    QSequentialAnimationGroup* _animationGroup;
 };
 
 

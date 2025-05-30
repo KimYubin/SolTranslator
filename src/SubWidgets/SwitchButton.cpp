@@ -20,7 +20,7 @@ SwitchButton::SwitchButton(QWidget* parent)
     , _transparentPen(Qt::transparent)
     , _lightGreyPen(Qt::lightGray)
 {
-    setContentsMargins(8, 0, 8, 0);
+    setButtonShape(QSize(36, 22), 1.0f, 0.8f);
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
     _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);
@@ -34,13 +34,20 @@ SwitchButton::SwitchButton(QWidget* parent)
 
 QSize SwitchButton::sizeHint() const
 {
-    // w, 22
-    return QSize(58, 40);
+    return _size;
 }
 
 bool SwitchButton::hitButton(const QPoint& pos) const
 {
     return contentsRect().contains(pos);
+}
+
+void SwitchButton::setButtonShape(const QSize& inSize, const float inTrackHeightRatio, const float inHandleRatio)
+{
+    _size             = inSize;
+    _trackHeightRatio = inTrackHeightRatio;
+    _handleRadRatio   = inHandleRatio / 2.0f;
+    update();
 }
 
 void SwitchButton::setupAnimation(const Qt::CheckState inCheckState)
@@ -54,18 +61,11 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    const float handleRadRatio  = 0.24f;
-    const float trackHightRatio = 0.55f;
-
     const QRectF cntRectF = contentsRect().toRectF();
-    const float handleRad = qRound(handleRadRatio * cntRectF.height());
 
-    QRectF trackRect(0, 0, cntRectF.width() - handleRad, cntRectF.height() * trackHightRatio);
-    const float trackRounding = trackRect.height() / 2.0f;
-
-    const float handleRailLength = (handleRad * 2) - cntRectF.width(); // 핸들이 움직일 거리
-    const float handleXPos       = (handleRailLength * _handlePos) + cntRectF.x() + handleRad;
-    const QPointF handlePoint    = QPointF(handleXPos, trackRect.center().y());
+    QRectF trackRect(0, 0, cntRectF.width(), cntRectF.height() * _trackHeightRatio);
+    trackRect.moveCenter(cntRectF.center());
+    const float trackRad = trackRect.height() / 2.0f;
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -74,17 +74,21 @@ void SwitchButton::paintEvent(QPaintEvent* event)
     if (isChecked())
     {
         painter.setBrush(_barCheckedBrush);
-        painter.drawRoundedRect(trackRect, trackRounding, trackRounding);
+        painter.drawRoundedRect(trackRect, trackRad, trackRad);
         painter.setBrush(_handleCheckedBrush);
     }
     else
     {
         painter.setBrush(_barBrush);
-        painter.drawRoundedRect(trackRect, trackRounding, trackRounding);
+        painter.drawRoundedRect(trackRect, trackRad, trackRad);
         painter.setPen(_lightGreyPen);
         painter.setBrush(_handleBrush);
     }
 
+    const float handleMoveDist = cntRectF.width() - (trackRad * 2); // 핸들이 움직이는 길이
+    const float handlePosX     = (handleMoveDist * _handlePos) + cntRectF.x() + trackRad;
+    const QPointF handlePoint  = QPointF(handlePosX, trackRect.center().y());
+    const float handleRad      = qRound(trackRect.height() * _handleRadRatio);
     painter.drawEllipse(handlePoint, handleRad, handleRad);
 }
 

@@ -24,6 +24,14 @@ public:
     virtual QSize sizeHint() const override;
     virtual bool hitButton(const QPoint& pos) const override;
 
+    /**
+     * 
+     * @param inSize button size
+     * @param inTrackHeightRatio size 높이 대비 트랙의 높이 비율 
+     * @param inHandleRatio 트랙 높이 대비 핸들 지름의 비율
+     */
+    void setButtonShape(const QSize& inSize, const float inTrackHeightRatio, const float inHandleRatio);
+
 protected:
     virtual void paintEvent(QPaintEvent* event) override;
 
@@ -44,8 +52,8 @@ private:
 
     // size
     QSize _size;             // sizeHint
-    float _handleRadRatio;   // 콘텐츠 사이즈 대비 핸들 반지름 비율
     float _trackHeightRatio; // 콘텐츠 사이즈 대비 트랙 높이 비율
+    float _handleRadRatio;   // 트랙 높이 대비 핸들 반지름 비율
 
     // animation
     QSequentialAnimationGroup* _animationGroup;

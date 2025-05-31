@@ -40,26 +40,23 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     // ~======================
     // button binding
-
-    _textEditTranslate = new TextEditTranslateWidget();
-
-    //<QPushButton*, size>
-    const std::array buttonList = {
-        std::pair{ui->button_0_TextTab, static_cast<QWidget*>(_textEditTranslate)}
-      , std::pair{ui->button_1_dummy, new QWidget()}
-    };
-
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    for (const auto& [button, childWidget] : buttonList)
+    auto bindButton = [this](QPushButton* button, QWidget* childWidget)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
-    }
+    };
+
+    _textEditTranslate = new TextEditTranslateWidget();
+    bindButton(ui->button_0_TextTab, _textEditTranslate);
+
+    QWidget* dummyWidget = new QWidget();
+    bindButton(ui->button_1_dummy, dummyWidget);
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {

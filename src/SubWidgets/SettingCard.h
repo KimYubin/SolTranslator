@@ -29,14 +29,13 @@ public:
     void setHeader(const QString& inStr);
     void setDescription(const QString& inStr);
 
-
 private:
     QGridLayout* _layout;
     QWidget* _gridLayoutWidget;
-    QLabel* _header;
-    std::optional<QLabel*> _description;
 
-    QWidget* _content;
+    QLabel* _header;                     // 기본 설명
+    QWidget* _content;                   // 셋팅을 조정하는 위젯
+    std::optional<QLabel*> _description; // 상세 설명. 없을 경우 공간을 차지하지 않습니다.
 
     QString _headerText;
     std::optional<QString> _descriptionText;

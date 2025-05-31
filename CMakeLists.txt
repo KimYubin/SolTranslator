@@ -75,8 +75,8 @@ set(PROJECT_SOURCES
         src/FinConstants.h
         src/SubWidgets/SwitchButton.cpp
         src/SubWidgets/SwitchButton.h
-        src/SubWidgets/ToggleSwitchBox.cpp
-        src/SubWidgets/ToggleSwitchBox.h
+        src/SubWidgets/SettingCard.cpp
+        src/SubWidgets/SettingCard.h
 
 )
 

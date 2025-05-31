@@ -11,13 +11,13 @@ class QGridLayout;
 class QLabel;
 class SwitchButton;
 
-class ToggleSwitchBox : public QWidget
+class SettingCard : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ToggleSwitchBox(QWidget* parent = nullptr);
-    ~ToggleSwitchBox() override;
+    explicit SettingCard(QWidget* parent = nullptr);
+    ~SettingCard() override;
 
     /***/
     void setHeader(const QString& inStr);

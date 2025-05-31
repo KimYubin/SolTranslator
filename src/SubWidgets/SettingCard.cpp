@@ -2,14 +2,14 @@
 // Created by YubinKim on 25/05/27 화.
 //
 
-#include "ToggleSwitchBox.h"
+#include "SettingCard.h"
 
 #include <QGridLayout>
 #include <QLabel>
 
 #include "SwitchButton.h"
 
-ToggleSwitchBox::ToggleSwitchBox(QWidget* parent) : QWidget(parent)
+SettingCard::SettingCard(QWidget* parent) : QWidget(parent)
 {
     _gridLayoutWidget = new QWidget(this);
     _gridLayoutWidget->setObjectName("gridLayoutWidget");
@@ -29,17 +29,17 @@ ToggleSwitchBox::ToggleSwitchBox(QWidget* parent) : QWidget(parent)
     _layout->setColumnStretch(0, 1);
 }
 
-ToggleSwitchBox::~ToggleSwitchBox()
+SettingCard::~SettingCard()
 {
 }
 
-void ToggleSwitchBox::setHeader(const QString& inStr)
+void SettingCard::setHeader(const QString& inStr)
 {
     _headerText = inStr;
     _header->setText(inStr);
 }
 
-void ToggleSwitchBox::setDescription(const QString& inStr)
+void SettingCard::setDescription(const QString& inStr)
 {
     _descriptionText = inStr;
     if (_description.has_value() == false)
@@ -51,7 +51,7 @@ void ToggleSwitchBox::setDescription(const QString& inStr)
     _description.value()->setText(inStr);
 }
 
-void ToggleSwitchBox::connectCheckStateChange(QObject* inContext, std::function<void(Qt::CheckState inCheckState)>&& callback)
+void SettingCard::connectCheckStateChange(QObject* inContext, std::function<void(Qt::CheckState inCheckState)>&& callback)
 {
     connect(_switchButton
           , &QCheckBox::checkStateChanged
@@ -59,22 +59,22 @@ void ToggleSwitchBox::connectCheckStateChange(QObject* inContext, std::function<
           , std::forward<std::function<void(Qt::CheckState inCheckState)>>(callback));
 }
 
-void ToggleSwitchBox::setCheckable(const bool inCheckable) 
+void SettingCard::setCheckable(const bool inCheckable) 
 {
     _switchButton->setCheckable(inCheckable);
 }
 
-bool ToggleSwitchBox::isCheckable() const
+bool SettingCard::isCheckable() const
 {
     return _switchButton->isCheckable();
 }
 
-void ToggleSwitchBox::setCheck(const bool inCheck)
+void SettingCard::setCheck(const bool inCheck)
 {
     _switchButton->setChecked(inCheck);
 }
 
-bool ToggleSwitchBox::isCheck() const
+bool SettingCard::isCheck() const
 {
     return _switchButton->isChecked();
 }

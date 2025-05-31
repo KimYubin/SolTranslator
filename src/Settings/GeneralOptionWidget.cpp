@@ -13,7 +13,7 @@
 #include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
 
-#include "../SubWidgets/ToggleSwitchBox.h"
+#include "../SubWidgets/SettingCard.h"
 
 #include "../Widgets/FinTranslatorMainWidget.h"
 
@@ -25,7 +25,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    ToggleSwitchBox* startRunSwitchBox = new ToggleSwitchBox(ui->engineGroup);
+    SettingCard* startRunSwitchBox = new SettingCard(ui->engineGroup);
     startRunSwitchBox->setHeader(tr("Run at startup"));
     startRunSwitchBox->setDescription(tr("시스템 시작 시 자동 실행"));
     startRunSwitchBox->setCheck(ConfigManager::get().getStartRun());

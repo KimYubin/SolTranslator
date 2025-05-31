@@ -16,20 +16,13 @@ class SettingCard : public QWidget
     Q_OBJECT
 
 public:
-    explicit SettingCard(QWidget* parent = nullptr);
+    explicit SettingCard(QWidget* inInteractionWidget, QWidget* parent);
     ~SettingCard() override;
 
     /***/
     void setHeader(const QString& inStr);
     void setDescription(const QString& inStr);
 
-    void connectCheckStateChange(QObject* inContext, std::function<void(Qt::CheckState inCheckState)>&& callback);
-
-    void setCheckable(const bool inCheckable);
-    bool isCheckable() const;
-
-    void setCheck(const bool inCheck);
-    bool isCheck() const;
 
 private:
     QGridLayout* _layout;
@@ -37,7 +30,7 @@ private:
     QLabel* _header;
     std::optional<QLabel*> _description;
 
-    SwitchButton* _switchButton;
+    QWidget* _interactionWidget;
 
 
     QString _headerText;

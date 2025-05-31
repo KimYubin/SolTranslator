@@ -6,10 +6,12 @@
 
 #include "GeneralOptionWidget.h"
 
+
 #include <QPushButton>
 
 #include "ui_GeneralOptionWidget.h"
 
+#include "../SubWidgets/SwitchButton.h"
 #include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
 
@@ -25,15 +27,17 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    SettingCard* startRunSwitchBox = new SettingCard(ui->engineGroup);
+    SwitchButton* switchButton = new SwitchButton();
+    switchButton->setChecked(ConfigManager::get().getStartRun());
+    connect(switchButton, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
+    {
+        ConfigManager::get().setStartRun(inState == Qt::CheckState::Checked);
+    });
+    
+    SettingCard* startRunSwitchBox = new SettingCard(switchButton, ui->engineGroup);
     startRunSwitchBox->setHeader(tr("Run at startup"));
     startRunSwitchBox->setDescription(tr("시스템 시작 시 자동 실행"));
-    startRunSwitchBox->setCheck(ConfigManager::get().getStartRun());
-    startRunSwitchBox->connectCheckStateChange(this, [](Qt::CheckState inCheckState)
-    {
-        ConfigManager::get().setStartRun(inCheckState == Qt::CheckState::Checked);
-    });
-
+    
     ui->verticalLayout->addWidget(startRunSwitchBox, 0, Qt::AlignmentFlag::AlignTop);
 
 

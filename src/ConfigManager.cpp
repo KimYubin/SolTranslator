@@ -66,6 +66,17 @@ void ConfigManager::setStartRun(const bool inStartRun)
     if (inStartRun)
     {
         settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::Const::CommandLineOptions::START_UP_RUN.data());
+
+        QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
+                                 , QSettings::NativeFormat);
+        QByteArray enabledData;
+        enabledData.resize(8);
+        enabledData[0] = 0x02; // Enabled
+        for (int i = 1; i < 8; ++i)
+        {
+            enabledData[i] = 0x00;
+        }
+        approvedSettings.setValue(appName, enabledData);
     }
     else
     {

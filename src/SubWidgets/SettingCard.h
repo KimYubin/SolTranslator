@@ -16,7 +16,13 @@ class SettingCard : public QWidget
     Q_OBJECT
 
 public:
-    explicit SettingCard(QWidget* inInteractionWidget, QWidget* parent);
+    enum ContentPos
+    {
+        Left
+      , Right
+    };
+
+    explicit SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos = ContentPos::Right);
     ~SettingCard() override;
 
     /***/
@@ -30,11 +36,12 @@ private:
     QLabel* _header;
     std::optional<QLabel*> _description;
 
-    QWidget* _interactionWidget;
-
+    QWidget* _content;
 
     QString _headerText;
     std::optional<QString> _descriptionText;
+
+    ContentPos _contentPos;
 };
 
 

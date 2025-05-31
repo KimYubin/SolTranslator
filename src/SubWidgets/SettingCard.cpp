@@ -8,8 +8,12 @@
 #include <QLabel>
 
 
-SettingCard::SettingCard(QWidget* inInteractionWidget, QWidget* parent) : QWidget(parent)
+SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos)
+    : QWidget(parent)
+    , _content(inContent)
+    , _contentPos(contentPos)
 {
+    // layout 
     _gridLayoutWidget = new QWidget(this);
     _gridLayoutWidget->setObjectName("gridLayoutWidget");
 
@@ -18,14 +22,21 @@ SettingCard::SettingCard(QWidget* inInteractionWidget, QWidget* parent) : QWidge
     _layout->setObjectName("layout");
     setLayout(_layout);
 
+    // ordering header, content
+    int headerCol  = 0;
+    int contentCol = 1;
+    if (_contentPos == ContentPos::Left)
+    {
+        headerCol  = 1;
+        contentCol = 0;
+    }
     _header = new QLabel(_gridLayoutWidget);
-    _layout->addWidget(_header, 0, 0, 1, 1);
+    _layout->addWidget(_header, 0, headerCol, 1, 1);
 
-    _interactionWidget = inInteractionWidget;
-    _interactionWidget->setParent(_gridLayoutWidget);
-    _layout->addWidget(_interactionWidget, 0, 1, 1, 1);
+    _content->setParent(_gridLayoutWidget);
+    _layout->addWidget(_content, 0, contentCol, 1, 1);
 
-    _layout->setColumnStretch(0, 1);
+    _layout->setColumnStretch(headerCol, 1);
 }
 
 SettingCard::~SettingCard()
@@ -44,7 +55,16 @@ void SettingCard::setDescription(const QString& inStr)
     if (_description.has_value() == false)
     {
         _description = new QLabel(_gridLayoutWidget);
-        _layout->addWidget(_description.value(), 1, 0, 1, 2);
+
+        int descCol     = 0;
+        int descColSpan = 2;
+        if (_contentPos == ContentPos::Left)
+        {
+            descCol     = 1;
+            descColSpan = 1;
+        }
+
+        _layout->addWidget(_description.value(), 1, descCol, 1, descColSpan);
     }
 
     _description.value()->setText(inStr);

@@ -45,7 +45,6 @@ private:
     QBrush _barBrush;
     QBrush _barCheckedBrush;
     QBrush _handleBrush;
-    QBrush _handleCheckedBrush;
 
     QPen _transparentPen;
     QPen _lightGreyPen;

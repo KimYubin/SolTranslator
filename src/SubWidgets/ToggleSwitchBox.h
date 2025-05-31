@@ -19,12 +19,23 @@ public:
     explicit ToggleSwitchBox(QWidget* parent = nullptr);
     ~ToggleSwitchBox() override;
 
+    /***/
     void setHeader(const QString& inStr);
     void setDescription(const QString& inStr);
+
+    void connectCheckStateChange(QObject* inContext, std::function<void(Qt::CheckState inCheckState)>&& callback);
+
+    void setCheckable(const bool inCheckable);
+    bool isCheckable() const;
+
+    void setCheck(const bool inCheck);
+    bool isCheck() const;
+
 private:
     QGridLayout* _layout;
+    QWidget* _gridLayoutWidget;
     QLabel* _header;
-    QLabel* _description;
+    std::optional<QLabel*> _description;
 
     SwitchButton* _switchButton;
 

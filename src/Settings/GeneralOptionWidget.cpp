@@ -13,6 +13,8 @@
 #include "../ConfigManager.h"
 #include "../FinTranslatorCore.h"
 
+#include "../SubWidgets/ToggleSwitchBox.h"
+
 #include "../Widgets/FinTranslatorMainWidget.h"
 
 
@@ -23,11 +25,17 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    ui->startRunCheckBox->setChecked(ConfigManager::get().getStartRun());
-    connect(ui->startRunCheckBox, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inCheckState)
+    ToggleSwitchBox* startRunSwitchBox = new ToggleSwitchBox(ui->engineGroup);
+    startRunSwitchBox->setHeader(tr("Run at startup"));
+    startRunSwitchBox->setDescription(tr("시스템 시작 시 자동 실행"));
+    startRunSwitchBox->setCheck(ConfigManager::get().getStartRun());
+    startRunSwitchBox->connectCheckStateChange(this, [](Qt::CheckState inCheckState)
     {
         ConfigManager::get().setStartRun(inCheckState == Qt::CheckState::Checked);
     });
+
+    ui->verticalLayout->addWidget(startRunSwitchBox, 0, Qt::AlignmentFlag::AlignTop);
+
 
     // 테마 적용 버튼
     QPushButton* themeButton = new QPushButton("ThemeButton");

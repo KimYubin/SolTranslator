@@ -14,13 +14,12 @@
 SwitchButton::SwitchButton(QWidget* parent)
     : QCheckBox(parent)
     , _barBrush(Qt::gray)
-    , _barCheckedBrush(QColor("#00B0FF").lighter())
+    , _barCheckedBrush(QColor("#00B0FF"))
     , _handleBrush(Qt::white)
-    , _handleCheckedBrush(QColor("#00B0FF"))
     , _transparentPen(Qt::transparent)
     , _lightGreyPen(Qt::lightGray)
 {
-    setButtonShape(QSize(36, 22), 1.0f, 0.8f);
+    setButtonShape(QSize(40, 22), 1.0f, 0.75f);
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
     _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);
@@ -75,7 +74,7 @@ void SwitchButton::paintEvent(QPaintEvent* event)
     {
         painter.setBrush(_barCheckedBrush);
         painter.drawRoundedRect(trackRect, trackRad, trackRad);
-        painter.setBrush(_handleCheckedBrush);
+        painter.setBrush(_handleBrush);
     }
     else
     {

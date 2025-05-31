@@ -46,15 +46,7 @@
       <property name="flat">
        <bool>true</bool>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
-        <widget class="QCheckBox" name="startRunCheckBox">
-         <property name="text">
-          <string>시스템 시작 시 자동 실행</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
      </widget>
     </item>
    </layout>

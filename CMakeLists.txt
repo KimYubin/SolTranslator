@@ -77,6 +77,8 @@ set(PROJECT_SOURCES
         src/SubWidgets/SwitchButton.h
         src/SubWidgets/SettingCard.cpp
         src/SubWidgets/SettingCard.h
+        src/Widgets/ITranslateWidget.cpp
+        src/Widgets/ITranslateWidget.h
 
 )
 

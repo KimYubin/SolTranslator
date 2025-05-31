@@ -61,7 +61,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
         _buttonGroup->addButton(button, stkIdx);
     }
 
-    connect(_buttonGroup, &QButtonGroup::idClicked, this, [=](const int inButtonId)
+    connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {
         ui->mainStackedWidget->setCurrentIndex(inButtonId);
     });

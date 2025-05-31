@@ -7,6 +7,8 @@
 
 #include <QWidget>
 
+#include "ITranslateWidget.h"
+
 #include "../FinTypes.h"
 
 class QPushButton;
@@ -27,7 +29,7 @@ class SimpleTranslatePopup;
 QT_END_NAMESPACE
 
 
-class SimpleTranslatePopup : public QWidget
+class SimpleTranslatePopup : public ITranslateWidget
 {
     Q_OBJECT
 
@@ -38,11 +40,9 @@ public:
 
     ~SimpleTranslatePopup() override;
 
-    void streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
-
-    void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
-
 protected:
+    virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
+
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle);
 
@@ -127,9 +127,6 @@ protected:
     int _lineCount = 0;
     int _lastLineLength = 0;
 
-    QString _prevString;
-    TextStyle _prevTextStyle;
-    QTimer* _updateStreamStrTimer;
     // ~================
     const QSizeF _minSizeRatio  = {0.15f, 0.15f};
     const QSizeF _maxSizeRatio  = {0.2f, 0.65f};

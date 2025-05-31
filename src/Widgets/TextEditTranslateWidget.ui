@@ -159,7 +159,7 @@
          </widget>
         </item>
         <item alignment="Qt::AlignmentFlag::AlignRight">
-         <widget class="QPushButton" name="findButton">
+         <widget class="QPushButton" name="translateButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>

@@ -27,7 +27,7 @@
 
 
 SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+    : ITranslateWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , ui(new Ui::SimpleTranslatePopup)
 {
     QIcon icon = QIcon(":/img/icon_img");
@@ -60,13 +60,6 @@ SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
     _animation->setEasingCurve(QEasingCurve::OutQuad);
     connect(_animation, &QAbstractAnimation::finished, this, &SimpleTranslatePopup::adjustSizeAfterAnimationFinished);
 
-    _updateStreamStrTimer = new QTimer(this);
-    _updateStreamStrTimer->setInterval(50);
-    _updateStreamStrTimer->setSingleShot(true);
-    connect(_updateStreamStrTimer, &QTimer::timeout, this, [this]()
-    {
-        showTranslationPopup(_prevString, _prevTextStyle);
-    });
 
     calculateTextEditLayoutInfo();
 
@@ -84,16 +77,8 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
     delete ui;
 }
 
-void SimpleTranslatePopup::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+void SimpleTranslatePopup::applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
-    _prevString    = inTranslatedText;
-    _prevTextStyle = inTextStyle;
-    _updateStreamStrTimer->start();
-}
-
-void SimpleTranslatePopup::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
-{
-    _updateStreamStrTimer->stop();
     showTranslationPopup(inTranslatedText, inTextStyle);
 }
 

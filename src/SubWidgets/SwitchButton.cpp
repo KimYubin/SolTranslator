@@ -19,7 +19,7 @@ SwitchButton::SwitchButton(QWidget* parent)
     , _transparentPen(Qt::transparent)
     , _lightGreyPen(Qt::lightGray)
 {
-    setButtonShape(QSize(44, 28), 1.0f, 20.0f/28.0f);
+    setButtonShape(QSize(46, 28), 1.0f, 20.0f/28.0f);
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
     _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);

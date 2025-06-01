@@ -29,6 +29,9 @@ public:
     void setHeader(const QString& inStr);
     void setDescription(const QString& inStr);
 
+    template <std::derived_from<QWidget> T>
+    T* getContent() const;
+
 private:
     QGridLayout* _layout;
     QWidget* _gridLayoutWidget;
@@ -42,6 +45,12 @@ private:
 
     ContentPos _contentPos;
 };
+
+template <std::derived_from<QWidget> T>
+T* SettingCard::getContent() const
+{
+    return qobject_cast<T*>(_content);
+}
 
 
 #endif //TOGGLESWITCHBOX_H

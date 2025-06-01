@@ -6,6 +6,8 @@
         <file>dark/SimpleTranslate_TextEdit.qss</file>
         <file>dark/TextEditTranslate.qss</file>
         <file>dark/Settings.qss</file>
+        <file>dark/SettingCard.qss</file>
+        
     </qresource>
 
 </RCC>

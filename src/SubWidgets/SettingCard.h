@@ -4,14 +4,14 @@
 
 #ifndef TOGGLESWITCHBOX_H
 #define TOGGLESWITCHBOX_H
-#include <QWidget>
+#include <QFrame>
 
 
 class QGridLayout;
 class QLabel;
 class SwitchButton;
 
-class SettingCard : public QWidget
+class SettingCard : public QFrame
 {
     Q_OBJECT
 

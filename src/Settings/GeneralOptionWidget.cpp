@@ -26,6 +26,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
+    ui->mainLayout->setContentsMargins(0, 0, 0, 0);
 
     SwitchButton* switchButton = new SwitchButton();
     switchButton->setChecked(ConfigManager::get().getStartRun());
@@ -37,7 +38,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     SettingCard* startRunSwitchBox = new SettingCard(switchButton, ui->engineGroup);
     startRunSwitchBox->setHeader(tr("Run at startup"));
     startRunSwitchBox->setDescription(tr("시스템 시작 시 자동 실행"));
-    
+    startRunSwitchBox->setContentsMargins(0, 0, 0, 0);
+    ui->verticalLayout->setContentsMargins(0, 0, 0, 0);
     ui->verticalLayout->addWidget(startRunSwitchBox, 0, Qt::AlignmentFlag::AlignTop);
 
 

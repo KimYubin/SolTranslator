@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>806</width>
-    <height>641</height>
+    <height>749</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,19 +23,10 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="mainLayout" rowstretch="0,0">
-    <property name="leftMargin">
-     <number>20</number>
-    </property>
-    <property name="topMargin">
-     <number>20</number>
-    </property>
-    <property name="bottomMargin">
-     <number>20</number>
-    </property>
     <property name="spacing">
      <number>0</number>
     </property>
-    <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignTop">
+    <item row="1" column="0">
      <widget class="QGroupBox" name="engineGroup">
       <property name="title">
        <string>모양 및 동작</string>

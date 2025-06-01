@@ -33,6 +33,9 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 {
     ui->setupUi(this);
     setLayout(ui->mainLayout);
+    ui->mainLayout->setContentsMargins(0, 16, 26, 0);
+    ui->mainLayout->setHorizontalSpacing(24);
+    ui->mainLayout->setVerticalSpacing(16);
 
     setAttribute(Qt::WA_DeleteOnClose);
 

@@ -143,20 +143,6 @@
   background-color: #31363b;
 }
 
-/* #FinTranslatorMainWidget  QGroupBox, */
-#FinTranslatorMainWidget  QFrame {
-  background-color: #31363b;
-  border: 2px solid #4f5b62;
-  border-radius: 4px;
-}
-
-/* #FinTranslatorMainWidget  QGroupBox.fill_background, */
-#FinTranslatorMainWidget  QFrame.fill_background {
-  background-color: #232629;
-  border: 2px solid #232629;
-  border-radius: 4px;
-}
-
 #FinTranslatorMainWidget  QSplitter {
   background-color: transparent;
   border: none
@@ -187,7 +173,7 @@
 #FinTranslatorMainWidget  QSpinBox,
 #FinTranslatorMainWidget  QDoubleSpinBox,
 #FinTranslatorMainWidget  QTextEdit,
-#FinTranslatorMainWidget  QLineEdit,
+/* #FinTranslatorMainWidget  QLineEdit, */
 #FinTranslatorMainWidget  QPushButton {
   
   background-color: rgb(179, 225, 255);
@@ -203,15 +189,11 @@
 #FinTranslatorMainWidget  QListView,
 #FinTranslatorMainWidget  QLineEdit,
 #FinTranslatorMainWidget  QComboBox {
-  color: #000000;
+  color: #ffffff;
   padding-left: 16px;
-  border-radius: 0px;
-  border-radius: 0px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-radius: 4px;
   height: 32px;
   background-color: rgba(35, 38, 41, 0.75);
-  border: 2px solid rgba(255, 255, 255, 0.2);
   border-width: 0 0 2px 0;
 }
 
@@ -350,7 +332,7 @@
 
 #FinTranslatorMainWidget  QGroupBox {
   padding-top:  16px;
-  padding-left: 12px;
+  /* padding-left: 12px; */
   margin-top: 0.5em;
   
   border: 1px solid gray;
@@ -844,7 +826,7 @@ background: #1de9b6;
 /*  ------------------------------------------------------------------------  */
 /*  QLabel  */
 
-#FinTranslatorMainWidget  QLabel {
+#FinTranslatorMainWidget QLabel {
   border: none;
   background: transparent;
   color: #ffffff
@@ -1252,7 +1234,7 @@ background: #1de9b6;
 #FinTranslatorMainWidget  QDateTimeEdit:focus,
 #FinTranslatorMainWidget  QSpinBox:focus,
 #FinTranslatorMainWidget  QDoubleSpinBox:focus,
-#FinTranslatorMainWidget  QLineEdit:focus,
+/* #FinTranslatorMainWidget  QLineEdit:focus, */
 #FinTranslatorMainWidget  QComboBox:focus {
   color: #1de9b6;
   border: 2px solid #1de9b6;

@@ -8,17 +8,19 @@
 }
 
 /* #SettingsWidget QGroupBox, */
-#SettingsWidget QFrame {
+#SettingsWidget QFrame
+{
   background-color: #31363b;
-  border: 2px solid #4f5b62;
-  border-radius: 4px;
+}
+#SettingsWidget QListWidget
+{
+  background-color: #232629;
 }
 
-/* #SettingsWidget QGroupBox.fill_background, */
-#SettingsWidget QFrame.fill_background {
-  background-color: #232629;
-  border: 2px solid #232629;
-  border-radius: 4px;
+#SettingsWidget QListView,
+#SettingsWidget QLineEdit
+{
+  border-radius: 0px;
 }
 
 #SettingsWidget QSplitter {

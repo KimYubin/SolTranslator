@@ -6,14 +6,19 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QStyleOption>
+#include <QPainter>
+
 
 
 SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos)
-    : QWidget(parent)
+    : QFrame(parent)
     , _content(inContent)
     , _contentPos(contentPos)
 {
-    // layout 
+    setObjectName("SettingCard");
+
+    // layout
     _gridLayoutWidget = new QWidget(this);
     _gridLayoutWidget->setObjectName("gridLayoutWidget");
 

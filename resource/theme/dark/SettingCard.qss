@@ -1,0 +1,9 @@
+
+#SettingCard
+{
+  border-bottom: 1px solid #4f5b62;
+  /* rgb(179, 225, 255); */
+  border-radius: 0px;
+  padding-bottom : 8px;
+}
+

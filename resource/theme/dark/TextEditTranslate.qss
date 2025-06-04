@@ -17,8 +17,8 @@
   border-radius : 6px;
   background-color: rgb(48, 48, 48);
  	color: rgb(250, 250, 250);
-  font-size: 14pt;
-  font-family: '맑은 고딕', 'Cascadia Mono', Consolas, monospace;
+  font-size: 15pt;
+  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
 }
 #TextEditTranslateWidget QTextEdit:focus,
 #TextEditTranslateWidget QPlainTextEdit:focus

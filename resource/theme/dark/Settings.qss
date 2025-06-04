@@ -17,18 +17,51 @@
   background-color: #232629;
 }
 
-#SettingsWidget QListView,
 #SettingsWidget QLineEdit
 {
   border-radius: 0px;
 }
 
-#SettingsWidget QSplitter {
+#SettingsWidget QListView
+{
+  font-size: 16px;
+  border-radius: 0px;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+#SettingsWidget QListView::item
+{
+  padding: 4px;
+  min-height: 32px;
+  color:rgb(219, 219, 219);
+  selection-color: rgb(219, 219, 219);
+  border-color: transparent;
+}
+
+#SettingsWidget QListView::item:hover
+{
+  background-color:rgba(214, 214, 214, 0.88);
+  selection-background-color:rgba(214, 214, 214, 0.88);
+  color: #000000;
+}
+
+#SettingsWidget QListView::item:selected 
+{
+  background-color:rgba(211, 211, 211, 0.29);
+  selection-background-color:rgba(211, 211, 211, 0.29);
+  color: rgb(219, 219, 219);
+  selection-color: rgb(219, 219, 219); /* For Windows */
+}
+
+#SettingsWidget QSplitter
+{
   background-color: transparent;
   border: none
 }
 
-#SettingsWidget QStatusBar {
+#SettingsWidget QStatusBar
+{
   color: #ffffff;
   background-color: rgba(79, 91, 98, 0.2);
   border-radius: 0px;
@@ -38,12 +71,50 @@
 #SettingsWidget QStackedWidget,
 #SettingsWidget QWidget > QToolBox,
 #SettingsWidget QToolBox > QWidget,
-#SettingsWidget QTabWidget > QWidget {
+#SettingsWidget QTabWidget > QWidget
+{
   border: none;
 }
 
-#SettingsWidget QTabWidget::pane {
+#SettingsWidget QTabWidget::pane
+{
   border: none;
+}
+
+#SettingsWidget QLabel
+{
+  border: none;
+  background: transparent;
+  color: #ffffff
+}
+#SettingsWidget  QLabel:disabled
+{
+  color: rgba(255, 255, 255, 0.2)
+}
+
+
+#SettingsWidget  QLineEdit
+{
+  color: #ffffff;
+  padding-left: 8px;
+  height: 32px;
+  background-color: rgba(35, 38, 41, 0.75);
+  border-width: 0 0 2px 0;
+}
+
+#SettingsWidget QGroupBox
+{
+  font-size: 16px;
+  border: none;
+  padding-top: 24px;
+  margin-top: 0.5em;
+  
+}
+
+#SettingsWidget QGroupBox::title
+{
+  color: rgba(255, 255, 255, 0.67);
+  subcontrol-origin: margin;
 }
 
 #SettingsWidget QPushButton[selectButton="true"]
@@ -52,12 +123,6 @@
   background-color:rgb(68, 93, 116);
   color:rgb(240, 240, 232)
 }
-
-#SettingsWidget QLabel
-{
-  background-color:  #31363b;
-}
-
 
 
 #SettingsWidget QPushButton {

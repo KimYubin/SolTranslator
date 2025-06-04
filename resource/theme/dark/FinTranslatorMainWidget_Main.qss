@@ -5,7 +5,8 @@
 *{
   color:rgb(22, 22, 22);
   font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 
@@ -932,7 +933,8 @@ background: #1de9b6;
 }
 
 #FinTranslatorMainWidget  QTreeView,
-#FinTranslatorMainWidget  QListView {
+#FinTranslatorMainWidget  QListView
+{
   border-radius: 4px;
   padding: 4px;
   margin: 0px;
@@ -941,7 +943,8 @@ background: #1de9b6;
 
 #FinTranslatorMainWidget  QTableView::item,
 #FinTranslatorMainWidget  QTreeView::item,
-#FinTranslatorMainWidget  QListView::item {
+#FinTranslatorMainWidget  QListView::item 
+{
   padding: 4px;
   min-height: 32px;
   color: #ffffff;
@@ -959,15 +962,6 @@ background: #1de9b6;
   selection-background-color: rgba(29, 233, 182, 0.2);
   color: #ffffff;
   selection-color: #ffffff; /* For Windows */
-}
-
-#FinTranslatorMainWidget  QTableView::item:selected:focus,
-#FinTranslatorMainWidget  QTreeView::item:selected:focus,
-#FinTranslatorMainWidget  QListView::item:selected:focus {
-  background-color: #1de9b6;
-  selection-background-color: #1de9b6;
-  color: #000000;
-  selection-color: #000000; /* For Windows */
 }
 
 #FinTranslatorMainWidget  QTableView {

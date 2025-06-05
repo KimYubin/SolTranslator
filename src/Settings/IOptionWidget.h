@@ -27,7 +27,12 @@ protected:
     virtual void cancel();
     virtual void finish();
 
+public:
+    IOptionPage* getOptionPage() const;;
+
 private:
+    void setOptionPage(IOptionPage* inOptionPage);
+    QPointer<IOptionPage> _optionPage;
 };
 
 class IOptionPage : public QObject

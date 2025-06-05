@@ -24,11 +24,12 @@
 
 enum
 {
-    stackIndexRole = Qt::ItemDataRole::UserRole + 1 
+    stackIndexRole = Qt::ItemDataRole::UserRole + 1
+  , OptionPageRole
 };
 
 SettingsWidget::SettingsWidget(QWidget* parent)
-    : QWidget(parent, Qt::Dialog | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint)
+    : QWidget(parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
@@ -40,7 +41,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui->findEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    ui->optionLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    ui->optionNameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     // ~=====================
     // option setup
@@ -62,6 +63,11 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](QListWidgetItem* current, QListWidgetItem* previous)
     {
         ui->optionStackedWidget->setCurrentIndex(current->data(stackIndexRole).toInt());
+        QWidget* curWidget = ui->optionStackedWidget->currentWidget();
+        if (IOptionWidget* curOptionWidget = qobject_cast<IOptionWidget*>(curWidget))
+        {
+            ui->optionNameLabel->setText(curOptionWidget->getOptionPage()->getDisplayName());
+        }
     });
 
     ui->listWidget->setCurrentRow(0);

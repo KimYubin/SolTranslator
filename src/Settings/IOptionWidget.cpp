@@ -32,6 +32,21 @@ void IOptionWidget::finish()
 {
 }
 
+IOptionPage* IOptionWidget::getOptionPage() const
+{
+    if (_optionPage.isNull())
+    {
+        qDebug() << "option page is null";
+    }
+
+    return _optionPage.get();
+}
+
+void IOptionWidget::setOptionPage(IOptionPage* inOptionPage)
+{
+    _optionPage = inOptionPage;
+}
+
 IOptionPage::IOptionPage()
 {
     optionsPages().emplace(this);
@@ -84,6 +99,7 @@ QWidget* IOptionPage::getOptionWidget()
         if (_optionWidgetCtor)
         {
             _optionWidget = _optionWidgetCtor();
+            _optionWidget->setOptionPage(this);
         }
         else
         {

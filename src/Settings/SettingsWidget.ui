@@ -42,7 +42,7 @@
      <widget class="QStackedWidget" name="optionStackedWidget"/>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="optionLabel">
+     <widget class="QLabel" name="optionNameLabel">
       <property name="text">
        <string>TextLabel</string>
       </property>
@@ -52,7 +52,13 @@
      <widget class="QLineEdit" name="findEdit"/>
     </item>
     <item row="1" column="0">
-     <widget class="QListWidget" name="listWidget"/>
+     <widget class="QListWidget" name="listWidget">
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

@@ -38,6 +38,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     setLayout(ui->mainLayout);
 
+    _finIcon = QIcon(":/img/icon_img");
+    qApp->setWindowIcon(_finIcon);
+
     // ~======================
     // button binding
     _buttonGroup = new QButtonGroup(this);
@@ -101,10 +104,6 @@ void FinTranslatorMainWidget::setVisible(bool visible)
     _miniToTrayAction->setEnabled(visible);
     _restoreAction->setEnabled(visible == false);
 
-    if (_settingsWidget.isNull() == false)
-    {
-        _settingsWidget->setVisible(visible);
-    }
     QWidget::setVisible(visible);
 }
 
@@ -112,7 +111,7 @@ void FinTranslatorMainWidget::showSettingsWidget()
 {
     if (_settingsWidget.isNull())
     {
-        _settingsWidget = new SettingsWidget(this);
+        _settingsWidget = new SettingsWidget();
     }
     else
     {
@@ -120,7 +119,13 @@ void FinTranslatorMainWidget::showSettingsWidget()
         {
             _settingsWidget->showNormal();
         }
-        _settingsWidget->show();
+        if (_settingsWidget->isHidden())
+        {
+            _settingsWidget->show();
+        }
+
+        _settingsWidget->raise();
+        _settingsWidget->activateWindow();
     }
 }
 
@@ -246,6 +251,9 @@ void FinTranslatorMainWidget::createActions()
     _restoreAction = new QAction(tr("&Restore"), this);
     connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
 
+    _settingAction = new QAction(tr("&Settings"), this);
+    connect(_settingAction, &QAction::triggered, this, &FinTranslatorMainWidget::showSettingsWidget);
+    
     _quitAction = new QAction(tr("&Quit"), this);
     connect(_quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 }
@@ -255,19 +263,13 @@ void FinTranslatorMainWidget::createTrayIcon()
     _trayIconMenu = new QMenu(this);
     _trayIconMenu->addAction(_miniToTrayAction);
     _trayIconMenu->addAction(_restoreAction);
+    _trayIconMenu->addAction(_settingAction);
     _trayIconMenu->addSeparator();
     _trayIconMenu->addAction(_quitAction);
 
     _trayIcon = new QSystemTrayIcon(this);
-    setIcon();
+    _trayIcon->setIcon(_finIcon);
     _trayIcon->setContextMenu(_trayIconMenu);
     _trayIcon->setVisible(true);
     _trayIcon->setToolTip(tr("FinTranslator"));
-}
-
-void FinTranslatorMainWidget::setIcon()
-{
-    QIcon icon = QIcon(":/img/icon_img");
-    _trayIcon->setIcon(icon);
-    setWindowIcon(icon);
 }

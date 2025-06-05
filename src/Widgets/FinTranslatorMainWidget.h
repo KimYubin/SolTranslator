@@ -54,8 +54,6 @@ private slots:
 private:
     void createActions();
     void createTrayIcon();
-    void setIcon();
-
 
     Ui::FinTranslatorMainWidget* ui;
 
@@ -70,8 +68,10 @@ private:
     // trayIcon
     QAction* _miniToTrayAction;
     QAction* _restoreAction;
+    QAction* _settingAction;
     QAction* _quitAction;
 
+    QIcon _finIcon;
     QSystemTrayIcon* _trayIcon;
     QMenu* _trayIconMenu;
 };

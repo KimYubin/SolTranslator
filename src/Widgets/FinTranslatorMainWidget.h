@@ -9,6 +9,8 @@
 #include <QSystemTrayIcon>
 #include <QWidget>
 
+#include "IFinWidget.h"
+
 
 class QButtonGroup;
 class SettingsWidget;
@@ -27,7 +29,7 @@ class FinTranslatorMainWidget;
 
 QT_END_NAMESPACE
 
-class FinTranslatorMainWidget : public QWidget
+class FinTranslatorMainWidget : public IFinWidget
 {
     Q_OBJECT
 

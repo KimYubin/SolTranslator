@@ -27,7 +27,7 @@
 
 
 FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
-    : QWidget(parent)
+    : IFinWidget(parent)
     , ui(new Ui::FinTranslatorMainWidget)
 {
     qApp->setQuitOnLastWindowClosed(false);

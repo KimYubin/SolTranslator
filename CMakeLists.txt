@@ -79,6 +79,8 @@ set(PROJECT_SOURCES
         src/SubWidgets/SettingCard.h
         src/Widgets/ITranslateWidget.cpp
         src/Widgets/ITranslateWidget.h
+        src/Widgets/IFinWidget.cpp
+        src/Widgets/IFinWidget.h
 
 )
 

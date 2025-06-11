@@ -6,6 +6,7 @@
 #define SETTINGSWIDGET_H
 
 #include <QWidget>
+#include "../Widgets/IFinWidget.h"
 
 
 class QButtonGroup;
@@ -23,7 +24,7 @@ class SettingsWidget;
 
 QT_END_NAMESPACE
 
-class SettingsWidget : public QWidget
+class SettingsWidget : public IFinWidget
 {
     Q_OBJECT
 

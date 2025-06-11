@@ -12,6 +12,7 @@
 #include "../FinTypes.h"
 
 class FinTranslatorCore;
+class IOptionPage;
 
 class IOptionWidget : public QWidget
 {

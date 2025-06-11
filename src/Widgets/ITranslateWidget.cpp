@@ -6,7 +6,8 @@
 
 #include <QTimer>
 
-ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags): QWidget(parent, flags)
+ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
+    : QWidget(parent, flags)
 {
     _updateStreamStrTimer = new QTimer(this);
     _updateStreamStrTimer->setInterval(50);

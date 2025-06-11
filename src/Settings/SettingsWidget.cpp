@@ -29,7 +29,7 @@ enum
 };
 
 SettingsWidget::SettingsWidget(QWidget* parent)
-    : QWidget(parent)
+    : IFinWidget(parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);

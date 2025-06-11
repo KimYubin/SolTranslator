@@ -52,13 +52,7 @@
      <widget class="QLineEdit" name="findEdit"/>
     </item>
     <item row="1" column="0">
-     <widget class="QListWidget" name="listWidget">
-      <property name="font">
-       <font>
-        <stylestrategy>PreferAntialias</stylestrategy>
-       </font>
-      </property>
-     </widget>
+     <widget class="QListWidget" name="listWidget"/>
     </item>
    </layout>
   </widget>

@@ -2,11 +2,17 @@
 /* QtMaterial - https://github.com/UN-GCPDS/qt-material
 /* By Yeison Cardona - GCPDS
 /*  ------------------------------------------------------------------------  */
+/**
+color: rgb(61, 68, 80);
+color: rgb(220, 222, 223);
+ */
 *{
   color:rgb(22, 22, 22);
+  /* color: rgb(61, 68, 80); */
+  
   font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
   font-size: 15px;
-  font-weight: 500;
+  /* font-weight: 400; */
 }
 
 
@@ -22,6 +28,7 @@
   margin: 0px;
   padding: 1px 16px;
   height: 32px;
+  font-size: 16px;
   font-weight: bold;
   border-radius: 4px;
   background-color:#6fc5ff;

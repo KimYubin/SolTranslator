@@ -45,6 +45,10 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     // ~=====================
     // option setup
+    QFont qfont = ui->listWidget->font();
+    qfont.setHintingPreference(QFont::PreferNoHinting);
+    qfont.setStyleStrategy(QFont::PreferAntialias);
+    ui->listWidget->setFont(qfont);
     ui->listWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     ui->listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);

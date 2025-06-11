@@ -23,7 +23,7 @@ SwitchButton::SwitchButton(QWidget* parent)
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
     _handleAnimation->setEasingCurve(QEasingCurve::OutExpo);
-    _handleAnimation->setDuration(300);
+    _handleAnimation->setDuration(250);
 
     _animationGroup = new QSequentialAnimationGroup(this);
     _animationGroup->addAnimation(_handleAnimation);

@@ -383,7 +383,6 @@ void SimpleTranslatePopup::setupUI()
     ui->textLayout->setContentsMargins(20, 0, 10, 20);
 
     QFont font = ui->resultText->font();
-    // font.setHintingPreference(QFont::PreferNoHinting);
     font.setPointSizeF(_fontSize);
     ui->resultText->setFont(font);
     Qt::TextInteractionFlags interactionFlags = ui->resultText->textInteractionFlags();

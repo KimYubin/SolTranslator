@@ -150,13 +150,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QPlainTextEdit" name="textOrigin">
-          <property name="font">
-           <font>
-            <hintingpreference>PreferNoHinting</hintingpreference>
-           </font>
-          </property>
-         </widget>
+         <widget class="QPlainTextEdit" name="textOrigin"/>
         </item>
         <item alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="translateButton">
@@ -177,11 +171,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTextBrowser" name="textTranslate">
-          <property name="font">
-           <font>
-            <hintingpreference>PreferNoHinting</hintingpreference>
-           </font>
-          </property>
           <property name="readOnly">
            <bool>false</bool>
           </property>

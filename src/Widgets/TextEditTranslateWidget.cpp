@@ -22,16 +22,13 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     , ui(new Ui::TextEditTranslateWidget)
 {
     ui->setupUi(this);
-    
+
     setLayout(ui->mainLayout);
 
     ui->textOrigin->setTabChangesFocus(true);
     ui->textTranslate->setTabChangesFocus(true);
     ui->textTranslate->setReadOnly(true);
     ui->textTranslate->setMouseTracking(false);
-    QFont textFont = ui->textTranslate->font();
-    textFont.setHintingPreference(QFont::PreferDefaultHinting);
-    ui->textTranslate->setFont(textFont);
     ui->textTranslate->setTextInteractionFlags(
         Qt::TextSelectableByMouse |
         Qt::TextSelectableByKeyboard |

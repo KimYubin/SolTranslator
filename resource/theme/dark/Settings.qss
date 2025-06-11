@@ -24,7 +24,8 @@
 
 #SettingsWidget QListView
 {
-  font-size: 16px;
+  /* font-size: 16px; */
+  /* font-weight: 400; */
   border-radius: 0px;
   padding: 0px;
   margin: 0px;
@@ -34,24 +35,24 @@
 {
   padding: 4px;
   min-height: 32px;
-  color:rgb(219, 219, 219);
-  selection-color: rgb(219, 219, 219);
+  color: rgb(220, 222, 223);
+  selection-color: rgb(220, 222, 223);
   border-color: transparent;
 }
 
 #SettingsWidget QListView::item:hover
 {
-  background-color:rgba(214, 214, 214, 0.88);
-  selection-background-color:rgba(214, 214, 214, 0.88);
-  color: #000000;
+  background-color:rgb(220, 222, 223);
+  selection-background-color:rgb(220, 222, 223);
+  color: rgb(61, 68, 80);
 }
 
 #SettingsWidget QListView::item:selected 
 {
   background-color:rgba(211, 211, 211, 0.29);
   selection-background-color:rgba(211, 211, 211, 0.29);
-  color: rgb(219, 219, 219);
-  selection-color: rgb(219, 219, 219); /* For Windows */
+  color: rgb(220, 222, 223);
+  selection-color: rgb(220, 222, 223); /* For Windows */
 }
 
 #SettingsWidget QSplitter

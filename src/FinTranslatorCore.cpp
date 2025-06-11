@@ -32,6 +32,12 @@ FinTranslatorCore::FinTranslatorCore(const QApplication& inQApp, QObject* parent
 
     loadCache();
 
+    // font
+    QFont qfont = qApp->font();
+    qfont.setHintingPreference(QFont::PreferNoHinting);
+    qfont.setStyleStrategy(QFont::PreferAntialias);
+    qApp->setFont(qfont);
+
     // parsing
     QCommandLineParser parser;
     parser.addOption({Fin::Const::CommandLineOptions::START_UP_RUN.data(), "Started from Windows startup"});

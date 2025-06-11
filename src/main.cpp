@@ -58,7 +58,7 @@ void setupLogFile()
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    FinTranslatorCore finTranslatorCore(app);
+    FinTranslatorCore finTranslatorCore(&app);
 
     // setupLogFile();
 

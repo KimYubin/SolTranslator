@@ -24,7 +24,7 @@ class FinTranslatorCore : public QObject
     Q_OBJECT
 
 public:
-    explicit FinTranslatorCore(const QApplication& inQApp, QObject* parent = nullptr);
+    explicit FinTranslatorCore(QObject* parent = nullptr);
     ~FinTranslatorCore() override;
 
     static FinTranslatorCore* instance() noexcept { return _self; }

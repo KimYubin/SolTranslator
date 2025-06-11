@@ -17,7 +17,7 @@
 
 FinTranslatorCore* FinTranslatorCore::_self = nullptr;
 
-FinTranslatorCore::FinTranslatorCore(const QApplication& inQApp, QObject* parent): QObject(parent)
+FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 {
     Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one application object");
     _self = this;
@@ -38,12 +38,13 @@ FinTranslatorCore::FinTranslatorCore(const QApplication& inQApp, QObject* parent
     qfont.setStyleStrategy(QFont::PreferAntialias);
     qApp->setFont(qfont);
 
+    // generate GUI widget
+    _finMainWidget = new FinTranslatorMainWidget();
+
     // parsing
     QCommandLineParser parser;
     parser.addOption({Fin::Const::CommandLineOptions::START_UP_RUN.data(), "Started from Windows startup"});
-    parser.process(inQApp);
-
-    _finMainWidget = new FinTranslatorMainWidget();
+    parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행 
     if (parser.isSet(Fin::Const::CommandLineOptions::START_UP_RUN.data()))

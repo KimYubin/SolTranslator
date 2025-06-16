@@ -13,6 +13,7 @@
 #include <QStyledItemDelegate>
 #include <QScrollArea>
 #include <QListWidget>
+#include <QShortcut>
 
 #include "IOptionWidget.h"
 
@@ -75,6 +76,10 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     });
 
     ui->listWidget->setCurrentRow(0);
+
+    QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
+
 
     show();
 }

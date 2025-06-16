@@ -81,12 +81,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     // tray icon
     createActions();
     createTrayIcon();
-    connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
 
-    _trayIcon->show();
 
     applyTheme();
-
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()
@@ -214,6 +211,10 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
     switch (reason)
     {
     case QSystemTrayIcon::Trigger:
+        if (_trayIcon && _trayIcon->contextMenu())
+        {
+            _trayIcon->contextMenu()->popup(QCursor::pos());
+        }
         break;
     case QSystemTrayIcon::DoubleClick:
         if (isMinimized())
@@ -272,4 +273,8 @@ void FinTranslatorMainWidget::createTrayIcon()
     _trayIcon->setContextMenu(_trayIconMenu);
     _trayIcon->setVisible(true);
     _trayIcon->setToolTip(tr("FinTranslator"));
+
+    connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
+
+    _trayIcon->show();
 }

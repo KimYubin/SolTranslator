@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS SvgWidgets)
 find_package(Qt${QT_VERSION_MAJOR}  REQUIRED COMPONENTS Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
 
@@ -125,6 +127,8 @@ set_target_properties( Qt PROPERTIES IMPORTED_LOCATION ${QTDIR}/bin )
 
 
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Svg)
+target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::SvgWidgets)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
 

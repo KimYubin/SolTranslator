@@ -9,7 +9,7 @@
 #include <QPointer>
 #include <QTextEdit>
 
-#include "FinTypes.h"
+#include "../FinTypes.h"
 
 
 class QTextEdit;

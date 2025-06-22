@@ -5,7 +5,7 @@
 #ifndef TRANSLATEUNITGOOGLE_H
 #define TRANSLATEUNITGOOGLE_H
 
-#include "TranslateUnit.h"
+#include "../TranslateUnit.h"
 
 
 class TranslateUnitGoogle final : public TranslateUnit

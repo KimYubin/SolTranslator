@@ -28,8 +28,8 @@ set(PROJECT_SOURCES
 
         src/TranslateManager.cpp
         src/TranslateManager.h
-        src/TranslateUnit.cpp
-        src/TranslateUnit.h
+        src/EngineUnits/TranslateUnit.cpp
+        src/EngineUnits/TranslateUnit.h
         src/ConfigManager.cpp
         src/ConfigManager.h
         src/FinTypes.cpp
@@ -45,12 +45,12 @@ set(PROJECT_SOURCES
         src/RunCopy_Impl_Mac.cpp
         src/FinHashQueue.cpp
         src/FinHashQueue.h
-        src/TlUnitFactory.cpp
-        src/TlUnitFactory.h
-        src/TranslateUnitOpenAi.cpp
-        src/TranslateUnitOpenAi.h
-        src/TranslateUnitGoogle.cpp
-        src/TranslateUnitGoogle.h
+        src/EngineUnits/TlUnitFactory.cpp
+        src/EngineUnits/TlUnitFactory.h
+        src/EngineUnits/OpenAI/TranslateUnitOpenAi.cpp
+        src/EngineUnits/OpenAI/TranslateUnitOpenAi.h
+        src/EngineUnits/GoogleEngine/TranslateUnitGoogle.cpp
+        src/EngineUnits/GoogleEngine/TranslateUnitGoogle.h
         src/DataManager.cpp
         src/DataManager.h
         src/AbstractManager.cpp

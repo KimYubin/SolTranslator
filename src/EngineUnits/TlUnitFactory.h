@@ -6,7 +6,7 @@
 #define TLENGINE_H
 #include <QObject>
 
-#include "FinTypes.h"
+#include "../FinTypes.h"
 
 
 class TranslateManager;

@@ -14,8 +14,8 @@
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
 #include "Widgets/SimpleTranslatePopup.h"
-#include "TlUnitFactory.h"
-#include "TranslateUnit.h"
+#include "EngineUnits/TlUnitFactory.h"
+#include "EngineUnits/TranslateUnit.h"
 
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)

@@ -9,7 +9,7 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "../FinTypes.h"
+#include "FinTypes.h"
 
 class FinTranslatorCore;
 class IOptionPage;

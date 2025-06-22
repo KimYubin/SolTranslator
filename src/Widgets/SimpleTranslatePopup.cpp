@@ -22,7 +22,6 @@
 #include <QTimer>
 #include <qevent.h>
 
-#include "../FinTranslatorCore.h"
 #include "Widgets/ui_SimpleTranslatePopup.h"
 
 

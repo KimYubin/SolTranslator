@@ -1,13 +1,14 @@
 ﻿//
 // Created by YubinKim on 25/04/14 월.
 //
-#include <QString>
 
 #include "EngineOptionWidget.h"
 
-#include "../Managers/ConfigManager.h"
-#include "../FinTranslatorCore.h"
-#include "../Widgets/FinTranslatorMainWidget.h"
+#include <QString>
+
+#include "Managers/ConfigManager.h"
+#include "FinTranslatorCore.h"
+#include "Widgets/FinTranslatorMainWidget.h"
 
 #include "ui_EngineOptionWidget.h"
 

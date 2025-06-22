@@ -132,6 +132,7 @@ target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::SvgWidgets)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
 
+target_include_directories(FinTranslator PUBLIC src/)
 
 target_include_directories(qhotkey PUBLIC src/QHotkey)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui)

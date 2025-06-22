@@ -9,10 +9,10 @@
 #include <QPointer>
 #include <QTimer>
 
-#include "../FinTypes.h"
-#include "../Managers/ConfigManager.h"
-#include "../FinTranslatorCore.h"
-#include "../Managers/TranslateManager.h"
+#include "FinTranslatorCore.h"
+#include "FinTypes.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
 

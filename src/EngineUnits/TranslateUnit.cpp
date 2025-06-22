@@ -6,9 +6,9 @@
 
 #include <QNetworkReply>
 
-#include "../FinTypes.h"
-#include "../Managers/ConfigManager.h"
-#include "../Managers/TranslateManager.h"
+#include "FinTypes.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
 
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)

@@ -18,12 +18,13 @@
 #include <qevent.h>
 #include <qtabbar.h>
 
-#include "../Managers/ConfigManager.h"
-#include "../FinTranslatorCore.h"
-
-#include "../Settings/SettingsWidget.h"
+#include "FinTranslatorCore.h"
 #include "TextEditTranslateWidget.h"
-#include "../Managers/TranslateManager.h"
+
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
+
+#include "Settings/SettingsWidget.h"
 
 #include "Widgets/ui_FinTranslatorMainWidget.h"
 

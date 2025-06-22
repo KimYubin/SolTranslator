@@ -15,10 +15,9 @@
 #include <QListWidget>
 #include <QShortcut>
 
+#include "FinTranslatorCore.h"
+#include "Widgets/FinTranslatorMainWidget.h"
 #include "IOptionWidget.h"
-
-#include "../FinTranslatorCore.h"
-#include "../Widgets/FinTranslatorMainWidget.h"
 
 #include "ui_SettingsWidget.h"
 

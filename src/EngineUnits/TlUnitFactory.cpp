@@ -4,14 +4,13 @@
 
 #include "TlUnitFactory.h"
 
+#include <magic_enum.hpp>
 
-#include "../Managers/ConfigManager.h"
-#include "../magic_enum.hpp"
-
-#include "../Managers/TranslateManager.h"
-#include "TranslateUnit.h"
-#include "GoogleEngine/TranslateUnitGoogle.h"
-#include "OpenAI/TranslateUnitOpenAi.h"
+#include "EngineUnits/TranslateUnit.h"
+#include "EngineUnits/GoogleEngine/TranslateUnitGoogle.h"
+#include "EngineUnits/OpenAI/TranslateUnitOpenAi.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
 
 TlUnitFactory::TlUnitFactory(QObject* parent)
 {

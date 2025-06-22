@@ -7,12 +7,10 @@
 
 #include <QNetworkAccessManager>
 #include <QPointer>
-#include <QTextEdit>
 
-#include "../FinTypes.h"
+#include "FinTypes.h"
 
 
-class QTextEdit;
 class TranslateManager;
 
 class TranslateUnit : public QNetworkAccessManager

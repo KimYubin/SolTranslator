@@ -9,10 +9,10 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-#include "../../FinTypes.h"
-#include "../../Managers/ConfigManager.h"
-#include "../../FinConstants.h"
-#include "../../Managers/TranslateManager.h"
+#include "FinConstants.h"
+#include "FinTypes.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
 
 TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
                                        , TranslateManager* parent)

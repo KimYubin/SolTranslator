@@ -9,7 +9,7 @@
 
 #include "ITranslateWidget.h"
 
-#include "../FinTypes.h"
+#include "FinTypes.h"
 
 class QPushButton;
 class QSizeGrip;

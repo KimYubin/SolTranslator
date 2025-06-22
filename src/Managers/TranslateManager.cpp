@@ -7,15 +7,16 @@
 #include <QMimeData>
 #include <QNetworkReply>
 #include <QRegularExpression>
+#include <QTextDocument>
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
-#include "../FinHashQueue.h"
-#include "../FinTranslatorCore.h"
-#include "../FinTypes.h"
-#include "../Widgets/SimpleTranslatePopup.h"
-#include "../EngineUnits/TlUnitFactory.h"
-#include "../EngineUnits/TranslateUnit.h"
+#include "FinHashQueue.h"
+#include "FinTranslatorCore.h"
+#include "FinTypes.h"
+#include "EngineUnits/TlUnitFactory.h"
+#include "EngineUnits/TranslateUnit.h"
+#include "Widgets/SimpleTranslatePopup.h"
 
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)

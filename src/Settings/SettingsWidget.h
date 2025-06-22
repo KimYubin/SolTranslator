@@ -6,7 +6,8 @@
 #define SETTINGSWIDGET_H
 
 #include <QWidget>
-#include "../Widgets/IFinWidget.h"
+
+#include "Widgets/IFinWidget.h"
 
 
 class QButtonGroup;

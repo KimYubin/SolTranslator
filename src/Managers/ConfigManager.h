@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QSettings>
 
-#include "../FinTypes.h"
+#include "FinTypes.h"
 
 
 class ConfigManager : public QObject

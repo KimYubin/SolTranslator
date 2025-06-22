@@ -6,18 +6,15 @@
 
 #include "GeneralOptionWidget.h"
 
-
 #include <QPushButton>
 
+#include "FinTranslatorCore.h"
+#include "Managers/ConfigManager.h"
+#include "SubWidgets/SettingCard.h"
+#include "SubWidgets/SwitchButton.h"
+#include "Widgets/FinTranslatorMainWidget.h"
+
 #include "ui_GeneralOptionWidget.h"
-
-#include "../SubWidgets/SwitchButton.h"
-#include "../Managers/ConfigManager.h"
-#include "../FinTranslatorCore.h"
-
-#include "../SubWidgets/SettingCard.h"
-
-#include "../Widgets/FinTranslatorMainWidget.h"
 
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)

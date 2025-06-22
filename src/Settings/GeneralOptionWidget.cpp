@@ -12,7 +12,7 @@
 #include "ui_GeneralOptionWidget.h"
 
 #include "../SubWidgets/SwitchButton.h"
-#include "../ConfigManager.h"
+#include "../Managers/ConfigManager.h"
 #include "../FinTranslatorCore.h"
 
 #include "../SubWidgets/SettingCard.h"

@@ -4,7 +4,7 @@
 
 #include "AbstractManager.h"
 
-#include "FinTranslatorCore.h"
+#include "../FinTranslatorCore.h"
 
 AbstractManager::AbstractManager(FinTranslatorCore* parent) : QObject(parent)
 {

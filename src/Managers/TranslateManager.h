@@ -7,7 +7,7 @@
 
 
 #include "AbstractManager.h"
-#include "FinHashQueue.h"
+#include "../FinHashQueue.h"
 
 
 class QTextEdit;

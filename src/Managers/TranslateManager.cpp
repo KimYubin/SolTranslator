@@ -10,12 +10,12 @@
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
-#include "FinHashQueue.h"
-#include "FinTranslatorCore.h"
-#include "FinTypes.h"
-#include "Widgets/SimpleTranslatePopup.h"
-#include "EngineUnits/TlUnitFactory.h"
-#include "EngineUnits/TranslateUnit.h"
+#include "../FinHashQueue.h"
+#include "../FinTranslatorCore.h"
+#include "../FinTypes.h"
+#include "../Widgets/SimpleTranslatePopup.h"
+#include "../EngineUnits/TlUnitFactory.h"
+#include "../EngineUnits/TranslateUnit.h"
 
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)

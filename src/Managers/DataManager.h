@@ -7,7 +7,7 @@
 #include <QObject>
 
 #include "AbstractManager.h"
-#include "FinHashQueue.h"
+#include "../FinHashQueue.h"
 
 class FinTranslatorCore;
 

@@ -26,23 +26,23 @@ set(PROJECT_SOURCES
         src/Widgets/FinTranslatorMainWidget.h
         src/Widgets/FinTranslatorMainWidget.ui
 
-        src/TranslateManager.cpp
-        src/TranslateManager.h
+        src/Managers/TranslateManager.cpp
+        src/Managers/TranslateManager.h
         src/EngineUnits/TranslateUnit.cpp
         src/EngineUnits/TranslateUnit.h
-        src/ConfigManager.cpp
-        src/ConfigManager.h
+        src/Managers/ConfigManager.cpp
+        src/Managers/ConfigManager.h
         src/FinTypes.cpp
         src/FinTypes.h
         src/magic_enum.hpp
 
-        src/GlobalHotKeyManager.cpp
-        src/GlobalHotKeyManager.h
-        src/RunCopKey.cpp
-        src/RunCopKey.h
-        src/RunCopy_Impl_Win.cpp
-        src/RunCopy_Impl_Linux.cpp
-        src/RunCopy_Impl_Mac.cpp
+        src/Managers/GlobalHotKeyManager.cpp
+        src/Managers/GlobalHotKeyManager.h
+        src/Managers/RunCopKey.cpp
+        src/Managers/RunCopKey.h
+        src/Managers/RunCopy_Impl_Win.cpp
+        src/Managers/RunCopy_Impl_Linux.cpp
+        src/Managers/RunCopy_Impl_Mac.cpp
         src/FinHashQueue.cpp
         src/FinHashQueue.h
         src/EngineUnits/TlUnitFactory.cpp
@@ -51,18 +51,18 @@ set(PROJECT_SOURCES
         src/EngineUnits/OpenAI/TranslateUnitOpenAi.h
         src/EngineUnits/GoogleEngine/TranslateUnitGoogle.cpp
         src/EngineUnits/GoogleEngine/TranslateUnitGoogle.h
-        src/DataManager.cpp
-        src/DataManager.h
-        src/AbstractManager.cpp
-        src/AbstractManager.h
+        src/Managers/DataManager.cpp
+        src/Managers/DataManager.h
+        src/Managers/AbstractManager.cpp
+        src/Managers/AbstractManager.h
         src/Widgets/SimpleTranslatePopup.cpp
         src/Widgets/SimpleTranslatePopup.h
         src/Widgets/SimpleTranslatePopup.ui
         src/Widgets/TextEditTranslateWidget.cpp
         src/Widgets/TextEditTranslateWidget.h
         src/Widgets/TextEditTranslateWidget.ui
-        src/AsyncManager.cpp
-        src/AsyncManager.h
+        src/Managers/AsyncManager.cpp
+        src/Managers/AsyncManager.h
         src/Settings/SettingsWidget.cpp
         src/Settings/SettingsWidget.h
         src/Settings/SettingsWidget.ui

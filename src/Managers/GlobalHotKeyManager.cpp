@@ -16,7 +16,7 @@
 
 #include "qhotkey.h"
 
-#include "FinTranslatorCore.h"
+#include "../FinTranslatorCore.h"
 #include "RunCopKey.h"
 
 GlobalHotKeyManager::GlobalHotKeyManager(FinTranslatorCore* parent): AbstractManager(parent)

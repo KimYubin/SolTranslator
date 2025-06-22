@@ -5,10 +5,10 @@
 #include "TlUnitFactory.h"
 
 
-#include "../ConfigManager.h"
+#include "../Managers/ConfigManager.h"
 #include "../magic_enum.hpp"
 
-#include "../TranslateManager.h"
+#include "../Managers/TranslateManager.h"
 #include "TranslateUnit.h"
 #include "GoogleEngine/TranslateUnitGoogle.h"
 #include "OpenAI/TranslateUnitOpenAi.h"

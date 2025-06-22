@@ -13,7 +13,7 @@
 #include <QtConcurrent>
 
 
-#include "magic_enum.hpp"
+#include "../magic_enum.hpp"
 
 DataManager::DataManager(FinTranslatorCore* parent): AbstractManager(parent)
 {

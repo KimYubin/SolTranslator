@@ -10,9 +10,9 @@
 #include <QNetworkReply>
 
 #include "../../FinTypes.h"
-#include "../../ConfigManager.h"
+#include "../../Managers/ConfigManager.h"
 #include "../../FinConstants.h"
-#include "../../TranslateManager.h"
+#include "../../Managers/TranslateManager.h"
 
 TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
                                        , TranslateManager* parent)

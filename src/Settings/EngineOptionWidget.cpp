@@ -5,7 +5,7 @@
 
 #include "EngineOptionWidget.h"
 
-#include "../ConfigManager.h"
+#include "../Managers/ConfigManager.h"
 #include "../FinTranslatorCore.h"
 #include "../Widgets/FinTranslatorMainWidget.h"
 

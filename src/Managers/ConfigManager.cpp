@@ -8,8 +8,8 @@
 #include <QDir>
 #include <QSettings>
 
-#include "FinConstants.h"
-#include "FinTypes.h"
+#include "../FinConstants.h"
+#include "../FinTypes.h"
 
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";

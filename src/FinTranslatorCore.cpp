@@ -7,13 +7,13 @@
 #include <QApplication>
 #include <QMimeData>
 
-#include "AsyncManager.h"
-#include "DataManager.h"
+#include "Managers/AsyncManager.h"
+#include "Managers/DataManager.h"
 #include "FinConstants.h"
 
 #include "Widgets/FinTranslatorMainWidget.h"
-#include "TranslateManager.h"
-#include "GlobalHotKeyManager.h"
+#include "Managers/TranslateManager.h"
+#include "Managers/GlobalHotKeyManager.h"
 
 FinTranslatorCore* FinTranslatorCore::_self = nullptr;
 

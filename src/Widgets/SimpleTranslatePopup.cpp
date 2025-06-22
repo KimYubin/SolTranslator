@@ -17,6 +17,7 @@
 #include <QRegularExpression>
 #include <QScreen>
 #include <QSizeGrip>
+#include <QSvgWidget>
 #include <QtConcurrentRun>
 #include <QTimer>
 #include <qevent.h>
@@ -372,11 +373,15 @@ void SimpleTranslatePopup::setupUI()
     // ~===========
     // bottom grip
     _sizeGrip = new QSizeGrip(this);
-    ui->statusLayout->addWidget(_sizeGrip, 0, 0, Qt::AlignBottom | Qt::AlignRight);
+    ui->statusLayout->addWidget(_sizeGrip, 0, 1, Qt::AlignBottom | Qt::AlignRight);
     ui->statusLayout->setContentsMargins(0, 0, 4, 4);
     _sizeGrip->show();
     _sizeGrip->installEventFilter(this);
 
+
+    QSvgWidget* waitAnimWidget = new QSvgWidget(QString(":/img/wait_anim_img"), this);
+    waitAnimWidget->setFixedSize(20,20);
+    ui->statusLayout->addWidget(waitAnimWidget, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
     // ~======================
     // resultText & scroll bar
     ui->textLayout->setContentsMargins(20, 0, 10, 20);

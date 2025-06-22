@@ -35,10 +35,10 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
 
     QJsonArray messages;
 
-    QJsonObject systemMessage;
-    systemMessage["role"] = "system";
-    systemMessage["content"] = QString(Fin::Const::Prompt::OPEN_AI.data()).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
-    messages.append(systemMessage);
+    QJsonObject developerMessage;
+    developerMessage["role"] = "developer";
+    developerMessage["content"] = QString(Fin::Const::Prompt::OPEN_AI.data()).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    messages.append(developerMessage);
 
     QJsonObject userMessage;
     userMessage["role"] = "user";

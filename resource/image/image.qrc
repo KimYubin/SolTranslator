@@ -16,6 +16,8 @@
         <file alias="restore_button_img">restore.svg</file>
 
         <file alias="close_button_img">close_48dp_E3E3E3_FILL0_wght300_GRAD0_opsz48.svg</file>
-    
+
+        <file alias="wait_anim_img">animation_test.svg</file>
+
     </qresource>
 </RCC>

@@ -76,6 +76,10 @@ private:
     QIcon _finIcon;
     QSystemTrayIcon* _trayIcon;
     QMenu* _trayIconMenu;
+
+    // 좌클릭과 더블클릭 구분용
+    QTimer* _doubleClickTimer;
+    QPoint _prevMousePos;
 };
 
 

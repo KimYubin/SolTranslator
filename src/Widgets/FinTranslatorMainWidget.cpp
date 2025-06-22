@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QStyle>
 #include <QTextStream>
+#include <QTimer>
+
 #include <qevent.h>
 #include <qtabbar.h>
 
@@ -211,12 +213,11 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
     switch (reason)
     {
     case QSystemTrayIcon::Trigger:
-        if (_trayIcon && _trayIcon->contextMenu())
-        {
-            _trayIcon->contextMenu()->popup(QCursor::pos());
-        }
+        _prevMousePos = QCursor::pos();
+        _doubleClickTimer->start();
         break;
     case QSystemTrayIcon::DoubleClick:
+        _doubleClickTimer->stop();
         if (isMinimized())
         {
             if (isMaximized())
@@ -273,6 +274,19 @@ void FinTranslatorMainWidget::createTrayIcon()
     _trayIcon->setContextMenu(_trayIconMenu);
     _trayIcon->setVisible(true);
     _trayIcon->setToolTip(tr("FinTranslator"));
+
+
+    _doubleClickTimer = new QTimer(this);
+    _doubleClickTimer->setInterval(1000);
+    _doubleClickTimer->setSingleShot(true);
+    connect(_doubleClickTimer, &QTimer::timeout, this, [this]()
+    {
+        if (_trayIcon && _trayIcon->contextMenu())
+        {
+            _prevMousePos.ry() -= _trayIcon->contextMenu()->size().height();
+            _trayIcon->contextMenu()->popup(_prevMousePos);
+        }
+    });
 
     connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
 

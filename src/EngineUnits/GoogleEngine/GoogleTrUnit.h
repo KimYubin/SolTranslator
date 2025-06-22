@@ -8,12 +8,12 @@
 #include "EngineUnits/TranslateUnit.h"
 
 
-class TranslateUnitGoogle final : public TranslateUnit
+class GoogleTrUnit final : public TranslateUnit
 {
     Q_OBJECT
 
 public:
-    explicit TranslateUnitGoogle(const TranslateRequestInfo& inTranslateRequestInfo
+    explicit GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                                , TranslateManager* parent);
 
 protected:

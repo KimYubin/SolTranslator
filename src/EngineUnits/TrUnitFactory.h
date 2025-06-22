@@ -12,17 +12,17 @@
 class TranslateManager;
 class TranslateUnit;
 
-class TlUnitFactory : public QObject
+class TrUnitFactory : public QObject
 {
     Q_OBJECT
 
 private:
-    explicit TlUnitFactory(QObject* parent = nullptr);
+    explicit TrUnitFactory(QObject* parent = nullptr);
 
 public:
-    static TlUnitFactory& get()
+    static TrUnitFactory& get()
     {
-        static TlUnitFactory* instance = new TlUnitFactory();
+        static TrUnitFactory* instance = new TrUnitFactory();
         return *instance;
     }
 

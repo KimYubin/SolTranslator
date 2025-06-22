@@ -8,12 +8,12 @@
 #include "EngineUnits/TranslateUnit.h"
 
 
-class TranslateUnitOpenAI final : public TranslateUnit
+class OpenAiTrUnit final : public TranslateUnit
 {
     Q_OBJECT
 
 public:
-    explicit TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
+    explicit OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                                , TranslateManager* parent);
 
 protected:

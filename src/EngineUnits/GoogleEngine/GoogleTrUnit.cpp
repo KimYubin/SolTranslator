@@ -2,18 +2,18 @@
 // Created by YubinKim on 25/03/17 월.
 //
 
-#include "TranslateUnitGoogle.h"
+#include "GoogleTrUnit.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkReply>
 
-TranslateUnitGoogle::TranslateUnitGoogle(const TranslateRequestInfo& inTranslateRequestInfo
+GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                                        , TranslateManager* parent)
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
-void TranslateUnitGoogle::requestTranslate()
+void GoogleTrUnit::requestTranslate()
 {
     QUrl url = QString("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3").arg(
         Langs::GetCodeName(_trReqData.sourceLang)
@@ -25,7 +25,7 @@ void TranslateUnitGoogle::requestTranslate()
     get(request);
 }
 
-void TranslateUnitGoogle::replyTranslateFinished(QNetworkReply* reply)
+void GoogleTrUnit::replyTranslateFinished(QNetworkReply* reply)
 {
     const QByteArray responseData    = reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);

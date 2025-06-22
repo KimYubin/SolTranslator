@@ -45,12 +45,12 @@ set(PROJECT_SOURCES
         src/Managers/RunCopy_Impl_Mac.cpp
         src/FinHashQueue.cpp
         src/FinHashQueue.h
-        src/EngineUnits/TlUnitFactory.cpp
-        src/EngineUnits/TlUnitFactory.h
-        src/EngineUnits/OpenAI/TranslateUnitOpenAi.cpp
-        src/EngineUnits/OpenAI/TranslateUnitOpenAi.h
-        src/EngineUnits/GoogleEngine/TranslateUnitGoogle.cpp
-        src/EngineUnits/GoogleEngine/TranslateUnitGoogle.h
+        src/EngineUnits/TrUnitFactory.cpp
+        src/EngineUnits/TrUnitFactory.h
+        src/EngineUnits/OpenAI/OpenAiTrUnit.cpp
+        src/EngineUnits/OpenAI/OpenAiTrUnit.h
+        src/EngineUnits/GoogleEngine/GoogleTrUnit.cpp
+        src/EngineUnits/GoogleEngine/GoogleTrUnit.h
         src/Managers/DataManager.cpp
         src/Managers/DataManager.h
         src/Managers/AbstractManager.cpp
@@ -83,6 +83,8 @@ set(PROJECT_SOURCES
         src/Widgets/ITranslateWidget.h
         src/Widgets/IFinWidget.cpp
         src/Widgets/IFinWidget.h
+        src/EngineUnits/FinPoint/FinPointTrUnit.cpp
+        src/EngineUnits/FinPoint/FinPointTrUnit.h
 
 )
 

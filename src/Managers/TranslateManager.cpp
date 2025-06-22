@@ -14,7 +14,7 @@
 #include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
-#include "EngineUnits/TlUnitFactory.h"
+#include "EngineUnits/TrUnitFactory.h"
 #include "EngineUnits/TranslateUnit.h"
 #include "Widgets/SimpleTranslatePopup.h"
 
@@ -26,10 +26,10 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
 
 QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
 {
-    TranslateUnit* tranUnit = TlUnitFactory::get().NewTranslateUnit(inTranslateRequestInfo, this);
-    tranUnit->executeTextTranslation();
+    TranslateUnit* transUnit = TrUnitFactory::get().NewTranslateUnit(inTranslateRequestInfo, this);
+    transUnit->executeTextTranslation();
 
-    return QPointer<TranslateUnit>{tranUnit};
+    return QPointer<TranslateUnit>{transUnit};
 }
 
 void TranslateManager::translateSimple(const QMimeData* inMimeData

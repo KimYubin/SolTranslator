@@ -2,7 +2,7 @@
 // Created by YubinKim on 25/03/17 월.
 //
 
-#include "TranslateUnitOpenAi.h"
+#include "OpenAiTrUnit.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -14,12 +14,12 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-TranslateUnitOpenAI::TranslateUnitOpenAI(const TranslateRequestInfo& inTranslateRequestInfo
+OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                                        , TranslateManager* parent)
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
-void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
+void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 {
     QUrl url("https://api.openai.com/v1/chat/completions");
     QNetworkRequest request(url);
@@ -58,12 +58,12 @@ void TranslateUnitOpenAI::chatTranslate(const bool bIsStreaming)
     }
 }
 
-void TranslateUnitOpenAI::requestTranslate()
+void OpenAiTrUnit::requestTranslate()
 {
     chatTranslate(true);
 }
 
-void TranslateUnitOpenAI::onReadyRead(QNetworkReply* reply)
+void OpenAiTrUnit::onReadyRead(QNetworkReply* reply)
 {
     QByteArray chunk  = reply->readAll();
     QString dataChunk = QString::fromUtf8(chunk);
@@ -98,7 +98,7 @@ void TranslateUnitOpenAI::onReadyRead(QNetworkReply* reply)
     }
 }
 
-void TranslateUnitOpenAI::replyTranslateFinished(QNetworkReply* reply)
+void OpenAiTrUnit::replyTranslateFinished(QNetworkReply* reply)
 {
     const QByteArray responseData    = reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);

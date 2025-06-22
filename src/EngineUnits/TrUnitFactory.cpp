@@ -2,34 +2,35 @@
 // Created by YubinKim on 25/03/17 월.
 //
 
-#include "TlUnitFactory.h"
+#include "TrUnitFactory.h"
 
 #include <magic_enum.hpp>
 
 #include "EngineUnits/TranslateUnit.h"
-#include "EngineUnits/GoogleEngine/TranslateUnitGoogle.h"
-#include "EngineUnits/OpenAI/TranslateUnitOpenAi.h"
+#include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
+#include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-TlUnitFactory::TlUnitFactory(QObject* parent)
+TrUnitFactory::TrUnitFactory(QObject* parent)
 {
 }
 
-TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
+TranslateUnit* TrUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                                              , TranslateManager* translateManager)
 {
-    TranslateUnit* tlUnit = nullptr;
+    TranslateUnit* trUnit = nullptr;
     const EngineType currentEngine = ConfigManager::get().getCurrentEngineType();
     switch (currentEngine)
     {
     case EngineType::None:
         break;
     case EngineType::Google:
-        tlUnit = new TranslateUnitGoogle(inTranslateRequestInfo, translateManager);
+        trUnit = new GoogleTrUnit(inTranslateRequestInfo, translateManager);
         break;
     case EngineType::OpenAI:
-        tlUnit = new TranslateUnitOpenAI(inTranslateRequestInfo, translateManager);
+        trUnit = new OpenAiTrUnit(inTranslateRequestInfo, translateManager);
         break;
     case EngineType::Size:
         break;
@@ -37,7 +38,7 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
 
     // string 기반 enum과 class 매칭 유효성 검사
     bool bValid = false;
-    if (const char* className = tlUnit ? tlUnit->metaObject()->className() : nullptr)
+    if (const char* className = trUnit ? trUnit->metaObject()->className() : nullptr)
     {
         std::string classNameSubStr = std::string(className).substr(std::size("TranslateUnit") - 1);
         if (magic_enum::enum_name(currentEngine) == classNameSubStr)
@@ -50,6 +51,6 @@ TranslateUnit* TlUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
         qDebug() << "Invalid engine type";
     }
     
-    return tlUnit;
+    return trUnit;
 }
 

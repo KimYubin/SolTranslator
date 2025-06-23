@@ -55,6 +55,7 @@ enum class EngineType
 
   , Google
   , OpenAI
+  , FinPoint
 
   , Size
 };

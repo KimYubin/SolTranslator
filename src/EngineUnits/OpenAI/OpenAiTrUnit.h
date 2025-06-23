@@ -14,12 +14,12 @@ class OpenAiTrUnit final : public TranslateUnit
 
 public:
     explicit OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                               , TranslateManager* parent);
+                        , TranslateManager* parent);
 
 protected:
-    void chatTranslate(const bool bIsStreaming);
-
     virtual void requestTranslate() override;
+
+    void chatTranslate(const bool bIsStreaming);
 
     void onReadyRead(QNetworkReply* reply);
 

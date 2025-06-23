@@ -4,13 +4,25 @@
 
 #ifndef FINPOINT_H
 #define FINPOINT_H
+#include "EngineUnits/TranslateUnit.h"
 
+class FinPointTrUnit final : public TranslateUnit
+{
+    Q_OBJECT
 
+public:
+    explicit FinPointTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
+                          , TranslateManager* parent);
 
-class FinPointTrUnit {
+protected:
+    virtual void requestTranslate() override;
 
+    void chatTranslate(const bool bIsStreaming);
+
+    void onReadyRead(QNetworkReply* reply);
+
+    virtual void replyTranslateFinished(QNetworkReply* reply) override;
 };
-
 
 
 #endif //FINPOINT_H

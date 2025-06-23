@@ -15,13 +15,18 @@
 #include "Managers/TranslateManager.h"
 
 OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                                       , TranslateManager* parent)
+                         , TranslateManager* parent)
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
+void OpenAiTrUnit::requestTranslate()
+{
+    chatTranslate(true);
+}
+
 void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 {
-    QUrl url("https://api.openai.com/v1/chat/completions");
+    const QUrl url(Fin::Const::URLs::OPEN_AI.data());
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPIKey(EngineType::OpenAI)).toStdString().c_str());
@@ -56,11 +61,6 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     {
         connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
     }
-}
-
-void OpenAiTrUnit::requestTranslate()
-{
-    chatTranslate(true);
 }
 
 void OpenAiTrUnit::onReadyRead(QNetworkReply* reply)

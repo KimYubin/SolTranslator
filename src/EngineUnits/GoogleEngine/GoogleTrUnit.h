@@ -14,14 +14,12 @@ class GoogleTrUnit final : public TranslateUnit
 
 public:
     explicit GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                               , TranslateManager* parent);
+                        , TranslateManager* parent);
 
 protected:
     virtual void requestTranslate() override;
     virtual void replyTranslateFinished(QNetworkReply* reply) override;
-
 };
-
 
 
 #endif //TRANSLATEUNITGOOGLE_H

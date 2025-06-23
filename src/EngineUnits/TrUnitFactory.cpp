@@ -9,6 +9,7 @@
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+#include "EngineUnits/FinPoint/FinPointTrUnit.h"
 
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -26,22 +27,26 @@ TranslateUnit* TrUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
     {
     case EngineType::None:
         break;
+
     case EngineType::Google:
         trUnit = new GoogleTrUnit(inTranslateRequestInfo, translateManager);
         break;
     case EngineType::OpenAI:
         trUnit = new OpenAiTrUnit(inTranslateRequestInfo, translateManager);
         break;
+    case EngineType::FinPoint:
+        trUnit = new FinPointTrUnit(inTranslateRequestInfo, translateManager);
+        break;
+
     case EngineType::Size:
         break;
     }
 
     // string 기반 enum과 class 매칭 유효성 검사
     bool bValid = false;
-    if (const char* className = trUnit ? trUnit->metaObject()->className() : nullptr)
+    if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
     {
-        std::string classNameSubStr = std::string(className).substr(std::size("TranslateUnit") - 1);
-        if (magic_enum::enum_name(currentEngine) == classNameSubStr)
+        if (magic_enum::enum_name(currentEngine).find(className))
         {
             bValid = true;
         }

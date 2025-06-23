@@ -28,7 +28,7 @@ void ConfigManager::setCurrentEngineType(EngineType inEngineType)
 
 EngineType ConfigManager::getCurrentEngineType()
 {
-    return static_cast<EngineType>(_settings->value(Engine_Type, EnumToInt(EngineType::OpenAI)).toInt());
+    return static_cast<EngineType>(_settings->value(Engine_Type, EnumToInt(EngineType::FinPoint)).toInt());
 }
 
 

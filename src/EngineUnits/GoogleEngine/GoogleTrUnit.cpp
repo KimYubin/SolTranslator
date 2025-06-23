@@ -8,14 +8,16 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 
+#include "FinConstants.h"
+
 GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                                       , TranslateManager* parent)
+                         , TranslateManager* parent)
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
 void GoogleTrUnit::requestTranslate()
 {
-    QUrl url = QString("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3").arg(
+    const QUrl url = QString(Fin::Const::URLs::GOOGLE.data()).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.originText));

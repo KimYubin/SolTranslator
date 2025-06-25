@@ -22,6 +22,8 @@
 #include <QTimer>
 #include <qevent.h>
 
+#include "Managers/ConfigManager.h"
+
 #include "Widgets/ui_SimpleTranslatePopup.h"
 
 
@@ -191,10 +193,6 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
 {
-    if (screen() == nullptr)
-    {
-        qWarning() << "not detected screen";
-    }
     // size
     const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
     const QSize widgetSize  = bgFrameSize + _outerMarginSize;
@@ -204,9 +202,32 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     ui->bgFrame->setFixedSize(bgFrameSize);
     setFixedSize(widgetSize);
 
+    // 생성될 스크린 위치 추적
+    QPointF screenTopLeft  = QPointF();
+    QScreen* currentScreen = nullptr;
+
+    const Fin::ScreenPopupPolicy screenPolicy = ConfigManager::get().getSimplePopupScreenPolicy();
+    switch (screenPolicy)
+    {
+    case Fin::ScreenPopupPolicy::Default:
+    case Fin::ScreenPopupPolicy::PrimaryScreen:
+        currentScreen = qApp->primaryScreen();
+        break;
+    case Fin::ScreenPopupPolicy::FixedScreen:
+        currentScreen = qApp->primaryScreen(); // 임시. 추후 저장된 스크린 위치 사용
+        break;
+    case Fin::ScreenPopupPolicy::CursorScreen:
+        currentScreen = qApp->screenAt(QCursor::pos());
+        break;
+    case Fin::ScreenPopupPolicy::Size:
+        break;
+    }
+
+    screenTopLeft = currentScreen ? currentScreen->geometry().topLeft() : QPointF();
+
     // position
-    const QSizeF screenSize   = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
-    const QPoint targetCenter = QPoint(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y());
+    const QSizeF screenSize   = currentScreen ? currentScreen->size().toSizeF() : QSizeF(1920, 1080);
+    const QPoint targetCenter = screenTopLeft.toPoint() + QPoint(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y());
     const QPoint recCenter    = rect().center();
 
     QPoint targetPos = targetCenter - recCenter;

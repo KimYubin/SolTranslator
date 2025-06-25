@@ -6,7 +6,10 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QRectF>
 #include <QSettings>
+
+#include "magic_enum.hpp"
 
 #include "FinConstants.h"
 #include "FinTypes.h"
@@ -14,6 +17,9 @@
 
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
+
+const QString SimplePopupGeometry     = "SimplePopupGeometry";
+const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
 
 ConfigManager::ConfigManager()
 {
@@ -23,12 +29,12 @@ ConfigManager::ConfigManager()
 
 void ConfigManager::setCurrentEngineType(EngineType inEngineType)
 {
-    _settings->setValue(Engine_Type, EnumToInt(inEngineType));
+    setEnumValue(Engine_Type, inEngineType);
 }
 
 EngineType ConfigManager::getCurrentEngineType()
 {
-    return static_cast<EngineType>(_settings->value(Engine_Type, EnumToInt(EngineType::FinPoint)).toInt());
+    return getEnumValue(Engine_Type, EngineType::FinPoint);
 }
 
 
@@ -88,4 +94,24 @@ void ConfigManager::setStartRun(const bool inStartRun)
 bool ConfigManager::getStartRun()
 {
     return _settings->value(Fin::Const::CommandLineOptions::START_UP_RUN, false).toBool();
+}
+
+void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)
+{
+    _settings->setValue(SimplePopupGeometry, inGeo);
+}
+
+QRect ConfigManager::getSimplePopupGeometry()
+{
+    return _settings->value(SimplePopupGeometry).toRect();
+}
+
+void ConfigManager::setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inPolicy)
+{
+    setEnumValue(SimplePopupScreenPolicy, inPolicy);
+}
+
+Fin::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
+{
+    return getEnumValue(SimplePopupScreenPolicy, Fin::ScreenPopupPolicy::CursorScreen);
 }

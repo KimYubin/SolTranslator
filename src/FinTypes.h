@@ -48,6 +48,24 @@ constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToI
     return static_cast<std::underlying_type_t<E>>(e);
 }
 
+namespace Fin
+{
+Q_NAMESPACE
+
+enum class ScreenPopupPolicy
+{
+    Default
+
+  , PrimaryScreen
+  , FixedScreen
+  , CursorScreen
+
+  , Size
+};
+Q_ENUM_NS(ScreenPopupPolicy)
+
+
+}
 
 enum class EngineType
 {

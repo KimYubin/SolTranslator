@@ -56,6 +56,7 @@ private slots:
 private:
     void createActions();
     void createTrayIcon();
+    void popupTrayMenu();
 
     Ui::FinTranslatorMainWidget* ui;
 

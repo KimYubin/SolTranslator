@@ -240,6 +240,7 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
     case QSystemTrayIcon::Unknown:
         break;
     case QSystemTrayIcon::Context:
+        popupTrayMenu();
         break;
     default:
         ;
@@ -282,14 +283,49 @@ void FinTranslatorMainWidget::createTrayIcon()
     _doubleClickTimer->setSingleShot(true);
     connect(_doubleClickTimer, &QTimer::timeout, this, [this]()
     {
-        if (_trayIcon && _trayIcon->contextMenu())
-        {
-            _prevMousePos.ry() -= _trayIcon->contextMenu()->size().height();
-            _trayIcon->contextMenu()->popup(_prevMousePos);
-        }
+        popupTrayMenu();
     });
 
     connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
 
     _trayIcon->show();
+}
+
+void FinTranslatorMainWidget::popupTrayMenu()
+{
+    if (_trayIcon && _trayIcon->contextMenu())
+    {
+        // 메뉴 사이즈 계산 유도.
+        _trayIcon->contextMenu()->show();
+
+        const QScreen* cursorScreen = qApp->screenAt(_prevMousePos);
+        const QScreen* targetScreen = cursorScreen ? cursorScreen : qApp->primaryScreen();
+
+        const QRect availableGeo = targetScreen ? targetScreen->availableGeometry() : QRect();
+        const QSize contextSize  = _trayIcon->contextMenu()->size();
+
+        QPoint popupPos = _prevMousePos;
+        popupPos.rx() -= (contextSize.width() / 2); // 마우스 위치에 팝업 중앙이 오도록 조정.
+        QRect popupGeo = QRect(popupPos, contextSize);
+
+        /** 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정. */
+        if (availableGeo.left() > popupGeo.left())
+        {
+            popupGeo.moveLeft(availableGeo.left());
+        }
+        if (availableGeo.top() > popupGeo.top())
+        {
+            popupGeo.moveTop(availableGeo.top());
+        }
+        if (availableGeo.right() < popupGeo.right())
+        {
+            popupGeo.moveRight(availableGeo.right());
+        }
+        if (availableGeo.bottom() < popupGeo.bottom())
+        {
+            popupGeo.moveBottom(availableGeo.bottom());
+        }
+
+        _trayIcon->contextMenu()->popup(popupGeo.topLeft());
+    }
 }

@@ -9,6 +9,8 @@
 
 #include "FinTypes.h"
 
+class QScrollBar;
+
 class ITranslateWidget : public QWidget
 {
     Q_OBJECT
@@ -23,7 +25,30 @@ public:
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
 
 protected:
+    /**
+     * 번역 텍스트를 에디터에 적용합니다.
+     * 에디터 크기 변경과 무관하게 스크롤바 위치를 고정합니다.
+     * 
+     * @param inTranslatedText 
+     * @param inTextStyle 
+     */
+    void setTranslationWithFixedScroll(const QString& inTranslatedText, const TextStyle inTextStyle);
+
+    /**
+     * 번역을 텍스트 에디터에 적용합니다.
+     * 
+     * @param inTranslatedText 
+     * @param inTextStyle 
+     */
     virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) = 0;
+
+    /**
+     * 스크롤바 위치를 고정하기 위해 사용할 스크롤바를 반환합니다
+     * 자식 클래스에서 이를 지정합니다.
+     */
+    virtual QScrollBar* getVerticalScrollBar() = 0;
+    virtual QScrollBar* getHorizontalScrollBar() = 0;
+    
 
     
     QString _prevString;

@@ -211,11 +211,15 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
 
 void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
+    // 클릭시 마우스 위치 저장합니다.
+    // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다. 
+    _prevMousePos = QCursor::pos();
+
     switch (reason)
     {
     case QSystemTrayIcon::Trigger:
-        _prevMousePos = QCursor::pos();
-        _doubleClickTimer->start();
+        // 더블클릭과 구분을 위해 50ms 추가
+        _doubleClickTimer->start(QApplication::doubleClickInterval() + 50);
         break;
     case QSystemTrayIcon::DoubleClick:
         _doubleClickTimer->stop();
@@ -279,7 +283,7 @@ void FinTranslatorMainWidget::createTrayIcon()
 
 
     _doubleClickTimer = new QTimer(this);
-    _doubleClickTimer->setInterval(1000);
+    _doubleClickTimer->setInterval(QApplication::doubleClickInterval() + 50);
     _doubleClickTimer->setSingleShot(true);
     connect(_doubleClickTimer, &QTimer::timeout, this, [this]()
     {

@@ -43,6 +43,10 @@ public:
 protected:
     virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
+    virtual QScrollBar* getVerticalScrollBar() override;
+    virtual QScrollBar* getHorizontalScrollBar() override;
+
+
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle);
 

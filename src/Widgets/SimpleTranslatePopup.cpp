@@ -83,6 +83,16 @@ void SimpleTranslatePopup::applyTranslation(const QString& inTranslatedText, con
     showTranslationPopup(inTranslatedText, inTextStyle);
 }
 
+QScrollBar* SimpleTranslatePopup::getVerticalScrollBar()
+{
+    return ui->resultText->verticalScrollBar();
+}
+
+QScrollBar* SimpleTranslatePopup::getHorizontalScrollBar()
+{
+    return ui->resultText->horizontalScrollBar();
+}
+
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {

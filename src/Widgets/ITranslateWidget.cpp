@@ -4,6 +4,7 @@
 
 #include "ITranslateWidget.h"
 
+#include <QScrollBar>
 #include <QTimer>
 
 ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
@@ -14,7 +15,7 @@ ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     _updateStreamStrTimer->setSingleShot(true);
     connect(_updateStreamStrTimer, &QTimer::timeout, this, [this]()
     {
-        applyTranslation(_prevString, _prevTextStyle);
+        setTranslationWithFixedScroll(_prevString, _prevTextStyle);
     });
 }
 
@@ -32,5 +33,16 @@ void ITranslateWidget::streamTransText(const QString& inTranslatedText, const Te
 void ITranslateWidget::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
     _updateStreamStrTimer->stop();
+    setTranslationWithFixedScroll(inTranslatedText, inTextStyle);
+}
+
+void ITranslateWidget::setTranslationWithFixedScroll(const QString& inTranslatedText, const TextStyle inTextStyle)
+{
+    const int prevVerticalScrollVal   = getVerticalScrollBar()->value();
+    const int prevHorizontalScrollVal = getHorizontalScrollBar()->value();
+
     applyTranslation(inTranslatedText, inTextStyle);
+
+    getVerticalScrollBar()->setValue(prevVerticalScrollVal);
+    getHorizontalScrollBar()->setValue(prevHorizontalScrollVal);
 }

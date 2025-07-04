@@ -6,8 +6,13 @@
 
 #include "TextEditTranslateWidget.h"
 
+#include <QLineEdit>
 #include <QPointer>
+#include <QScrollBar>
 #include <QTimer>
+
+#include <qsortfilterproxymodel.h>
+#include <qstringlistmodel.h>
 
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
@@ -51,6 +56,16 @@ void TextEditTranslateWidget::applyTranslation(const QString& inTranslatedText, 
     ui->textTranslate->setPlainText(inTranslatedText);
 }
 
+QScrollBar* TextEditTranslateWidget::getVerticalScrollBar()
+{
+    return ui->textTranslate->verticalScrollBar();
+}
+
+QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar()
+{
+    return ui->textTranslate->horizontalScrollBar();
+}
+
 void TextEditTranslateWidget::focusTextOrigin()
 {
     ui->textOrigin->setFocus();
@@ -63,7 +78,7 @@ void TextEditTranslateWidget::onTranslateClicked()
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
-      , LangType::en
+      , LangType::AUTO
       , LangType::ko
       , ui->textTranslate
       , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }

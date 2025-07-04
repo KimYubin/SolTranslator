@@ -14,8 +14,9 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS SvgWidgets)
-find_package(Qt${QT_VERSION_MAJOR}  REQUIRED COMPONENTS Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core LinguistTools)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -85,6 +86,8 @@ set(PROJECT_SOURCES
         src/Widgets/IFinWidget.h
         src/EngineUnits/FinPoint/FinPointTrUnit.cpp
         src/EngineUnits/FinPoint/FinPointTrUnit.h
+        src/SubWidgets/DropdownMenu.cpp
+        src/SubWidgets/DropdownMenu.h
 
 )
 
@@ -160,6 +163,20 @@ endif()
 
 target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
 
+
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ko jp)
+#add_subdirectory(src)
+file(GLOB_RECURSE SOURCES_TO_TRANSLATE
+        "src/*.cpp"
+        "src/*.h"
+)
+qt_add_translations(FinTranslator
+        TS_FILE_BASE fin
+        TS_OUTPUT_DIRECTORY localization
+        SOURCES ${SOURCES_TO_TRANSLATE}
+)
+
+add_dependencies(FinTranslator update_translations)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

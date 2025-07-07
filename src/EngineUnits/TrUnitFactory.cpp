@@ -22,7 +22,7 @@ TranslateUnit* TrUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
                                              , TranslateManager* translateManager)
 {
     TranslateUnit* trUnit = nullptr;
-    const EngineType currentEngine = ConfigManager::get().getCurrentEngineType();
+    const EngineType currentEngine = finConfig.getCurrentEngineType();
     switch (currentEngine)
     {
     case EngineType::Default: // break;

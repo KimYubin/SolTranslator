@@ -30,10 +30,10 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     SettingCard* startRunCard = new SettingCard(new SwitchButton, ui->engineGroup);
     startRunCard->setHeader(tr("Run at startup"));
     startRunCard->setDescription(tr("시스템 시작 시 자동 실행"));
-    startRunCard->getContent<SwitchButton>()->setChecked(ConfigManager::get().getStartRun());
+    startRunCard->getContent<SwitchButton>()->setChecked(finConfig.getStartRun());
     connect(startRunCard->getContent<SwitchButton>(), &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
     {
-        ConfigManager::get().setStartRun(inState == Qt::CheckState::Checked);
+        finConfig.setStartRun(inState == Qt::CheckState::Checked);
     });
     ui->verticalLayout->addWidget(startRunCard, 0, Qt::AlignmentFlag::AlignTop);
 

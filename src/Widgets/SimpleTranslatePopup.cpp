@@ -216,7 +216,7 @@ void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)
     QPointF screenTopLeft  = QPointF();
     QScreen* currentScreen = nullptr;
 
-    const Fin::ScreenPopupPolicy screenPolicy = ConfigManager::get().getSimplePopupScreenPolicy();
+    const Fin::ScreenPopupPolicy screenPolicy = finConfig.getSimplePopupScreenPolicy();
     switch (screenPolicy)
     {
     case Fin::ScreenPopupPolicy::Default:

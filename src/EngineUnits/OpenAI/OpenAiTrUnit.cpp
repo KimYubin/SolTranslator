@@ -29,10 +29,10 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     const QUrl url(Fin::Const::URLs::OPEN_AI.data());
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + ConfigManager::get().getAPIKey(EngineType::OpenAI)).toStdString().c_str());
+    request.setRawHeader("Authorization", ("Bearer " + finConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
 
     QJsonObject json;
-    json["model"] = ConfigManager::get().getOpenAIModel();
+    json["model"] = finConfig.getOpenAIModel();
     if (bIsStreaming)
     {
         json["stream"] = bIsStreaming; // streaming

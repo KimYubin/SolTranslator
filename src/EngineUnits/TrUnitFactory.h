@@ -20,10 +20,10 @@ private:
     explicit TrUnitFactory(QObject* parent = nullptr);
 
 public:
-    static TrUnitFactory& get()
+    static TrUnitFactory& instance()
     {
-        static TrUnitFactory* instance = new TrUnitFactory();
-        return *instance;
+        static TrUnitFactory* trFacInstance = new TrUnitFactory();
+        return *trFacInstance;
     }
 
     TranslateUnit* NewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo

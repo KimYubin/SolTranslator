@@ -26,7 +26,7 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
 
 QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
 {
-    TranslateUnit* transUnit = TrUnitFactory::get().NewTranslateUnit(inTranslateRequestInfo, this);
+    TranslateUnit* transUnit = TrUnitFactory::instance().NewTranslateUnit(inTranslateRequestInfo, this);
     transUnit->executeTextTranslation();
 
     return QPointer<TranslateUnit>{transUnit};
@@ -91,8 +91,8 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
 
 void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
 {
-    // 중복은 순서 최신화
-    const EngineType engineType = ConfigManager::get().getCurrentEngineType();
+    // 이미 캐시되어 있다면, 순서 최신화
+    const EngineType engineType = finConfig.getCurrentEngineType();
     _cachingTranslateText.push({originText, engineType, targetLang}, translateText);
     if (_cachingTranslateText.size() > _maxCacheLength)
     {
@@ -107,7 +107,7 @@ std::tuple<bool, QString> TranslateManager::findCachingText(const QString& origi
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    const EngineType engineType = ConfigManager::get().getCurrentEngineType();
+    const EngineType engineType = finConfig.getCurrentEngineType();
     const TextCacheKey findCacheKey = TextCacheKey{originText, engineType, targetLang};
     if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
     {

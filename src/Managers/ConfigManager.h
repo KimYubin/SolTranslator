@@ -11,7 +11,7 @@
 #include "magic_enum.hpp"
 
 
-#define finConfig ConfigManager::get()
+#define finConfig ConfigManager::instance()
 
 /**
  * 프로그램의 구성, 설정 등의 상태 정보를 저장 및 관리합니다.
@@ -26,10 +26,10 @@ private:
     ConfigManager();
 
 public:
-    static ConfigManager& get()
+    static ConfigManager& instance()
     {
-        static ConfigManager* instance = new ConfigManager();
-        return *instance;
+        static ConfigManager* configInstance = new ConfigManager();
+        return *configInstance;
     }
 
     void setCurrentEngineType(EngineType inEngineType);

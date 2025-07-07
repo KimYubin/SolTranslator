@@ -17,13 +17,12 @@ inline constexpr std::string_view START_UP_RUN = "startup_run";
 
 namespace URLs
 {
-inline constexpr std::string_view GOOGLE  = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3";
-inline constexpr std::string_view OPEN_AI = "https://api.openai.com/v1/chat/completions";
-inline constexpr std::string_view FIN_POINT
-        // = "https://us-central1-fintrans-33fftt.cloudfunctions.net/helloWorld/v1/text";
-        // = "http://localhost:5001/fintrans-33fftt/us-central1/helloWorld/v1/text";
-        = "https://asia-northeast3-fintrans-33fftt.cloudfunctions.net/helloWorld/v1/text";
-        // = "http://127.0.0.1:5001/fintrans-33fftt/asia-northeast3/helloWorld/v1/text";
+inline constexpr std::string_view GOOGLE    = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3";
+inline constexpr std::string_view OPEN_AI   = "https://api.openai.com/v1/chat/completions";
+inline constexpr std::string_view FIN_POINT = "https://asia-northeast3-fintrans-33fftt.cloudfunctions.net/helloWorld/v1/text";
+
+inline constexpr std::string_view FIN_POINT_DEBUG = "http://127.0.0.1:5001/fintrans-33fftt/asia-northeast3/helloWorld/v1/text";
+
 }
 
 namespace Prompt

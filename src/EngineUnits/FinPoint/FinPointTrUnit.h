@@ -22,6 +22,12 @@ protected:
     void onReadyRead(QNetworkReply* reply);
 
     virtual void replyTranslateFinished(QNetworkReply* reply) override;
+
+public:
+    void setDebugMode(const bool inDebugMode) { bDebugMode = inDebugMode; };
+
+private:
+    bool bDebugMode = false;
 };
 
 

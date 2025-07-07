@@ -38,6 +38,7 @@ private:
 
 class EngineOption : public IOptionPage
 {
+    Q_OBJECT
     Q_DISABLE_COPY_MOVE(EngineOption)
 
 public:

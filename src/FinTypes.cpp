@@ -35,7 +35,7 @@ QString EngineName::getName(EngineType inEngineType)
 {
     switch (inEngineType)
     {
-    case EngineType::None:
+    case EngineType::Default:
         break;
     case EngineType::Google:
         break;

@@ -11,6 +11,13 @@
 #include "magic_enum.hpp"
 
 
+#define finConfig ConfigManager::get()
+
+/**
+ * 프로그램의 구성, 설정 등의 상태 정보를 저장 및 관리합니다.
+ * 영구 저장이 필요한 관리 데이터는 이곳에서 저장합니다.
+ * 전역에서 접근할 수 있는 싱글톤 객체로 사용합니다.
+ */
 class ConfigManager : public QObject
 {
     Q_OBJECT

@@ -19,6 +19,10 @@ class DataManager;
 
 #define finCore FinTranslatorCore::instance()
 
+/**
+ * FinTranslator의 Non-UI 관련 기능과 mainWidget을 관리하는 최상위 객체입니다.
+ * 객체는 전역에서 유일하게 존재해야 합니다.
+ */
 class FinTranslatorCore : public QObject
 {
     Q_OBJECT

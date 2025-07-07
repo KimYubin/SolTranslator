@@ -69,11 +69,12 @@ Q_ENUM_NS(ScreenPopupPolicy)
 
 enum class EngineType
 {
-    None = 0
+    Default = 0
 
   , Google
   , OpenAI
   , FinPoint
+  , FinPointDebug
 
   , Size
 };

@@ -6,6 +6,9 @@
 
 #include <QString>
 
+#include <qsortfilterproxymodel.h>
+#include <qstringlistmodel.h>
+
 #include "Managers/ConfigManager.h"
 #include "FinTranslatorCore.h"
 #include "Widgets/FinTranslatorMainWidget.h"
@@ -19,19 +22,53 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
 
-    QString api = ConfigManager::get().getAPIKey(EngineType::OpenAI);
-    if (api.isEmpty() == false)
+
+    // 엔진 선택 초기화
+    ui->enginSelectCombo->setEditable(false);
+    for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
     {
-        QString asterisk = QString(api.size(), '*');
-        ui->apiInputLine->setPlaceholderText(asterisk);
+        ui->enginSelectCombo->addItem(EngineName::getName(eg), static_cast<int>(eg));
     }
-    connect(ui->apiInputLine, &QLineEdit::textEdited, this, [](const QString& inStr)
+
+    // 번역 엔진 변경.
+    connect(ui->enginSelectCombo, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
     {
-        ConfigManager::get().setAPIKey(EngineType::OpenAI, inStr);
+        finConfig.setCurrentEngineType(static_cast<EngineType>(inIdx));
+        const EngineType eg  = finConfig.getCurrentEngineType();
+        const QString apiKey = finConfig.getAPIKey(eg);
+        const int apiSize    = apiKey.size();
+
+        QString phStr;
+        if (apiSize > 15)
+        {
+            phStr = apiKey.sliced(0, 3).trimmed() + "..." + apiKey.last(4).trimmed();
+        }
+        else if (apiSize > 3)
+        {
+            phStr = QString(apiSize - 2, '*') + apiKey.last(2).trimmed();
+        }
+        else if (apiSize > 0)
+        {
+            phStr = QString(apiSize, '*');
+        }
+
+        ui->apiInputLine->setPlaceholderText(phStr);
     });
 
-    // ui->themeButton->setCheckable(false);
-    // connect(ui->themeButton, &QPushButton::clicked, this, &EngineOptionWidget::applyTheme);
+    // api 키 저장 및 적용
+    connect(ui->apiKeySaveButton, &QPushButton::clicked, this, [this]()
+    {
+        const QString inputApiKey = ui->apiInputLine->text();
+        if (inputApiKey.isEmpty())
+        {
+            return;
+        }
+
+        finConfig.setAPIKey(finConfig.getCurrentEngineType(), inputApiKey);
+    });
+
+
+    ui->enginSelectCombo->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
 }
 
 EngineOptionWidget::~EngineOptionWidget()

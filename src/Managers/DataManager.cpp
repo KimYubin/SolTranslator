@@ -103,7 +103,7 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
 
             TextCacheKey cacheKey;
             cacheKey.originText = cacheObject["OriginText"].toString();
-            cacheKey.engineType = magic_enum::enum_cast<EngineType>(cacheObject["EngineType"].toString().toStdString()).value_or(EngineType::None);
+            cacheKey.engineType = magic_enum::enum_cast<EngineType>(cacheObject["EngineType"].toString().toStdString()).value_or(EngineType::Default);
             cacheKey.targetLang = magic_enum::enum_cast<LangType>(cacheObject["LangType"].toString().toStdString()).value_or(LangType::NONE);
 
             QString cacheText = cacheObject["TranslateText"].toString();

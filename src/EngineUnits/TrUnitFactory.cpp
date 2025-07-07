@@ -25,9 +25,7 @@ TranslateUnit* TrUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
     const EngineType currentEngine = ConfigManager::get().getCurrentEngineType();
     switch (currentEngine)
     {
-    case EngineType::None:
-        break;
-
+    case EngineType::Default: // break;
     case EngineType::Google:
         trUnit = new GoogleTrUnit(inTranslateRequestInfo, translateManager);
         break;
@@ -37,7 +35,13 @@ TranslateUnit* TrUnitFactory::NewTranslateUnit(const TranslateRequestInfo& inTra
     case EngineType::FinPoint:
         trUnit = new FinPointTrUnit(inTranslateRequestInfo, translateManager);
         break;
-
+    case EngineType::FinPointDebug:
+    {
+        FinPointTrUnit* finPointTr = new FinPointTrUnit(inTranslateRequestInfo, translateManager);
+        finPointTr->setDebugMode(true);
+        trUnit = finPointTr;
+        break;
+    }
     case EngineType::Size:
         break;
     }

@@ -16,7 +16,7 @@ public:
 
 
 protected:
-
+    virtual void wheelEvent(QWheelEvent *event) override;
 
 private slots:
 

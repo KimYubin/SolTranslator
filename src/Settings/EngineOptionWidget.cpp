@@ -4,6 +4,7 @@
 
 #include "EngineOptionWidget.h"
 
+#include <QComboBox>
 #include <QString>
 
 #include <qsortfilterproxymodel.h>
@@ -12,6 +13,7 @@
 #include "Managers/ConfigManager.h"
 #include "FinTranslatorCore.h"
 #include "Widgets/FinTranslatorMainWidget.h"
+#include "SubWidgets/DropdownMenu.h"
 
 #include "ui_EngineOptionWidget.h"
 
@@ -23,8 +25,9 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     setLayout(ui->mainLayout);
 
 
-    // 엔진 선택 초기화
     ui->enginSelectCombo->setEditable(false);
+
+    // 엔진 선택 초기화
     for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
     {
         ui->enginSelectCombo->addItem(EngineName::getName(eg), static_cast<int>(eg));

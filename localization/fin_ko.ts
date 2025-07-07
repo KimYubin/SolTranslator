@@ -4,12 +4,12 @@
 <context>
     <name>EngineOption</name>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="111"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="114"/>
         <source>번역 엔진</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="112"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="115"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>

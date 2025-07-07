@@ -98,7 +98,7 @@
              </widget>
             </item>
             <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-             <widget class="QComboBox" name="enginSelectCombo">
+             <widget class="DropdownMenu" name="enginSelectCombo">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -110,7 +110,7 @@
             <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
              <widget class="QPushButton" name="apiKeySaveButton">
               <property name="text">
-               <string>적용</string>
+               <string>저장</string>
               </property>
              </widget>
             </item>
@@ -125,6 +125,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DropdownMenu</class>
+   <extends>QComboBox</extends>
+   <header>SubWidgets/DropdownMenu.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

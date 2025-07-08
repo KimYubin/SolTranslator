@@ -5,17 +5,10 @@
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H
 
-#include <QWidget>
-
 #include "Widgets/IFinWidget.h"
 
+#include <QWidget>
 
-class QButtonGroup;
-class CategoryListView;
-class QLabel;
-class QListView;
-class QCheckBox;
-class FinTranslatorCore;
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -36,7 +29,6 @@ public:
 private:
     void applyTheme();
 
-    QButtonGroup* _buttonGroup;
     Ui::SettingsWidget* ui;
 };
 

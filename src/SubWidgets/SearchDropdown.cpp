@@ -23,17 +23,17 @@ public:
 
 public:
 signals:
-    void languageSelected(const QString& language);
+    void itemSelected(const QString& inItem);
 
 private:
-    void filterLanguages(const QString& text);
-    void onItemClicked(QListWidgetItem* item);
+    void filterItems(const QString& inText);
+    void onItemClicked(QListWidgetItem* inItem);
 
-    QLineEdit* _searchBox;
-    QListWidget* _languageList;
+    QLineEdit* _searchLine;
+    QListWidget* _listWidget;
 
-    QString _currentSelection;
-    QStringList _allLanguages;
+    QString _currentItem;
+    QStringList _allDataList;
 };
 
 
@@ -90,24 +90,26 @@ SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* parent, con
     Q_ASSERT(parent);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    _searchBox          = new QLineEdit(this);
-    _searchBox->setPlaceholderText("언어 검색...");
+    setLayout(layout);
 
-    _languageList = new QListWidget(this);
+    _searchLine = new QLineEdit(this);
+    _searchLine->setPlaceholderText("언어 검색...");
 
-    layout->addWidget(_searchBox);
-    layout->addWidget(_languageList);
+    _listWidget = new QListWidget(this);
 
-    _allLanguages = QStringList{
+    layout->addWidget(_searchLine);
+    layout->addWidget(_listWidget);
+
+    _allDataList = QStringList{
         "한국어", "영어", "중국어", "일본어", "프랑스어", "독일어", "스페인어",
     };
 
-    _languageList->addItems(_allLanguages);
+    _listWidget->addItems(_allDataList);
 
-    connect(_searchBox, &QLineEdit::textChanged, this, &SearchDropdownMenuPrivate::filterLanguages);
-    connect(_languageList, &QListWidget::itemClicked, this, &SearchDropdownMenuPrivate::onItemClicked);
+    connect(_searchLine, &QLineEdit::textChanged, this, &SearchDropdownMenuPrivate::filterItems);
+    connect(_listWidget, &QListWidget::itemClicked, this, &SearchDropdownMenuPrivate::onItemClicked);
 
-    connect(this, &SearchDropdownMenuPrivate::languageSelected, this, [this, parent](const QString& lang)
+    connect(this, &SearchDropdownMenuPrivate::itemSelected, this, [this, parent](const QString& lang)
     {
         parent->setButtonText(lang);
     });
@@ -125,25 +127,25 @@ void SearchDropdownMenuPrivate::showMenuPopup()
 
 QString SearchDropdownMenuPrivate::selectedLanguage() const
 {
-    return _currentSelection;
+    return _currentItem;
 }
 
-void SearchDropdownMenuPrivate::filterLanguages(const QString& text)
+void SearchDropdownMenuPrivate::filterItems(const QString& inText)
 {
-    _languageList->clear();
-    for (const QString& lang : _allLanguages)
+    _listWidget->clear();
+    for (const QString& lang : _allDataList)
     {
-        if (lang.contains(text, Qt::CaseInsensitive))
+        if (lang.contains(inText, Qt::CaseInsensitive))
         {
-            _languageList->addItem(lang);
+            _listWidget->addItem(lang);
         }
     }
 }
 
-void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* item)
+void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* inItem)
 {
-    _currentSelection = item->text();
-    emit languageSelected(_currentSelection);
+    _currentItem = inItem->text();
+    emit itemSelected(_currentItem);
     hide();
 }
 

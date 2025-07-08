@@ -19,6 +19,8 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
+#include "SubWidgets/SearchDropdown.h"
+
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
 
@@ -44,6 +46,10 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     connect(ui->translateButton, &QPushButton::clicked, this, &TextEditTranslateWidget::onTranslateClicked);
+
+    SearchDropdown* searchDropdown = new SearchDropdown(this);
+    ui->hLayout_0_origin->addWidget(searchDropdown);
+
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()

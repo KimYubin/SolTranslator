@@ -88,6 +88,8 @@ set(PROJECT_SOURCES
         src/EngineUnits/FinPoint/FinPointTrUnit.h
         src/SubWidgets/DropdownMenu.cpp
         src/SubWidgets/DropdownMenu.h
+        src/SubWidgets/SearchDropdown.cpp
+        src/SubWidgets/SearchDropdown.h
 
 )
 

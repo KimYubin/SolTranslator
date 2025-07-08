@@ -43,7 +43,7 @@ void TranslateUnit::executeTextTranslation_Impl()
         return;
     }
 
-    if (TranslateManager* translate_manager = dynamic_cast<TranslateManager*>(parent()))
+    if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
     {
         auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.originText, _trReqData.targetLang);
         if (bIsFind)

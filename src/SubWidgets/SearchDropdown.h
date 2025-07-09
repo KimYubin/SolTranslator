@@ -19,15 +19,18 @@ class SearchDropdown : public QWidget
     Q_OBJECT
 
 public:
-    explicit SearchDropdown(QWidget* parent);
+    explicit SearchDropdown(QWidget* parent, QWidget* inSizeWidget);
 
     void setButtonText(const QString& text);
 private:
+    friend class SearchDropdownMenuPrivate;
+
     SearchDropdownMenuPrivate* getMenu();
 
     QGridLayout* _mainLayout;
     QPushButton* _button;
 
+    QPointer<QWidget> _sizeWidget;
     QPointer<SearchDropdownMenuPrivate> _menu;
 };
 

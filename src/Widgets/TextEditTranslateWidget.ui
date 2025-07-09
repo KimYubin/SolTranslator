@@ -46,57 +46,8 @@
     </property>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="hLayout_1_LangSelect">
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_0_origin" stretch="0,0">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>24</number>
-        </property>
-        <item>
-         <widget class="QComboBox" name="OrignLangSelectCombo">
-          <property name="maximumSize">
-           <size>
-            <width>69</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
-          </property>
-          <item>
-           <property name="text">
-            <string>새 항목1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>새 항목fdsafdsklafnjdskla12</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>74</width>
-            <height>17</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
       <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="languageSwapButton">
         <property name="maximumSize">
          <size>
           <width>64</width>
@@ -107,29 +58,6 @@
          <string>⮂</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hLayout_1_trans" stretch="0,0">
-        <property name="leftMargin">
-         <number>8</number>
-        </property>
-        <item>
-         <widget class="QComboBox" name="TargetLangSelectCombo"/>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
       </item>
      </layout>
     </item>
@@ -150,7 +78,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QPlainTextEdit" name="textOrigin"/>
+         <widget class="QPlainTextEdit" name="originTextEdit"/>
         </item>
         <item alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QPushButton" name="translateButton">
@@ -170,7 +98,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTextBrowser" name="textTranslate">
+         <widget class="QTextBrowser" name="trTextEdit">
           <property name="readOnly">
            <bool>false</bool>
           </property>
@@ -187,8 +115,8 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>textOrigin</tabstop>
-  <tabstop>textTranslate</tabstop>
+  <tabstop>originTextEdit</tabstop>
+  <tabstop>trTextEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

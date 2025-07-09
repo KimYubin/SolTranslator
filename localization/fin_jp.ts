@@ -113,6 +113,14 @@
     </message>
 </context>
 <context>
+    <name>SearchDropdownMenuPrivate</name>
+    <message>
+        <location filename="../src/SubWidgets/SearchDropdown.cpp" line="122"/>
+        <source>언어 검색</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingsWidget</name>
     <message>
         <location filename="../src/Settings/SettingsWidget.ui" line="14"/>
@@ -158,22 +166,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="73"/>
-        <source>새 항목1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="78"/>
-        <source>새 항목fdsafdsklafnjdskla12</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="107"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="58"/>
         <source>⮂</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="164"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="92"/>
         <source>translate</source>
         <translation type="unfinished"></translation>
     </message>

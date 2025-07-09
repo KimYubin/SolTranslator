@@ -4,10 +4,13 @@
 
 #include "SearchDropdown.h"
 
+#include <QCoreApplication>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
+
+#include <qevent.h>
 
 /** SearchDropdown에서 사용하는 메뉴 */
 class SearchDropdownMenuPrivate : public QWidget
@@ -15,7 +18,9 @@ class SearchDropdownMenuPrivate : public QWidget
     Q_OBJECT
 
 public:
-    explicit SearchDropdownMenuPrivate(SearchDropdown* parent, Qt::WindowFlags flags = Qt::Popup);
+    explicit SearchDropdownMenuPrivate(SearchDropdown* parent);
+
+    virtual QSize sizeHint() const override;
 
     void showMenuPopup();
 
@@ -29,21 +34,26 @@ private:
     void filterItems(const QString& inText);
     void onItemClicked(QListWidgetItem* inItem);
 
+    QPoint getTargetGlobalPos() const;
+    QSize getTargetSize() const;
+
     QLineEdit* _searchLine;
     QListWidget* _listWidget;
 
     QString _currentItem;
     QStringList _allDataList;
+
+    QPointer<QWidget> _sizeWidget;
 };
 
 
 #include "SearchDropdown.moc"
 
 
-SearchDropdown::SearchDropdown(QWidget* parent)
-    : QWidget(parent)
+SearchDropdown::SearchDropdown(QWidget* parent, QWidget* inSizeWidget)
+    : QWidget(parent), _sizeWidget(inSizeWidget)
 {
-    resize(300, 400);
+    // resize(300, 400);
 
     _mainLayout = new QGridLayout(this);
     _mainLayout->setObjectName("mainLayout");
@@ -53,7 +63,9 @@ SearchDropdown::SearchDropdown(QWidget* parent)
     setLayout(_mainLayout);
 
     _button = new QPushButton(this);
-    _mainLayout->addWidget(_button);
+    _mainLayout->addWidget(_button, 0, 0, Qt::AlignLeft);
+
+
     connect(_button, &QPushButton::clicked, this, [this]()
     {
         if (getMenu()->isVisible())
@@ -85,19 +97,26 @@ SearchDropdownMenuPrivate* SearchDropdown::getMenu()
 // ~=====================================
 // SearchDropdownMenuPrivate
 
-SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* parent, const Qt::WindowFlags flags): QWidget(parent, flags)
+SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* parent)
+    : QWidget(parent, Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+    , _sizeWidget(parent->_sizeWidget)
 {
     Q_ASSERT(parent);
 
+    setAttribute(Qt::WA_TranslucentBackground);
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     setLayout(layout);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     _searchLine = new QLineEdit(this);
-    _searchLine->setPlaceholderText("언어 검색...");
+    layout->addWidget(_searchLine);
+    _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
+
+    _searchLine->setPlaceholderText(tr("언어 검색"));
 
     _listWidget = new QListWidget(this);
-
-    layout->addWidget(_searchLine);
     layout->addWidget(_listWidget);
 
     _allDataList = QStringList{
@@ -115,12 +134,14 @@ SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* parent, con
     });
 }
 
+QSize SearchDropdownMenuPrivate::sizeHint() const
+{
+    return getTargetSize();
+}
+
 void SearchDropdownMenuPrivate::showMenuPopup()
 {
-    const QWidget* pWidget  = parentWidget();
-    const QPoint pGlobalPos = pWidget->mapToGlobal(QPoint(0, pWidget->height()));
-    move(pGlobalPos);
-    // resize(pWidget->width() * 3, 300); // 적절한 크기로 조정
+    move(getTargetGlobalPos());
     show();
     raise();
 }
@@ -148,4 +169,30 @@ void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* inItem)
     emit itemSelected(_currentItem);
     hide();
 }
+
+QPoint SearchDropdownMenuPrivate::getTargetGlobalPos() const
+{
+    if (_sizeWidget.isNull())
+    {
+        qDebug() << "_sizeWidget is not valid.";
+        return QPoint(0, 0);
+    }
+
+    const QPoint local = _sizeWidget->rect().topLeft();
+    const QPoint pGlobalPos = _sizeWidget->mapToGlobal(local);
+
+    return pGlobalPos;
+}
+
+QSize SearchDropdownMenuPrivate::getTargetSize() const
+{
+    if (_sizeWidget.isNull())
+    {
+        qDebug() << "_sizeWidget is not valid.";
+        return QSize(0, 0);
+    }
+    
+    return _sizeWidget->size();
+}
+
 

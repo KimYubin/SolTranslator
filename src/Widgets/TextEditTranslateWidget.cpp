@@ -32,11 +32,13 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     setLayout(ui->mainLayout);
 
-    ui->textOrigin->setTabChangesFocus(true);
-    ui->textTranslate->setTabChangesFocus(true);
-    ui->textTranslate->setReadOnly(true);
-    ui->textTranslate->setMouseTracking(false);
-    ui->textTranslate->setTextInteractionFlags(
+    ui->hLayout_2_TextInputs->setSpacing(8);
+
+    ui->originTextEdit->setTabChangesFocus(true);
+    ui->trTextEdit->setTabChangesFocus(true);
+    ui->trTextEdit->setReadOnly(true);
+    ui->trTextEdit->setMouseTracking(false);
+    ui->trTextEdit->setTextInteractionFlags(
         Qt::TextSelectableByMouse |
         Qt::TextSelectableByKeyboard |
         Qt::LinksAccessibleByMouse |
@@ -47,8 +49,12 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     connect(ui->translateButton, &QPushButton::clicked, this, &TextEditTranslateWidget::onTranslateClicked);
 
-    SearchDropdown* searchDropdown = new SearchDropdown(this);
-    ui->hLayout_0_origin->addWidget(searchDropdown);
+    SearchDropdown* sourceLang = new SearchDropdown(this, ui->originTextEdit);
+    ui->hLayout_1_LangSelect->insertWidget(0, sourceLang, 1);
+
+    SearchDropdown* targetLang = new SearchDropdown(this, ui->trTextEdit);
+    ui->hLayout_1_LangSelect->insertWidget(2, targetLang, 1);
+
 
 }
 
@@ -59,36 +65,36 @@ TextEditTranslateWidget::~TextEditTranslateWidget()
 
 void TextEditTranslateWidget::applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
-    ui->textTranslate->setPlainText(inTranslatedText);
+    ui->trTextEdit->setPlainText(inTranslatedText);
 }
 
 QScrollBar* TextEditTranslateWidget::getVerticalScrollBar()
 {
-    return ui->textTranslate->verticalScrollBar();
+    return ui->trTextEdit->verticalScrollBar();
 }
 
 QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar()
 {
-    return ui->textTranslate->horizontalScrollBar();
+    return ui->trTextEdit->horizontalScrollBar();
 }
 
 void TextEditTranslateWidget::focusTextOrigin()
 {
-    ui->textOrigin->setFocus();
+    ui->originTextEdit->setFocus();
 }
 
 void TextEditTranslateWidget::onTranslateClicked()
 {
-    const QString orignText = ui->textOrigin->toPlainText();
+    const QString orignText = ui->originTextEdit->toPlainText();
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
       , LangType::AUTO
       , LangType::ko
-      , ui->textTranslate
+      , ui->trTextEdit
       , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }
-      , ui->textTranslate
+      , ui->trTextEdit
       , [this](const QString& inStr) { streamTransText(inStr, TextStyle::PlainText); }
     });
 }

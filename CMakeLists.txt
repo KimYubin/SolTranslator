@@ -166,8 +166,9 @@ endif()
 target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
 
 
+#[[
+#### 현지화
 qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ko jp)
-#add_subdirectory(src)
 file(GLOB_RECURSE SOURCES_TO_TRANSLATE
         "src/*.cpp"
         "src/*.h"
@@ -179,6 +180,8 @@ qt_add_translations(FinTranslator
 )
 
 add_dependencies(FinTranslator update_translations)
+]]
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

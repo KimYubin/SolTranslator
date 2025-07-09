@@ -27,15 +27,15 @@
 
   border-radius : 6px;
 }
-#TextEditTranslateWidget QTextEdit#originTranslate,
-#TextEditTranslateWidget QPlainTextEdit#originTranslate
+#TextEditTranslateWidget QTextEdit#originTextEdit,
+#TextEditTranslateWidget QPlainTextEdit#originTextEdit
 {
-  margin-right : 8px;
+  /* margin-right : 4px; */
 }
-#TextEditTranslateWidget QTextEdit#textTranslate,
-#TextEditTranslateWidget QPlainTextEdit#textTranslate
+#TextEditTranslateWidget QTextEdit#trTextEdit,
+#TextEditTranslateWidget QPlainTextEdit#trTextEdit
 {
-  margin-left : 8px;
+  /* margin-left : 4px; */
   background-color: rgb(37, 37, 37);
 }
 #TextEditTranslateWidget a,

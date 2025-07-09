@@ -98,7 +98,7 @@ SearchDropdownMenuPrivate* SearchDropdown::getMenu()
 // SearchDropdownMenuPrivate
 
 SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* parent)
-    : QWidget(parent, Qt::Tool | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+    : QWidget(parent, Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , _sizeWidget(parent->_sizeWidget)
 {
     Q_ASSERT(parent);
@@ -144,6 +144,7 @@ void SearchDropdownMenuPrivate::showMenuPopup()
     move(getTargetGlobalPos());
     show();
     raise();
+    activateWindow();
 }
 
 QString SearchDropdownMenuPrivate::selectedLanguage() const

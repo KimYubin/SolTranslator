@@ -22,6 +22,10 @@ public:
     explicit SearchDropdown(QWidget* parent, QWidget* inSizeWidget);
 
     void setButtonText(const QString& text);
+
+protected:
+    virtual void closeEvent(QCloseEvent* event) override;
+
 private:
     friend class SearchDropdownMenuPrivate;
 

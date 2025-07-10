@@ -20,6 +20,7 @@ class SearchDropdown : public QWidget
 
 public:
     explicit SearchDropdown(QWidget* parent, QWidget* inSizeWidget);
+    ~SearchDropdown() override;
 
     void setButtonText(const QString& text);
 

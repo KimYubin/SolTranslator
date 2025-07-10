@@ -13,6 +13,8 @@
 
 #include <qevent.h>
 
+#include "FinUtilibrary.h"
+
 /** SearchDropdown에서 사용하는 메뉴 */
 class SearchDropdownMenuPrivate : public QWidget
 {
@@ -20,6 +22,7 @@ class SearchDropdownMenuPrivate : public QWidget
 
 public:
     explicit SearchDropdownMenuPrivate(SearchDropdown* searchDropdown, QWidget* parentWidget);
+    ~SearchDropdownMenuPrivate() override;
 
     virtual QSize sizeHint() const override;
 
@@ -27,11 +30,9 @@ public:
 
     QString selectedLanguage() const;
 
-    void detectFocusInOut(QWidget* old, QWidget* now);
-
 protected:
-    virtual void focusOutEvent(QFocusEvent* event) override;
-    
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+
 public:
 signals:
     void itemSelected(const QString& inItem);
@@ -40,7 +41,7 @@ private:
     void filterItems(const QString& inText);
     void onItemClicked(QListWidgetItem* inItem);
 
-    QPoint getTargetGlobalPos() const;
+    QPoint getTargetRelPos() const;
     QSize getTargetSize() const;
 
     QLineEdit* _searchLine;
@@ -60,8 +61,6 @@ private:
 SearchDropdown::SearchDropdown(QWidget* parent, QWidget* inSizeWidget)
     : QWidget(parent), _sizeWidget(inSizeWidget)
 {
-    // resize(300, 400);
-
     _mainLayout = new QGridLayout(this);
     _mainLayout->setObjectName("mainLayout");
     _mainLayout->setSpacing(0);
@@ -79,16 +78,20 @@ SearchDropdown::SearchDropdown(QWidget* parent, QWidget* inSizeWidget)
         {
             getMenu()->showMenuPopup();
         }
-    });
-
-    connect(this, &QObject::destroyed, this, [this]()
-    {
-        if (_menu)
+        else
         {
-            _menu->deleteLater();
+            getMenu()->close();
         }
     });
-    
+
+}
+
+SearchDropdown::~SearchDropdown()
+{
+    if (_menu)
+    {
+        _menu->deleteLater();
+    }
 }
 
 void SearchDropdown::setButtonText(const QString& text)
@@ -159,8 +162,11 @@ SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* searchDropd
             _searchDropdown->setButtonText(lang);
         }
     });
+}
 
-    connect(qApp, &QApplication::focusChanged, this, &SearchDropdownMenuPrivate::detectFocusInOut);
+SearchDropdownMenuPrivate::~SearchDropdownMenuPrivate()
+{
+    qApp->removeEventFilter(this);
 }
 
 QSize SearchDropdownMenuPrivate::sizeHint() const
@@ -170,8 +176,9 @@ QSize SearchDropdownMenuPrivate::sizeHint() const
 
 void SearchDropdownMenuPrivate::showMenuPopup()
 {
+    qApp->installEventFilter(this);
     resize(getTargetSize());
-    move(getTargetGlobalPos());
+    move(getTargetRelPos());
     show();
     raise();
     setFocus();
@@ -182,34 +189,40 @@ QString SearchDropdownMenuPrivate::selectedLanguage() const
     return _currentItem;
 }
 
-void SearchDropdownMenuPrivate::detectFocusInOut(QWidget* old, QWidget* now)
+bool SearchDropdownMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 {
-    // 위젯과 그 부모가 this인지 재귀적으로 확인합니다.
-    auto isThis = [this](QWidget* inWidget)
+    if (event->type() == QEvent::MouseButtonPress
+        || event->type() == QEvent::NonClientAreaMouseButtonPress)
     {
-        bool bIsWidgetThis = false;
-        QObject* parentObj = inWidget;
-        while (parentObj != nullptr)
+        if (Fin::isThis(this, obj) == false)
         {
-            if (parentObj == this)
+            const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();
+
+            // 마우스가 메뉴 위에 있는지 확인
+            const QPoint menuGlobalPos     = mapToGlobal(QPoint(0, 0));
+            const QRect menuGlobalRect     = QRect(menuGlobalPos, size());
+            const bool bIsMenuContainMouse = menuGlobalRect.contains(mouseGlobalPos);
+
+            // 마우스가 드롭다운 버튼 위에 있는지 확인
+            bool bIsButtonContainMouse = false;
+            if (const QPushButton* dropButton = _searchDropdown ? _searchDropdown->_button : nullptr)
             {
-                bIsWidgetThis = true;
-                break;
+                const QPoint buttonGlobalPos = dropButton->mapToGlobal(QPoint(0, 0));
+                const QRect buttonGlobalRect = QRect(buttonGlobalPos, dropButton->size());
+
+                bIsButtonContainMouse = buttonGlobalRect.contains(mouseGlobalPos);
             }
-            parentObj = parentObj->parent();
+
+            // 마우스 위치가 외부라면 닫음. Popup 행동
+            if (bIsMenuContainMouse == false && bIsButtonContainMouse == false)
+            {
+                qApp->removeEventFilter(this);
+                close();
+            }
         }
-        return bIsWidgetThis;
-    };
-
-    if (isThis(old) && (isThis(now) == false))
-    {
-        hide();
     }
-}
-
-void SearchDropdownMenuPrivate::focusOutEvent(QFocusEvent* event)
-{
-    QWidget::focusOutEvent(event);
+    return QWidget::eventFilter(obj, event);
 }
 
 void SearchDropdownMenuPrivate::filterItems(const QString& inText)
@@ -231,17 +244,13 @@ void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* inItem)
     hide();
 }
 
-QPoint SearchDropdownMenuPrivate::getTargetGlobalPos() const
+QPoint SearchDropdownMenuPrivate::getTargetRelPos() const
 {
     if (_sizeWidget.isNull())
     {
         qDebug() << "_sizeWidget is not valid.";
         return QPoint(0, 0);
     }
-
-    const QPoint local = _sizeWidget->rect().topLeft();
-    const QPoint pGlobalPos = _sizeWidget->mapToGlobal(local);
-    
 
     return _sizeWidget->pos();
 }
@@ -253,7 +262,7 @@ QSize SearchDropdownMenuPrivate::getTargetSize() const
         qDebug() << "_sizeWidget is not valid.";
         return QSize(0, 0);
     }
-    
+
     return _sizeWidget->size();
 }
 

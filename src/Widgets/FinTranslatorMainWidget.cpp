@@ -44,7 +44,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     _finIcon = QIcon(":/img/icon_img");
     qApp->setWindowIcon(_finIcon);
 
-    setFocusPolicy(Qt::ClickFocus);
+
     // ~======================
     // button binding
     _buttonGroup = new QButtonGroup(this);

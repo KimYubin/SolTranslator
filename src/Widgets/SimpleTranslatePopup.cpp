@@ -22,6 +22,8 @@
 #include <QTimer>
 #include <qevent.h>
 
+#include "FinUtilibrary.h"
+
 #include "Managers/ConfigManager.h"
 
 #include "Widgets/ui_SimpleTranslatePopup.h"
@@ -701,26 +703,9 @@ void SimpleTranslatePopup::setShadowEffectEnabled(const bool bIsEnable)
 
 void SimpleTranslatePopup::detectFocusInOut(QWidget* old, QWidget* now)
 {
-    // 위젯과 그 부모가 this인지 재귀적으로 확인합니다.
-    auto isThis = [this](QWidget* inWidget)
+    if (Fin::isThis(this, old))
     {
-        bool bIsWidgetThis = false;
-        QObject* parentObj = inWidget;
-        while (parentObj != nullptr)
-        {
-            if (parentObj == this)
-            {
-                bIsWidgetThis = true;
-                break;
-            }
-            parentObj = parentObj->parent();
-        }
-        return bIsWidgetThis;
-    };
-
-    if (isThis(old))
-    {
-        if (isThis(now))
+        if (Fin::isThis(this, now))
         {
             return;
         }
@@ -730,7 +715,7 @@ void SimpleTranslatePopup::detectFocusInOut(QWidget* old, QWidget* now)
             return;
         }
     }
-    if (isThis(now))
+    if (Fin::isThis(this, now))
     {
         setShadowEffectEnabled(true);
     }

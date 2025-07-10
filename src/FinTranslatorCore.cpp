@@ -78,5 +78,5 @@ void FinTranslatorCore::asyncSaveCache()
 
 void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
 {
-    _translateManager->translateSimple(inMimeData, LangType::AUTO, finConfig.getTargetLang());
+    _translateManager->translateSimple(inMimeData, LangType::AUTO, finConfig.getPopupTargetLang());
 }

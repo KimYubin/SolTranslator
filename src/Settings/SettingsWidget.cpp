@@ -33,6 +33,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
+    resize(640, 600);
+
     setLayout(ui->mainLayout);
     ui->mainLayout->setContentsMargins(0, 16, 26, 0);
     ui->mainLayout->setHorizontalSpacing(24);

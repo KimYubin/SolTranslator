@@ -46,14 +46,21 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         Qt::TextEditable
     );
 
-
-    connect(ui->translateButton, &QPushButton::clicked, this, &TextEditTranslateWidget::onTranslateClicked);
-
-    SearchDropdown* sourceLang = new SearchDropdown(this, ui->originTextEdit);
+    SearchDropdown* sourceLang = new SearchDropdown(this, ui->originTextEdit, finConfig.getTextSrcLang());
+    connect(sourceLang, &SearchDropdown::languageSelected, this, [](const LangType inlangType)
+    {
+        finConfig.setTextSrcLang(inlangType);
+    });
     ui->hLayout_1_LangSelect->insertWidget(0, sourceLang, 1);
 
-    SearchDropdown* targetLang = new SearchDropdown(this, ui->trTextEdit);
+    SearchDropdown* targetLang = new SearchDropdown(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    connect(targetLang, &SearchDropdown::languageSelected, this, [](const LangType inlangType)
+    {
+        finConfig.setTextTargetLang(inlangType);
+    });
     ui->hLayout_1_LangSelect->insertWidget(2, targetLang, 1);
+
+    connect(ui->translateButton, &QPushButton::clicked, this, &TextEditTranslateWidget::onTranslateClicked);
 
 
 }
@@ -90,8 +97,8 @@ void TextEditTranslateWidget::onTranslateClicked()
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
       , TextStyle::PlainText
-      , LangType::AUTO
-      , LangType::ko
+      , finConfig.getTextSrcLang()
+      , finConfig.getTextTargetLang()
       , ui->trTextEdit
       , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }
       , ui->trTextEdit

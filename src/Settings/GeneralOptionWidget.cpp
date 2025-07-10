@@ -41,27 +41,28 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     });
     shapeBehaviorVLay->addWidget(startRunCard, 0, Qt::AlignmentFlag::AlignTop);
 
-    // 도착언어 선택
+
+    // 팝업번역 도착언어 선택
     SettingCard* selectTargetLang = new SettingCard(new QComboBox, shapeBehaviorGroup);
     selectTargetLang->setHeader(tr("Target Language"));
     selectTargetLang->setDescription(tr("팝업 번역 대상이 되는 언어를 선택합니다."));
+
     QComboBox* selectCombo = selectTargetLang->getContent<QComboBox>();
-    for (LangType eg = LangType::AUTO; eg != LangType::Size; eg = static_cast<LangType>(static_cast<int>(eg) + 1))
+
+    std::vector<LangType> langList = Langs::GetLanguageList();
+    for (LangType lang : langList)
     {
-        const QString langName = Langs::GetEndonymName(eg);
-        if (langName != "NONE")
-        {
-            selectCombo->addItem(langName, static_cast<int>(eg));
-        }
+        selectCombo->addItem(Langs::GetLocaleName(lang), static_cast<int>(lang));
     }
 
     connect(selectCombo, &QComboBox::currentIndexChanged, this, [this, selectCombo](const int inIdx)
     {
         const int payload = selectCombo->itemData(inIdx).toInt();
 
-        finConfig.setTargetLang(static_cast<LangType>(payload));
+        finConfig.setPopupTargetLang(static_cast<LangType>(payload));
     });
-    const LangType curTargetLang = finConfig.getTargetLang();
+
+    const LangType curTargetLang = finConfig.getPopupTargetLang();
     const int curLangIdx         = selectCombo->findData(static_cast<int>(curTargetLang));
     selectCombo->setCurrentIndex(curLangIdx);
 

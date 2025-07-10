@@ -18,7 +18,10 @@
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
 
-const QString LanguageType = "LanguageType";
+const QString PopupTargetLanguageType = "PopupTargetLanguageType";
+
+const QString TextSrcLangType    = "TextEditSourceLanguageType";
+const QString TextTargetLangType = "TextEditTargetLanguageType";
 
 const QString SimplePopupGeometry     = "SimplePopupGeometry";
 const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
@@ -98,14 +101,34 @@ bool ConfigManager::getStartRun()
     return _settings->value(Fin::Const::CommandLineOptions::START_UP_RUN, false).toBool();
 }
 
-void ConfigManager::setTargetLang(const LangType inLangType)
+void ConfigManager::setPopupTargetLang(const LangType inLangType)
 {
-    setEnumValue(LanguageType, inLangType);
+    setEnumValue(PopupTargetLanguageType, inLangType);
 }
 
-LangType ConfigManager::getTargetLang()
+LangType ConfigManager::getPopupTargetLang()
 {
-    return getEnumValue(LanguageType, LangType::ko);
+    return getEnumValue(PopupTargetLanguageType, LangType::ko);
+}
+
+void ConfigManager::setTextSrcLang(const LangType inLangType)
+{
+    setEnumValue(TextSrcLangType, inLangType);
+}
+
+LangType ConfigManager::getTextSrcLang()
+{
+    return getEnumValue(TextSrcLangType, LangType::AUTO);
+}
+
+void ConfigManager::setTextTargetLang(const LangType inLangType)
+{
+    setEnumValue(TextTargetLangType, inLangType);
+}
+
+LangType ConfigManager::getTextTargetLang()
+{
+    return getEnumValue(TextTargetLangType, LangType::ko);
 }
 
 void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)

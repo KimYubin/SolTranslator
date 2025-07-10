@@ -143,6 +143,12 @@ public:
     static QString GetCodeName(const LangType inLangType);
     static QString GetEnglishName(const LangType inLangType);
     static QString GetEndonymName(const LangType inLangType);
+    static QString GetLocaleName(const LangType inLangType);
+
+    static std::vector<LangType> GetLanguageList();
+
+    static bool IsContainName(const LangType inLangType, const QString& inLangName);
+
 private:
     static const std::unordered_map<LangType, LangInfo> langs;
 };

@@ -44,8 +44,17 @@ public:
     void setStartRun(const bool inStartRun);
     bool getStartRun();
 
-    void setTargetLang(const LangType inLangType);
-    LangType getTargetLang();
+    /** 팝업 번역 도착 언어 */
+    void setPopupTargetLang(const LangType inLangType);
+    LangType getPopupTargetLang();
+
+    /** TextEdit 번역 출발 언어 */
+    void setTextSrcLang(const LangType inLangType);
+    LangType getTextSrcLang();
+
+    /** TextEdit 번역 도착 언어 */
+    void setTextTargetLang(const LangType inLangType);
+    LangType getTextTargetLang();
 
     void setSimplePopupGeometry(const QRect& inGeo);
     QRect getSimplePopupGeometry();

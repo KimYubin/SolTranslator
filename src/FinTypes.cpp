@@ -22,13 +22,13 @@ const QString TRANSLATE_HISTORY = "Translate_History.json";
 }
 
 
-
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
     {LangType::NONE, {LangType::NONE, magic_enum::enum_name(LangType::NONE).data(), u8"NONE", u8"NONE"}}
   , {LangType::AUTO, {LangType::AUTO, u8"auto", u8"auto", u8"auto"}}
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
+  , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
 
 QString EngineName::getName(EngineType inEngineType)
@@ -110,4 +110,33 @@ QString Langs::GetEnglishName(const LangType inLangType)
 QString Langs::GetEndonymName(const LangType inLangType)
 {
     return GetLangInfo(inLangType).endonymName;
+}
+
+QString Langs::GetLocaleName(const LangType inLangType)
+{
+    // todo: 현지화 버전으로 변경할 예정. 현재는 자국명.
+    return GetLangInfo(inLangType).endonymName;
+}
+
+std::vector<LangType> Langs::GetLanguageList()
+{
+    std::vector<LangType> languageList;
+    for (LangType lt = LangType::AUTO; lt != LangType::Size; lt = static_cast<LangType>(static_cast<int>(lt) + 1))
+    {
+        const QString langName = Langs::GetLocaleName(lt);
+        if (langName != "NONE")
+        {
+            languageList.push_back(lt);
+        }
+    }
+
+    return languageList;
+}
+
+bool Langs::IsContainName(const LangType inLangType, const QString& inLangName)
+{
+    // todo: 로케일 현지화 이름 및 각국 언어별 명칭을 모두 찾도록 만들어야합니다.
+    // todo: 현지명, 영어명, 코드명, 자국명(모든언어 검색X. 자국명만 따로 모아놓아야합니다.)
+    const QString LangName = Langs::GetLocaleName(inLangType);
+    return LangName.contains(inLangName, Qt::CaseInsensitive);
 }

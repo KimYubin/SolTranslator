@@ -8,6 +8,7 @@
 #include <QPointer>
 #include <QWidget>
 
+enum class LangType;
 class QGridLayout;
 class SearchDropdownMenuPrivate;
 class QListWidget;
@@ -19,10 +20,19 @@ class SearchDropdown : public QWidget
     Q_OBJECT
 
 public:
-    explicit SearchDropdown(QWidget* parent, QWidget* inSizeWidget);
+    explicit SearchDropdown(QWidget* parent
+                          , QWidget* inSizeWidget
+                          , const LangType inLangType);
     ~SearchDropdown() override;
 
-    void setButtonText(const QString& text);
+    void setButtonText(const LangType inlangType);
+
+public slots:
+    void onSelectedLanguage(const LangType inlangType);
+
+public:
+signals:
+    void languageSelected(const LangType inlangType);
 
 protected:
     virtual void closeEvent(QCloseEvent* event) override;

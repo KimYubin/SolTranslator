@@ -13,7 +13,16 @@
 
 #include <qevent.h>
 
+#include "FinTypes.h"
 #include "FinUtilibrary.h"
+
+#include "Managers/ConfigManager.h"
+
+enum
+{
+    LangTypeRole = Qt::ItemDataRole::UserRole + 1
+  , 
+};
 
 /** SearchDropdown에서 사용하는 메뉴 */
 class SearchDropdownMenuPrivate : public QWidget
@@ -35,11 +44,12 @@ protected:
 
 public:
 signals:
-    void itemSelected(const QString& inItem);
+    void itemSelected(const LangType inLangType);
 
 private:
     void filterItems(const QString& inText);
     void onItemClicked(QListWidgetItem* inItem);
+    void addListItem(const LangType& inLangType);
 
     QPoint getTargetRelPos() const;
     QSize getTargetSize() const;
@@ -48,7 +58,7 @@ private:
     QListWidget* _listWidget;
 
     QString _currentItem;
-    QStringList _allDataList;
+    std::vector<LangType> _allLangTypes;
 
     QPointer<SearchDropdown> _searchDropdown;
     QPointer<QWidget> _sizeWidget;
@@ -58,7 +68,9 @@ private:
 #include "SearchDropdown.moc"
 
 
-SearchDropdown::SearchDropdown(QWidget* parent, QWidget* inSizeWidget)
+SearchDropdown::SearchDropdown(QWidget* parent
+                             , QWidget* inSizeWidget
+                             , const LangType inLangType)
     : QWidget(parent), _sizeWidget(inSizeWidget)
 {
     _mainLayout = new QGridLayout(this);
@@ -69,6 +81,7 @@ SearchDropdown::SearchDropdown(QWidget* parent, QWidget* inSizeWidget)
     setLayout(_mainLayout);
 
     _button = new QPushButton(this);
+    setButtonText(inLangType);
     _mainLayout->addWidget(_button, 0, 0, Qt::AlignLeft);
 
 
@@ -94,9 +107,15 @@ SearchDropdown::~SearchDropdown()
     }
 }
 
-void SearchDropdown::setButtonText(const QString& text)
+void SearchDropdown::setButtonText(const LangType inlangType)
 {
-    _button->setText(text);
+    _button->setText(Langs::GetLocaleName(inlangType));
+}
+
+void SearchDropdown::onSelectedLanguage(const LangType inlangType)
+{
+    setButtonText(inlangType);
+    emit languageSelected(inlangType);
 }
 
 void SearchDropdown::closeEvent(QCloseEvent* event)
@@ -146,22 +165,17 @@ SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* searchDropd
     _listWidget = new QListWidget(this);
     layout->addWidget(_listWidget);
 
-    _allDataList = QStringList{
-        "한국어", "영어", "중국어", "일본어", "프랑스어", "독일어", "스페인어",
-    };
+    _allLangTypes = Langs::GetLanguageList();
 
-    _listWidget->addItems(_allDataList);
+    for (const LangType langType : _allLangTypes)
+    {
+        addListItem(langType);
+    }
 
     connect(_searchLine, &QLineEdit::textChanged, this, &SearchDropdownMenuPrivate::filterItems);
     connect(_listWidget, &QListWidget::itemClicked, this, &SearchDropdownMenuPrivate::onItemClicked);
 
-    connect(this, &SearchDropdownMenuPrivate::itemSelected, this, [this](const QString& lang)
-    {
-        if (_searchDropdown)
-        {
-            _searchDropdown->setButtonText(lang);
-        }
-    });
+    connect(this, &SearchDropdownMenuPrivate::itemSelected, _searchDropdown, &SearchDropdown::onSelectedLanguage);
 }
 
 SearchDropdownMenuPrivate::~SearchDropdownMenuPrivate()
@@ -228,23 +242,32 @@ bool SearchDropdownMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 void SearchDropdownMenuPrivate::filterItems(const QString& inText)
 {
     _listWidget->clear();
-    QStringList filteredList;
-    for (const QString& lang : _allDataList)
+    for (const LangType langType : _allLangTypes)
     {
-        if (lang.contains(inText, Qt::CaseInsensitive))
+        if (Langs::IsContainName(langType, inText))
         {
-            filteredList.append(lang);
+            addListItem(langType);
         }
     }
-
-    _listWidget->addItems(filteredList);
 }
 
 void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* inItem)
 {
+    const int payload = inItem->data(LangTypeRole).toInt();
+    
     _currentItem = inItem->text();
-    emit itemSelected(_currentItem);
+    emit itemSelected(static_cast<LangType>(payload));
     hide();
+}
+
+void SearchDropdownMenuPrivate::addListItem(const LangType& inLangType)
+{
+    const QString langName = Langs::GetLocaleName(inLangType);
+    _listWidget->addItem(langName);
+    if (QListWidgetItem* lastItem = _listWidget->item(_listWidget->count() - 1))
+    {
+        lastItem->setData(LangTypeRole, static_cast<int>(inLangType));
+    }
 }
 
 QPoint SearchDropdownMenuPrivate::getTargetRelPos() const

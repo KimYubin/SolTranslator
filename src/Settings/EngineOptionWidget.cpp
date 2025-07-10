@@ -36,7 +36,9 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     // 번역 엔진 변경.
     connect(ui->enginSelectCombo, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
     {
-        finConfig.setCurrentEngineType(static_cast<EngineType>(inIdx));
+        const int payload = ui->enginSelectCombo->itemData(inIdx).toInt();
+
+        finConfig.setCurrentEngineType(static_cast<EngineType>(payload));
         const EngineType eg  = finConfig.getCurrentEngineType();
         const QString apiKey = finConfig.getAPIKey(eg);
         const int apiSize    = apiKey.size();

@@ -18,6 +18,8 @@
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
 
+const QString LanguageType = "LanguageType";
+
 const QString SimplePopupGeometry     = "SimplePopupGeometry";
 const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
 
@@ -94,6 +96,16 @@ void ConfigManager::setStartRun(const bool inStartRun)
 bool ConfigManager::getStartRun()
 {
     return _settings->value(Fin::Const::CommandLineOptions::START_UP_RUN, false).toBool();
+}
+
+void ConfigManager::setTargetLang(const LangType inLangType)
+{
+    setEnumValue(LanguageType, inLangType);
+}
+
+LangType ConfigManager::getTargetLang()
+{
+    return getEnumValue(LanguageType, LangType::ko);
 }
 
 void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)

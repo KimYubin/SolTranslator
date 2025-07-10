@@ -6,6 +6,8 @@
 
 #include "GeneralOptionWidget.h"
 
+#include <QComboBox>
+#include <QGroupBox>
 #include <QPushButton>
 
 #include "FinTranslatorCore.h"
@@ -24,19 +26,47 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     ui->setupUi(this);
     setLayout(ui->mainLayout);
     ui->mainLayout->setContentsMargins(0, 0, 0, 0);
-    ui->verticalLayout->setContentsMargins(0, 0, 0, 0);
+
+    auto [shapeBehaviorGroup, shapeBehaviorVLay] = IOptionWidget::newOptionGroupBox(tr("모양 및 동작"), ui->mainLayout, ui->mainLayout->rowCount(), 0);
 
     // 시작시 실행
-    SettingCard* startRunCard = new SettingCard(new SwitchButton, ui->engineGroup);
+    SettingCard* startRunCard = new SettingCard(new SwitchButton, shapeBehaviorGroup);
     startRunCard->setHeader(tr("Run at startup"));
     startRunCard->setDescription(tr("시스템 시작 시 자동 실행"));
-    startRunCard->getContent<SwitchButton>()->setChecked(finConfig.getStartRun());
-    connect(startRunCard->getContent<SwitchButton>(), &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
+    SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
+    startRunSwitch->setChecked(finConfig.getStartRun());
+    connect(startRunSwitch, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
     {
         finConfig.setStartRun(inState == Qt::CheckState::Checked);
     });
-    ui->verticalLayout->addWidget(startRunCard, 0, Qt::AlignmentFlag::AlignTop);
+    shapeBehaviorVLay->addWidget(startRunCard, 0, Qt::AlignmentFlag::AlignTop);
 
+    // 도착언어 선택
+    SettingCard* selectTargetLang = new SettingCard(new QComboBox, shapeBehaviorGroup);
+    selectTargetLang->setHeader(tr("Target Language"));
+    selectTargetLang->setDescription(tr("팝업 번역 대상이 되는 언어를 선택합니다."));
+    QComboBox* selectCombo = selectTargetLang->getContent<QComboBox>();
+    for (LangType eg = LangType::AUTO; eg != LangType::Size; eg = static_cast<LangType>(static_cast<int>(eg) + 1))
+    {
+        const QString langName = Langs::GetEndonymName(eg);
+        if (langName != "NONE")
+        {
+            selectCombo->addItem(langName, static_cast<int>(eg));
+        }
+    }
+
+    connect(selectCombo, &QComboBox::currentIndexChanged, this, [this, selectCombo](const int inIdx)
+    {
+        const int payload = selectCombo->itemData(inIdx).toInt();
+
+        finConfig.setTargetLang(static_cast<LangType>(payload));
+    });
+    const LangType curTargetLang = finConfig.getTargetLang();
+    const int curLangIdx         = selectCombo->findData(static_cast<int>(curTargetLang));
+    selectCombo->setCurrentIndex(curLangIdx);
+
+    shapeBehaviorVLay->addWidget(selectTargetLang, 0, Qt::AlignmentFlag::AlignTop);
+    
 
     // 테마 적용 버튼
     QPushButton* themeButton = new QPushButton("ThemeButton");

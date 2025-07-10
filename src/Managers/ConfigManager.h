@@ -44,6 +44,9 @@ public:
     void setStartRun(const bool inStartRun);
     bool getStartRun();
 
+    void setTargetLang(const LangType inLangType);
+    LangType getTargetLang();
+
     void setSimplePopupGeometry(const QRect& inGeo);
     QRect getSimplePopupGeometry();
     void setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inPolicy);

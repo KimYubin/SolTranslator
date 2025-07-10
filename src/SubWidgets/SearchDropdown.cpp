@@ -228,13 +228,16 @@ bool SearchDropdownMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 void SearchDropdownMenuPrivate::filterItems(const QString& inText)
 {
     _listWidget->clear();
+    QStringList filteredList;
     for (const QString& lang : _allDataList)
     {
         if (lang.contains(inText, Qt::CaseInsensitive))
         {
-            _listWidget->addItem(lang);
+            filteredList.append(lang);
         }
     }
+
+    _listWidget->addItems(filteredList);
 }
 
 void SearchDropdownMenuPrivate::onItemClicked(QListWidgetItem* inItem)
@@ -260,7 +263,7 @@ QSize SearchDropdownMenuPrivate::getTargetSize() const
     if (_sizeWidget.isNull())
     {
         qDebug() << "_sizeWidget is not valid.";
-        return QSize(0, 0);
+        return QSize(200, 300);
     }
 
     return _sizeWidget->size();

@@ -10,6 +10,7 @@
 #include "FinConstants.h"
 
 #include "Managers/AsyncManager.h"
+#include "Managers/ConfigManager.h"
 #include "Managers/DataManager.h"
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/TranslateManager.h"
@@ -77,5 +78,5 @@ void FinTranslatorCore::asyncSaveCache()
 
 void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
 {
-    _translateManager->translateSimple(inMimeData, LangType::AUTO, LangType::ko);
+    _translateManager->translateSimple(inMimeData, LangType::AUTO, finConfig.getTargetLang());
 }

@@ -22,24 +22,10 @@
      <height>481</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="mainLayout" rowstretch="0,0">
+   <layout class="QGridLayout" name="mainLayout" rowstretch="0">
     <property name="spacing">
      <number>0</number>
     </property>
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="engineGroup">
-      <property name="title">
-       <string>모양 및 동작</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout"/>
-     </widget>
-    </item>
    </layout>
   </widget>
  </widget>

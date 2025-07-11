@@ -48,12 +48,11 @@ protected:
      */
     virtual QScrollBar* getVerticalScrollBar() = 0;
     virtual QScrollBar* getHorizontalScrollBar() = 0;
-    
 
-    
-    QString _prevString;
-    TextStyle _prevTextStyle;
-    QTimer* _updateStreamStrTimer;
+
+    QString _translatedText;        // 번역문자열 보관
+    TextStyle _translatedTextStyle; // 번역문자열의 스타일
+    QTimer* _streamUpdateTimer;     // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
 };
 
 #endif //ITRANSLATEWIDGET_H

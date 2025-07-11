@@ -10,12 +10,12 @@
 ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
 {
-    _updateStreamStrTimer = new QTimer(this);
-    _updateStreamStrTimer->setInterval(50);
-    _updateStreamStrTimer->setSingleShot(true);
-    connect(_updateStreamStrTimer, &QTimer::timeout, this, [this]()
+    _streamUpdateTimer = new QTimer(this);
+    _streamUpdateTimer->setInterval(50);
+    _streamUpdateTimer->setSingleShot(true);
+    connect(_streamUpdateTimer, &QTimer::timeout, this, [this]()
     {
-        setTranslationWithFixedScroll(_prevString, _prevTextStyle);
+        setTranslationWithFixedScroll(_translatedText, _translatedTextStyle);
     });
 }
 
@@ -25,14 +25,16 @@ ITranslateWidget::~ITranslateWidget()
 
 void ITranslateWidget::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
-    _prevString    = inTranslatedText;
-    _prevTextStyle = inTextStyle;
-    _updateStreamStrTimer->start();
+    _translatedText      = inTranslatedText;
+    _translatedTextStyle = inTextStyle;
+    _streamUpdateTimer->start();
 }
 
 void ITranslateWidget::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
-    _updateStreamStrTimer->stop();
+    _translatedText      = inTranslatedText;
+    _translatedTextStyle = inTextStyle;
+    _streamUpdateTimer->stop();
     setTranslationWithFixedScroll(inTranslatedText, inTextStyle);
 }
 

@@ -90,8 +90,6 @@ set(PROJECT_SOURCES
         src/SubWidgets/DropdownMenu.h
         src/SubWidgets/SearchDropdown.cpp
         src/SubWidgets/SearchDropdown.h
-        src/SubWidgets/LanguageSelector.cpp
-        src/SubWidgets/LanguageSelector.h
         src/FinUtilibrary.cpp
         src/FinUtilibrary.h
 

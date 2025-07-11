@@ -152,21 +152,19 @@ SearchDropdownMenuPrivate::SearchDropdownMenuPrivate(SearchDropdown* searchDropd
     setAttribute(Qt::WA_TranslucentBackground);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    setLayout(layout);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
 
     _searchLine = new QLineEdit(this);
-    layout->addWidget(_searchLine);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
-
     _searchLine->setPlaceholderText(tr("언어 검색"));
+    layout->addWidget(_searchLine);
 
     _listWidget = new QListWidget(this);
     layout->addWidget(_listWidget);
 
     _allLangTypes = Langs::GetLanguageList();
-
     for (const LangType langType : _allLangTypes)
     {
         addListItem(langType);

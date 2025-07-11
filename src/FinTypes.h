@@ -30,6 +30,7 @@ private:
 
 public:
     static QString getLogPath();
+    static QString getConfigPath();
     static QString getApiKeyPath();
     static QString getTranslateHistoryFilePath();
 };

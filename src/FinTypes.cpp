@@ -18,6 +18,7 @@ const QString HISTORY = "history";
 namespace Fin::Internal::FileName
 {
 const QString API_KEY = "api";
+const QString FIN_CONFIG = "FinConfig.ini";
 const QString TRANSLATE_HISTORY = "Translate_History.json";
 }
 
@@ -74,6 +75,11 @@ QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& in
 QString FinPaths::getLogPath()
 {
     return getFinAppPath("logs", "log.txt");
+}
+
+QString FinPaths::getConfigPath()
+{
+    return getFinAppPath(Fin::Internal::DirName::SAVE, Fin::Internal::FileName::FIN_CONFIG);
 }
 
 QString FinPaths::getApiKeyPath()

@@ -28,7 +28,7 @@ const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
 
 ConfigManager::ConfigManager()
 {
-    _settings = new QSettings(FinPaths::getApiKeyPath(), QSettings::IniFormat, this);
+    _settings = new QSettings(FinPaths::getConfigPath(), QSettings::IniFormat, this);
 }
 
 

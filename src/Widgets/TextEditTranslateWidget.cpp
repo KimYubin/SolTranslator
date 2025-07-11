@@ -19,7 +19,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-#include "SubWidgets/SearchDropdown.h"
+#include "SubWidgets/LanguageSelector.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
@@ -46,15 +46,15 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         Qt::TextEditable
     );
 
-    SearchDropdown* sourceLang = new SearchDropdown(this, ui->originTextEdit, finConfig.getTextSrcLang());
-    connect(sourceLang, &SearchDropdown::languageSelected, this, [](const LangType inlangType)
+    LanguageSelector* sourceLang = new LanguageSelector(this, ui->originTextEdit, finConfig.getTextSrcLang());
+    connect(sourceLang, &LanguageSelector::languageSelected, this, [](const LangType inlangType)
     {
         finConfig.setTextSrcLang(inlangType);
     });
     ui->hLayout_1_LangSelect->insertWidget(0, sourceLang, 1);
 
-    SearchDropdown* targetLang = new SearchDropdown(this, ui->trTextEdit, finConfig.getTextTargetLang());
-    connect(targetLang, &SearchDropdown::languageSelected, this, [](const LangType inlangType)
+    LanguageSelector* targetLang = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    connect(targetLang, &LanguageSelector::languageSelected, this, [](const LangType inlangType)
     {
         finConfig.setTextTargetLang(inlangType);
     });

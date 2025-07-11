@@ -88,8 +88,8 @@ set(PROJECT_SOURCES
         src/EngineUnits/FinPoint/FinPointTrUnit.h
         src/SubWidgets/DropdownMenu.cpp
         src/SubWidgets/DropdownMenu.h
-        src/SubWidgets/SearchDropdown.cpp
-        src/SubWidgets/SearchDropdown.h
+        src/SubWidgets/LanguageSelector.cpp
+        src/SubWidgets/LanguageSelector.h
         src/FinUtilibrary.cpp
         src/FinUtilibrary.h
 

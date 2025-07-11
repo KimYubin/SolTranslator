@@ -32,9 +32,9 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     setLayout(ui->mainLayout);
 
-    ui->hLayout_2_TextInputs->setSpacing(8);
+    ui->TextEditLayout->setSpacing(8);
 
-    ui->originTextEdit->setTabChangesFocus(true);
+    ui->srcTextEdit->setTabChangesFocus(true);
     ui->trTextEdit->setTabChangesFocus(true);
     ui->trTextEdit->setReadOnly(true);
     ui->trTextEdit->setMouseTracking(false);
@@ -46,23 +46,67 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         Qt::TextEditable
     );
 
-    LanguageSelector* sourceLang = new LanguageSelector(this, ui->originTextEdit, finConfig.getTextSrcLang());
-    connect(sourceLang, &LanguageSelector::languageSelected, this, [](const LangType inlangType)
+    // 출발언어 선택기
+    _sourceLang = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
+    connect(_sourceLang, &LanguageSelector::languageSelected, this, [this](const LangType inlangType)
     {
+        const bool bIsAuto = (inlangType == LangType::AUTO);
+        ui->languageSwapButton->setEnabled(bIsAuto == false);
+
         finConfig.setTextSrcLang(inlangType);
     });
-    ui->hLayout_1_LangSelect->insertWidget(0, sourceLang, 1);
 
-    LanguageSelector* targetLang = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
-    connect(targetLang, &LanguageSelector::languageSelected, this, [](const LangType inlangType)
+    ui->LangSelectLayout->insertWidget(0, _sourceLang, 1);
+
+
+    // 도착언어 선택기
+    _targetLang = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    connect(_targetLang, &LanguageSelector::languageSelected, &finConfig, &ConfigManager::setTextTargetLang);
+
+    ui->LangSelectLayout->insertWidget(2, _targetLang, 1);
+
+
+    // 언어 교환 버튼
+    const bool bIsAuto = (finConfig.getTextSrcLang() == LangType::AUTO);
+    ui->languageSwapButton->setEnabled(bIsAuto == false);
+    connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {
-        finConfig.setTextTargetLang(inlangType);
+        const LangType srcLangType    = finConfig.getTextSrcLang();
+        const LangType targetLangType = finConfig.getTextTargetLang();
+        if (srcLangType == LangType::AUTO)
+        {
+            qDebug()<<"swap button is clicked, when source Language Type is AUTO.";
+            return;
+        }
+
+        _sourceLang->onSelectedLanguage(targetLangType);
+        _targetLang->onSelectedLanguage(srcLangType);
     });
-    ui->hLayout_1_LangSelect->insertWidget(2, targetLang, 1);
 
-    connect(ui->translateButton, &QPushButton::clicked, this, &TextEditTranslateWidget::onTranslateClicked);
+    // 번역 실행 타이머
+    _translationExecutionTimer = new QTimer(this);
+    _translationExecutionTimer->setInterval(500);
+    _translationExecutionTimer->setSingleShot(true);
+    connect(_translationExecutionTimer, &QTimer::timeout, this, &TextEditTranslateWidget::onTranslateClicked);
+    connect(ui->srcTextEdit, &QPlainTextEdit::textChanged, this, [this]()
+    {
+        _translationExecutionTimer->start();
+    });
 
-
+    
+    // todo: 검색 기능 추가 예정.
+    // ui->OrignLangSelectCombo->setEditable(true);
+    //
+    // QStringList items       = {"Apple", "Banana", "Cherry", "Date"};
+    // QStringListModel* model = new QStringListModel(items, this);
+    //
+    // QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
+    // proxyModel->setSourceModel(model);
+    // proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    //
+    // ui->OrignLangSelectCombo->setModel(proxyModel);
+    //
+    // connect(ui->OrignLangSelectCombo->lineEdit(), &QLineEdit::textChanged, proxyModel, &QSortFilterProxyModel::setFilterFixedString);
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()
@@ -87,12 +131,12 @@ QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar()
 
 void TextEditTranslateWidget::focusTextOrigin()
 {
-    ui->originTextEdit->setFocus();
+    ui->srcTextEdit->setFocus();
 }
 
 void TextEditTranslateWidget::onTranslateClicked()
 {
-    const QString orignText = ui->originTextEdit->toPlainText();
+    const QString orignText = ui->srcTextEdit->toPlainText();
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText

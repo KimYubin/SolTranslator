@@ -41,6 +41,7 @@ public:
 
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
+    virtual void closeEvent(QCloseEvent* event) override;
 
 public:
 signals:
@@ -82,7 +83,7 @@ LanguageSelector::LanguageSelector(QWidget* parent
     setLayout(_mainLayout);
 
     _button = new QPushButton(this);
-    setButtonText(inLangType);
+    setButtonText(inLangType); // onSelectedLanguage(inLangType);
     _mainLayout->addWidget(_button, 0, 0, Qt::AlignLeft);
 
 
@@ -175,6 +176,7 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     connect(_listWidget, &QListWidget::itemClicked, this, &LanguageSelectorMenuPrivate::onItemClicked);
 
     connect(this, &LanguageSelectorMenuPrivate::itemSelected, _langSelector, &LanguageSelector::onSelectedLanguage);
+    setTabOrder(_searchLine, _listWidget);
 }
 
 LanguageSelectorMenuPrivate::~LanguageSelectorMenuPrivate()
@@ -194,7 +196,7 @@ void LanguageSelectorMenuPrivate::showMenuPopup()
     move(getTargetRelPos());
     show();
     raise();
-    setFocus();
+    _searchLine->setFocus();
 }
 
 QString LanguageSelectorMenuPrivate::selectedLanguage() const
@@ -204,8 +206,10 @@ QString LanguageSelectorMenuPrivate::selectedLanguage() const
 
 bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::MouseButtonPress
-        || event->type() == QEvent::NonClientAreaMouseButtonPress)
+    const QEvent::Type eventType = event->type();
+    bool bIsMouseClickOut = (eventType == QEvent::NonClientAreaMouseButtonPress);
+
+    if (eventType == QEvent::MouseButtonPress)
     {
         if (Fin::isThis(this, obj) == false)
         {
@@ -227,15 +231,26 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
                 bIsButtonContainMouse = buttonGlobalRect.contains(mouseGlobalPos);
             }
 
-            // 마우스 위치가 외부라면 닫음. Popup 행동
             if (bIsMenuContainMouse == false && bIsButtonContainMouse == false)
             {
-                qApp->removeEventFilter(this);
-                close();
+                bIsMouseClickOut = true;
             }
         }
     }
+
+    // 마우스 위치가 외부라면 닫음. Popup 행동
+    if (bIsMouseClickOut)
+    {
+        qApp->removeEventFilter(this);
+        close();
+    }
     return QWidget::eventFilter(obj, event);
+}
+
+void LanguageSelectorMenuPrivate::closeEvent(QCloseEvent* event)
+{
+    qApp->removeEventFilter(this);
+    QWidget::closeEvent(event);
 }
 
 void LanguageSelectorMenuPrivate::filterItems(const QString& inText)

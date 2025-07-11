@@ -27,8 +27,8 @@
 
   border-radius : 6px;
 }
-#TextEditTranslateWidget QTextEdit#originTextEdit,
-#TextEditTranslateWidget QPlainTextEdit#originTextEdit
+#TextEditTranslateWidget QTextEdit#srcTextEdit,
+#TextEditTranslateWidget QPlainTextEdit#srcTextEdit
 {
   /* margin-right : 4px; */
 }

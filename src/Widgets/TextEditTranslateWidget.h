@@ -10,6 +10,7 @@
 #include "ITranslateWidget.h"
 
 
+class LanguageSelector;
 enum class TextStyle;
 class FinTranslatorCore;
 QT_BEGIN_NAMESPACE
@@ -43,10 +44,12 @@ private slots:
     void onTranslateClicked();
 
 private:
-    QString _prevString;
-    QTimer* _updateStreamStrTimer;
-
     Ui::TextEditTranslateWidget* ui;
+    LanguageSelector* _sourceLang;
+    LanguageSelector* _targetLang;
+
+    // 문자입력 후 번역요청까지 타이머
+    QTimer* _translationExecutionTimer;
 };
 
 

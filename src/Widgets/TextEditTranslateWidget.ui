@@ -45,7 +45,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="hLayout_1_LangSelect">
+     <layout class="QHBoxLayout" name="LangSelectLayout">
       <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
        <widget class="QPushButton" name="languageSwapButton">
         <property name="maximumSize">
@@ -62,7 +62,7 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <layout class="QHBoxLayout" name="hLayout_2_TextInputs">
+     <layout class="QHBoxLayout" name="TextEditLayout">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -73,51 +73,23 @@
        <number>0</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QPlainTextEdit" name="originTextEdit"/>
-        </item>
-        <item alignment="Qt::AlignmentFlag::AlignRight">
-         <widget class="QPushButton" name="translateButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>translate</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPlainTextEdit" name="srcTextEdit"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QTextBrowser" name="trTextEdit">
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QTextBrowser" name="trTextEdit">
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
     <item row="2" column="0">
-     <layout class="QHBoxLayout" name="hLayout_3_Bottom"/>
+     <layout class="QHBoxLayout" name="BottomLayout"/>
     </item>
    </layout>
   </widget>
  </widget>
- <tabstops>
-  <tabstop>originTextEdit</tabstop>
-  <tabstop>trTextEdit</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

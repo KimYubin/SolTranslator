@@ -48,20 +48,14 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 출발언어 선택기
     _sourceLang = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
-    connect(_sourceLang, &LanguageSelector::languageSelected, this, [this](const LangType inlangType)
-    {
-        const bool bIsAuto = (inlangType == LangType::AUTO);
-        ui->languageSwapButton->setEnabled(bIsAuto == false);
-
-        finConfig.setTextSrcLang(inlangType);
-    });
+    connect(_sourceLang, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(0, _sourceLang, 1);
 
 
     // 도착언어 선택기
     _targetLang = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
-    connect(_targetLang, &LanguageSelector::languageSelected, &finConfig, &ConfigManager::setTextTargetLang);
+    connect(_targetLang, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(2, _targetLang, 1);
 
@@ -83,6 +77,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         _targetLang->onSelectedLanguage(srcLangType);
     });
 
+
     // 번역 실행 타이머
     _translationExecutionTimer = new QTimer(this);
     _translationExecutionTimer->setInterval(500);
@@ -93,20 +88,6 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         _translationExecutionTimer->start();
     });
 
-    
-    // todo: 검색 기능 추가 예정.
-    // ui->OrignLangSelectCombo->setEditable(true);
-    //
-    // QStringList items       = {"Apple", "Banana", "Cherry", "Date"};
-    // QStringListModel* model = new QStringListModel(items, this);
-    //
-    // QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
-    // proxyModel->setSourceModel(model);
-    // proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    //
-    // ui->OrignLangSelectCombo->setModel(proxyModel);
-    //
-    // connect(ui->OrignLangSelectCombo->lineEdit(), &QLineEdit::textChanged, proxyModel, &QSortFilterProxyModel::setFilterFixedString);
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()
@@ -148,5 +129,18 @@ void TextEditTranslateWidget::onTranslateClicked()
       , ui->trTextEdit
       , [this](const QString& inStr) { streamTransText(inStr, TextStyle::PlainText); }
     });
+}
+
+void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType) const
+{
+    const bool bIsAuto = (inlangType == LangType::AUTO);
+    ui->languageSwapButton->setEnabled(bIsAuto == false);
+
+    finConfig.setTextSrcLang(inlangType);
+}
+
+void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType) const
+{
+    finConfig.setTextTargetLang(inlangType);
 }
 

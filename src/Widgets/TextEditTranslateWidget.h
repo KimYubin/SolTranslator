@@ -42,6 +42,8 @@ public:
 
 private slots:
     void onTranslateClicked();
+    void onSourceLanguageChanged(const LangType inlangType) const;
+    void onTargetLanguageChanged(const LangType inlangType) const;
 
 private:
     Ui::TextEditTranslateWidget* ui;

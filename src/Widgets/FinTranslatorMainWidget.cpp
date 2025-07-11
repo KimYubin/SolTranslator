@@ -88,6 +88,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
 
     applyTheme();
+
+    finConfig.restoreWidgetGeometry(this);
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()
@@ -205,9 +208,40 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
     }
     if (_trayIcon->isVisible())
     {
+        if (finConfig.isFirstCloseToTray())
+        {
+            finConfig.setFirstCloseToTray();
+            _trayIcon->showMessage(tr("트레이로 최소화되었습니다.")
+                                 , tr("Fin.번역기가 아직 실행 중입니다.\n"
+                                       "아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.")
+                                 , QSystemTrayIcon::NoIcon, 20'000);
+        }
+        finConfig.saveWidgetGeometry(this);
         hide();
         event->ignore();
     }
+}
+
+void FinTranslatorMainWidget::quitApp()
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this
+                                , tr("Fin.Translator")
+                                , tr("정말 종료할까요?")
+                                , QMessageBox::Yes | QMessageBox::No
+                                , QMessageBox::No);
+
+    
+    if (reply == QMessageBox::Yes)
+    {
+        qApp->QCoreApplication::quit();
+    }
+    
+}
+
+void FinTranslatorMainWidget::onAppQuitEvent() const
+{
+    finConfig.saveWidgetGeometry(this);
 }
 
 void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -264,7 +298,7 @@ void FinTranslatorMainWidget::createActions()
     connect(_settingAction, &QAction::triggered, this, &FinTranslatorMainWidget::showSettingsWidget);
     
     _quitAction = new QAction(tr("&Quit"), this);
-    connect(_quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+    connect(_quitAction, &QAction::triggered, this, &FinTranslatorMainWidget::quitApp, Qt::QueuedConnection);
 }
 
 void FinTranslatorMainWidget::createTrayIcon()

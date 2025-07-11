@@ -44,11 +44,21 @@ public:
     // ~=================
     // theme
     void applyTheme(const QString& inThemeName = "dark");
-    
+
     QString applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors);
-    
+
 protected:
     virtual void closeEvent(QCloseEvent* event) override;
+
+protected slots:
+    /** 앱을 종료합니다. */
+    void quitApp();
+
+    /**
+     * 앱 종료 이벤트로 발생하는 신호를 받습니다.
+     * @see QCoreApplication::aboutToQuit
+     */
+    void onAppQuitEvent() const;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);

@@ -26,6 +26,12 @@ public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() override;
 
+protected:
+    virtual void closeEvent(QCloseEvent* event) override;
+
+protected slots:
+    void appQuitEvent() const;
+
 private:
     void applyTheme();
 

@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QRectF>
 #include <QSettings>
+#include <QWidget>
 
 #include "magic_enum.hpp"
 
@@ -25,6 +26,8 @@ const QString TextTargetLangType = "TextEditTargetLanguageType";
 
 const QString SimplePopupGeometry     = "SimplePopupGeometry";
 const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
+
+const QString WidgetGeometry = "WidgetGeometry";
 
 ConfigManager::ConfigManager()
 {
@@ -149,4 +152,43 @@ void ConfigManager::setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inP
 Fin::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
 {
     return getEnumValue(SimplePopupScreenPolicy, Fin::ScreenPopupPolicy::CursorScreen);
+}
+
+void ConfigManager::saveWidgetGeometry(const QWidget* inWidget)
+{
+    setSaveGeometry(inWidget->objectName() + WidgetGeometry, inWidget->saveGeometry());
+}
+
+bool ConfigManager::restoreWidgetGeometry(QWidget* inWidget)
+{
+    const auto [bIsExistGeo, geoByteArr] = getSaveGeometry(inWidget->objectName() + WidgetGeometry);
+
+    if (bIsExistGeo)
+    {
+        return inWidget->restoreGeometry(geoByteArr);
+    }
+    return false;
+}
+
+
+void ConfigManager::setFirstCloseToTray()
+{
+    _settings->setValue("UserGuide/FirstCloseToTray", false);
+}
+
+bool ConfigManager::isFirstCloseToTray()
+{
+    return _settings->value("UserGuide/FirstCloseToTray", true).toBool();
+}
+
+void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const
+{
+    _settings->setValue(inKey, inGeoData);
+}
+
+std::tuple<bool, QByteArray> ConfigManager::getSaveGeometry(const QAnyStringView& inKey) const
+{
+    const QVariant valVariant = _settings->value(inKey);
+
+    return {valVariant.isValid(), valVariant.toByteArray()};
 }

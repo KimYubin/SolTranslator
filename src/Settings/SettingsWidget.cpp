@@ -21,6 +21,8 @@
 
 #include "ui_SettingsWidget.h"
 
+#include "Managers/ConfigManager.h"
+
 
 enum
 {
@@ -83,6 +85,9 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
 
     show();
+
+    finConfig.restoreWidgetGeometry(this);
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &SettingsWidget::appQuitEvent);
 }
 
 SettingsWidget::~SettingsWidget()
@@ -94,6 +99,17 @@ SettingsWidget::~SettingsWidget()
     }
     
     delete ui;
+}
+
+void SettingsWidget::closeEvent(QCloseEvent* event)
+{
+    finConfig.saveWidgetGeometry(this);
+    IFinWidget::closeEvent(event);
+}
+
+void SettingsWidget::appQuitEvent() const
+{
+    finConfig.saveWidgetGeometry(this);
 }
 
 void SettingsWidget::applyTheme()

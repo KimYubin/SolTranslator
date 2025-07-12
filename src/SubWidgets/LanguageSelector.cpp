@@ -15,6 +15,7 @@
 
 #include "FinTypes.h"
 #include "FinUtilibrary.h"
+#include "KeySelectionList.h"
 
 #include "Managers/ConfigManager.h"
 
@@ -36,8 +37,7 @@ public:
     virtual QSize sizeHint() const override;
 
     void showMenuPopup();
-
-    QString selectedLanguage() const;
+    void closeMenuPopup();
 
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
@@ -56,9 +56,8 @@ private:
     QSize getTargetSize() const;
 
     QLineEdit* _searchLine;
-    QListWidget* _listWidget;
+    KeySelectionList* _listWidget;
 
-    QString _currentItem;
     std::vector<LangType> _allLangTypes;
 
     QPointer<LanguageSelector> _langSelector;
@@ -75,6 +74,8 @@ LanguageSelector::LanguageSelector(QWidget* parent
     : QWidget(parent)
     , _sizeWidget(inSizeWidget)
 {
+    setObjectName("LanguageSelector");
+
     _mainLayout = new QGridLayout(this);
     _mainLayout->setObjectName("mainLayout");
     _mainLayout->setSpacing(0);
@@ -99,6 +100,8 @@ LanguageSelector::LanguageSelector(QWidget* parent
         }
     });
 
+    setFocusPolicy(Qt::TabFocus);
+    setFocusProxy(_button);
 }
 
 LanguageSelector::~LanguageSelector()
@@ -151,6 +154,8 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
 {
     Q_ASSERT(_langSelector);
 
+    setObjectName("LanguageSelectorMenu");
+
     setAttribute(Qt::WA_TranslucentBackground);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -158,12 +163,19 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
+
+    QFont qfont = qApp->font();
+    qfont.setHintingPreference(QFont::PreferNoHinting);
+    qfont.setStyleStrategy(QFont::PreferAntialias);
+    qApp->setFont(qfont);
+
+
     _searchLine = new QLineEdit(this);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
     _searchLine->setPlaceholderText(tr("언어 검색"));
     layout->addWidget(_searchLine);
 
-    _listWidget = new QListWidget(this);
+    _listWidget = new KeySelectionList(this);
     layout->addWidget(_listWidget);
 
     _allLangTypes = Langs::GetLanguageList();
@@ -174,9 +186,10 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
 
     connect(_searchLine, &QLineEdit::textChanged, this, &LanguageSelectorMenuPrivate::filterItems);
     connect(_listWidget, &QListWidget::itemClicked, this, &LanguageSelectorMenuPrivate::onItemClicked);
-
+    connect(_listWidget, &KeySelectionList::itemKeyPressed, this, &LanguageSelectorMenuPrivate::onItemClicked);
     connect(this, &LanguageSelectorMenuPrivate::itemSelected, _langSelector, &LanguageSelector::onSelectedLanguage);
-    setTabOrder(_searchLine, _listWidget);
+
+    setTabOrder({_searchLine, _listWidget});
 }
 
 LanguageSelectorMenuPrivate::~LanguageSelectorMenuPrivate()
@@ -199,15 +212,21 @@ void LanguageSelectorMenuPrivate::showMenuPopup()
     _searchLine->setFocus();
 }
 
-QString LanguageSelectorMenuPrivate::selectedLanguage() const
+void LanguageSelectorMenuPrivate::closeMenuPopup()
 {
-    return _currentItem;
+    qApp->removeEventFilter(this);
+    if (_langSelector)
+    {
+        _langSelector->setFocus();
+    }
+
+    close();
 }
 
 bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 {
     const QEvent::Type eventType = event->type();
-    bool bIsMouseClickOut = (eventType == QEvent::NonClientAreaMouseButtonPress);
+    bool bIsCloseEvent = (eventType == QEvent::NonClientAreaMouseButtonPress);
 
     if (eventType == QEvent::MouseButtonPress)
     {
@@ -233,23 +252,47 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 
             if (bIsMenuContainMouse == false && bIsButtonContainMouse == false)
             {
-                bIsMouseClickOut = true;
+                bIsCloseEvent = true;
+            }
+        }
+    }
+    else if (eventType == QEvent::KeyPress)
+    {
+        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        const int pressedKey = keyEvent->key();
+        // esc 종료
+        if (pressedKey == Qt::Key_Escape)
+        {
+            bIsCloseEvent = true;
+        }
+        // 탭 순환
+        else if (pressedKey == Qt::Key_Tab)
+        {
+            if (obj == _searchLine)
+            {
+                _listWidget->setFocus();
+                return true;
+            }
+            else if (obj == _listWidget)
+            {
+                _searchLine->setFocus();
+                return true;
             }
         }
     }
 
-    // 마우스 위치가 외부라면 닫음. Popup 행동
-    if (bIsMouseClickOut)
+    // 클릭 위치가 외부이거나 esc키를 눌렀다면 닫음. Popup 행동
+    if (bIsCloseEvent)
     {
-        qApp->removeEventFilter(this);
-        close();
+        closeMenuPopup();
+        event->accept();
     }
+
     return QWidget::eventFilter(obj, event);
 }
 
 void LanguageSelectorMenuPrivate::closeEvent(QCloseEvent* event)
 {
-    qApp->removeEventFilter(this);
     QWidget::closeEvent(event);
 }
 
@@ -269,9 +312,9 @@ void LanguageSelectorMenuPrivate::onItemClicked(QListWidgetItem* inItem)
 {
     const int payload = inItem->data(LangTypeRole).toInt();
     
-    _currentItem = inItem->text();
     emit itemSelected(static_cast<LangType>(payload));
-    hide();
+
+    closeMenuPopup();
 }
 
 void LanguageSelectorMenuPrivate::addListItem(const LangType& inLangType)

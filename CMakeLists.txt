@@ -92,6 +92,8 @@ set(PROJECT_SOURCES
         src/SubWidgets/LanguageSelector.h
         src/FinUtilibrary.cpp
         src/FinUtilibrary.h
+        src/SubWidgets/KeySelectionList.cpp
+        src/SubWidgets/KeySelectionList.h
 
 )
 

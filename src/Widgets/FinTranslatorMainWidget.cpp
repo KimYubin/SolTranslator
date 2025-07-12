@@ -224,17 +224,17 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
 
 void FinTranslatorMainWidget::quitApp()
 {
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this
-                                , tr("Fin.Translator")
-                                , tr("정말 종료할까요?")
-                                , QMessageBox::Yes | QMessageBox::No
-                                , QMessageBox::No);
+    const QMessageBox::StandardButton reply
+            = QMessageBox::question(this
+                                  , tr("Fin.Translator")
+                                  , tr("정말 종료할까요?")
+                                  , QMessageBox::Yes | QMessageBox::No
+                                  , QMessageBox::No);
 
-    
+
     if (reply == QMessageBox::Yes)
     {
-        qApp->QCoreApplication::quit();
+        qApp->quit();
     }
     
 }

@@ -26,7 +26,7 @@ const QString TRANSLATE_HISTORY = "Translate_History.json";
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
     {LangType::NONE, {LangType::NONE, magic_enum::enum_name(LangType::NONE).data(), u8"NONE", u8"NONE"}}
-  , {LangType::AUTO, {LangType::AUTO, u8"auto", u8"auto", u8"auto"}}
+  , {LangType::AUTO, {LangType::AUTO, u8"Auto", u8"Auto", u8"Auto"}}
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}

@@ -42,22 +42,21 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         Qt::TextSelectableByMouse |
         Qt::TextSelectableByKeyboard |
         Qt::LinksAccessibleByMouse |
-        Qt::LinksAccessibleByKeyboard |
-        Qt::TextEditable
+        Qt::LinksAccessibleByKeyboard
     );
 
     // 출발언어 선택기
-    _sourceLang = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
-    connect(_sourceLang, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
+    _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
+    connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
-    ui->LangSelectLayout->insertWidget(0, _sourceLang, 1);
+    ui->LangSelectLayout->insertWidget(0, _srcLangSelector, 1);
 
 
     // 도착언어 선택기
-    _targetLang = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
-    connect(_targetLang, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
+    _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
-    ui->LangSelectLayout->insertWidget(2, _targetLang, 1);
+    ui->LangSelectLayout->insertWidget(2, _targetLangSelector, 1);
 
 
     // 언어 교환 버튼
@@ -69,12 +68,12 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         const LangType targetLangType = finConfig.getTextTargetLang();
         if (srcLangType == LangType::AUTO)
         {
-            qDebug()<<"swap button is clicked, when source Language Type is AUTO.";
+            qDebug() << "swap button is clicked, when source Language Type is AUTO.";
             return;
         }
 
-        _sourceLang->onSelectedLanguage(targetLangType);
-        _targetLang->onSelectedLanguage(srcLangType);
+        _srcLangSelector->onSelectedLanguage(targetLangType);
+        _targetLangSelector->onSelectedLanguage(srcLangType);
     });
 
 
@@ -82,12 +81,13 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     _translationExecutionTimer = new QTimer(this);
     _translationExecutionTimer->setInterval(500);
     _translationExecutionTimer->setSingleShot(true);
-    connect(_translationExecutionTimer, &QTimer::timeout, this, &TextEditTranslateWidget::onTranslateClicked);
+    connect(_translationExecutionTimer, &QTimer::timeout, this, &TextEditTranslateWidget::onExecuteTranslate);
     connect(ui->srcTextEdit, &QPlainTextEdit::textChanged, this, [this]()
     {
         _translationExecutionTimer->start();
     });
 
+    setTabOrder({_srcLangSelector, ui->srcTextEdit, ui->languageSwapButton, _targetLangSelector, ui->trTextEdit});
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()
@@ -115,9 +115,15 @@ void TextEditTranslateWidget::focusTextOrigin()
     ui->srcTextEdit->setFocus();
 }
 
-void TextEditTranslateWidget::onTranslateClicked()
+void TextEditTranslateWidget::onExecuteTranslate()
 {
     const QString orignText = ui->srcTextEdit->toPlainText();
+    if (orignText.isEmpty())
+    {
+        ui->trTextEdit->setPlainText("");
+        return;
+    }
+    ui->trTextEdit->setPlainText(tr("번역 중..."));
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
         orignText
@@ -136,11 +142,19 @@ void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
     const bool bIsAuto = (inlangType == LangType::AUTO);
     ui->languageSwapButton->setEnabled(bIsAuto == false);
 
-    finConfig.setTextSrcLang(inlangType);
+    if (finConfig.getTextSrcLang() != inlangType)
+    {
+        finConfig.setTextSrcLang(inlangType);
+        _translationExecutionTimer->start();
+    }
 }
 
 void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType) const
 {
-    finConfig.setTextTargetLang(inlangType);
+    if (finConfig.getTextTargetLang() != inlangType)
+    {
+        finConfig.setTextTargetLang(inlangType);
+        _translationExecutionTimer->start();
+    }
 }
 

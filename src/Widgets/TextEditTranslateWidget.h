@@ -41,14 +41,14 @@ public:
     void focusTextOrigin();
 
 private slots:
-    void onTranslateClicked();
+    void onExecuteTranslate();
     void onSourceLanguageChanged(const LangType inlangType) const;
     void onTargetLanguageChanged(const LangType inlangType) const;
 
 private:
     Ui::TextEditTranslateWidget* ui;
-    LanguageSelector* _sourceLang;
-    LanguageSelector* _targetLang;
+    LanguageSelector* _srcLangSelector;
+    LanguageSelector* _targetLangSelector;
 
     // 문자입력 후 번역요청까지 타이머
     QTimer* _translationExecutionTimer;

@@ -80,7 +80,8 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
         QJsonObject cacheObject;
         cacheObject["OriginText"]    = cacheKey.originText;
         cacheObject["EngineType"]    = magic_enum::enum_name(cacheKey.engineType).data();
-        cacheObject["LangType"]      = magic_enum::enum_name(cacheKey.targetLang).data();
+        cacheObject["sourceLang"]    = magic_enum::enum_name(cacheKey.sourceLang).data();
+        cacheObject["targetLang"]    = magic_enum::enum_name(cacheKey.targetLang).data();
         cacheObject["TranslateText"] = cacheText;
 
         arr.append(cacheObject);
@@ -102,9 +103,10 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
             QJsonObject cacheObject = cacheValue.toObject();
 
             TextCacheKey cacheKey;
-            cacheKey.originText = cacheObject["OriginText"].toString();
             cacheKey.engineType = magic_enum::enum_cast<EngineType>(cacheObject["EngineType"].toString().toStdString()).value_or(EngineType::Default);
-            cacheKey.targetLang = magic_enum::enum_cast<LangType>(cacheObject["LangType"].toString().toStdString()).value_or(LangType::NONE);
+            cacheKey.originText = cacheObject["OriginText"].toString();
+            cacheKey.sourceLang = magic_enum::enum_cast<LangType>(cacheObject["sourceLang"].toString().toStdString()).value_or(LangType::NONE);
+            cacheKey.targetLang = magic_enum::enum_cast<LangType>(cacheObject["targetLang"].toString().toStdString()).value_or(LangType::NONE);
 
             QString cacheText = cacheObject["TranslateText"].toString();
 

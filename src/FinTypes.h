@@ -93,7 +93,8 @@ struct TranslateRequestInfo
 {
     TranslateRequestInfo() = default;
 
-    TranslateRequestInfo(const QString& inOriginText
+    TranslateRequestInfo(const EngineType inEngineType
+                       , const QString& inOriginText
                        , const TextStyle inTextFormat
                        , const LangType inSourceLang
                        , const LangType inTargetLang
@@ -101,7 +102,8 @@ struct TranslateRequestInfo
                        , std::function<void(const QString&)>&& inCallbackTranslateComplete
                        , QObject* inStreamContext = nullptr
                        , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt)
-        : originText(inOriginText)
+        : engineType(inEngineType)
+        , originText(inOriginText)
         , textFormat(inTextFormat)
         , sourceLang(inSourceLang)
         , targetLang(inTargetLang)
@@ -111,6 +113,7 @@ struct TranslateRequestInfo
         , callbackTranslateStreaming(incallbackTranslateStreaming)
     {}
 
+    EngineType engineType;
     QString originText;
     TextStyle textFormat;
     LangType sourceLang;

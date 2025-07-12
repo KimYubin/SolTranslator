@@ -45,7 +45,10 @@ void TranslateUnit::executeTextTranslation_Impl()
 
     if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
     {
-        auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.originText, _trReqData.targetLang);
+        auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.engineType
+                                                                     , _trReqData.originText
+                                                                     , _trReqData.sourceLang
+                                                                     , _trReqData.targetLang);
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
@@ -96,7 +99,11 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
     {
         if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
         {
-            translate_manager->setCacheText(_trReqData.originText, inTranslatedText, _trReqData.targetLang);
+            translate_manager->setCacheText(_trReqData.engineType
+                                          , _trReqData.originText
+                                          , inTranslatedText
+                                          , _trReqData.sourceLang
+                                          , _trReqData.targetLang);
         }
     }
 

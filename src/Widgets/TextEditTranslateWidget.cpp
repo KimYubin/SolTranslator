@@ -72,6 +72,9 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
             return;
         }
 
+        ui->srcTextEdit->setPlainText(ui->trTextEdit->toPlainText());
+        ui->trTextEdit->setPlainText("");
+
         _srcLangSelector->onSelectedLanguage(targetLangType);
         _targetLangSelector->onSelectedLanguage(srcLangType);
     });
@@ -126,7 +129,8 @@ void TextEditTranslateWidget::onExecuteTranslate()
     ui->trTextEdit->setPlainText(tr("번역 중..."));
 
     finCore->getTranslateManager()->translateText(TranslateRequestInfo{
-        orignText
+        finConfig.getCurrentEngineType()
+      , orignText
       , TextStyle::PlainText
       , finConfig.getTextSrcLang()
       , finConfig.getTextTargetLang()

@@ -45,7 +45,8 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
     auto runSimpleTranslate = [=, this](const QString& inOriginText, const TextStyle inTextStyle)
     {
         QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
-            inOriginText
+            finConfig.getCurrentEngineType()
+          , inOriginText
           , inTextStyle
           , inSourceLang
           , inTargetLang
@@ -89,11 +90,14 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
     }
 }
 
-void TranslateManager::setCacheText(const QString& originText, const QString& translateText, const LangType targetLang)
+void TranslateManager::setCacheText(const EngineType inEngineType
+                                  , const QString& inOriginText
+                                  , const QString& inTranslateText
+                                  , const LangType inSourceLang
+                                  , const LangType inTargetLang)
 {
     // 이미 캐시되어 있다면, 순서 최신화
-    const EngineType engineType = finConfig.getCurrentEngineType();
-    _cachingTranslateText.push({originText, engineType, targetLang}, translateText);
+    _cachingTranslateText.push(TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang}, inTranslateText);
     if (_cachingTranslateText.size() > _maxCacheLength)
     {
         _cachingTranslateText.pop();
@@ -103,12 +107,14 @@ void TranslateManager::setCacheText(const QString& originText, const QString& tr
     finCore->asyncSaveCache();
 }
 
-std::tuple<bool, QString> TranslateManager::findCachingText(const QString& originText, const LangType targetLang)
+std::tuple<bool, QString> TranslateManager::findCachingText(const EngineType inEngineType
+                                                          , const QString& inOriginText
+                                                          , const LangType inSourceLang
+                                                          , const LangType inTargetLang)
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    const EngineType engineType = finConfig.getCurrentEngineType();
-    const TextCacheKey findCacheKey = TextCacheKey{originText, engineType, targetLang};
+    const TextCacheKey findCacheKey = TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang};
     if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
     {
         res = {true, *text_cache};

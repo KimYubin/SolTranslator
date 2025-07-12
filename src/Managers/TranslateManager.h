@@ -32,11 +32,16 @@ public:
 private slots:
 
 public:
-    void setCacheText(const QString& originText
-                    , const QString& translateText
-                    , const LangType targetLang);
+    void setCacheText(const EngineType inEngineType
+                    , const QString& inOriginText
+                    , const QString& inTranslateText
+                    , const LangType inSourceLang
+                    , const LangType inTargetLang);
 
-    std::tuple<bool, QString> findCachingText(const QString& originText, const LangType targetLang);
+    std::tuple<bool, QString> findCachingText(const EngineType inEngineType
+                                            , const QString& inOriginText
+                                            , const LangType inSourceLang
+                                            , const LangType inTargetLang);
 
 
     void updateNewCacheQueue(cache_queue&& newCache);

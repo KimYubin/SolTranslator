@@ -1,0 +1,7 @@
+QMessageBox
+{
+  font-size: 16px;
+  font-weight: bold;
+  background-color:#2e2b2b;
+}
+

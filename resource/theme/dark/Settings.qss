@@ -4,56 +4,14 @@
 /*  ------------------------------------------------------------------------  */
 #SettingsWidget
 {
-  background-color: #31363b;
+  background-color: rgba(50, 55, 60, 1);
 }
 
 /* #SettingsWidget QGroupBox, */
-#SettingsWidget QFrame
+/* #SettingsWidget QFrame
 {
-  background-color: #31363b;
-}
-#SettingsWidget QListWidget
-{
-  background-color: #232629;
-}
-
-#SettingsWidget QLineEdit
-{
-  border-radius: 0px;
-}
-
-#SettingsWidget QListView
-{
-  /* font-size: 16px; */
-  /* font-weight: 400; */
-  border-radius: 0px;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-#SettingsWidget QListView::item
-{
-  padding: 4px;
-  min-height: 32px;
-  color: rgb(220, 222, 223);
-  selection-color: rgb(220, 222, 223);
-  border-color: transparent;
-}
-
-#SettingsWidget QListView::item:hover
-{
-  background-color:rgb(220, 222, 223);
-  selection-background-color:rgb(220, 222, 223);
-  color: rgb(61, 68, 80);
-}
-
-#SettingsWidget QListView::item:selected 
-{
-  background-color:rgba(211, 211, 211, 0.29);
-  selection-background-color:rgba(211, 211, 211, 0.29);
-  color: rgb(220, 222, 223);
-  selection-color: rgb(220, 222, 223); /* For Windows */
-}
+  background-color: rgba(50, 55, 60, 1);
+} */
 
 #SettingsWidget QSplitter
 {
@@ -125,77 +83,3 @@
   color:rgb(240, 240, 232)
 }
 
-
-#SettingsWidget QPushButton {
-  margin: 0px;
-  padding: 1px 16px;
-  height: 32px;
-  font-weight: bold;
-  border-radius: 4px;
-  background-color:#6fc5ff;
-}
-
-#SettingsWidget QPushButton:flat {
-  margin: 0px;
-  color: #6fc5ff;
-  border: none;
-  background-color: transparent;
-}
-
-#SettingsWidget QPushButton:checked,
-#SettingsWidget QPushButton:pressed {
-  color: #31363b;
-  background-color:#6fc5ff;
-}
-
-
-#SettingsWidget QPushButton:flat:hover {
-  background-color:rgb(179, 225, 255);
-}
-#SettingsWidget QPushButton:flat:pressed,
-#SettingsWidget QPushButton:flat:checked {
-  background-color: rgb(179, 225, 255);
-}
-#SettingsWidget QPushButton:flat:disabled {
-  color: rgb(49, 51, 53);
-  background-color: rgb(84, 99, 107);
-  border: none;
-}
-
-#SettingsWidget QPushButton:disabled {
-  border: 2px solid rgb(49, 51, 53);
-}
-
-#SettingsWidget QPushButton:disabled {
-  color: rgba(79, 91, 98, 0.75);
-  border-color:  #4f5b62;
-}
-
-#SettingsWidget QPushButton:checked:disabled {
-  color: #232629;
-  background-color: #4f5b62;
-  border-color:  #4f5b62;
-}
-
-#SettingsWidget QToolButton:focus,
-#SettingsWidget QPushButton:focus {
-  background-color: rgba(29, 233, 182, 0.2);
-}
-
-#SettingsWidget QPushButton:checked:focus,
-#SettingsWidget QPushButton:pressed:focus {
-  background-color: rgba(29, 233, 182, 0.8);
-}
-
-#SettingsWidget QPushButton:flat:focus {
-  border: none;
-  background-color: rgba(29, 233, 182, 0.2);
-}
-
-#SettingsWidget QPushButton 
-{
-  background-color: rgb(179, 225, 255);
-  border: 2px solid rgb(179, 225, 255);
-  border-radius: 4px;
-  height: 32px;
-}

@@ -3,7 +3,13 @@
 
 
 /build/
+/resource/image/noused/
+/resource/image/test/
+.O_Commit_Message.txt
+.O_Project_Memo.txt
+.lldbinit
 
+*.pdn
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/qt,c++,clion,cmake,clion+all,clion+iml,qtcreator,visualstudio,visualstudiocode

@@ -7,6 +7,8 @@
         <file>dark/TextEditTranslate.qss</file>
         <file>dark/Settings.qss</file>
         <file>dark/SettingCard.qss</file>
+        <file>dark/MessageBox.qss</file>
+        <file>dark/CommonStyle.qss</file>
         
     </qresource>
 

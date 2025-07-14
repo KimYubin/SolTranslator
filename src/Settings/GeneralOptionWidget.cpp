@@ -88,7 +88,10 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 테마 적용 버튼
     {
-        QPushButton* themeButton = new QPushButton("ThemeButton");
+        SettingCard* themeCard = new SettingCard(new QPushButton(tr("적용")), shapeBehaviorGroup);
+        themeCard->setHeader(tr("테마 적용"));
+        themeCard->setDescription(tr("테마를 적용합니다."));
+        QPushButton* themeButton = themeCard->getContent<QPushButton>();
         themeButton->setCheckable(false);
         connect(themeButton, &QPushButton::clicked, this, []()
         {
@@ -101,7 +104,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
                 qDebug() << "finMainWidget is invalid";
             }
         });
-        ui->mainLayout->addWidget(themeButton);
+        shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
     }
 }
 

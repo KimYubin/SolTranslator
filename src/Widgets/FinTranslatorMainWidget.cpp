@@ -36,9 +36,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 {
     qApp->setQuitOnLastWindowClosed(false);
 
-    setWindowTitle(tr("FinTranslator"));
-
     ui->setupUi(this);
+
+    setWindowTitle(tr("FinTranslator"));
 
     setLayout(ui->mainLayout);
 
@@ -55,18 +55,21 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
+        button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
     };
 
     _textEditTranslate = new TextEditTranslateWidget();
-    bindButton(ui->button_0_TextTab, _textEditTranslate);
-    ui->button_0_TextTab->setText(tr("Text"));
-    ui->button_0_TextTab->setIcon(QIcon(":/img/text_caret_cursor"));
+    ui->textTabButton->setText(tr("텍스트"));
+    ui->textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
+    bindButton(ui->textTabButton, _textEditTranslate);
 
-    QWidget* dummyWidget = new QWidget();
-    bindButton(ui->button_1_dummy, dummyWidget);
+    QWidget* docTranslateWidget = new QWidget();
+    ui->docTabButton->setText(tr("문서"));
+    ui->docTabButton->setIcon(QIcon(":/img/document_img"));
+    bindButton(ui->docTabButton, docTranslateWidget);
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {
@@ -78,10 +81,11 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     // ~====================
     // setting button
-    ui->button_9_setting->setCheckable(false);
-    ui->button_9_setting->setFocusPolicy(Qt::TabFocus);
-    connect(ui->button_9_setting, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
-    ui->button_9_setting->setIcon(QIcon(":/img/settings_gear_img"));
+    ui->settingsButton->setCheckable(false);
+    ui->settingsButton->setText(tr("설정"));
+    ui->settingsButton->setFocusPolicy(Qt::TabFocus);
+    connect(ui->settingsButton, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
+    ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
 
 
     // ~====================
@@ -328,22 +332,23 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
 
 void FinTranslatorMainWidget::createActions()
 {
-    _miniToTrayAction = new QAction(tr("Mi&nimize To Tray"), this);
+    _miniToTrayAction = new QAction(tr("트레이로 최소화(&M)"), this);
     connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
 
-    _restoreAction = new QAction(tr("&Restore"), this);
+    _restoreAction = new QAction(tr("창 복원(&R)"), this);
     connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
 
-    _settingAction = new QAction(tr("&Settings"), this);
+    _settingAction = new QAction(tr("설정(&S)"), this);
     connect(_settingAction, &QAction::triggered, this, &FinTranslatorMainWidget::showSettingsWidget);
     
-    _quitAction = new QAction(tr("&Quit"), this);
+    _quitAction = new QAction(tr("종료(&Q)"), this);
     connect(_quitAction, &QAction::triggered, this, &FinTranslatorMainWidget::quitApp, Qt::QueuedConnection);
 }
 
 void FinTranslatorMainWidget::createTrayIcon()
 {
     _trayIconMenu = new QMenu(this);
+    Fin::noHintingFont(_trayIconMenu);
     _trayIconMenu->addAction(_miniToTrayAction);
     _trayIconMenu->addAction(_restoreAction);
     _trayIconMenu->addAction(_settingAction);

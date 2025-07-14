@@ -101,3 +101,36 @@ void SwitchButton::setHandlePosition(const float position)
     _handlePos = position;
     update();
 }
+
+QSize SwitchButton::getSwitchSize() const
+{
+    return _size;
+}
+
+void SwitchButton::setSwitchSize(const QSize& inSize)
+{
+    _size = inSize;
+    update();
+}
+
+float SwitchButton::getTrackHeightRatio() const
+{
+    return _trackHeightRatio;
+}
+
+void SwitchButton::setTrackHeightRatio(const float inRatio)
+{
+    _trackHeightRatio = inRatio;
+    update();
+}
+
+float SwitchButton::getHandleRatio() const
+{
+    return _handleRadRatio * 2.0f;
+}
+
+void SwitchButton::setHandleRatio(const float inRatio)
+{
+    _handleRadRatio = (inRatio / 2.0f);
+    update();
+}

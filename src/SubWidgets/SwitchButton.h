@@ -18,6 +18,11 @@ class SwitchButton : public QCheckBox
 
     Q_PROPERTY(float handlePosition READ handlePosition WRITE setHandlePosition)
 
+    // qss에서 사용
+    Q_PROPERTY(QSize switchSize READ getSwitchSize WRITE setSwitchSize)
+    Q_PROPERTY(float trackHeightRatio READ getTrackHeightRatio WRITE setTrackHeightRatio)
+    Q_PROPERTY(float HandleRatio READ getHandleRatio WRITE setHandleRatio)
+
 public:
     explicit SwitchButton(QWidget* parent = nullptr);
 
@@ -41,6 +46,15 @@ private slots:
 private:
     float handlePosition() const;
     void setHandlePosition(const float position);
+
+    QSize getSwitchSize() const;
+    void setSwitchSize(const QSize& inSize);
+
+    float getTrackHeightRatio() const;
+    void setTrackHeightRatio(const float inRatio);
+
+    float getHandleRatio() const;
+    void setHandleRatio(const float inRatio);
 
     QBrush _barBrush;
     QBrush _barCheckedBrush;

@@ -16,3 +16,18 @@
   color: rgba(255, 255, 255, 0.66);
   font-size: 14px;
 }
+
+SwitchButton
+{
+  qproperty-switchSize: 46px 28px;
+  qproperty-trackHeightRatio: 1;
+  qproperty-HandleRatio: 0.714285;
+}
+
+
+SwitchButton
+{
+  qproperty-switchSize: 44px 26px;
+  qproperty-trackHeightRatio: 1;
+  qproperty-HandleRatio: 0.72;
+}

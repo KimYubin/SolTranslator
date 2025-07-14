@@ -182,34 +182,34 @@ void SwitchButton::setHandleUncheckedColor(const QColor& inColor)
     update();
 }
 
-QColor SwitchButton::getBarPenColor() const
+QColor SwitchButton::getBarBorderColor() const
 {
     return _barPen.color();
 }
 
-void SwitchButton::setBarPenColor(const QColor& inColor)
+void SwitchButton::setBarBorderColor(const QColor& inColor)
 {
     _barPen = inColor;
     update();
 }
 
-QColor SwitchButton::getHandleCheckedPenColor() const
+QColor SwitchButton::getHandleCheckedBorderColor() const
 {
     return _handleCheckedPen.color();
 }
 
-void SwitchButton::setHandleCheckedPenColor(const QColor& inColor)
+void SwitchButton::setHandleCheckedBorderColor(const QColor& inColor)
 {
     _handleCheckedPen = inColor;
     update();
 }
 
-QColor SwitchButton::getHandleUncheckedPenColor() const
+QColor SwitchButton::getHandleUncheckedBorderColor() const
 {
     return _handleUncheckedPen.color();
 }
 
-void SwitchButton::setHandleUncheckedPenColor(const QColor& inColor)
+void SwitchButton::setHandleUncheckedBorderColor(const QColor& inColor)
 {
     _handleUncheckedPen = inColor;
     update();

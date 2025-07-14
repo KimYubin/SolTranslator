@@ -27,9 +27,9 @@ class SwitchButton : public QCheckBox
     Q_PROPERTY(QColor barUncheckedColor READ getBarUncheckedColor WRITE setBarUncheckedColor)
     Q_PROPERTY(QColor handleCheckedColor READ getHandleCheckedColor WRITE setHandleCheckedColor)
     Q_PROPERTY(QColor handleUncheckedColor READ getHandleUncheckedColor WRITE setHandleUncheckedColor)
-    Q_PROPERTY(QColor barPenColor READ getBarPenColor WRITE setBarPenColor)
-    Q_PROPERTY(QColor handleCheckedPenColor READ getHandleCheckedPenColor WRITE setHandleCheckedPenColor)
-    Q_PROPERTY(QColor handleUncheckedPenColor READ getHandleUncheckedPenColor WRITE setHandleUncheckedPenColor)
+    Q_PROPERTY(QColor barBorderColor READ getBarBorderColor WRITE setBarBorderColor)
+    Q_PROPERTY(QColor handleCheckedBorderColor READ getHandleCheckedBorderColor WRITE setHandleCheckedBorderColor)
+    Q_PROPERTY(QColor handleUncheckedBorderColor READ getHandleUncheckedBorderColor WRITE setHandleUncheckedBorderColor)
 
 public:
     explicit SwitchButton(QWidget* parent = nullptr);
@@ -52,47 +52,47 @@ private slots:
     void setupAnimation(const Qt::CheckState inCheckState);
 
 private:
+    // size
     float handlePosition() const;
-    void setHandlePosition(const float position);
-
+    void  setHandlePosition(const float position);
     QSize getSwitchSize() const;
-    void setSwitchSize(const QSize& inSize);
-
+    void  setSwitchSize(const QSize& inSize);
     float getTrackHeightRatio() const;
-    void setTrackHeightRatio(const float inRatio);
-
+    void  setTrackHeightRatio(const float inRatio);
     float getHandleRatio() const;
-    void setHandleRatio(const float inRatio);
+    void  setHandleRatio(const float inRatio);
 
+    // color
     QColor getBarCheckedColor() const;
-    void setBarCheckedColor(const QColor& inColor);
+    void   setBarCheckedColor(const QColor& inColor);
     QColor getBarUncheckedColor() const;
-    void setBarUncheckedColor(const QColor& inColor);
+    void   setBarUncheckedColor(const QColor& inColor);
     QColor getHandleCheckedColor() const;
-    void setHandleCheckedColor(const QColor& inColor);
+    void   setHandleCheckedColor(const QColor& inColor);
     QColor getHandleUncheckedColor() const;
-    void setHandleUncheckedColor(const QColor& inColor);
-    QColor getBarPenColor() const;
-    void setBarPenColor(const QColor& inColor);
-    QColor getHandleCheckedPenColor() const;
-    void setHandleCheckedPenColor(const QColor& inColor);
-    QColor getHandleUncheckedPenColor() const;
-    void setHandleUncheckedPenColor(const QColor& inColor);
-    
-
-    QBrush _barCheckedBrush;
-    QBrush _barUncheckedBrush;
-    QBrush _handleCheckedBrush;
-    QBrush _handleUncheckedBrush;
-
-    QPen _barPen;
-    QPen _handleCheckedPen;
-    QPen _handleUncheckedPen;
+    void   setHandleUncheckedColor(const QColor& inColor);
+    QColor getBarBorderColor() const;
+    void   setBarBorderColor(const QColor& inColor);
+    QColor getHandleCheckedBorderColor() const;
+    void   setHandleCheckedBorderColor(const QColor& inColor);
+    QColor getHandleUncheckedBorderColor() const;
+    void   setHandleUncheckedBorderColor(const QColor& inColor);
 
     // size
     QSize _size;             // sizeHint
     float _trackHeightRatio; // 콘텐츠 사이즈 대비 트랙 높이 비율
     float _handleRadRatio;   // 트랙 높이 대비 핸들 반지름 비율
+
+    // color
+    QBrush _barCheckedBrush;
+    QBrush _barUncheckedBrush;
+    QBrush _handleCheckedBrush;
+    QBrush _handleUncheckedBrush;
+
+    // border color
+    QPen _barPen;
+    QPen _handleCheckedPen;
+    QPen _handleUncheckedPen;
 
     // animation
     QSequentialAnimationGroup* _animationGroup;

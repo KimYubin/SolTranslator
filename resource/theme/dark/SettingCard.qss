@@ -40,7 +40,7 @@ SwitchButton
   qproperty-handleCheckedColor: white;
   qproperty-handleUncheckedColor: white;
   
-  qproperty-barPenColor: transparent;
-  qproperty-handleCheckedPenColor: transparent;
-  qproperty-handleUncheckedPenColor: transparent;
+  qproperty-barBorderColor: transparent;
+  qproperty-handleCheckedBorderColor: transparent;
+  qproperty-handleUncheckedBorderColor: transparent;
 }

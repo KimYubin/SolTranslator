@@ -13,11 +13,13 @@
 
 SwitchButton::SwitchButton(QWidget* parent)
     : QCheckBox(parent)
-    , _barBrush(Qt::gray)
     , _barCheckedBrush(QColor("#00B0FF"))
-    , _handleBrush(Qt::white)
-    , _transparentPen(Qt::transparent)
-    , _lightGreyPen(Qt::lightGray)
+    , _barUncheckedBrush(Qt::gray)
+    , _handleCheckedBrush(Qt::white)
+    , _handleUncheckedBrush(Qt::white)
+    , _barPen(Qt::transparent)
+    , _handleCheckedPen(Qt::transparent)
+    , _handleUncheckedPen(Qt::lightGray)
 {
     setButtonShape(QSize(46, 28), 1.0f, 20.0f/28.0f);
 
@@ -68,20 +70,21 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(_transparentPen);
+    painter.setPen(_barPen);
 
     if (isChecked())
     {
         painter.setBrush(_barCheckedBrush);
         painter.drawRoundedRect(trackRect, trackRad, trackRad);
-        painter.setBrush(_handleBrush);
+        painter.setPen(_handleCheckedPen);
+        painter.setBrush(_handleCheckedBrush);
     }
     else
     {
-        painter.setBrush(_barBrush);
+        painter.setBrush(_barUncheckedBrush);
         painter.drawRoundedRect(trackRect, trackRad, trackRad);
-        painter.setPen(_lightGreyPen);
-        painter.setBrush(_handleBrush);
+        painter.setPen(_handleUncheckedPen);
+        painter.setBrush(_handleUncheckedBrush);
     }
 
     const float handleMoveDist = cntRectF.width() - (trackRad * 2); // 핸들이 움직이는 길이
@@ -134,3 +137,81 @@ void SwitchButton::setHandleRatio(const float inRatio)
     _handleRadRatio = (inRatio / 2.0f);
     update();
 }
+
+QColor SwitchButton::getBarCheckedColor() const
+{
+    return _barCheckedBrush.color();
+}
+
+void SwitchButton::setBarCheckedColor(const QColor& inColor)
+{
+    _barCheckedBrush = inColor;
+    update();
+}
+
+QColor SwitchButton::getBarUncheckedColor() const
+{
+    return _barUncheckedBrush.color();
+}
+
+void SwitchButton::setBarUncheckedColor(const QColor& inColor)
+{
+    _barUncheckedBrush = inColor;
+    update();
+}
+
+QColor SwitchButton::getHandleCheckedColor() const
+{
+    return _handleCheckedBrush.color();
+}
+
+void SwitchButton::setHandleCheckedColor(const QColor& inColor)
+{
+    _handleCheckedBrush = inColor;
+    update();
+}
+
+QColor SwitchButton::getHandleUncheckedColor() const
+{
+    return _handleUncheckedBrush.color();
+}
+
+void SwitchButton::setHandleUncheckedColor(const QColor& inColor)
+{
+    _handleUncheckedBrush = inColor;
+    update();
+}
+
+QColor SwitchButton::getBarPenColor() const
+{
+    return _barPen.color();
+}
+
+void SwitchButton::setBarPenColor(const QColor& inColor)
+{
+    _barPen = inColor;
+    update();
+}
+
+QColor SwitchButton::getHandleCheckedPenColor() const
+{
+    return _handleCheckedPen.color();
+}
+
+void SwitchButton::setHandleCheckedPenColor(const QColor& inColor)
+{
+    _handleCheckedPen = inColor;
+    update();
+}
+
+QColor SwitchButton::getHandleUncheckedPenColor() const
+{
+    return _handleUncheckedPen.color();
+}
+
+void SwitchButton::setHandleUncheckedPenColor(const QColor& inColor)
+{
+    _handleUncheckedPen = inColor;
+    update();
+}
+

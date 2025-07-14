@@ -23,6 +23,14 @@ class SwitchButton : public QCheckBox
     Q_PROPERTY(float trackHeightRatio READ getTrackHeightRatio WRITE setTrackHeightRatio)
     Q_PROPERTY(float HandleRatio READ getHandleRatio WRITE setHandleRatio)
 
+    Q_PROPERTY(QColor barCheckedColor READ getBarCheckedColor WRITE setBarCheckedColor)
+    Q_PROPERTY(QColor barUncheckedColor READ getBarUncheckedColor WRITE setBarUncheckedColor)
+    Q_PROPERTY(QColor handleCheckedColor READ getHandleCheckedColor WRITE setHandleCheckedColor)
+    Q_PROPERTY(QColor handleUncheckedColor READ getHandleUncheckedColor WRITE setHandleUncheckedColor)
+    Q_PROPERTY(QColor barPenColor READ getBarPenColor WRITE setBarPenColor)
+    Q_PROPERTY(QColor handleCheckedPenColor READ getHandleCheckedPenColor WRITE setHandleCheckedPenColor)
+    Q_PROPERTY(QColor handleUncheckedPenColor READ getHandleUncheckedPenColor WRITE setHandleUncheckedPenColor)
+
 public:
     explicit SwitchButton(QWidget* parent = nullptr);
 
@@ -56,12 +64,30 @@ private:
     float getHandleRatio() const;
     void setHandleRatio(const float inRatio);
 
-    QBrush _barBrush;
-    QBrush _barCheckedBrush;
-    QBrush _handleBrush;
+    QColor getBarCheckedColor() const;
+    void setBarCheckedColor(const QColor& inColor);
+    QColor getBarUncheckedColor() const;
+    void setBarUncheckedColor(const QColor& inColor);
+    QColor getHandleCheckedColor() const;
+    void setHandleCheckedColor(const QColor& inColor);
+    QColor getHandleUncheckedColor() const;
+    void setHandleUncheckedColor(const QColor& inColor);
+    QColor getBarPenColor() const;
+    void setBarPenColor(const QColor& inColor);
+    QColor getHandleCheckedPenColor() const;
+    void setHandleCheckedPenColor(const QColor& inColor);
+    QColor getHandleUncheckedPenColor() const;
+    void setHandleUncheckedPenColor(const QColor& inColor);
+    
 
-    QPen _transparentPen;
-    QPen _lightGreyPen;
+    QBrush _barCheckedBrush;
+    QBrush _barUncheckedBrush;
+    QBrush _handleCheckedBrush;
+    QBrush _handleUncheckedBrush;
+
+    QPen _barPen;
+    QPen _handleCheckedPen;
+    QPen _handleUncheckedPen;
 
     // size
     QSize _size;             // sizeHint

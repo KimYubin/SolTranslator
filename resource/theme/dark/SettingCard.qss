@@ -31,3 +31,16 @@ SwitchButton
   qproperty-trackHeightRatio: 1;
   qproperty-HandleRatio: 0.72;
 }
+
+SwitchButton
+{
+  qproperty-barCheckedColor: rgba(0, 176, 255, 1);
+  qproperty-barUncheckedColor: gray;
+
+  qproperty-handleCheckedColor: white;
+  qproperty-handleUncheckedColor: white;
+  
+  qproperty-barPenColor: transparent;
+  qproperty-handleCheckedPenColor: transparent;
+  qproperty-handleUncheckedPenColor: transparent;
+}

@@ -19,6 +19,7 @@
 #include <qtabbar.h>
 
 #include "FinTranslatorCore.h"
+#include "FinUtilibrary.h"
 #include "TextEditTranslateWidget.h"
 
 #include "Managers/ConfigManager.h"
@@ -61,6 +62,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     _textEditTranslate = new TextEditTranslateWidget();
     bindButton(ui->button_0_TextTab, _textEditTranslate);
+    ui->button_0_TextTab->setText(tr("Text"));
+    ui->button_0_TextTab->setIcon(QIcon(":/img/text_caret_cursor"));
 
     QWidget* dummyWidget = new QWidget();
     bindButton(ui->button_1_dummy, dummyWidget);
@@ -263,8 +266,8 @@ void FinTranslatorMainWidget::quitApp()
 {
     const auto reply = showNewMessageBox(this
                                        , QMessageBox::Icon::Question
-                                  , tr("Fin.Translator")
-                                  , tr("정말 종료할까요?")
+                                       , tr("Fin.Translator")
+                                       , tr("정말 종료할까요?")
                                        , {{tr("종료"), QMessageBox::Yes}, {tr("취소"), QMessageBox::Cancel}}
                                        , QMessageBox::Cancel);
 

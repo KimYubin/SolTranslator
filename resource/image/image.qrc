@@ -19,5 +19,6 @@
 
         <file alias="wait_anim_img">animation_test.svg</file>
 
+        <file alias="text_caret_cursor">text_select_match_case_48e3_w700_G200.svg</file>
     </qresource>
 </RCC>

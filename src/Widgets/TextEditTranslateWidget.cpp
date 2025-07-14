@@ -7,18 +7,13 @@
 #include "TextEditTranslateWidget.h"
 
 #include <QLineEdit>
-#include <QPointer>
 #include <QScrollBar>
 #include <QTimer>
-
-#include <qsortfilterproxymodel.h>
-#include <qstringlistmodel.h>
 
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
-
 #include "SubWidgets/LanguageSelector.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"

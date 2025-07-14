@@ -25,19 +25,33 @@ bool Fin::isThis(const QObject* inThis, const QObject* inOther)
     }
     return bIsOtherThis;
 }
+namespace Fin::Internal
+{
+
+template <typename T>
+concept HasFontFunctions = requires(T* t)
+{
+    { t->font() } -> std::convertible_to<QFont>;
+    { t->setFont(std::declval<QFont>()) };
+};
+
+template <HasFontFunctions T>
+void noHintingFont(T* inOutWidget)
+{
+    QFont qfont = inOutWidget->font();
+    qfont.setHintingPreference(QFont::PreferNoHinting);
+    qfont.setStyleStrategy(QFont::PreferAntialias);
+    inOutWidget->setFont(qfont);
+}
+
+}
 
 void Fin::noHintingFont(QWidget* inOutWidget)
 {
-    QFont qfont = inOutWidget->font();
-    // qfont.setHintingPreference(QFont::PreferNoHinting);
-    // qfont.setStyleStrategy(QFont::PreferAntialias);
-    inOutWidget->setFont(qfont);
+    Fin::Internal::noHintingFont(inOutWidget);
 }
 
 void Fin::noHintingFont(QApplication* inOutWidget)
 {
-    QFont qfont = inOutWidget->font();
-    // qfont.setHintingPreference(QFont::PreferNoHinting);
-    // qfont.setStyleStrategy(QFont::PreferAntialias);
-    inOutWidget->setFont(qfont);
+    Fin::Internal::noHintingFont(inOutWidget);
 }

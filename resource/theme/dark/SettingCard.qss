@@ -1,15 +1,14 @@
-
-#SettingCard
+#SettingCard 
 {
   border-bottom: 1px solid #4f5b62;
-  /* rgb(179, 225, 255); */
   border-radius: 0px;
   padding-bottom : 8px;
 }
 
 #SettingCard QLabel#SettingHeaderText
 {
-  
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 16px;
 }
 
 #SettingCard QLabel#SettingDescriptionText

@@ -4,12 +4,11 @@
 
 #ifndef FINUTILIBRARY_H
 #define FINUTILIBRARY_H
-#include <QObject>
 
 
-class FinUtilibrary {
-
-};
+class QObject;
+class QWidget;
+class QApplication;
 
 namespace Fin
 {
@@ -29,19 +28,6 @@ bool isThis(const QObject* inThis, const QObject* inOther);
 
 void noHintingFont(QWidget* inOutWidget);
 void noHintingFont(QApplication* inOutWidget);
-
-template <typename T>
-concept HasFontFunctions = requires(T* t)
-{
-    { t->font() } -> std::same_as<QFont>;
-    { t->setFont(std::declval<QFont>()) };
-};
-
-// template <HasFontFunctions T>
-// void noHintingFont(T* inOutWidget)
-// {
-//     noHintingFont(inOutWidget);
-// }
 
 
 }

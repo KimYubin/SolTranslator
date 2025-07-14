@@ -10,146 +10,60 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS SvgWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core LinguistTools)
+find_package(QT NAMES Qt6 Qt5)
 
-set(PROJECT_SOURCES
-        src/main.cpp
-
-        src/FinTranslatorCore.cpp
-        src/FinTranslatorCore.h
-        src/Widgets/FinTranslatorMainWidget.cpp
-        src/Widgets/FinTranslatorMainWidget.h
-        src/Widgets/FinTranslatorMainWidget.ui
-
-        src/Managers/TranslateManager.cpp
-        src/Managers/TranslateManager.h
-        src/EngineUnits/TranslateUnit.cpp
-        src/EngineUnits/TranslateUnit.h
-        src/Managers/ConfigManager.cpp
-        src/Managers/ConfigManager.h
-        src/FinTypes.cpp
-        src/FinTypes.h
-        src/magic_enum.hpp
-
-        src/Managers/GlobalHotKeyManager.cpp
-        src/Managers/GlobalHotKeyManager.h
-        src/Managers/RunCopKey.cpp
-        src/Managers/RunCopKey.h
-        src/Managers/RunCopy_Impl_Win.cpp
-        src/Managers/RunCopy_Impl_Linux.cpp
-        src/Managers/RunCopy_Impl_Mac.cpp
-        src/FinHashQueue.cpp
-        src/FinHashQueue.h
-        src/EngineUnits/TrUnitFactory.cpp
-        src/EngineUnits/TrUnitFactory.h
-        src/EngineUnits/OpenAI/OpenAiTrUnit.cpp
-        src/EngineUnits/OpenAI/OpenAiTrUnit.h
-        src/EngineUnits/GoogleEngine/GoogleTrUnit.cpp
-        src/EngineUnits/GoogleEngine/GoogleTrUnit.h
-        src/Managers/DataManager.cpp
-        src/Managers/DataManager.h
-        src/Managers/AbstractManager.cpp
-        src/Managers/AbstractManager.h
-        src/Widgets/SimpleTranslatePopup.cpp
-        src/Widgets/SimpleTranslatePopup.h
-        src/Widgets/SimpleTranslatePopup.ui
-        src/Widgets/TextEditTranslateWidget.cpp
-        src/Widgets/TextEditTranslateWidget.h
-        src/Widgets/TextEditTranslateWidget.ui
-        src/Managers/AsyncManager.cpp
-        src/Managers/AsyncManager.h
-        src/Settings/SettingsWidget.cpp
-        src/Settings/SettingsWidget.h
-        src/Settings/SettingsWidget.ui
-        src/Settings/IOptionWidget.cpp
-        src/Settings/IOptionWidget.h
-        src/Settings/EngineOptionWidget.cpp
-        src/Settings/EngineOptionWidget.h
-        src/Settings/GeneralOptionWidget.cpp
-        src/Settings/GeneralOptionWidget.h
-        src/Settings/GeneralOptionWidget.ui
-        src/FinConstants.cpp
-        src/FinConstants.h
-        src/SubWidgets/SwitchButton.cpp
-        src/SubWidgets/SwitchButton.h
-        src/SubWidgets/SettingCard.cpp
-        src/SubWidgets/SettingCard.h
-        src/Widgets/ITranslateWidget.cpp
-        src/Widgets/ITranslateWidget.h
-        src/Widgets/IFinWidget.cpp
-        src/Widgets/IFinWidget.h
-        src/EngineUnits/FinPoint/FinPointTrUnit.cpp
-        src/EngineUnits/FinPoint/FinPointTrUnit.h
-        src/SubWidgets/DropdownMenu.cpp
-        src/SubWidgets/DropdownMenu.h
-        src/SubWidgets/LanguageSelector.cpp
-        src/SubWidgets/LanguageSelector.h
-        src/FinUtilibrary.cpp
-        src/FinUtilibrary.h
-        src/SubWidgets/KeySelectionList.cpp
-        src/SubWidgets/KeySelectionList.h
-
+find_package(Qt6 REQUIRED COMPONENTS
+        Widgets
+        Svg
+        SvgWidgets
+        Network
+        Concurrent
+        Core
+        Gui
+        LinguistTools
 )
 
+file(GLOB_RECURSE PROJECT_SOURCES
+        "src/*.cpp"
+        "src/*.h"
+        "src/*.ui"
+        "src/*.qml"
+        "resource/*.qrc"
+)
+list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*/QHotkey/.*")
+
+qt_add_executable(FinTranslator
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+)
+
+# Android 환경일 경우에만 패키지 소스 디렉토리 설정
+# Define target properties for Android with Qt 6 as:
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+if(ANDROID)
+    set_property(TARGET FinTranslator APPEND PROPERTY
+            QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
+    )
+endif ()
+
+target_include_directories(FinTranslator PUBLIC src/)
+target_link_libraries(FinTranslator PRIVATE
+        Qt6::Widgets
+        Qt6::Svg
+        Qt6::SvgWidgets
+        Qt6::Network
+        Qt6::Concurrent
+        Qt6::Core
+        Qt6::Gui
+)
+
+
+# QHotkey
 add_library(qhotkey src/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)
 
-
-if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(FinTranslator
-            MANUAL_FINALIZATION
-            ${PROJECT_SOURCES}
-
-            resource/theme/theme.qrc
-            resource/image/image.qrc
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET FinTranslator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(FinTranslator SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(FinTranslator
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
-
-################
-# Your-external "mylib", add GLOBAL if the imported library is located in directories above the current.
-# 외부 "mylib"를 추가하시오. 현재 디렉토리 위의 디렉토리에 있는 경우 GLOBAL을 추가하십시오.
-add_library( Qt SHARED IMPORTED )
-# You can define two import-locations: one for debug and one for release.
-# 디버그용과 릴리스용으로 두 개의 가져오기 위치를 정의할 수 있습니다.
-set_target_properties( Qt PROPERTIES IMPORTED_LOCATION ${QTDIR}/bin )
-################
-
-
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Svg)
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::SvgWidgets)
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Network)
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
-
-target_include_directories(FinTranslator PUBLIC src/)
-
 target_include_directories(qhotkey PUBLIC src/QHotkey)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui)
-
-target_link_libraries(FinTranslator PRIVATE Qt${QT_VERSION_MAJOR}::Gui)
-target_link_libraries(qhotkey PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui)
+target_link_libraries(qhotkey PUBLIC Qt6::Core Qt6::Gui)
 
 if(APPLE)
     find_library(CARBON_LIBRARY Carbon)

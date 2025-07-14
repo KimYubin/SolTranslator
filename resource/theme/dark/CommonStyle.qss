@@ -5,7 +5,7 @@ QPushButton
   outline: none;
   height: 32px;
 
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   font-weight: bold;
   font-size: 18px;
 

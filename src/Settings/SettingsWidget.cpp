@@ -16,6 +16,8 @@
 #include <QShortcut>
 
 #include "FinTranslatorCore.h"
+#include "FinUtilibrary.h"
+
 #include "Widgets/FinTranslatorMainWidget.h"
 #include "IOptionWidget.h"
 
@@ -49,10 +51,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     // ~=====================
     // option setup
-    QFont qfont = ui->listWidget->font();
-    qfont.setHintingPreference(QFont::PreferNoHinting);
-    qfont.setStyleStrategy(QFont::PreferAntialias);
-    ui->listWidget->setFont(qfont);
+    Fin::noHintingFont(ui->listWidget);
     ui->listWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     ui->listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);

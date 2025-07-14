@@ -222,14 +222,51 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
     }
 }
 
+QMessageBox::StandardButton showNewMessageBox(QWidget* inParent
+                                            , const QMessageBox::Icon inIcon
+                                            , const QString& inTitle
+                                            , const QString& inText
+                                            , const std::vector<std::pair<QString, QMessageBox::StandardButton>>& inButtons
+                                            , const QMessageBox::StandardButton inDefaultButton
+)
+{
+    QMessageBox msgBox(inIcon, inTitle, inText, QMessageBox::NoButton, inParent);
+
+    Fin::noHintingFont(&msgBox);
+
+    QDialogButtonBox* buttonBox = msgBox.findChild<QDialogButtonBox*>();
+    Q_ASSERT(buttonBox != nullptr);
+
+    for (auto& [buttonText, standButton] : inButtons)
+    {
+        QPushButton* button = msgBox.addButton(standButton);
+        if (buttonText.isEmpty() == false)
+        {
+            button->setText(buttonText);
+        }
+
+        if (inDefaultButton == standButton)
+        {
+            msgBox.setDefaultButton(button);
+        }
+    }
+
+    if (msgBox.exec() == -1)
+    {
+        return QMessageBox::Cancel;
+    }
+
+    return msgBox.standardButton(msgBox.clickedButton());
+}
+
 void FinTranslatorMainWidget::quitApp()
 {
-    const QMessageBox::StandardButton reply
-            = QMessageBox::question(this
+    const auto reply = showNewMessageBox(this
+                                       , QMessageBox::Icon::Question
                                   , tr("Fin.Translator")
                                   , tr("정말 종료할까요?")
-                                  , QMessageBox::Yes | QMessageBox::No
-                                  , QMessageBox::No);
+                                       , {{tr("종료"), QMessageBox::Yes}, {tr("취소"), QMessageBox::Cancel}}
+                                       , QMessageBox::Cancel);
 
 
     if (reply == QMessageBox::Yes)

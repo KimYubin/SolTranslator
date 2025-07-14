@@ -20,6 +20,30 @@ namespace Fin
  * @return 
  */
 bool isThis(const QObject* inThis, const QObject* inOther);
+
+/**
+ * 위젯의 QFont 셋팅을 유지하면서 PreferNoHinting으로 설정합니다.
+ * 
+ * @param inOutWidget QFont를 변경할 위젯 
+ */
+
+void noHintingFont(QWidget* inOutWidget);
+void noHintingFont(QApplication* inOutWidget);
+
+template <typename T>
+concept HasFontFunctions = requires(T* t)
+{
+    { t->font() } -> std::same_as<QFont>;
+    { t->setFont(std::declval<QFont>()) };
+};
+
+// template <HasFontFunctions T>
+// void noHintingFont(T* inOutWidget)
+// {
+//     noHintingFont(inOutWidget);
+// }
+
+
 }
 
 

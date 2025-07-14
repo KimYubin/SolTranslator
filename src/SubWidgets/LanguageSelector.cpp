@@ -163,12 +163,7 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
-
-    QFont qfont = qApp->font();
-    qfont.setHintingPreference(QFont::PreferNoHinting);
-    qfont.setStyleStrategy(QFont::PreferAntialias);
-    qApp->setFont(qfont);
-
+    Fin::noHintingFont(qApp);
 
     _searchLine = new QLineEdit(this);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);

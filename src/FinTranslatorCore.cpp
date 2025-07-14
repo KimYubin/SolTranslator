@@ -8,6 +8,7 @@
 #include <QMimeData>
 
 #include "FinConstants.h"
+#include "FinUtilibrary.h"
 
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
@@ -35,10 +36,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
     loadCache();
 
     // font
-    QFont qfont = qApp->font();
-    qfont.setHintingPreference(QFont::PreferNoHinting);
-    qfont.setStyleStrategy(QFont::PreferAntialias);
-    qApp->setFont(qfont);
+    Fin::noHintingFont(qApp);
 
     // generate GUI widget
     _finMainWidget = new FinTranslatorMainWidget();

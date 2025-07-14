@@ -30,7 +30,6 @@ file(GLOB_RECURSE PROJECT_SOURCES
         "src/*.qml"
         "resource/*.qrc"
 )
-list(FILTER PROJECT_SOURCES EXCLUDE REGEX ".*/QHotkey/.*")
 
 qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
@@ -40,7 +39,7 @@ qt_add_executable(FinTranslator
 # Android 환경일 경우에만 패키지 소스 디렉토리 설정
 # Define target properties for Android with Qt 6 as:
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-if(ANDROID)
+if (ANDROID)
     set_property(TARGET FinTranslator APPEND PROPERTY
             QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
     )
@@ -59,27 +58,27 @@ target_link_libraries(FinTranslator PRIVATE
 
 
 # QHotkey
-add_library(qhotkey src/QHotkey/qhotkey.cpp)
+add_library(qhotkey external/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)
 
-target_include_directories(qhotkey PUBLIC src/QHotkey)
+target_include_directories(qhotkey PUBLIC external/QHotkey)
 target_link_libraries(qhotkey PUBLIC Qt6::Core Qt6::Gui)
 
-if(APPLE)
+if (APPLE)
     find_library(CARBON_LIBRARY Carbon)
     mark_as_advanced(CARBON_LIBRARY)
 
-    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_mac.cpp)
+    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_mac.cpp)
     target_link_libraries(qhotkey PRIVATE ${CARBON_LIBRARY})
-elseif(WIN32)
-    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_win.cpp)
-else()
+elseif (WIN32)
+    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_win.cpp)
+else ()
     find_package(X11 REQUIRED)
     target_link_libraries(qhotkey PRIVATE ${X11_LIBRARIES})
-    
+
     include_directories(${X11_INCLUDE_DIR})
-    target_sources(qhotkey PRIVATE src/QHotkey/qhotkey_x11.cpp)
-endif()
+    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_x11.cpp)
+endif ()
 
 target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
 
@@ -104,24 +103,24 @@ add_dependencies(FinTranslator update_translations)
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.FinTranslator)
-endif()
+if (${QT_VERSION} VERSION_LESS 6.1.0)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.FinTranslator)
+endif ()
 set_target_properties(FinTranslator PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE TRUE
+        WIN32_EXECUTABLE TRUE
 )
 
 include(GNUInstallDirs)
 install(TARGETS FinTranslator
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        BUNDLE DESTINATION .
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
+if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(FinTranslator)
-endif()
+endif ()

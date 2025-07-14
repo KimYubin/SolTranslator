@@ -14,7 +14,7 @@
 #include <QTimer>
 #include <QWindow>
 
-#include <qhotkey.h>
+#include <QHotkey>
 
 #include "FinTranslatorCore.h"
 #include "RunCopKey.h"

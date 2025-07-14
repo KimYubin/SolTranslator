@@ -61,6 +61,11 @@ public:
     void setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inPolicy);
     Fin::ScreenPopupPolicy getSimplePopupScreenPolicy();
 
+    /** 창의 위치와 크기를 기억 유무를 저장합니다. */
+    void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);
+    bool getIsRememberWindowGeometry();
+
+    /** 창의 위치와 크기를 저장합니다. */
     void saveWidgetGeometry(const QWidget* inWidget);
     bool restoreWidgetGeometry(QWidget* inWidget);
 

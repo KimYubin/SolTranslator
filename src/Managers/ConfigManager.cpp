@@ -27,6 +27,7 @@ const QString TextTargetLangType = "TextEditTargetLanguageType";
 const QString SimplePopupGeometry     = "SimplePopupGeometry";
 const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
 
+const QString IsRememberWindowGeo = "IsRememberWindowGeo";
 const QString WidgetGeometry = "WidgetGeometry";
 
 ConfigManager::ConfigManager()
@@ -154,6 +155,16 @@ Fin::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
     return getEnumValue(SimplePopupScreenPolicy, Fin::ScreenPopupPolicy::CursorScreen);
 }
 
+void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)
+{
+    _settings->setValue(IsRememberWindowGeo, inIsRememberWindowGeometry);
+}
+
+bool ConfigManager::getIsRememberWindowGeometry()
+{
+    return _settings->value(IsRememberWindowGeo, false).toBool();
+}
+
 void ConfigManager::saveWidgetGeometry(const QWidget* inWidget)
 {
     setSaveGeometry(inWidget->objectName() + WidgetGeometry, inWidget->saveGeometry());
@@ -161,6 +172,11 @@ void ConfigManager::saveWidgetGeometry(const QWidget* inWidget)
 
 bool ConfigManager::restoreWidgetGeometry(QWidget* inWidget)
 {
+    if (getIsRememberWindowGeometry() == false)
+    {
+        return false;
+    }
+
     const auto [bIsExistGeo, geoByteArr] = getSaveGeometry(inWidget->objectName() + WidgetGeometry);
 
     if (bIsExistGeo)

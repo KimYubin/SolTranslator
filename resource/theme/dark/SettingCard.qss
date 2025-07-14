@@ -7,3 +7,13 @@
   padding-bottom : 8px;
 }
 
+#SettingCard QLabel#SettingHeaderText
+{
+  
+}
+
+#SettingCard QLabel#SettingDescriptionText
+{
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+}

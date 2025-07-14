@@ -36,9 +36,11 @@ SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos c
         contentCol = 0;
     }
     _header = new QLabel(_gridLayoutWidget);
+    _header->setObjectName("SettingHeaderText");
     _layout->addWidget(_header, 0, headerCol, 1, 1);
 
     _content->setParent(_gridLayoutWidget);
+    _content->setObjectName("SettingContent");
     _layout->addWidget(_content, 0, contentCol, 1, 1);
 
     _layout->setColumnStretch(headerCol, 1);
@@ -60,6 +62,7 @@ void SettingCard::setDescription(const QString& inStr)
     if (_description.has_value() == false)
     {
         _description = new QLabel(_gridLayoutWidget);
+        _description.value()->setObjectName("SettingDescriptionText");
 
         int descCol     = 0;
         int descColSpan = 2;

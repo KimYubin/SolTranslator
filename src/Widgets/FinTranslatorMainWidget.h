@@ -12,6 +12,7 @@
 #include "IFinWidget.h"
 
 
+class QComboBox;
 class QButtonGroup;
 class SettingsWidget;
 class TextEditTranslateWidget;
@@ -69,6 +70,8 @@ private:
     void popupTrayMenu();
 
     Ui::FinTranslatorMainWidget* ui;
+
+    QComboBox* _engineSelector;
 
     // ~==============
     // sub widgets

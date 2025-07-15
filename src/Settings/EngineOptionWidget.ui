@@ -31,7 +31,7 @@
       <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignTop">
        <widget class="QGroupBox" name="engineGroup">
         <property name="title">
-         <string>번역 엔진</string>
+         <string>번역 엔진 설정</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>

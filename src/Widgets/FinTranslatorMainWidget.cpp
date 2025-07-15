@@ -7,6 +7,7 @@
 #include "FinTranslatorMainWidget.h"
 
 #include <QButtonGroup>
+#include <QComboBox>
 #include <QDir>
 #include <QFile>
 #include <QLabel>
@@ -15,10 +16,9 @@
 #include <QStyle>
 #include <QTextStream>
 #include <QTimer>
-
 #include <qevent.h>
-#include <qtabbar.h>
 
+#include "FinToolTip.h"
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 #include "TextEditTranslateWidget.h"
@@ -61,16 +61,19 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
         _buttonGroup->addButton(button, stkIdx);
     };
 
+    // 텍스트 번역
     _textEditTranslate = new TextEditTranslateWidget();
     ui->textTabButton->setText(tr("텍스트"));
     ui->textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
     bindButton(ui->textTabButton, _textEditTranslate);
 
+    // 문서 번역
     QLabel* docTranslateWidget = new QLabel(tr("준비 중"));
     docTranslateWidget->setAlignment(Qt::AlignCenter);
     ui->docTabButton->setText(tr("문서"));
     ui->docTabButton->setIcon(QIcon(":/img/document_img"));
     bindButton(ui->docTabButton, docTranslateWidget);
+
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {
@@ -78,6 +81,30 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     });
     _buttonGroup->button(0)->click();
     _textEditTranslate->focusTextOrigin();
+
+
+    // ~=========================
+    // 번역 엔진 선택
+    _engineSelector = new QComboBox(this);
+
+    for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
+    {
+        _engineSelector->addItem(EngineName::getName(eg), static_cast<int>(eg));
+    }
+
+    _engineSelector->setEditable(false);
+    _engineSelector->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
+    _engineSelector->setToolTip(tr("번역 엔진 선택"));
+    _engineSelector->installEventFilter(new FinTooltipFilter(qApp));
+
+    connect(_engineSelector, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
+    {
+        const int payload      = _engineSelector->itemData(inIdx).toInt();
+        const EngineType curEg = static_cast<EngineType>(payload);
+        finConfig.setCurrentEngineType(curEg);
+    });
+
+    ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignmentFlag::AlignRight);
 
 
     // ~====================

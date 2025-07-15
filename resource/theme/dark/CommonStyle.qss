@@ -214,11 +214,18 @@ QToolTip
 
 #FinToolTipBallon QLabel
 {
-  color: rgba(255, 255, 255, 0.9);;
-  background-color: rgba(34, 34, 34, 1);
-
-  border: 1px solid rgba(255, 255, 255, 0.27);
-  border-radius: 4px;
-
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
   padding: 4px;
+  padding-bottom: 6px;
+}
+
+FinToolTipBallon
+{
+  qproperty-triangleBaseWidth: 8;
+  qproperty-triangleHeight: 4;
+  qproperty-borderRadius: 4;
+  qproperty-borderWidth: 0.8;
+  qproperty-backgroundColor: rgba(32, 32, 32, 1);
+  qproperty-borderColor: rgba(92, 92, 92, 1);
 }

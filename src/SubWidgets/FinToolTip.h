@@ -19,10 +19,9 @@ class FinTooltipFilter : public QObject
     Q_OBJECT
 
 public:
-    explicit FinTooltipFilter(QObject *parent = nullptr);
+    explicit FinTooltipFilter(QObject* parent = nullptr);
 
-    virtual bool eventFilter(QObject *watched, QEvent *event) override;
-
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 

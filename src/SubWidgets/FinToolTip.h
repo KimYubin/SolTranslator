@@ -5,7 +5,7 @@
 #ifndef FINTOOLTIP_H
 #define FINTOOLTIP_H
 
-#include <QLabel>
+#include <QObject>
 
 
 class FinToolTipBallon;

@@ -4,6 +4,7 @@
 
 #include "FinToolTip.h"
 
+#include <QLabel>
 #include <QWidget>
 #include <QToolTip>
 

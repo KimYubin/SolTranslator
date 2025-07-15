@@ -18,10 +18,10 @@
 #include <QTimer>
 #include <qevent.h>
 
-#include "FinToolTip.h"
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 #include "TextEditTranslateWidget.h"
+#include "SubWidgets/FinToolTip.h"
 
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"

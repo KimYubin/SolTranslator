@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/06/25 수.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef DROPDOWNMENU_H
 #define DROPDOWNMENU_H

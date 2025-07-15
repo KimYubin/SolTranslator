@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/05/13 화.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef GeneralOptionWIDGET_H
 #define GeneralOptionWIDGET_H

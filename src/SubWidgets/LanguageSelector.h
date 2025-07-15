@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/07/08 화.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef LANGUAGESELECTOR_H
 #define LANGUAGESELECTOR_H

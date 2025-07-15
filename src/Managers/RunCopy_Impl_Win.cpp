@@ -1,6 +1,5 @@
-﻿//
-// Created by YubinKim on 25/03/13 목.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+
 #ifdef _WIN32
 
 #include <QThread>

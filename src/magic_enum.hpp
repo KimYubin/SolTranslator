@@ -1,7 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/12 수.
-//
-
+﻿
 #ifndef MAGIC_ENUM_HPP
 #define MAGIC_ENUM_HPP
 

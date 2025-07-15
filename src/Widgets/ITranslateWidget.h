@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/06/01 일.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef ITRANSLATEWIDGET_H
 #define ITRANSLATEWIDGET_H

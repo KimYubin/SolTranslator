@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/20 목.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H

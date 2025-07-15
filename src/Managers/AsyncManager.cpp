@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/04/09 수.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "AsyncManager.h"
 

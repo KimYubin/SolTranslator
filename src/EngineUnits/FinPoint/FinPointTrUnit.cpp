@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/06/22 일.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "FinPointTrUnit.h"
 

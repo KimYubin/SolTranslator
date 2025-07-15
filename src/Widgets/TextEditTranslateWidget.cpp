@@ -1,8 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/19 수.
-//
-
-// You may need to build the project (run Qt uic code generator) to get "ui_TextEditTranslateWidget.h" resolved
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "TextEditTranslateWidget.h"
 

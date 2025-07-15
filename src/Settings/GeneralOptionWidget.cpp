@@ -1,8 +1,4 @@
-﻿//
-// Created by YubinKim on 25/05/13 화.
-//
-
-// You may need to build the project (run Qt uic code generator) to get "ui_GeneralOptionWidget.h" resolved
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "GeneralOptionWidget.h"
 

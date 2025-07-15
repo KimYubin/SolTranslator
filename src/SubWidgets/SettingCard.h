@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/05/27 화.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef TOGGLESWITCHBOX_H
 #define TOGGLESWITCHBOX_H

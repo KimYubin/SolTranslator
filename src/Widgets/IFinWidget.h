@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/06/08 일.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef IFINWIDGET_H
 #define IFINWIDGET_H

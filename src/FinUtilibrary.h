@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/07/10 목.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef FINUTILIBRARY_H
 #define FINUTILIBRARY_H

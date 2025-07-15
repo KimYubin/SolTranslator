@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/13 목.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef GLOBALHOTKEYMANAGER_H
 #define GLOBALHOTKEYMANAGER_H

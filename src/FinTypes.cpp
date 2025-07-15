@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/11 화.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "FinTypes.h"
 

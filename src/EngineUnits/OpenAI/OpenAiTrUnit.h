@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/03/17 월.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef TRANSLATEUNITOPENAI_H
 #define TRANSLATEUNITOPENAI_H

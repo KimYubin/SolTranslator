@@ -11,16 +11,18 @@
 #include <QRectF>
 #include <QEasingCurve>
 
-SwitchButton::SwitchButton(QWidget* parent)
+SwitchButton::SwitchButton(const bool inChecked, QWidget* parent)
     : QCheckBox(parent)
-    , _barCheckedBrush(QColor("#00B0FF"))
+    , _barCheckedBrush(QColor(0x00B0FF))
     , _barUncheckedBrush(Qt::gray)
     , _handleCheckedBrush(Qt::white)
     , _handleUncheckedBrush(Qt::white)
     , _barPen(Qt::transparent)
     , _handleCheckedPen(Qt::transparent)
     , _handleUncheckedPen(Qt::lightGray)
+    , _handlePos((inChecked ? 1.0f : 0.0f))
 {
+    setChecked(inChecked);
     setButtonShape(QSize(46, 28), 1.0f, 20.0f/28.0f);
 
     _handleAnimation = new QPropertyAnimation(this, "handlePosition", this);
@@ -99,9 +101,9 @@ float SwitchButton::handlePosition() const
     return _handlePos;
 }
 
-void SwitchButton::setHandlePosition(const float position)
+void SwitchButton::setHandlePosition(const float inPosition)
 {
-    _handlePos = position;
+    _handlePos = inPosition;
     update();
 }
 

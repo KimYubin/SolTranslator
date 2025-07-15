@@ -10,9 +10,6 @@
     <height>571</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>SettingsWidget</string>
-  </property>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>

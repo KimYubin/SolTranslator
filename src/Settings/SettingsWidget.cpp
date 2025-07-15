@@ -37,6 +37,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("설정"));
     resize(640, 600);
 
     setLayout(ui->mainLayout);

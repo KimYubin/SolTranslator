@@ -10,38 +10,50 @@ QPushButton
   font-size: 18px;
 
   margin: 0px;
-  padding: 1px 8px;
 
+  /* 바닥 패딩+테두리 = 3px*/
+  padding: 2px 8px;
   border: 1px solid transparent;
-  border-bottom: 3px solid transparent;
 }
 
 QPushButton:hover 
 {
   background-color: rgba(160, 160, 160, 0.44);
 }
-
 QPushButton:pressed
 {
   background-color: rgba(117, 117, 117, 0.44);
 }
 
-QPushButton:checked
-{
-  border-bottom: 3px solid rgba(98, 187, 238, 1);
-}
-QPushButton:checked:focus
-{
-  padding: 1px 16px;
-  
-  border-bottom: 3px solid rgba(98, 187, 238, 1);
-}
 QPushButton:focus
 {
   border: 1px solid rgba(255, 255, 255, 0.84);
   border-radius: 2px;
-  padding-bottom: 3px;
 }
+
+
+/*unchecked*/
+QPushButton[checkable="true"]
+{
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+QPushButton[checkable="true"]:focus
+{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.84);
+}
+
+/*checked*/
+QPushButton:checked
+{
+  padding-bottom: 0px;
+  border-bottom: 3px solid rgba(98, 187, 238, 1);
+}
+QPushButton:checked:focus
+{
+  border-bottom: 3px solid rgba(98, 187, 238, 1);
+}
+
 
 QPushButton:disabled {
   color: rgba(138, 138, 138, 0.51);

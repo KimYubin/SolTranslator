@@ -9,6 +9,7 @@
 #include <QButtonGroup>
 #include <QDir>
 #include <QFile>
+#include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QStyle>
@@ -55,7 +56,6 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
-        button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
@@ -66,7 +66,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     ui->textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
     bindButton(ui->textTabButton, _textEditTranslate);
 
-    QWidget* docTranslateWidget = new QWidget();
+    QLabel* docTranslateWidget = new QLabel(tr("준비 중"));
+    docTranslateWidget->setAlignment(Qt::AlignCenter);
     ui->docTabButton->setText(tr("문서"));
     ui->docTabButton->setIcon(QIcon(":/img/document_img"));
     bindButton(ui->docTabButton, docTranslateWidget);

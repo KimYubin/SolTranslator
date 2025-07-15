@@ -31,11 +31,10 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 시작시 실행
     {
-        SettingCard* startRunCard = new SettingCard(new SwitchButton, shapeBehaviorGroup);
+        SettingCard* startRunCard = new SettingCard(new SwitchButton(finConfig.getStartRun()), shapeBehaviorGroup);
         startRunCard->setHeader(tr("시작 시 실행"));
         startRunCard->setDescription(tr("시스템 시작 시 Fin번역기가 자동으로 실행됩니다."));
         SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
-        startRunSwitch->setChecked(finConfig.getStartRun());
         connect(startRunSwitch, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
         {
             finConfig.setStartRun(inState == Qt::CheckState::Checked);
@@ -73,11 +72,10 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 창 위치 크기 기억
     {
-        SettingCard* rememberWindow = new SettingCard(new SwitchButton, shapeBehaviorGroup);
+        SettingCard* rememberWindow = new SettingCard(new SwitchButton(finConfig.getIsRememberWindowGeometry()), shapeBehaviorGroup);
         rememberWindow->setHeader(tr("창 위치, 크기 기억"));
         rememberWindow->setDescription(tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다."));
         SwitchButton* remWindowSwitch = rememberWindow->getContent<SwitchButton>();
-        remWindowSwitch->setChecked(finConfig.getIsRememberWindowGeometry());
         connect(remWindowSwitch, &QCheckBox::checkStateChanged, this, [](Qt::CheckState inState)
         {
             finConfig.setIsRememberWindowGeometry(inState == Qt::CheckState::Checked);

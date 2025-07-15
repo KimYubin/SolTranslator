@@ -40,6 +40,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 출발언어 선택기
     _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
+    _srcLangSelector->setBubbleToolTip(tr("출발 언어"));
     connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(0, _srcLangSelector, 1);
@@ -47,6 +48,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 도착언어 선택기
     _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    _targetLangSelector->setBubbleToolTip(tr("도착 언어"));
     connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(2, _targetLangSelector, 1);

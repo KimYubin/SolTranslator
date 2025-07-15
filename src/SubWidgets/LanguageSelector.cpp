@@ -11,6 +11,7 @@
 
 #include <qevent.h>
 
+#include "FinToolTip.h"
 #include "FinTypes.h"
 #include "FinUtilibrary.h"
 #include "KeySelectionList.h"
@@ -113,6 +114,12 @@ LanguageSelector::~LanguageSelector()
 void LanguageSelector::setButtonText(const LangType inlangType)
 {
     _button->setText(Langs::GetLocaleName(inlangType));
+}
+
+void LanguageSelector::setBubbleToolTip(const QString& inStr)
+{
+    _button->setToolTip(inStr);
+    _button->installEventFilter(new FinTooltipFilter(qApp));
 }
 
 void LanguageSelector::onSelectedLanguage(const LangType inlangType)

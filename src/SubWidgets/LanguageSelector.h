@@ -25,6 +25,8 @@ public:
 
     void setButtonText(const LangType inlangType);
 
+    void setBubbleToolTip(const QString& inStr);
+
 public slots:
     void onSelectedLanguage(const LangType inlangType);
 

@@ -147,8 +147,7 @@ color: rgb(220, 222, 223);
 #FinTranslatorMainWidget  QDateTimeEdit,
 #FinTranslatorMainWidget  QSpinBox,
 #FinTranslatorMainWidget  QDoubleSpinBox,
-#FinTranslatorMainWidget  QTreeView,
-#FinTranslatorMainWidget  QComboBox {
+#FinTranslatorMainWidget  QTreeView {
   color: #ffffff;
   padding-left: 16px;
   border-radius: 4px;
@@ -1004,16 +1003,6 @@ background: #1de9b6;
   border-top-right-radius: unset;
 }
 
-/*  ------------------------------------------------------------------------  */
-/*  QToolTip  */
-
-#FinTranslatorMainWidget  QToolTip {
-  padding: 4px;
-  border: 1px solid rgba(50, 55, 60, 1);
-  border-radius: 4px;
-  color: #ffffff;
-  background-color: #4f5b62;
-}
 
 /*  ------------------------------------------------------------------------  */
 /*  QDialog  */

@@ -184,3 +184,41 @@ QComboBox::drop-down
   color: #ffffff;
   width: 20px;
 }
+
+
+
+
+/*  ------------------------------------------------------------------------  */
+/*  QToolTip  */
+
+QToolTip QLabel
+{
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid rgba(50, 55, 60, 1);
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: #4f5b62;
+}
+QToolTip 
+{
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid rgba(50, 55, 60, 1);
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: #4f5b62;
+  background-clip: content;
+
+}
+
+#FinToolTipBallon QLabel
+{
+  color: rgba(255, 255, 255, 0.9);;
+  background-color: rgba(34, 34, 34, 1);
+
+  border: 1px solid rgba(255, 255, 255, 0.27);
+  border-radius: 4px;
+
+  padding: 4px;
+}

@@ -2,7 +2,7 @@
 
 #include "TrUnitFactory.h"
 
-#include <magic_enum.hpp>
+#include "../../external/magic_enum.hpp"
 
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"

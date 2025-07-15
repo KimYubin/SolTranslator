@@ -6,7 +6,7 @@
 #include <QSettings>
 
 #include "FinTypes.h"
-#include "magic_enum.hpp"
+#include "../../external/magic_enum.hpp"
 
 
 #define finConfig ConfigManager::instance()

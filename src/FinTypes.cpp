@@ -6,7 +6,7 @@
 
 #include <qstandardpaths.h>
 
-#include "magic_enum.hpp"
+#include "../external/magic_enum.hpp"
 
 namespace Fin::Internal::DirName
 {

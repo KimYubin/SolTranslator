@@ -8,7 +8,7 @@
 #include <QSettings>
 #include <QWidget>
 
-#include "magic_enum.hpp"
+#include "../../external/magic_enum.hpp"
 
 #include "FinConstants.h"
 #include "FinTypes.h"

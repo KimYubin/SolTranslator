@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en" sourcelanguage="ko">
+<TS version="2.1" language="ja" sourcelanguage="ko">
 <context>
     <name>EngineOption</name>
     <message>

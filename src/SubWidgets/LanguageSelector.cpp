@@ -118,8 +118,7 @@ void LanguageSelector::setButtonText(const LangType inlangType)
 
 void LanguageSelector::setBubbleToolTip(const QString& inStr)
 {
-    _button->setToolTip(inStr);
-    _button->installEventFilter(new FinTooltipFilter(qApp));
+    FinTooltipFilter::setBubbleToolTip(_button, inStr);
 }
 
 void LanguageSelector::onSelectedLanguage(const LangType inlangType)

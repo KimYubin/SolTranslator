@@ -90,8 +90,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     _engineSelector->setEditable(false);
     _engineSelector->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
-    _engineSelector->setToolTip(tr("번역 엔진 선택"));
-    _engineSelector->installEventFilter(new FinTooltipFilter(qApp));
+    FinTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
 
     connect(_engineSelector, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
     {

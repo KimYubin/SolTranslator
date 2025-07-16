@@ -223,6 +223,12 @@ void FinToolTipBallon::setBorderColor(const QColor inColor)
 // ~==================================
 // FinTooltipFilter 
 
+void FinTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+{
+    inTargetWidget->setToolTip(inToolTip);
+    inTargetWidget->installEventFilter(new FinTooltipFilter(inTargetWidget));
+}
+
 FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
 {
 }

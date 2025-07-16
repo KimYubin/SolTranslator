@@ -57,8 +57,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     // 언어 교환 버튼
     const bool bIsAuto = (finConfig.getTextSrcLang() == LangType::AUTO);
     ui->languageSwapButton->setEnabled(bIsAuto == false);
-    ui->languageSwapButton->setToolTip(tr("언어 바꾸기"));
-    ui->languageSwapButton->installEventFilter(new FinTooltipFilter(qApp));
+    FinTooltipFilter::setBubbleToolTip(ui->languageSwapButton, tr("언어 바꾸기"));
     connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {
         const LangType srcLangType    = finConfig.getTextSrcLang();

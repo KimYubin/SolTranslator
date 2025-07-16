@@ -98,6 +98,7 @@ void FinToolTipBallon::showToolTip(const QString& inText, const QPoint& inPos)
 {
     _label->setText(inText);
     _label->adjustSize();
+    _label->repaint(); // 이전 문자열 깜빡임 방지
     adjustSize();
 
     const QPoint newPos = {inPos.x() - (width() / 2), inPos.y() - height()};

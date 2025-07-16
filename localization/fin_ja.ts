@@ -261,22 +261,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="43"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="45"/>
         <source>출발 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="51"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="53"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="60"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="62"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="125"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="127"/>
         <source>번역 중...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -85,6 +85,7 @@ target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
 
 
 
+#[[
 #### 현지화
 qt_standard_project_setup(
         I18N_SOURCE_LANGUAGE ko
@@ -103,6 +104,7 @@ qt_add_translations(FinTranslator
 )
 
 add_dependencies(FinTranslator update_translations)
+]]
 
 
 

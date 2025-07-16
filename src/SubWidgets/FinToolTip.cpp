@@ -41,18 +41,20 @@ protected:
 
 private:
     // property
-    int    getTriangleBaseWidth();
+    int    getTriangleBaseWidth() const;
     void   setTriangleBaseWidth(const int inWidth);
-    int    getTriangleHeight();
+    int    getTriangleHeight() const;
     void   setTriangleHeight(const int inHeight);
-    int    getBorderRadius();
+    int    getBorderRadius() const;
     void   setBorderRadius(const int inRad);
-    float  getBorderWidth();
+    float  getBorderWidth() const;
     void   setBorderWidth(const float inWidth);
-    QColor getBackgroundColor();
+    QColor getBackgroundColor() const;
     void   setBackgroundColor(const QColor inColor);
-    QColor getBorderColor();
+    QColor getBorderColor() const;
     void   setBorderColor(const QColor inColor);
+
+    void updateMargins() const;
     
     QLabel* _label;
     QVBoxLayout* _layout;
@@ -76,7 +78,6 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     setObjectName("FinToolTipBallon");
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_TranslucentBackground);
-    _label = new QLabel(this);
 
     _triangleBaseWidth = 8;
     _triangleHeight    = 4;
@@ -87,8 +88,9 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _borderColor     = QColor(255, 255, 255, 230);
 
 
+    _label  = new QLabel(this);
     _layout = new QVBoxLayout(this);
-    _layout->setContentsMargins(0, 0, 0, _triangleHeight);
+    updateMargins();
     _layout->addWidget(_label);
 }
 
@@ -117,8 +119,7 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
     const double halfWidth        = width() / 2.0;
     const double halfTriBaseWidth = _triangleBaseWidth / 2.0;
     const QMargins layoutMargin   = _layout->contentsMargins();
-    const QRect lineRect          = rect() - layoutMargin; // 하단 꼬리 공간 확보
-    // const QRect lineRect       = rect().adjusted(0, 0, 0, -_triangleHeight);
+    const QRect lineRect          = rect() - layoutMargin; // 하단 꼬리, 테두리 공간 확보
 
 
     QPainterPath path;
@@ -154,7 +155,7 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
     painter.drawPath(path);
 }
 
-int FinToolTipBallon::getTriangleBaseWidth()
+int FinToolTipBallon::getTriangleBaseWidth() const
 {
     return _triangleBaseWidth;
 }
@@ -165,7 +166,7 @@ void FinToolTipBallon::setTriangleBaseWidth(const int inWidth)
     update();
 }
 
-int FinToolTipBallon::getTriangleHeight()
+int FinToolTipBallon::getTriangleHeight() const
 {
     return _triangleHeight;
 }
@@ -173,11 +174,11 @@ int FinToolTipBallon::getTriangleHeight()
 void FinToolTipBallon::setTriangleHeight(const int inHeight)
 {
     _triangleHeight = inHeight;
-    _layout->setContentsMargins(0, 0, 0, _triangleHeight);
+    updateMargins();
     update();
 }
 
-int FinToolTipBallon::getBorderRadius()
+int FinToolTipBallon::getBorderRadius() const
 {
     return _borderRadius;
 }
@@ -188,7 +189,7 @@ void FinToolTipBallon::setBorderRadius(const int inRad)
     update();
 }
 
-float FinToolTipBallon::getBorderWidth()
+float FinToolTipBallon::getBorderWidth() const
 {
     return _borderWidth;
 }
@@ -196,10 +197,11 @@ float FinToolTipBallon::getBorderWidth()
 void FinToolTipBallon::setBorderWidth(const float inWidth)
 {
     _borderWidth = inWidth;
+    updateMargins();
     update();
 }
 
-QColor FinToolTipBallon::getBackgroundColor()
+QColor FinToolTipBallon::getBackgroundColor() const
 {
     return _backgroundColor;
 }
@@ -210,7 +212,7 @@ void FinToolTipBallon::setBackgroundColor(const QColor inColor)
     update();
 }
 
-QColor FinToolTipBallon::getBorderColor()
+QColor FinToolTipBallon::getBorderColor() const
 {
     return _borderColor;
 }
@@ -218,6 +220,12 @@ QColor FinToolTipBallon::getBorderColor()
 void FinToolTipBallon::setBorderColor(const QColor inColor)
 {
     _borderColor = inColor;
+}
+
+void FinToolTipBallon::updateMargins() const
+{
+    const int borderMargin = qCeil(_borderWidth);
+    _layout->setContentsMargins(borderMargin, borderMargin, borderMargin, _triangleHeight);
 }
 
 // ~==================================

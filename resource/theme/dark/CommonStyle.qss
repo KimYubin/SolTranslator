@@ -156,6 +156,12 @@ QMenu#trayIconMenu::item
   color: rgba(255, 255, 255, 1);
   padding: 8px 8px 8px 18px;
 }
+
+QMenu#trayIconMenu::item:disabled 
+{
+  color: rgba(255, 255, 255, 0.3);
+} 
+
 QMenu#trayIconMenu::icon,
 QMenu#trayIconMenu::icon
 {

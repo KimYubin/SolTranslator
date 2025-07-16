@@ -210,12 +210,8 @@ void FinTranslatorMainWidget::applyTheme(const QString& inThemeName)
     if (newStyleSheet.isEmpty() == false)
     {
         qApp->setStyleSheet(newStyleSheet);
-        // Fin::noHintingFont();
-        
-        QFont qfont = qApp->font();
-        qfont.setHintingPreference(QFont::PreferNoHinting);
-        qfont.setStyleStrategy(QFont::PreferAntialias);
-        qApp->setFont(qfont);
+        Fin::noHintingFont();
+
         QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)
         {

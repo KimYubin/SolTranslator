@@ -4,7 +4,7 @@
 
 #include <QApplication>
 #include <QWidget>
-#include <qfont.h>
+#include <QFont>
 
 
 bool Fin::isThis(const QObject* inThis, const QObject* inOther)
@@ -43,13 +43,15 @@ void noHintingFont(T* inOutWidget)
 }
 
 }
-//
-// void Fin::noHintingFont(QWidget* inOutWidget)
-// {
-//     // Fin::Internal::noHintingFont(inOutWidget);
-// }
-//
-// void Fin::noHintingFont()
-// {
-//     // Fin::Internal::noHintingFont(qApp);
-// }
+
+/*
+void Fin::noHintingFont(QWidget* inOutWidget)
+{
+    // Fin::Internal::noHintingFont(inOutWidget);
+}
+*/
+
+void Fin::noHintingFont()
+{
+    Fin::Internal::noHintingFont(qApp);
+}

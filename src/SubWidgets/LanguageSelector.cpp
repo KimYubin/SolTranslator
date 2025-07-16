@@ -167,8 +167,6 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
-    Fin::noHintingFont(qApp);
-
     _searchLine = new QLineEdit(this);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
     _searchLine->setPlaceholderText(tr("언어 검색"));

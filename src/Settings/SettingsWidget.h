@@ -31,8 +31,6 @@ protected slots:
     void appQuitEvent() const;
 
 private:
-    void applyTheme();
-
     Ui::SettingsWidget* ui;
 };
 

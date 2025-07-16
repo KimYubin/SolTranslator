@@ -40,8 +40,8 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     loadCache();
 
-    // font
-    Fin::noHintingFont(qApp);
+    // theme font
+    FinTranslatorMainWidget::applyTheme();
 
     // generate GUI widget
     _finMainWidget = new FinTranslatorMainWidget();

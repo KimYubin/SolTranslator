@@ -89,14 +89,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         themeButton->setCheckable(false);
         connect(themeButton, &QPushButton::clicked, this, []()
         {
-            if (finCore->getFinMainWidget())
-            {
-                finCore->getFinMainWidget()->applyTheme();
-            }
-            else
-            {
-                qDebug() << "finMainWidget is invalid";
-            }
+            FinTranslatorMainWidget::applyTheme();
         });
         shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
     }

@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>FinTranslatorMainWidget</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>

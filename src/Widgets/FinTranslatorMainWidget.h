@@ -42,7 +42,7 @@ public:
 
     // ~=================
     // theme
-    void applyTheme(const QString& inThemeName = "dark");
+    static void applyTheme(const QString& inThemeName = "dark");
 
     QString applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors);
 

@@ -48,7 +48,6 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     // ~=====================
     // option setup
-    Fin::noHintingFont(ui->listWidget);
     ui->listWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     ui->listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -106,16 +105,4 @@ void SettingsWidget::closeEvent(QCloseEvent* event)
 void SettingsWidget::appQuitEvent() const
 {
     finConfig.saveWidgetGeometry(this);
-}
-
-void SettingsWidget::applyTheme()
-{
-    if (finCore->getFinMainWidget())
-    {
-        finCore->getFinMainWidget()->applyTheme();
-    }
-    else
-    {
-        qDebug()<<"finMainWidget is invalid";
-    }
 }

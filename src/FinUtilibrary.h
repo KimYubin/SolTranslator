@@ -24,8 +24,8 @@ bool isThis(const QObject* inThis, const QObject* inOther);
  * @param inOutWidget QFont를 변경할 위젯 
  */
 
-void noHintingFont(QWidget* inOutWidget);
-void noHintingFont(QApplication* inOutWidget);
+// void noHintingFont(QWidget* inOutWidget);
+// void noHintingFont();
 
 
 }

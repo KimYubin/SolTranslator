@@ -3,11 +3,14 @@
 #include "TextEditTranslateWidget.h"
 
 #include <QLineEdit>
+#include <QMenu>
 #include <QScrollBar>
 #include <QTimer>
 
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
+#include "FinUtilibrary.h"
+
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 

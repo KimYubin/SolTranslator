@@ -94,18 +94,6 @@ void EngineOptionWidget::finish()
     IOptionWidget::finish();
 }
 
-void EngineOptionWidget::applyTheme()
-{
-    if (finCore->getFinMainWidget())
-    {
-        finCore->getFinMainWidget()->applyTheme();
-    }
-    else
-    {
-        qDebug()<<"finMainWidget is invalid";
-    }
-}
-
 
 // ~======================
 // EngineOption 

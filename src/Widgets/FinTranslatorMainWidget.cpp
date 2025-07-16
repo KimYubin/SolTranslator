@@ -117,8 +117,6 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     createTrayIcon();
 
 
-    applyTheme();
-
     finConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);
 }
@@ -212,6 +210,12 @@ void FinTranslatorMainWidget::applyTheme(const QString& inThemeName)
     if (newStyleSheet.isEmpty() == false)
     {
         qApp->setStyleSheet(newStyleSheet);
+        // Fin::noHintingFont();
+        
+        QFont qfont = qApp->font();
+        qfont.setHintingPreference(QFont::PreferNoHinting);
+        qfont.setStyleStrategy(QFont::PreferAntialias);
+        qApp->setFont(qfont);
         QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)
         {
@@ -261,8 +265,6 @@ QMessageBox::StandardButton showNewMessageBox(QWidget* inParent
 )
 {
     QMessageBox msgBox(inIcon, inTitle, inText, QMessageBox::NoButton, inParent);
-
-    Fin::noHintingFont(&msgBox);
 
     QDialogButtonBox* buttonBox = msgBox.findChild<QDialogButtonBox*>();
     Q_ASSERT(buttonBox != nullptr);
@@ -374,8 +376,8 @@ void FinTranslatorMainWidget::createTrayIcon()
     _trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);
     _trayIconMenu->setWindowFlag(Qt::FramelessWindowHint);
     _trayIconMenu->setWindowFlag(Qt::NoDropShadowWindowHint);
-    Fin::noHintingFont(_trayIconMenu);
     _trayIconMenu->setObjectName("trayIconMenu");
+
     _trayIconMenu->addAction(_miniToTrayAction);
     _trayIconMenu->addAction(_restoreAction);
     _trayIconMenu->addAction(_settingAction);

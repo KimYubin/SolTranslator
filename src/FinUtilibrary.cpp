@@ -43,13 +43,13 @@ void noHintingFont(T* inOutWidget)
 }
 
 }
-
-void Fin::noHintingFont(QWidget* inOutWidget)
-{
-    Fin::Internal::noHintingFont(inOutWidget);
-}
-
-void Fin::noHintingFont(QApplication* inOutWidget)
-{
-    Fin::Internal::noHintingFont(inOutWidget);
-}
+//
+// void Fin::noHintingFont(QWidget* inOutWidget)
+// {
+//     // Fin::Internal::noHintingFont(inOutWidget);
+// }
+//
+// void Fin::noHintingFont()
+// {
+//     // Fin::Internal::noHintingFont(qApp);
+// }

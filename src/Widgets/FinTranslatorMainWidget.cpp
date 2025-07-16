@@ -371,7 +371,11 @@ void FinTranslatorMainWidget::createActions()
 void FinTranslatorMainWidget::createTrayIcon()
 {
     _trayIconMenu = new QMenu(this);
+    _trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);
+    _trayIconMenu->setWindowFlag(Qt::FramelessWindowHint);
+    _trayIconMenu->setWindowFlag(Qt::NoDropShadowWindowHint);
     Fin::noHintingFont(_trayIconMenu);
+    _trayIconMenu->setObjectName("trayIconMenu");
     _trayIconMenu->addAction(_miniToTrayAction);
     _trayIconMenu->addAction(_restoreAction);
     _trayIconMenu->addAction(_settingAction);
@@ -413,6 +417,7 @@ void FinTranslatorMainWidget::popupTrayMenu()
 
         QPoint popupPos = _prevMousePos;
         popupPos.rx() -= (contextSize.width() / 2); // 마우스 위치에 팝업 중앙이 오도록 조정.
+        popupPos.ry() -= contextSize.height(); 
         QRect popupGeo = QRect(popupPos, contextSize);
 
         /** 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정. */

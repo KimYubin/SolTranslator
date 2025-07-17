@@ -8,13 +8,21 @@
 #include "Widgets/IFinWidget.h"
 #include "FinUtilibrary.h"
 
-class FinStyleWidget  : public IFinWidget
+#define QSS_PALETTE_COLOR(colorName) \
+private: \
+    Q_PROPERTY(QColor colorName READ get##colorName WRITE set##colorName) \
+    void set##colorName(const QColor& inColor) { _##colorName = inColor; }; \
+    QColor get##colorName() const { return _##colorName; }; \
+    QColor _##colorName;
+
+
+class FinPalette : public IFinWidget
 {
     Q_OBJECT
 
 public:
-    explicit FinStyleWidget(QWidget* parent = nullptr);
-    ~FinStyleWidget() override;
+    explicit FinPalette(QWidget* parent = nullptr);
+    ~FinPalette() override;
 
     void applyThemePrivate(const QString& inThemeName = "dark");
 
@@ -23,56 +31,22 @@ public:
     void updatePaletteColor() const;
 
 private:
-    Q_PROPERTY(QColor windowColor READ getWindowColor WRITE setWindowColor)
-    Q_PROPERTY(QColor windowTextColor READ getWindowTextColor WRITE setWindowTextColor)
-    Q_PROPERTY(QColor baseColor READ getBaseColor WRITE setBaseColor)
-    Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor)
-    Q_PROPERTY(QColor buttonColor READ getButtonColor WRITE setButtonColor)
-    Q_PROPERTY(QColor buttonTextColor READ getButtonTextColor WRITE setButtonTextColor)
-    Q_PROPERTY(QColor highlightColor READ getHighlightColor WRITE setHighlightColor)
-    Q_PROPERTY(QColor highlightedTextColor READ getHighlightedTextColor WRITE setHighlightedTextColor)
-    Q_PROPERTY(QColor linkColor READ getLinkColor WRITE setLinkColor)
-    Q_PROPERTY(QColor disableColor READ getDisableColor WRITE setDisableColor)
+    QSS_PALETTE_COLOR(windowColor);
+    QSS_PALETTE_COLOR(windowTextColor);
+    QSS_PALETTE_COLOR(baseColor);
+    QSS_PALETTE_COLOR(textColor);
+    QSS_PALETTE_COLOR(buttonColor);
+    QSS_PALETTE_COLOR(buttonTextColor);
+    QSS_PALETTE_COLOR(highlightColor);
+    QSS_PALETTE_COLOR(highlightedTextColor);
+    QSS_PALETTE_COLOR(linkColor);
 
-    void setWindowColor(const QColor& inColor);
-    void setWindowTextColor(const QColor& inColor);
-    void setBaseColor(const QColor& inColor);
-    void setTextColor(const QColor& inColor);
-    void setButtonColor(const QColor& inColor);
-    void setButtonTextColor(const QColor& inColor);
-    void setHighlightColor(const QColor& inColor);
-    void setHighlightedTextColor(const QColor& inColor);
-    void setLinkColor(const QColor& inColor);
-    void setDisableColor(const QColor& inColor);
-
-    QColor getWindowColor() const;
-    QColor getWindowTextColor() const;
-    QColor getBaseColor() const;
-    QColor getTextColor() const;
-    QColor getButtonColor() const;
-    QColor getButtonTextColor() const;
-    QColor getHighlightColor() const;
-    QColor getHighlightedTextColor() const;
-    QColor getLinkColor() const;
-    QColor getDisableColor() const;
-    // Color
-
-    QColor _windowColor;
-    QColor _windowTextColor;
-    QColor _baseColor;
-    QColor _textColor;
-    QColor _buttonColor;
-    QColor _buttonTextColor;
-    QColor _highlightColor;
-    QColor _highlightedTextColor;
-    QColor _linkColor;
-    QColor _disableColor;
-    
+    QSS_PALETTE_COLOR(disableColor);
 };
 
 #include "StyleManger.moc"
 
-FinStyleWidget::FinStyleWidget(QWidget* parent): IFinWidget(parent)
+FinPalette::FinPalette(QWidget* parent): IFinWidget(parent)
 {
     _windowColor          = QColor(53, 53, 53);
     _windowTextColor      = Qt::white;
@@ -80,13 +54,13 @@ FinStyleWidget::FinStyleWidget(QWidget* parent): IFinWidget(parent)
     _textColor            = Qt::white;
     _buttonColor          = QColor(53, 53, 53);
     _buttonTextColor      = Qt::white;
-    _highlightColor       = QColor(142, 45, 197).lighter();
+    _highlightColor       = QColor(198, 99, 255);
     _highlightedTextColor = Qt::black;
     _linkColor            = QColor(0x6ba7f7);
     _disableColor         = QColor(76, 76, 76);
 }
 
-FinStyleWidget::~FinStyleWidget() {
+FinPalette::~FinPalette() {
 }
 
 StyleManger::StyleManger(QObject* parent) : QObject(parent)
@@ -98,12 +72,12 @@ StyleManger::~StyleManger() {
 
 void StyleManger::applyTheme(const QString& inThemeName)
 {
-    FinStyleWidget finManger;
+    FinPalette finManger;
 
     finManger.applyThemePrivate(inThemeName);
 }
 
-void FinStyleWidget::applyThemePrivate(const QString& inThemeName)
+void FinPalette::applyThemePrivate(const QString& inThemeName)
 {
     // hide 상태에서도 qss의 qproperty 항목 로드를 보장하기 위해 스타일 적용 전 호출.
     ensurePolished();
@@ -167,7 +141,7 @@ void FinStyleWidget::applyThemePrivate(const QString& inThemeName)
     }
 }
 
-QString FinStyleWidget::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
+QString FinPalette::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
 {
     QString res = templateTheme;
     for (const auto& [colorName, colorValue] : colors)
@@ -177,7 +151,7 @@ QString FinStyleWidget::applyThemeColor(const QString& templateTheme, const std:
     return res;
 }
 
-void FinStyleWidget::updatePaletteColor() const
+void FinPalette::updatePaletteColor() const
 {
     QPalette qPalette;
 
@@ -202,25 +176,3 @@ void FinStyleWidget::updatePaletteColor() const
 
     QApplication::setPalette(qPalette);
 }
-
-void FinStyleWidget::setWindowColor(const QColor& inColor) { _windowColor = inColor; }
-void FinStyleWidget::setWindowTextColor(const QColor& inColor) { _windowTextColor = inColor; }
-void FinStyleWidget::setBaseColor(const QColor& inColor) { _baseColor = inColor; }
-void FinStyleWidget::setTextColor(const QColor& inColor) { _textColor = inColor; }
-void FinStyleWidget::setButtonColor(const QColor& inColor) { _buttonColor = inColor; }
-void FinStyleWidget::setButtonTextColor(const QColor& inColor) { _buttonTextColor = inColor; }
-void FinStyleWidget::setHighlightColor(const QColor& inColor) { _highlightColor = inColor; }
-void FinStyleWidget::setHighlightedTextColor(const QColor& inColor) { _highlightedTextColor = inColor; }
-void FinStyleWidget::setLinkColor(const QColor& inColor) { _linkColor = inColor; }
-void FinStyleWidget::setDisableColor(const QColor& inColor) { _disableColor = inColor; }
-
-QColor FinStyleWidget::getWindowColor() const { return _windowColor; }
-QColor FinStyleWidget::getWindowTextColor() const { return _windowTextColor; }
-QColor FinStyleWidget::getBaseColor() const { return _baseColor; }
-QColor FinStyleWidget::getTextColor() const { return _textColor; }
-QColor FinStyleWidget::getButtonColor() const { return _buttonColor; }
-QColor FinStyleWidget::getButtonTextColor() const { return _buttonTextColor; }
-QColor FinStyleWidget::getHighlightColor() const { return _highlightColor; }
-QColor FinStyleWidget::getHighlightedTextColor() const { return _highlightedTextColor; }
-QColor FinStyleWidget::getLinkColor() const { return _linkColor; }
-QColor FinStyleWidget::getDisableColor() const { return _disableColor; }

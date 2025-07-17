@@ -1,4 +1,25 @@
 /* -------------------------------- */
+/* Palette Color*/
+FinPalette
+{
+  qproperty-windowColor: rgba(53, 53, 53, 1);
+  qproperty-windowTextColor: white;
+  qproperty-baseColor: rgba(42, 42, 42, 1);
+  qproperty-textColor: white;
+  qproperty-buttonColor: rgba(53, 53, 53, 1);
+  qproperty-buttonTextColor: white;
+  qproperty-highlightColor: rgba(198, 99, 255, 1);
+  qproperty-highlightedTextColor: black;
+  qproperty-linkColor: rgba(107, 167, 247, 1);
+  qproperty-linkColor: rgba(255, 238, 0, 1);
+  qproperty-disableColor: rgba(76, 76, 76, 1);
+  
+  qproperty-highlightedTextColor: rgba(250, 250, 250, 0.93);
+  qproperty-highlightColor:rgba(36, 91, 130, 0.83);
+}
+
+
+/* -------------------------------- */
 /* QPushButton */
 QPushButton
 {
@@ -298,9 +319,3 @@ FinToolTipBallon
   qproperty-borderColor: rgba(168, 168, 168, 1);
 }
 
-FinTranslatorMainWidget,
-FinStyle
-{
-  qproperty-linkColor: rgba(255, 238, 0, 1);
-  /* qproperty-windowColor: rgba(50, 55, 60, 1); */
-}

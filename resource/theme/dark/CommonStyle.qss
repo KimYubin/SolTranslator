@@ -297,3 +297,10 @@ FinToolTipBallon
   qproperty-backgroundColor: rgba(32, 32, 32, 1);
   qproperty-borderColor: rgba(168, 168, 168, 1);
 }
+
+FinTranslatorMainWidget,
+FinStyle
+{
+  qproperty-linkColor: rgba(255, 238, 0, 1);
+  /* qproperty-windowColor: rgba(50, 55, 60, 1); */
+}

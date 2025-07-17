@@ -44,12 +44,10 @@ void noHintingFont(T* inOutWidget)
 
 }
 
-/*
 void Fin::noHintingFont(QWidget* inOutWidget)
 {
-    // Fin::Internal::noHintingFont(inOutWidget);
+    Fin::Internal::noHintingFont(inOutWidget);
 }
-*/
 
 void Fin::noHintingFont()
 {

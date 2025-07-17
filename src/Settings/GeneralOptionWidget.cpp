@@ -14,6 +14,8 @@
 
 #include "ui_GeneralOptionWidget.h"
 
+#include "Managers/StyleManger.h"
+
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
@@ -89,7 +91,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         themeButton->setCheckable(false);
         connect(themeButton, &QPushButton::clicked, this, []()
         {
-            FinTranslatorMainWidget::applyTheme();
+            StyleManger::applyTheme();
         });
         shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
     }

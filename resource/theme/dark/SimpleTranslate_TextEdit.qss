@@ -12,7 +12,7 @@
 #SimpleTranslatePopup span
 {
   /* text-decoration: underline;  */
-  color:#6ba7f7;
+  color:#ff0000;
 }
 #SimpleTranslatePopup body
 {

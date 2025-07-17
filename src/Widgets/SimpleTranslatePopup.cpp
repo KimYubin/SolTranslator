@@ -128,17 +128,14 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 {
     QTextDocument* doc = ui->resultText->document();
 
-    // 링크 색상 변경
-    const QString colorHex      = QString("#6ba7f7");
-    const QColor hyperLinkColor = QColor(colorHex);
-
+    // 링크와 코드블록을 마크다운 스타일에서 html 스타일로 변경
     QString md = inMarkdownStr;
 
     const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
     QStringList monoFontList = doc->defaultFont().families();
-    if (monoFontList.size()>=2)
+    if (monoFontList.size() >= 2)
     {
         monoFontList.swapItemsAt(0, 1);
     }
@@ -172,33 +169,6 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
 
-    // 링크 색상 변경
-    int loIdx = 0;
-    int hiIdx = 0;
-    while (cursor.atEnd() == false)
-    {
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-        const bool bIsAnchor = cursor.charFormat().isAnchor();
-        if (bIsAnchor)
-        {
-            hiIdx = cursor.position();
-        }
-        if (bIsAnchor == false || cursor.atEnd() == false)
-        {
-            if (loIdx < hiIdx)
-            {
-                // word 내부 부분 링크 대응
-                cursor.setPosition(loIdx);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, hiIdx - loIdx);
-                QTextCharFormat prevLinkFormat = cursor.charFormat();
-                prevLinkFormat.setForeground(QBrush(hyperLinkColor));
-                cursor.mergeCharFormat(prevLinkFormat);
-            }
-
-            loIdx = cursor.position();
-            hiIdx = loIdx;
-        }
-    }
 }
 
 void SimpleTranslatePopup::setTextEditSize(const QSize& inTextEditSize)

@@ -35,6 +35,8 @@ qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
+        src/Managers/StyleManger.cpp
+        src/Managers/StyleManger.h
 )
 
 # Android 환경일 경우에만 패키지 소스 디렉토리 설정

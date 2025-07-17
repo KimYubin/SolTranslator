@@ -18,7 +18,7 @@ namespace Fin
  */
 bool isThis(const QObject* inThis, const QObject* inOther);
 
-
+void noHintingFont(QWidget* inOutWidget);
 /** 앱 전체 기본 QFont 셋팅을 유지하면서 PreferNoHinting으로 설정합니다. */
 void noHintingFont();
 

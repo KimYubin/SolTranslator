@@ -14,6 +14,8 @@
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/TranslateManager.h"
 
+#include "Managers/StyleManger.h"
+
 #include "Widgets/FinTranslatorMainWidget.h"
 
 FinTranslatorCore* FinTranslatorCore::_self = nullptr;
@@ -40,9 +42,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     loadCache();
 
-    // theme font
-    FinTranslatorMainWidget::applyTheme();
-
+    StyleManger::applyTheme();
     // generate GUI widget
     _finMainWidget = new FinTranslatorMainWidget();
 

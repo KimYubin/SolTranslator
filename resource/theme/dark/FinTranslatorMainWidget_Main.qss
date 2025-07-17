@@ -103,6 +103,7 @@ color: rgb(220, 222, 223);
 #FinTranslatorMainWidget
 {
   background-color: rgba(50, 55, 60, 1);
+  
 }
 
 #FinTranslatorMainWidget  QSplitter {

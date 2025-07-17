@@ -33,6 +33,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 {
     qApp->setQuitOnLastWindowClosed(false);
 
+    // theme font
+    // applyTheme();
+
     ui->setupUi(this);
 
     setWindowTitle(tr("FinTranslator"));
@@ -209,13 +212,21 @@ void FinTranslatorMainWidget::applyTheme(const QString& inThemeName)
     }
     if (newStyleSheet.isEmpty() == false)
     {
+        // hide 상태에서도 qss의 qproperty 항목 로드를 보장하기 위해
+        // 스타일 적용 전, 폴리싱 보장 처리합니다.
+        QWidgetList allWidgetList = qApp->allWidgets();
+        for (const QWidget* childWidget : allWidgetList)
+        {
+            childWidget->ensurePolished();
+        }
+        
         qApp->setStyleSheet(newStyleSheet);
+        updatePaletteColor();
         Fin::noHintingFont();
 
-        QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)
         {
-            childWidget->repaint();
+            childWidget->update();
         }
     }
 }
@@ -439,3 +450,65 @@ void FinTranslatorMainWidget::popupTrayMenu()
         _trayIcon->contextMenu()->popup(popupGeo.topLeft());
     }
 }
+
+
+
+QColor FinTranslatorMainWidget::_windowColor          = QColor(53, 53, 53);
+QColor FinTranslatorMainWidget::_windowTextColor      = Qt::white;
+QColor FinTranslatorMainWidget::_baseColor            = QColor(42, 42, 42);
+QColor FinTranslatorMainWidget::_textColor            = Qt::white;
+QColor FinTranslatorMainWidget::_buttonColor          = QColor(53, 53, 53);
+QColor FinTranslatorMainWidget::_buttonTextColor      = Qt::white;
+QColor FinTranslatorMainWidget::_highlightColor       = QColor(142, 45, 197).lighter();
+QColor FinTranslatorMainWidget::_highlightedTextColor = Qt::black;
+QColor FinTranslatorMainWidget::_linkColor            = QColor(0x6ba7f7);
+QColor FinTranslatorMainWidget::_disableColor         = QColor(76, 76, 76);
+
+
+void FinTranslatorMainWidget::updatePaletteColor()
+{
+    QPalette qPalette;
+
+    qPalette.setColor(QPalette::Window,           _windowColor);
+    qPalette.setColor(QPalette::WindowText,       _windowTextColor);
+    qPalette.setColor(QPalette::Base,             _baseColor);
+    qPalette.setColor(QPalette::Text,             _textColor);
+    qPalette.setColor(QPalette::Button,           _buttonColor);
+    qPalette.setColor(QPalette::ButtonText,       _buttonTextColor);
+    qPalette.setColor(QPalette::Highlight,        _highlightColor);
+    qPalette.setColor(QPalette::HighlightedText,  _highlightedTextColor);
+    qPalette.setColor(QPalette::Link,             _linkColor);
+
+    qPalette.setColor(QPalette::Disabled, QPalette::Window, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::WindowText, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Base, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Text, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Button, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::ButtonText, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Highlight, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, _disableColor);
+
+    QApplication::setPalette(qPalette);
+}
+
+void FinTranslatorMainWidget::setWindowColor(const QColor& inColor) { _windowColor = inColor; }
+void FinTranslatorMainWidget::setWindowTextColor(const QColor& inColor) { _windowTextColor = inColor; }
+void FinTranslatorMainWidget::setBaseColor(const QColor& inColor) { _baseColor = inColor; }
+void FinTranslatorMainWidget::setTextColor(const QColor& inColor) { _textColor = inColor; }
+void FinTranslatorMainWidget::setButtonColor(const QColor& inColor) { _buttonColor = inColor; }
+void FinTranslatorMainWidget::setButtonTextColor(const QColor& inColor) { _buttonTextColor = inColor; }
+void FinTranslatorMainWidget::setHighlightColor(const QColor& inColor) { _highlightColor = inColor; }
+void FinTranslatorMainWidget::setHighlightedTextColor(const QColor& inColor) { _highlightedTextColor = inColor; }
+void FinTranslatorMainWidget::setLinkColor(const QColor& inColor) { _linkColor = inColor; }
+void FinTranslatorMainWidget::setDisableColor(const QColor& inColor) { _disableColor = inColor; }
+
+QColor FinTranslatorMainWidget::getWindowColor() const { return _windowColor; }
+QColor FinTranslatorMainWidget::getWindowTextColor() const { return _windowTextColor; }
+QColor FinTranslatorMainWidget::getBaseColor() const { return _baseColor; }
+QColor FinTranslatorMainWidget::getTextColor() const { return _textColor; }
+QColor FinTranslatorMainWidget::getButtonColor() const { return _buttonColor; }
+QColor FinTranslatorMainWidget::getButtonTextColor() const { return _buttonTextColor; }
+QColor FinTranslatorMainWidget::getHighlightColor() const { return _highlightColor; }
+QColor FinTranslatorMainWidget::getHighlightedTextColor() const { return _highlightedTextColor; }
+QColor FinTranslatorMainWidget::getLinkColor() const { return _linkColor; }
+QColor FinTranslatorMainWidget::getDisableColor() const { return _disableColor; }

@@ -131,8 +131,6 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     // 링크와 코드블록을 마크다운 스타일에서 html 스타일로 변경
     QString md = inMarkdownStr;
 
-    const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
-    const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
     QStringList monoFontList = doc->defaultFont().families();
     if (monoFontList.size() >= 2)
@@ -147,27 +145,47 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     }
     codeFontFamilies += ";";
 
+    const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
+
+    // 문단 코드
+    const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
     QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(inMarkdownStr);
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
 
-        QString original  = match.captured(0); // 전체 패턴 일치
-        QString codeBlock = match.captured(1); // 백틱 내부
+        QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
+        QString codeBlock = match.captured(1); // 백틱 내부만
 
-        // html 스타일 링크로 변경
+        // 코드 내부에 링크가 있다면, html 스타일 링크로 변경
         QString modified = codeBlock.toHtmlEscaped();
         modified.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
 
         // 원래 코드 블록 전체를 수정된 내용으로 대체
         // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original, "\n<pre style=\"white-space: pre-wrap;" + codeFontFamilies + " \">\n" + modified + "</pre>");
+        md.replace(original, "\n<pre style=\"white-space: pre-wrap; background-color: rgba(29,29,29,1); " + codeFontFamilies + " \">\n" + modified + "</pre>");
+    }
+
+    // 단어 코드 스니펫
+    const QRegularExpression codePattern("`(.*?)`", QRegularExpression::DotMatchesEverythingOption);
+    it = codePattern.globalMatch(inMarkdownStr);
+    while (it.hasNext())
+    {
+        QRegularExpressionMatch match = it.next();
+
+        QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
+        QString codeBlock = match.captured(1); // 백틱 내부만
+
+        // 코드 내부에 링크가 있다면, html 스타일 링크로 변경
+        QString modified = codeBlock.toHtmlEscaped();
+        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
+
+        // 원래 코드 블록 전체를 수정된 내용으로 대체
+        // 백틱을 html 스타일 코드 인용으로 변경
+        md.replace(original, "<code style= \"" + codeFontFamilies + "background-color: rgba(29,29,29,1); \">" + modified + "</code>");
     }
 
     doc->setMarkdown(md);
-
-    QTextCursor cursor(doc);
-    cursor.movePosition(QTextCursor::Start);
 
 }
 

@@ -41,6 +41,11 @@ private:
     QSS_PALETTE_COLOR(highlightedTextColor);
     QSS_PALETTE_COLOR(linkColor);
 
+    // focus out
+    QSS_PALETTE_COLOR(inact_highlightColor);
+    QSS_PALETTE_COLOR(inact_highlightedTextColor);
+
+    // 비활성화
     QSS_PALETTE_COLOR(disableColor);
 };
 
@@ -51,13 +56,17 @@ FinPalette::FinPalette(QWidget* parent): IFinWidget(parent)
     _windowColor          = QColor(53, 53, 53);
     _windowTextColor      = Qt::white;
     _baseColor            = QColor(42, 42, 42);
-    _textColor            = Qt::white;
+    _textColor            = QColor(250, 250, 250, 237);
     _buttonColor          = QColor(53, 53, 53);
-    _buttonTextColor      = Qt::white;
-    _highlightColor       = QColor(198, 99, 255);
-    _highlightedTextColor = Qt::black;
-    _linkColor            = QColor(0x6ba7f7);
-    _disableColor         = QColor(76, 76, 76);
+    _buttonTextColor      = QColor(250, 250, 250, 237);
+    _highlightColor       = QColor(36, 91, 130, 211);
+    _highlightedTextColor = QColor(250, 250, 250, 237);
+    _linkColor            = QColor(107, 167, 247);
+
+    _inact_highlightColor       = QColor(146, 146, 146, 145);
+    _inact_highlightedTextColor = QColor(250, 250, 250, 237);
+
+    _disableColor = QColor(76, 76, 76);
 }
 
 FinPalette::~FinPalette() {
@@ -164,6 +173,9 @@ void FinPalette::updatePaletteColor() const
     qPalette.setColor(QPalette::Highlight,        _highlightColor);
     qPalette.setColor(QPalette::HighlightedText,  _highlightedTextColor);
     qPalette.setColor(QPalette::Link,             _linkColor);
+
+    qPalette.setColor(QPalette::Inactive, QPalette::Highlight, _inact_highlightColor);
+    qPalette.setColor(QPalette::Inactive, QPalette::HighlightedText, _inact_highlightedTextColor);
 
     qPalette.setColor(QPalette::Disabled, QPalette::Window, _disableColor);
     qPalette.setColor(QPalette::Disabled, QPalette::WindowText, _disableColor);

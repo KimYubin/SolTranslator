@@ -5,17 +5,19 @@ FinPalette
   qproperty-windowColor: rgba(53, 53, 53, 1);
   qproperty-windowTextColor: white;
   qproperty-baseColor: rgba(42, 42, 42, 1);
-  qproperty-textColor: white;
+  qproperty-textColor: rgba(250, 250, 250, 0.93);
   qproperty-buttonColor: rgba(53, 53, 53, 1);
-  qproperty-buttonTextColor: white;
-  qproperty-highlightColor: rgba(198, 99, 255, 1);
-  qproperty-highlightedTextColor: black;
-  qproperty-linkColor: rgba(107, 167, 247, 1);
-  qproperty-linkColor: rgba(255, 238, 0, 1);
-  qproperty-disableColor: rgba(76, 76, 76, 1);
-  
-  qproperty-highlightedTextColor: rgba(250, 250, 250, 0.93);
+  qproperty-buttonTextColor: rgba(250, 250, 250, 0.93);
   qproperty-highlightColor:rgba(36, 91, 130, 0.83);
+  qproperty-highlightedTextColor: rgba(250, 250, 250, 0.93);  
+  qproperty-linkColor: rgba(107, 167, 247, 1);
+  qproperty-linkColor: rgba(100, 185, 255, 1);
+  /* qproperty-linkColor: rgba(255, 238, 0, 1); */
+
+  qproperty-inact_highlightColor: rgba(146, 146, 146, 0.57);
+  qproperty-inact_highlightedTextColor:rgba(250, 250, 250, 0.93);
+
+  qproperty-disableColor: rgba(76, 76, 76, 1);
 }
 
 

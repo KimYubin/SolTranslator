@@ -6,6 +6,7 @@
 #include <QObject>
 
 
+class QAbstractButton;
 class FinToolTipBallon;
 
 /**
@@ -25,6 +26,8 @@ public:
      * @param inToolTip 툴팁 내용
      */
     static void setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip);
+
+    static void setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip);
 
     explicit FinTooltipFilter(QObject* parent = nullptr);
 

@@ -302,7 +302,7 @@ void SimpleTranslatePopup::setupUI()
 
     constexpr QSize topButtonsSize{24, 24};
     auto getTitleLastColumn = [this]() { return ui->titleLayout->columnCount(); };
-    auto setupTitleButton   = [=, this](QPushButton* inButton, const Qt::Alignment inAlignment, const QString& inToolTip = "")
+    auto setupTitleButton   = [=, this](QPushButton* inButton, const Qt::Alignment inAlignment)
     {
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -312,7 +312,6 @@ void SimpleTranslatePopup::setupUI()
         inButton->setMinimumSize(topButtonsSize);
         inButton->setMaximumSize(topButtonsSize);
         inButton->setFixedSize(topButtonsSize);
-        FinTooltipFilter::setBubbleToolTip(inButton, inToolTip);
 
         inButton->setFocusPolicy(Qt::TabFocus);
         inButton->setFlat(true);
@@ -331,10 +330,11 @@ void SimpleTranslatePopup::setupUI()
     _AlwaysOnButton->setIcon(alwaysIcon);
     _AlwaysOnButton->hide();
 
-    setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft, tr("항상 위 켜기"));
+    setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_AlwaysOnButton, &QPushButton::toggled
           , this, &SimpleTranslatePopup::onAlwaysOnToggle);
+    FinTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기"), tr("항상 위 끄기"));
 
     // ~===========
     // windowModeButton
@@ -343,10 +343,11 @@ void SimpleTranslatePopup::setupUI()
     _windowModeButton->setObjectName("windowModeButton");
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
 
-    setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft, tr("임시창을 일반창으로 승격"));
+    setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_windowModeButton, &QPushButton::toggled
           , this, &SimpleTranslatePopup::onWindowModeToggle);
+    FinTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격"), tr("임시 창모드"));
 
 
     // 좌우 버튼 분리
@@ -361,7 +362,8 @@ void SimpleTranslatePopup::setupUI()
     _minimizedButton->setObjectName("minimizedButton");
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
 
-    setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight, tr("최소화"));
+    setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
+    FinTooltipFilter::setBubbleToolTip(_minimizedButton, tr("최소화"));
     connect(_minimizedButton, &QPushButton::clicked, this, &SimpleTranslatePopup::onMinimized);
 
     // ~===========
@@ -374,8 +376,9 @@ void SimpleTranslatePopup::setupUI()
     maxRestoreIcon.addFile(":/img/restore_button_img", QSize(), QIcon::Normal, QIcon::On);
     _maxRestoreButton->setIcon(maxRestoreIcon);
 
-    setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight, tr("최대화"));
-    connect(_maxRestoreButton, &QPushButton::toggled, this,&SimpleTranslatePopup::onMaxNormalToggle);
+    setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
+    connect(_maxRestoreButton, &QPushButton::toggled, this, &SimpleTranslatePopup::onMaxNormalToggle);
+    FinTooltipFilter::setCheckableButtonToolTip(_maxRestoreButton, tr("최대화"), tr("이전 크기로 복원"));
 
     // ~===========
     // close button
@@ -384,7 +387,8 @@ void SimpleTranslatePopup::setupUI()
     // _closeButton->setIcon(QIcon(":/img/close_button_img"));
     _closeButton->setShortcut(Qt::Key_Escape);
 
-    setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight, tr("닫기"));
+    setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
+    FinTooltipFilter::setBubbleToolTip(_closeButton, tr("닫기"));
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 
@@ -577,17 +581,6 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
 
     manualSizeMode();
 
-    QString toolTip;
-    if (checked)
-    {
-        toolTip = tr("항상 위 끄기");
-    }
-    else
-    {
-        toolTip = tr("항상 위 켜기");
-    }
-    FinTooltipFilter::setBubbleToolTip(_AlwaysOnButton, toolTip);
-
 #ifdef _WIN32
     BOOL bIsSet = SetWindowPos(reinterpret_cast<HWND>(winId())
                              , checked ? HWND_TOPMOST : HWND_NOTOPMOST
@@ -608,19 +601,14 @@ void SimpleTranslatePopup::onAlwaysOnToggle(bool checked)
 
 void SimpleTranslatePopup::onWindowModeToggle(bool checked)
 {
-    QString toolTip;
     if (checked)
     {
-        toolTip = tr("임시 창모드");
         changeNormalWindowMode();
     }
     else
     {
-        toolTip = tr("임시창을 일반창으로 승격");
         changePopupMode();
     }
-
-    FinTooltipFilter::setBubbleToolTip(_windowModeButton, toolTip);
 }
 
 void SimpleTranslatePopup::changeNormalWindowMode()
@@ -692,17 +680,6 @@ void SimpleTranslatePopup::onMaxNormalToggle(const bool bMaximize)
         }
     }
     _bMaximizedMode = bMaximize;
-    
-    QString toolTip;
-    if (bMaximize)
-    {
-        toolTip = tr("이전 크기로 복원");
-    }
-    else
-    {
-        toolTip = tr("최대화");
-    }
-    FinTooltipFilter::setBubbleToolTip(_maxRestoreButton, toolTip);
 }
 
 void SimpleTranslatePopup::onMinimized()

@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QToolTip>
 #include <QVBoxLayout>
+#include <QAbstractButton>
 
 #include <qevent.h>
 
@@ -34,6 +35,7 @@ public:
 
     explicit FinToolTipBallon(QWidget* parent = nullptr);
 
+    void showToolTip(const QWidget* widget);
     void showToolTip(const QString& inText, const QPoint& inPos);
 
 protected:
@@ -94,12 +96,30 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _layout->addWidget(_label);
 }
 
+void FinToolTipBallon::showToolTip(const QWidget* widget)
+{
+    if (widget && widget->isVisible() && widget->toolTip().isEmpty() == false)
+    {
+        // 중앙 상단
+        const QSize widgetSize = widget->size();
+        const QPoint globalPos = widget->mapToGlobal(QPoint(0, 0));
+        const QPoint centerPos = {globalPos.x() + (widgetSize.width() / 2), globalPos.y()};
+
+        showToolTip(widget->toolTip(), centerPos);
+    }
+    else
+    {
+        hide();
+    }
+}
+
 void FinToolTipBallon::showToolTip(const QString& inText, const QPoint& inPos)
 {
     _label->setText(inText);
     _label->adjustSize();
     _label->repaint(); // 이전 문자열 깜빡임 방지
     adjustSize();
+    repaint();
 
     const QPoint newPos = {inPos.x() - (width() / 2), inPos.y() - height()};
     move(newPos);
@@ -238,6 +258,35 @@ void FinTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& 
     inTargetWidget->installEventFilter(new FinTooltipFilter(inTargetWidget));
 }
 
+void FinTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
+{
+    QString currentToolTip = inOnCheckToolTip;
+    if (inTargetWidget->isCheckable())
+    {
+        if (inTargetWidget->isChecked())
+        {
+            currentToolTip = inOffCheckToolTip;
+        }
+    }
+
+    setBubbleToolTip(inTargetWidget, currentToolTip);
+
+    connect(inTargetWidget, &QAbstractButton::toggled, inTargetWidget, [inTargetWidget, inOnCheckToolTip, inOffCheckToolTip](const bool checked)
+    {
+        QString toolTip;
+        if (checked)
+        {
+            toolTip = inOffCheckToolTip;
+        }
+        else
+        {
+            toolTip = inOnCheckToolTip;
+        }
+        inTargetWidget->setToolTip(toolTip);
+        FinToolTipBallon::instance()->showToolTip(inTargetWidget);
+    });
+}
+
 FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
 {
 }
@@ -256,17 +305,15 @@ bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
         const QString tooltipText = widget->toolTip();
         if (tooltipText.isEmpty() == false)
         {
-            // 중앙 상단
-            const QSize widgetSize = widget->size();
-            const QPoint globalPos = widget->mapToGlobal(QPoint(0, 0));
-            const QPoint centerPos = {globalPos.x() + (widgetSize.width() / 2), globalPos.y()};
-
-            FinToolTipBallon::instance()->showToolTip(tooltipText, centerPos);
-
-            return true; // 기본 툴팁을 차단
+            FinToolTipBallon::instance()->showToolTip(widget);
         }
+
+        return true; // 기본 툴팁을 차단
     }
-    else if (event->type() == QEvent::Leave)
+    else if (event->type() == QEvent::Leave
+        || event->type() == QEvent::Hide
+        || event->type() == QEvent::Close
+        || event->type() == QEvent::Quit)
     {
         FinToolTipBallon::instance()->hide();
     }

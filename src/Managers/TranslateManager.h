@@ -21,6 +21,8 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(FinTranslatorCore* parent);
 
+    TranslateUnit* executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo);
+    
     QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
     
     void translateSimple(const QMimeData* inMimeData

@@ -12,8 +12,12 @@
 #include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
-#include "EngineUnits/TrUnitFactory.h"
+
 #include "EngineUnits/TranslateUnit.h"
+#include "EngineUnits/FinPoint/FinPointTrUnit.h"
+#include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
+#include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+
 #include "Widgets/SimpleTranslatePopup.h"
 
 
@@ -22,10 +26,58 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
     
 }
 
+TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo)
+{
+    TranslateUnit* trUnit = nullptr;
+    const EngineType currentEngine = finConfig.getCurrentEngineType();
+    switch (currentEngine)
+    {
+    case EngineType::Default: // break;
+    case EngineType::Google:
+        trUnit = new GoogleTrUnit(inTranslateRequestInfo, this);
+        break;
+    case EngineType::OpenAI:
+        trUnit = new OpenAiTrUnit(inTranslateRequestInfo, this);
+        break;
+    case EngineType::FinPoint:
+        trUnit = new FinPointTrUnit(inTranslateRequestInfo, this);
+        break;
+    case EngineType::FinPointDebug:
+    {
+        FinPointTrUnit* finPointTr = new FinPointTrUnit(inTranslateRequestInfo, this);
+        finPointTr->setDebugMode(true);
+        trUnit = finPointTr;
+        break;
+    }
+    case EngineType::Size:
+        break;
+    }
+
+    // string 기반 enum과 class 매칭 유효성 검사
+    bool bValid = false;
+    if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
+    {
+        if (magic_enum::enum_name(currentEngine).find(className))
+        {
+            bValid = true;
+        }
+    }
+    if (bValid == false)
+    {
+        qDebug() << "Invalid engine type";
+    }
+
+    if (trUnit != nullptr)
+    {
+        trUnit->executeTextTranslation();
+    }
+
+    return trUnit;
+}
+
 QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
 {
-    TranslateUnit* transUnit = TrUnitFactory::instance().NewTranslateUnit(inTranslateRequestInfo, this);
-    transUnit->executeTextTranslation();
+    TranslateUnit* transUnit = executeNewTranslateUnit(inTranslateRequestInfo);
 
     return QPointer<TranslateUnit>{transUnit};
 }

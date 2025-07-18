@@ -9,6 +9,8 @@
 #include <QToolTip>
 #include <QVBoxLayout>
 #include <QAbstractButton>
+#include <QPointer>
+#include <QTimer>
 
 #include <qevent.h>
 
@@ -29,8 +31,11 @@ class FinToolTipBallon : public QWidget
 public:
     static FinToolTipBallon* instance()
     {
-        static FinToolTipBallon* ins = new FinToolTipBallon();
-        return ins;
+        if (_ins.isNull())
+        {
+            _ins = new FinToolTipBallon();
+        }
+        return _ins;
     }
 
     explicit FinToolTipBallon(QWidget* parent = nullptr);
@@ -57,7 +62,9 @@ private:
     void   setBorderColor(const QColor inColor);
 
     void updateMargins() const;
-    
+
+    static QPointer<FinToolTipBallon> _ins;
+
     QLabel* _label;
     QVBoxLayout* _layout;
 
@@ -68,7 +75,11 @@ private:
 
     QColor _backgroundColor;
     QColor _borderColor;
+
+    QTimer* _hideTimer;
 };
+
+QPointer<FinToolTipBallon> FinToolTipBallon::_ins = nullptr;
 
 #include "FinToolTip.moc"
 
@@ -94,6 +105,12 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _layout = new QVBoxLayout(this);
     updateMargins();
     _layout->addWidget(_label);
+
+
+    _hideTimer = new QTimer(this);
+    _hideTimer->setInterval(60'000);
+    _hideTimer->setSingleShot(true);
+    connect(_hideTimer, &QTimer::timeout, this, [this]() { hide(); });
 }
 
 void FinToolTipBallon::showToolTip(const QWidget* widget)
@@ -124,6 +141,7 @@ void FinToolTipBallon::showToolTip(const QString& inText, const QPoint& inPos)
     const QPoint newPos = {inPos.x() - (width() / 2), inPos.y() - height()};
     move(newPos);
     show();
+    _hideTimer->start();
 }
 
 void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)

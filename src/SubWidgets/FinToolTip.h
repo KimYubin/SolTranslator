@@ -10,11 +10,8 @@ class FinToolTipBallon;
 
 /**
  * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.
- * 
- * FinTooltipFilter::setBubbleToolTip(widget, "tool tip");
- * 
- * widget->setToolTip("tool tip");
- * widget->installEventFilter(new FinTooltipFilter(qApp));
+ *
+ * @see FinTooltipFilter::setBubbleToolTip(widget, "tool tip");
  */
 class FinTooltipFilter : public QObject
 {

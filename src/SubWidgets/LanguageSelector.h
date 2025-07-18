@@ -3,6 +3,7 @@
 #ifndef LANGUAGESELECTOR_H
 #define LANGUAGESELECTOR_H
 
+#include <QFrame>
 #include <QPointer>
 #include <QWidget>
 
@@ -13,7 +14,7 @@ class QListWidget;
 class QListWidgetItem;
 class QPushButton;
 
-class LanguageSelector : public QWidget
+class LanguageSelector : public QFrame
 {
     Q_OBJECT
 
@@ -21,6 +22,7 @@ public:
     explicit LanguageSelector(QWidget* parent
                             , QWidget* inSizeWidget
                             , const LangType inLangType);
+
     ~LanguageSelector() override;
 
     void setButtonText(const LangType inlangType);

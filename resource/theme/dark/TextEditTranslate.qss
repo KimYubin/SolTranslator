@@ -39,7 +39,7 @@
 
 
 /* 언어 선택 */
-#LanguageSelector QPushButton
+LanguageSelector
 {
   margin-left: 6px;
 }
@@ -170,4 +170,10 @@ QScrollBar::sub-page
   background: transparent;
   width: 0px;
   height: 0px;
+}
+
+
+QPushButton#languageSwapButton
+{
+  font-size: 20px;
 }

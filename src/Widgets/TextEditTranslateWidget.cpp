@@ -60,6 +60,8 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     // 언어 교환 버튼
     const bool bIsAuto = (finConfig.getTextSrcLang() == LangType::AUTO);
     ui->languageSwapButton->setEnabled(bIsAuto == false);
+    ui->languageSwapButton->setAccessibleName(tr("언어 바꾸기"));
+    ui->languageSwapButton->setAccessibleDescription(tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다."));
     FinTooltipFilter::setBubbleToolTip(ui->languageSwapButton, tr("언어 바꾸기"));
     connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {

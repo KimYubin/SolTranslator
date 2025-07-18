@@ -70,7 +70,7 @@ private:
 LanguageSelector::LanguageSelector(QWidget* parent
                                  , QWidget* inSizeWidget
                                  , const LangType inLangType)
-    : QWidget(parent)
+    : QFrame(parent)
     , _sizeWidget(inSizeWidget)
 {
     setObjectName("LanguageSelector");
@@ -84,6 +84,7 @@ LanguageSelector::LanguageSelector(QWidget* parent
 
     _button = new QPushButton(this);
     setButtonText(inLangType); // onSelectedLanguage(inLangType);
+
     _mainLayout->addWidget(_button, 0, 0, Qt::AlignLeft);
 
 

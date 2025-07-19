@@ -42,6 +42,8 @@ public:
 
     void showToolTip(const QWidget* widget);
     void showToolTip(const QString& inText, const QPoint& inPos);
+    void hideTipImmediately();
+    void hideTipDelay();
 
 protected:
     virtual void paintEvent(QPaintEvent*) override;
@@ -76,7 +78,9 @@ private:
     QColor _backgroundColor;
     QColor _borderColor;
 
-    QTimer* _hideTimer;
+    QTimer _expireTimer;
+    QTimer _hideTimer;
+    
 };
 
 QPointer<FinToolTipBallon> FinToolTipBallon::_ins = nullptr;
@@ -107,10 +111,12 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _layout->addWidget(_label);
 
 
-    _hideTimer = new QTimer(this);
-    _hideTimer->setInterval(60'000);
-    _hideTimer->setSingleShot(true);
-    connect(_hideTimer, &QTimer::timeout, this, [this]() { hide(); });
+    _expireTimer.setInterval(60'000);
+    _expireTimer.setSingleShot(true);
+    _hideTimer.setInterval(300);
+    _hideTimer.setSingleShot(true);
+    connect(&_expireTimer, &QTimer::timeout, this, &FinToolTipBallon::hideTipImmediately);
+    connect(&_hideTimer, &QTimer::timeout, this, &FinToolTipBallon::hideTipImmediately);
 }
 
 void FinToolTipBallon::showToolTip(const QWidget* widget)
@@ -126,7 +132,7 @@ void FinToolTipBallon::showToolTip(const QWidget* widget)
     }
     else
     {
-        hide();
+        hideTipDelay();
     }
 }
 
@@ -141,7 +147,20 @@ void FinToolTipBallon::showToolTip(const QString& inText, const QPoint& inPos)
     const QPoint newPos = {inPos.x() - (width() / 2), inPos.y() - height()};
     move(newPos);
     show();
-    _hideTimer->start();
+    _expireTimer.start();
+    _hideTimer.stop();
+}
+
+void FinToolTipBallon::hideTipImmediately()
+{
+    close();
+    deleteLater();
+}
+
+void FinToolTipBallon::hideTipDelay()
+{
+    if (_hideTimer.isActive() == false)
+        _hideTimer.start(300);
 }
 
 void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
@@ -311,7 +330,7 @@ FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
 
 bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::ToolTip)
+    if (event->type() == QEvent::Enter || event->type() == QEvent::ToolTip)
     {
         const QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
         const QWidget* widget = qobject_cast<QWidget*>(obj);
@@ -333,7 +352,7 @@ bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
         || event->type() == QEvent::Close
         || event->type() == QEvent::Quit)
     {
-        FinToolTipBallon::instance()->hide();
+        FinToolTipBallon::instance()->hideTipImmediately();
     }
 
     return QObject::eventFilter(obj, event);

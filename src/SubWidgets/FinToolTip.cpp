@@ -151,6 +151,7 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     adjustSize();
     repaint();
 
+    // 위치 계산
     const QRect wRect       = widget->rect();
     const QPoint wGlobalPos = widget->mapToGlobal(wRect.topLeft());
     const QPoint wCenterPos = {wGlobalPos.x() + (wRect.width() / 2), wGlobalPos.y() + (wRect.height() / 2)};
@@ -159,10 +160,11 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     const int topBottomX = wCenterPos.x() - (width() / 2);
     const int lefRightY  = wCenterPos.y() - (height() / 2);
 
-    const int topY    = wGlobalPos.y() - height();
-    const int bottomY = wGlobalPos.y() + wRect.height();
-    const int rightX  = wGlobalPos.x() + wRect.width();
-    const int leftX   = wGlobalPos.x() - width();
+    constexpr int interval = 2;
+    const int topY    = wGlobalPos.y() - height() - interval;
+    const int bottomY = wGlobalPos.y() + wRect.height() + interval;
+    const int rightX  = wGlobalPos.x() + wRect.width() + interval;
+    const int leftX   = wGlobalPos.x() - width() - interval;
 
     const QPoint newTopPos    = {topBottomX, topY};
     const QPoint newRightPos  = {rightX, lefRightY};
@@ -171,80 +173,57 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
 
     const QRect availableGeo = Fin::availableGeometryAt(QCursor::pos());
 
-    QRect current = frameGeometry();
-    current.moveTo(newTopPos);
-
-    auto ppp = [availableGeo](const QRect& inRect)
+    // 교집합 면적 최대값 계산하고, _direction을 업데이트합니다.
+    // 겹치는 면적이 가장 넓은 방향으로 생성합니다.
+    auto checkMaxArea = [availableGeo, this](int inMaxArea, const ShowDirection inNewSD, const QPoint& inNewPos)
     {
-        const QRect intersection  = availableGeo & inRect;
-        const int intersectedArea = intersection.width() * intersection.height();
-        return intersectedArea;
+        auto availGeoInterArea = [availableGeo](const QRect& inRect)
+        {
+            const QRect intersection  = availableGeo & inRect;
+            const int intersectedArea = intersection.width() * intersection.height();
+            return intersectedArea;
+        };
+
+        QRect currentGeo = frameGeometry();
+        currentGeo.moveTo(inNewPos);
+        const int newInterArea = availGeoInterArea(currentGeo);
+        if (inMaxArea < newInterArea)
+        {
+            inMaxArea  = newInterArea;
+            _direction = inNewSD;
+        }
+        return inMaxArea;
     };
-    const QRect intersection  = availableGeo & current;
-    const int intersectedArea = intersection.width() * intersection.height();
-    int maxArea = intersectedArea;
-    _direction = ShowDirection::Top;
 
-    QRect TopG = current; TopG.moveTo(newTopPos); int TopArea = ppp(TopG);
-    if (maxArea < TopArea)
-    {
-        maxArea = TopArea;
-        _direction = ShowDirection::Top;
-    }
-    QRect RightG = current; RightG.moveTo(newRightPos); int RightArea = ppp(RightG);
-        if (maxArea < RightArea)
-    {
-        maxArea = RightArea;
-        _direction = ShowDirection::Right;
-    }
-    
-    QRect BottomG = current; BottomG.moveTo(newBottomPos); int BottomArea = ppp(BottomG);
-        if (maxArea < BottomArea)
-    {
-        maxArea = BottomArea;
-        _direction = ShowDirection::Bottom;
-    }
-    
-    QRect LeftG = current; LeftG.moveTo(newLeftPos); int LeftArea = ppp(LeftG);
-        if (maxArea < LeftArea)
-    {
-        maxArea = LeftArea;
-        _direction = ShowDirection::Left;
-    }
+    int maxArea = 0;
+    _direction  = ShowDirection::Top;
+
+    maxArea = checkMaxArea(maxArea, ShowDirection::Top, newTopPos);
+    maxArea = checkMaxArea(maxArea, ShowDirection::Right, newRightPos);
+    maxArea = checkMaxArea(maxArea, ShowDirection::Bottom, newBottomPos);
+    maxArea = checkMaxArea(maxArea, ShowDirection::Left, newLeftPos);
+
+    QRect current = frameGeometry();
+
+    // 가장 적절한 방향으로 이동
     switch (_direction)
     {
     case ShowDirection::Top:
-    current.moveTo(newTopPos);
+        current.moveTo(newTopPos);
         break;
     case ShowDirection::Right:
-    current.moveTo(newRightPos);
+        current.moveTo(newRightPos);
         break;
     case ShowDirection::Bottom:
-    current.moveTo(newBottomPos);
+        current.moveTo(newBottomPos);
         break;
     case ShowDirection::Left:
-    current.moveTo(newLeftPos);
+        current.moveTo(newLeftPos);
         break;
     }
+
+    // 벗어나면 안쪽으로 이동
     current = Fin::moveToInside(availableGeo, current);
-    //
-    // if (availableGeo.top() > current.top())
-    // {
-    //     current.moveTo(newBottomPos);
-    // }
-    // if (availableGeo.right() < current.right())
-    // {
-    //     current.moveTo(newLeftPos);
-    // }
-    // if (availableGeo.bottom() < current.bottom())
-    // {
-    //     current.moveTo(newTopPos); // 없어도 될듯
-    // }
-    // if (availableGeo.left() > current.left())
-    // {
-    //     current.moveTo(newRightPos);
-    // }
-    
 
     move(current.topLeft());
 

@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QFont>
+#include <QScreen>
 
 
 bool Fin::isThis(const QObject* inThis, const QObject* inOther)
@@ -52,4 +53,35 @@ void Fin::noHintingFont(QWidget* inOutWidget)
 void Fin::noHintingFont()
 {
     Fin::Internal::noHintingFont(qApp);
+}
+
+QRect Fin::availableGeometryAt(const QPoint& inPoint)
+{
+    const QScreen* cursorScreen = qApp->screenAt(inPoint);
+    const QScreen* targetScreen = cursorScreen ? cursorScreen : qApp->primaryScreen();
+
+    return targetScreen ? targetScreen->availableGeometry() : QRect();
+}
+
+QRect Fin::moveToInside(const QRect& outerRect, const QRect& innerRect)
+{
+    QRect res = innerRect;
+    if (outerRect.left() > res.left())
+    {
+        res.moveLeft(outerRect.left());
+    }
+    if (outerRect.top() > res.top())
+    {
+        res.moveTop(outerRect.top());
+    }
+    if (outerRect.right() < res.right())
+    {
+        res.moveRight(outerRect.right());
+    }
+    if (outerRect.bottom() < res.bottom())
+    {
+        res.moveBottom(outerRect.bottom());
+    }
+
+    return res;
 }

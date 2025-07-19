@@ -14,6 +14,8 @@
 
 #include <qevent.h>
 
+#include "FinUtilibrary.h"
+
 
 /** 커스텀 툴팁 말풍선 */
 class FinToolTipBallon : public QWidget
@@ -28,6 +30,8 @@ class FinToolTipBallon : public QWidget
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
     Q_PROPERTY(QColor borderColor READ getBorderColor WRITE setBorderColor)
 
+    static QPointer<FinToolTipBallon> _ins;
+
 public:
     static FinToolTipBallon* instance()
     {
@@ -41,7 +45,7 @@ public:
     explicit FinToolTipBallon(QWidget* parent = nullptr);
 
     void showToolTip(const QWidget* widget);
-    void showToolTip(const QString& inText, const QPoint& inPos);
+    void showToolTipImpl(const QWidget* widget);
     void hideTipImmediately();
     void hideTipDelay();
 
@@ -65,8 +69,6 @@ private:
 
     void updateMargins() const;
 
-    static QPointer<FinToolTipBallon> _ins;
-
     QLabel* _label;
     QVBoxLayout* _layout;
 
@@ -80,7 +82,16 @@ private:
 
     QTimer _expireTimer;
     QTimer _hideTimer;
-    
+
+    enum class ShowDirection
+    {
+        Top
+      , Right
+      , Bottom
+      , Left
+    };
+
+     ShowDirection _direction = ShowDirection::Top;
 };
 
 QPointer<FinToolTipBallon> FinToolTipBallon::_ins = nullptr;
@@ -106,6 +117,7 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
 
 
     _label  = new QLabel(this);
+
     _layout = new QVBoxLayout(this);
     updateMargins();
     _layout->addWidget(_label);
@@ -123,12 +135,7 @@ void FinToolTipBallon::showToolTip(const QWidget* widget)
 {
     if (widget && widget->isVisible() && widget->toolTip().isEmpty() == false)
     {
-        // 중앙 상단
-        const QSize widgetSize = widget->size();
-        const QPoint globalPos = widget->mapToGlobal(QPoint(0, 0));
-        const QPoint centerPos = {globalPos.x() + (widgetSize.width() / 2), globalPos.y()};
-
-        showToolTip(widget->toolTip(), centerPos);
+        showToolTipImpl(widget);
     }
     else
     {
@@ -136,16 +143,111 @@ void FinToolTipBallon::showToolTip(const QWidget* widget)
     }
 }
 
-void FinToolTipBallon::showToolTip(const QString& inText, const QPoint& inPos)
+void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
 {
-    _label->setText(inText);
+    _label->setText(widget->toolTip());
     _label->adjustSize();
     _label->repaint(); // 이전 문자열 깜빡임 방지
     adjustSize();
     repaint();
 
-    const QPoint newPos = {inPos.x() - (width() / 2), inPos.y() - height()};
-    move(newPos);
+    const QRect wRect       = widget->rect();
+    const QPoint wGlobalPos = widget->mapToGlobal(wRect.topLeft());
+    const QPoint wCenterPos = {wGlobalPos.x() + (wRect.width() / 2), wGlobalPos.y() + (wRect.height() / 2)};
+
+    // 상하, 좌우 각각 공유하는 중앙 위치
+    const int topBottomX = wCenterPos.x() - (width() / 2);
+    const int lefRightY  = wCenterPos.y() - (height() / 2);
+
+    const int topY    = wGlobalPos.y() - height();
+    const int bottomY = wGlobalPos.y() + wRect.height();
+    const int rightX  = wGlobalPos.x() + wRect.width();
+    const int leftX   = wGlobalPos.x() - width();
+
+    const QPoint newTopPos    = {topBottomX, topY};
+    const QPoint newRightPos  = {rightX, lefRightY};
+    const QPoint newBottomPos = {topBottomX, bottomY};
+    const QPoint newLeftPos   = {leftX, lefRightY};
+
+    const QRect availableGeo = Fin::availableGeometryAt(QCursor::pos());
+
+    QRect current = frameGeometry();
+    current.moveTo(newTopPos);
+
+    auto ppp = [availableGeo](const QRect& inRect)
+    {
+        const QRect intersection  = availableGeo & inRect;
+        const int intersectedArea = intersection.width() * intersection.height();
+        return intersectedArea;
+    };
+    const QRect intersection  = availableGeo & current;
+    const int intersectedArea = intersection.width() * intersection.height();
+    int maxArea = intersectedArea;
+    _direction = ShowDirection::Top;
+
+    QRect TopG = current; TopG.moveTo(newTopPos); int TopArea = ppp(TopG);
+    if (maxArea < TopArea)
+    {
+        maxArea = TopArea;
+        _direction = ShowDirection::Top;
+    }
+    QRect RightG = current; RightG.moveTo(newRightPos); int RightArea = ppp(RightG);
+        if (maxArea < RightArea)
+    {
+        maxArea = RightArea;
+        _direction = ShowDirection::Right;
+    }
+    
+    QRect BottomG = current; BottomG.moveTo(newBottomPos); int BottomArea = ppp(BottomG);
+        if (maxArea < BottomArea)
+    {
+        maxArea = BottomArea;
+        _direction = ShowDirection::Bottom;
+    }
+    
+    QRect LeftG = current; LeftG.moveTo(newLeftPos); int LeftArea = ppp(LeftG);
+        if (maxArea < LeftArea)
+    {
+        maxArea = LeftArea;
+        _direction = ShowDirection::Left;
+    }
+    switch (_direction)
+    {
+    case ShowDirection::Top:
+    current.moveTo(newTopPos);
+        break;
+    case ShowDirection::Right:
+    current.moveTo(newRightPos);
+        break;
+    case ShowDirection::Bottom:
+    current.moveTo(newBottomPos);
+        break;
+    case ShowDirection::Left:
+    current.moveTo(newLeftPos);
+        break;
+    }
+    current = Fin::moveToInside(availableGeo, current);
+    //
+    // if (availableGeo.top() > current.top())
+    // {
+    //     current.moveTo(newBottomPos);
+    // }
+    // if (availableGeo.right() < current.right())
+    // {
+    //     current.moveTo(newLeftPos);
+    // }
+    // if (availableGeo.bottom() < current.bottom())
+    // {
+    //     current.moveTo(newTopPos); // 없어도 될듯
+    // }
+    // if (availableGeo.left() > current.left())
+    // {
+    //     current.moveTo(newRightPos);
+    // }
+    
+
+    move(current.topLeft());
+
     show();
     _expireTimer.start();
     _hideTimer.stop();
@@ -330,7 +432,7 @@ FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
 
 bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if (event->type() == QEvent::Enter || event->type() == QEvent::ToolTip)
+    if (/*event->type() == QEvent::Enter ||*/ event->type() == QEvent::ToolTip)
     {
         const QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
         const QWidget* widget = qobject_cast<QWidget*>(obj);

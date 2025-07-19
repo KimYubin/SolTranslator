@@ -338,10 +338,7 @@ void FinTranslatorMainWidget::popupTrayMenu()
         // 메뉴 사이즈 계산 유도.
         _trayIcon->contextMenu()->show();
 
-        const QScreen* cursorScreen = qApp->screenAt(_prevMousePos);
-        const QScreen* targetScreen = cursorScreen ? cursorScreen : qApp->primaryScreen();
-
-        const QRect availableGeo = targetScreen ? targetScreen->availableGeometry() : QRect();
+        const QRect availableGeo = Fin::availableGeometryAt(_prevMousePos);
         const QSize contextSize  = _trayIcon->contextMenu()->size();
 
         QPoint popupPos = _prevMousePos;
@@ -350,22 +347,7 @@ void FinTranslatorMainWidget::popupTrayMenu()
         QRect popupGeo = QRect(popupPos, contextSize);
 
         /** 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정. */
-        if (availableGeo.left() > popupGeo.left())
-        {
-            popupGeo.moveLeft(availableGeo.left());
-        }
-        if (availableGeo.top() > popupGeo.top())
-        {
-            popupGeo.moveTop(availableGeo.top());
-        }
-        if (availableGeo.right() < popupGeo.right())
-        {
-            popupGeo.moveRight(availableGeo.right());
-        }
-        if (availableGeo.bottom() < popupGeo.bottom())
-        {
-            popupGeo.moveBottom(availableGeo.bottom());
-        }
+        popupGeo = Fin::moveToInside(availableGeo, popupGeo);
 
         _trayIcon->contextMenu()->popup(popupGeo.topLeft());
     }

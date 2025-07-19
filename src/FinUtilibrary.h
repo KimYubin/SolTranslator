@@ -2,6 +2,7 @@
 
 #ifndef FINUTILIBRARY_H
 #define FINUTILIBRARY_H
+#include <QRect>
 
 
 class QObject;
@@ -22,6 +23,24 @@ void noHintingFont(QWidget* inOutWidget);
 /** 앱 전체 기본 QFont 셋팅을 유지하면서 PreferNoHinting으로 설정합니다. */
 void noHintingFont();
 
+/**
+ * 지정된 point의 screen의 유효한 영역을 반환합니다.
+ * 어떤 screen도 해당되지 않으면, primaryScreen을 시도하고,
+ * 실패시 QRect()을 반홥합니다.
+ * 
+ * @param inPoint 
+ * @return 
+ */
+QRect availableGeometryAt(const QPoint& inPoint);
+
+/**
+ * innerRect을 outerRect 안으로 이동시킵니다.
+ * 
+ * @param outerRect  
+ * @param innerRect 
+ * @return 
+ */
+[[nodiscard]] QRect moveToInside(const QRect& outerRect, const QRect& innerRect);
 }
 
 

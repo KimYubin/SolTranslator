@@ -306,7 +306,7 @@ QToolTip
 #FinToolTipBallon QLabel
 {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(204, 204, 204, 1);
   padding: 4px;
   padding-bottom: 6px;
 }
@@ -316,10 +316,10 @@ FinToolTipBallon
   qproperty-triangleBaseWidth: 8;
   qproperty-triangleHeight: 3;
   qproperty-borderRadius: 4;
-  qproperty-borderWidth: 0.8;
+  qproperty-borderWidth: 0.5;
   qproperty-spacing: 0;
 
   qproperty-backgroundColor: rgba(32, 32, 32, 1);
-  qproperty-borderColor: rgba(168, 168, 168, 1);
+  qproperty-borderColor: rgba(200, 200, 200, 1);
 }
 

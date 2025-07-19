@@ -255,7 +255,7 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
     const QPen qPen(_borderColor, _borderWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter.setPen(qPen);
 
-    const double halfWidth        = width() / 2.0;
+    const double halfWidth        = qFloor(width() / 2.0);
     const double halfTriBaseWidth = _triangleBaseWidth / 2.0;
     const QMargins layoutMargin   = _layout->contentsMargins();
     const QRect lineRect          = rect() - layoutMargin; // 하단 꼬리, 테두리 공간 확보
@@ -268,25 +268,29 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
 
     // 우상단, 둥근 모서리
     path.lineTo(lineRect.right() - _borderRadius, lineRect.top());
-    path.quadTo(lineRect.right(), lineRect.top(), lineRect.right(), lineRect.top() + _borderRadius);
+    path.quadTo(lineRect.right(), lineRect.top()
+              , lineRect.right(), lineRect.top() + _borderRadius);
 
     // 우하단, 둥근 모서리
     path.lineTo(lineRect.right(), lineRect.bottom() - _borderRadius);
-    path.quadTo(lineRect.right(), lineRect.bottom(), lineRect.right() - _borderRadius, lineRect.bottom());
+    path.quadTo(lineRect.right(), lineRect.bottom()
+              , lineRect.right() - _borderRadius, lineRect.bottom());
 
     // 말풍선 꼬리 삼각형
-    path.lineTo(halfWidth + halfTriBaseWidth, lineRect.bottom());
-    path.lineTo(halfWidth, height());
-    path.lineTo(halfWidth - 1, height());
-    path.lineTo(halfWidth - 1 - halfTriBaseWidth, lineRect.bottom());
+    path.lineTo(halfWidth + 0.25 + halfTriBaseWidth, lineRect.bottom());
+    path.lineTo(halfWidth + 0.25, height());
+    path.lineTo(halfWidth - 0.25, height());
+    path.lineTo(halfWidth - 0.25 - halfTriBaseWidth, lineRect.bottom());
 
     // 좌하단, 둥근 모서리
     path.lineTo(lineRect.left() + _borderRadius, lineRect.bottom());
-    path.quadTo(lineRect.left(), lineRect.bottom(), lineRect.left(), lineRect.bottom() - _borderRadius);
+    path.quadTo(lineRect.left(), lineRect.bottom()
+              , lineRect.left(), lineRect.bottom() - _borderRadius);
 
     // 좌상단, 둥근 모서리
     path.lineTo(lineRect.left(), lineRect.top() + _borderRadius);
-    path.quadTo(lineRect.left(), lineRect.top(), lineRect.left() + _borderRadius, lineRect.top());
+    path.quadTo(lineRect.left(), lineRect.top()
+              , lineRect.left() + _borderRadius, lineRect.top());
 
 
     path.closeSubpath();

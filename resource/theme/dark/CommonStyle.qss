@@ -314,7 +314,7 @@ QToolTip
 FinToolTipBallon
 {
   qproperty-triangleBaseWidth: 8;
-  qproperty-triangleHeight: 4;
+  qproperty-triangleHeight: 3;
   qproperty-borderRadius: 4;
   qproperty-borderWidth: 0.8;
   qproperty-backgroundColor: rgba(32, 32, 32, 1);

@@ -27,6 +27,7 @@ class FinToolTipBallon : public QWidget
     Q_PROPERTY(int triangleHeight READ getTriangleHeight WRITE setTriangleHeight)
     Q_PROPERTY(int borderRadius READ getBorderRadius WRITE setBorderRadius)
     Q_PROPERTY(float borderWidth READ getBorderWidth WRITE setBorderWidth)
+    Q_PROPERTY(int spacing READ getSpacing WRITE setSpacing)
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
     Q_PROPERTY(QColor borderColor READ getBorderColor WRITE setBorderColor)
 
@@ -62,6 +63,8 @@ private:
     void   setBorderRadius(const int inRad);
     float  getBorderWidth() const;
     void   setBorderWidth(const float inWidth);
+    int    getSpacing() const;
+    void   setSpacing(const int inSpacing);
     QColor getBackgroundColor() const;
     void   setBackgroundColor(const QColor inColor);
     QColor getBorderColor() const;
@@ -77,6 +80,9 @@ private:
     int _borderRadius;
     qreal _borderWidth;
 
+    // 위젯과의 간격
+    int _spacing;
+
     QColor _backgroundColor;
     QColor _borderColor;
 
@@ -91,7 +97,11 @@ private:
       , Left
     };
 
-     ShowDirection _direction = ShowDirection::Top;
+    QMargins triMargins(const ShowDirection inDirection) const;
+
+    // 툴팁의 생성 위치. 타겟 위젯에서 바라보는 방향.
+    ShowDirection _direction = ShowDirection::Top;
+    QPoint triVertex;
 };
 
 QPointer<FinToolTipBallon> FinToolTipBallon::_ins = nullptr;
@@ -111,6 +121,7 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _triangleHeight    = 4;
     _borderRadius      = 4;
     _borderWidth       = 0.5f;
+    _spacing           = 0;
 
     _backgroundColor = QColor(0, 0, 150, 230);
     _borderColor     = QColor(255, 255, 255, 230);
@@ -147,9 +158,12 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
 {
     _label->setText(widget->toolTip());
     _label->adjustSize();
-    _label->repaint(); // 이전 문자열 깜빡임 방지
+    _label->repaint();
     adjustSize();
     repaint();
+
+    // 라벨 지오메트리 계산
+    const QRect labelRect = geometry().marginsRemoved(_layout->contentsMargins());
 
     // 위치 계산
     const QRect wRect       = widget->rect();
@@ -157,14 +171,14 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     const QPoint wCenterPos = {wGlobalPos.x() + (wRect.width() / 2), wGlobalPos.y() + (wRect.height() / 2)};
 
     // 상하, 좌우 각각 공유하는 중앙 위치
-    const int topBottomX = wCenterPos.x() - (width() / 2);
-    const int lefRightY  = wCenterPos.y() - (height() / 2);
+    // 라벨 크기 + 각 시나리오별 여백 추가
+    const int topBottomX = wCenterPos.x() - ((labelRect.width() / 2) + _borderWidth);
+    const int lefRightY  = wCenterPos.y() - ((labelRect.height() / 2) + _borderWidth);
 
-    constexpr int interval = 2;
-    const int topY    = wGlobalPos.y() - height() - interval;
-    const int bottomY = wGlobalPos.y() + wRect.height() + interval;
-    const int rightX  = wGlobalPos.x() + wRect.width() + interval;
-    const int leftX   = wGlobalPos.x() - width() - interval;
+    const int topY    = wGlobalPos.y() - labelRect.height() - _spacing - (_triangleHeight + _borderWidth); // 위젯 방향 마진 반영 
+    const int bottomY = wGlobalPos.y() + wRect.height()     + _spacing;
+    const int rightX  = wGlobalPos.x() + wRect.width()      + _spacing;
+    const int leftX   = wGlobalPos.x() - labelRect.width()  - _spacing - (_triangleHeight + _borderWidth);
 
     const QPoint newTopPos    = {topBottomX, topY};
     const QPoint newRightPos  = {rightX, lefRightY};
@@ -175,7 +189,7 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
 
     // 교집합 면적 최대값 계산하고, _direction을 업데이트합니다.
     // 겹치는 면적이 가장 넓은 방향으로 생성합니다.
-    auto checkMaxArea = [availableGeo, this](int inMaxArea, const ShowDirection inNewSD, const QPoint& inNewPos)
+    auto checkMaxArea = [availableGeo, labelRect, this](int inMaxArea, const ShowDirection inNewSD, const QPoint& inNewPos)
     {
         auto availGeoInterArea = [availableGeo](const QRect& inRect)
         {
@@ -184,7 +198,7 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
             return intersectedArea;
         };
 
-        QRect currentGeo = frameGeometry();
+        QRect currentGeo = labelRect;
         currentGeo.moveTo(inNewPos);
         const int newInterArea = availGeoInterArea(currentGeo);
         if (inMaxArea < newInterArea)
@@ -199,35 +213,36 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     _direction  = ShowDirection::Top;
 
     maxArea = checkMaxArea(maxArea, ShowDirection::Top, newTopPos);
-    maxArea = checkMaxArea(maxArea, ShowDirection::Right, newRightPos);
     maxArea = checkMaxArea(maxArea, ShowDirection::Bottom, newBottomPos);
     maxArea = checkMaxArea(maxArea, ShowDirection::Left, newLeftPos);
+    maxArea = checkMaxArea(maxArea, ShowDirection::Right, newRightPos);
 
-    QRect current = frameGeometry();
-
-    // 가장 적절한 방향으로 이동
+    QRect newRect = labelRect;
     switch (_direction)
     {
     case ShowDirection::Top:
-        current.moveTo(newTopPos);
+        newRect.moveTo(newTopPos);
         break;
     case ShowDirection::Right:
-        current.moveTo(newRightPos);
+        newRect.moveTo(newRightPos);
         break;
     case ShowDirection::Bottom:
-        current.moveTo(newBottomPos);
+        newRect.moveTo(newBottomPos);
         break;
     case ShowDirection::Left:
-        current.moveTo(newLeftPos);
+        newRect.moveTo(newLeftPos);
         break;
     }
 
     // 벗어나면 안쪽으로 이동
-    current = Fin::moveToInside(availableGeo, current);
+    newRect = Fin::moveToInside(availableGeo, newRect);
+    move(newRect.topLeft());
 
-    move(current.topLeft());
-
+    // 계산된 마진 및 사이즈로 업데이트
+    updateMargins();
+    adjustSize();
     show();
+
     _expireTimer.start();
     _hideTimer.stop();
 }
@@ -256,36 +271,64 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
     painter.setPen(qPen);
 
     const double halfWidth        = qFloor(width() / 2.0);
+    const double halfHeight       = qFloor(height() / 2.0);
     const double halfTriBaseWidth = _triangleBaseWidth / 2.0;
     const QMargins layoutMargin   = _layout->contentsMargins();
-    const QRect lineRect          = rect() - layoutMargin; // 하단 꼬리, 테두리 공간 확보
+    const QRect lineRect          = rect() - layoutMargin - QMargins(1, 1, 0, 0); // 하단 꼬리, 테두리 공간 확보
 
+    constexpr double vertexWidth = 0.25;
 
     QPainterPath path;
 
     // 좌상단
     path.moveTo(lineRect.left() + _borderRadius, lineRect.top());
 
+    if (_direction == ShowDirection::Bottom)
+    {
+        path.lineTo(halfWidth - vertexWidth - halfTriBaseWidth, lineRect.top());
+        path.lineTo(halfWidth - vertexWidth, 0);
+        path.lineTo(halfWidth + vertexWidth, 0);
+        path.lineTo(halfWidth + vertexWidth + halfTriBaseWidth, lineRect.top());
+    }
+
     // 우상단, 둥근 모서리
     path.lineTo(lineRect.right() - _borderRadius, lineRect.top());
     path.quadTo(lineRect.right(), lineRect.top()
               , lineRect.right(), lineRect.top() + _borderRadius);
+
+    if (_direction == ShowDirection::Left)
+    {
+        path.lineTo(lineRect.right(), halfHeight - vertexWidth - halfTriBaseWidth);
+        path.lineTo(width(), halfHeight - vertexWidth);
+        path.lineTo(width(), halfHeight + vertexWidth);
+        path.lineTo(lineRect.right(), halfHeight + vertexWidth + halfTriBaseWidth);
+    }
 
     // 우하단, 둥근 모서리
     path.lineTo(lineRect.right(), lineRect.bottom() - _borderRadius);
     path.quadTo(lineRect.right(), lineRect.bottom()
               , lineRect.right() - _borderRadius, lineRect.bottom());
 
-    // 말풍선 꼬리 삼각형
-    path.lineTo(halfWidth + 0.25 + halfTriBaseWidth, lineRect.bottom());
-    path.lineTo(halfWidth + 0.25, height());
-    path.lineTo(halfWidth - 0.25, height());
-    path.lineTo(halfWidth - 0.25 - halfTriBaseWidth, lineRect.bottom());
+    if (_direction == ShowDirection::Top)
+    {
+        path.lineTo(halfWidth + vertexWidth + halfTriBaseWidth, lineRect.bottom());
+        path.lineTo(halfWidth + vertexWidth, height());
+        path.lineTo(halfWidth - vertexWidth, height());
+        path.lineTo(halfWidth - vertexWidth - halfTriBaseWidth, lineRect.bottom());
+    }
 
     // 좌하단, 둥근 모서리
     path.lineTo(lineRect.left() + _borderRadius, lineRect.bottom());
     path.quadTo(lineRect.left(), lineRect.bottom()
               , lineRect.left(), lineRect.bottom() - _borderRadius);
+
+    if (_direction == ShowDirection::Right)
+    {
+        path.lineTo(lineRect.left(), halfHeight + vertexWidth + halfTriBaseWidth);
+        path.lineTo(0, halfHeight + vertexWidth);
+        path.lineTo(0, halfHeight - vertexWidth);
+        path.lineTo(lineRect.left(), halfHeight - vertexWidth - halfTriBaseWidth);
+    }
 
     // 좌상단, 둥근 모서리
     path.lineTo(lineRect.left(), lineRect.top() + _borderRadius);
@@ -344,6 +387,17 @@ void FinToolTipBallon::setBorderWidth(const float inWidth)
     update();
 }
 
+int FinToolTipBallon::getSpacing() const
+{
+    return _spacing;
+}
+
+void FinToolTipBallon::setSpacing(const int inSpacing)
+{
+    _spacing = inSpacing;
+    update();
+}
+
 QColor FinToolTipBallon::getBackgroundColor() const
 {
     return _backgroundColor;
@@ -363,12 +417,35 @@ QColor FinToolTipBallon::getBorderColor() const
 void FinToolTipBallon::setBorderColor(const QColor inColor)
 {
     _borderColor = inColor;
+    update();
 }
 
 void FinToolTipBallon::updateMargins() const
 {
+    _layout->setContentsMargins(triMargins(_direction));
+}
+
+QMargins FinToolTipBallon::triMargins(const ShowDirection inDirection) const
+{
     const int borderMargin = qCeil(_borderWidth);
-    _layout->setContentsMargins(borderMargin, borderMargin, borderMargin, _triangleHeight);
+
+    QMargins margins = {borderMargin, borderMargin, borderMargin, _triangleHeight};
+    switch (inDirection)
+    {
+    case ShowDirection::Top:
+        margins = {borderMargin, borderMargin, borderMargin, _triangleHeight};
+        break;
+    case ShowDirection::Right:
+        margins = {_triangleHeight, borderMargin, borderMargin, borderMargin};
+        break;
+    case ShowDirection::Bottom:
+        margins = {borderMargin, _triangleHeight, borderMargin, borderMargin};
+        break;
+    case ShowDirection::Left:
+        margins = {borderMargin, borderMargin, _triangleHeight, borderMargin};
+        break;
+    }
+    return margins;
 }
 
 // ~==================================

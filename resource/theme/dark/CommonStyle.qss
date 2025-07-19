@@ -317,6 +317,8 @@ FinToolTipBallon
   qproperty-triangleHeight: 3;
   qproperty-borderRadius: 4;
   qproperty-borderWidth: 0.8;
+  qproperty-spacing: 0;
+
   qproperty-backgroundColor: rgba(32, 32, 32, 1);
   qproperty-borderColor: rgba(168, 168, 168, 1);
 }

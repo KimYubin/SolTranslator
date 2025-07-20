@@ -4,6 +4,7 @@
 
 #include <QLineEdit>
 #include <QMenu>
+#include <QPlainTextEdit>
 #include <QScrollBar>
 #include <QTimer>
 

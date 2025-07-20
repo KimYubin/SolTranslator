@@ -37,6 +37,8 @@ qt_add_executable(FinTranslator
         external/magic_enum.hpp
         src/Managers/StyleManger.cpp
         src/Managers/StyleManger.h
+        src/SubWidgets/CustomMenuTextEdit.cpp
+        src/SubWidgets/CustomMenuTextEdit.h
 )
 
 # Android 환경일 경우에만 패키지 소스 디렉토리 설정

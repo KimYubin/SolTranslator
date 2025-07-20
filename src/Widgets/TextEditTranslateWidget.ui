@@ -61,10 +61,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPlainTextEdit" name="srcTextEdit"/>
+       <widget class="MenuPlainTextEdit" name="srcTextEdit"/>
       </item>
       <item>
-       <widget class="QTextBrowser" name="trTextEdit">
+       <widget class="MenuTextBrowser" name="trTextEdit">
         <property name="readOnly">
          <bool>false</bool>
         </property>
@@ -78,6 +78,18 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MenuPlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>SubWidgets/CustomMenuTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MenuTextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>SubWidgets/CustomMenuTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

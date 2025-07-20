@@ -124,6 +124,8 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     finConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);
+
+    setTabOrder(_engineSelector, _settingsWidget);
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()

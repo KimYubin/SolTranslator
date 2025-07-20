@@ -21,6 +21,7 @@ class LanguageSelector : public QFrame
 public:
     explicit LanguageSelector(QWidget* parent
                             , QWidget* inSizeWidget
+                            , QWidget* inReturnFocusWidget
                             , const LangType inLangType);
 
     ~LanguageSelector() override;
@@ -48,6 +49,7 @@ private:
     QPushButton* _button;
 
     QPointer<QWidget> _sizeWidget;
+    QPointer<QWidget> _returnFocusWidget;
     QPointer<LanguageSelectorMenuPrivate> _menu;
 };
 

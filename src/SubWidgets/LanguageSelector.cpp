@@ -69,9 +69,11 @@ private:
 
 LanguageSelector::LanguageSelector(QWidget* parent
                                  , QWidget* inSizeWidget
+                                 , QWidget* inReturnFocusWidget
                                  , const LangType inLangType)
     : QFrame(parent)
     , _sizeWidget(inSizeWidget)
+    , _returnFocusWidget(inReturnFocusWidget)
 {
     setObjectName("LanguageSelector");
 
@@ -213,9 +215,9 @@ void LanguageSelectorMenuPrivate::showMenuPopup()
 void LanguageSelectorMenuPrivate::closeMenuPopup()
 {
     qApp->removeEventFilter(this);
-    if (_langSelector)
+    if (_langSelector && _langSelector->_returnFocusWidget)
     {
-        _langSelector->setFocus();
+        _langSelector->_returnFocusWidget->setFocus();
     }
 
     close();

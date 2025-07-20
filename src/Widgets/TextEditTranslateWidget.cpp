@@ -42,7 +42,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     );
 
     // 출발언어 선택기
-    _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, finConfig.getTextSrcLang());
+    _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, finConfig.getTextSrcLang());
     _srcLangSelector->setBubbleToolTip(tr("출발 언어"));
     connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
@@ -50,7 +50,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     // 도착언어 선택기
-    _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, finConfig.getTextTargetLang());
+    _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, ui->srcTextEdit, finConfig.getTextTargetLang());
     _targetLangSelector->setBubbleToolTip(tr("도착 언어"));
     connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
@@ -60,6 +60,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     // 언어 교환 버튼
     const bool bIsAuto = (finConfig.getTextSrcLang() == LangType::AUTO);
     ui->languageSwapButton->setEnabled(bIsAuto == false);
+    ui->languageSwapButton->setFocusPolicy(Qt::TabFocus);
     ui->languageSwapButton->setAccessibleName(tr("언어 바꾸기"));
     ui->languageSwapButton->setAccessibleDescription(tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다."));
     FinTooltipFilter::setBubbleToolTip(ui->languageSwapButton, tr("언어 바꾸기"));

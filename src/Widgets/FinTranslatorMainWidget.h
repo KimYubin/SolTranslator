@@ -10,6 +10,7 @@
 #include "IFinWidget.h"
 
 
+class DropdownMenu;
 class QComboBox;
 class QButtonGroup;
 class SettingsWidget;
@@ -63,7 +64,7 @@ private:
 
     Ui::FinTranslatorMainWidget* ui;
 
-    QComboBox* _engineSelector;
+    DropdownMenu* _engineSelector;
 
     // ~==============
     // sub widgets

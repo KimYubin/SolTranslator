@@ -5,6 +5,9 @@
 #include <QComboBox>
 
 
+/**
+ * 포커스가 없을때 휠 이벤트를 무시하는 콤보박스입니다.
+ */
 class DropdownMenu : public QComboBox
 {
     Q_OBJECT

@@ -6,7 +6,8 @@
 
 DropdownMenu::DropdownMenu(QWidget* parent): QComboBox(parent)
 {
-    setFocusPolicy(Qt::StrongFocus);
+    // not WheelFocus
+    setFocusPolicy(Qt::TabFocus);
 }
 
 void DropdownMenu::wheelEvent(QWheelEvent* event)

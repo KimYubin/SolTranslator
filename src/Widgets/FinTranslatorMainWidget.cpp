@@ -3,12 +3,12 @@
 #include "FinTranslatorMainWidget.h"
 
 #include <QButtonGroup>
-#include <QComboBox>
 #include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
+#include <QShortcut>
 #include <QStyle>
 #include <QTextStream>
 #include <QTimer>
@@ -23,6 +23,8 @@
 #include "Managers/TranslateManager.h"
 
 #include "Settings/SettingsWidget.h"
+
+#include "SubWidgets/DropdownMenu.h"
 
 #include "Widgets/ui_FinTranslatorMainWidget.h"
 
@@ -81,7 +83,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     // ~=========================
     // 번역 엔진 선택
-    _engineSelector = new QComboBox(this);
+    _engineSelector = new DropdownMenu(this);
 
     for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
     {
@@ -116,6 +118,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     createActions();
     createTrayIcon();
 
+
+    QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_W), this);
+    connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
 
     finConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);

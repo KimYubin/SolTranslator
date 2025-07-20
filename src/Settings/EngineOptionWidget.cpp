@@ -2,7 +2,6 @@
 
 #include "EngineOptionWidget.h"
 
-#include <QComboBox>
 #include <QString>
 
 #include <qsortfilterproxymodel.h>

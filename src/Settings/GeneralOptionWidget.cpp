@@ -2,7 +2,6 @@
 
 #include "GeneralOptionWidget.h"
 
-#include <QComboBox>
 #include <QGroupBox>
 #include <QPushButton>
 
@@ -15,6 +14,8 @@
 #include "ui_GeneralOptionWidget.h"
 
 #include "Managers/StyleManger.h"
+
+#include "SubWidgets/DropdownMenu.h"
 
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
@@ -42,11 +43,11 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 팝업번역 도착언어 선택
     {
-        SettingCard* selectTargetLang = new SettingCard(new QComboBox, shapeBehaviorGroup);
+        SettingCard* selectTargetLang = new SettingCard(new DropdownMenu, shapeBehaviorGroup);
         selectTargetLang->setHeader(tr("목표 언어"));
         selectTargetLang->setDescription(tr("팝업 번역의 목표가 되는 언어를 선택합니다."));
 
-        QComboBox* selectCombo = selectTargetLang->getContent<QComboBox>();
+        DropdownMenu* selectCombo = selectTargetLang->getContent<DropdownMenu>();
 
         std::vector<LangType> langList = Langs::GetLanguageList();
         for (LangType lang : langList)

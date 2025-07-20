@@ -31,6 +31,8 @@ SwitchButton::SwitchButton(const bool inChecked, QWidget* parent)
     _animationGroup->addAnimation(_handleAnimation);
 
     connect(this, &QCheckBox::checkStateChanged, this, &SwitchButton::setupAnimation);
+
+    setFocusPolicy(Qt::TabFocus);
 }
 
 QSize SwitchButton::sizeHint() const
@@ -62,7 +64,9 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    const QRectF cntRectF = contentsRect().toRectF();
+    // 펜이 그려지기 위해 절반만큼 안쪽으로 들어가서 그려야함. 
+    const qreal defaultDrawMargin = qCeil(_barPen.width() / 2.0);
+    const QRectF cntRectF = contentsRect().toRectF().marginsRemoved(QMargins(defaultDrawMargin, defaultDrawMargin, defaultDrawMargin, defaultDrawMargin));
 
     QRectF trackRect(0, 0, cntRectF.width(), cntRectF.height() * _trackHeightRatio);
     trackRect.moveCenter(cntRectF.center());
@@ -92,6 +96,20 @@ void SwitchButton::paintEvent(QPaintEvent* event)
     const QPointF handlePoint  = QPointF(handlePosX, trackRect.center().y());
     const float handleRad      = qRound(trackRect.height() * _handleRadRatio);
     painter.drawEllipse(handlePoint, handleRad, handleRad);
+
+
+    if (hasFocus())
+    {
+        painter.setPen(_barFocusPen);
+        painter.setBrush(Qt::transparent);
+        const qreal focusDrawMargin  = qCeil(_barFocusPen.width() / 2.0);
+        const QRectF cntFocusRectF = contentsRect().toRectF().marginsRemoved(QMargins(focusDrawMargin, focusDrawMargin, focusDrawMargin, focusDrawMargin));
+
+        QRectF trackFocusRect(0, 0, cntFocusRectF.width(), cntFocusRectF.height());
+        trackFocusRect.moveCenter(cntFocusRectF.center());
+        const float trackFocusRad = trackFocusRect.height() / 2.0f;
+        painter.drawRoundedRect(trackFocusRect, trackFocusRad, trackFocusRad);
+    }
 }
 
 float SwitchButton::handlePosition() const
@@ -190,6 +208,39 @@ QColor SwitchButton::getBarBorderColor() const
 void SwitchButton::setBarBorderColor(const QColor& inColor)
 {
     _barPen = inColor;
+    update();
+}
+
+QColor SwitchButton::getBarFocusBorderColor() const
+{
+    return _barFocusPen.color();
+}
+
+void SwitchButton::setBarFocusBorderColor(const QColor& inColor)
+{
+    _barFocusPen = inColor;
+    update();
+}
+
+float SwitchButton::getBarBorderWidth() const
+{
+    return _barPen.width();
+}
+
+void SwitchButton::setBarBorderWidth(const float inWidth)
+{
+    _barPen.setWidthF(inWidth);
+    update();
+}
+
+float SwitchButton::getBarFocusBorderWidth() const
+{
+    return _barFocusPen.width();
+}
+
+void SwitchButton::setBarFocusBorderWidth(const float inWidth)
+{
+    _barFocusPen.setWidthF(inWidth);
     update();
 }
 

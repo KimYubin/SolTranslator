@@ -26,6 +26,9 @@ class SwitchButton : public QCheckBox
     Q_PROPERTY(QColor handleCheckedColor READ getHandleCheckedColor WRITE setHandleCheckedColor)
     Q_PROPERTY(QColor handleUncheckedColor READ getHandleUncheckedColor WRITE setHandleUncheckedColor)
     Q_PROPERTY(QColor barBorderColor READ getBarBorderColor WRITE setBarBorderColor)
+    Q_PROPERTY(QColor barFocusBorderColor READ getBarFocusBorderColor WRITE setBarFocusBorderColor)
+    Q_PROPERTY(float  barBorderWidth READ getBarBorderWidth WRITE setBarBorderWidth)
+    Q_PROPERTY(float  barFocusBorderWidth READ getBarFocusBorderWidth WRITE setBarFocusBorderWidth)
     Q_PROPERTY(QColor handleCheckedBorderColor READ getHandleCheckedBorderColor WRITE setHandleCheckedBorderColor)
     Q_PROPERTY(QColor handleUncheckedBorderColor READ getHandleUncheckedBorderColor WRITE setHandleUncheckedBorderColor)
 
@@ -73,6 +76,13 @@ private:
     void   setHandleUncheckedColor(const QColor& inColor);
     QColor getBarBorderColor() const;
     void   setBarBorderColor(const QColor& inColor);
+    QColor getBarFocusBorderColor() const;
+    void   setBarFocusBorderColor(const QColor& inColor);
+    float  getBarBorderWidth() const;
+    void   setBarBorderWidth(const float inWidth);
+    float  getBarFocusBorderWidth() const;
+    void   setBarFocusBorderWidth(const float inWidth);
+    
     QColor getHandleCheckedBorderColor() const;
     void   setHandleCheckedBorderColor(const QColor& inColor);
     QColor getHandleUncheckedBorderColor() const;
@@ -90,6 +100,7 @@ private:
     QBrush _handleUncheckedBrush;
 
     // border color
+    QPen _barFocusPen;
     QPen _barPen;
     QPen _handleCheckedPen;
     QPen _handleUncheckedPen;

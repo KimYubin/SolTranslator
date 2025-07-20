@@ -41,6 +41,10 @@ SwitchButton
   qproperty-handleUncheckedColor: white;
   
   qproperty-barBorderColor: transparent;
+  qproperty-barFocusBorderColor: white;
+  /* qproperty-barBorderWidth: ; */
+  qproperty-barFocusBorderWidth: 1.8;
+
   qproperty-handleCheckedBorderColor: transparent;
   qproperty-handleUncheckedBorderColor: transparent;
 }

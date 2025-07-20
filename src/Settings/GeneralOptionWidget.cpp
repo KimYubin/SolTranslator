@@ -89,6 +89,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         themeCard->setHeader(tr("테마 적용"));
         themeCard->setDescription(tr("테마를 적용합니다."));
         QPushButton* themeButton = themeCard->getContent<QPushButton>();
+        themeButton->setFocusPolicy(Qt::TabFocus);
         themeButton->setCheckable(false);
         connect(themeButton, &QPushButton::clicked, this, []()
         {

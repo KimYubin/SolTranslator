@@ -25,9 +25,13 @@ void GoogleTrUnit::requestTranslate()
     get(request);
 }
 
-void GoogleTrUnit::replyTranslateFinished(QNetworkReply* reply)
+void GoogleTrUnit::onReadyRead()
 {
-    const QByteArray responseData    = reply->readAll();
+}
+
+void GoogleTrUnit::replyTranslateFinished()
+{
+    const QByteArray responseData    = _reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
     const QJsonArray jsonArr         = responseJson.array();
     if (jsonArr.isEmpty() == false)

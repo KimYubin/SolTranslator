@@ -4,6 +4,7 @@
 
 #include <QNetworkReply>
 
+#include "FinTranslatorCore.h"
 #include "FinTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -11,7 +12,6 @@
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)
     : QObject(parent)
-    , _translateManager(parent)
     , _trReqData(inTranslateRequestInfo)
 {
 }
@@ -21,6 +21,9 @@ void TranslateUnit::executeTextTranslation()
     if (_trReqData.originText.isEmpty())
     {
         qDebug()<<"translate request text is empty";
+        
+        completeTranslatedText(_trReqData.originText);
+        return;
     }
     if (_trReqData.callbackTranslateStreaming.has_value())
     {
@@ -29,17 +32,7 @@ void TranslateUnit::executeTextTranslation()
 
     connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, std::move(_trReqData.callbackTranslateComplete));
 
-    // connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
-    
-    // executeTextTranslation_Impl();
-    
-    if (_trReqData.originText.isEmpty())
-    {
-        completeTranslatedText(_trReqData.originText);
-        return;
-    }
-
-    if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
+    if (TranslateManager* translate_manager = finCore->getTranslateManager())
     {
         auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.engineType
                                                                      , _trReqData.originText
@@ -60,45 +53,42 @@ void TranslateUnit::executeTextTranslation()
 
 void TranslateUnit::get(const QNetworkRequest& request)
 {
-    _reply = _translateManager->getNetworkAccessManager()->get(request);
-
-    connect(_reply.data(), &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
+    _reply = finCore->getTranslateManager()->getNetworkAccessManager()->get(request);
+    postProcess();
 }
 
 void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming)
 {
-    _reply = _translateManager->getNetworkAccessManager()->post(request, data);
+    _reply = finCore->getTranslateManager()->getNetworkAccessManager()->post(request, data);
 
     if (bIsStreaming)
     {
-        connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
+        connect(_reply.data(), &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
     }
+    postProcess();
+}
 
+void TranslateUnit::postProcess()
+{
     connect(_reply.data(), &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
+    connect(_reply.data(), &QObject::destroyed, this, &QObject::deleteLater); // reply 오류에 대비
 }
 
-void TranslateUnit::executeTextTranslation_Impl()
+void TranslateUnit::onReplyFinished()
 {
-}
-
-void TranslateUnit::onReadyRead(QNetworkReply* reply)
-{
-    qDebug()<<"onReadyRead";
-}
-
-void TranslateUnit::onReplyFinished(/*QNetworkReply* reply*/)
-{
-    if (_reply->error() == QNetworkReply::NoError)
+    if (_reply.isNull() == false)
     {
-        // to subclass
-        replyTranslateFinished(_reply);
+        if (_reply->error() == QNetworkReply::NoError)
+        {
+            // to subclass
+            replyTranslateFinished();
+        }
+        else
+        {
+            qDebug() << "Error: " << _reply->errorString();
+        }
+        _reply->deleteLater();
     }
-    else
-    {
-        qDebug() << "Error: " << _reply->errorString();
-    }
-    _reply->deleteLater();
-
     deleteLater();
 }
 

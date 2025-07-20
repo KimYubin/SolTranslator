@@ -17,11 +17,6 @@ OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
     : TranslateUnit(inTranslateRequestInfo, parent)
 {}
 
-void OpenAiTrUnit::requestTranslate()
-{
-    chatTranslate(true);
-}
-
 void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 {
     const QUrl url(Fin::Const::URLs::OPEN_AI.data());
@@ -56,9 +51,14 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     post(request, data, bIsStreaming);
 }
 
-void OpenAiTrUnit::onReadyRead(QNetworkReply* reply)
+void OpenAiTrUnit::requestTranslate()
 {
-    QByteArray chunk  = reply->readAll();
+    chatTranslate(true);
+}
+
+void OpenAiTrUnit::onReadyRead()
+{
+    QByteArray chunk  = _reply->readAll();
     QString dataChunk = QString::fromUtf8(chunk);
 
     QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
@@ -91,9 +91,9 @@ void OpenAiTrUnit::onReadyRead(QNetworkReply* reply)
     }
 }
 
-void OpenAiTrUnit::replyTranslateFinished(QNetworkReply* reply)
+void OpenAiTrUnit::replyTranslateFinished()
 {
-    const QByteArray responseData    = reply->readAll();
+    const QByteArray responseData    = _reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
     const QJsonObject jsonObject     = responseJson.object();
     const QJsonArray choices         = jsonObject["choices"].toArray();

@@ -15,13 +15,11 @@ public:
                         , TranslateManager* parent);
 
 protected:
-    virtual void requestTranslate() override;
-
     void chatTranslate(const bool bIsStreaming);
 
-    virtual void onReadyRead(QNetworkReply* reply) override;
-
-    virtual void replyTranslateFinished(QNetworkReply* reply) override;
+    virtual void requestTranslate() override;
+    virtual void onReadyRead() override;
+    virtual void replyTranslateFinished() override;
 };
 
 

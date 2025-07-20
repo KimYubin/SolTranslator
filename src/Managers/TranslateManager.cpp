@@ -113,6 +113,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
             {
                 return;
             }
+            // todo: history 개발 후, 제거해야합니다.
             transUnit->abortTranslate();
         });
     };

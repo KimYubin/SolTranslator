@@ -13,6 +13,11 @@
 class QNetworkReply;
 class TranslateManager;
 
+/**
+ * 각 번역 요청을 독립적으로 수행하는 번역 유닛입니다.
+ * 번역 요청에 필요한 정보를 보관하고, 전처리, 후처리 과정을 전담합니다.
+ * TranslateManager::executeNewTranslateUnit()함수로 사용합니다.
+ */
 class TranslateUnit : public QObject
 {
     Q_OBJECT
@@ -24,16 +29,16 @@ public:
     void executeTextTranslation();
 
 protected:
-    void get(const QNetworkRequest &request);
+    void get(const QNetworkRequest& request);
     void post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming);
 
 private:
-    void executeTextTranslation_Impl();
+    void postProcess();
 
 protected:
     virtual void requestTranslate() = 0;
+    virtual void onReadyRead() = 0;
 
-    virtual void onReadyRead(QNetworkReply* reply);
 private:
 signals:
     /** 완료된 번역문을 등록된 슬롯에 적용합니다. */
@@ -43,13 +48,14 @@ signals:
     void addStreamTranslatedText(const QString& TranslateText);
 
 private slots:
-    void onReplyFinished(/*QNetworkReply* reply*/);
+    void onReplyFinished();
 
 public slots:
     void abortTranslate();
+
 protected:
     /** 받은 응답에서 번역문을 추출합니다. */
-    virtual void replyTranslateFinished(QNetworkReply* reply) = 0;
+    virtual void replyTranslateFinished() = 0;
 
     /** 중간 번역을 반영합니다. */
     void addTranslatedText(const QString& inTranslatedText);
@@ -66,7 +72,6 @@ protected:
     void completeTranslatedText(const QString& inTranslatedText);
 
 protected:
-    QPointer<TranslateManager> _translateManager;
     QPointer<QNetworkReply> _reply;
 
     TranslateRequestInfo _trReqData;

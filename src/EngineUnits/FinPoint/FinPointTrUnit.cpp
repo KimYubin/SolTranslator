@@ -42,9 +42,9 @@ void FinPointTrUnit::requestTranslate()
     chatTranslate(true);
 }
 
-void FinPointTrUnit::onReadyRead(QNetworkReply* reply)
+void FinPointTrUnit::onReadyRead()
 {
-    const QByteArray chunk  = reply->readAll();
+    const QByteArray chunk  = _reply->readAll();
     const QString dataChunk = QString::fromUtf8(chunk);
     const QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
 
@@ -77,9 +77,9 @@ void FinPointTrUnit::onReadyRead(QNetworkReply* reply)
     }
 }
 
-void FinPointTrUnit::replyTranslateFinished(QNetworkReply* reply)
+void FinPointTrUnit::replyTranslateFinished()
 {
-    const QByteArray chunk  = reply->readAll();
+    const QByteArray chunk  = _reply->readAll();
     const QString dataChunk = QString::fromUtf8(chunk);
     const QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
 

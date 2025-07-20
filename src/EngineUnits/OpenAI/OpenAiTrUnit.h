@@ -19,7 +19,7 @@ protected:
 
     void chatTranslate(const bool bIsStreaming);
 
-    void onReadyRead(QNetworkReply* reply);
+    virtual void onReadyRead(QNetworkReply* reply) override;
 
     virtual void replyTranslateFinished(QNetworkReply* reply) override;
 };

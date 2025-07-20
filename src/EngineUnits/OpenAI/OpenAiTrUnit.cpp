@@ -53,12 +53,7 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     QJsonDocument doc(json);
     QByteArray data = doc.toJson();
 
-    _reply = post(request, data);
-
-    if (bIsStreaming)
-    {
-        connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
-    }
+    post(request, data, bIsStreaming);
 }
 
 void OpenAiTrUnit::onReadyRead(QNetworkReply* reply)

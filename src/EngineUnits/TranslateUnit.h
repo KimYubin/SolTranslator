@@ -3,15 +3,17 @@
 #ifndef TRANSLATEUNIT_H
 #define TRANSLATEUNIT_H
 
-#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QObject>
 #include <QPointer>
 
 #include "FinTypes.h"
 
 
+class QNetworkReply;
 class TranslateManager;
 
-class TranslateUnit : public QNetworkAccessManager
+class TranslateUnit : public QObject
 {
     Q_OBJECT
 
@@ -21,12 +23,17 @@ public:
 
     void executeTextTranslation();
 
+protected:
+    void get(const QNetworkRequest &request);
+    void post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming);
+
 private:
     void executeTextTranslation_Impl();
 
 protected:
     virtual void requestTranslate() = 0;
 
+    virtual void onReadyRead(QNetworkReply* reply);
 private:
 signals:
     /** 완료된 번역문을 등록된 슬롯에 적용합니다. */
@@ -36,7 +43,7 @@ signals:
     void addStreamTranslatedText(const QString& TranslateText);
 
 private slots:
-    void onReplyFinished(QNetworkReply* reply);
+    void onReplyFinished(/*QNetworkReply* reply*/);
 
 public slots:
     void abortTranslate();
@@ -59,6 +66,7 @@ protected:
     void completeTranslatedText(const QString& inTranslatedText);
 
 protected:
+    QPointer<TranslateManager> _translateManager;
     QPointer<QNetworkReply> _reply;
 
     TranslateRequestInfo _trReqData;

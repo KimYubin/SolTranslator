@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 #include <QRegularExpression>
 #include <QTextDocument>
+#include <QNetworkAccessManager>
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
@@ -23,7 +24,7 @@
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
 {
-    
+    _networkAccessManager = new QNetworkAccessManager(this);
 }
 
 TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo)

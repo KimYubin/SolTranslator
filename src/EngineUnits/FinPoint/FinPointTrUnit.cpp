@@ -34,12 +34,7 @@ void FinPointTrUnit::chatTranslate(const bool bIsStreaming)
     const QJsonDocument doc(jsonObj);
     const QByteArray data = doc.toJson();
 
-    _reply = post(request, data);
-
-    if (bIsStreaming)
-    {
-        connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
-    }
+    post(request, data, bIsStreaming);
 }
 
 void FinPointTrUnit::requestTranslate()

@@ -8,6 +8,7 @@
 #include "FinHashQueue.h"
 
 
+class QNetworkAccessManager;
 class QTextEdit;
 class TranslateUnit;
 class FinTranslatorCore;
@@ -47,7 +48,10 @@ public:
     void updateNewCacheQueue(cache_queue&& newCache);
     const cache_queue& getCacheQueue() const;
 
+    QNetworkAccessManager* getNetworkAccessManager() const { return _networkAccessManager; };
+
 private:
+    QNetworkAccessManager* _networkAccessManager;
     // ~===========
     // cache
     int _maxCacheLength = 100;

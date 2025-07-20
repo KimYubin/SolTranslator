@@ -10,7 +10,8 @@
 
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)
-    : QNetworkAccessManager(parent)
+    : QObject(parent)
+    , _translateManager(parent)
     , _trReqData(inTranslateRequestInfo)
 {
 }
@@ -28,13 +29,10 @@ void TranslateUnit::executeTextTranslation()
 
     connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, std::move(_trReqData.callbackTranslateComplete));
 
-    connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
+    // connect(this, &QNetworkAccessManager::finished, this, &TranslateUnit::onReplyFinished);
     
-    executeTextTranslation_Impl();
-}
-
-void TranslateUnit::executeTextTranslation_Impl()
-{
+    // executeTextTranslation_Impl();
+    
     if (_trReqData.originText.isEmpty())
     {
         completeTranslatedText(_trReqData.originText);
@@ -60,18 +58,46 @@ void TranslateUnit::executeTextTranslation_Impl()
     requestTranslate();
 }
 
-void TranslateUnit::onReplyFinished(QNetworkReply* reply)
+void TranslateUnit::get(const QNetworkRequest& request)
 {
-    if (reply->error() == QNetworkReply::NoError)
+    _reply = _translateManager->getNetworkAccessManager()->get(request);
+
+    connect(_reply.data(), &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
+}
+
+void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming)
+{
+    _reply = _translateManager->getNetworkAccessManager()->post(request, data);
+
+    if (bIsStreaming)
+    {
+        connect(_reply.data(), &QIODevice::readyRead, this, [this]() { onReadyRead(_reply); });
+    }
+
+    connect(_reply.data(), &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
+}
+
+void TranslateUnit::executeTextTranslation_Impl()
+{
+}
+
+void TranslateUnit::onReadyRead(QNetworkReply* reply)
+{
+    qDebug()<<"onReadyRead";
+}
+
+void TranslateUnit::onReplyFinished(/*QNetworkReply* reply*/)
+{
+    if (_reply->error() == QNetworkReply::NoError)
     {
         // to subclass
-        replyTranslateFinished(reply);
+        replyTranslateFinished(_reply);
     }
     else
     {
-        qDebug() << "Error: " << reply->errorString();
+        qDebug() << "Error: " << _reply->errorString();
     }
-    reply->deleteLater();
+    _reply->deleteLater();
 
     deleteLater();
 }

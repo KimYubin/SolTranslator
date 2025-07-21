@@ -5,10 +5,9 @@
 #include <QPlainTextEdit>
 #include <QTextBrowser>
 
-// QTextEdit
-// QPlainTextEdit
-// QTextBrowser
-
+/**
+ * contextMenu의 창테두리와 배경을 투명하게 처리하기 위한 클래스입니다. 
+ */
 class MenuPlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT

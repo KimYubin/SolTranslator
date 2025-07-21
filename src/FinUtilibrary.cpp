@@ -85,3 +85,9 @@ QRect Fin::moveToInside(const QRect& outerRect, const QRect& innerRect)
 
     return res;
 }
+
+QString Fin::QStrFromStdView(const std::string_view& inStrView)
+{
+    // string_view -> std::str -> QString
+    return QString::fromStdString(std::string{inStrView});
+}

@@ -28,9 +28,9 @@ cache_queue DataManager::loadTranslateCache()
         return {};
     }
 
-    QByteArray saveData = loadFile.readAll();
+    const QByteArray saveData = loadFile.readAll();
 
-    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    const QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 
     return convertJsonToCache(loadDoc.object());
 }
@@ -47,7 +47,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
         dataWatcher->deleteLater();
     });
 
-    QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
+    const QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
     {
         QFile saveFile(FinPaths::getTranslateHistoryFilePath());
         if (saveFile.open(QIODevice::WriteOnly) == false)

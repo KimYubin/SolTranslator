@@ -41,6 +41,8 @@ QRect availableGeometryAt(const QPoint& inPoint);
  * @return 
  */
 [[nodiscard]] QRect moveToInside(const QRect& outerRect, const QRect& innerRect);
+
+QString QStrFromStdView(const std::string_view& inStrView);
 }
 
 

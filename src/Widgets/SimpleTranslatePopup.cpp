@@ -133,6 +133,11 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     // 링크와 코드블록을 마크다운 스타일에서 html 스타일로 변경
     QString md = inMarkdownStr;
 
+    // 이스케이프 되지 않은 <>가 태그로 인식되는 문제 해결
+    const QRegularExpression unescapedLT(R"((?<!\\)<)");
+    md.replace(unescapedLT, R"(\<)");
+    const QRegularExpression unescapedGT(R"((?<!\\)>)");
+    md.replace(unescapedGT, R"(\>)");
 
     QStringList monoFontList = doc->defaultFont().families();
     if (monoFontList.size() >= 2)

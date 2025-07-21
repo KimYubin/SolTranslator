@@ -18,7 +18,7 @@ void GoogleTrUnit::requestTranslate()
     const QUrl url = QString(Fin::Const::URLs::GOOGLE.data()).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
-      , QUrl::toPercentEncoding(_trReqData.originText));
+      , QUrl::toPercentEncoding(_trReqData.originText, "()")); // ()괄호는 인코딩 변경 안합니다.
 
     QNetworkRequest request(url);
 

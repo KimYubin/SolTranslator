@@ -6,6 +6,8 @@
 #include <QSettings>
 
 #include "FinTypes.h"
+#include "FinUtilibrary.h"
+
 #include "../../external/magic_enum.hpp"
 
 
@@ -108,17 +110,21 @@ template <typename EnumType>
     requires std::is_enum_v<EnumType>
 void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inVal)
 {
-    const std::string_view enumMemberName = magic_enum::enum_name<EnumType>(inVal);
-    _settings->setValue(inKey, enumMemberName.data());
+    const std::string_view value_sv = magic_enum::enum_name<EnumType>(inVal);
+    _settings->setValue(inKey, Fin::QStrFromStdView(value_sv));
 }
 
 template <typename EnumType>
         requires std::is_enum_v<EnumType>
 EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
 {
-    const QVariant variant = _settings->value(inKey, magic_enum::enum_name<EnumType>(inDefaultVal).data());
-    const QString str      = variant.toString();
-    EnumType policy        = magic_enum::enum_cast<EnumType>(str.toStdString()).value_or(inDefaultVal);
+    const std::string_view default_sv = magic_enum::enum_name<EnumType>(inDefaultVal);
+    const QString defaultQStr = Fin::QStrFromStdView(default_sv);
+
+    const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
+
+    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefaultVal);
+
     return policy;
 }
 

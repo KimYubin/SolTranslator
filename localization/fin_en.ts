@@ -4,12 +4,12 @@
 <context>
     <name>EngineOption</name>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="102"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="101"/>
         <source>번역 엔진</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="103"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="102"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -51,86 +51,86 @@
     </message>
     <message>
         <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="57"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="62"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="64"/>
         <source>텍스트</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="67"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="69"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="71"/>
         <source>문서</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="97"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="108"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="110"/>
         <source>설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="38"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="318"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="40"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="325"/>
         <source>FinTranslator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="67"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="69"/>
         <source>준비 중</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="93"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="95"/>
         <source>번역 엔진 선택</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="175"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="182"/>
         <source>트레이로 최소화되었습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="176"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="183"/>
         <source>Fin.번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="225"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="232"/>
         <source>Fin.Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="226"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="233"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="227"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="234"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="227"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="234"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="287"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="294"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="290"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="297"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="293"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="300"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="296"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="303"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -138,12 +138,12 @@
 <context>
     <name>GeneralOption</name>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="126"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="128"/>
         <source>일반</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="127"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="129"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -156,52 +156,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="28"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="29"/>
         <source>모양 및 동작</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="33"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="34"/>
         <source>시작 시 실행</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="34"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="35"/>
         <source>시스템 시작 시 Fin번역기가 자동으로 실행됩니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="46"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="47"/>
         <source>목표 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="47"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="48"/>
         <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="74"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
         <source>창 위치, 크기 기억</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
         <source>다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="87"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="88"/>
         <source>적용</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="88"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="89"/>
         <source>테마 적용</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="89"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="90"/>
         <source>테마를 적용합니다.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,7 +209,7 @@
 <context>
     <name>LanguageSelectorMenuPrivate</name>
     <message>
-        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="173"/>
+        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="175"/>
         <source>언어 검색</source>
         <translation type="unfinished"></translation>
     </message>
@@ -243,8 +243,48 @@
 <context>
     <name>SimpleTranslatePopup</name>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="36"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="38"/>
         <source>fin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="342"/>
+        <source>항상 위 켜기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="342"/>
+        <source>항상 위 끄기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="355"/>
+        <source>임시창을 일반창으로 승격</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="355"/>
+        <source>임시 창모드</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="371"/>
+        <source>최소화</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="386"/>
+        <source>최대화</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="386"/>
+        <source>이전 크기로 복원</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="396"/>
+        <source>닫기</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -261,22 +301,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="46"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="47"/>
         <source>출발 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="54"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="55"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="63"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="65"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="67"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="128"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="66"/>
+        <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="132"/>
         <source>번역 중...</source>
         <translation type="unfinished"></translation>
     </message>

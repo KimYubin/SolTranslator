@@ -10,6 +10,7 @@ void customMenu(QContextMenuEvent* event, QMenu* menu)
     menu->setWindowFlag(Qt::FramelessWindowHint);
     menu->setWindowFlag(Qt::NoDropShadowWindowHint);
     menu->popup(event->globalPos());
+
     event->accept();
 }
 

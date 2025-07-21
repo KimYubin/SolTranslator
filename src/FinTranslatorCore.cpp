@@ -48,11 +48,11 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     // parsing
     QCommandLineParser parser;
-    parser.addOption({Fin::CommandLineOptions::START_UP_RUN.data(), "Started from Windows startup"});
+    parser.addOption({Fin::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
     parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행 
-    if (parser.isSet(Fin::CommandLineOptions::START_UP_RUN.data()))
+    if (parser.isSet(Fin::CmdLineOptions::START_UP_RUN))
     {
         _finMainWidget->hide();
     }

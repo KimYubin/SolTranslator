@@ -17,6 +17,8 @@
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
 
+const QString OpenAI_Model = "openai_model"; 
+
 const QString PopupTargetLanguageType = "PopupTargetLanguageType";
 
 const QString TextSrcLangType    = "TextEditSourceLanguageType";
@@ -59,18 +61,18 @@ QString ConfigManager::getAPIKey(EngineType inEngineType)
 
 void ConfigManager::setOpenAIModel(const QString& inModelName)
 {
-    _settings->setValue("openai_model", inModelName);
+    _settings->setValue(OpenAI_Model, inModelName);
 }
 
 QString ConfigManager::getOpenAIModel()
 {
-    // gpt-4o-mini    // gpt-4.1-mini
-    return _settings->value("openai_model", "gpt-4o-mini").toString();
+    // gpt-4o-mini / gpt-4.1-mini
+    return _settings->value(OpenAI_Model, "gpt-4o-mini").toString();
 }
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {
-    _settings->setValue(Fin::CommandLineOptions::START_UP_RUN, inStartRun);
+    _settings->setValue(Fin::CmdLineOptions::START_UP_RUN, inStartRun);
 
     const QString appName = QCoreApplication::applicationName();
     const QString appPath = QCoreApplication::applicationFilePath();
@@ -79,7 +81,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
     
     if (inStartRun)
     {
-        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::CommandLineOptions::START_UP_RUN.data());
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::CmdLineOptions::START_UP_RUN);
 
         QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
                                  , QSettings::NativeFormat);
@@ -100,7 +102,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
 bool ConfigManager::getStartRun()
 {
-    return _settings->value(Fin::CommandLineOptions::START_UP_RUN, false).toBool();
+    return _settings->value(Fin::CmdLineOptions::START_UP_RUN, false).toBool();
 }
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)

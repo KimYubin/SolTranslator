@@ -19,7 +19,7 @@ OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 {
-    const QUrl url(Fin::URLs::OPEN_AI.data());
+    const QUrl url(Fin::URLs::OPEN_AI);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + finConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
@@ -35,7 +35,7 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 
     QJsonObject developerMessage;
     developerMessage["role"] = "developer";
-    developerMessage["content"] = QString(Fin::Prompt::OPEN_AI.data()).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    developerMessage["content"] = QString(Fin::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
     messages.append(developerMessage);
 
     QJsonObject userMessage;

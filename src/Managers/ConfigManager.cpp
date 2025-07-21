@@ -70,7 +70,7 @@ QString ConfigManager::getOpenAIModel()
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {
-    _settings->setValue(Fin::Const::CommandLineOptions::START_UP_RUN, inStartRun);
+    _settings->setValue(Fin::CommandLineOptions::START_UP_RUN, inStartRun);
 
     const QString appName = QCoreApplication::applicationName();
     const QString appPath = QCoreApplication::applicationFilePath();
@@ -79,7 +79,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
     
     if (inStartRun)
     {
-        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::Const::CommandLineOptions::START_UP_RUN.data());
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::CommandLineOptions::START_UP_RUN.data());
 
         QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
                                  , QSettings::NativeFormat);
@@ -100,7 +100,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
 bool ConfigManager::getStartRun()
 {
-    return _settings->value(Fin::Const::CommandLineOptions::START_UP_RUN, false).toBool();
+    return _settings->value(Fin::CommandLineOptions::START_UP_RUN, false).toBool();
 }
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)

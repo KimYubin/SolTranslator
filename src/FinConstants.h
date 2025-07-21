@@ -5,7 +5,7 @@
 #include <string_view>
 
 
-namespace Fin::Const
+namespace Fin
 {
 /** 커맨드라인 명령줄 옵션 */
 namespace CommandLineOptions

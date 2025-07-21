@@ -15,7 +15,7 @@ GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void GoogleTrUnit::requestTranslate()
 {
-    const QUrl url = QString(Fin::Const::URLs::GOOGLE.data()).arg(
+    const QUrl url = QString(Fin::URLs::GOOGLE.data()).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.originText, "()")); // ()괄호는 인코딩 변경 안합니다.

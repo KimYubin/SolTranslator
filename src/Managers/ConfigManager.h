@@ -110,16 +110,14 @@ template <typename EnumType>
     requires std::is_enum_v<EnumType>
 void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inVal)
 {
-    const std::string_view value_sv = magic_enum::enum_name<EnumType>(inVal);
-    _settings->setValue(inKey, Fin::QStrFromStdView(value_sv));
+    _settings->setValue(inKey, Fin::enumToQStr(inVal));
 }
 
 template <typename EnumType>
         requires std::is_enum_v<EnumType>
 EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
 {
-    const std::string_view default_sv = magic_enum::enum_name<EnumType>(inDefaultVal);
-    const QString defaultQStr = Fin::QStrFromStdView(default_sv);
+    const QString defaultQStr = Fin::enumToQStr(inDefaultVal);
 
     const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
 

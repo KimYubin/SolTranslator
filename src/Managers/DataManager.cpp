@@ -10,6 +10,8 @@
 #include <QString>
 #include <QtConcurrent>
 
+#include "FinUtilibrary.h"
+
 
 #include "../../external/magic_enum.hpp"
 
@@ -77,9 +79,9 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
     {
         QJsonObject cacheObject;
         cacheObject["OriginText"]    = cacheKey.originText;
-        cacheObject["EngineType"]    = magic_enum::enum_name(cacheKey.engineType).data();
-        cacheObject["sourceLang"]    = magic_enum::enum_name(cacheKey.sourceLang).data();
-        cacheObject["targetLang"]    = magic_enum::enum_name(cacheKey.targetLang).data();
+        cacheObject["EngineType"]    = Fin::enumToQStr(cacheKey.engineType);
+        cacheObject["sourceLang"]    = Fin::enumToQStr(cacheKey.sourceLang);
+        cacheObject["targetLang"]    = Fin::enumToQStr(cacheKey.targetLang);
         cacheObject["TranslateText"] = cacheText;
 
         arr.append(cacheObject);

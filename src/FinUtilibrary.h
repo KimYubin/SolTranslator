@@ -3,7 +3,7 @@
 #ifndef FINUTILIBRARY_H
 #define FINUTILIBRARY_H
 #include <QRect>
-
+#include "../../external/magic_enum.hpp"
 
 class QObject;
 class QWidget;
@@ -42,7 +42,23 @@ QRect availableGeometryAt(const QPoint& inPoint);
  */
 [[nodiscard]] QRect moveToInside(const QRect& outerRect, const QRect& innerRect);
 
+
+/**
+ * std::string_view를 QString으로 변환합니다.
+ */
 QString QStrFromStdView(const std::string_view& inStrView);
+
+
+/**
+ * enum 열거자의 이름을 QString으로 변환해서 반환합니다.
+ */
+template <typename EnumType>
+    requires std::is_enum_v<EnumType>
+QString enumToQStr(const EnumType inDefaultVal)
+{
+    return QStrFromStdView(magic_enum::enum_name<EnumType>(inDefaultVal));
+}
+
 }
 
 

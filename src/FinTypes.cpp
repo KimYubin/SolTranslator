@@ -6,6 +6,8 @@
 
 #include <qstandardpaths.h>
 
+#include "FinUtilibrary.h"
+
 #include "../external/magic_enum.hpp"
 
 namespace Fin::Internal::DirName
@@ -23,7 +25,7 @@ const QString TRANSLATE_HISTORY = "Translate_History.json";
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
-    {LangType::NONE, {LangType::NONE, magic_enum::enum_name(LangType::NONE).data(), u8"NONE", u8"NONE"}}
+    {LangType::NONE, {LangType::NONE, Fin::enumToQStr(LangType::NONE), u8"NONE", u8"NONE"}}
   , {LangType::AUTO, {LangType::AUTO, u8"Auto", u8"Auto", u8"Auto"}}
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
@@ -44,7 +46,8 @@ QString EngineName::getName(EngineType inEngineType)
         break;
     default: ;
     }
-    return QString{magic_enum::enum_name(inEngineType).data()};
+
+    return Fin::enumToQStr(inEngineType);
 }
 
 QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath)

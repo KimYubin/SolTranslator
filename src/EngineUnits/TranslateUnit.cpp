@@ -63,15 +63,15 @@ void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data,
 
     if (bIsStreaming)
     {
-        connect(_reply.data(), &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
+        connect(_reply, &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
     }
     postProcess();
 }
 
 void TranslateUnit::postProcess()
 {
-    connect(_reply.data(), &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
-    connect(_reply.data(), &QObject::destroyed, this, &QObject::deleteLater); // reply 오류에 대비
+    connect(_reply, &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
+    connect(_reply, &QObject::destroyed, this, &QObject::deleteLater); // reply 오류에 대비
 }
 
 void TranslateUnit::onReplyFinished()

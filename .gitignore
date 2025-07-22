@@ -3,7 +3,7 @@
 
 
 /build/
-/resource/image/noused/
+**/noused/
 /resource/image/test/
 .O_Commit_Message.txt
 .O_Project_Memo.txt

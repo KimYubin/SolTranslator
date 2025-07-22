@@ -7,7 +7,6 @@
 
 class QObject;
 class QWidget;
-class QApplication;
 
 namespace Fin
 {
@@ -19,9 +18,13 @@ namespace Fin
  */
 bool isThis(const QObject* inThis, const QObject* inOther);
 
+
+/** QWidget 기본 QFont 셋팅을 유지하면서 PreferNoHinting으로 설정합니다. */
 void noHintingFont(QWidget* inOutWidget);
+
 /** 앱 전체 기본 QFont 셋팅을 유지하면서 PreferNoHinting으로 설정합니다. */
 void noHintingFont();
+
 
 /**
  * 지정된 point의 screen의 유효한 영역을 반환합니다.
@@ -32,6 +35,7 @@ void noHintingFont();
  * @return 
  */
 QRect availableGeometryAt(const QPoint& inPoint);
+
 
 /**
  * innerRect을 outerRect 안으로 이동시킵니다.

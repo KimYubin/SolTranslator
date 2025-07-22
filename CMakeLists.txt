@@ -31,8 +31,15 @@ file(GLOB_RECURSE PROJECT_SOURCES
         "resource/*.qrc"
 )
 
+if (WIN32)
+    #! [appicon_windows]
+    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc")
+    #! [appicon_windows]
+endif()
+
 qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
+        ${app_icon_resource_windows}
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
         src/Managers/StyleManger.cpp

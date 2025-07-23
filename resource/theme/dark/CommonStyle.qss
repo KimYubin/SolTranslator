@@ -327,3 +327,21 @@ FinToolTipBallon
   qproperty-borderColor: rgba(200, 200, 200, 1);
 }
 
+FinToastWidget
+{
+  padding: 4px 10px;
+  margin: 0px;
+  background-color: rgba(44, 44, 44, 0.88);
+
+  border: 1.5px solid rgba(100, 100, 100, 1);
+  border-radius: 6px;
+  qproperty-toastPosY: 15;
+}
+
+FinToastWidget QLabel
+{
+  font-size: 14px;
+}
+
+
+  

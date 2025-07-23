@@ -16,6 +16,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
+#include "SubWidgets/FinToast.h"
 #include "SubWidgets/FinToolTip.h"
 #include "SubWidgets/LanguageSelector.h"
 
@@ -33,6 +34,8 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     ui->TextEditLayout->setSpacing(8);
 
     ui->srcTextEdit->setTabChangesFocus(true);
+    ui->srcTextEdit->setAccessibleName(tr("번역 원문 입력 편집기"));
+    ui->trTextEdit->setAccessibleName(tr("번역 결과"));
     ui->trTextEdit->setTabChangesFocus(true);
     ui->trTextEdit->setReadOnly(true);
     ui->trTextEdit->setMouseTracking(false);
@@ -52,6 +55,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     connect(trCopy, &QPushButton::clicked, this, [this]()
     {
         QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
+        FinToast::showToast(tr("복사 완료!"));
     });
 
 

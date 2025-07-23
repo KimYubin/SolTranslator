@@ -64,11 +64,7 @@
        <widget class="MenuPlainTextEdit" name="srcTextEdit"/>
       </item>
       <item>
-       <widget class="MenuTextBrowser" name="trTextEdit">
-        <property name="readOnly">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="MenuTextEdit" name="trTextEdit"/>
       </item>
      </layout>
     </item>
@@ -85,8 +81,8 @@
    <header>SubWidgets/CustomMenuTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>MenuTextBrowser</class>
-   <extends>QTextBrowser</extends>
+   <class>MenuTextEdit</class>
+   <extends>QTextEdit</extends>
    <header>SubWidgets/CustomMenuTextEdit.h</header>
   </customwidget>
  </customwidgets>

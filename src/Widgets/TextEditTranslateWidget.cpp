@@ -2,6 +2,7 @@
 
 #include "TextEditTranslateWidget.h"
 
+#include <QClipboard>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPlainTextEdit>
@@ -37,10 +38,22 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     ui->trTextEdit->setMouseTracking(false);
     ui->trTextEdit->setTextInteractionFlags(
         Qt::TextSelectableByMouse |
-        Qt::TextSelectableByKeyboard |
-        Qt::LinksAccessibleByMouse |
-        Qt::LinksAccessibleByKeyboard
+        Qt::TextSelectableByKeyboard //|
+        // Qt::LinksAccessibleByMouse |
+        // Qt::LinksAccessibleByKeyboard
     );
+
+    // 전체 복사 버튼
+    QPushButton* trCopy = new QPushButton(ui->trTextEdit);
+    trCopy->setIcon(QIcon(":/img/copy_img"));
+    trCopy->setFocusPolicy(Qt::TabFocus);
+    FinTooltipFilter::setBubbleToolTip(trCopy, tr("모든 번역 복사"));
+    ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
+    connect(trCopy, &QPushButton::clicked, this, [this]()
+    {
+        QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
+    });
+
 
     // 출발언어 선택기
     _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, finConfig.getTextSrcLang());

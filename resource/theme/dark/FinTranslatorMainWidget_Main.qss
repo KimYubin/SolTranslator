@@ -134,8 +134,8 @@ color: rgb(220, 222, 223);
 
 #FinTranslatorMainWidget  QDateTimeEdit,
 #FinTranslatorMainWidget  QSpinBox,
-#FinTranslatorMainWidget  QDoubleSpinBox,
-#FinTranslatorMainWidget  QTextEdit
+#FinTranslatorMainWidget  QDoubleSpinBox
+/* #FinTranslatorMainWidget  QTextEdit */
 /* #FinTranslatorMainWidget  QLineEdit, */
 {
   
@@ -157,18 +157,6 @@ color: rgb(220, 222, 223);
   border-width: 0 0 2px 0;
 }
 
-#FinTranslatorMainWidget  QPlainTextEdit {
-  border-radius: 4px;
-  padding: 8px 16px;
-  background-color: rgba(50, 55, 60, 1);
-  border: 2px solid #4f5b62;
-}
-
-#FinTranslatorMainWidget  QTextEdit {
-  padding: 8px 16px;
-  border-radius: 4px;
-  background-color: #232629;
-}
 
 #FinTranslatorMainWidget  QDateTimeEdit:disabled,
 #FinTranslatorMainWidget  QSpinBox:disabled,

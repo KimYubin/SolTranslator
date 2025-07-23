@@ -248,6 +248,12 @@ QComboBox
   background-color: rgba(35, 38, 41, 1);
 }
 
+QComboBox:hover
+{
+  color: rgba(245, 245, 245, 1);
+  border-bottom-color: rgba(245, 245, 245, 1);
+}
+
 QComboBox:on,
 QComboBox:focus
 {
@@ -262,18 +268,6 @@ QComboBox:disabled
   color: rgba(117, 117, 117, 1);
   background-color: rgba(44, 46, 48, 1);
   border-bottom: 2px solid #232629;
-}
-
-QComboBox[frame='false'] 
-{
-  color: #ffffff;
-  background-color: transparent;
-  border: 1px solid transparent;
-}
-
-QComboBox[frame='false']:disabled 
-{
-  color: rgba(255, 255, 255, 0.2);
 }
 
 QComboBox::drop-down	

@@ -33,7 +33,9 @@ file(GLOB_RECURSE PROJECT_SOURCES
 
 if (WIN32)
     #! [appicon_windows]
-    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc")
+    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc"
+            src/SubWidgets/FinToast.cpp
+            src/SubWidgets/FinToast.h)
     #! [appicon_windows]
 endif()
 
@@ -115,7 +117,7 @@ qt_add_translations(FinTranslator
 )
 
 add_dependencies(FinTranslator update_translations)
-]]
+# ]]
 
 
 

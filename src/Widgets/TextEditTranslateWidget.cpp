@@ -10,6 +10,7 @@
 #include <QTimer>
 
 #include "FinTranslatorCore.h"
+#include "FinTranslatorMainWidget.h"
 #include "FinTypes.h"
 #include "FinUtilibrary.h"
 
@@ -55,7 +56,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     connect(trCopy, &QPushButton::clicked, this, [this]()
     {
         QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-        FinToast::showToast(tr("복사 완료!"));
+        FinToast::showToast(tr("복사 완료!"), finCore->getFinMainWidget());
     });
 
 

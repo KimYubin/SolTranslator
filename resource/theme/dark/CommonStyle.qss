@@ -88,6 +88,22 @@ QPushButton:checked:disabled {
 }
 
 /* -------------------------------- */
+/*  QLabel  */
+
+QLabel 
+{
+  /* border: none; */
+  /* background: transparent; */
+  color: rgba(242,242,242,1);
+}
+
+QLabel:disabled 
+{
+  color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* -------------------------------- */
 /* QLineEdit */
 QLineEdit
 {
@@ -329,19 +345,19 @@ FinToolTipBallon
 
 FinToastWidget
 {
-  padding: 4px 10px;
-  margin: 0px;
-  background-color: rgba(44, 44, 44, 0.88);
-
-  border: 1.5px solid rgba(100, 100, 100, 1);
-  border-radius: 6px;
-  qproperty-toastPosY: 15;
+  qproperty-targetPos: 15;
 }
 
 FinToastWidget QLabel
-{
+{ 
   font-size: 14px;
+
+  padding: 5px 7px;
+  margin: 0px;
+
+  background-color: rgba(36, 36, 36, 1);
+
+  border: 1.5px solid rgba(85, 85, 85, 1);
+  border-radius: 6px;
 }
 
-
-  

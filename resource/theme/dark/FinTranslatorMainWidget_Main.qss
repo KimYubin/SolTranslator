@@ -668,19 +668,6 @@ background: #1de9b6;
 }
 
 /*  ------------------------------------------------------------------------  */
-/*  QLabel  */
-
-#FinTranslatorMainWidget QLabel {
-  border: none;
-  background: transparent;
-  color: #ffffff
-}
-
-#FinTranslatorMainWidget  QLabel:disabled {
-  color: rgba(255, 255, 255, 0.2)
-}
-
-/*  ------------------------------------------------------------------------  */
 /*  VLines and HLinex  */
 
 #FinTranslatorMainWidget  QFrame[frameShape="4"] {

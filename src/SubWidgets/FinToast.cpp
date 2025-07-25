@@ -16,25 +16,25 @@
 #include "Widgets/FinTranslatorMainWidget.h"
 
 
-class FinToastWidget : public QFrame
+class FinToastWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(int toastPosY READ getToastPosY WRITE setToastPosY)
+    Q_PROPERTY(int targetPos READ getTargetPos WRITE setTargetPos)
     Q_PROPERTY(float toastRatio READ getToastRatio WRITE setToastRatio)
 
 public:
-    explicit FinToastWidget(const QString& inMsg, const int inExpireTime, QWidget* parent = nullptr);
+    explicit FinToastWidget(const QString& inMsg, QWidget* parent, const int inExpireTime);
     ~FinToastWidget() override;
 
 private:
-    int getToastPosY() const { return _toastPosY; };
-    void setToastPosY(const int inToastPosY) { _toastPosY = inToastPosY; };
+    int getTargetPos() const { return _targetPos; };
+    void setTargetPos(const int inTargetPos) { _targetPos = inTargetPos; };
 
     float getToastRatio() const { return _toastRatio; };
     void setToastRatio(const float inToastRatio);;
 
-    QLabel* _label;
     QVBoxLayout* _layout;
+    QLabel* _label;
 
     QGraphicsOpacityEffect* _effect;
 
@@ -42,24 +42,28 @@ private:
     QPropertyAnimation* _endAnim;
     QTimer _expireTimer;
 
-    int _toastPosY = 200;
-    float _toastRatio; // 시작, 종료 애니메이션 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
+    int _targetPos = 200; // 토스트 메시지를 띄울 위치. 부모 위젯에 상대 위치
+    float _toastRatio;     // 시작, 종료 애니메이션에서 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
 };
 
 #include "FinToast.moc"
 
-FinToastWidget::FinToastWidget(const QString& inMsg, const int inExpireTime, QWidget* parent)
-    : QFrame(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
+FinToastWidget::FinToastWidget(const QString& inMsg, QWidget* parent, const int inExpireTime)
+    : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_ShowWithoutActivating);
+    setAttribute(Qt::WA_TranslucentBackground);
 
-    _label = new QLabel(this);
-    _label->setText(inMsg);
     _layout = new QVBoxLayout(this);
     _layout->setSpacing(0);
     _layout->setContentsMargins(0, 0, 0, 0);
+
+    _label = new QLabel(this);
+    _label->setText(inMsg);
+
     _layout->addWidget(_label);
+
     adjustSize();
 
     _effect = new QGraphicsOpacityEffect(this);
@@ -78,7 +82,6 @@ FinToastWidget::FinToastWidget(const QString& inMsg, const int inExpireTime, QWi
     _endAnim->setStartValue(1);
     _endAnim->setEndValue(0);
 
-    // 추후 종료시간 초기화 혹은 연장 기능을 위해, singleShot 대신 멤버 변수를 사용합니다. 
     _expireTimer.setInterval(inExpireTime);
     _expireTimer.setSingleShot(true);
 
@@ -110,28 +113,28 @@ void FinToastWidget::setToastRatio(const float inToastRatio)
 {
     _toastRatio = qBound(0.0f, inToastRatio, 1.0f);
 
-    FinTranslatorMainWidget* _mainWidget = finCore->getFinMainWidget();
-    if (_mainWidget && (_mainWidget->isHidden() == false))
+    QPoint newPoint(10, 10);
+    const int currentPosY = _targetPos * _toastRatio;
+
+    const QWidget* parentW = parentWidget();
+
+    // 부모 위젯이 show 상태면 중앙 상단에 배치. 그외엔 우하단
+    if (parentW && (parentW->isHidden() == false))
     {
-        setParent(_mainWidget);
 
-        const int targetPosY = _toastPosY * _toastRatio;
-
-        const QRect mainGeo     = _mainWidget->geometry();
+        const QRect mainGeo     = parentW->geometry();
         const QPoint mainCenter = QPoint((mainGeo.width() / 2) - (width() / 2), 0);
-        const QPoint newPoint   = mainCenter + QPoint(0, targetPosY);
 
-        move(newPoint);
+        newPoint = mainCenter + QPoint(0, currentPosY);
     }
     else if (const auto pScreen = qApp->primaryScreen())
     {
-        const QRect avGeo     = pScreen->availableGeometry();
-        const QPoint bR       = avGeo.bottomRight();
-        const QPoint newPoint = bR - QPoint((width() * 1.15), (height() * 1.15));
+        const QPoint avBottomRight = pScreen->availableGeometry().bottomRight();
 
-        move(newPoint);
+        newPoint = avBottomRight - (QPoint(width() + _targetPos, height() + currentPosY) /** 1.15*/);
     }
 
+    move(newPoint);
     _effect->setOpacity(_toastRatio);
 }
 
@@ -145,7 +148,7 @@ FinToast::~FinToast() {
 // todo: 중복 메시지를 모아서 내보내는 기능 추가
 // todo: 여러 메시지가 나올때 채팅창처럼 순차적으로 표기되도록 해야함.
 // FinToastWidget map
-void FinToast::showToast(const QString& inMessage, const int inDuration)
+void FinToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration)
 {
-    new FinToastWidget(inMessage, inDuration);
+    new FinToastWidget(inMessage, inToastParent, inDuration);
 }

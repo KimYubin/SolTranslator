@@ -41,6 +41,15 @@ void noHintingFont(T* inOutWidget)
     qfont.setHintingPreference(QFont::PreferNoHinting);
     qfont.setStyleStrategy(QFont::PreferAntialias);
     inOutWidget->setFont(qfont);
+
+
+    // 그레이스케일 적용을 위해서는 qt.conf 파일에 다음 내용을 추가해야합니다.
+    //
+    // [Platforms]
+    // WindowsArguments = fontengine=freetype
+    // 
+    // 또한 다음을 적용해야합니다.
+    // qfont.setStyleStrategy(QFont::NoSubpixelAntialias);    
 }
 
 }

@@ -453,8 +453,9 @@ QMargins FinToolTipBallon::triMargins(const ShowDirection inDirection) const
 
 void FinTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
 {
+    static FinTooltipFilter* ins = new FinTooltipFilter();
     inTargetWidget->setToolTip(inToolTip);
-    inTargetWidget->installEventFilter(new FinTooltipFilter(inTargetWidget));
+    inTargetWidget->installEventFilter(ins);
 }
 
 void FinTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)

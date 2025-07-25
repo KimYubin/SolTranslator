@@ -18,6 +18,8 @@ class FinTooltipFilter : public QObject
 {
     Q_OBJECT
 
+    explicit FinTooltipFilter(QObject* parent = nullptr);
+
 public:
     /**
      * 버블 툴팁을 추가합니다.
@@ -29,7 +31,6 @@ public:
 
     static void setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip);
 
-    explicit FinTooltipFilter(QObject* parent = nullptr);
 
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
 };

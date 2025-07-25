@@ -17,7 +17,7 @@
 
         <file alias="close_button_img">close_48dp_E3E3E3_FILL0_wght300_GRAD0_opsz48.svg</file>
 
-        <file alias="wait_anim_img">animation_test.svg</file>
+        <file alias="wait_anim_img">linear_progress_indeterminate.svg</file>
 
         <file alias="text_caret_cursor">text_select_match_case_48e3_w700_G200_800.svg</file>
         <file alias="document_img">docs_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>

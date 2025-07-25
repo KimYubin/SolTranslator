@@ -31,24 +31,19 @@ file(GLOB_RECURSE PROJECT_SOURCES
         "resource/*.qrc"
 )
 
-if (WIN32)
-    #! [appicon_windows]
-    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc"
-            src/SubWidgets/FinToast.cpp
-            src/SubWidgets/FinToast.h)
-    #! [appicon_windows]
-endif()
 
 qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
-        ${app_icon_resource_windows}
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
-        src/Managers/StyleManger.cpp
-        src/Managers/StyleManger.h
-        src/SubWidgets/CustomMenuTextEdit.cpp
-        src/SubWidgets/CustomMenuTextEdit.h
 )
+
+if (WIN32)
+    #! [appicon_windows]
+    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc")
+    target_sources(FinTranslator PRIVATE ${app_icon_resource_windows})
+    #! [appicon_windows]
+endif ()
 
 # Android 환경일 경우에만 패키지 소스 디렉토리 설정
 # Define target properties for Android with Qt 6 as:

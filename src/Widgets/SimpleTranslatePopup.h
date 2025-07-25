@@ -9,6 +9,7 @@
 
 #include "FinTypes.h"
 
+class LoadingBar;
 class QPushButton;
 class QSizeGrip;
 class QScrollBar;
@@ -37,6 +38,8 @@ public:
     explicit SimpleTranslatePopup(QWidget* parent = nullptr);
 
     ~SimpleTranslatePopup() override;
+
+    virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
 protected:
     virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
@@ -155,6 +158,8 @@ private:
     QPushButton* _maxRestoreButton;
     QPushButton* _minimizedButton;
     QPushButton* _closeButton;
+
+    LoadingBar* _loadingBar;
 
     QSizeGrip* _sizeGrip;
 };

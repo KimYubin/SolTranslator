@@ -25,6 +25,7 @@
 #include "Managers/ConfigManager.h"
 
 #include "SubWidgets/FinToolTip.h"
+#include "SubWidgets/LoadingBar.h"
 
 #include "Widgets/ui_SimpleTranslatePopup.h"
 
@@ -78,6 +79,12 @@ SimpleTranslatePopup::~SimpleTranslatePopup()
     qApp->removeEventFilter(this);
     emit abortTranslateReq();
     delete ui;
+}
+
+void SimpleTranslatePopup::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+{
+    ITranslateWidget::completeTransText(inTranslatedText, inTextStyle);
+    _loadingBar->stop();
 }
 
 void SimpleTranslatePopup::applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle)
@@ -409,9 +416,10 @@ void SimpleTranslatePopup::setupUI()
     _sizeGrip->installEventFilter(this);
 
 
-    QSvgWidget* waitAnimWidget = new QSvgWidget(QString(":/img/wait_anim_img"), this);
-    waitAnimWidget->setFixedSize(20,20);
-    ui->statusLayout->addWidget(waitAnimWidget, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
+    _loadingBar = new LoadingBar(":/img/wait_anim_img", this);
+    ui->loadingLayout->addWidget(_loadingBar, 0, 0);
+    _loadingBar->run();
+
     // ~======================
     // resultText & scroll bar
     ui->textLayout->setContentsMargins(20, 0, 10, 20);
@@ -540,6 +548,7 @@ void SimpleTranslatePopup::calculateTextEditLayoutInfo()
     const QMargins inMargins = ui->textLayout->contentsMargins()
             + ui->mainLayout->contentsMargins()                        // 메인 컨텐츠 레이아웃 마진
             + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)  // 상단 타이틀바 레이아웃 높이
+            + QMargins(0, ui->loadingLayout->sizeHint().height(), 0, 0)// 상단 로딩바 레이아웃 높이
             + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()) // 하단 상태표시 레이아웃 높이
             + QMargins(0, 0, ui->outerVScrollBar->width(), 0);         // 우측 외부 스크롤바
 

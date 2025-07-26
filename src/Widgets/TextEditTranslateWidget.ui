@@ -13,12 +13,6 @@
   <property name="windowTitle">
    <string>TextEditTranslateWidget</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QLabel
-{
-	text-align: center;
-}</string>
-  </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>

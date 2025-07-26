@@ -510,7 +510,7 @@ void SimpleTranslatePopup::setupUI()
 
 QSize SimpleTranslatePopup::calculateTextEditSize(const QString& inNewText) const
 {
-    const QTextEdit* textEdit = ui->resultText;
+    const auto* textEdit = ui->resultText;
 
     int newWidth;
     const int newHeight = qBound(_minEditSize.height(), textEdit->document()->size().toSize().height(), _maxEditSize.height());

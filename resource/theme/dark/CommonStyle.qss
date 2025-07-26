@@ -352,12 +352,12 @@ FinToastWidget QLabel
 { 
   font-size: 14px;
 
-  padding: 5px 7px;
+  padding: 4px 6px;
   margin: 0px;
 
   background-color: rgba(36, 36, 36, 1);
 
-  border: 1.5px solid rgba(85, 85, 85, 1);
+  border: 1px solid rgba(70, 70, 70, 1);
   border-radius: 6px;
 }
 

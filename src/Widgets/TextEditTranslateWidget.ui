@@ -58,7 +58,7 @@
        <widget class="MenuPlainTextEdit" name="srcTextEdit"/>
       </item>
       <item>
-       <widget class="MenuTextEdit" name="trTextEdit"/>
+       <widget class="LayoutTextEdit" name="trTextEdit"/>
       </item>
      </layout>
     </item>
@@ -75,9 +75,9 @@
    <header>SubWidgets/CustomMenuTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>MenuTextEdit</class>
+   <class>LayoutTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>SubWidgets/CustomMenuTextEdit.h</header>
+   <header>SubWidgets/LayoutTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

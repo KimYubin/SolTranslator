@@ -2,10 +2,11 @@
 
 #ifndef CUSTOMMENUTEXTEDIT_H
 #define CUSTOMMENUTEXTEDIT_H
+
 #include <QPlainTextEdit>
 #include <QTextBrowser>
 
-class QHBoxLayout;
+
 /**
  * contextMenu의 창테두리와 배경을 투명하게 처리하기 위한 클래스입니다. 
  */
@@ -20,6 +21,7 @@ public:
     virtual void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
+
 class MenuTextEdit : public QTextEdit
 {
     Q_OBJECT
@@ -29,12 +31,6 @@ public:
     ~MenuTextEdit() override;
 
     virtual void contextMenuEvent(QContextMenuEvent* event) override;
-    virtual void resizeEvent(QResizeEvent* event) override;
-
-    QHBoxLayout* getLayout() const { return _layout; };
-    
-    QWidget* _bottomWidget;
-    QHBoxLayout* _layout;
 };
 
 

@@ -50,6 +50,12 @@ public:
     void hideTipImmediately();
     void hideTipDelay();
 
+    /**
+     * 위젯의 툴팁이 변경될 때 사용합니다.
+     * 해당 위젯의 툴팁이 보여지고 있다면, 새로운 툴팁으로 업데이트 합니다.
+     */
+    void updateWidgetToolTip(const QWidget* inWidget);
+
 protected:
     virtual void paintEvent(QPaintEvent*) override;
 
@@ -71,6 +77,8 @@ private:
     void   setBorderColor(const QColor inColor);
 
     void updateMargins() const;
+
+    QPointer<const QWidget> _currentTargetWidget;
 
     QLabel* _label;
     QVBoxLayout* _layout;
@@ -146,6 +154,7 @@ void FinToolTipBallon::showToolTip(const QWidget* widget)
 {
     if (widget && widget->isVisible() && widget->toolTip().isEmpty() == false)
     {
+        _currentTargetWidget = QPointer(widget);
         showToolTipImpl(widget);
     }
     else
@@ -257,6 +266,14 @@ void FinToolTipBallon::hideTipDelay()
 {
     if (_hideTimer.isActive() == false)
         _hideTimer.start(300);
+}
+
+void FinToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
+{
+    if (_currentTargetWidget == inWidget)
+    {
+        showToolTipImpl(_currentTargetWidget);
+    }
 }
 
 void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
@@ -483,7 +500,8 @@ void FinTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget
             toolTip = inOnCheckToolTip;
         }
         inTargetWidget->setToolTip(toolTip);
-        FinToolTipBallon::instance()->showToolTip(inTargetWidget);
+
+        FinToolTipBallon::instance()->updateWidgetToolTip(inTargetWidget);
     });
 }
 

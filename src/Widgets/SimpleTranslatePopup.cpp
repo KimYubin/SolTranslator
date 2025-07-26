@@ -18,6 +18,7 @@
 #include <QSvgWidget>
 #include <QtConcurrentRun>
 #include <QTimer>
+#include <QTextBlock>
 #include <qevent.h>
 
 #include "FinUtilibrary.h"
@@ -29,6 +30,13 @@
 
 #include "Widgets/ui_SimpleTranslatePopup.h"
 
+constexpr QColor codeBgColor(29, 29, 29, 255);
+
+const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
+                               .arg(codeBgColor.red())
+                               .arg(codeBgColor.green())
+                               .arg(codeBgColor.blue())
+                               .arg(codeBgColor.alpha());
 
 SimpleTranslatePopup::SimpleTranslatePopup(QWidget* parent)
     : ITranslateWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
@@ -131,6 +139,32 @@ void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText,
         break;
     default: ;
     }
+
+    // 문단간 간격 조정.
+    const QFontMetricsF fntMetricsF(ui->resultText->font());
+    const qreal lineHeight = fntMetricsF.lineSpacing();
+    const qreal parSpacing = lineHeight * 0.6; // 줄간격의 1.6배
+
+    const QTextDocument* doc = ui->resultText->document();
+    QTextBlock block         = doc->firstBlock();
+    
+    while (block.isValid() && block.next().isValid())
+    {
+        QTextCursor blockCursor(block);
+        QTextBlockFormat blockFormat = blockCursor.blockFormat();
+
+        // 코드 블록은 간격 조정 안함.
+        if (blockFormat.background().color() == codeBgColor
+            && block.next().blockFormat().background().color() == codeBgColor)
+        {
+            break;
+        }
+
+        blockFormat.setBottomMargin(parSpacing);
+        blockCursor.setBlockFormat(blockFormat);
+
+        block = block.next();
+    }
 }
 
 void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
@@ -141,9 +175,9 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
     QString md = inMarkdownStr;
 
     // 이스케이프 되지 않은 <>가 태그로 인식되는 문제 해결
-    const QRegularExpression unescapedLT(R"((?<!\\)<)");
+    static const QRegularExpression unescapedLT(R"((?<!\\)<)");
     md.replace(unescapedLT, R"(\<)");
-    const QRegularExpression unescapedGT(R"((?<!\\)>)");
+    static const QRegularExpression unescapedGT(R"((?<!\\)>)");
     md.replace(unescapedGT, R"(\>)");
 
     QStringList monoFontList = doc->defaultFont().families();
@@ -163,7 +197,7 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
     // 문단 코드
     const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
-    QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(inMarkdownStr);
+    QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(md);
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
@@ -177,7 +211,7 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
         // 원래 코드 블록 전체를 수정된 내용으로 대체
         // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original, "\n<pre style=\"white-space: pre-wrap; background-color: rgba(29,29,29,1); " + codeFontFamilies + " \">\n" + modified + "</pre>");
+        md.replace(original, "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n" + modified + "</pre>");
     }
 
     // 단어 코드 스니펫
@@ -196,7 +230,7 @@ void SimpleTranslatePopup::setMarkdown(const QString& inMarkdownStr)
 
         // 원래 코드 블록 전체를 수정된 내용으로 대체
         // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original, "<code style= \"" + codeFontFamilies + "background-color: rgba(29,29,29,1); \">" + modified + "</code>");
+        md.replace(original, "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">" + modified + "</code>");
     }
 
     doc->setMarkdown(md);

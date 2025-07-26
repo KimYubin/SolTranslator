@@ -51,7 +51,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     QPushButton* trCopy = new QPushButton(ui->trTextEdit);
     trCopy->setIcon(QIcon(":/img/copy_img"));
     trCopy->setFocusPolicy(Qt::TabFocus);
-    FinTooltipFilter::setBubbleToolTip(trCopy, tr("모든 번역 복사"));
+    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
     ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
     connect(trCopy, &QPushButton::clicked, this, [this]()
     {

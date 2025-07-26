@@ -5,7 +5,6 @@
 {
   border: none;
   border-radius : 8px;
-  /* background-color: rgba(235, 235, 235, 0.98); */
   background-color: rgb(38, 38, 38); /* 배경 투명화 금지. 서브픽셀 안티에일리어싱을 위함. */
 }
 #SimpleTranslatePopup a,
@@ -28,6 +27,7 @@
   /* font-size: 14pt; */
   font-size: 19px;
   font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  
 }
 
 /* -------------------- */

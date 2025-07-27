@@ -54,10 +54,10 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     trCopy->setFocusPolicy(Qt::TabFocus);
     FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
     ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
-    connect(trCopy, &QPushButton::clicked, this, [this]()
+    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
         QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-        FinToast::showToast(tr("복사 완료!"), finCore->getFinMainWidget());
+        FinToast::popToastOnWidget(tr("복사 완료!"), trCopy);
     });
 
 

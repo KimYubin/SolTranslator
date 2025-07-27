@@ -345,7 +345,8 @@ FinToolTipBallon
 
 FinToastWidget
 {
-  qproperty-targetPos: 15;
+  qproperty-showPos: 15;
+  qproperty-popPos: 5;
 }
 
 FinToastWidget QLabel

@@ -511,9 +511,11 @@ FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
 
 bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 {
-    if (/*event->type() == QEvent::Enter ||*/ event->type() == QEvent::ToolTip)
+    switch (event->type())
     {
-        const QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+    case QEvent::ToolTip:
+    {
+        // const QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
         const QWidget* widget = qobject_cast<QWidget*>(obj);
         if (widget == nullptr)
         {
@@ -528,12 +530,19 @@ bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 
         return true; // 기본 툴팁을 차단
     }
-    else if (event->type() == QEvent::Leave
-        || event->type() == QEvent::Hide
-        || event->type() == QEvent::Close
-        || event->type() == QEvent::Quit)
+    case QEvent::Leave:
+    case QEvent::Hide:
+    case QEvent::Close:
+    case QEvent::Quit:
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick:
+    case QEvent::Wheel:
     {
         FinToolTipBallon::instance()->hideTipImmediately();
+        break;
+    }
+    default: break;  
     }
 
     return QObject::eventFilter(obj, event);

@@ -19,19 +19,27 @@
 class FinToastWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(int targetPos READ getTargetPos WRITE setTargetPos)
+    Q_PROPERTY(int showPos READ getshowPos WRITE setshowPos)
+    Q_PROPERTY(int popPos READ getpopPos WRITE setpopPos)
     Q_PROPERTY(float toastRatio READ getToastRatio WRITE setToastRatio)
 
 public:
-    explicit FinToastWidget(const QString& inMsg, QWidget* parent, const int inExpireTime);
+    explicit FinToastWidget(const QString& inMsg
+                          , QWidget* targetWidget
+                          , QWidget* parent
+                          , const int inExpireTime);
     ~FinToastWidget() override;
 
 private:
-    int getTargetPos() const { return _targetPos; };
-    void setTargetPos(const int inTargetPos) { _targetPos = inTargetPos; };
+    int getshowPos() const { return _showPos; };
+    void setshowPos(const int inshowPos) { _showPos = inshowPos; };
+    int getpopPos() const { return _popPos; };
+    void setpopPos(const int inpopPos) { _popPos = inpopPos; };
 
     float getToastRatio() const { return _toastRatio; };
     void setToastRatio(const float inToastRatio);;
+
+    QPointer<QWidget> _targetWidget;
 
     QVBoxLayout* _layout;
     QLabel* _label;
@@ -42,14 +50,20 @@ private:
     QPropertyAnimation* _endAnim;
     QTimer _expireTimer;
 
-    int _targetPos = 200; // 토스트 메시지를 띄울 위치. 부모 위젯에 상대 위치
-    float _toastRatio;     // 시작, 종료 애니메이션에서 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
+    int _showPos = 15; // show toast 상대 위치.
+    int _popPos  = 5;  // pop toast 상대 위치
+
+    float _toastRatio; // 시작, 종료 애니메이션에서 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
 };
 
 #include "FinToast.moc"
 
-FinToastWidget::FinToastWidget(const QString& inMsg, QWidget* parent, const int inExpireTime)
+FinToastWidget::FinToastWidget(const QString& inMsg
+                             , QWidget* targetWidget
+                             , QWidget* parent
+                             , const int inExpireTime)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
+    , _targetWidget(targetWidget)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_ShowWithoutActivating);
@@ -80,7 +94,14 @@ FinToastWidget::FinToastWidget(const QString& inMsg, QWidget* parent, const int 
     _endAnim->setDuration(_animDuration);
     _endAnim->setEasingCurve(QEasingCurve::InCubic);
     _endAnim->setStartValue(1);
-    _endAnim->setEndValue(0);
+    if (_targetWidget.isNull())
+    {
+        _endAnim->setEndValue(0);
+    }
+    else
+    {
+        _endAnim->setEndValue(2);
+    }
 
     _expireTimer.setInterval(inExpireTime);
     _expireTimer.setSingleShot(true);
@@ -111,31 +132,44 @@ FinToastWidget::~FinToastWidget() {
 
 void FinToastWidget::setToastRatio(const float inToastRatio)
 {
-    _toastRatio = qBound(0.0f, inToastRatio, 1.0f);
+    _toastRatio = qBound(0.0f, inToastRatio, 2.0f);
 
+    // 위치 조정
     QPoint newPoint(10, 10);
-    const int currentPosY = _targetPos * _toastRatio;
 
-    const QWidget* parentW = parentWidget();
-
-    // 부모 위젯이 show 상태면 중앙 상단에 배치. 그외엔 우하단
-    if (parentW && (parentW->isHidden() == false))
+    if (parentWidget() && (parentWidget()->isHidden() == false))
     {
-
-        const QRect mainGeo     = parentW->geometry();
+        // show toast: 부모 위젯의 내부 중앙 상단에 배치
+        const int currentPosY   = _showPos * _toastRatio;
+        const QRect mainGeo     = parentWidget()->geometry();
         const QPoint mainCenter = QPoint((mainGeo.width() / 2) - (width() / 2), 0);
 
         newPoint = mainCenter + QPoint(0, currentPosY);
     }
+    else if (_targetWidget && (_targetWidget->isHidden() == false))
+    {
+        // pop toast: 대상 위젯의 바깥쪽 중앙 위에 배치
+        const int currentPosY  = _popPos * _toastRatio;
+        const QRect mainGeo    = _targetWidget->geometry();
+        const QPoint centerTop = QPoint((mainGeo.width() / 2) - (width() / 2)
+                                      , -(height() + currentPosY));
+
+        newPoint = _targetWidget->mapToGlobal(centerTop);
+    }
     else if (const auto pScreen = qApp->primaryScreen())
     {
-        const QPoint avBottomRight = pScreen->availableGeometry().bottomRight();
+        // show, pop 대상 위젯이 보이지 않을 때, 화면 우측 하단에 배치
+        const int currentPosY   = _showPos * _toastRatio;
+        const QPoint avScreenBR = pScreen->availableGeometry().bottomRight();
 
-        newPoint = avBottomRight - (QPoint(width() + _targetPos, height() + currentPosY) /** 1.15*/);
+        newPoint = avScreenBR - (QPoint(width() + _showPos, height() + currentPosY));
     }
 
     move(newPoint);
-    _effect->setOpacity(_toastRatio);
+
+    // 투명도 조정
+    const float toastOpacity = _toastRatio > 1.0f ? (2.0f - _toastRatio) : _toastRatio;
+    _effect->setOpacity(toastOpacity);
 }
 
 FinToast::FinToast(QObject* parent) : QObject(parent)
@@ -150,5 +184,10 @@ FinToast::~FinToast() {
 // FinToastWidget map
 void FinToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration)
 {
-    new FinToastWidget(inMessage, inToastParent, inDuration);
+    new FinToastWidget(inMessage, nullptr, inToastParent, inDuration);
+}
+
+void FinToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDuration)
+{
+    new FinToastWidget(inMessage, inTargetWidget, nullptr, inDuration);
 }

@@ -2,9 +2,7 @@
 
 #include "CustomMenuTextEdit.h"
 
-#include <QHBoxLayout>
 #include <QMenu>
-#include <QPushButton>
 
 void customMenu(QContextMenuEvent* event, QMenu* menu)
 {

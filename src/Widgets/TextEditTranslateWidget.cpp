@@ -56,8 +56,19 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
     connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
+        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
+        {
+            FinToast::popToastOnWidget(tr("복사 완료!"), trCopy);
+        }, Qt::SingleShotConnection);
+
+        // 연결 대기 시간 제한.
+        // 비어있는 복사와 무제한 대기를 방지합니다.
+        QTimer::singleShot(500, this, [connection]()
+        {
+            disconnect(connection);
+        });
+
         QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-        FinToast::popToastOnWidget(tr("복사 완료!"), trCopy);
     });
 
 

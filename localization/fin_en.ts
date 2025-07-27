@@ -243,47 +243,47 @@
 <context>
     <name>SimpleTranslatePopup</name>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="38"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="47"/>
         <source>fin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="342"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="383"/>
         <source>항상 위 켜기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="342"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="383"/>
         <source>항상 위 끄기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="355"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="396"/>
         <source>임시창을 일반창으로 승격</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="355"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="396"/>
         <source>임시 창모드</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="371"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="412"/>
         <source>최소화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="386"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="427"/>
         <source>최대화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="386"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="427"/>
         <source>이전 크기로 복원</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="396"/>
+        <location filename="../src/Widgets/SimpleTranslatePopup.cpp" line="437"/>
         <source>닫기</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,33 +296,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="46"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="40"/>
         <source>⮂</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="47"/>
-        <source>출발 언어</source>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="38"/>
+        <source>번역 원문 입력 편집기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="40"/>
+        <source>번역 결과</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="55"/>
+        <source>번역 복사</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="61"/>
+        <source>복사 완료!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="77"/>
+        <source>출발 언어</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="85"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="65"/>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="67"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="95"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="97"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="66"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="96"/>
         <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="132"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="162"/>
         <source>번역 중...</source>
         <translation type="unfinished"></translation>
     </message>

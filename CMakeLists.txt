@@ -36,6 +36,8 @@ qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
+        src/Widgets/PopupTranslateWidget.cpp
+        src/Widgets/PopupTranslateWidget.h
 )
 
 if (WIN32)
@@ -93,7 +95,7 @@ target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
 
 
 
-##[[
+#[[
 #### 현지화
 qt_standard_project_setup(
         I18N_SOURCE_LANGUAGE ko

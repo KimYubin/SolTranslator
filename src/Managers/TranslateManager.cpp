@@ -19,7 +19,7 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
 
-#include "Widgets/SimpleTranslatePopup.h"
+#include "Widgets/PopupTranslateWidget.h"
 
 
 TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
@@ -92,7 +92,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
         return;
     }
 
-    SimpleTranslatePopup* simple = new SimpleTranslatePopup();
+    PopupTranslateWidget* simple = new PopupTranslateWidget();
     auto runSimpleTranslate = [=, this](const QString& inOriginText, const TextStyle inTextStyle)
     {
         QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
@@ -107,7 +107,7 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
           , [=](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
         });
 
-        connect(simple, &SimpleTranslatePopup::abortTranslateReq, transUnit, [=]()
+        connect(simple, &PopupTranslateWidget::abortTranslateReq, transUnit, [=]()
         {
             if (transUnit.isNull())
             {

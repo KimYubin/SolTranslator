@@ -59,10 +59,6 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     // 포커스 변경에 따른 그림자 on/off 제어. (그림자 성능)
     connect(qApp, &QApplication::focusChanged, this, &PopupTranslateWidget::detectFocusInOut);
 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    
     changePopupMode();
 
     // ~======================
@@ -72,14 +68,17 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     _animation->setEasingCurve(QEasingCurve::OutQuad);
     connect(_animation, &QAbstractAnimation::finished, this, &PopupTranslateWidget::adjustSizeAfterAnimationFinished);
 
-
     calculateTextEditLayoutInfo();
-
-    showTranslationPopup("", TextStyle::PlainText);
 
     show();
     raise();
     activateWindow();
+
+    // resizeEvent 유도를 위해 show 이후에 호출
+    // animation start size 지정.
+    ui->resultText->setFixedSize(20, 20);
+    adjustSize();
+    showTranslationPopup("", TextStyle::PlainText);
 }
 
 PopupTranslateWidget::~PopupTranslateWidget()
@@ -239,14 +238,9 @@ void PopupTranslateWidget::setMarkdown(const QString& inMarkdownStr)
 
 void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 {
-    // size
-    const QSize bgFrameSize = inTextEditSize + _innerMarginSize;
-    const QSize widgetSize  = bgFrameSize + _outerMarginSize;
-
     // text edit 폭 줄어드는 현상 방지.
     ui->resultText->setFixedSize(inTextEditSize);
-    ui->bgFrame->setFixedSize(bgFrameSize);
-    setFixedSize(widgetSize);
+    adjustSize();
 
     // 생성될 스크린 위치 추적
     QPointF screenTopLeft  = QPointF();
@@ -277,7 +271,7 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
     const QPoint recCenter    = rect().center();
 
     QPoint targetPos = targetCenter - recCenter;
-    targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - widgetSize.width()));
+    targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - size().width()));
     targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* _yPosMaxRatio));
     
     move(targetPos);
@@ -307,37 +301,21 @@ void PopupTranslateWidget::manualSizeMode()
     ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
-
-    const QSize widgetMin = QSize(screenSize.width() * _minSizeRatio.width(), screenSize.height() * _minSizeRatio.height());
-    const QSize widgetMax = QSize(screenSize.width() * _fullSizeRatio.width(), screenSize.height() * _fullSizeRatio.height());
-
-    const QSize bgFrameMin = widgetMin - _outerMarginSize;
-    const QSize bgFrameMax = widgetMax - _outerMarginSize;
-
-    const QSize textMin = bgFrameMin - _innerMarginSize;
-    const QSize textMax = bgFrameMax - _innerMarginSize;
-
-    setMinimumSize(widgetMin);
-    setMaximumSize(widgetMax);
+    const QSize minSize = _minEditSize + _innerMarginSize + _outerMarginSize;
+    setMinimumSize(minSize);
     setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-
-    ui->bgFrame->setMinimumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-    ui->bgFrame->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-    ui->resultText->setMinimumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    ui->resultText->setMinimumSize(10, 10);
     ui->resultText->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 void PopupTranslateWidget::setupUI()
 {
     ui->setupUi(this);
-
-    ui->bgFrame->setLayout(ui->mainLayout);
     setLayout(ui->outerLayout);
 
     // ~===========
     // bgFrame shadow
-    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
+    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect(ui->bgFrame);
     shadow->setBlurRadius(12);
     shadow->setOffset(0.5);
     shadow->setColor(QColor(0, 0, 0, 255));
@@ -571,7 +549,6 @@ void PopupTranslateWidget::calculateTextEditLayoutInfo()
         qWarning() << "not detected screen";
     }
     const QSizeF screenSize  = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
-    const float minScreenLen = std::min(screenSize.width(), screenSize.height());
 
     const int minWidth  = screenSize.width() * _minSizeRatio.width();
     const int minHeight = screenSize.height() * _minSizeRatio.height();

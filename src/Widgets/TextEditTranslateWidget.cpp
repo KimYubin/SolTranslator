@@ -5,7 +5,6 @@
 #include <QClipboard>
 #include <QLineEdit>
 #include <QMenu>
-#include <QPlainTextEdit>
 #include <QScrollBar>
 #include <QTimer>
 
@@ -118,7 +117,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     _translationExecutionTimer->setInterval(500);
     _translationExecutionTimer->setSingleShot(true);
     connect(_translationExecutionTimer, &QTimer::timeout, this, &TextEditTranslateWidget::onExecuteTranslate);
-    connect(ui->srcTextEdit, &QPlainTextEdit::textChanged, this, [this]()
+    connect(ui->srcTextEdit, &QTextEdit::textChanged, this, [this]()
     {
         _translationExecutionTimer->start();
     });

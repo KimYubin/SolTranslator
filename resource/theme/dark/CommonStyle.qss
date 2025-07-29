@@ -362,3 +362,108 @@ FinToastWidget QLabel
   border-radius: 6px;
 }
 
+
+
+/* -------------------- */
+/* QScrollBar */
+QScrollBar:vertical,
+QScrollBar:horizontal
+{
+  padding: 2px;
+  background: rgba(66, 66, 66, 1);
+}
+QScrollBar:horizontal
+{
+  height: 12px;
+  margin: 0px 10px 0px 10px;
+}
+QScrollBar:vertical
+{
+  width: 12px;
+  margin: 10px 0px 10px 0px;
+}
+
+QScrollBar::handle
+{
+  background: #a0a0a0;
+  border-radius : 4px;
+}
+QScrollBar::handle:hover
+{
+  background: #dbdbdb;
+}
+
+QScrollBar::handle:horizontal
+{
+  min-width: 24px;
+}
+
+QScrollBar::handle:vertical
+{
+  min-height: 24px;
+}
+
+
+/* 버튼. 누르면 라인 단위로 이동 */
+QScrollBar::sub-line:vertical,
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:horizontal,
+QScrollBar::add-line:horizontal {
+  border: 0;
+  subcontrol-origin: margin;
+  background: rgba(66, 66, 66, 1);
+}
+QScrollBar::sub-line:vertical
+{
+  height: 12px;
+  subcontrol-position: top;
+}
+QScrollBar::add-line:vertical
+{
+  height: 12px;
+  subcontrol-position: bottom;
+}
+QScrollBar::sub-line:horizontal
+{
+  width: 12px;
+  subcontrol-position: left;
+}
+QScrollBar::add-line:horizontal
+{
+  width: 12px;
+  subcontrol-position: right;
+}
+
+
+QScrollBar::up-arrow
+{
+  image: url(:/img/arrow_up_img);
+}
+QScrollBar::down-arrow
+{
+  image: url(:/img/arrow_down_img);
+}
+QScrollBar::left-arrow
+{
+  image: url(:/img/arrow_left_img);
+}
+QScrollBar::right-arrow
+{
+  image: url(:/img/arrow_right_img);
+}
+QScrollBar::down-arrow,
+QScrollBar::left-arrow,
+QScrollBar::right-arrow,
+QScrollBar::up-arrow
+{
+  width: 8px;
+}
+
+
+
+/* 버튼과 슬라이더 사이 빈공간. 누르면 페이지 단위로 이동 */
+QScrollBar::add-page,
+QScrollBar::sub-page 
+{
+  background: transparent; /* 기본 바탕색 사용*/
+}

@@ -10,6 +10,10 @@
         <file>dark/MessageBox.qss</file>
         <file>dark/CommonStyle.qss</file>
         
+        <file>dark/PopupTranslateWidget_Main.qss</file>
+        <file>dark/PopupTranslateWidget_PushButton.qss</file>
+        <file>dark/PopupTranslateWidget_TextEdit.qss</file>
+        
     </qresource>
 
 </RCC>

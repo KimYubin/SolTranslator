@@ -23,5 +23,10 @@
         <file alias="document_img">docs_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
 
         <file alias="copy_img">content_copy_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
+
+        <file alias="arrow_up_img">arrow_drop_up_48dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_400x400.svg</file>
+        <file alias="arrow_down_img">arrow_drop_down_48dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_400x400.svg</file>
+        <file alias="arrow_left_img">arrow_left_48dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_400x400.svg</file>
+        <file alias="arrow_right_img">arrow_right_48dp_E3E3E3_FILL0_wght400_GRAD0_opsz48_400x400.svg</file>
     </qresource>
 </RCC>

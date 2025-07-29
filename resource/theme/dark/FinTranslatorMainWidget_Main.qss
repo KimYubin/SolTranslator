@@ -537,47 +537,6 @@ color: rgb(220, 222, 223);
   background-color: #1de9b6;
 }
 
-/*  ------------------------------------------------------------------------  */
-/*  QScrollBar  */
-
-#FinTranslatorMainWidget  QScrollBar:horizontal {
-  border: 0;
-  background: #232629;
-  height: 8px;
-}
-
-#FinTranslatorMainWidget  QScrollBar:vertical {
-  border: 0;
-  background: #6298a5b3;
-  width: 8px;
-}
-
-#FinTranslatorMainWidget  QScrollBar::handle {
-  background: rgba(29, 233, 182, 0.1);
-}
-
-#FinTranslatorMainWidget  QScrollBar::handle:horizontal {
-  min-width: 24px;
-}
-
-#FinTranslatorMainWidget  QScrollBar::handle:vertical {
-  min-height: 24px;
-}
-
-#FinTranslatorMainWidget  QScrollBar::handle:vertical:hover,
-#FinTranslatorMainWidget  QScrollBar::handle:horizontal:hover {
-  background: #1de9b6;
-}
-
-#FinTranslatorMainWidget  QScrollBar::add-line:vertical,
-#FinTranslatorMainWidget  QScrollBar::sub-line:vertical,
-#FinTranslatorMainWidget  QScrollBar::add-line:horizontal,
-#FinTranslatorMainWidget  QScrollBar::sub-line:horizontal {
-  border: 0;
-  background: transparent;
-  width: 0px;
-  height: 0px;
-}
 
 /*  ------------------------------------------------------------------------  */
 /*  QScrollBar-Big  */

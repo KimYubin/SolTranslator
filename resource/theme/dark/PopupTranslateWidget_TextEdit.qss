@@ -1,25 +1,25 @@
 /* ----------------------------------------------------- */
 /* QPushButton # QTextEdit */
-#SimpleTranslatePopup QTextEdit,
-#SimpleTranslatePopup QFrame#bgFrame
+#PopupTranslateWidget QTextEdit,
+#PopupTranslateWidget QFrame#bgFrame
 {
   border: none;
   border-radius : 8px;
   background-color: rgb(38, 38, 38); /* 배경 투명화 금지. 서브픽셀 안티에일리어싱을 위함. */
 }
-#SimpleTranslatePopup a,
-#SimpleTranslatePopup span
+#PopupTranslateWidget a,
+#PopupTranslateWidget span
 {
   /* text-decoration: underline;  */
   color:#ff0000;
 }
-#SimpleTranslatePopup body
+#PopupTranslateWidget body
 {
   /* text-decoration: underline;  */
   color:#6ba7f7;
 }
-#SimpleTranslatePopup QLabel,
-#SimpleTranslatePopup QTextEdit
+#PopupTranslateWidget QLabel,
+#PopupTranslateWidget QTextEdit
 {
  	color: rgb(250, 250, 250);
   color: rgb(212, 212, 212);

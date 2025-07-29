@@ -1,0 +1,8 @@
+#PopupTranslateWidget
+{
+  border: none;
+}
+#PopupTranslateWidget
+*:focus {
+   outline: none;
+}

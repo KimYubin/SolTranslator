@@ -33,8 +33,9 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     ui->TextEditLayout->setSpacing(8);
 
-    ui->srcTextEdit->setTabChangesFocus(true);
     ui->srcTextEdit->setAccessibleName(tr("번역 원문 입력 편집기"));
+    ui->srcTextEdit->setTabChangesFocus(true);
+    ui->srcTextEdit->setAcceptRichText(false);
 
     ui->trTextEdit->setAccessibleName(tr("번역 결과"));
     ui->trTextEdit->setTabChangesFocus(true);

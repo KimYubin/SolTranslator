@@ -369,18 +369,18 @@ FinToastWidget QLabel
 QScrollBar:vertical,
 QScrollBar:horizontal
 {
-  padding: 2px;
-  background: rgba(66, 66, 66, 1);
+  padding: 0px; /* 스크롤바와 핸들 사이 공간 */
+  background: rgba(66, 66, 66, 0);
 }
 QScrollBar:horizontal
 {
-  height: 12px;
-  margin: 0px 10px 0px 10px;
+  height: 8px;
+  margin: 0px 12px 0px 12px;
 }
 QScrollBar:vertical
 {
-  width: 12px;
-  margin: 10px 0px 10px 0px;
+  width: 8px;
+  margin: 12px 0px 12px 0px;
 }
 
 QScrollBar::handle
@@ -411,7 +411,7 @@ QScrollBar::sub-line:horizontal,
 QScrollBar::add-line:horizontal {
   border: 0;
   subcontrol-origin: margin;
-  background: rgba(66, 66, 66, 1);
+  /* background: rgba(66, 66, 66, 1); */
 }
 QScrollBar::sub-line:vertical
 {

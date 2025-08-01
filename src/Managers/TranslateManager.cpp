@@ -83,9 +83,9 @@ QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestIn
     return QPointer<TranslateUnit>{transUnit};
 }
 
-void TranslateManager::translateSimple(const QMimeData* inMimeData
-                                     , const LangType inSourceLang
-                                     , const LangType inTargetLang)
+void TranslateManager::translateAtPopup(const QMimeData* inMimeData
+                                      , const LangType inSourceLang
+                                      , const LangType inTargetLang)
 {
     if (inMimeData->hasText() == false)
     {
@@ -93,7 +93,8 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
     }
 
     PopupTranslateWidget* simple = new PopupTranslateWidget();
-    auto runSimpleTranslate = [=, this](const QString& inOriginText, const TextStyle inTextStyle)
+
+    auto runPopupTranslate = [this, inSourceLang, inTargetLang, simple](const QString& inOriginText, const TextStyle inTextStyle)
     {
         QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
             finConfig.getCurrentEngineType()
@@ -133,12 +134,12 @@ void TranslateManager::translateSimple(const QMimeData* inMimeData
             },
             [=](const QString& inMd)
             {
-                runSimpleTranslate(inMd, TextStyle::MarkDown);
+                runPopupTranslate(inMd, TextStyle::MarkDown);
             });
     }
     else
     {
-        runSimpleTranslate(inMimeData->text(), TextStyle::PlainText);
+        runPopupTranslate(inMimeData->text(), TextStyle::PlainText);
     }
 }
 

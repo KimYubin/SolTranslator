@@ -36,12 +36,12 @@ public:
     void asyncSaveCache();
     void onSimpleTranslate(const QMimeData* inMimeData);
 
-    DataManager* getDataManager() const { return _dataManager; }
-    TranslateManager* getTranslateManager() const { return _translateManager; }
-    GlobalHotKeyManager* getGlobalHotKeyManager() const { return _globalHotKeyManager; }
-    AsyncManager* getAsyncManager() const { return _asyncManager; };
+    DataManager* dataManager() const { return _dataManager; }
+    TranslateManager* translateManager() const { return _translateManager; }
+    GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
+    AsyncManager* asyncManager() const { return _asyncManager; };
 
-    FinTranslatorMainWidget* getFinMainWidget() const { return _finMainWidget; }
+    FinTranslatorMainWidget* finMainWidget() const { return _finMainWidget; }
 
 private:
     static FinTranslatorCore* _self;

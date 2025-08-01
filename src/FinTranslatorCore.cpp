@@ -22,7 +22,7 @@ FinTranslatorCore* FinTranslatorCore::_self = nullptr;
 
 FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 {
-    Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one application object");
+    Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one fin core object");
     _self = this;
 
     qApp->setOrganizationDomain("fin");
@@ -81,5 +81,5 @@ void FinTranslatorCore::asyncSaveCache()
 
 void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
 {
-    _translateManager->translateSimple(inMimeData, LangType::AUTO, finConfig.getPopupTargetLang());
+    _translateManager->translateAtPopup(inMimeData, LangType::AUTO, finConfig.getPopupTargetLang());
 }

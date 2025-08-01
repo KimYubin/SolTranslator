@@ -161,7 +161,7 @@ void TextEditTranslateWidget::onExecuteTranslate()
     }
     ui->trTextEdit->setPlainText(tr("번역 중..."));
 
-    finCore->getTranslateManager()->translateText(TranslateRequestInfo{
+    finCore->translateManager()->translateText(TranslateRequestInfo{
         finConfig.getCurrentEngineType()
       , orignText
       , TextStyle::PlainText

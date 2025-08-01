@@ -32,7 +32,7 @@ void TranslateUnit::executeTextTranslation()
 
     connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, std::move(_trReqData.callbackTranslateComplete));
 
-    if (TranslateManager* translate_manager = finCore->getTranslateManager())
+    if (TranslateManager* translate_manager = finCore->translateManager())
     {
         auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.engineType
                                                                      , _trReqData.originText
@@ -53,13 +53,13 @@ void TranslateUnit::executeTextTranslation()
 
 void TranslateUnit::get(const QNetworkRequest& request)
 {
-    _reply = finCore->getTranslateManager()->getNetworkAccessManager()->get(request);
+    _reply = finCore->translateManager()->getNetworkAccessManager()->get(request);
     postProcess();
 }
 
 void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming)
 {
-    _reply = finCore->getTranslateManager()->getNetworkAccessManager()->post(request, data);
+    _reply = finCore->translateManager()->getNetworkAccessManager()->post(request, data);
 
     if (bIsStreaming)
     {

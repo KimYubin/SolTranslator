@@ -25,10 +25,10 @@ public:
     TranslateUnit* executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo);
     
     QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
-    
-    void translateSimple(const QMimeData* inMimeData
-                       , const LangType inSourceLang
-                       , const LangType inTargetLang);
+
+    void translateAtPopup(const QMimeData* inMimeData
+                        , const LangType inSourceLang
+                        , const LangType inTargetLang);
 
 private slots:
 

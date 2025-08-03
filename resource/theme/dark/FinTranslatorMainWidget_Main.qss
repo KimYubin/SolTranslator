@@ -20,28 +20,20 @@ color: rgb(220, 222, 223);
 /*  ------------------------------------------------------------------------  */
 /*  QPushButton  */
 
-#FinTranslatorMainWidget  QToolButton:focus{
-  background-color: rgba(29, 233, 182, 0.2);
-}
-
-
-#FinTranslatorMainWidget QPushButton#textTabButton
+#FinTranslatorMainWidget QPushButton
 {
-  /* icon: url(:/img/text_caret_cursor); */
+  /* 아이콘과 텍스트 사이 간격을 위한 조치 */
+  text-align: center center;
+}
+#FinTranslatorMainWidget QPushButton#textTabButton,
+#FinTranslatorMainWidget QPushButton#docTabButton
+{
   icon-size: 20px;
-
 }
 
 #FinTranslatorMainWidget QPushButton#settingsButton
-{
-  /* icon: url(:/img/settings_gear_img); */
-}
+{}
 
-#FinTranslatorMainWidget QPushButton#docTabButton
-{
-  /* icon: url(:/img/document_img); */
-  icon-size: 20px;
-}
 
 /*  ------------------------------------------------------------------------  */
 /*  Custom colors  */

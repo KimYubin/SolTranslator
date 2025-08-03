@@ -443,7 +443,7 @@ void PopupTranslateWidget::setupUI()
     trCopy->setIcon(QIcon(":/img/copy_img"));
     trCopy->setShortcut(Qt::Key_C);
     trCopy->setFocusPolicy(Qt::TabFocus);
-    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
+    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사(<u>C<\\u>)"));
     connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable

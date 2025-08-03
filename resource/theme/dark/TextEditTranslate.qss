@@ -55,7 +55,6 @@ QWidget#bottomWidget
 #bottomWidget QPushButton
 {
   padding: 0px; /* 필수 pushbutton override */
-  /* icon: url(:/img/copy_img); */
   icon-size: 24px;
   height: 40px; /* textEdit padding-bottom */
   width:  40px;

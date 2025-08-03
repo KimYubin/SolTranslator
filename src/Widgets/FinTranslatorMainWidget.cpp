@@ -108,9 +108,9 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     // setting button
     ui->settingsButton->setCheckable(false);
     ui->settingsButton->setText(tr("설정"));
+    ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
     connect(ui->settingsButton, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
-    ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
 
 
     // ~====================

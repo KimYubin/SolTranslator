@@ -422,7 +422,7 @@ void PopupTranslateWidget::setupUI()
     // close button
     _closeButton = new QPushButton(this);
     _closeButton->setObjectName("closeButton");
-    // _closeButton->setIcon(QIcon(":/img/close_button_img"));
+    _closeButton->setIcon(QIcon(":/img/close_button_img"));
     _closeButton->setShortcut(Qt::Key_Escape);
 
     setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
@@ -441,6 +441,7 @@ void PopupTranslateWidget::setupUI()
     // 복사 버튼 
     QPushButton* trCopy = new QPushButton(this);
     trCopy->setIcon(QIcon(":/img/copy_img"));
+    trCopy->setShortcut(Qt::Key_C);
     trCopy->setFocusPolicy(Qt::TabFocus);
     FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
     connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
@@ -461,11 +462,6 @@ void PopupTranslateWidget::setupUI()
     });
 
     ui->statusLayout->addWidget(trCopy, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
-
-
-    QShortcut* copyShortcut = new QShortcut(this);
-    copyShortcut->setKey(QKeySequence(Qt::Key_C));
-    connect(copyShortcut, &QShortcut::activated, trCopy, &QPushButton::click);
 
 
     // ~===========

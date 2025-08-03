@@ -36,7 +36,7 @@
 }
 #SimpleTranslatePopup QPushButton#alwaysOnButton
 {
-  icon: url(:/img/keep_pin_clock45d);
+  /* icon: url(:/img/keep_pin_clock45d); */
   icon-size: 20px;
 }
 #SimpleTranslatePopup QPushButton#alwaysOnButton:pressed,
@@ -44,7 +44,7 @@
 #SimpleTranslatePopup QPushButton#alwaysOnButton:flat:pressed,
 #SimpleTranslatePopup QPushButton#alwaysOnButton:flat:checked
 {
-  icon: url(../resource/image/keep_48dp_E3E3E3_FILL1_wght700_GRAD200_opsz48_color.svg);
+  /* icon: url(:/img/keep_pin_fill_v); */
 }
 
 #SimpleTranslatePopup QPushButton#windowModeButton
@@ -55,7 +55,7 @@
 /* QPushButton # closeButton */
 #SimpleTranslatePopup QPushButton#closeButton
 {
-  icon: url(:/img/close_button_img);
+  /* icon: url(:/img/close_button_img); */
   icon-size: 24px;
   background-color: transparent;
   color : #e7e7e7;

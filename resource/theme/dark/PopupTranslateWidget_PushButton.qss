@@ -37,7 +37,7 @@
 }
 #PopupTranslateWidget QPushButton#alwaysOnButton
 {
-  icon: url(:/img/keep_pin_clock45d);
+  /* icon: url(:/img/keep_pin_clock45d); */
   icon-size: 20px;
 }
 #PopupTranslateWidget QPushButton#alwaysOnButton:pressed,
@@ -45,7 +45,7 @@
 #PopupTranslateWidget QPushButton#alwaysOnButton:flat:pressed,
 #PopupTranslateWidget QPushButton#alwaysOnButton:flat:checked
 {
-  icon: url(:/img/keep_pin_fill_v);
+  /* icon: url(:/img/keep_pin_fill_v); */
 }
 
 #PopupTranslateWidget QPushButton#windowModeButton
@@ -56,7 +56,7 @@
 /* QPushButton # closeButton */
 #PopupTranslateWidget QPushButton#closeButton
 {
-  icon: url(:/img/close_button_img);
+  /* icon: url(:/img/close_button_img); */
   icon-size: 24px;
   background-color: transparent;
   color : #e7e7e7;

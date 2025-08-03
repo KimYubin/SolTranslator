@@ -440,7 +440,7 @@ void SimpleTranslatePopup::setupUI()
     // close button
     _closeButton = new QPushButton(this);
     _closeButton->setObjectName("closeButton");
-    // _closeButton->setIcon(QIcon(":/img/close_button_img"));
+    _closeButton->setIcon(QIcon(":/img/close_button_img"));
     _closeButton->setShortcut(Qt::Key_Escape);
 
     setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);

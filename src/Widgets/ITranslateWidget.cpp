@@ -5,6 +5,8 @@
 #include <QScrollBar>
 #include <QTimer>
 
+#include "SubWidgets/CustomMenuTextEdit.h"
+
 ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
 {
@@ -40,9 +42,14 @@ void ITranslateWidget::setTranslationWithFixedScroll(const QString& inTranslated
 {
     const int prevVerticalScrollVal   = getVerticalScrollBar()->value();
     const int prevHorizontalScrollVal = getHorizontalScrollBar()->value();
+    const int prevTextCursorPos       = getTextCursor().position();
 
     applyTranslation(inTranslatedText, inTextStyle);
 
     getVerticalScrollBar()->setValue(prevVerticalScrollVal);
     getHorizontalScrollBar()->setValue(prevHorizontalScrollVal);
+
+    QTextCursor textCursor = getTextCursor();
+    textCursor.setPosition(prevTextCursorPos);
+    setTextCursor(textCursor);
 }

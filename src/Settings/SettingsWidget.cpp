@@ -76,7 +76,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     ui->listWidget->setCurrentRow(0);
 
     QShortcut* closeShortcut = new QShortcut(this);
-     closeShortcut->setKeys(QList{QKeySequence(Qt::Key_Escape), QKeySequence(Qt::CTRL | Qt::Key_W)});
+    closeShortcut->setKeys(QList{QKeySequence(Qt::Key_Escape), QKeySequence(Qt::CTRL | Qt::Key_W)});
     connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
 
 

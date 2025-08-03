@@ -146,6 +146,16 @@ QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar()
     return ui->trTextEdit->horizontalScrollBar();
 }
 
+QTextCursor TextEditTranslateWidget::getTextCursor()
+{
+    return ui->trTextEdit->textCursor();
+}
+
+void TextEditTranslateWidget::setTextCursor(const QTextCursor& cursor)
+{
+    ui->trTextEdit->setTextCursor(cursor);
+}
+
 void TextEditTranslateWidget::focusTextOrigin()
 {
     ui->srcTextEdit->setFocus();

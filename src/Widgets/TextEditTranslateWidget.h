@@ -34,6 +34,8 @@ protected:
 
     virtual QScrollBar* getVerticalScrollBar() override;
     virtual QScrollBar* getHorizontalScrollBar() override;
+    virtual QTextCursor getTextCursor() override;
+    virtual void setTextCursor(const QTextCursor& cursor) override;
 
 public:
     void focusTextOrigin();

@@ -110,6 +110,16 @@ QScrollBar* SimpleTranslatePopup::getHorizontalScrollBar()
     return ui->resultText->horizontalScrollBar();
 }
 
+QTextCursor SimpleTranslatePopup::getTextCursor()
+{
+    return ui->resultText->textCursor();
+}
+
+void SimpleTranslatePopup::setTextCursor(const QTextCursor& cursor)
+{
+    ui->resultText->setTextCursor(cursor);
+}
+
 
 void SimpleTranslatePopup::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {

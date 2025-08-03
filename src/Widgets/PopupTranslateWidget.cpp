@@ -109,6 +109,16 @@ QScrollBar* PopupTranslateWidget::getHorizontalScrollBar()
     return ui->resultText->horizontalScrollBar();
 }
 
+QTextCursor PopupTranslateWidget::getTextCursor()
+{
+    return ui->resultText->textCursor();
+}
+
+void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
+{
+    ui->resultText->setTextCursor(cursor);
+}
+
 
 void PopupTranslateWidget::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {

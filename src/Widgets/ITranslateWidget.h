@@ -7,6 +7,7 @@
 
 #include "FinTypes.h"
 
+class QTextCursor;
 class QScrollBar;
 
 class ITranslateWidget : public QWidget
@@ -46,6 +47,12 @@ protected:
      */
     virtual QScrollBar* getVerticalScrollBar() = 0;
     virtual QScrollBar* getHorizontalScrollBar() = 0;
+
+    /**
+     * 번역 중, 커서 위치를 고정하기 위해 사용할 텍스트 커서
+     */
+    virtual QTextCursor getTextCursor() = 0;
+    virtual void setTextCursor(const QTextCursor& cursor) = 0;
 
 
     QString _translatedText;        // 번역문자열 보관

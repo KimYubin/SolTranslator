@@ -114,6 +114,7 @@ protected:
 
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
+    QString _translatedText;
     QPropertyAnimation* _animation;
 
     FinWidgetModeFlags _widgetModeFlags; 

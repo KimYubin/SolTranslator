@@ -124,7 +124,7 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
     {
         AsyncManager::asyncLaunch<QString>(
             simple,
-            [=, htmlStr = std::move(inMimeData->html())]() mutable
+            [htmlStr = std::move(inMimeData->html())]() mutable
             {
                 // list 무시하는 문법 제거.
                 QTextDocument txtDoc;

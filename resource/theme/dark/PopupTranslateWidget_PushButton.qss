@@ -5,7 +5,8 @@
 {
   border: none;
   border-radius : 4px;
-  
+  height: 24px;
+  width: 24px;
   margin: 0px;
   padding: 0px 0px;
   /* border: 1px solid transparent; */
@@ -44,7 +45,7 @@
 #PopupTranslateWidget QPushButton#alwaysOnButton:flat:pressed,
 #PopupTranslateWidget QPushButton#alwaysOnButton:flat:checked
 {
-  icon: url(../resource/image/keep_48dp_E3E3E3_FILL1_wght700_GRAD200_opsz48_color.svg);
+  icon: url(:/img/keep_pin_fill_v);
 }
 
 #PopupTranslateWidget QPushButton#windowModeButton

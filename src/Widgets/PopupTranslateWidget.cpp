@@ -8,12 +8,14 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QBoxLayout>
+#include <QClipboard>
 #include <QFuturewatcher>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScreen>
+#include <QShortcut>
 #include <QSizeGrip>
 #include <QSvgWidget>
 #include <QtConcurrentRun>
@@ -25,6 +27,7 @@
 
 #include "Managers/ConfigManager.h"
 
+#include "SubWidgets/FinToast.h"
 #include "SubWidgets/FinToolTip.h"
 #include "SubWidgets/LoadingBar.h"
 
@@ -122,10 +125,11 @@ void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
 
 void PopupTranslateWidget::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
+    _translatedText = inTranslatedText;
     if ((_prevSize.width() < _maxEditSize.width())
         || (_prevSize.height() < _maxEditSize.height()))
     {
-        const QSize newSize = calculateTextEditSize(inTranslatedText);
+        const QSize newSize = calculateTextEditSize(_translatedText);
         animateTextEditResize(newSize);
     }
 
@@ -134,14 +138,14 @@ void PopupTranslateWidget::showTranslationPopup(const QString& inTranslatedText,
     case TextStyle::None:
         break;
     case TextStyle::PlainText:
-        ui->resultText->setText(inTranslatedText);
+        ui->resultText->setText(_translatedText);
         break;
     case TextStyle::Html:
-        ui->resultText->setHtml(inTranslatedText);
+        ui->resultText->setHtml(_translatedText);
         break;
     case TextStyle::MarkDown:
     {
-        setMarkdown(inTranslatedText);
+        setMarkdown(_translatedText);
         break;
     }
     case TextStyle::Size:
@@ -202,10 +206,10 @@ void PopupTranslateWidget::setMarkdown(const QString& inMarkdownStr)
     }
     codeFontFamilies += ";";
 
-    const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
+    static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
     // 문단 코드
-    const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
+    static const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
     QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(md);
     while (it.hasNext())
     {
@@ -224,7 +228,7 @@ void PopupTranslateWidget::setMarkdown(const QString& inMarkdownStr)
     }
 
     // 단어 코드 스니펫
-    const QRegularExpression codePattern("`(.*?)`", QRegularExpression::DotMatchesEverythingOption);
+    static const QRegularExpression codePattern("`(.*?)`", QRegularExpression::DotMatchesEverythingOption);
     it = codePattern.globalMatch(inMarkdownStr);
     while (it.hasNext())
     {
@@ -430,21 +434,58 @@ void PopupTranslateWidget::setupUI()
     // ~===========
 
     // ~===========
-    // bottom grip
+    // bottom statusLayout
+    ui->statusLayout->setContentsMargins(5, 0, 5, 5);
+
+    // ~===========
+    // 복사 버튼 
+    QPushButton* trCopy = new QPushButton(this);
+    trCopy->setIcon(QIcon(":/img/copy_img"));
+    trCopy->setFocusPolicy(Qt::TabFocus);
+    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
+    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
+    {
+        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
+        {
+            FinToast::popToastOnWidget(tr("복사 완료!"), trCopy, 50);
+        }, Qt::SingleShotConnection);
+
+        // 연결 대기 시간 제한.
+        // 비어있는 복사와 무제한 대기를 방지합니다.
+        QTimer::singleShot(500, this, [connection]()
+        {
+            disconnect(connection);
+        });
+
+        QGuiApplication::clipboard()->setText(_translatedText);
+    });
+
+    ui->statusLayout->addWidget(trCopy, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
+
+
+    QShortcut* copyShortcut = new QShortcut(this);
+    copyShortcut->setKey(QKeySequence(Qt::Key_C));
+    connect(copyShortcut, &QShortcut::activated, trCopy, &QPushButton::click);
+
+
+    // ~===========
+    // sizeGrip
     _sizeGrip = new QSizeGrip(this);
-    ui->statusLayout->addWidget(_sizeGrip, 0, 1, Qt::AlignBottom | Qt::AlignRight);
-    ui->statusLayout->setContentsMargins(0, 0, 4, 4);
     _sizeGrip->show();
     _sizeGrip->installEventFilter(this);
 
+    ui->statusLayout->addWidget(_sizeGrip, 0, 1, Qt::AlignBottom | Qt::AlignRight);
 
+
+    // ~===========
+    // _loadingBar
     _loadingBar = new LoadingBar(":/img/wait_anim_img", this);
     ui->loadingLayout->addWidget(_loadingBar, 0, 0);
     _loadingBar->run();
 
     // ~======================
     // resultText & scroll bar
-    ui->textLayout->setContentsMargins(20, 0, 10, 20);
+    ui->textLayout->setContentsMargins(20, 0, 10, 0);
 
     QFont font = ui->resultText->font();
     font.setPointSizeF(_fontSize);

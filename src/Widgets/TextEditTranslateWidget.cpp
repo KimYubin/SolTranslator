@@ -165,6 +165,8 @@ void TextEditTranslateWidget::focusTextOrigin()
 
 void TextEditTranslateWidget::onExecuteTranslate()
 {
+    abortTrUnit();
+
     const QString orignText = ui->srcTextEdit->toPlainText();
     if (orignText.isEmpty())
     {
@@ -174,7 +176,8 @@ void TextEditTranslateWidget::onExecuteTranslate()
     ui->trTextEdit->setPlainText(tr("번역 중..."));
 
     finCore->translateManager()->translateText(TranslateRequestInfo{
-        finConfig.getCurrentEngineType()
+        this
+      , finConfig.getCurrentEngineType()
       , orignText
       , TextStyle::PlainText
       , finConfig.getTextSrcLang()

@@ -96,8 +96,9 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
 
     auto runPopupTranslate = [this, inSourceLang, inTargetLang, simple](const QString& inOriginText, const TextStyle inTextStyle)
     {
-        QPointer<TranslateUnit> transUnit = translateText(TranslateRequestInfo{
-            finConfig.getCurrentEngineType()
+        translateText(TranslateRequestInfo{
+            simple
+          , finConfig.getCurrentEngineType()
           , inOriginText
           , inTextStyle
           , inSourceLang
@@ -106,16 +107,6 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
           , [=](const QString& inStr) { simple->completeTransText(inStr, inTextStyle); }
           , simple
           , [=](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
-        });
-
-        connect(simple, &PopupTranslateWidget::abortTranslateReq, transUnit, [=]()
-        {
-            if (transUnit.isNull())
-            {
-                return;
-            }
-            // todo: history 개발 후, 제거해야합니다.
-            transUnit->abortTranslate();
         });
     };
 

@@ -3,10 +3,14 @@
 
 
 /build/
+
 **/noused/
 /resource/image/test/
+.fin.release/
+
 .O_Commit_Message.txt
 .O_Project_Memo.txt
+
 .lldbinit
 
 *.pdn

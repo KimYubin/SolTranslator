@@ -4,8 +4,10 @@
 #define FINTYPES_H
 #include <QString>
 #include <QObject>
+#include <QPointer>
 
 
+class ITranslateWidget;
 enum class EngineType;
 enum class LangType;
 
@@ -87,11 +89,27 @@ enum class TextStyle
   , Size
 };
 
+/** 번역 요청에 필요한 정보를 모아놓은 구조체입니다. */
 struct TranslateRequestInfo
 {
     TranslateRequestInfo() = default;
 
-    TranslateRequestInfo(const EngineType inEngineType
+    /**
+     * 번역 요청에 필요한 정보를 모아놓은 구조체입니다.
+     * 
+     * @param inTrTargetWidget trUnit의 번역값을 표기하는 ITranslateWidget입니다.
+     * @param inEngineType 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
+     * @param inOriginText 번역 원문
+     * @param inTextFormat 원문 텍스트의 종류.
+     * @param inSourceLang 출발 언어
+     * @param inTargetLang 도착 언어
+     * @param inCompleteContext callbackTranslateComplete 수명을 관리하는 객체입니다.
+     * @param inCallbackTranslateComplete 번역이 완료되면 호출되는 콜백입니다.
+     * @param inStreamContext callbackTranslateStreaming 수명을 관리하는 객체입니다.
+     * @param incallbackTranslateStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
+     */
+    TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
+                       , const EngineType inEngineType
                        , const QString& inOriginText
                        , const TextStyle inTextFormat
                        , const LangType inSourceLang
@@ -99,26 +117,17 @@ struct TranslateRequestInfo
                        , QObject* inCompleteContext
                        , std::function<void(const QString&)>&& inCallbackTranslateComplete
                        , QObject* inStreamContext = nullptr
-                       , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt)
-        : engineType(inEngineType)
-        , originText(inOriginText)
-        , textFormat(inTextFormat)
-        , sourceLang(inSourceLang)
-        , targetLang(inTargetLang)
-        , completeContext(inCompleteContext)
-        , callbackTranslateComplete(inCallbackTranslateComplete)
-        , streamContext(inStreamContext)
-        , callbackTranslateStreaming(incallbackTranslateStreaming)
-    {}
+                       , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt);
 
+    QPointer<ITranslateWidget> trTargetWidget;
     EngineType engineType;
     QString originText;
     TextStyle textFormat;
     LangType sourceLang;
     LangType targetLang;
-    QObject* completeContext;
+    QPointer<QObject> completeContext;
     std::function<void(const QString&)> callbackTranslateComplete;
-    QObject* streamContext;
+    QPointer<QObject> streamContext;
     std::optional<std::function<void(const QString&)>> callbackTranslateStreaming;
 };
 

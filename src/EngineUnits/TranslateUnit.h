@@ -77,6 +77,9 @@ protected:
     TranslateRequestInfo _trReqData;
 
     QString _translatedText;
+
+    QMetaObject::Connection _streamConnection;
+    QMetaObject::Connection _completeConnection;
 };
 
 

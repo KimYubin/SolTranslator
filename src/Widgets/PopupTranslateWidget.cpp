@@ -87,7 +87,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
 PopupTranslateWidget::~PopupTranslateWidget()
 {
     qApp->removeEventFilter(this);
-    emit abortTranslateReq();
+
     delete ui;
 }
 

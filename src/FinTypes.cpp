@@ -7,6 +7,7 @@
 #include <qstandardpaths.h>
 
 #include "FinUtilibrary.h"
+#include "Widgets/ITranslateWidget.h"
 
 #include "../external/magic_enum.hpp"
 
@@ -92,6 +93,28 @@ QString FinPaths::getTranslateHistoryFilePath()
 {
     return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::TRANSLATE_HISTORY);
 }
+
+TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
+                                         , const EngineType inEngineType
+                                         , const QString& inOriginText
+                                         , const TextStyle inTextFormat
+                                         , const LangType inSourceLang
+                                         , const LangType inTargetLang
+                                         , QObject* inCompleteContext
+                                         , std::function<void(const QString&)>&& inCallbackTranslateComplete
+                                         , QObject* inStreamContext
+                                         , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming)
+    : trTargetWidget(inTrTargetWidget)
+    , engineType(inEngineType)
+    , originText(inOriginText)
+    , textFormat(inTextFormat)
+    , sourceLang(inSourceLang)
+    , targetLang(inTargetLang)
+    , completeContext(inCompleteContext)
+    , callbackTranslateComplete(inCallbackTranslateComplete)
+    , streamContext(inStreamContext)
+    , callbackTranslateStreaming(incallbackTranslateStreaming)
+{}
 
 LangInfo Langs::GetLangInfo(const LangType inLangType)
 {

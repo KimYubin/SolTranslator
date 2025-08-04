@@ -9,11 +9,15 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
+#include "Widgets/ITranslateWidget.h"
+
 TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
                            , TranslateManager* parent)
     : QObject(parent)
     , _trReqData(inTranslateRequestInfo)
 {
+    Q_ASSERT(_trReqData.trTargetWidget);
+    _trReqData.trTargetWidget->setTrUnit(this);
 }
 
 void TranslateUnit::executeTextTranslation()
@@ -27,10 +31,11 @@ void TranslateUnit::executeTextTranslation()
     }
     if (_trReqData.callbackTranslateStreaming.has_value())
     {
-        connect(this, &TranslateUnit::addStreamTranslatedText, _trReqData.streamContext, std::move((*_trReqData.callbackTranslateStreaming)));
+        _streamConnection
+            = connect(this, &TranslateUnit::addStreamTranslatedText, _trReqData.streamContext, (*_trReqData.callbackTranslateStreaming));
     }
-
-    connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, std::move(_trReqData.callbackTranslateComplete));
+    _completeConnection
+        = connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, _trReqData.callbackTranslateComplete);
 
     if (TranslateManager* translate_manager = finCore->translateManager())
     {
@@ -98,6 +103,9 @@ void TranslateUnit::abortTranslate()
     {
         qDebug() << "abort translate request";
         _reply->abort();
+
+        disconnect(_streamConnection);
+        disconnect(_completeConnection);
     }
 }
 

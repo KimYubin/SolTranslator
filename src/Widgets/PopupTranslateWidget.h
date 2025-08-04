@@ -83,8 +83,6 @@ private:
      */
     void syncInOutScrollbar();
 
-public: signals:
-    void abortTranslateReq();
     
 protected:
     void onAlwaysOnToggle(bool checked);

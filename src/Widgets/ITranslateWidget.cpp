@@ -63,10 +63,13 @@ void ITranslateWidget::setTranslationWithFixedScroll(const QString& inTranslated
 
     applyTranslation(inTranslatedText, inTextStyle);
 
-    getVerticalScrollBar()->setValue(prevVerticalScrollVal);
-    getHorizontalScrollBar()->setValue(prevHorizontalScrollVal);
-
+    // 스트리밍 간 커서 현재 위치 유지
     QTextCursor textCursor = getTextCursor();
     textCursor.setPosition(prevTextCursorPos);
     setTextCursor(textCursor);
+
+    // 스크롤바 현재 위치 유지.
+    // 커서보다 나중에 적용해야, 커서 위치가 아닌 곳으로 스크롤할 수 있습니다.
+    getVerticalScrollBar()->setValue(prevVerticalScrollVal);
+    getHorizontalScrollBar()->setValue(prevHorizontalScrollVal);
 }

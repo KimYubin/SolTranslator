@@ -29,13 +29,6 @@ void TranslateUnit::executeTextTranslation()
         completeTranslatedText(_trReqData.originText);
         return;
     }
-    if (_trReqData.callbackTranslateStreaming.has_value())
-    {
-        _streamConnection
-            = connect(this, &TranslateUnit::addStreamTranslatedText, _trReqData.streamContext, (*_trReqData.callbackTranslateStreaming));
-    }
-    _completeConnection
-        = connect(this, &TranslateUnit::onCompletedTranslate, _trReqData.completeContext, _trReqData.callbackTranslateComplete);
 
     if (TranslateManager* translate_manager = finCore->translateManager())
     {
@@ -104,15 +97,21 @@ void TranslateUnit::abortTranslate()
         qDebug() << "abort translate request";
         _reply->abort();
 
-        disconnect(_streamConnection);
-        disconnect(_completeConnection);
+        _trReqData.streamContext              = nullptr;
+        _trReqData.callbackTranslateStreaming = nullptr;
+        _trReqData.completeContext            = nullptr;
+        _trReqData.callbackTranslateComplete  = nullptr;
     }
 }
 
 void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
 {
     _translatedText.append(inTranslatedText);
-    emit addStreamTranslatedText(_translatedText);
+
+    if (_trReqData.streamContext && _trReqData.callbackTranslateStreaming)
+    {
+        (*_trReqData.callbackTranslateStreaming)(_translatedText);
+    }
 }
 
 void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
@@ -130,6 +129,10 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
     }
 
     // 빈 문자열도 적용합니다.
-    emit onCompletedTranslate(inTranslatedText);
+    if (_trReqData.completeContext && _trReqData.callbackTranslateComplete)
+    {
+        _trReqData.callbackTranslateComplete(inTranslatedText);
+    }
+
     deleteLater();
 }

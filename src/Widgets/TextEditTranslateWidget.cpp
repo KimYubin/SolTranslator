@@ -48,29 +48,6 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         // Qt::LinksAccessibleByKeyboard
     );
 
-    // 전체 복사 버튼
-    QPushButton* trCopy = new QPushButton(ui->trTextEdit);
-    trCopy->setIcon(QIcon(":/img/copy_img"));
-    trCopy->setFocusPolicy(Qt::TabFocus);
-    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
-    ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
-    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
-    {
-        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
-        {
-            FinToast::popToastOnWidget(tr("복사 완료!"), trCopy);
-        }, Qt::SingleShotConnection);
-
-        // 연결 대기 시간 제한.
-        // 비어있는 복사와 무제한 대기를 방지합니다.
-        QTimer::singleShot(500, this, [connection]()
-        {
-            disconnect(connection);
-        });
-
-        QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-    });
-
 
     // 출발언어 선택기
     _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, finConfig.getTextSrcLang());
@@ -113,6 +90,30 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     });
 
 
+    // 전체 복사 버튼
+    QPushButton* trCopy = new QPushButton(ui->trTextEdit);
+    trCopy->setIcon(QIcon(":/img/copy_img"));
+    trCopy->setFocusPolicy(Qt::TabFocus);
+    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
+    ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
+    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
+    {
+        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
+        {
+            FinToast::popToastOnWidget(tr("복사 완료!"), trCopy);
+        }, Qt::SingleShotConnection);
+
+        // 연결 대기 시간 제한.
+        // 비어있는 복사와 무제한 대기를 방지합니다.
+        QTimer::singleShot(500, this, [connection]()
+        {
+            disconnect(connection);
+        });
+
+        QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
+    });
+
+
     // 번역 실행 타이머
     _translationExecutionTimer = new QTimer(this);
     _translationExecutionTimer->setInterval(500);
@@ -124,6 +125,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     });
 
     setTabOrder({_srcLangSelector, ui->srcTextEdit, ui->languageSwapButton, _targetLangSelector, ui->trTextEdit});
+    setFocusProxy(_srcLangSelector);
 }
 
 TextEditTranslateWidget::~TextEditTranslateWidget()

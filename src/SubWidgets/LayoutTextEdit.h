@@ -20,6 +20,7 @@ public:
     ~LayoutTextEdit() override;
 
     virtual void resizeEvent(QResizeEvent* event) override;
+    virtual bool focusNextPrevChild(bool next) override;
 
     QHBoxLayout* getLayout() const { return _layout; };
 

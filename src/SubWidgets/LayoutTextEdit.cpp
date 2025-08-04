@@ -24,3 +24,39 @@ void LayoutTextEdit::resizeEvent(QResizeEvent* event)
     const QSize bottomSize = _bottomWidget->size();
     _bottomWidget->setGeometry(0, height() - bottomSize.height(), width(), bottomSize.height());
 }
+
+bool LayoutTextEdit::focusNextPrevChild(bool next)
+{
+    QWidget* firstChild = _layout->parentWidget()->findChild<QWidget*>();
+    // if (firstChild == nullptr)
+    {
+        return MenuTextEdit::focusNextPrevChild(next);
+    }
+
+    if (next)
+    {
+        if (firstChild->hasFocus() == false)
+        {
+            firstChild->setFocus();
+            return true;
+        }
+        else if (firstChild->hasFocus())
+        {
+            if (nextInFocusChain())
+            {
+                nextInFocusChain()->setFocus();
+                // return true;
+            }
+        }
+    }
+    else
+    {
+        if (firstChild->hasFocus())
+        {
+            setFocus();
+            return true;
+        }
+    }
+
+    return MenuTextEdit::focusNextPrevChild(next);
+}

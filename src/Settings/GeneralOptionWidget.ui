@@ -22,10 +22,31 @@
      <height>481</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="mainLayout" rowstretch="0">
+   <layout class="QGridLayout" name="outerLayout" rowstretch="0">
     <property name="spacing">
      <number>0</number>
     </property>
+    <item row="0" column="0">
+     <widget class="QWidget" name="mainLayoutWidget" native="true">
+      <layout class="QGridLayout" name="mainLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>

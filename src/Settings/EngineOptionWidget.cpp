@@ -22,7 +22,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     , ui(new Ui::EngineOptionWidget)
 {
     ui->setupUi(this);
-    setLayout(ui->mainLayout);
+    setLayout(ui->outerLayout);
 
 
     ui->enginSelectCombo->setEditable(false);

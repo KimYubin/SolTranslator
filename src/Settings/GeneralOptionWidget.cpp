@@ -23,7 +23,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     , ui(new Ui::GeneralOptionWidget)
 {
     ui->setupUi(this);
-    setLayout(ui->mainLayout);
+    setLayout(ui->outerLayout);
+    ui->outerLayout->setContentsMargins(0, 0, 0, 0);
     ui->mainLayout->setContentsMargins(0, 0, 0, 0);
 
     auto [shapeBehaviorGroup, shapeBehaviorVLay] = newOptionGroupBox(tr("모양 및 동작"), ui->mainLayout, ui->mainLayout->rowCount(), 0);

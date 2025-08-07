@@ -4,6 +4,7 @@
 
 #include <QString>
 #include <QDoubleSpinBox>
+#include <QGroupBox>
 
 #include <qsortfilterproxymodel.h>
 #include <qstringlistmodel.h>
@@ -21,9 +22,15 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
     , ui(new Ui::EngineOptionWidget)
 {
-    ui->setupUi(this);
-    setLayout(ui->outerLayout);
+    setObjectName("EngineOptionWidget");
 
+    auto [engineGroup, engineVLay] = addNewOptionGroupBox(tr("번역 엔진 설정"));
+
+    {
+        ui->setupUi(engineGroup);
+        engineVLay->addWidget(ui->gridLayoutWidget, 0, Qt::AlignmentFlag::AlignTop);
+    }
+    
 
     ui->enginSelectCombo->setEditable(false);
 
@@ -77,11 +84,11 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 
 
     // AI 옵션
-    auto [shapeBehaviorGroup, shapeBehaviorVLay] = newOptionGroupBox(tr("AI 옵션"), ui->mainLayout, ui->mainLayout->rowCount(), 0, Qt::AlignTop);
+    auto [aiOptionGroup, aiOptionVLay] = addNewOptionGroupBox(tr("AI 옵션"));
 
     // 온도 설정
     {
-        SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), shapeBehaviorGroup);
+        SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), aiOptionGroup);
         openAiTemper->setHeader(tr("OpenAI 온도 설정"));
         openAiTemper->setDescription(tr("(기본값: 0.5)"));
 
@@ -97,13 +104,17 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         });
 
 
-        shapeBehaviorVLay->addWidget(openAiTemper, 0, Qt::AlignmentFlag::AlignTop);
+        aiOptionVLay->addWidget(openAiTemper, 0, Qt::AlignmentFlag::AlignTop);
     }
 }
 
 EngineOptionWidget::~EngineOptionWidget()
 {
     delete ui;
+}
+
+void EngineOptionWidget::setEngineGroupUI()
+{
 }
 
 void EngineOptionWidget::apply()

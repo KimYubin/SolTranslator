@@ -4,6 +4,7 @@
 
 #include <QGroupBox>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 #include "FinTranslatorCore.h"
 #include "Managers/ConfigManager.h"
@@ -11,7 +12,6 @@
 #include "SubWidgets/SwitchButton.h"
 #include "Widgets/FinTranslatorMainWidget.h"
 
-#include "ui_GeneralOptionWidget.h"
 
 #include "Managers/StyleManger.h"
 
@@ -20,14 +20,10 @@
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
-    , ui(new Ui::GeneralOptionWidget)
 {
-    ui->setupUi(this);
-    setLayout(ui->outerLayout);
-    ui->outerLayout->setContentsMargins(0, 0, 0, 0);
-    ui->mainLayout->setContentsMargins(0, 0, 0, 0);
+    setObjectName("GeneralOptionWidget");
 
-    auto [shapeBehaviorGroup, shapeBehaviorVLay] = newOptionGroupBox(tr("모양 및 동작"), ui->mainLayout, ui->mainLayout->rowCount(), 0);
+    auto [shapeBehaviorGroup, shapeBehaviorVLay] = addNewOptionGroupBox(tr("모양 및 동작"));
 
     // 시작시 실행
     {
@@ -102,7 +98,6 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
 GeneralOptionWidget::~GeneralOptionWidget()
 {
-    delete ui;
 }
 
 

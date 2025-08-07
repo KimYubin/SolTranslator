@@ -51,6 +51,15 @@ protected:
 
     /**
      * 새로운 GroupBox와 GroupBox 내부에서 사용되는 VBoxLayout을 만들어 제공합니다.
+     * mainLayout에 마지막에 추가됩니다.
+     * 
+     * @param inGroupTitle GroupBox 타이틀에 사용할 이름 
+     * @return 그룹박스와 그룹박스 내부에 배치된 VBoxLayout을 반환합니다.
+     */
+    std::tuple<QGroupBox*, QVBoxLayout*> addNewOptionGroupBox(const QString& inGroupTitle);
+
+    /**
+     * 새로운 GroupBox와 GroupBox 내부에서 사용되는 VBoxLayout을 만들어 제공합니다.
      * 
      * @param inGroupTitle GroupBox 타이틀에 사용할 이름 
      * @return 그룹박스와 그룹박스 내부에 배치된 VBoxLayout을 반환합니다.
@@ -63,6 +72,11 @@ public:
 private:
     void setOptionPage(IOptionPage* inOptionPage);
     QPointer<IOptionPage> _optionPage;
+
+    QGridLayout* outerLayout;
+
+protected:
+    QGridLayout* mainLayout;
 };
 
 class IOptionPage : public QObject

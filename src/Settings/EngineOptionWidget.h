@@ -21,6 +21,7 @@ public:
     ~EngineOptionWidget() override;
 
 protected:
+    void setEngineGroupUI();
     virtual void apply() override;
     virtual void cancel() override;
     virtual void finish() override;

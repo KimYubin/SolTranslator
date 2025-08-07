@@ -4,18 +4,8 @@
 #define GeneralOptionWIDGET_H
 
 #include <QWidget>
-
 #include "IOptionWidget.h"
 
-
-QT_BEGIN_NAMESPACE
-
-namespace Ui
-{
-class GeneralOptionWidget;
-}
-
-QT_END_NAMESPACE
 
 class GeneralOptionWidget : public IOptionWidget
 {
@@ -32,7 +22,7 @@ protected:
 
 private:
     friend class GeneralOption;
-    Ui::GeneralOptionWidget* ui;
+
 };
 
 

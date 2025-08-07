@@ -16,6 +16,20 @@ static std::unordered_set<IOptionPage*>& optionsPages()
 
 IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {
+    outerLayout = new QGridLayout(this);
+    outerLayout->setSpacing(0);
+    outerLayout->setObjectName("outerLayout");
+    outerLayout->setContentsMargins(0, 0, 0, 0);
+
+    mainLayout = new QGridLayout();
+    mainLayout->setSpacing(0);
+    mainLayout->setVerticalSpacing(15);
+    mainLayout->setObjectName("mainLayout");
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    outerLayout->addLayout(mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
+
+    setLayout(outerLayout);
 }
 
 IOptionWidget::~IOptionWidget()
@@ -55,6 +69,11 @@ std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QStr
     inParentLayout->addWidget(groupBox, inRow, inColumn, inRowSpan, inColumnSpan, inAlignment | Qt::AlignTop);
 
     return {groupBox, vLayout};
+}
+
+std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::addNewOptionGroupBox(const QString& inGroupTitle)
+{
+    return newOptionGroupBox(inGroupTitle, mainLayout, mainLayout->rowCount(), 0);
 }
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::generateGroupBox(const QString& inGroupTitle)

@@ -11,6 +11,7 @@
 
 ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
+    , _translatedTextStyle(TextStyle::PlainText)
 {
     _streamUpdateTimer = new QTimer(this);
     _streamUpdateTimer->setInterval(50);

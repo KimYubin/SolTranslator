@@ -3,6 +3,7 @@
 #include "EngineOptionWidget.h"
 
 #include <QString>
+#include <QDoubleSpinBox>
 
 #include <qsortfilterproxymodel.h>
 #include <qstringlistmodel.h>
@@ -13,6 +14,8 @@
 #include "SubWidgets/DropdownMenu.h"
 
 #include "ui_EngineOptionWidget.h"
+
+#include "SubWidgets/SettingCard.h"
 
 EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
@@ -71,6 +74,31 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 
 
     ui->enginSelectCombo->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
+
+
+    // AI 옵션
+    auto [shapeBehaviorGroup, shapeBehaviorVLay] = newOptionGroupBox(tr("AI 옵션"), ui->mainLayout, ui->mainLayout->rowCount(), 0, Qt::AlignTop);
+
+    // 온도 설정
+    {
+        SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), shapeBehaviorGroup);
+        openAiTemper->setHeader(tr("OpenAI 온도 설정"));
+        openAiTemper->setDescription(tr("(기본값: 0.5)"));
+
+        // openAiTemper->setDescription(tr("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
+        QDoubleSpinBox* spinBox = openAiTemper->getContent<QDoubleSpinBox>();
+        spinBox->setRange(0.0, 1.5);
+        spinBox->setDecimals(2);
+        spinBox->setSingleStep(0.1);
+        spinBox->setValue(finConfig.getOpenAI_Temperature());
+        connect(spinBox, &QDoubleSpinBox::valueChanged, this, [](const double inTemper)
+        {
+            finConfig.setOpenAI_Temperature(inTemper);
+        });
+
+
+        shapeBehaviorVLay->addWidget(openAiTemper, 0, Qt::AlignmentFlag::AlignTop);
+    }
 }
 
 EngineOptionWidget::~EngineOptionWidget()

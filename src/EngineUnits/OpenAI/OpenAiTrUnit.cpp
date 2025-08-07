@@ -24,12 +24,15 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + finConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
 
-    QJsonObject json;
-    json["model"] = finConfig.getOpenAIModel();
+    QJsonObject chatBodyJson;
+
+    chatBodyJson["model"] = finConfig.getOpenAIModel();
     if (bIsStreaming)
     {
-        json["stream"] = bIsStreaming; // streaming
+        chatBodyJson["stream"] = bIsStreaming; // streaming
     }
+    chatBodyJson["temperature"] = finConfig.getOpenAI_Temperature();
+
 
     QJsonArray messages;
 
@@ -43,9 +46,10 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     userMessage["content"] = _trReqData.originText;
     messages.append(userMessage);
 
-    json["messages"] = messages;
+    chatBodyJson["messages"] = messages;
 
-    QJsonDocument doc(json);
+
+    QJsonDocument doc(chatBodyJson);
     QByteArray data = doc.toJson();
 
     post(request, data, bIsStreaming);

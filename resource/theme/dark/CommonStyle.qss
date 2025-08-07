@@ -264,6 +264,13 @@ QComboBox
   background-color: rgba(35, 38, 41, 1);
 }
 
+QComboBox::drop-down
+{
+  subcontrol-origin: padding;
+}
+
+QAbstractSpinBox:focus,
+QAbstractSpinBox:hover,
 QComboBox:hover
 {
   color: rgba(245, 245, 245, 1);
@@ -279,14 +286,15 @@ QComboBox:focus
   border-bottom-color: rgba(255, 255, 255, 1);
 }
 
-QComboBox:disabled 
+QAbstractSpinBox:disabled,
+QComboBox:disabled
 {
   color: rgba(117, 117, 117, 1);
   background-color: rgba(44, 46, 48, 1);
   border-bottom: 2px solid #232629;
 }
 
-QComboBox::drop-down	
+QComboBox::drop-down
 {
   color: #ffffff;
   width: 20px;
@@ -296,6 +304,60 @@ QComboBox QListView::item
 {
   padding: 4px 4px;
   min-height: 28px;
+}
+
+
+/*  ------------------------------------------------  */
+/*  QAbstractSpinBox  */
+QAbstractSpinBox
+{
+  color: rgba(225, 225, 225, 1);
+  min-height: 32px;
+
+  border: 0px solid rgba(0, 0, 0, 0);
+  border-top: 0px solid rgba(255, 255, 255, 0);
+  border-bottom: 2px solid rgba(170, 170, 170, 1);
+
+  padding: 0px 16px 0px 7px;
+
+  background-color: rgba(35, 38, 41, 1);
+}
+QAbstractSpinBox:disabled
+{
+  color: rgba(117, 117, 117, 1);
+  background-color: rgba(44, 46, 48, 1);
+}
+QAbstractSpinBox::up-button,
+QAbstractSpinBox::down-button
+{
+  background-color:rgba(0, 0, 0, 0);
+  subcontrol-origin: padding;
+  width: 16px;
+}
+QAbstractSpinBox::up-button:hover,
+QAbstractSpinBox::down-button:hover
+{
+  background-color:rgba(255, 255, 255, 0.1);
+  background-color: rgba(160, 160, 160, 0.44);
+}
+
+QAbstractSpinBox::up-button:pressed,
+QAbstractSpinBox::down-button:pressed
+{
+  background-color: rgba(117, 117, 117, 0.44);
+}
+QAbstractSpinBox::up-arrow,
+QAbstractSpinBox::down-arrow
+{
+  width: 7px;
+}
+QAbstractSpinBox::up-arrow
+{
+  image: url(:/img/arrow_up_img) 1;
+}
+QAbstractSpinBox::down-arrow
+{
+  image: url(:/img/arrow_down_img) 1;
 }
 
 

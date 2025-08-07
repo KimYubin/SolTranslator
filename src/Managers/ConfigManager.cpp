@@ -17,7 +17,8 @@
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
 
-const QString OpenAI_Model = "openai_model"; 
+const QString OpenAI_Model = "openai_model";
+const QString OpenAI_Temperature = "openai_temperature";
 
 const QString PopupTargetLanguageType = "PopupTargetLanguageType";
 
@@ -68,6 +69,16 @@ QString ConfigManager::getOpenAIModel()
 {
     // gpt-4o-mini / gpt-4.1-mini
     return _settings->value(OpenAI_Model, "gpt-4o-mini").toString();
+}
+
+void ConfigManager::setOpenAI_Temperature(const double inTemperature)
+{
+    _settings->setValue(OpenAI_Temperature, inTemperature);
+}
+
+double ConfigManager::getOpenAI_Temperature()
+{
+    return _settings->value(OpenAI_Temperature, 0.5).toDouble();
 }
 
 void ConfigManager::setStartRun(const bool inStartRun)

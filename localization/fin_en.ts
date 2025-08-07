@@ -4,12 +4,12 @@
 <context>
     <name>EngineOption</name>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="101"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="129"/>
         <source>번역 엔진</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="102"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="130"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,23 +22,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="34"/>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="50"/>
         <source>번역 엔진 설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="83"/>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="99"/>
         <source>번역 엔진:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="96"/>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="112"/>
         <source>API: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="113"/>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="129"/>
         <source>저장</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="80"/>
+        <source>AI 옵션</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="85"/>
+        <source>OpenAI 온도 설정</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="86"/>
+        <source>(기본값: 0.5)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -138,12 +153,12 @@
 <context>
     <name>GeneralOption</name>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="128"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="129"/>
         <source>일반</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="129"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="130"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -156,52 +171,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="29"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="30"/>
         <source>모양 및 동작</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="34"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="35"/>
         <source>시작 시 실행</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="35"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="36"/>
         <source>시스템 시작 시 Fin번역기가 자동으로 실행됩니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="47"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="48"/>
         <source>목표 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="48"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="49"/>
         <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
         <source>창 위치, 크기 기억</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="77"/>
         <source>다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="88"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="89"/>
         <source>적용</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="89"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="90"/>
         <source>테마 적용</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="90"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="91"/>
         <source>테마를 적용합니다.</source>
         <translation type="unfinished"></translation>
     </message>

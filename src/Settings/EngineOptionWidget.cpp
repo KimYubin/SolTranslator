@@ -117,20 +117,6 @@ void EngineOptionWidget::setEngineGroupUI()
 {
 }
 
-void EngineOptionWidget::apply()
-{
-    IOptionWidget::apply();
-}
-
-void EngineOptionWidget::cancel()
-{
-    IOptionWidget::cancel();
-}
-
-void EngineOptionWidget::finish()
-{
-    IOptionWidget::finish();
-}
 
 
 // ~======================

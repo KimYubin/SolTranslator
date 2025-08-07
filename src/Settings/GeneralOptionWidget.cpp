@@ -101,21 +101,6 @@ GeneralOptionWidget::~GeneralOptionWidget()
 }
 
 
-void GeneralOptionWidget::apply()
-{
-    IOptionWidget::apply();
-}
-
-void GeneralOptionWidget::cancel()
-{
-    IOptionWidget::cancel();
-}
-
-void GeneralOptionWidget::finish()
-{
-    IOptionWidget::finish();
-}
-
 
 // ~======================
 // GeneralOption 

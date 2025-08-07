@@ -4,12 +4,12 @@
 <context>
     <name>EngineOption</name>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="140"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="126"/>
         <source>번역 엔진</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="141"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="127"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,12 +153,12 @@
 <context>
     <name>GeneralOption</name>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="124"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="109"/>
         <source>일반</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="125"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="110"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>

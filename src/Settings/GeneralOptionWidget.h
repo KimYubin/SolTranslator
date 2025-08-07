@@ -16,9 +16,6 @@ public:
     ~GeneralOptionWidget() override;
 
 protected:
-    virtual void apply() override;
-    virtual void cancel() override;
-    virtual void finish() override;
 
 private:
     friend class GeneralOption;
@@ -33,7 +30,7 @@ class GeneralOption : public IOptionPage
 
 public:
     GeneralOption();
-    virtual ~GeneralOption() override;
+    ~GeneralOption() override;
 
 };
 

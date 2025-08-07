@@ -22,9 +22,6 @@ public:
 
 protected:
     void setEngineGroupUI();
-    virtual void apply() override;
-    virtual void cancel() override;
-    virtual void finish() override;
 
 private:
     friend class EngineOption;
@@ -40,7 +37,7 @@ class EngineOption : public IOptionPage
 
 public:
     EngineOption();
-    virtual ~EngineOption() override;
+    ~EngineOption() override;
 
 };
 

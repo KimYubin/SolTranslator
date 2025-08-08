@@ -4,6 +4,7 @@
 
 #include <QGroupBox>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QVBoxLayout>
 
 #include <unordered_set>
@@ -14,26 +15,39 @@ static std::unordered_set<IOptionPage*>& optionsPages()
     return staticOptionPages;
 }
 
-IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
+IOptionWidget::IOptionWidget(QWidget* parent) : QScrollArea(parent)
 {
-    outerLayout = new QGridLayout(this);
-    outerLayout->setSpacing(0);
-    outerLayout->setObjectName("outerLayout");
-    outerLayout->setContentsMargins(0, 0, 0, 0);
+    QWidget* inWidget = new QWidget(this);
+    _outerLayout = new QGridLayout(inWidget);
+    _outerLayout->setSpacing(0);
+    _outerLayout->setObjectName("_outerLayout");
+    _outerLayout->setContentsMargins(0, 0, 0, 0);
 
-    mainLayout = new QGridLayout();
-    mainLayout->setSpacing(0);
-    mainLayout->setVerticalSpacing(15);
-    mainLayout->setObjectName("mainLayout");
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+    _mainLayout = new QGridLayout();
+    _mainLayout->setSpacing(0);
+    _mainLayout->setVerticalSpacing(15);
+    _mainLayout->setObjectName("_mainLayout");
+    _mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    outerLayout->addLayout(mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
+    _outerLayout->addLayout(_mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
 
-    setLayout(outerLayout);
+    setWidgetResizable(true);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    inWidget->setLayout(_outerLayout);
+    inWidget->show();
+    setWidget(inWidget);
 }
 
 IOptionWidget::~IOptionWidget()
 {
+}
+
+void IOptionWidget::initializeAfterCtor()
+{
+    const int contentMinWidth = widget()->sizeHint().width() + verticalScrollBar()->sizeHint().width();
+
+    setMinimumWidth(contentMinWidth);
 }
 
 void IOptionWidget::apply()
@@ -49,8 +63,8 @@ void IOptionWidget::finish()
 }
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle, QGridLayout* inParentLayout
-                                                                          , const int inRow, const int inColumn
-                                                                          , Qt::Alignment inAlignment)
+                                                                    , const int inRow, const int inColumn
+                                                                    , Qt::Alignment inAlignment)
 {
     auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
 
@@ -73,7 +87,7 @@ std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QStr
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::addNewOptionGroupBox(const QString& inGroupTitle)
 {
-    return newOptionGroupBox(inGroupTitle, mainLayout, mainLayout->rowCount(), 0);
+    return newOptionGroupBox(inGroupTitle, _mainLayout, _mainLayout->rowCount(), 0);
 }
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::generateGroupBox(const QString& inGroupTitle)

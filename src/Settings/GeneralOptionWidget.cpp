@@ -94,6 +94,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         });
         shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
     }
+
+    initializeAfterCtor();
 }
 
 GeneralOptionWidget::~GeneralOptionWidget()

@@ -106,6 +106,8 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 
         aiOptionVLay->addWidget(openAiTemper, 0, Qt::AlignmentFlag::AlignTop);
     }
+
+    initializeAfterCtor();
 }
 
 EngineOptionWidget::~EngineOptionWidget()

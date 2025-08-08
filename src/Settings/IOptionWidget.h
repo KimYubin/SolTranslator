@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QScrollArea>
 #include <QWidget>
 
 #include "FinTypes.h"
@@ -15,7 +16,7 @@ class QGroupBox;
 class FinTranslatorCore;
 class IOptionPage;
 
-class IOptionWidget : public QWidget
+class IOptionWidget : public QScrollArea
 {
     Q_OBJECT
 
@@ -25,6 +26,8 @@ public:
 
 protected:
     friend class IOptionPage;
+    void initializeAfterCtor();
+
     virtual void apply();
     virtual void cancel();
     virtual void finish();
@@ -73,11 +76,13 @@ private:
     void setOptionPage(IOptionPage* inOptionPage);
     QPointer<IOptionPage> _optionPage;
 
-    QGridLayout* outerLayout;
+    QGridLayout* _outerLayout;
 
 protected:
-    QGridLayout* mainLayout;
+    QGridLayout* _mainLayout;
 };
+
+
 
 class IOptionPage : public QObject
 {

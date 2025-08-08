@@ -130,16 +130,22 @@ protected:
 
     QSize _prevSize;
 
-    int _lineCount = 0;
-    int _lastLineLength = 0;
-
     // ~================
-    const QSizeF _minSizeRatio  = {0.15f, 0.15f};
-    const QSizeF _maxSizeRatio  = {0.2f, 0.65f};
-    const QSizeF _fullSizeRatio = {0.95f, 0.95f};
+    const QSizeF _minSizeRatio;
+    const QSizeF _maxSizeRatio; // 팝업창이 자동으로 커지는 한계 크기
+    const QSizeF _fullSizeRatio;
 
-    const QPointF _centerPosRatio = {0.85f, 0.33f};
-    const float _yPosMaxRatio = 0.175f;
+    /**
+     * 팝업창 중심 지점 위치.
+     * 이 값을 중심으로 커지지만, _yPosMaxRatio을 넘겨서 커지지는 않습니다.
+     */
+    const QPointF _centerPosRatio;
+
+    /**
+     * 팝업창 자동 확장시, 창 좌상단의 최대 y축 위치.
+     * 자동으로 커져도 이 값을 넘겨서 위로 올라가지는 않습니다. 
+     */
+    const qreal _yPosMaxRatio;
 
     bool _bManualSizeMode = false;
 
@@ -148,7 +154,7 @@ protected:
     bool _bIsDrag = false;
     QPoint _dragPoint;
 
-    qreal _fontSize = 14.0f;
+    qreal _fontSize = 14.0;
 
 private:
     Ui::PopupTranslateWidget* ui;

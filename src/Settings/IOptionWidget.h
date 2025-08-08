@@ -10,13 +10,14 @@
 
 #include "FinTypes.h"
 
+class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
 class QGroupBox;
 class FinTranslatorCore;
 class IOptionPage;
 
-class IOptionWidget : public QScrollArea
+class IOptionWidget : public QWidget
 {
     Q_OBJECT
 
@@ -27,6 +28,7 @@ public:
 protected:
     friend class IOptionPage;
     void initializeAfterCtor();
+    void syncInOutScrollbar();
 
     virtual void apply();
     virtual void cancel();
@@ -76,10 +78,15 @@ private:
     void setOptionPage(IOptionPage* inOptionPage);
     QPointer<IOptionPage> _optionPage;
 
-    QGridLayout* _outerLayout;
+    QHBoxLayout* _outScrollLayout; // scrollArea와 외부 스크롤바가 위치할 레이아웃
+    QScrollBar* _outScrollBar;     // 외부 스크롤바
+
+    QScrollArea* _srollArea;
+    QWidget* _scrollContent;
+    QGridLayout* _wrapMainLayout;  // mainLayout을 AlignTop으로 위로 정렬하기 위한 랩핑용 레이아웃
 
 protected:
-    QGridLayout* _mainLayout;
+    QGridLayout* _mainLayout; // 내부 위젯을 배치할 가장 안쪽 레이아웃
 };
 
 

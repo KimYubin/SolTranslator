@@ -608,7 +608,7 @@ void PopupTranslateWidget::calculateTextEditLayoutInfo()
             + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)  // 상단 타이틀바 레이아웃 높이
             + QMargins(0, ui->loadingLayout->sizeHint().height(), 0, 0)// 상단 로딩바 레이아웃 높이
             + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()) // 하단 상태표시 레이아웃 높이
-            + QMargins(0, 0, ui->outerVScrollBar->width(), 0);         // 우측 외부 스크롤바
+            + QMargins(0, 0, ui->outerVScrollBar->width(), 0);         // 우측 외부 스크롤바 ->sizeHint().width();로 대체 고려해야함
 
     _outMargins = ui->outerLayout->contentsMargins();
 

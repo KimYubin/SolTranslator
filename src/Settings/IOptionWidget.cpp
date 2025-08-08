@@ -15,13 +15,25 @@ static std::unordered_set<IOptionPage*>& optionsPages()
     return staticOptionPages;
 }
 
-IOptionWidget::IOptionWidget(QWidget* parent) : QScrollArea(parent)
+IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {
-    QWidget* inWidget = new QWidget(this);
-    _outerLayout = new QGridLayout(inWidget);
-    _outerLayout->setSpacing(0);
-    _outerLayout->setObjectName("_outerLayout");
-    _outerLayout->setContentsMargins(0, 0, 0, 0);
+    _outScrollLayout = new QHBoxLayout(this);
+    _outScrollLayout->setSpacing(16);
+    _outScrollLayout->setContentsMargins(0, 0, 4, 0);
+
+
+    // _srollArea 
+    _srollArea = new QScrollArea(this);
+    _srollArea->setWidgetResizable(true);
+    _srollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _srollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    _scrollContent = new QWidget(_srollArea);
+
+    _wrapMainLayout = new QGridLayout(_scrollContent);
+    _wrapMainLayout->setSpacing(0);
+    _wrapMainLayout->setObjectName("_wrapMainLayout");
+    _wrapMainLayout->setContentsMargins(0, 0, 0, 0);
 
     _mainLayout = new QGridLayout();
     _mainLayout->setSpacing(0);
@@ -29,14 +41,40 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QScrollArea(parent)
     _mainLayout->setObjectName("_mainLayout");
     _mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    _outerLayout->addLayout(_mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
+    
+    // _outScrollLayout -> _srollArea -> _scrollContent -> _wrapMainLayout -> _mainLayout -> innerWidgets
+    _wrapMainLayout->addLayout(_mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
+    _scrollContent->setLayout(_wrapMainLayout);
+    _scrollContent->show();
+    _srollArea->setWidget(_scrollContent);
 
-    setWidgetResizable(true);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _outScrollLayout->addWidget(_srollArea);
 
-    inWidget->setLayout(_outerLayout);
-    inWidget->show();
-    setWidget(inWidget);
+
+    // 기본 수직 스크롤바를 외부 스크롤바로 대체
+    _outScrollBar = new QScrollBar(this);
+    _outScrollBar->setOrientation(Qt::Orientation::Vertical);
+    QSizePolicy scrollSizePolicy = _outScrollBar->sizePolicy();
+    scrollSizePolicy.setRetainSizeWhenHidden(true);
+    _outScrollBar->setSizePolicy(scrollSizePolicy);
+
+    _outScrollLayout->addWidget(_outScrollBar);
+
+
+    // 외부 스크롤바 -> 내부 스크롤바 제어
+    connect(_outScrollBar, &QScrollBar::valueChanged, this, [this](const int value)
+    {
+        _srollArea->verticalScrollBar()->setValue(value);
+    });
+    // 내부 스크롤바 값 -> 외부 스크롤바에 반영
+    connect(_srollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int, int)
+    {
+        syncInOutScrollbar();
+    });
+    connect(_srollArea->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int)
+    {
+        syncInOutScrollbar();
+    });
 }
 
 IOptionWidget::~IOptionWidget()
@@ -45,9 +83,34 @@ IOptionWidget::~IOptionWidget()
 
 void IOptionWidget::initializeAfterCtor()
 {
-    const int contentMinWidth = widget()->sizeHint().width() + verticalScrollBar()->sizeHint().width();
+    const int contentMinWidth =
+            _srollArea->widget()->sizeHint().width()
+            + _srollArea->verticalScrollBar()->sizeHint().width()
+            + _outScrollLayout->spacing()
+            + _outScrollBar->sizeHint().width();
 
     setMinimumWidth(contentMinWidth);
+}
+
+void IOptionWidget::syncInOutScrollbar()
+{
+    const QScrollBar* scrollBar = _srollArea->verticalScrollBar();
+
+    const int min = scrollBar->minimum();
+    const int max = scrollBar->maximum();
+    const int pageStep = scrollBar->pageStep();
+
+    if (min == max)
+    {
+        _outScrollBar->hide();
+    }
+    else
+    {
+        _outScrollBar->setRange(min, max);
+        _outScrollBar->setPageStep(pageStep);
+        _outScrollBar->setValue(scrollBar->value());
+        _outScrollBar->show();
+    }
 }
 
 void IOptionWidget::apply()

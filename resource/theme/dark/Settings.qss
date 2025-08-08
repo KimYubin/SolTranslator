@@ -86,8 +86,10 @@
 
 
 /* IOptionWidget */
+#SettingsWidget IOptionWidget > QWidget > QWidget> QWidget,
 #SettingsWidget IOptionWidget > QWidget > QWidget,
-#SettingsWidget IOptionWidget 
+#SettingsWidget IOptionWidget > QWidget,
+#SettingsWidget IOptionWidget
 {
   background-color: transparent;
 }

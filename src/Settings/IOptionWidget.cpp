@@ -9,12 +9,6 @@
 
 #include <unordered_set>
 
-static std::unordered_set<IOptionPage*>& optionsPages()
-{
-    static std::unordered_set<IOptionPage*> staticOptionPages;
-    return staticOptionPages;
-}
-
 IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {
     _outScrollLayout = new QHBoxLayout(this);
@@ -187,26 +181,53 @@ void IOptionWidget::setOptionPage(IOptionPage* inOptionPage)
     _optionPage = inOptionPage;
 }
 
+
+// ~======================
+// IOptionPage
+
+template <class T>
+size_t qHash(const QPointer<T> &ptr, size_t seed = 0)
+{
+    return qHash(ptr ? ptr.data() : 0, seed);
+}
+
+static QSet<QPointer<IOptionPage>>& optionsPages()
+{
+    static QSet<QPointer<IOptionPage>> staticOptionPages;
+
+    return staticOptionPages;
+}
+
+
 IOptionPage::IOptionPage()
 {
-    optionsPages().emplace(this);
+    optionsPages().insert(this);
 }
 
 IOptionPage::~IOptionPage()
 {
-    optionsPages().erase(this);
+    optionsPages().remove(this);
 }
 
-const std::unordered_set<IOptionPage*>& IOptionPage::allOptionsPages()
+const QSet<QPointer<IOptionPage>>& IOptionPage::allOptionsPages()
 {
     return optionsPages();
 }
 
 std::vector<IOptionPage*> IOptionPage::sortedOptionsPages()
 {
-    std::vector<IOptionPage*> sortedOptionPages(optionsPages().begin(), optionsPages().end());
+    std::vector<IOptionPage*> sortedOptionPages;
+    const QSet<QPointer<IOptionPage>>& optionPageSet = optionsPages();
+    for (const auto& option : optionPageSet)
+    {
+        if (option)
+        {
+            sortedOptionPages.push_back(option);
+        }
+    }
+
     std::ranges::sort(sortedOptionPages, IOptionPage::compareOptionsPages);
-    
+
     return sortedOptionPages;
 }
 
@@ -259,8 +280,10 @@ void IOptionPage::cancel()
 
 void IOptionPage::finish()
 {
-    if (_optionWidget.isNull() == false)
+    if (_optionWidget)
     {
+        // 필수적이지 않습니다.
+        // SettingsWidget이 _optionWidget의 소유권을 갖고, 수명을 관리하기 때문입니다.
         _optionWidget->deleteLater();
     }
 }

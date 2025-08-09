@@ -72,7 +72,7 @@ protected:
     std::tuple<QGroupBox*, QVBoxLayout*> generateGroupBox(const QString& inGroupTitle);
 
 public:
-    IOptionPage* getOptionPage() const;;
+    IOptionPage* getOptionPage() const;
 
 private:
     void setOptionPage(IOptionPage* inOptionPage);
@@ -99,9 +99,9 @@ public:
     IOptionPage();
     ~IOptionPage() override;
 
-    static const std::unordered_set<IOptionPage*>& allOptionsPages();
+    static const QSet<QPointer<IOptionPage>>& allOptionsPages();
     static std::vector<IOptionPage*> sortedOptionsPages();
-    static bool compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2);    
+    static bool compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2);
 
     QString getDisplayName() const;
     QString getIconPath() const;
@@ -127,6 +127,7 @@ private:
     OptionPriority _priority = OptionPriority::None; // 옵션 정렬 우선 순위
 
     int _optionStkId;
+
     Q_DISABLE_COPY_MOVE(IOptionPage)
 };
 

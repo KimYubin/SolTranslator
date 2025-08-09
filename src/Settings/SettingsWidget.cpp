@@ -88,12 +88,15 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
 SettingsWidget::~SettingsWidget()
 {
-    const std::unordered_set<IOptionPage*>& options = IOptionPage::allOptionsPages();
-    for (IOptionPage* option : options)
+    const QSet<QPointer<IOptionPage>>& options = IOptionPage::allOptionsPages();
+    for (const QPointer<IOptionPage>& option : options)
     {
-        option->finish();
+        if (option)
+        {
+            option->finish();
+        }
     }
-    
+
     delete ui;
 }
 

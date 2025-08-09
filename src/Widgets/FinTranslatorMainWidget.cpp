@@ -345,15 +345,16 @@ void FinTranslatorMainWidget::popupTrayMenu()
         // 메뉴 사이즈 계산 유도.
         _trayIcon->contextMenu()->show();
 
+        // 트레이 아이콘 중앙 상단에, 메뉴 중앙 하단이 오도록 조정.
+        const QRect trayGeo        = _trayIcon->geometry();
+        const QPoint trayTopCenter = trayGeo.topLeft() + QPoint(trayGeo.width() / 2, 0);
+        const QSize menuSize       = _trayIcon->contextMenu()->size();
+        const QPoint popupPos      = trayTopCenter - QPoint(menuSize.width() / 2, menuSize.height());
+
+        QRect popupGeo = QRect(popupPos, menuSize);
+
+        // 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정.
         const QRect availableGeo = Fin::availableGeometryAt(_prevMousePos);
-        const QSize contextSize  = _trayIcon->contextMenu()->size();
-
-        QPoint popupPos = _prevMousePos;
-        popupPos.rx() -= (contextSize.width() / 2); // 마우스 위치에 팝업 중앙이 오도록 조정.
-        popupPos.ry() -= contextSize.height(); 
-        QRect popupGeo = QRect(popupPos, contextSize);
-
-        /** 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정. */
         popupGeo = Fin::moveToInside(availableGeo, popupGeo);
 
         _trayIcon->contextMenu()->popup(popupGeo.topLeft());

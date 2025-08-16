@@ -31,7 +31,7 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 
     _mainLayout = new QGridLayout();
     _mainLayout->setSpacing(0);
-    _mainLayout->setVerticalSpacing(15);
+    _mainLayout->setVerticalSpacing(35);
     _mainLayout->setObjectName("_mainLayout");
     _mainLayout->setContentsMargins(0, 0, 0, 0);
 

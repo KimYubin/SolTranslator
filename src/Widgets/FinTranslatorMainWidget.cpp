@@ -345,6 +345,7 @@ void FinTranslatorMainWidget::popupTrayMenu()
         // 메뉴 사이즈 계산 유도.
         _trayIcon->contextMenu()->show();
 
+        // todo: 트레이 아이콘 위치가 상단(화면 높이 절반 위인 경우)이면, 아이콘 아래로 메뉴가 열리게 변경
         // 트레이 아이콘 중앙 상단에, 메뉴 중앙 하단이 오도록 조정.
         const QRect trayGeo        = _trayIcon->geometry();
         const QPoint trayTopCenter = trayGeo.topLeft() + QPoint(trayGeo.width() / 2, 0);

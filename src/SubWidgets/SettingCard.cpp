@@ -61,6 +61,7 @@ void SettingCard::setDescription(const QString& inStr)
     {
         _description = new QLabel(_gridLayoutWidget);
         _description.value()->setObjectName("SettingDescriptionText");
+        _description.value()->setWordWrap(true);
 
         int descCol     = 0;
         int descColSpan = 2;

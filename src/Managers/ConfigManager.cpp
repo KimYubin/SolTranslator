@@ -29,7 +29,9 @@ const QString SimplePopupGeometry     = "SimplePopupGeometry";
 const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
 
 const QString IsRememberWindowGeo = "IsRememberWindowGeo";
-const QString WidgetGeometry = "WidgetGeometry";
+const QString WidgetGeometry      = "WidgetGeometry";
+
+const QString IsPopupTrWindowTemp = "IsPopupTrWindowTemp";
 
 ConfigManager::ConfigManager()
 {
@@ -195,6 +197,16 @@ bool ConfigManager::restoreWidgetGeometry(QWidget* inWidget)
         return inWidget->restoreGeometry(geoByteArr);
     }
     return false;
+}
+
+void ConfigManager::setIsPopupTrWindowTemp(const bool inTemp)
+{
+    _settings->setValue(IsPopupTrWindowTemp, inTemp);
+}
+
+bool ConfigManager::getIsPopupTrWindowTemp()
+{
+    return _settings->value(IsPopupTrWindowTemp, false).toBool();
 }
 
 

@@ -67,7 +67,15 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     // 포커스 변경에 따른 그림자 on/off 제어. (그림자 성능)
     connect(qApp, &QApplication::focusChanged, this, &PopupTranslateWidget::detectFocusInOut);
 
-    changePopupMode();
+    if (finConfig.getIsPopupTrWindowTemp())
+    {
+        changePopupMode();
+    }
+    else
+    {
+        changeNormalWindowMode();
+    }
+
 
     // ~======================
     // 애니메이션

@@ -54,6 +54,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
+        ui->tabBarLayout->addWidget(button, 0, Qt::AlignmentFlag::AlignLeft);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
@@ -61,16 +62,27 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     // 텍스트 번역
     _textEditTranslate = new TextEditTranslateWidget();
-    ui->textTabButton->setText(tr("텍스트"));
-    ui->textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
-    bindButton(ui->textTabButton, _textEditTranslate);
+
+    textTabButton = new QPushButton(this);
+    textTabButton->setObjectName("textTabButton");
+    textTabButton->setText(tr("텍스트"));
+    textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
+    ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+
+    bindButton(textTabButton, _textEditTranslate);
+
 
     // 문서 번역
     QLabel* docTranslateWidget = new QLabel(tr("준비 중"));
     docTranslateWidget->setAlignment(Qt::AlignCenter);
-    ui->docTabButton->setText(tr("문서"));
-    ui->docTabButton->setIcon(QIcon(":/img/document_img"));
-    bindButton(ui->docTabButton, docTranslateWidget);
+
+    docTabButton = new QPushButton(this);
+    docTabButton->setObjectName("docTabButton");
+    docTabButton->setText(tr("문서"));
+    docTabButton->setIcon(QIcon(":/img/document_img"));
+    ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+
+    bindButton(docTabButton, docTranslateWidget);
 
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
@@ -125,7 +137,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     finConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);
 
-    setTabOrder({ui->mainStackedWidget, ui->textTabButton, _engineSelector, ui->settingsButton});
+    setTabOrder({ui->mainStackedWidget, textTabButton, _engineSelector, ui->settingsButton});
 }
 
 FinTranslatorMainWidget::~FinTranslatorMainWidget()

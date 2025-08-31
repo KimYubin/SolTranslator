@@ -51,26 +51,6 @@
         <property name="spacing">
          <number>40</number>
         </property>
-        <item alignment="Qt::AlignmentFlag::AlignLeft">
-         <widget class="QPushButton" name="textTabButton">
-          <property name="text">
-           <string>텍스트</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item alignment="Qt::AlignmentFlag::AlignLeft">
-         <widget class="QPushButton" name="docTabButton">
-          <property name="text">
-           <string>문서</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>

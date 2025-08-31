@@ -10,6 +10,7 @@
 #include "IFinWidget.h"
 
 
+class QPushButton;
 class DropdownMenu;
 class QComboBox;
 class QButtonGroup;
@@ -69,6 +70,9 @@ private:
     // ~==============
     // sub widgets
     QButtonGroup* _buttonGroup;
+    QPushButton* textTabButton;
+    QPushButton* docTabButton;
+
     TextEditTranslateWidget* _textEditTranslate;
     QPointer<SettingsWidget> _settingsWidget;
     

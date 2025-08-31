@@ -65,87 +65,85 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="57"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="64"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="68"/>
         <source>텍스트</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="67"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="71"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="81"/>
         <source>문서</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="97"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="110"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.ui" line="77"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="122"/>
         <source>설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="40"/>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="325"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="337"/>
         <source>FinTranslator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="69"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="76"/>
         <source>준비 중</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="95"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="107"/>
         <source>번역 엔진 선택</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="182"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="194"/>
         <source>트레이로 최소화되었습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="183"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="195"/>
         <source>Fin.번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="232"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="244"/>
         <source>Fin.Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="233"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="245"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="234"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="246"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="234"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="246"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="294"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="306"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="297"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="309"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="300"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="312"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="303"/>
+        <location filename="../src/Widgets/FinTranslatorMainWidget.cpp" line="315"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>

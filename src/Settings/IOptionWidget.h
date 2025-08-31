@@ -27,6 +27,7 @@ public:
 
 protected:
     friend class IOptionPage;
+
     void initializeAfterCtor();
     void syncInOutScrollbar();
 

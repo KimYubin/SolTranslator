@@ -72,6 +72,7 @@ private:
     QButtonGroup* _buttonGroup;
     QPushButton* textTabButton;
     QPushButton* docTabButton;
+    QPushButton* historyTabButton;
 
     TextEditTranslateWidget* _textEditTranslate;
     QPointer<SettingsWidget> _settingsWidget;

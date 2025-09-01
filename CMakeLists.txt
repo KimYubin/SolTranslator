@@ -38,6 +38,8 @@ qt_add_executable(FinTranslator
         external/magic_enum.hpp
         src/Widgets/PopupTranslateWidget.cpp
         src/Widgets/PopupTranslateWidget.h
+        src/Widgets/TranslateHistoryWidget.cpp
+        src/Widgets/TranslateHistoryWidget.h
 )
 
 if (WIN32)

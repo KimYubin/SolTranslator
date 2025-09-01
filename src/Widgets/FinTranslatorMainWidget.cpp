@@ -17,6 +17,8 @@
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 #include "TextEditTranslateWidget.h"
+#include "TranslateHistoryWidget.h"
+
 #include "SubWidgets/FinToolTip.h"
 
 #include "Managers/ConfigManager.h"
@@ -44,6 +46,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     _finIcon = QIcon(":/img/icon_img");
     qApp->setWindowIcon(_finIcon);
 
+    ui->tabBarLayout->setSpacing(20);
 
     // ~======================
     // button binding
@@ -84,6 +87,16 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
 
     bindButton(docTabButton, docTranslateWidget);
 
+    // 번역 기록
+    TranslateHistoryWidget* historyWidget = new TranslateHistoryWidget();
+
+    historyTabButton = new QPushButton(this);
+    historyTabButton->setObjectName("historyTabButton");
+    historyTabButton->setText(tr("기록"));
+    historyTabButton->setIcon(QIcon(":/img/history_img"));
+    ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+
+    bindButton(historyTabButton, historyWidget);
 
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {

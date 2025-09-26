@@ -67,16 +67,6 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     // 포커스 변경에 따른 그림자 on/off 제어. (그림자 성능)
     connect(qApp, &QApplication::focusChanged, this, &PopupTranslateWidget::detectFocusInOut);
 
-    if (finConfig.getIsPopupTrWindowTemp())
-    {
-        changePopupMode();
-    }
-    else
-    {
-        changeNormalWindowMode();
-    }
-
-
     // ~======================
     // 애니메이션
     _animation = new QPropertyAnimation(this, "textEditSize", this); // setTextEditSize 함수 연결
@@ -89,6 +79,16 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     show();
     raise();
     activateWindow();
+
+    setMouseTracking(true);
+    if (finConfig.getIsPopupTrWindowTemp())
+    {
+        changePopupMode();
+    }
+    else
+    {
+        changeNormalWindowMode();
+    }
 
     // resizeEvent 유도를 위해 show 이후에 호출
     // animation start size 지정.
@@ -376,13 +376,13 @@ void PopupTranslateWidget::setupUI()
     alwaysIcon.addFile(":/img/keep_pin_clock45d", QSize(), QIcon::Normal, QIcon::Off);
     alwaysIcon.addFile(":/img/keep_pin_fill_v", QSize(), QIcon::Normal, QIcon::On);
     _AlwaysOnButton->setIcon(alwaysIcon);
+    _AlwaysOnButton->setShortcut(Qt::Key_T);
     _AlwaysOnButton->hide();
 
     setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
-    connect(_AlwaysOnButton, &QPushButton::toggled
-          , this, &PopupTranslateWidget::onAlwaysOnToggle);
-    FinTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기"), tr("항상 위 끄기"));
+    connect(_AlwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
+    FinTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기(<u>T<\\u>)"), tr("항상 위 끄기(<u>T<\\u>)"));
 
     // ~===========
     // windowModeButton
@@ -390,12 +390,12 @@ void PopupTranslateWidget::setupUI()
     _windowModeButton->setCheckable(true);
     _windowModeButton->setObjectName("windowModeButton");
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
+    _windowModeButton->setShortcut(Qt::Key_N);
 
     setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
-    connect(_windowModeButton, &QPushButton::toggled
-          , this, &PopupTranslateWidget::onWindowModeToggle);
-    FinTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격"), tr("임시 창모드"));
+    connect(_windowModeButton, &QPushButton::toggled, this, &PopupTranslateWidget::onWindowModeToggle);
+    FinTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격(<u>T<\\u>)"), tr("임시 창모드(N)"));
 
 
     // 좌우 버튼 분리
@@ -698,13 +698,12 @@ void PopupTranslateWidget::changeNormalWindowMode()
     // 자동닫기 해제
     qApp->removeEventFilter(this);
 
-    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode) == false)
+    // 처음부터 일반모드로 시작하는 경우 매뉴얼 모드로 변경하지 않습니다.
+    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode))
     {
-        return;
+        manualSizeMode();
     }
     _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
-
-    manualSizeMode();
 
     const bool bHasWModeBtnFocus = _windowModeButton->hasFocus();
     _windowModeButton->hide();

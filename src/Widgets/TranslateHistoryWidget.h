@@ -5,6 +5,10 @@
 #include "IFinWidget.h"
 
 
+class QListView;
+class QListWidget;
+class MenuTextEdit;
+class QSplitter;
 class QGridLayout;
 
 class TranslateHistoryWidget : public IFinWidget
@@ -19,6 +23,9 @@ private:
     void setupUI();
 
     QGridLayout* _mainLayout;
+    QSplitter* _splitter;
+    QListView* _historyList;
+    MenuTextEdit* _selectedDetail;
 };
 
 

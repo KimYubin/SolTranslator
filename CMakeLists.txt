@@ -22,6 +22,7 @@ find_package(Qt6 REQUIRED COMPONENTS
         Gui
         LinguistTools
 )
+include_directories("C:/Qt/6.9.0/Src")
 
 file(GLOB_RECURSE PROJECT_SOURCES
         "src/*.cpp"

@@ -14,6 +14,7 @@ windeployqt F:\Dev\FinPoint\FinTranslator\ `폴더` \FinTranslator.exe
 
 C:\Windows\System32\cmd.exe /A /Q /K C:\Qt\6.9.0\msvc2022_64\bin\qtenv2.bat
 windeployqt F:\Dev\FinPoint\FinTranslator\cmake-build-debug_vs_69\FinTranslator.exe
+windeployqt --pdb F:\Dev\FinPoint\FinTranslator\cmake-build-debug_vs_69\FinTranslator.exe
 
 
 ## Qt 6.9.0 / MSVC 2022 / Release
@@ -26,6 +27,7 @@ windeployqt F:\Dev\FinPoint\FinTranslator\cmake-build-release_vs_69\FinTranslato
 
 C:\Windows\System32\cmd.exe /A /Q /K C:\Qt\6.9.0\mingw_64\bin\qtenv2.bat
 windeployqt F:\Dev\FinPoint\FinTranslator\cmake-build-debug-mingw\FinTranslator.exe
+->.dll 파일 위치에 .debug 파일을 같이 위치 시켜야합니다.
 
 
 ## Qt 6.9.0 / MinGW / Release

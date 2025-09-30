@@ -13,8 +13,9 @@
 #include "Managers/DataManager.h"
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/TranslateManager.h"
-
 #include "Managers/StyleManger.h"
+
+#include "Support/WidgetInspector.h"
 
 #include "Widgets/FinTranslatorMainWidget.h"
 
@@ -60,6 +61,10 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
     {
         _finMainWidget->show();
     }
+
+#ifdef QT_DEBUG
+    // WidgetInspector* inspector = new WidgetInspector();
+#endif
 }
 
 FinTranslatorCore::~FinTranslatorCore()

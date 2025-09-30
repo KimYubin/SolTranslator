@@ -41,6 +41,8 @@ qt_add_executable(FinTranslator
         src/Widgets/PopupTranslateWidget.h
         src/Widgets/TranslateHistoryWidget.cpp
         src/Widgets/TranslateHistoryWidget.h
+        src/Support/WidgetInspector.cpp
+        src/Support/WidgetInspector.h
 )
 
 if (WIN32)

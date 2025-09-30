@@ -101,6 +101,17 @@ protected:
 protected slots:
     void detectFocusInOut(QWidget* old, QWidget* now);
 
+private:
+    /**
+     * 크기 조절용 안쪽 지오메트리 입니다.
+     * 이 사각형보다 외곽은 크기 조절용 지역이고, 안쪽은 이동 구역입니다.
+     * @return 
+     */
+    QRect getInnerGeometry() const;
+    void moveWindow(const QPoint& inMousePos);
+    void resizeWindow(const QPoint& inMousePos);
+    void setCursorShape(const QPoint& inMousePos);
+
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;

@@ -21,6 +21,8 @@
 #include <QtConcurrentRun>
 #include <QTimer>
 #include <QTextBlock>
+#include <QWindow>
+
 #include <qevent.h>
 
 #include "FinUtilibrary.h"
@@ -81,6 +83,13 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     activateWindow();
 
     setMouseTracking(true);
+
+    // 리사이즈 영역에서 커서 모양 변경.
+    // bgFrame에서 mouse move 이벤트를 부모(현재 위젯)로 전달하기 위해 이벤트 필터를 설치합니다.
+    ui->verticalLayoutWidget->setGeometry(0, 0, 0, 0);
+    ui->bgFrame->setMouseTracking(true);
+    ui->bgFrame->installEventFilter(this);
+
     if (finConfig.getIsPopupTrWindowTemp())
     {
         changePopupMode();
@@ -795,12 +804,149 @@ void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
     }
 }
 
+QRect PopupTranslateWidget::getInnerGeometry() const
+{
+    constexpr int margin       = 15;
+    constexpr QMargins margins = {margin, margin, margin, margin};
+    return frameGeometry() - margins;
+}
+
+void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
+{
+    if (_bMaximizedMode)
+    {
+        // 내부 QFrame의 절대 좌표와, QFrame 기준 상대 좌표 계산
+        const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
+        const QPoint frameTopLeft     = frameGeometry().topLeft() + outMarginTopLeft;
+        const QPointF mouseRelPointF  = (inMousePos - frameTopLeft).toPointF();
+
+        // frame 기준 사이즈
+        const QSizeF maxFrameSizeF   = frameGeometry().size().toSizeF() - _outerMarginSize;
+        const QSizeF normalSizeF     = normalGeometry().size().toSizeF() - _outerMarginSize;
+        const QSizeF halfNormalSizeF = normalSizeF / 2.0;
+
+        const qreal leftInterval   = mouseRelPointF.x();
+        const qreal rightInterval  = maxFrameSizeF.width() - mouseRelPointF.x();
+        const qreal topInterval    = mouseRelPointF.y();
+        const qreal bottomInterval = maxFrameSizeF.height() - mouseRelPointF.y();
+
+        QPoint normalRelMousePoint;
+        if (leftInterval <= halfNormalSizeF.width())
+        {
+            normalRelMousePoint.rx() = leftInterval;
+        }
+        else if (rightInterval <= halfNormalSizeF.width())
+        {
+            normalRelMousePoint.rx() = normalSizeF.width() - rightInterval;
+        }
+        else
+        {
+            normalRelMousePoint.rx() = halfNormalSizeF.width();
+        }
+
+        if (topInterval <= halfNormalSizeF.height())
+        {
+            normalRelMousePoint.ry() = topInterval;
+        }
+        else if (bottomInterval <= halfNormalSizeF.height())
+        {
+            normalRelMousePoint.ry() = normalSizeF.height() - bottomInterval;
+        }
+        else
+        {
+            normalRelMousePoint.ry() = halfNormalSizeF.height();
+        }
+
+
+        const QPoint newNormalWindowPos = inMousePos - normalRelMousePoint - outMarginTopLeft;
+        setMaxNormal(false);
+        move(newNormalWindowPos);
+        _dragPoint = inMousePos - newNormalWindowPos;
+    }
+    else if (getInnerGeometry().contains(inMousePos))
+    {
+        if (QWindow* win = windowHandle())
+        {
+            const bool bSystemMove = win->startSystemMove();
+            if (bSystemMove == false)
+            {
+                move(inMousePos - _dragPoint);
+            }
+        }
+    }
+}
+
+void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
+{
+    if (QWindow* win = windowHandle())
+    {
+        const QRect geo    = frameGeometry();
+        const QRect innGeo = getInnerGeometry();
+
+        if (innGeo.contains(inMousePos))
+            return;
+
+        const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
+        const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
+        const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
+        const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
+        const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
+        const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
+        const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
+        const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
+
+        if (topLeftArea.contains(inMousePos))          win->startSystemResize(Qt::TopEdge | Qt::LeftEdge);
+        else if (topRightArea.contains(inMousePos))    win->startSystemResize(Qt::TopEdge | Qt::RightEdge);
+        else if (bottomLeftArea.contains(inMousePos))  win->startSystemResize(Qt::BottomEdge | Qt::LeftEdge);
+        else if (bottomRightArea.contains(inMousePos)) win->startSystemResize(Qt::BottomEdge | Qt::RightEdge);
+        else if (topArea.contains(inMousePos))         win->startSystemResize(Qt::TopEdge);
+        else if (bottomArea.contains(inMousePos))      win->startSystemResize(Qt::BottomEdge);
+        else if (LeftArea.contains(inMousePos))        win->startSystemResize(Qt::LeftEdge);
+        else if (RightArea.contains(inMousePos))       win->startSystemResize(Qt::RightEdge);
+    }
+}
+
+void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)
+{
+    const QRect geo = frameGeometry();
+    const QRect innGeo = getInnerGeometry();
+
+    const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
+    const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
+    const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
+    const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
+    const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
+    const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
+    const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
+    const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
+
+    Qt::CursorShape cursorShape = Qt::ArrowCursor;
+
+    if (innGeo.contains(inMousePos))               cursorShape = Qt::ArrowCursor;
+    else if (topLeftArea.contains(inMousePos))     cursorShape = Qt::SizeFDiagCursor;
+    else if (topRightArea.contains(inMousePos))    cursorShape = Qt::SizeBDiagCursor;
+    else if (bottomLeftArea.contains(inMousePos))  cursorShape = Qt::SizeBDiagCursor;
+    else if (bottomRightArea.contains(inMousePos)) cursorShape = Qt::SizeFDiagCursor;
+    else if (topArea.contains(inMousePos))         cursorShape = Qt::SizeVerCursor;
+    else if (bottomArea.contains(inMousePos))      cursorShape = Qt::SizeVerCursor;
+    else if (LeftArea.contains(inMousePos))        cursorShape = Qt::SizeHorCursor;
+    else if (RightArea.contains(inMousePos))       cursorShape = Qt::SizeHorCursor;
+
+    setCursor(cursorShape);
+}
+
 void PopupTranslateWidget::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
         _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
+
         _bIsDrag   = true;
+        if (_bMaximizedMode == false)
+        {
+            resizeWindow(event->globalPosition().toPoint());
+        }
+
         event->accept();
     }
 }
@@ -814,73 +960,27 @@ void PopupTranslateWidget::mouseDoubleClickEvent(QMouseEvent* event)
         event->accept();
     }
     
-    QWidget::mouseDoubleClickEvent(event);  
+    QWidget::mouseDoubleClickEvent(event);
 }
 
 void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    if (_bIsDrag && (event->button() | Qt::LeftButton))
+    const QPoint eventPoint = event->globalPosition().toPoint();
+
+    if (_bMaximizedMode == false)
     {
-        manualSizeMode();
-
-        const QPoint eventPoint = event->globalPosition().toPoint();
-        if (_bMaximizedMode)
-        {
-            // 내부 QFrame의 절대 좌표와, QFrame 기준 상대 좌표 계산
-            const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
-            const QPoint frameTopLeft     = frameGeometry().topLeft() + outMarginTopLeft;
-            const QPointF mouseRelPointF  = (event->globalPosition().toPoint() - frameTopLeft).toPointF();
-
-            // frame 기준 사이즈
-            const QSizeF maxFrameSizeF   = frameGeometry().size().toSizeF() - _outerMarginSize;
-            const QSizeF normalSizeF     = normalGeometry().size().toSizeF() - _outerMarginSize;
-            const QSizeF halfNormalSizeF = normalSizeF / 2.0;
-
-            const qreal leftInterval   = mouseRelPointF.x();
-            const qreal rightInterval  = maxFrameSizeF.width() - mouseRelPointF.x();
-            const qreal topInterval    = mouseRelPointF.y();
-            const qreal bottomInterval = maxFrameSizeF.height() - mouseRelPointF.y();
-
-            QPoint normalRelMousePoint;
-            if (leftInterval <= halfNormalSizeF.width())
-            {
-                normalRelMousePoint.rx() = leftInterval;
-            }
-            else if (rightInterval <= halfNormalSizeF.width())
-            {
-                normalRelMousePoint.rx() = normalSizeF.width() - rightInterval;
-            }
-            else
-            {
-                normalRelMousePoint.rx() = halfNormalSizeF.width();
-            }
-
-            if (topInterval <= halfNormalSizeF.height())
-            {
-                normalRelMousePoint.ry() = topInterval;
-            }
-            else if (bottomInterval <= halfNormalSizeF.height())
-            {
-                normalRelMousePoint.ry() = normalSizeF.height() - bottomInterval;
-            }
-            else
-            {
-                normalRelMousePoint.ry() = halfNormalSizeF.height();
-            }
-
-
-            const QPoint newNormalWindowPos = eventPoint - normalRelMousePoint - outMarginTopLeft;
-            setMaxNormal(false);
-            move(newNormalWindowPos);
-            _dragPoint = eventPoint - newNormalWindowPos;
-        }
-        else
-        {
-            move(eventPoint - _dragPoint);
-        }
-
-        event->accept();
+        setCursorShape(eventPoint);
     }
+
+    if ((_bIsDrag && (event->button() == Qt::LeftButton)) == false)
+    {
+        return;
+    }
+
+    manualSizeMode();
+
+    moveWindow(eventPoint);
+    event->accept();
 }
 
 void PopupTranslateWidget::mouseReleaseEvent(QMouseEvent* event)
@@ -920,6 +1020,7 @@ void PopupTranslateWidget::leaveEvent(QEvent* event)
     {
         setShadowEffectEnabled(false);
     }
+    setCursor(Qt::ArrowCursor);
 
     QWidget::leaveEvent(event);
 }
@@ -944,6 +1045,13 @@ bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
         manualSizeMode();
         return false; // no consume
     }
+    else if (obj == ui->bgFrame
+        && event->type() == QEvent::MouseMove)
+    {
+        mouseMoveEvent(static_cast<QMouseEvent*>(event));
+        return false; // no consume
+    }
+
 
     return QWidget::eventFilter(obj, event);
 }

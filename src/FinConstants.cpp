@@ -9,8 +9,8 @@ const QString CmdLineOptions::START_UP_RUN = "startup_run";
 
 const QString URLs::GOOGLE    = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3";
 const QString URLs::OPEN_AI   = "https://api.openai.com/v1/chat/completions";
-const QString URLs::FIN_POINT = "https://asia-northeast3-fintrans-33fftt.cloudfunctions.net/helloWorld/v1/text";
-const QString URLs::FIN_POINT_DEBUG = "http://127.0.0.1:5001/fintrans-33fftt/asia-northeast3/helloWorld/v1/text";
+const QString URLs::FIN_POINT = "https://asia-northeast1-fintrans-33fftt.cloudfunctions.net/v1/text";
+const QString URLs::FIN_POINT_DEBUG = "http://127.0.0.1:5001/fintrans-33fftt/asia-northeast1/v1/text";
 
 
 const QString Prompt::OPEN_AI =

@@ -941,7 +941,7 @@ void PopupTranslateWidget::mousePressEvent(QMouseEvent* event)
     {
         _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
 
-        _bIsDrag   = true;
+        _bIsDrag = true;
         if (_bMaximizedMode == false)
         {
             resizeWindow(event->globalPosition().toPoint());
@@ -972,7 +972,7 @@ void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* event)
         setCursorShape(eventPoint);
     }
 
-    if ((_bIsDrag && (event->button() == Qt::LeftButton)) == false)
+    if (_bIsDrag == false)
     {
         return;
     }
@@ -1044,7 +1044,7 @@ bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
     {
         manualSizeMode();
         return false; // no consume
-    }
+    } // bgframe에 전달된 mouseMove이벤트 후킹
     else if (obj == ui->bgFrame
         && event->type() == QEvent::MouseMove)
     {

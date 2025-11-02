@@ -17,7 +17,7 @@
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 #include "TextEditTranslateWidget.h"
-#include "TranslateHistoryWidget.h"
+#include "HistoryWidget.h"
 
 #include "SubWidgets/FinToolTip.h"
 
@@ -88,7 +88,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     bindButton(docTabButton, docTranslateWidget);
 
     // 번역 기록
-    TranslateHistoryWidget* historyWidget = new TranslateHistoryWidget();
+    HistoryWidget* historyWidget = new HistoryWidget();
 
     historyTabButton = new QPushButton(this);
     historyTabButton->setObjectName("historyTabButton");

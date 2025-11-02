@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_TRANSLATEHISTORYWIDGET_H
-#define FINTRANSLATOR_TRANSLATEHISTORYWIDGET_H
+#ifndef FINTRANSLATOR_HISTORYWIDGET_H
+#define FINTRANSLATOR_HISTORYWIDGET_H
 #include "IFinWidget.h"
 
 
@@ -11,13 +11,13 @@ class MenuTextEdit;
 class QSplitter;
 class QGridLayout;
 
-class TranslateHistoryWidget : public IFinWidget
+class HistoryWidget : public IFinWidget
 {
     Q_OBJECT
 
 public:
-    explicit TranslateHistoryWidget(QWidget* parent = nullptr);
-    ~TranslateHistoryWidget() override;
+    explicit HistoryWidget(QWidget* parent = nullptr);
+    ~HistoryWidget() override;
 
 private:
     void setupUI();
@@ -29,4 +29,5 @@ private:
 };
 
 
-#endif //FINTRANSLATOR_TRANSLATEHISTORYWIDGET_H
+#endif //FINTRANSLATOR_HISTORYWIDGET_H
+

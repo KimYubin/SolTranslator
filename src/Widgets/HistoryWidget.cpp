@@ -1,6 +1,6 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "TranslateHistoryWidget.h"
+#include "HistoryWidget.h"
 
 #include <QGridLayout>
 #include <QListView>
@@ -8,16 +8,16 @@
 
 #include "SubWidgets/CustomMenuTextEdit.h"
 
-TranslateHistoryWidget::TranslateHistoryWidget(QWidget* parent) : IFinWidget(parent)
+HistoryWidget::HistoryWidget(QWidget* parent) : IFinWidget(parent)
 {
     setupUI();
 }
 
-TranslateHistoryWidget::~TranslateHistoryWidget()
+HistoryWidget::~HistoryWidget()
 {
 }
 
-void TranslateHistoryWidget::setupUI()
+void HistoryWidget::setupUI()
 {
     _mainLayout = new QGridLayout(this);
     _mainLayout->setSpacing(0);

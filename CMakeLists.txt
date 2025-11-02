@@ -19,6 +19,7 @@ find_package(Qt6 REQUIRED COMPONENTS
         Network
         Concurrent
         Core
+        Sql
         Gui
         LinguistTools
 )
@@ -37,12 +38,6 @@ qt_add_executable(FinTranslator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
-        src/Widgets/PopupTranslateWidget.cpp
-        src/Widgets/PopupTranslateWidget.h
-        src/Widgets/TranslateHistoryWidget.cpp
-        src/Widgets/TranslateHistoryWidget.h
-        src/Support/WidgetInspector.cpp
-        src/Support/WidgetInspector.h
 )
 
 if (WIN32)
@@ -69,6 +64,7 @@ target_link_libraries(FinTranslator PRIVATE
         Qt6::Network
         Qt6::Concurrent
         Qt6::Core
+        Qt6::Sql
         Qt6::Gui
 )
 

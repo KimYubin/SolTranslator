@@ -5,6 +5,8 @@
 #include "IFinWidget.h"
 
 
+class HistoryModel;
+class QStringListModel;
 class QListView;
 class QListWidget;
 class MenuTextEdit;
@@ -21,10 +23,12 @@ public:
 
 private:
     void setupUI();
+    void addEntry(const QString &name, const QString &address);
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;
-    QListView* _historyList;
+    QListView* _historyListView;
+    HistoryModel* _historyListModel;
     MenuTextEdit* _selectedDetail;
 };
 

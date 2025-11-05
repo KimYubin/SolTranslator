@@ -90,7 +90,7 @@ public:
         keyListHash[key] = keyValQueue.emplace(keyValQueue.end(), key, value);
     }
 
-    _Valty top()
+    _Valty top() const
     {
         if (keyValQueue.empty())
         {
@@ -124,7 +124,7 @@ public:
         return true;
     }
 
-    _Valty* find(const _Kty& key)
+    _Valty* find(const _Kty& key) const
     {
         const auto findIt = keyListHash.find(key);
         if (findIt == keyListHash.end())
@@ -148,12 +148,12 @@ public:
         return &(findIt->second->second);
     }
 
-    bool empty()
+    bool empty() const
     {
         return keyValQueue.empty();
     }
 
-    size_t size()
+    size_t size() const
     {
         return keyValQueue.size();
     }

@@ -30,7 +30,10 @@ public:
                         , const LangType inSourceLang
                         , const LangType inTargetLang);
 
-private slots:
+signals:
+    void translateHistoryChanged(const TranslateRequestInfo& inTranslateRequestInfo);
+    
+    
 
 public:
     void setCacheText(const EngineType inEngineType

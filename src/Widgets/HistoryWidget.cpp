@@ -8,8 +8,11 @@
 #include <QSortFilterProxyModel>
 #include <QStringListModel>
 
+#include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
 #include "HistoryModel.h"
+
+#include "Managers/TranslateManager.h"
 
 
 #include "SubWidgets/CustomMenuTextEdit.h"
@@ -26,6 +29,8 @@ HistoryWidget::~HistoryWidget()
 
 void HistoryWidget::setupUI()
 {
+    setObjectName("HistoryWidget");
+
     _mainLayout = new QGridLayout(this);
     _mainLayout->setSpacing(0);
     _mainLayout->setObjectName("mainLayout");
@@ -40,14 +45,16 @@ void HistoryWidget::setupUI()
     _historyListView = new QListView(_splitter);
     _historyListView->setMinimumWidth(150);
     _historyListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    _historyListView->setLayoutMode(QListView::Batched);
-    _historyListView->setBatchSize(10);
     _historyListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     _historyListView->setUniformItemSizes(true);
+    _historyListView->setLayoutMode(QListView::Batched);
+    _historyListView->setBatchSize(10);
 
+    
     _splitter->addWidget(_historyListView);
 
     _selectedDetail = new MenuTextEdit(_splitter);
+    _selectedDetail->setObjectName("historySelectedDetail");
     _selectedDetail->setMinimumWidth(150);
 
     _splitter->addWidget(_selectedDetail);
@@ -55,7 +62,7 @@ void HistoryWidget::setupUI()
     _splitter->setStretchFactor(1, 2);
 
     // _splitter->setSizes({250, 500});
-    _historyListModel = new HistoryModel();
+    _historyListModel = new HistoryModel(this);
 
     auto proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(_historyListModel);
@@ -65,6 +72,21 @@ void HistoryWidget::setupUI()
     _historyListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     _historyListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _historyListView->setSelectionMode(QAbstractItemView::SingleSelection);
+    QItemSelectionModel* selectionModel = _historyListView->selectionModel();
+    connect(selectionModel, &QItemSelectionModel::selectionChanged, [this](QItemSelection selected, QItemSelection deselected)
+    {
+        const QModelIndexList slist = selected.indexes();
+        const cache_queue& qlist = finCore->translateManager()->getCacheQueue();
+
+        auto contactIt = std::prev(qlist.end());
+        for (int row = 0; row < slist.front().row(); ++row)
+        {
+            contactIt = std::prev(contactIt);
+        }
+        const QString& str = contactIt->second;
+        _selectedDetail->setMarkdown(str);
+        
+    });
 
 }
 

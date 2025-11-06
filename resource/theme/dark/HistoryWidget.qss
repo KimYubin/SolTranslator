@@ -1,0 +1,29 @@
+/* ----------------------------------------------------- */
+#HistoryWidget MenuTextEdit,
+#HistoryWidget QFrame#historySelectedDetail
+{
+  border: none;
+  border-radius : 8px;
+  background-color: rgb(38, 38, 38); /* 배경 투명화 금지. 서브픽셀 안티에일리어싱을 위함. */
+}
+#HistoryWidget a,
+#HistoryWidget span
+{
+  /* text-decoration: underline;  */
+  color:#ff0000;
+}
+#HistoryWidget body
+{
+  /* text-decoration: underline;  */
+  color:#6ba7f7;
+}
+#HistoryWidget QLabel,
+#HistoryWidget MenuTextEdit
+{
+ 	color: rgb(250, 250, 250);
+  color: rgb(212, 212, 212);
+  color: rgb(225, 225, 225);
+  font-size: 14pt;  /* px로 사용할 경우 휠 확대/축소가 작동하지 않습니다. */
+  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  
+}

@@ -40,6 +40,8 @@ qt_add_executable(FinTranslator
         external/magic_enum.hpp
         src/Widgets/HistoryModel.cpp
         src/Widgets/HistoryModel.h
+        src/SubWidgets/ResultTextEdit.cpp
+        src/SubWidgets/ResultTextEdit.h
 )
 
 if (WIN32)

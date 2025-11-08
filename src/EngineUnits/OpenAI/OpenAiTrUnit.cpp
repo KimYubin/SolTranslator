@@ -70,7 +70,7 @@ void OpenAiTrUnit::onReadyRead()
     {
         if (line.startsWith("data: "))
         {
-            QString jsonStr = line.mid(6).trimmed();
+            QString jsonStr = line.sliced(6).trimmed();
             if (jsonStr == "[DONE]")
             {
                 return;
@@ -78,18 +78,48 @@ void OpenAiTrUnit::onReadyRead()
 
             QJsonParseError parseError;
             QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonStr.toUtf8(), &parseError);
-            if (parseError.error == QJsonParseError::NoError)
-            {
-                QJsonObject obj = jsonDoc.object();
-                QString content = obj["choices"].toArray()[0].toObject()["delta"].toObject()["content"].toString();
-                if (content.isEmpty() == false)
-                {
-                    addTranslatedText(content);
-                }
-            }
-            else
+            if (parseError.error != QJsonParseError::NoError)
             {
                 qDebug() << parseError.errorString();
+                return;
+            }
+
+            QJsonObject obj = jsonDoc.object();
+
+            // choices가 없다면 value는 QJsonValue(QJsonValue::Undefined)을 반환하고,
+            // toArray()는 빈 Array를 반환합니다. 
+            QJsonArray choicesArr = obj.value("choices").toArray();
+            if (choicesArr.isEmpty())
+            {
+                const QJsonObject errorObj = obj.value("error").toObject();
+                const QString errorMsg     = errorObj.value("message").toString();
+                const QString errorType    = errorObj.value("type").toString();
+                qDebug() << "openAI errorMsg:" << errorMsg;
+                qDebug() << "openAI errorType:" << errorType;
+                return;
+            }
+
+            auto choices = choicesArr[0];
+
+            QJsonValue delta = choices.toObject().value("delta");
+            if (delta.isUndefined())
+            {
+                qDebug() << "openAI not detected \'delta\'";
+                return;
+            }
+
+            QJsonValue content = delta.toObject().value("content");
+            if (content.isUndefined())
+            {
+                qDebug() << "openAI not detected \'content\'";
+                return;
+            }
+
+            QString contentStr = content.toString();
+
+            if (contentStr.isEmpty() == false)
+            {
+                addTranslatedText(contentStr);
             }
         }
     }

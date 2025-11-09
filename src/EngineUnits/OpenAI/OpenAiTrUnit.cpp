@@ -86,16 +86,15 @@ void OpenAiTrUnit::onReadyRead()
 
             QJsonObject obj = jsonDoc.object();
 
-            // choices가 없다면 value는 QJsonValue(QJsonValue::Undefined)을 반환하고,
+            // choices가 없다면,
+            // value는 QJsonValue(QJsonValue::Undefined)을 반환하고,
             // toArray()는 빈 Array를 반환합니다. 
             QJsonArray choicesArr = obj.value("choices").toArray();
             if (choicesArr.isEmpty())
             {
                 const QJsonObject errorObj = obj.value("error").toObject();
-                const QString errorMsg     = errorObj.value("message").toString();
-                const QString errorType    = errorObj.value("type").toString();
-                qDebug() << "openAI errorMsg:" << errorMsg;
-                qDebug() << "openAI errorType:" << errorType;
+                qDebug() << "openAI errorMsg:" << errorObj.value("message").toString();
+                qDebug() << "openAI errorType:" << errorObj.value("type").toString();
                 return;
             }
 
@@ -111,7 +110,11 @@ void OpenAiTrUnit::onReadyRead()
             QJsonValue content = delta.toObject().value("content");
             if (content.isUndefined())
             {
-                qDebug() << "openAI not detected \'content\'";
+                if (choices.toObject().value("finish_reason").toString() != "stop")
+                {
+                    qDebug() << "openAI not detected \'content\'";
+                    qDebug() << "openAI last chunk:'" << chunk;
+                }
                 return;
             }
 

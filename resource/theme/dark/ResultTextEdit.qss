@@ -1,0 +1,22 @@
+/* ----------------------------------------------------- */
+ResultTextEdit
+{
+  border: none;
+  border-radius : 8px;
+  background-color: rgb(38, 38, 38); /* 배경 투명화 금지. 서브픽셀 안티에일리어싱을 위함. */
+  
+  color: rgb(225, 225, 225);
+  font-size: 14pt;  /* px로 사용할 경우 휠 확대/축소가 작동하지 않습니다. */
+  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  
+}
+
+ResultTextEdit > a,
+ResultTextEdit > span
+{
+  color:#ff0000;
+}
+ResultTextEdit > body
+{
+  color:#6ba7f7;
+}

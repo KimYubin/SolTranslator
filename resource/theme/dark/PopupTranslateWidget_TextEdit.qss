@@ -1,5 +1,4 @@
 /* ----------------------------------------------------- */
-/* QPushButton # QTextEdit */
 #PopupTranslateWidget QTextEdit,
 #PopupTranslateWidget QFrame#bgFrame
 {
@@ -10,19 +9,15 @@
 #PopupTranslateWidget a,
 #PopupTranslateWidget span
 {
-  /* text-decoration: underline;  */
   color:#ff0000;
 }
 #PopupTranslateWidget body
 {
-  /* text-decoration: underline;  */
   color:#6ba7f7;
 }
 #PopupTranslateWidget QLabel,
 #PopupTranslateWidget QTextEdit
 {
- 	color: rgb(250, 250, 250);
-  color: rgb(212, 212, 212);
   color: rgb(225, 225, 225);
   font-size: 14pt;  /* px로 사용할 경우 휠 확대/축소가 작동하지 않습니다. */
   font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;

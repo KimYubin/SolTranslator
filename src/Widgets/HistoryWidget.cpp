@@ -14,8 +14,7 @@
 
 #include "Managers/TranslateManager.h"
 
-
-#include "SubWidgets/CustomMenuTextEdit.h"
+#include "SubWidgets/ResultTextEdit.h"
 
 
 HistoryWidget::HistoryWidget(QWidget* parent) : IFinWidget(parent)
@@ -53,11 +52,11 @@ void HistoryWidget::setupUI()
     
     _splitter->addWidget(_historyListView);
 
-    _selectedDetail = new MenuTextEdit(_splitter);
-    _selectedDetail->setObjectName("historySelectedDetail");
-    _selectedDetail->setMinimumWidth(150);
+    _selectedTextEdit = new ResultTextEdit(_splitter);
+    _selectedTextEdit->setObjectName("historySelectedDetail");
+    _selectedTextEdit->setMinimumWidth(150);
 
-    _splitter->addWidget(_selectedDetail);
+    _splitter->addWidget(_selectedTextEdit);
     _splitter->setStretchFactor(0, 1);
     _splitter->setStretchFactor(1, 2);
 
@@ -76,16 +75,18 @@ void HistoryWidget::setupUI()
     connect(selectionModel, &QItemSelectionModel::selectionChanged, [this](QItemSelection selected, QItemSelection deselected)
     {
         const QModelIndexList slist = selected.indexes();
-        const cache_queue& qlist = finCore->translateManager()->getCacheQueue();
+        const cache_queue& qlist    = finCore->translateManager()->getCacheQueue();
 
         auto contactIt = std::prev(qlist.end());
-        for (int row = 0; row < slist.front().row(); ++row)
+        for (int row = 0; row < std::min<int>(qlist.size(), slist.front().row()); ++row)
         {
             contactIt = std::prev(contactIt);
         }
-        const QString& str = contactIt->second;
-        _selectedDetail->setMarkdown(str);
-        
+        _selectedTextEdit->setFormattingText(contactIt->second, TextStyle::MarkDown);
+
+        QTextCursor textCursor = _selectedTextEdit->textCursor();
+        textCursor.setPosition(0);
+        _selectedTextEdit->setTextCursor(textCursor);
     });
 
 }

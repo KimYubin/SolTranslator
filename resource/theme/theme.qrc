@@ -11,6 +11,7 @@
         <file>dark/PopupTranslateWidget_PushButton.qss</file>
         <file>dark/PopupTranslateWidget_TextEdit.qss</file>
 
+        <file>dark/ResultTextEdit.qss</file>
         <file>dark/HistoryWidget.qss</file>
     </qresource>
 

@@ -46,15 +46,7 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
         }
         const QString& str = contactIt->second;
 
-        switch (index.column())
-        {
-        case 0:
-            return str.left(std::min<int>(50, str.indexOf(QRegularExpression("[\\r\\n]"))));
-        case 1:
-            return str;
-        default:
-            break;
-        }
+        return str.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
     return QVariant();
 }

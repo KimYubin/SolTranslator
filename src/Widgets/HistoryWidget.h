@@ -9,7 +9,7 @@ class HistoryModel;
 class QStringListModel;
 class QListView;
 class QListWidget;
-class MenuTextEdit;
+class ResultTextEdit;
 class QSplitter;
 class QGridLayout;
 
@@ -29,7 +29,7 @@ private:
     QSplitter* _splitter;
     QListView* _historyListView;
     HistoryModel* _historyListModel;
-    MenuTextEdit* _selectedDetail;
+    ResultTextEdit* _selectedTextEdit;
 };
 
 

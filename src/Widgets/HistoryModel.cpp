@@ -7,7 +7,7 @@
 #include "FinTranslatorCore.h"
 
 
-#include "Managers/TranslateManager.h"
+#include "Managers/HistoryManager.h"
 
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -19,7 +19,7 @@ HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : finCore->translateManager()->getCacheQueue().size();
+    return parent.isValid() ? 0 : finCore->historyManager()->getCacheQueue().size();
 }   
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -29,7 +29,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    const cache_queue& qlist = finCore->translateManager()->getCacheQueue();
+    const cache_queue& qlist = finCore->historyManager()->getCacheQueue();
 
     if (!index.isValid())
         return QVariant();

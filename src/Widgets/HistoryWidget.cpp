@@ -12,6 +12,7 @@
 #include "FinTranslatorCore.h"
 #include "HistoryModel.h"
 
+#include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
 #include "SubWidgets/ResultTextEdit.h"
@@ -75,7 +76,7 @@ void HistoryWidget::setupUI()
     connect(selectionModel, &QItemSelectionModel::selectionChanged, [this](QItemSelection selected, QItemSelection deselected)
     {
         const QModelIndexList slist = selected.indexes();
-        const cache_queue& qlist    = finCore->translateManager()->getCacheQueue();
+        const cache_queue& qlist    = finCore->historyManager()->getCacheQueue();
 
         auto contactIt = std::prev(qlist.end());
         for (int row = 0; row < std::min<int>(qlist.size(), slist.front().row()); ++row)

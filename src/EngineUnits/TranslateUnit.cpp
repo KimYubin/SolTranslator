@@ -6,7 +6,7 @@
 
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
-#include "Managers/ConfigManager.h"
+#include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
 #include "Widgets/ITranslateWidget.h"
@@ -30,12 +30,12 @@ void TranslateUnit::executeTextTranslation()
         return;
     }
 
-    if (TranslateManager* translate_manager = finCore->translateManager())
+    if (HistoryManager* historyManager = finCore->historyManager())
     {
-        auto [bIsFind, findCache] = translate_manager->findCachingText(_trReqData.engineType
-                                                                     , _trReqData.originText
-                                                                     , _trReqData.sourceLang
-                                                                     , _trReqData.targetLang);
+        auto [bIsFind, findCache] = historyManager->findHistory(_trReqData.engineType
+                                                              , _trReqData.originText
+                                                              , _trReqData.sourceLang
+                                                              , _trReqData.targetLang);
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
@@ -118,13 +118,13 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
 {
     if (inTranslatedText.isEmpty() == false)
     {
-        if (TranslateManager* translate_manager = qobject_cast<TranslateManager*>(parent()))
+        if (HistoryManager* historyManager = finCore->historyManager())
         {
-            translate_manager->setCacheText(_trReqData.engineType
-                                          , _trReqData.originText
-                                          , inTranslatedText
-                                          , _trReqData.sourceLang
-                                          , _trReqData.targetLang);
+            historyManager->setTranslationHistory(_trReqData.engineType
+                                                , _trReqData.originText
+                                                , inTranslatedText
+                                                , _trReqData.sourceLang
+                                                , _trReqData.targetLang);
         }
     }
 

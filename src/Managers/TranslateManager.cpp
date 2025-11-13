@@ -10,9 +10,7 @@
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
-#include "FinHashQueue.h"
 #include "FinTranslatorCore.h"
-#include "FinTypes.h"
 
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
@@ -134,46 +132,4 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
     }
 }
 
-void TranslateManager::setCacheText(const EngineType inEngineType
-                                  , const QString& inOriginText
-                                  , const QString& inTranslateText
-                                  , const LangType inSourceLang
-                                  , const LangType inTargetLang)
-{
-    // 이미 캐시되어 있다면, 순서 최신화
-    _cachingTranslateText.push(TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang}, inTranslateText);
-    if (_cachingTranslateText.size() > _maxCacheLength)
-    {
-        _cachingTranslateText.pop();
-    }
-
-    // 캐시 저장
-    finCore->asyncSaveCache();
-}
-
-std::tuple<bool, QString> TranslateManager::findCachingText(const EngineType inEngineType
-                                                          , const QString& inOriginText
-                                                          , const LangType inSourceLang
-                                                          , const LangType inTargetLang)
-{
-    std::tuple<bool, QString> res = {false, QString()};
-
-    const TextCacheKey findCacheKey = TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang};
-    if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
-    {
-        res = {true, *text_cache};
-    }
-
-    return res;
-}
-
-void TranslateManager::updateNewCacheQueue(cache_queue&& newCache)
-{
-    _cachingTranslateText = std::move(newCache);
-}
-
-const cache_queue& TranslateManager::getCacheQueue() const
-{
-    return _cachingTranslateText;
-}
 

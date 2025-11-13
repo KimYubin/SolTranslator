@@ -8,6 +8,7 @@
 #include "FinTypes.h"
 
 
+class HistoryManager;
 class AsyncManager;
 class QMimeData;
 class FinTranslatorMainWidget;
@@ -38,6 +39,7 @@ public:
 
     DataManager* dataManager() const { return _dataManager; }
     TranslateManager* translateManager() const { return _translateManager; }
+    HistoryManager* historyManager() const { return _historyManager; }
     GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
     AsyncManager* asyncManager() const { return _asyncManager; };
 
@@ -48,6 +50,7 @@ private:
 
     DataManager* _dataManager;
     TranslateManager* _translateManager;
+    HistoryManager* _historyManager;
     GlobalHotKeyManager* _globalHotKeyManager;
     AsyncManager* _asyncManager;
 

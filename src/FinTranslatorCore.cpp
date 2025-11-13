@@ -12,6 +12,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/DataManager.h"
 #include "Managers/GlobalHotKeyManager.h"
+#include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 #include "Managers/StyleManger.h"
 
@@ -38,6 +39,7 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     _dataManager         = new DataManager(this);
     _translateManager    = new TranslateManager(this);
+    _historyManager      = new HistoryManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);
     _asyncManager        = new AsyncManager(this);
 
@@ -75,13 +77,13 @@ FinTranslatorCore::~FinTranslatorCore()
 void FinTranslatorCore::loadCache()
 {
     // 캐시 로드
-    _translateManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
+    _historyManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
 }
 
 void FinTranslatorCore::asyncSaveCache()
 {
     // 캐시 저장
-    _dataManager->asyncSaveTranslateCache(_translateManager->getCacheQueue());
+    _dataManager->asyncSaveTranslateCache(_historyManager->getCacheQueue());
 }
 
 void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)

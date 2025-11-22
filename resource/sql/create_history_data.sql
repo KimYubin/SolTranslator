@@ -1,0 +1,10 @@
+﻿CREATE TABLE IF NOT EXISTS history_data
+(
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    engine_type TEXT,
+    source_lang TEXT,
+    target_lang TEXT,
+    source_text TEXT,
+    target_text TEXT
+
+);

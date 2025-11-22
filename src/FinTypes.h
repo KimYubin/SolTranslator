@@ -33,6 +33,7 @@ public:
     static QString getConfigPath();
     static QString getApiKeyPath();
     static QString getTranslateHistoryFilePath();
+    static QString getHistoryDBFilePath();
 };
 
 

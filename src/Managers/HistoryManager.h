@@ -4,13 +4,13 @@
 #define FINTRANSLATOR_HISTORYMANAGER_H
 
 
-#include <QObject>
 
 #include "AbstractManager.h"
 #include "FinHashQueue.h"
 #include "FinTypes.h"
 
 class FinTranslatorCore;
+class QSqlError;
 
 class HistoryManager : public AbstractManager
 {
@@ -18,12 +18,17 @@ class HistoryManager : public AbstractManager
 
 public:
     explicit HistoryManager(FinTranslatorCore* parent);
+    virtual ~HistoryManager() override;
 
-    void setTranslationHistory(const EngineType inEngineType
-                               , const QString& inOriginText
-                               , const QString& inTranslateText
-                               , const LangType inSourceLang
-                               , const LangType inTargetLang);
+private:
+    QSqlError initializeDB();
+
+public:
+    void addHistory(const EngineType inEngineType
+                  , const QString& inOriginText
+                  , const QString& inTranslateText
+                  , const LangType inSourceLang
+                  , const LangType inTargetLang);
 
     std::tuple<bool, QString> findHistory(const EngineType inEngineType
                                         , const QString& inOriginText

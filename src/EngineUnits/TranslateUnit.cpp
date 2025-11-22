@@ -120,11 +120,11 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
     {
         if (HistoryManager* historyManager = finCore->historyManager())
         {
-            historyManager->setTranslationHistory(_trReqData.engineType
-                                                , _trReqData.originText
-                                                , inTranslatedText
-                                                , _trReqData.sourceLang
-                                                , _trReqData.targetLang);
+            historyManager->addHistory(_trReqData.engineType
+                                     , _trReqData.originText
+                                     , inTranslatedText
+                                     , _trReqData.sourceLang
+                                     , _trReqData.targetLang);
         }
     }
 

@@ -1,0 +1,13 @@
+﻿<RCC>
+    <qresource prefix="/sql">
+        <file>create_history_data.sql</file>
+        <file>create_history_favorite.sql</file>
+        <file>create_history_favorite_group.sql</file>
+        <file>create_history_timeline.sql</file>
+        <file>create_index_favorite.sql</file>
+        <file>create_index_timeline.sql</file>
+        <file>create_index_translation_text.sql</file>
+        
+    </qresource>
+
+</RCC>

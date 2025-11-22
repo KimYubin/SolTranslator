@@ -21,6 +21,7 @@ namespace Fin::Internal::FileName
 const QString API_KEY = "api";
 const QString FIN_CONFIG = "FinConfig.ini";
 const QString TRANSLATE_HISTORY = "Translate_History.json";
+const QString HISTORY_DB = "Fin_Translation_History.sqlite";
 }
 
 
@@ -53,7 +54,7 @@ QString EngineName::getName(EngineType inEngineType)
 
 QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath)
 {
-    const QString appPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation	);
+    const QString appPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     if (appPath.isEmpty())
     {
         qFatal() << "Cannot determine settings storage location";
@@ -92,6 +93,11 @@ QString FinPaths::getApiKeyPath()
 QString FinPaths::getTranslateHistoryFilePath()
 {
     return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::TRANSLATE_HISTORY);
+}
+
+QString FinPaths::getHistoryDBFilePath()
+{
+    return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::HISTORY_DB);
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget

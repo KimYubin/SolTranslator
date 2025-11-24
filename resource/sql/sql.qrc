@@ -7,7 +7,10 @@
         <file>create_index_favorite.sql</file>
         <file>create_index_timeline.sql</file>
         <file>create_index_translation_text.sql</file>
-        
+
+        <file>insert_translation_data.sql</file>
+        <file>insert_translation_timeline.sql</file>
+
     </qresource>
 
 </RCC>

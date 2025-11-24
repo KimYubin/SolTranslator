@@ -8,46 +8,12 @@
 #include <QSqlError>
 #include <QDateTime>
 
+#include "FinDatabase.h"
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 
 const char* db_type = "QSQLITE";
 const char* db_connectionName = "fin_db";
-
-std::pair<bool, QString> readSqlFromFile(const QString& inFilePath)
-{
-    QFile sqlFile(inFilePath);
-
-    if (sqlFile.open(QFile::ReadOnly) == false)
-    {
-        return {false, {}};
-    }
-
-    QString sqlStr = sqlFile.readAll();
-
-    sqlFile.close();
-    return {true, sqlStr};
-}
-
-QSqlError execSQL(const QString& inFilePath)
-{
-    const auto [isFileOpen, sqlStr] = readSqlFromFile(inFilePath);
-
-    if (isFileOpen == false)
-    {
-        qDebug() << "not found sql files";
-        return QSqlError("Error executing SQL", "Could not find SQL file: " + inFilePath, QSqlError::StatementError);
-    }
-
-    QSqlQuery sqlQuery(sqlStr);
-    if (sqlQuery.exec() == false)
-    {
-        qDebug() << "Error executing SQL";
-        return QSqlError("Error executing SQL", "Could not execute sql: " + inFilePath, QSqlError::StatementError);
-    }
-
-    return QSqlError();
-}
 
 HistoryManager::HistoryManager(FinTranslatorCore* parent) : AbstractManager(parent)
 {
@@ -84,11 +50,11 @@ QSqlError HistoryManager::initializeDB()
 
     for (QString& tableName : db_tables)
     {
-        execSQL(":/sql/create_" + tableName + ".sql");
+        FinSql::execSQL(":/sql/create_" + tableName + ".sql");
     }
     for (QString& indexName : db_indexes)
     {
-        execSQL(":/sql/create_" + indexName + ".sql");
+        FinSql::execSQL(":/sql/create_" + indexName + ".sql");
     }
 
     return QSqlError();
@@ -111,12 +77,13 @@ void HistoryManager::addHistory(const EngineType inEngineType
     // 캐시 저장
     finCore->asyncSaveCache();
 
+
     // SQLite 버전
-    const QString insertDataFilePath = ":/sql/insert_translation_data.sql";
+    const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
     
-    const auto [isOpenData, insertDataQuery] = readSqlFromFile(insertDataFilePath);
-    const auto [isOpenTimeline, insertTimelineQuery] = readSqlFromFile(insertTimelineFilePath);
+    const auto [isOpenData, insertDataQuery] = FinSql::readSqlFromFile(insertDataFilePath);
+    const auto [isOpenTimeline, insertTimelineQuery] = FinSql::readSqlFromFile(insertTimelineFilePath);
 
     if ((isOpenData && isOpenTimeline) == false)
     {
@@ -124,8 +91,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
         return;
     }
 
-    QSqlDatabase historyDB = QSqlDatabase::database();
-    historyDB.transaction();
+    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
     QVariant historyDataId;
 
@@ -142,7 +108,6 @@ void HistoryManager::addHistory(const EngineType inEngineType
         if (sqlQuery.exec() == false)
         {
             qDebug() << "Error executing SQL" << sqlQuery.lastError();
-            historyDB.rollback();
             return;
         }
         historyDataId = sqlQuery.lastInsertId();
@@ -158,11 +123,11 @@ void HistoryManager::addHistory(const EngineType inEngineType
         if (sqlQuery.exec() == false)
         {
             qDebug() << "Error executing SQL" << sqlQuery.lastError();
-            historyDB.rollback();
             return;
         }
     }
-    historyDB.commit();
+
+    transactionGuard.commit();
 }
 
 std::tuple<bool, QString> HistoryManager::findHistory(const EngineType inEngineType

@@ -10,6 +10,8 @@
 
         <file>insert_translation_data.sql</file>
         <file>insert_translation_timeline.sql</file>
+        
+        <file>select_history_data.sql</file>
 
     </qresource>
 

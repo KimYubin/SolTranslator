@@ -4,6 +4,7 @@
 
 #include <QNetworkReply>
 
+#include "FinLog.h"
 #include "FinTranslatorCore.h"
 #include "FinTypes.h"
 #include "Managers/HistoryManager.h"
@@ -32,10 +33,10 @@ void TranslateUnit::executeTextTranslation()
 
     if (HistoryManager* historyManager = finCore->historyManager())
     {
-        auto [bIsFind, findCache] = historyManager->findHistory(_trReqData.engineType
-                                                              , _trReqData.originText
-                                                              , _trReqData.sourceLang
-                                                              , _trReqData.targetLang);
+        auto [bIsFind, findCache] = historyManager->lookupHistory(_trReqData.engineType
+                                                                , _trReqData.originText
+                                                                , _trReqData.sourceLang
+                                                                , _trReqData.targetLang);
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
@@ -114,20 +115,24 @@ void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
     }
 }
 
+void TranslateUnit::updateHistory(const QString& inTranslatedText)
+{
+    if (inTranslatedText.isEmpty())
+    {
+        return;
+    }
+    if (HistoryManager* historyManager = finCore->historyManager())
+    {
+        historyManager->addHistory(_trReqData.engineType
+                                 , _trReqData.sourceLang
+                                 , _trReqData.targetLang
+                                 , _trReqData.originText
+                                 , inTranslatedText);
+    }
+}
+
 void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
 {
-    if (inTranslatedText.isEmpty() == false)
-    {
-        if (HistoryManager* historyManager = finCore->historyManager())
-        {
-            historyManager->addHistory(_trReqData.engineType
-                                     , _trReqData.originText
-                                     , inTranslatedText
-                                     , _trReqData.sourceLang
-                                     , _trReqData.targetLang);
-        }
-    }
-
     // 빈 문자열도 적용합니다.
     if (_trReqData.completeContext && _trReqData.callbackTranslateComplete)
     {
@@ -135,4 +140,10 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
     }
 
     deleteLater();
+}
+
+void TranslateUnit::finishTranslateRequest(const QString& inTranslatedText)
+{
+    updateHistory(inTranslatedText);
+    completeTranslatedText(inTranslatedText);
 }

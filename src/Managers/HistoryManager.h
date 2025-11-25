@@ -25,15 +25,29 @@ private:
 
 public:
     void addHistory(const EngineType inEngineType
-                  , const QString& inOriginText
-                  , const QString& inTranslateText
                   , const LangType inSourceLang
-                  , const LangType inTargetLang);
+                  , const LangType inTargetLang
+                  , const QString& inOriginText
+                  , const QString& inTranslateText);
 
     std::tuple<bool, QString> findHistory(const EngineType inEngineType
                                         , const QString& inOriginText
                                         , const LangType inSourceLang
                                         , const LangType inTargetLang);
+    /**
+     * 번역 기록이 있다면, 번역문을 반환합니다.
+     * 해당 번역의 최근 기록을 추가합니다.
+     * 
+     * @param inEngineType 
+     * @param inOriginText 
+     * @param inSourceLang 
+     * @param inTargetLang 
+     * @return 
+     */
+    std::tuple<bool, QString> lookupHistory(const EngineType inEngineType
+                                          , const QString& inOriginText
+                                          , const LangType inSourceLang
+                                          , const LangType inTargetLang);
 
     void updateNewCacheQueue(cache_queue&& newCache);
     const cache_queue& getCacheQueue() const;

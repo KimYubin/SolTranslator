@@ -139,5 +139,5 @@ void OpenAiTrUnit::replyTranslateFinished()
         const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
         _translatedText.append(lastTranslatedText);
     }
-    completeTranslatedText(_translatedText);
+    finishTranslateRequest(_translatedText);
 }

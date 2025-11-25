@@ -44,6 +44,8 @@ qt_add_executable(FinTranslator
         src/SubWidgets/ResultTextEdit.h
         src/FinDatabase.cpp
         src/FinDatabase.h
+        src/FinLog.cpp
+        src/FinLog.h
 )
 
 if (WIN32)

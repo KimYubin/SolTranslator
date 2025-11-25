@@ -9,6 +9,7 @@
 #include <QDateTime>
 
 #include "FinDatabase.h"
+#include "FinLog.h"
 #include "FinTranslatorCore.h"
 #include "FinUtilibrary.h"
 
@@ -32,7 +33,7 @@ QSqlError HistoryManager::initializeDB()
     historyDB.setDatabaseName(FinPaths::getHistoryDBFilePath());
     if (historyDB.open() == false)
     {
-        qDebug() << "Could not connect to history database";
+        finDebug << "Could not connect to history database";
         return historyDB.lastError();
     }
 
@@ -61,10 +62,10 @@ QSqlError HistoryManager::initializeDB()
 }
 
 void HistoryManager::addHistory(const EngineType inEngineType
-                              , const QString& inOriginText
-                              , const QString& inTranslateText
                               , const LangType inSourceLang
-                              , const LangType inTargetLang)
+                              , const LangType inTargetLang
+                              , const QString& inOriginText
+                              , const QString& inTranslateText)
 {
     
     // 이미 캐시되어 있다면, 순서 최신화
@@ -87,7 +88,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
 
     if ((isOpenData && isOpenTimeline) == false)
     {
-        qDebug() << "not found sql files";
+        finDebug << "not found sql files";
         return;
     }
 
@@ -100,14 +101,14 @@ void HistoryManager::addHistory(const EngineType inEngineType
         sqlQuery.prepare(insertDataQuery);
 
         sqlQuery.bindValue(":engine_type", Fin::enumToQStr(inEngineType));
-        sqlQuery.bindValue(":source_lang", inOriginText);
-        sqlQuery.bindValue(":target_lang", inTranslateText);
-        sqlQuery.bindValue(":source_text", Fin::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_text", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_lang", Fin::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_text", inOriginText);
+        sqlQuery.bindValue(":target_text", inTranslateText);
 
         if (sqlQuery.exec() == false)
         {
-            qDebug() << "Error executing SQL" << sqlQuery.lastError();
+            finDebug << "Error executing SQL" << sqlQuery.lastError();
             return;
         }
         historyDataId = sqlQuery.lastInsertId();
@@ -122,7 +123,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
 
         if (sqlQuery.exec() == false)
         {
-            qDebug() << "Error executing SQL" << sqlQuery.lastError();
+            finDebug << "Error executing SQL" << sqlQuery.lastError();
             return;
         }
     }
@@ -142,6 +143,124 @@ std::tuple<bool, QString> HistoryManager::findHistory(const EngineType inEngineT
     {
         res = {true, *text_cache};
     }
+
+
+    // SQLite 버전
+    const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
+    
+    const auto [isOpenData, selectHistoryQuery] = FinSql::readSqlFromFile(selectHistoryDataFilePath);
+
+    if (isOpenData == false)
+    {
+        finDebug << "not found sql files";
+        return res;
+    }
+
+    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+
+    qint64 historyDataId;
+    QString targetText;
+
+    {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(selectHistoryQuery);
+
+        sqlQuery.bindValue(":engine_type", Fin::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", Fin::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_text", inOriginText);
+
+        if (sqlQuery.exec() == false)
+        {
+            finDebug << "Error executing SQL1" << sqlQuery.lastError();
+            return res;
+        }
+        if (sqlQuery.first())
+        {
+            historyDataId = sqlQuery.value(0).toLongLong();
+            targetText    = sqlQuery.value(1).toString();
+            res           = {true, targetText};
+            finDebug << targetText;
+        }
+    }
+
+    transactionGuard.commit();
+    
+    return res;
+}
+
+std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngineType
+                                                      , const QString& inOriginText
+                                                      , const LangType inSourceLang
+                                                      , const LangType inTargetLang)
+{
+    std::tuple<bool, QString> res = {false, QString()};
+
+    const TextCacheKey findCacheKey = TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang};
+    if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
+    {
+        res = {true, *text_cache};
+    }
+
+    // SQLite 버전
+    const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
+    const QString insertTimelineFilePath    = ":/sql/insert_translation_timeline.sql";
+
+    const auto [isOpenData, selectHistoryQuery]      = FinSql::readSqlFromFile(selectHistoryDataFilePath);
+    const auto [isOpenTimeline, insertTimelineQuery] = FinSql::readSqlFromFile(insertTimelineFilePath);
+
+    if ((isOpenData && isOpenTimeline) == false)
+    {
+        finDebug << "not found sql files";
+        return res;
+    }
+
+    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+
+    qint64 historyDataId{-1};
+    QString targetText;
+
+    {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(selectHistoryQuery);
+
+        sqlQuery.bindValue(":engine_type", Fin::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", Fin::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_text", inOriginText);
+
+        // error sql
+        if (sqlQuery.exec() == false)
+        {
+            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            return res;
+        }
+        // no history
+        if (sqlQuery.first() == false)
+        {
+            return res;
+        }
+
+        historyDataId = sqlQuery.value(0).toLongLong();
+        targetText    = sqlQuery.value(1).toString();
+        res           = {true, targetText};
+    }
+
+    {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(insertTimelineQuery);
+
+        sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
+        sqlQuery.bindValue(":history_data_id", historyDataId);
+
+        if (sqlQuery.exec() == false)
+        {
+            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            return res;
+        }
+    }
+
+    transactionGuard.commit();
 
     return res;
 }

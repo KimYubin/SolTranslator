@@ -38,7 +38,7 @@ void GoogleTrUnit::replyTranslateFinished()
     {
         const QString replyTranslatedText = jsonArr[0].toArray()[0].toArray()[0].toString();
 
-        completeTranslatedText(replyTranslatedText);
+        finishTranslateRequest(replyTranslatedText);
     }
     else
     {

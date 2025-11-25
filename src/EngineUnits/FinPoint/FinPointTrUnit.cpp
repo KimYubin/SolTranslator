@@ -95,5 +95,5 @@ void FinPointTrUnit::replyTranslateFinished()
         }
     }
 
-    completeTranslatedText(_translatedText);
+    finishTranslateRequest(_translatedText);
 }

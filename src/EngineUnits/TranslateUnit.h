@@ -53,15 +53,27 @@ protected:
     void addTranslatedText(const QString& inTranslatedText);
 
     /**
+     * 번역 기록을 업데이트합니다.
+     * 영구 데이터로 기록합니다.
+     * 
+     * @param inTranslatedText 
+     */
+    void updateHistory(const QString& inTranslatedText);
+
+    /** 번역문을 등록된 펑터에 반영하고, 본 객체를 파괴합니다.(deleteLater) */
+    void completeTranslatedText(const QString& inTranslatedText);
+
+
+    /**
      * 추출 완료된 번역문에 대한 후처리를 합니다.
      * 캐시를 업데이트하고, 번역문을 등록된 펑터에 반영하고,
-     * 본 객체를 파괴합니다.
+     * 본 객체를 파괴합니다.(deleteLater)
      *
      * @see replyTranslate
      * @see ApplyCompletedTranslate
      * @param inTranslatedText
      */
-    void completeTranslatedText(const QString& inTranslatedText);
+    void finishTranslateRequest(const QString& inTranslatedText);
 
 protected:
     QPointer<QNetworkReply> _reply;

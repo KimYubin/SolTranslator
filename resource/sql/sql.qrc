@@ -12,7 +12,9 @@
         <file>insert_translation_timeline.sql</file>
         
         <file>select_history_data.sql</file>
+        <file>select_translation_timeline.sql</file>
 
+        
     </qresource>
 
 </RCC>

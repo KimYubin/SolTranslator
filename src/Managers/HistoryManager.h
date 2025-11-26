@@ -4,6 +4,7 @@
 #define FINTRANSLATOR_HISTORYMANAGER_H
 
 
+#include <deque>
 
 #include "AbstractManager.h"
 #include "FinHashQueue.h"
@@ -30,28 +31,36 @@ public:
                   , const QString& inOriginText
                   , const QString& inTranslateText);
 
-    std::tuple<bool, QString> findHistory(const EngineType inEngineType
-                                        , const QString& inOriginText
-                                        , const LangType inSourceLang
-                                        , const LangType inTargetLang);
     /**
      * 번역 기록이 있다면, 번역문을 반환합니다.
      * 해당 번역의 최근 기록을 추가합니다.
      * 
-     * @param inEngineType 
-     * @param inOriginText 
-     * @param inSourceLang 
-     * @param inTargetLang 
-     * @return 
+     * @return first - 번역이 있다면 true. second - 번역문
      */
     std::tuple<bool, QString> lookupHistory(const EngineType inEngineType
                                           , const QString& inOriginText
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang);
 
+    int getHistoryCount();
+
     void updateNewCacheQueue(cache_queue&& newCache);
     const cache_queue& getCacheQueue() const;
 
+    
+    struct trDbInfo
+    {
+        trDbInfo(const qint64 inId = 0, const QString& _translateText = {})
+            : _dbId(inId), _translateText(_translateText)
+        {}
+
+        qint64 _dbId;
+        QString _translateText;
+    };
+    
+    const std::deque<trDbInfo>& getTranslateTextCache();
+
+    void markDbDirty();
 private:
     // ~===========
     // cache
@@ -63,6 +72,10 @@ private:
      * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
      */
     cache_queue _cachingTranslateText;
+
+    std::deque<trDbInfo> _translateTextCache;
+
+    bool _bIsDirtyDB = true;
 };
 
 

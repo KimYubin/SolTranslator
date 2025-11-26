@@ -76,14 +76,15 @@ void HistoryWidget::setupUI()
     connect(selectionModel, &QItemSelectionModel::selectionChanged, [this](QItemSelection selected, QItemSelection deselected)
     {
         const QModelIndexList slist = selected.indexes();
-        const cache_queue& qlist    = finCore->historyManager()->getCacheQueue();
+        // const cache_queue& qlist    = finCore->historyManager()->getCacheQueue();
 
-        auto contactIt = std::prev(qlist.end());
-        for (int row = 0; row < std::min<int>(qlist.size(), slist.front().row()); ++row)
-        {
-            contactIt = std::prev(contactIt);
-        }
-        _selectedTextEdit->setFormattingText(contactIt->second, TextStyle::MarkDown);
+        // auto contactIt = std::prev(qlist.end());
+        // for (int row = 0; row < std::min<int>(qlist.size(), slist.front().row()); ++row)
+        // {
+        //     contactIt = std::prev(contactIt);
+        // }
+        const auto& qlist = finCore->historyManager()->getTranslateTextCache();
+        _selectedTextEdit->setFormattingText(qlist[slist.back().row()]._translateText, TextStyle::MarkDown);
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);

@@ -19,7 +19,7 @@ HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : finCore->historyManager()->getCacheQueue().size();
+    return parent.isValid() ? 0 : finCore->historyManager()->getTranslateTextCache().size();
 }   
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -29,24 +29,26 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    const cache_queue& qlist = finCore->historyManager()->getCacheQueue();
+    // const cache_queue& qlist = finCore->historyManager()->getCacheQueue();
+    const auto& qlist = finCore->historyManager()->getTranslateTextCache();
 
     if (!index.isValid())
         return QVariant();
 
-    if (index.row()  >= qlist.size() || index.row() < 0)
+    if (index.row() >= qlist.size() || index.row() < 0)
         return QVariant();
 
     if (role == Qt::DisplayRole)
     {
-        auto contactIt = std::prev(qlist.end());
-        for (int row = 0; row < index.row() ; ++row)
-        {
-            contactIt = std::prev(contactIt);
-        }
-        const QString& str = contactIt->second;
+        // auto contactIt = std::prev(qlist.end());
+        // for (int row = 0; row < index.row() ; ++row)
+        // {
+        //     contactIt = std::prev(contactIt);
+        // }
+        // const QString& str = contactIt->second;
+        
 
-        return str.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+        return qlist[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
     return QVariant();
 }

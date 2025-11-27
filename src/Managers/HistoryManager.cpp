@@ -67,18 +67,6 @@ void HistoryManager::addHistory(const EngineType inEngineType
                               , const QString& inOriginText
                               , const QString& inTranslateText)
 {
-    
-    // 이미 캐시되어 있다면, 순서 최신화
-    _cachingTranslateText.push(TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang}, inTranslateText);
-    if (_cachingTranslateText.size() > _maxCacheLength)
-    {
-        _cachingTranslateText.pop();
-    }
-
-    // 캐시 저장
-    finCore->asyncSaveCache();
-
-
     // SQLite 버전
     const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
@@ -140,12 +128,6 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
                                                       , const LangType inTargetLang)
 {
     std::tuple<bool, QString> res = {false, QString()};
-
-    const TextCacheKey findCacheKey = TextCacheKey{inEngineType, inOriginText, inSourceLang, inTargetLang};
-    if (const QString* text_cache = _cachingTranslateText.find(findCacheKey))
-    {
-        res = {true, *text_cache};
-    }
 
     // SQLite 버전
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
@@ -215,42 +197,6 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 int HistoryManager::getHistoryCount()
 {
     return getTranslateTextCache().size();
-
-    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
-
-    qint64 historyTimelineCount{0};
-
-    // find history
-    {
-        QSqlQuery sqlQuery;
-        sqlQuery.prepare("SELECT COUNT(*) FROM history_timeline;");
-
-        // error sql
-        if (sqlQuery.exec() == false)
-        {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
-            return 0;
-        }
-        // no history
-        if (sqlQuery.first() == false)
-        {
-            return 0;
-        }
-        historyTimelineCount = sqlQuery.value(0).toLongLong(); 
-    }
-
-    transactionGuard.commit();
-    return historyTimelineCount;
-}
-
-void HistoryManager::updateNewCacheQueue(cache_queue&& newCache)
-{
-    _cachingTranslateText = std::move(newCache);
-}
-
-const cache_queue& HistoryManager::getCacheQueue() const
-{
-    return _cachingTranslateText;
 }
 
 const std::deque<HistoryManager::trDbInfo>& HistoryManager::getTranslateTextCache()

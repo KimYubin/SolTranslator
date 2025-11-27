@@ -44,35 +44,26 @@ public:
 
     int getHistoryCount();
 
-    void updateNewCacheQueue(cache_queue&& newCache);
-    const cache_queue& getCacheQueue() const;
-
-    
     struct trDbInfo
     {
-        trDbInfo(const qint64 inId = 0, const QString& _translateText = {})
-            : _dbId(inId), _translateText(_translateText)
+        trDbInfo(const qint64 inId              = 0
+               , const QString& inTranslateText = {}
+               , const TextStyle inTextStyle    = TextStyle::PlainText)
+            : _dbId(inId)
+            , _translateText(inTranslateText)
+            , _textStyle(inTextStyle)
         {}
 
         qint64 _dbId;
         QString _translateText;
+        TextStyle _textStyle;
     };
-    
+
     const std::deque<trDbInfo>& getTranslateTextCache();
 
     void markDbDirty();
 private:
-    // ~===========
-    // cache
-    int _maxCacheLength = 100;
-
-    /**
-     * 캐시된 번역문을 관리합니다.
-     * 원문, 엔진, 목표언어를 key로 사용합니다.
-     * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
-     */
-    cache_queue _cachingTranslateText;
-
+    /** 캐시된 번역문.*/
     std::deque<trDbInfo> _translateTextCache;
 
     bool _bIsDirtyDB = true;

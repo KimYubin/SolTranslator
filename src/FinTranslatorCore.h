@@ -33,8 +33,6 @@ public:
     static FinTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    void loadCache();
-    void asyncSaveCache();
     void onSimpleTranslate(const QMimeData* inMimeData);
 
     DataManager* dataManager() const { return _dataManager; }

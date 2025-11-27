@@ -43,7 +43,6 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
     _globalHotKeyManager = new GlobalHotKeyManager(this);
     _asyncManager        = new AsyncManager(this);
 
-    loadCache();
 
     StyleManger::applyTheme();
     // generate GUI widget
@@ -71,19 +70,6 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
 FinTranslatorCore::~FinTranslatorCore()
 {
-    asyncSaveCache();
-}
-
-void FinTranslatorCore::loadCache()
-{
-    // 캐시 로드
-    _historyManager->updateNewCacheQueue(_dataManager->loadTranslateCache());
-}
-
-void FinTranslatorCore::asyncSaveCache()
-{
-    // 캐시 저장
-    _dataManager->asyncSaveTranslateCache(_historyManager->getCacheQueue());
 }
 
 void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)

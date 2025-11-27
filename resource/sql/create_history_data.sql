@@ -5,6 +5,6 @@
     source_lang TEXT,
     target_lang TEXT,
     source_text TEXT,
-    target_text TEXT
-
+    target_text TEXT/*,
+    text_style TEXT*/
 );

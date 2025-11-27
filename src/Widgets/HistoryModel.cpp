@@ -29,7 +29,6 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    // const cache_queue& qlist = finCore->historyManager()->getCacheQueue();
     const auto& qlist = finCore->historyManager()->getTranslateTextCache();
 
     if (!index.isValid())
@@ -40,14 +39,6 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        // auto contactIt = std::prev(qlist.end());
-        // for (int row = 0; row < index.row() ; ++row)
-        // {
-        //     contactIt = std::prev(contactIt);
-        // }
-        // const QString& str = contactIt->second;
-        
-
         return qlist[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
     return QVariant();

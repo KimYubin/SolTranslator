@@ -40,7 +40,6 @@ void TranslateUnit::executeTextTranslation()
         if (bIsFind)
         {
             // 캐싱되어있다면 업데이트 합니다.
-            // 내부에서 캐시의 순서를 최신으로 변경합니다.
             completeTranslatedText(findCache);
             return;
         }
@@ -127,7 +126,8 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
                                  , _trReqData.sourceLang
                                  , _trReqData.targetLang
                                  , _trReqData.originText
-                                 , inTranslatedText);
+                                 , inTranslatedText
+                                 , _trReqData.textFormat);
     }
 }
 

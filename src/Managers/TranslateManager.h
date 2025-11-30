@@ -30,11 +30,6 @@ public:
                         , const LangType inSourceLang
                         , const LangType inTargetLang);
 
-signals:
-    void translateHistoryChanged(const TranslateRequestInfo& inTranslateRequestInfo);
-    
-    
-
 public:
     QNetworkAccessManager* getNetworkAccessManager() const { return _networkAccessManager; };
 

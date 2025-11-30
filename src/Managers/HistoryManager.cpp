@@ -65,9 +65,9 @@ void HistoryManager::addHistory(const EngineType inEngineType
                               , const LangType inSourceLang
                               , const LangType inTargetLang
                               , const QString& inOriginText
-                              , const QString& inTranslateText)
+                              , const QString& inTranslateText
+                              , const TextStyle inTextStyle)
 {
-    // SQLite 버전
     const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
     
@@ -94,6 +94,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
         sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inOriginText);
         sqlQuery.bindValue(":target_text", inTranslateText);
+        sqlQuery.bindValue(":text_style",  Fin::enumToQStr(inTextStyle));
 
         if (sqlQuery.exec() == false)
         {
@@ -118,8 +119,8 @@ void HistoryManager::addHistory(const EngineType inEngineType
         }
     }
 
-    markDbDirty();
     transactionGuard.commit();
+    markDbDirty();
 }
 
 std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngineType
@@ -129,7 +130,6 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    // SQLite 버전
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
     const QString insertTimelineFilePath    = ":/sql/insert_translation_timeline.sql";
 
@@ -199,10 +199,11 @@ int HistoryManager::getHistoryCount()
     return getTranslateTextCache().size();
 }
 
-const std::deque<HistoryManager::trDbInfo>& HistoryManager::getTranslateTextCache()
+const std::deque<trDbInfo> HistoryManager::getTranslateTextCache()
 {
+    std::deque<trDbInfo> translateTextCache;
     // if dirty update
-    if (_bIsDirtyDB)
+    // if (_bIsDirtyDB)
     {
         FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
@@ -214,7 +215,7 @@ const std::deque<HistoryManager::trDbInfo>& HistoryManager::getTranslateTextCach
         if (isOpenData == false)
         {
             finDebug << "not found sql files";
-            return _translateTextCache;
+            return translateTextCache;
         }
 
         sqlQuery.prepare(selectTimelineQuery);
@@ -223,24 +224,25 @@ const std::deque<HistoryManager::trDbInfo>& HistoryManager::getTranslateTextCach
         if (sqlQuery.exec() == false)
         {
             finDebug << "Error executing SQL" << sqlQuery.lastError();
-            return _translateTextCache;
+            return translateTextCache;
         }
 
-        _translateTextCache.clear();
+        translateTextCache.clear();
         while (sqlQuery.next())
         {
-            _translateTextCache.emplace_back(sqlQuery.value(0).toLongLong(), sqlQuery.value(1).toString());
+            translateTextCache.emplace_back(sqlQuery.value(0).toLongLong(), sqlQuery.value(1).toString()); // sqlQuery.value(2).toString()
         }
 
         transactionGuard.commit();
 
         _bIsDirtyDB = false;
     }
-    return _translateTextCache;
+    return translateTextCache;
 }
 
 void HistoryManager::markDbDirty()
 {
+    emit translateHistoryChanged();
     _bIsDirtyDB = true;
 }
 

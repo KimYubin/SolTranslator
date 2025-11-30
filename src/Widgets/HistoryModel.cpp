@@ -11,15 +11,18 @@
 
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
-{}
+{
+    connect(finCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::resetModel);
+    resetModel();
+}
 
 HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)
-    : QAbstractListModel(parent), contacts(contacts)
+    : QAbstractListModel(parent), _historyList(contacts)
 {}
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : finCore->historyManager()->getTranslateTextCache().size();
+    return parent.isValid() ? 0 : _translateTextCache.size();
 }   
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -29,17 +32,15 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    const auto& qlist = finCore->historyManager()->getTranslateTextCache();
-
     if (!index.isValid())
         return QVariant();
 
-    if (index.row() >= qlist.size() || index.row() < 0)
+    if (index.row() >= _translateTextCache.size() || index.row() < 0)
         return QVariant();
 
     if (role == Qt::DisplayRole)
     {
-        return qlist[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+        return _translateTextCache[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
     return QVariant();
 }
@@ -50,7 +51,7 @@ bool HistoryModel::insertRows(int position, int rows, const QModelIndex& index)
     beginInsertRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row)
-        contacts.insert(position, {QString(), QString()});
+        _historyList.insert(position, {QString(), QString()});
 
     endInsertRows();
     return true;
@@ -62,7 +63,7 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row)
-        contacts.removeAt(position);
+        _historyList.removeAt(position);
 
     endRemoveRows();
     return true;
@@ -73,7 +74,7 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
     if (index.isValid() && role == Qt::EditRole)
     {
         const int row = index.row();
-        auto contact  = contacts.value(row);
+        auto contact  = _historyList.value(row);
 
         switch (index.column())
         {
@@ -83,7 +84,7 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
         default:
             return false;
         }
-        contacts.replace(row, contact);
+        _historyList.replace(row, contact);
         emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
         return true;
@@ -100,7 +101,14 @@ Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
-const QList<HistoryInfo>& HistoryModel::getContacts() const
+const QList<HistoryInfo>& HistoryModel::getHistoryList() const
 {
-    return contacts;
+    return _historyList;
+}
+
+void HistoryModel::resetModel()
+{
+    beginResetModel();
+    _translateTextCache = finCore->historyManager()->getTranslateTextCache();
+    endResetModel();
 }

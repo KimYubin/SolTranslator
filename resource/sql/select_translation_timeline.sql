@@ -1,5 +1,6 @@
 ﻿SELECT history_data.id
      , history_data.target_text
+     , history_data.text_style
      , history_timeline.accessed_time
 FROM history_timeline
          JOIN history_data

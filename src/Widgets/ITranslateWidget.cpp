@@ -24,7 +24,7 @@ ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
 
 ITranslateWidget::~ITranslateWidget()
 {
-    abortTrUnit();
+    // abortTrUnit();
 }
 
 void ITranslateWidget::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)

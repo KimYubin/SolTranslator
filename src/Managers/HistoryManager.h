@@ -29,7 +29,8 @@ public:
                   , const LangType inSourceLang
                   , const LangType inTargetLang
                   , const QString& inOriginText
-                  , const QString& inTranslateText);
+                  , const QString& inTranslateText
+                  , const TextStyle inTextStyle);
 
     /**
      * 번역 기록이 있다면, 번역문을 반환합니다.
@@ -44,27 +45,16 @@ public:
 
     int getHistoryCount();
 
-    struct trDbInfo
-    {
-        trDbInfo(const qint64 inId              = 0
-               , const QString& inTranslateText = {}
-               , const TextStyle inTextStyle    = TextStyle::PlainText)
-            : _dbId(inId)
-            , _translateText(inTranslateText)
-            , _textStyle(inTextStyle)
-        {}
-
-        qint64 _dbId;
-        QString _translateText;
-        TextStyle _textStyle;
-    };
-
-    const std::deque<trDbInfo>& getTranslateTextCache();
+    const std::deque<trDbInfo> getTranslateTextCache();
 
     void markDbDirty();
+
+signals:
+    void translateHistoryChanged();
+
 private:
     /** 캐시된 번역문.*/
-    std::deque<trDbInfo> _translateTextCache;
+    // std::deque<trDbInfo> _translateTextCache;
 
     bool _bIsDirtyDB = true;
 };

@@ -132,6 +132,21 @@ struct TranslateRequestInfo
     std::optional<std::function<void(const QString&)>> callbackTranslateStreaming;
 };
 
+struct trDbInfo
+{
+    trDbInfo(const qint64 inId              = 0
+           , const QString& inTranslateText = {}
+           , const TextStyle inTextStyle    = TextStyle::PlainText)
+        : _dbId(inId)
+        , _translateText(inTranslateText)
+        , _textStyle(inTextStyle)
+    {}
+
+    qint64 _dbId;
+    QString _translateText;
+    TextStyle _textStyle;
+};
+
 struct LangInfo
 {
 public:

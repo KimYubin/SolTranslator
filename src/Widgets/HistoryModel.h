@@ -4,6 +4,9 @@
 #define FINTRANSLATOR_HISTORYMODEL_H
 
 #include <QAbstractListModel>
+#include <deque>
+
+#include "FinTypes.h"
 
 
 struct HistoryInfo
@@ -37,10 +40,12 @@ public:
     virtual bool insertRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
     virtual bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
-    const QList<HistoryInfo>& getContacts() const;
+    const QList<HistoryInfo>& getHistoryList() const;
 
 private:
-    QList<HistoryInfo> contacts;
+    void resetModel();
+    QList<HistoryInfo> _historyList;
+    std::deque<trDbInfo> _translateTextCache;
 };
 
 

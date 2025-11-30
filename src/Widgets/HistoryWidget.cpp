@@ -78,8 +78,9 @@ void HistoryWidget::setupUI()
     {
         const QModelIndexList slist   = selected.indexes();
         const auto& translateTextlist = finCore->historyManager()->getTranslateTextCache();
+        const trDbInfo& selectedTr    = translateTextlist[slist.back().row()];
 
-        _selectedTextEdit->setFormattingText(translateTextlist[slist.back().row()]._translateText, TextStyle::MarkDown);
+        _selectedTextEdit->setFormattingText(selectedTr._translateText, selectedTr._textStyle);
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);
@@ -90,7 +91,7 @@ void HistoryWidget::setupUI()
 
 void HistoryWidget::addEntry(const QString& name, const QString& address)
 {
-    if (_historyListModel->getContacts().contains({name, address}))
+    if (_historyListModel->getHistoryList().contains({name, address}))
         return;
 
     _historyListModel->insertRows(0, 1, QModelIndex());

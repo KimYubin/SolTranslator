@@ -12,8 +12,7 @@
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    connect(finCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::resetModel);
-    resetModel();
+    connect(finCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::updateTranslateCache);
 }
 
 HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)
@@ -106,9 +105,14 @@ const QList<HistoryInfo>& HistoryModel::getHistoryList() const
     return _historyList;
 }
 
-void HistoryModel::resetModel()
+const std::deque<trDbInfo>& HistoryModel::getTranslateTextCache() const
+{
+    return _translateTextCache;
+}
+
+void HistoryModel::updateTranslateCache(const std::deque<trDbInfo>& inHistoryList)
 {
     beginResetModel();
-    _translateTextCache = finCore->historyManager()->getTranslateTextCache();
+    _translateTextCache = inHistoryList;
     endResetModel();
 }

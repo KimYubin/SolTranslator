@@ -63,6 +63,19 @@ QString enumToQStr(const EnumType inDefaultVal)
     return QStrFromStdView(magic_enum::enum_name<EnumType>(inDefaultVal));
 }
 
+/**
+ * QString을 enum 열거자로 변환합니다.
+ * @param inString 출발 string
+ * @param inDefaultVal string이 유효하지 않을 경우 사용할 기본 타입
+ */
+template <typename EnumType>
+    requires std::is_enum_v<EnumType>
+EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
+{
+    return magic_enum::enum_cast<EnumType>(inString.toStdString()).value_or(inDefaultVal);
+}
+
+
 }
 
 

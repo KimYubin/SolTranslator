@@ -4,11 +4,14 @@
 
 #include <QGridLayout>
 #include <QListView>
+#include <QScrollBar>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
 #include <QStringListModel>
+#include <QTimer>
 
 #include "FinHashQueue.h"
+#include "FinLog.h"
 #include "FinTranslatorCore.h"
 #include "HistoryModel.h"
 
@@ -50,7 +53,7 @@ void HistoryWidget::setupUI()
     _historyListView->setLayoutMode(QListView::Batched);
     _historyListView->setBatchSize(10);
 
-    
+
     _splitter->addWidget(_historyListView);
 
     _selectedTextEdit = new ResultTextEdit(_splitter);
@@ -73,11 +76,13 @@ void HistoryWidget::setupUI()
     _historyListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _historyListView->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    // select item
     QItemSelectionModel* selectionModel = _historyListView->selectionModel();
-    connect(selectionModel, &QItemSelectionModel::selectionChanged, this, [this](QItemSelection selected, QItemSelection deselected)
+
+    connect(selectionModel, &QItemSelectionModel::selectionChanged, this, [this](const QItemSelection& selected, const QItemSelection& deselected)
     {
         const QModelIndexList slist   = selected.indexes();
-        const auto& translateTextlist = finCore->historyManager()->getTranslateTextCache();
+        const auto& translateTextlist = _historyListModel->getTranslateTextCache();
         const trDbInfo& selectedTr    = translateTextlist[slist.back().row()];
 
         _selectedTextEdit->setFormattingText(selectedTr._translateText, selectedTr._textStyle);
@@ -87,6 +92,26 @@ void HistoryWidget::setupUI()
         _selectedTextEdit->setTextCursor(textCursor);
     });
 
+
+    // 모델 리셋 시, 스크롤 위치 유지
+    connect(_historyListModel, &QAbstractItemModel::modelAboutToBeReset, _historyListView, [this]()
+    {
+        const QScrollBar* scrollBar = _historyListView->verticalScrollBar();
+        const qreal currentScroll   = scrollBar->value();
+        const qreal maxScroll       = scrollBar->maximum();
+        _listScrollBarRatio         = (maxScroll > 0) ? (currentScroll / maxScroll) : 0.0;
+    });
+
+    connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int min, int max)
+    {
+        QScrollBar* scrollBar = _historyListView->verticalScrollBar();
+
+        if ((min < max) && scrollBar->value() == 0)
+        {
+            const qreal newVal = _listScrollBarRatio * scrollBar->maximum();
+            scrollBar->setValue(static_cast<int>(newVal));
+        }
+    });
 }
 
 void HistoryWidget::addEntry(const QString& name, const QString& address)

@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDateTime>
+#include <QTimer>
 
 #include "FinDatabase.h"
 #include "FinLog.h"
@@ -19,10 +20,19 @@ const char* db_connectionName = "fin_db";
 HistoryManager::HistoryManager(FinTranslatorCore* parent) : AbstractManager(parent)
 {
     initializeDB();
+
+    _dbUpdateTimer = new QTimer(this);
+    _dbUpdateTimer->setInterval(500);
+    _dbUpdateTimer->setSingleShot(true);
+    _dbUpdateTimer->callOnTimeout(this, &HistoryManager::applyTranslateHistory);
+
+    markDbDirty();
 }
 
 HistoryManager::~HistoryManager()
 {
+    _dbUpdateTimer->stop();
+
     QSqlDatabase historyDB = QSqlDatabase::database();
     historyDB.close();
 }
@@ -194,55 +204,54 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     return res;
 }
 
-int HistoryManager::getHistoryCount()
+void HistoryManager::applyTranslateHistory()
 {
-    return getTranslateTextCache().size();
-}
-
-const std::deque<trDbInfo> HistoryManager::getTranslateTextCache()
-{
-    std::deque<trDbInfo> translateTextCache;
-    // if dirty update
-    // if (_bIsDirtyDB)
+    if (_bIsDirtyDB == false)
     {
-        FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
-
-        QSqlQuery sqlQuery;
-        const QString selectTimelineFilePath = ":/sql/select_translation_timeline.sql";
-
-        const auto [isOpenData, selectTimelineQuery] = FinSql::readSqlFromFile(selectTimelineFilePath);
-
-        if (isOpenData == false)
-        {
-            finDebug << "not found sql files";
-            return translateTextCache;
-        }
-
-        sqlQuery.prepare(selectTimelineQuery);
-
-        // error sql
-        if (sqlQuery.exec() == false)
-        {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
-            return translateTextCache;
-        }
-
-        translateTextCache.clear();
-        while (sqlQuery.next())
-        {
-            translateTextCache.emplace_back(sqlQuery.value(0).toLongLong(), sqlQuery.value(1).toString()); // sqlQuery.value(2).toString()
-        }
-
-        transactionGuard.commit();
-
-        _bIsDirtyDB = false;
+        finDebug << "DB is not dirty";
+        return;
     }
-    return translateTextCache;
+
+    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+
+    QSqlQuery sqlQuery;
+    const QString selectTimelineFilePath = ":/sql/select_translation_timeline.sql";
+
+    const auto [isOpenData, selectTimelineQuery] = FinSql::readSqlFromFile(selectTimelineFilePath);
+
+    if (isOpenData == false)
+    {
+        finDebug << "not found sql files";
+        return;
+    }
+
+    sqlQuery.prepare(selectTimelineQuery);
+    if (sqlQuery.exec() == false)
+    {
+        finDebug << "Error executing SQL" << sqlQuery.lastError();
+        return;
+    }
+
+    std::deque<trDbInfo> translateHistory;
+    while (sqlQuery.next())
+    {
+        TextStyle textStyle = Fin::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);
+
+        translateHistory.emplace_back(sqlQuery.value(0).toLongLong()
+                                    , sqlQuery.value(1).toString()
+                                    , textStyle);
+    }
+
+    transactionGuard.commit();
+
+    _bIsDirtyDB = false;
+
+    emit translateHistoryChanged(translateHistory);
 }
 
 void HistoryManager::markDbDirty()
 {
-    emit translateHistoryChanged();
     _bIsDirtyDB = true;
+    _dbUpdateTimer->start();
 }
 

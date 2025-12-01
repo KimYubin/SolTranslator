@@ -42,8 +42,9 @@ public:
 
     const QList<HistoryInfo>& getHistoryList() const;
 
+    const std::deque<trDbInfo>& getTranslateTextCache() const; 
 private:
-    void resetModel();
+    void updateTranslateCache(const std::deque<trDbInfo>& inHistoryList);
     QList<HistoryInfo> _historyList;
     std::deque<trDbInfo> _translateTextCache;
 };

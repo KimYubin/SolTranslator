@@ -12,6 +12,7 @@
 
 class FinTranslatorCore;
 class QSqlError;
+class QTimer;
 
 class HistoryManager : public AbstractManager
 {
@@ -43,18 +44,17 @@ public:
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang);
 
-    int getHistoryCount();
-
-    const std::deque<trDbInfo> getTranslateTextCache();
-
     void markDbDirty();
 
 signals:
-    void translateHistoryChanged();
+    void translateHistoryChanged(const std::deque<trDbInfo>& inHistoryList);
 
 private:
-    /** 캐시된 번역문.*/
-    // std::deque<trDbInfo> _translateTextCache;
+    void applyTranslateHistory();
+
+    // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
+    // emit translateHistoryChanged
+    QTimer* _dbUpdateTimer;
 
     bool _bIsDirtyDB = true;
 };

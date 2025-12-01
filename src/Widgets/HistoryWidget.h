@@ -30,6 +30,8 @@ private:
     QListView* _historyListView;
     HistoryModel* _historyListModel;
     ResultTextEdit* _selectedTextEdit;
+
+    qreal _listScrollBarRatio = 0.0;
 };
 
 

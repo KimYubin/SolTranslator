@@ -10,19 +10,19 @@
 #include <QString>
 #include <QtConcurrent>
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 
 
 #include "../../external/magic_enum.hpp"
 
-DataManager::DataManager(FinTranslatorCore* parent): AbstractManager(parent)
+DataManager::DataManager(SolTranslatorCore* parent): AbstractManager(parent)
 {
     
 }
 
 cache_queue DataManager::loadTranslateCache()
 {
-    QFile loadFile(FinPaths::getTranslateHistoryFilePath());
+    QFile loadFile(SolPaths::getTranslateHistoryFilePath());
 
     if (loadFile.open(QIODevice::ReadOnly) == false)
     {
@@ -51,7 +51,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
 
     const QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
     {
-        QFile saveFile(FinPaths::getTranslateHistoryFilePath());
+        QFile saveFile(SolPaths::getTranslateHistoryFilePath());
         if (saveFile.open(QIODevice::WriteOnly) == false)
         {
             qWarning() << "cannot open history file.";
@@ -79,9 +79,9 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
     {
         QJsonObject cacheObject;
         cacheObject["OriginText"]    = cacheKey.originText;
-        cacheObject["EngineType"]    = Fin::enumToQStr(cacheKey.engineType);
-        cacheObject["sourceLang"]    = Fin::enumToQStr(cacheKey.sourceLang);
-        cacheObject["targetLang"]    = Fin::enumToQStr(cacheKey.targetLang);
+        cacheObject["EngineType"]    = sol::enumToQStr(cacheKey.engineType);
+        cacheObject["sourceLang"]    = sol::enumToQStr(cacheKey.sourceLang);
+        cacheObject["targetLang"]    = sol::enumToQStr(cacheKey.targetLang);
         cacheObject["TranslateText"] = cacheText;
 
         arr.append(cacheObject);
@@ -103,10 +103,10 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
             QJsonObject cacheObject = cacheValue.toObject();
 
             TextCacheKey cacheKey;
-            cacheKey.engineType = Fin::qStrToEnum(cacheObject["EngineType"].toString(), EngineType::Default);
+            cacheKey.engineType = sol::qStrToEnum(cacheObject["EngineType"].toString(), EngineType::Default);
             cacheKey.originText = cacheObject["OriginText"].toString();
-            cacheKey.sourceLang = Fin::qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
-            cacheKey.targetLang = Fin::qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);
+            cacheKey.sourceLang = sol::qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
+            cacheKey.targetLang = sol::qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);
 
             QString cacheText = cacheObject["TranslateText"].toString();
 

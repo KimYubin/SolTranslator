@@ -9,15 +9,15 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include "FinDatabase.h"
-#include "FinLog.h"
-#include "FinTranslatorCore.h"
-#include "FinUtilibrary.h"
+#include "SolDatabase.h"
+#include "SolLog.h"
+#include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
 
 const char* db_type = "QSQLITE";
-const char* db_connectionName = "fin_db";
+const char* db_connectionName = "sol_db";
 
-HistoryManager::HistoryManager(FinTranslatorCore* parent) : AbstractManager(parent)
+HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
     initializeDB();
 
@@ -40,10 +40,10 @@ HistoryManager::~HistoryManager()
 QSqlError HistoryManager::initializeDB()
 {
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
-    historyDB.setDatabaseName(FinPaths::getHistoryDBFilePath());
+    historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
     if (historyDB.open() == false)
     {
-        finDebug << "Could not connect to history database";
+        solDebug << "Could not connect to history database";
         return historyDB.lastError();
     }
 
@@ -61,11 +61,11 @@ QSqlError HistoryManager::initializeDB()
 
     for (QString& tableName : db_tables)
     {
-        FinSql::execSQL(":/sql/create_" + tableName + ".sql");
+        SolSql::execSQL(":/sql/create_" + tableName + ".sql");
     }
     for (QString& indexName : db_indexes)
     {
-        FinSql::execSQL(":/sql/create_" + indexName + ".sql");
+        SolSql::execSQL(":/sql/create_" + indexName + ".sql");
     }
 
     return QSqlError();
@@ -81,16 +81,16 @@ void HistoryManager::addHistory(const EngineType inEngineType
     const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
     
-    const auto [isOpenData, insertDataQuery] = FinSql::readSqlFromFile(insertDataFilePath);
-    const auto [isOpenTimeline, insertTimelineQuery] = FinSql::readSqlFromFile(insertTimelineFilePath);
+    const auto [isOpenData, insertDataQuery] = SolSql::readSqlFromFile(insertDataFilePath);
+    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
 
     if ((isOpenData && isOpenTimeline) == false)
     {
-        finDebug << "not found sql files";
+        solDebug << "not found sql files";
         return;
     }
 
-    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
     QVariant historyDataId;
 
@@ -99,16 +99,16 @@ void HistoryManager::addHistory(const EngineType inEngineType
         QSqlQuery sqlQuery;
         sqlQuery.prepare(insertDataQuery);
 
-        sqlQuery.bindValue(":engine_type", Fin::enumToQStr(inEngineType));
-        sqlQuery.bindValue(":source_lang", Fin::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", sol::enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inOriginText);
         sqlQuery.bindValue(":target_text", inTranslateText);
-        sqlQuery.bindValue(":text_style",  Fin::enumToQStr(inTextStyle));
+        sqlQuery.bindValue(":text_style",  sol::enumToQStr(inTextStyle));
 
         if (sqlQuery.exec() == false)
         {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
             return;
         }
         historyDataId = sqlQuery.lastInsertId();
@@ -124,7 +124,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
 
         if (sqlQuery.exec() == false)
         {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
             return;
         }
     }
@@ -143,16 +143,16 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
     const QString insertTimelineFilePath    = ":/sql/insert_translation_timeline.sql";
 
-    const auto [isOpenData, selectHistoryQuery]      = FinSql::readSqlFromFile(selectHistoryDataFilePath);
-    const auto [isOpenTimeline, insertTimelineQuery] = FinSql::readSqlFromFile(insertTimelineFilePath);
+    const auto [isOpenData, selectHistoryQuery]      = SolSql::readSqlFromFile(selectHistoryDataFilePath);
+    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
 
     if ((isOpenData && isOpenTimeline) == false)
     {
-        finDebug << "not found sql files";
+        solDebug << "not found sql files";
         return res;
     }
 
-    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
     qint64 historyDataId{-1};
     QString targetText;
@@ -162,15 +162,15 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
         QSqlQuery sqlQuery;
         sqlQuery.prepare(selectHistoryQuery);
 
-        sqlQuery.bindValue(":engine_type", Fin::enumToQStr(inEngineType));
-        sqlQuery.bindValue(":source_lang", Fin::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", Fin::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", sol::enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inOriginText);
 
         // error sql
         if (sqlQuery.exec() == false)
         {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
             return res;
         }
         // no history
@@ -194,7 +194,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 
         if (sqlQuery.exec() == false)
         {
-            finDebug << "Error executing SQL" << sqlQuery.lastError();
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
             return res;
         }
     }
@@ -208,34 +208,34 @@ void HistoryManager::applyTranslateHistory()
 {
     if (_bIsDirtyDB == false)
     {
-        finDebug << "DB is not dirty";
+        solDebug << "DB is not dirty";
         return;
     }
 
-    FinSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
     QSqlQuery sqlQuery;
     const QString selectTimelineFilePath = ":/sql/select_translation_timeline.sql";
 
-    const auto [isOpenData, selectTimelineQuery] = FinSql::readSqlFromFile(selectTimelineFilePath);
+    const auto [isOpenData, selectTimelineQuery] = SolSql::readSqlFromFile(selectTimelineFilePath);
 
     if (isOpenData == false)
     {
-        finDebug << "not found sql files";
+        solDebug << "not found sql files";
         return;
     }
 
     sqlQuery.prepare(selectTimelineQuery);
     if (sqlQuery.exec() == false)
     {
-        finDebug << "Error executing SQL" << sqlQuery.lastError();
+        solDebug << "Error executing SQL" << sqlQuery.lastError();
         return;
     }
 
     std::deque<trDbInfo> translateHistory;
     while (sqlQuery.next())
     {
-        TextStyle textStyle = Fin::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);
+        TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);
 
         translateHistory.emplace_back(sqlQuery.value(0).toLongLong()
                                     , sqlQuery.value(1).toString()

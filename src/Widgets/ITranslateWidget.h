@@ -6,7 +6,7 @@
 #include <QPointer>
 #include <QWidget>
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 class TranslateUnit;
 class QTextCursor;

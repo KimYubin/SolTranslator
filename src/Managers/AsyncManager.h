@@ -9,14 +9,14 @@
 #include <QFuture>
 
 
-class FinTranslatorCore;
+class SolTranslatorCore;
 
 class AsyncManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    explicit AsyncManager(FinTranslatorCore* parent);
+    explicit AsyncManager(SolTranslatorCore* parent);
 
     /**
      * Fire & Forget, QFuture와 QFutureWatcher을 이용한 비동기 계산 후, 동기화 로직의 간소화 버전입니다.

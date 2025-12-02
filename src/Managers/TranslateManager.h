@@ -5,13 +5,13 @@
 
 
 #include "AbstractManager.h"
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 
 class QNetworkAccessManager;
 class QTextEdit;
 class TranslateUnit;
-class FinTranslatorCore;
+class SolTranslatorCore;
 class QMimeData;
 
 
@@ -20,7 +20,7 @@ class TranslateManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit TranslateManager(FinTranslatorCore* parent);
+    explicit TranslateManager(SolTranslatorCore* parent);
 
     TranslateUnit* executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo);
     

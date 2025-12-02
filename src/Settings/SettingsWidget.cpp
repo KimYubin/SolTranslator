@@ -11,10 +11,10 @@
 #include <QListWidget>
 #include <QShortcut>
 
-#include "FinTranslatorCore.h"
-#include "FinUtilibrary.h"
+#include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
 
-#include "Widgets/FinTranslatorMainWidget.h"
+#include "Widgets/SolMainWidget.h"
 #include "IOptionWidget.h"
 
 #include "ui_SettingsWidget.h"
@@ -29,7 +29,7 @@ enum
 };
 
 SettingsWidget::SettingsWidget(QWidget* parent)
-    : IFinWidget(parent)
+    : ISolWidget(parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
@@ -82,7 +82,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
     show();
 
-    finConfig.restoreWidgetGeometry(this);
+    solConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &SettingsWidget::appQuitEvent);
 }
 
@@ -102,11 +102,11 @@ SettingsWidget::~SettingsWidget()
 
 void SettingsWidget::closeEvent(QCloseEvent* event)
 {
-    finConfig.saveWidgetGeometry(this);
-    IFinWidget::closeEvent(event);
+    solConfig.saveWidgetGeometry(this);
+    ISolWidget::closeEvent(event);
 }
 
 void SettingsWidget::appQuitEvent() const
 {
-    finConfig.saveWidgetGeometry(this);
+    solConfig.saveWidgetGeometry(this);
 }

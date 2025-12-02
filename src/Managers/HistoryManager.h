@@ -1,16 +1,16 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_HISTORYMANAGER_H
-#define FINTRANSLATOR_HISTORYMANAGER_H
+#ifndef SOLTRANSLATOR_HISTORYMANAGER_H
+#define SOLTRANSLATOR_HISTORYMANAGER_H
 
 
 #include <deque>
 
 #include "AbstractManager.h"
-#include "FinHashQueue.h"
-#include "FinTypes.h"
+#include "SolHashQueue.h"
+#include "SolTypes.h"
 
-class FinTranslatorCore;
+class SolTranslatorCore;
 class QSqlError;
 class QTimer;
 
@@ -19,7 +19,7 @@ class HistoryManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit HistoryManager(FinTranslatorCore* parent);
+    explicit HistoryManager(SolTranslatorCore* parent);
     virtual ~HistoryManager() override;
 
 private:
@@ -60,4 +60,4 @@ private:
 };
 
 
-#endif //FINTRANSLATOR_HISTORYMANAGER_H
+#endif //SOLTRANSLATOR_HISTORYMANAGER_H

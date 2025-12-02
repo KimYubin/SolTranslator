@@ -10,9 +10,9 @@
 #include <QStringListModel>
 #include <QTimer>
 
-#include "FinHashQueue.h"
-#include "FinLog.h"
-#include "FinTranslatorCore.h"
+#include "SolHashQueue.h"
+#include "SolLog.h"
+#include "SolTranslatorCore.h"
 #include "HistoryModel.h"
 
 #include "Managers/HistoryManager.h"
@@ -21,7 +21,7 @@
 #include "SubWidgets/ResultTextEdit.h"
 
 
-HistoryWidget::HistoryWidget(QWidget* parent) : IFinWidget(parent)
+HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
 }
@@ -102,7 +102,7 @@ void HistoryWidget::setupUI()
         _listScrollBarRatio         = (maxScroll > 0) ? (currentScroll / maxScroll) : 0.0;
     });
 
-    connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int min, int max)
+    connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](const int min, const int max)
     {
         QScrollBar* scrollBar = _historyListView->verticalScrollBar();
 

@@ -22,8 +22,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="27"/>
-        <source>번역 엔진 설정</source>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="41"/>
+        <source>API: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -32,13 +32,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="41"/>
-        <source>API: </source>
+        <location filename="../src/Settings/EngineOptionWidget.ui" line="81"/>
+        <source>저장</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.ui" line="81"/>
-        <source>저장</source>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="27"/>
+        <source>번역 엔진 설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -88,31 +88,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="70"/>
-        <source>팝업 번역</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
-        <source>목표 언어</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
-        <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="103"/>
-        <source>팝업 번역창을 임시창으로 열기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="104"/>
-        <source>팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Settings/GeneralOptionWidget.cpp" line="44"/>
         <source>창 위치, 크기 기억</source>
         <translation type="unfinished"></translation>
@@ -135,6 +110,31 @@
     <message>
         <location filename="../src/Settings/GeneralOptionWidget.cpp" line="59"/>
         <source>테마를 적용합니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="70"/>
+        <source>팝업 번역</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
+        <source>목표 언어</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
+        <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="103"/>
+        <source>팝업 번역창을 임시창으로 열기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="104"/>
+        <source>팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -349,16 +349,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="97"/>
-        <source>번역 복사</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="103"/>
-        <source>복사 완료!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="54"/>
         <source>출발 언어</source>
         <translation type="unfinished"></translation>
@@ -377,6 +367,16 @@
     <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="73"/>
         <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="97"/>
+        <source>번역 복사</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="103"/>
+        <source>복사 완료!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

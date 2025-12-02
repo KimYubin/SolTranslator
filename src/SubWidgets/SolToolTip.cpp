@@ -1,6 +1,6 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinToolTip.h"
+#include "SolToolTip.h"
 
 #include <QLabel>
 #include <QPainter>
@@ -14,11 +14,11 @@
 
 #include <qevent.h>
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 
 
 /** 커스텀 툴팁 말풍선 */
-class FinToolTipBallon : public QWidget
+class SolToolTipBallon : public QWidget
 {
     Q_OBJECT
 
@@ -31,19 +31,19 @@ class FinToolTipBallon : public QWidget
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor)
     Q_PROPERTY(QColor borderColor READ getBorderColor WRITE setBorderColor)
 
-    static QPointer<FinToolTipBallon> _ins;
+    static QPointer<SolToolTipBallon> _ins;
 
 public:
-    static FinToolTipBallon* instance()
+    static SolToolTipBallon* instance()
     {
         if (_ins.isNull())
         {
-            _ins = new FinToolTipBallon();
+            _ins = new SolToolTipBallon();
         }
         return _ins;
     }
 
-    explicit FinToolTipBallon(QWidget* parent = nullptr);
+    explicit SolToolTipBallon(QWidget* parent = nullptr);
 
     void showToolTip(const QWidget* widget);
     void showToolTipImpl(const QWidget* widget);
@@ -112,16 +112,16 @@ private:
     QPoint triVertex;
 };
 
-QPointer<FinToolTipBallon> FinToolTipBallon::_ins = nullptr;
+QPointer<SolToolTipBallon> SolToolTipBallon::_ins = nullptr;
 
-#include "FinToolTip.moc"
+#include "SolToolTip.moc"
 
 
 
-FinToolTipBallon::FinToolTipBallon(QWidget* parent)
+SolToolTipBallon::SolToolTipBallon(QWidget* parent)
     : QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
 {
-    setObjectName("FinToolTipBallon");
+    setObjectName("SolToolTipBallon");
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -146,11 +146,11 @@ FinToolTipBallon::FinToolTipBallon(QWidget* parent)
     _expireTimer.setSingleShot(true);
     _hideTimer.setInterval(300);
     _hideTimer.setSingleShot(true);
-    connect(&_expireTimer, &QTimer::timeout, this, &FinToolTipBallon::hideTipImmediately);
-    connect(&_hideTimer, &QTimer::timeout, this, &FinToolTipBallon::hideTipImmediately);
+    connect(&_expireTimer, &QTimer::timeout, this, &SolToolTipBallon::hideTipImmediately);
+    connect(&_hideTimer, &QTimer::timeout, this, &SolToolTipBallon::hideTipImmediately);
 }
 
-void FinToolTipBallon::showToolTip(const QWidget* widget)
+void SolToolTipBallon::showToolTip(const QWidget* widget)
 {
     if (widget && widget->isVisible() && widget->toolTip().isEmpty() == false)
     {
@@ -163,7 +163,7 @@ void FinToolTipBallon::showToolTip(const QWidget* widget)
     }
 }
 
-void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
+void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
 {
     _label->setText(widget->toolTip());
     _label->adjustSize();
@@ -194,7 +194,7 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     const QPoint newBottomPos = {topBottomX, bottomY};
     const QPoint newLeftPos   = {leftX, lefRightY};
 
-    const QRect availableGeo = Fin::availableGeometryAt(QCursor::pos());
+    const QRect availableGeo = sol::availableGeometryAt(QCursor::pos());
 
     // 교집합 면적 최대값 계산하고, _direction을 업데이트합니다.
     // 겹치는 면적이 가장 넓은 방향으로 생성합니다.
@@ -244,7 +244,7 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     }
 
     // 벗어나면 안쪽으로 이동
-    newRect = Fin::moveToInside(availableGeo, newRect);
+    newRect = sol::moveToInside(availableGeo, newRect);
     move(newRect.topLeft());
 
     // 계산된 마진 및 사이즈로 업데이트
@@ -256,19 +256,19 @@ void FinToolTipBallon::showToolTipImpl(const QWidget* widget)
     _hideTimer.stop();
 }
 
-void FinToolTipBallon::hideTipImmediately()
+void SolToolTipBallon::hideTipImmediately()
 {
     close();
     deleteLater();
 }
 
-void FinToolTipBallon::hideTipDelay()
+void SolToolTipBallon::hideTipDelay()
 {
     if (_hideTimer.isActive() == false)
         _hideTimer.start(300);
 }
 
-void FinToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
+void SolToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
 {
     if (_currentTargetWidget == inWidget)
     {
@@ -276,7 +276,7 @@ void FinToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
     }
 }
 
-void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
+void SolToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
 {
     QWidget::paintEvent(inPaintEvent);
 
@@ -358,91 +358,91 @@ void FinToolTipBallon::paintEvent(QPaintEvent* inPaintEvent)
     painter.drawPath(path);
 }
 
-int FinToolTipBallon::getTriangleBaseWidth() const
+int SolToolTipBallon::getTriangleBaseWidth() const
 {
     return _triangleBaseWidth;
 }
 
-void FinToolTipBallon::setTriangleBaseWidth(const int inWidth)
+void SolToolTipBallon::setTriangleBaseWidth(const int inWidth)
 {
     _triangleBaseWidth = inWidth;
     update();
 }
 
-int FinToolTipBallon::getTriangleHeight() const
+int SolToolTipBallon::getTriangleHeight() const
 {
     return _triangleHeight;
 }
 
-void FinToolTipBallon::setTriangleHeight(const int inHeight)
+void SolToolTipBallon::setTriangleHeight(const int inHeight)
 {
     _triangleHeight = inHeight;
     updateMargins();
     update();
 }
 
-int FinToolTipBallon::getBorderRadius() const
+int SolToolTipBallon::getBorderRadius() const
 {
     return _borderRadius;
 }
 
-void FinToolTipBallon::setBorderRadius(const int inRad)
+void SolToolTipBallon::setBorderRadius(const int inRad)
 {
     _borderRadius = inRad;
     update();
 }
 
-float FinToolTipBallon::getBorderWidth() const
+float SolToolTipBallon::getBorderWidth() const
 {
     return _borderWidth;
 }
 
-void FinToolTipBallon::setBorderWidth(const float inWidth)
+void SolToolTipBallon::setBorderWidth(const float inWidth)
 {
     _borderWidth = inWidth;
     updateMargins();
     update();
 }
 
-int FinToolTipBallon::getSpacing() const
+int SolToolTipBallon::getSpacing() const
 {
     return _spacing;
 }
 
-void FinToolTipBallon::setSpacing(const int inSpacing)
+void SolToolTipBallon::setSpacing(const int inSpacing)
 {
     _spacing = inSpacing;
     update();
 }
 
-QColor FinToolTipBallon::getBackgroundColor() const
+QColor SolToolTipBallon::getBackgroundColor() const
 {
     return _backgroundColor;
 }
 
-void FinToolTipBallon::setBackgroundColor(const QColor inColor)
+void SolToolTipBallon::setBackgroundColor(const QColor inColor)
 {
     _backgroundColor = inColor;
     update();
 }
 
-QColor FinToolTipBallon::getBorderColor() const
+QColor SolToolTipBallon::getBorderColor() const
 {
     return _borderColor;
 }
 
-void FinToolTipBallon::setBorderColor(const QColor inColor)
+void SolToolTipBallon::setBorderColor(const QColor inColor)
 {
     _borderColor = inColor;
     update();
 }
 
-void FinToolTipBallon::updateMargins() const
+void SolToolTipBallon::updateMargins() const
 {
     _layout->setContentsMargins(triMargins(_direction));
 }
 
-QMargins FinToolTipBallon::triMargins(const ShowDirection inDirection) const
+QMargins SolToolTipBallon::triMargins(const ShowDirection inDirection) const
 {
     const int borderMargin = qCeil(_borderWidth);
 
@@ -466,16 +466,16 @@ QMargins FinToolTipBallon::triMargins(const ShowDirection inDirection) const
 }
 
 // ~==================================
-// FinTooltipFilter 
+// SolTooltipFilter 
 
-void FinTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+void SolTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
 {
-    static FinTooltipFilter* ins = new FinTooltipFilter();
+    static SolTooltipFilter* ins = new SolTooltipFilter();
     inTargetWidget->setToolTip(inToolTip);
     inTargetWidget->installEventFilter(ins);
 }
 
-void FinTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
+void SolTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
 {
     QString currentToolTip = inOnCheckToolTip;
     if (inTargetWidget->isCheckable())
@@ -501,15 +501,15 @@ void FinTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget
         }
         inTargetWidget->setToolTip(toolTip);
 
-        FinToolTipBallon::instance()->updateWidgetToolTip(inTargetWidget);
+        SolToolTipBallon::instance()->updateWidgetToolTip(inTargetWidget);
     });
 }
 
-FinTooltipFilter::FinTooltipFilter(QObject* parent): QObject(parent)
+SolTooltipFilter::SolTooltipFilter(QObject* parent): QObject(parent)
 {
 }
 
-bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
+bool SolTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 {
     switch (event->type())
     {
@@ -525,7 +525,7 @@ bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
         const QString tooltipText = widget->toolTip();
         if (tooltipText.isEmpty() == false)
         {
-            FinToolTipBallon::instance()->showToolTip(widget);
+            SolToolTipBallon::instance()->showToolTip(widget);
         }
 
         return true; // 기본 툴팁을 차단
@@ -539,7 +539,7 @@ bool FinTooltipFilter::eventFilter(QObject* obj, QEvent* event)
     case QEvent::MouseButtonDblClick:
     case QEvent::Wheel:
     {
-        FinToolTipBallon::instance()->hideTipImmediately();
+        SolToolTipBallon::instance()->hideTipImmediately();
         break;
     }
     default: break;  

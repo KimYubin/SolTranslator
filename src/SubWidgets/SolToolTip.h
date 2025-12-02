@@ -1,24 +1,24 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTOOLTIP_H
-#define FINTOOLTIP_H
+#ifndef SOLTOOLTIP_H
+#define SOLTOOLTIP_H
 
 #include <QObject>
 
 
 class QAbstractButton;
-class FinToolTipBallon;
+class SolToolTipBallon;
 
 /**
  * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.
  *
- * @see FinTooltipFilter::setBubbleToolTip(widget, "tool tip");
+ * @see SolTooltipFilter::setBubbleToolTip(widget, "tool tip");
  */
-class FinTooltipFilter : public QObject
+class SolTooltipFilter : public QObject
 {
     Q_OBJECT
 
-    explicit FinTooltipFilter(QObject* parent = nullptr);
+    explicit SolTooltipFilter(QObject* parent = nullptr);
 
 public:
     /**
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif //FINTOOLTIP_H
+#endif //SOLTOOLTIP_H

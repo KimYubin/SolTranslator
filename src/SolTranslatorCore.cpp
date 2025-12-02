@@ -1,12 +1,12 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
 #include <QApplication>
 #include <QMimeData>
 
-#include "FinConstants.h"
-#include "FinUtilibrary.h"
+#include "SolConstants.h"
+#include "SolUtilibrary.h"
 
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
@@ -18,20 +18,20 @@
 
 #include "Support/WidgetInspector.h"
 
-#include "Widgets/FinTranslatorMainWidget.h"
+#include "Widgets/SolMainWidget.h"
 
-FinTranslatorCore* FinTranslatorCore::_self = nullptr;
+SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 
-FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
+SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 {
-    Q_ASSERT_X(!FinTranslatorCore::_self, "FinTranslatorCore", "there should be only one fin core object");
+    Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
     _self = this;
 
-    qApp->setOrganizationDomain("fin");
-    qApp->setApplicationName("FinTranslator");
+    qApp->setOrganizationDomain("sol");
+    qApp->setApplicationName("SolTranslator");
 
     QTranslator* qtTranslator = new QTranslator(this);
-    if (qtTranslator->load(QLocale::system(), "fin", "_"
+    if (qtTranslator->load(QLocale::system(), "sol", "_"
                         , QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
     {
         qApp->installTranslator(qtTranslator);
@@ -46,21 +46,21 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 
     StyleManger::applyTheme();
     // generate GUI widget
-    _finMainWidget = new FinTranslatorMainWidget();
+    _solMainWidget = new SolMainWidget();
 
     // parsing
     QCommandLineParser parser;
-    parser.addOption({Fin::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
+    parser.addOption({sol::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
     parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행 
-    if (parser.isSet(Fin::CmdLineOptions::START_UP_RUN))
+    if (parser.isSet(sol::CmdLineOptions::START_UP_RUN))
     {
-        _finMainWidget->hide();
+        _solMainWidget->hide();
     }
     else
     {
-        _finMainWidget->show();
+        _solMainWidget->show();
     }
 
 #ifdef QT_DEBUG
@@ -68,11 +68,11 @@ FinTranslatorCore::FinTranslatorCore(QObject* parent): QObject(parent)
 #endif
 }
 
-FinTranslatorCore::~FinTranslatorCore()
+SolTranslatorCore::~SolTranslatorCore()
 {
 }
 
-void FinTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
+void SolTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
 {
-    _translateManager->translateAtPopup(inMimeData, LangType::AUTO, finConfig.getPopupTargetLang());
+    _translateManager->translateAtPopup(inMimeData, LangType::AUTO, solConfig.getPopupTargetLang());
 }

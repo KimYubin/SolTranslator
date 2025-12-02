@@ -2,11 +2,11 @@
 // Created by YubinKim on 25/11/07 금.
 //
 
-#ifndef FINTRANSLATOR_RESULTTEXTEDIT_H
-#define FINTRANSLATOR_RESULTTEXTEDIT_H
+#ifndef SOLTRANSLATOR_RESULTTEXTEDIT_H
+#define SOLTRANSLATOR_RESULTTEXTEDIT_H
 
 #include "CustomMenuTextEdit.h"
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 
 class ResultTextEdit : public MenuTextBrowser
@@ -35,4 +35,4 @@ private:
 
 
 
-#endif //FINTRANSLATOR_RESULTTEXTEDIT_H
+#endif //SOLTRANSLATOR_RESULTTEXTEDIT_H

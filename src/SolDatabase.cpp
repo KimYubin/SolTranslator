@@ -1,14 +1,14 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 
-#include "FinDatabase.h"
+#include "SolDatabase.h"
 
 #include <QString>
 #include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
 
-std::pair<bool, QString> FinSql::readSqlFromFile(const QString& inFilePath)
+std::pair<bool, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
 
@@ -23,7 +23,7 @@ std::pair<bool, QString> FinSql::readSqlFromFile(const QString& inFilePath)
     return {true, sqlStr};
 }
 
-QSqlError FinSql::execSQL(const QString& inFilePath)
+QSqlError SolSql::execSQL(const QString& inFilePath)
 {
     const auto [isFileOpen, sqlStr] = readSqlFromFile(inFilePath);
 
@@ -43,28 +43,28 @@ QSqlError FinSql::execSQL(const QString& inFilePath)
     return QSqlError();
 }
 
-FinSqlTransactionGuard::FinSqlTransactionGuard(QSqlDatabase inDB)
+SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDB)
     :_database(inDB)
 {
     transaction();
 }
 
-FinSqlTransactionGuard::~FinSqlTransactionGuard()
+SolSqlTransactionGuard::~SolSqlTransactionGuard()
 {
     rollback();
 }
 
-void FinSqlTransactionGuard::transaction()
+void SolSqlTransactionGuard::transaction()
 {
     _database.transaction();
 }
 
-void FinSqlTransactionGuard::commit()
+void SolSqlTransactionGuard::commit()
 {
     _database.commit();
 }
 
-void FinSqlTransactionGuard::rollback()
+void SolSqlTransactionGuard::rollback()
 {
     _database.rollback();
 }

@@ -6,7 +6,7 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 
-#include "FinConstants.h"
+#include "SolConstants.h"
 
 GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                          , TranslateManager* parent)
@@ -15,7 +15,7 @@ GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void GoogleTrUnit::requestTranslate()
 {
-    const QUrl url = QString(Fin::URLs::GOOGLE).arg(
+    const QUrl url = QString(sol::URLs::GOOGLE).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.originText, "()")); // ()괄호는 인코딩 변경 안합니다.

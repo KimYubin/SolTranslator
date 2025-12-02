@@ -25,12 +25,12 @@
 
 #include <qevent.h>
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 
 #include "Managers/ConfigManager.h"
 
-#include "SubWidgets/FinToast.h"
-#include "SubWidgets/FinToolTip.h"
+#include "SubWidgets/SolToast.h"
+#include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LoadingBar.h"
 
 #include "Widgets/ui_PopupTranslateWidget.h"
@@ -54,7 +54,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
 {
     QIcon icon = QIcon(":/img/icon_img");
     setWindowIcon(icon);
-    setWindowTitle(tr("fin"));
+    setWindowTitle(tr("sol"));
 
     // ~===========
     // config
@@ -90,7 +90,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     ui->bgFrame->setMouseTracking(true);
     ui->bgFrame->installEventFilter(this);
 
-    if (finConfig.getIsPopupTrWindowTemp())
+    if (solConfig.getIsPopupTrWindowTemp())
     {
         changePopupMode();
     }
@@ -166,19 +166,19 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 
     // 생성될 스크린 위치 추적
     QScreen* currentScreen = nullptr;
-    switch (finConfig.getSimplePopupScreenPolicy())
+    switch (solConfig.getSimplePopupScreenPolicy())
     {
-    case Fin::ScreenPopupPolicy::Default:
-    case Fin::ScreenPopupPolicy::PrimaryScreen:
+    case sol::ScreenPopupPolicy::Default:
+    case sol::ScreenPopupPolicy::PrimaryScreen:
         currentScreen = qApp->primaryScreen();
         break;
-    case Fin::ScreenPopupPolicy::FixedScreen:
+    case sol::ScreenPopupPolicy::FixedScreen:
         currentScreen = qApp->primaryScreen(); // 임시. 추후 저장된 스크린 위치 사용
         break;
-    case Fin::ScreenPopupPolicy::CursorScreen:
+    case sol::ScreenPopupPolicy::CursorScreen:
         currentScreen = qApp->screenAt(QCursor::pos());
         break;
-    case Fin::ScreenPopupPolicy::Size:
+    case sol::ScreenPopupPolicy::Size:
         break;
     }
 
@@ -277,7 +277,7 @@ void PopupTranslateWidget::setupUI()
     setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_AlwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
-    FinTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기(<u>T<\\u>)"), tr("항상 위 끄기(<u>T<\\u>)"));
+    SolTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기(<u>T<\\u>)"), tr("항상 위 끄기(<u>T<\\u>)"));
 
     // ~===========
     // windowModeButton
@@ -290,7 +290,7 @@ void PopupTranslateWidget::setupUI()
     setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_windowModeButton, &QPushButton::toggled, this, &PopupTranslateWidget::onWindowModeToggle);
-    FinTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격(<u>T<\\u>)"), tr("임시 창모드(N)"));
+    SolTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격(<u>T<\\u>)"), tr("임시 창모드(N)"));
 
 
     // 좌우 버튼 분리
@@ -306,7 +306,7 @@ void PopupTranslateWidget::setupUI()
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
 
     setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
-    FinTooltipFilter::setBubbleToolTip(_minimizedButton, tr("최소화"));
+    SolTooltipFilter::setBubbleToolTip(_minimizedButton, tr("최소화"));
     connect(_minimizedButton, &QPushButton::clicked, this, &PopupTranslateWidget::onMinimized);
 
     // ~===========
@@ -321,7 +321,7 @@ void PopupTranslateWidget::setupUI()
 
     setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
     connect(_maxRestoreButton, &QPushButton::toggled, this, &PopupTranslateWidget::onMaxNormalToggle);
-    FinTooltipFilter::setCheckableButtonToolTip(_maxRestoreButton, tr("최대화"), tr("이전 크기로 복원"));
+    SolTooltipFilter::setCheckableButtonToolTip(_maxRestoreButton, tr("최대화"), tr("이전 크기로 복원"));
 
     // ~===========
     // close button
@@ -331,7 +331,7 @@ void PopupTranslateWidget::setupUI()
     _closeButton->setShortcut(Qt::Key_Escape);
 
     setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
-    FinTooltipFilter::setBubbleToolTip(_closeButton, tr("닫기"));
+    SolTooltipFilter::setBubbleToolTip(_closeButton, tr("닫기"));
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 
@@ -348,12 +348,12 @@ void PopupTranslateWidget::setupUI()
     trCopy->setIcon(QIcon(":/img/copy_img"));
     trCopy->setShortcut(Qt::Key_C);
     trCopy->setFocusPolicy(Qt::TabFocus);
-    FinTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사(<u>C<\\u>)"));
+    SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사(<u>C<\\u>)"));
     connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
         {
-            FinToast::popToastOnWidget(tr("복사 완료!"), trCopy, 50);
+            SolToast::popToastOnWidget(tr("복사 완료!"), trCopy, 50);
         }, Qt::SingleShotConnection);
 
         // 연결 대기 시간 제한.
@@ -582,11 +582,11 @@ void PopupTranslateWidget::changeNormalWindowMode()
     qApp->removeEventFilter(this);
 
     // 처음부터 일반모드로 시작하는 경우 매뉴얼 모드로 변경하지 않습니다.
-    if (_widgetModeFlags.testFlag(FinWidgetMode::PopupMode))
+    if (_widgetModeFlags.testFlag(SolWidgetMode::PopupMode))
     {
         manualSizeMode();
     }
-    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode, false);
+    _widgetModeFlags.setFlag(SolWidgetMode::PopupMode, false);
 
     const bool bHasWModeBtnFocus = _windowModeButton->hasFocus();
     _windowModeButton->hide();
@@ -607,7 +607,7 @@ void PopupTranslateWidget::changePopupMode()
     // 팝업모드에서 자동 닫기 기능 등록
     qApp->installEventFilter(this);
 
-    _widgetModeFlags.setFlag(FinWidgetMode::PopupMode);
+    _widgetModeFlags.setFlag(SolWidgetMode::PopupMode);
 
     if (_AlwaysOnButton->isHidden() == false)
     {
@@ -660,9 +660,9 @@ void PopupTranslateWidget::setShadowEffectEnabled(const bool bIsEnable)
 
 void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
 {
-    if (Fin::isThis(this, old))
+    if (sol::isThis(this, old))
     {
-        if (Fin::isThis(this, now))
+        if (sol::isThis(this, now))
         {
             return;
         }
@@ -672,7 +672,7 @@ void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
             return;
         }
     }
-    if (Fin::isThis(this, now))
+    if (sol::isThis(this, now))
     {
         setShadowEffectEnabled(true);
     }
@@ -903,7 +903,7 @@ bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
 {
     // 팝업모드에서 자동 종료
     if (obj == qApp
-        && _widgetModeFlags.testFlag(FinWidgetMode::PopupMode)
+        && _widgetModeFlags.testFlag(SolWidgetMode::PopupMode)
         && event->type() == QEvent::ApplicationStateChange)
     {
         Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();

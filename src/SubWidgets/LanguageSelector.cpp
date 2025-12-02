@@ -11,9 +11,9 @@
 
 #include <qevent.h>
 
-#include "FinToolTip.h"
-#include "FinTypes.h"
-#include "FinUtilibrary.h"
+#include "SolToolTip.h"
+#include "SolTypes.h"
+#include "SolUtilibrary.h"
 #include "KeySelectionList.h"
 
 #include "Managers/ConfigManager.h"
@@ -121,7 +121,7 @@ void LanguageSelector::setButtonText(const LangType inlangType)
 
 void LanguageSelector::setBubbleToolTip(const QString& inStr)
 {
-    FinTooltipFilter::setBubbleToolTip(_button, inStr);
+    SolTooltipFilter::setBubbleToolTip(_button, inStr);
 }
 
 void LanguageSelector::onSelectedLanguage(const LangType inlangType)
@@ -230,7 +230,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 
     if (eventType == QEvent::MouseButtonPress)
     {
-        if (Fin::isThis(this, obj) == false)
+        if (sol::isThis(this, obj) == false)
         {
             const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();

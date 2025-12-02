@@ -1,10 +1,10 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINCONSTANTS_H
-#define FINCONSTANTS_H
+#ifndef SOLCONSTANTS_H
+#define SOLCONSTANTS_H
 #include <QString>
 
-namespace Fin
+namespace sol
 {
 
 /** 커맨드라인 명령줄 옵션 */
@@ -32,4 +32,4 @@ struct Prompt
 }
 
 
-#endif //FINCONSTANTS_H
+#endif //SOLCONSTANTS_H

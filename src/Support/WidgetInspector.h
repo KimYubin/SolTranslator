@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_WIDGETINSPECTOR_H
-#define FINTRANSLATOR_WIDGETINSPECTOR_H
+#ifndef SOLTRANSLATOR_WIDGETINSPECTOR_H
+#define SOLTRANSLATOR_WIDGETINSPECTOR_H
 
 #include <QWidget>
 
@@ -22,4 +22,4 @@ private:
     QLabel* label;
 };
 
-#endif //FINTRANSLATOR_WIDGETINSPECTOR_H
+#endif //SOLTRANSLATOR_WIDGETINSPECTOR_H

@@ -1,14 +1,14 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINUTILIBRARY_H
-#define FINUTILIBRARY_H
+#ifndef SOLUTILIBRARY_H
+#define SOLUTILIBRARY_H
 #include <QRect>
 #include "../../external/magic_enum.hpp"
 
 class QObject;
 class QWidget;
 
-namespace Fin
+namespace sol
 {
 /**
  * Other QObject와 그 부모가 this인지 재귀적으로 확인합니다.
@@ -80,4 +80,4 @@ EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
 
 
 
-#endif //FINUTILIBRARY_H
+#endif //SOLUTILIBRARY_H

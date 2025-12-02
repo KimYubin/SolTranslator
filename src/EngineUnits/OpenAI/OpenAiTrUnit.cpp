@@ -7,8 +7,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-#include "FinConstants.h"
-#include "FinTypes.h"
+#include "SolConstants.h"
+#include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
@@ -19,26 +19,26 @@ OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
 {
-    const QUrl url(Fin::URLs::OPEN_AI);
+    const QUrl url(sol::URLs::OPEN_AI);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + finConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
+    request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = finConfig.getOpenAIModel();
+    chatBodyJson["model"] = solConfig.getOpenAIModel();
     if (bIsStreaming)
     {
         chatBodyJson["stream"] = bIsStreaming; // streaming
     }
-    chatBodyJson["temperature"] = finConfig.getOpenAI_Temperature();
+    chatBodyJson["temperature"] = solConfig.getOpenAI_Temperature();
 
 
     QJsonArray messages;
 
     QJsonObject developerMessage;
     developerMessage["role"] = "developer";
-    developerMessage["content"] = QString(Fin::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    developerMessage["content"] = QString(sol::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
     messages.append(developerMessage);
 
     QJsonObject userMessage;

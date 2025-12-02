@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_FINDATABASE_H
-#define FINTRANSLATOR_FINDATABASE_H
+#ifndef SOLTRANSLATOR_SOLDATABASE_H
+#define SOLTRANSLATOR_SOLDATABASE_H
 
 #include <QSqlDatabase>
 
@@ -11,23 +11,23 @@ class QString;
 class QSqlError;
 
 
-class FinDatabase
+class SolDatabase
 {
 };
 
-class FinSql
+class SolSql
 {
 public:
     static std::pair<bool, QString> readSqlFromFile(const QString& inFilePath);
     static QSqlError execSQL(const QString& inFilePath);
 };
 
-class FinSqlTransactionGuard
+class SolSqlTransactionGuard
 {
 public:
-    explicit FinSqlTransactionGuard(QSqlDatabase inDB);
+    explicit SolSqlTransactionGuard(QSqlDatabase inDB);
 
-    ~FinSqlTransactionGuard();
+    ~SolSqlTransactionGuard();
 
     void transaction();
     void commit();
@@ -37,4 +37,4 @@ private:
     QSqlDatabase _database;
 };
 
-#endif //FINTRANSLATOR_FINDATABASE_H
+#endif //SOLTRANSLATOR_SOLDATABASE_H

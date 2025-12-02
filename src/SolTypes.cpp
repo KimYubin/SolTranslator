@@ -1,33 +1,33 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 #include <QDir>
 
 #include <qstandardpaths.h>
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 #include "Widgets/ITranslateWidget.h"
 
 #include "../external/magic_enum.hpp"
 
-namespace Fin::Internal::DirName
+namespace sol::Internal::DirName
 {
 const QString SAVE = "save";
 const QString HISTORY = "history";
 }
-namespace Fin::Internal::FileName
+namespace sol::Internal::FileName
 {
 const QString API_KEY = "api";
-const QString FIN_CONFIG = "FinConfig.ini";
+const QString CONFIG_FILE = "SolConfig.ini";
 const QString TRANSLATE_HISTORY = "Translate_History.json";
-const QString HISTORY_DB = "Fin_Translation_History.sqlite";
+const QString HISTORY_DB = "Sol_Translation_History.sqlite";
 }
 
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
-    {LangType::NONE, {LangType::NONE, Fin::enumToQStr(LangType::NONE), u8"NONE", u8"NONE"}}
+    {LangType::NONE, {LangType::NONE, sol::enumToQStr(LangType::NONE), u8"NONE", u8"NONE"}}
   , {LangType::AUTO, {LangType::AUTO, u8"Auto", u8"Auto", u8"Auto"}}
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
@@ -49,10 +49,10 @@ QString EngineName::getName(EngineType inEngineType)
     default: ;
     }
 
-    return Fin::enumToQStr(inEngineType);
+    return sol::enumToQStr(inEngineType);
 }
 
-QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath)
+QString SolPaths::getSolAppPath(const QString& inSecondaryDir, const QString& inFilePath)
 {
     const QString appPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     if (appPath.isEmpty())
@@ -75,29 +75,29 @@ QString FinPaths::getFinAppPath(const QString& inSecondaryDir, const QString& in
     return secondaryDir.absoluteFilePath(inFilePath);
 }
 
-QString FinPaths::getLogPath()
+QString SolPaths::getLogPath()
 {
-    return getFinAppPath("logs", "log.txt");
+    return getSolAppPath("logs", "log.txt");
 }
 
-QString FinPaths::getConfigPath()
+QString SolPaths::getConfigPath()
 {
-    return getFinAppPath(Fin::Internal::DirName::SAVE, Fin::Internal::FileName::FIN_CONFIG);
+    return getSolAppPath(sol::Internal::DirName::SAVE, sol::Internal::FileName::CONFIG_FILE);
 }
 
-QString FinPaths::getApiKeyPath()
+QString SolPaths::getApiKeyPath()
 {
-    return getFinAppPath(Fin::Internal::DirName::SAVE, Fin::Internal::FileName::API_KEY);
+    return getSolAppPath(sol::Internal::DirName::SAVE, sol::Internal::FileName::API_KEY);
 }
 
-QString FinPaths::getTranslateHistoryFilePath()
+QString SolPaths::getTranslateHistoryFilePath()
 {
-    return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::TRANSLATE_HISTORY);
+    return getSolAppPath(sol::Internal::DirName::HISTORY, sol::Internal::FileName::TRANSLATE_HISTORY);
 }
 
-QString FinPaths::getHistoryDBFilePath()
+QString SolPaths::getHistoryDBFilePath()
 {
-    return getFinAppPath(Fin::Internal::DirName::HISTORY, Fin::Internal::FileName::HISTORY_DB);
+    return getSolAppPath(sol::Internal::DirName::HISTORY, sol::Internal::FileName::HISTORY_DB);
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget

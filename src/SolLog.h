@@ -1,15 +1,15 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_FINLOG_H
-#define FINTRANSLATOR_FINLOG_H
+#ifndef SOLTRANSLATOR_SOLLOG_H
+#define SOLTRANSLATOR_SOLLOG_H
 
 
-class FinLog {
+class SolLog {
 };
 
 #define LOG_FUNC_LINE_INFO (QString(__FUNCTION__) + "(" + QString::fromStdString(std::to_string(__LINE__)) + ")")
 
-#define finDebug qDebug() << LOG_FUNC_LINE_INFO
+#define solDebug qDebug() << LOG_FUNC_LINE_INFO
 
 
-#endif //FINTRANSLATOR_FINLOG_H
+#endif //SOLTRANSLATOR_SOLLOG_H

@@ -2,9 +2,9 @@
 
 #include "AbstractManager.h"
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
-AbstractManager::AbstractManager(FinTranslatorCore* parent) : QObject(parent)
+AbstractManager::AbstractManager(SolTranslatorCore* parent) : QObject(parent)
 {
 }
 

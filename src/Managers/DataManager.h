@@ -5,16 +5,16 @@
 #include <QObject>
 
 #include "AbstractManager.h"
-#include "FinHashQueue.h"
+#include "SolHashQueue.h"
 
-class FinTranslatorCore;
+class SolTranslatorCore;
 
 class DataManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    explicit DataManager(FinTranslatorCore* parent);
+    explicit DataManager(SolTranslatorCore* parent);
 
     cache_queue loadTranslateCache();
     bool asyncSaveTranslateCache(const cache_queue& CacheTextQueue);

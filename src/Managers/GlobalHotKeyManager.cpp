@@ -14,10 +14,10 @@
 
 #include <QHotkey>
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 #include "RunCopKey.h"
 
-GlobalHotKeyManager::GlobalHotKeyManager(FinTranslatorCore* parent): AbstractManager(parent)
+GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent): AbstractManager(parent)
 {
     RegisterHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
 }
@@ -69,7 +69,7 @@ void GlobalHotKeyManager::FireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             // 번역 실행
-            finCore->onSimpleTranslate(selectedMime);
+            solCore->onSimpleTranslate(selectedMime);
 
             if (prevMimePtrChanged->text() == selectedMime->text())
             {

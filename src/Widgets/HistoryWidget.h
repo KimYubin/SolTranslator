@@ -1,8 +1,8 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_HISTORYWIDGET_H
-#define FINTRANSLATOR_HISTORYWIDGET_H
-#include "IFinWidget.h"
+#ifndef SOLTRANSLATOR_HISTORYWIDGET_H
+#define SOLTRANSLATOR_HISTORYWIDGET_H
+#include "ISolWidget.h"
 
 
 class HistoryModel;
@@ -13,7 +13,7 @@ class ResultTextEdit;
 class QSplitter;
 class QGridLayout;
 
-class HistoryWidget : public IFinWidget
+class HistoryWidget : public ISolWidget
 {
     Q_OBJECT
 
@@ -35,5 +35,5 @@ private:
 };
 
 
-#endif //FINTRANSLATOR_HISTORYWIDGET_H
+#endif //SOLTRANSLATOR_HISTORYWIDGET_H
 

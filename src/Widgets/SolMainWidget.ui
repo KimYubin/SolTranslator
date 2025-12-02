@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FinTranslatorMainWidget</class>
- <widget class="QWidget" name="FinTranslatorMainWidget">
+ <class>SolMainWidget</class>
+ <widget class="QWidget" name="SolMainWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>FinTranslatorMainWidget</string>
+   <string>SolMainWidget</string>
   </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">

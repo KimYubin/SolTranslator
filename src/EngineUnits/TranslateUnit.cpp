@@ -4,9 +4,9 @@
 
 #include <QNetworkReply>
 
-#include "FinLog.h"
-#include "FinTranslatorCore.h"
-#include "FinTypes.h"
+#include "SolLog.h"
+#include "SolTranslatorCore.h"
+#include "SolTypes.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
@@ -31,7 +31,7 @@ void TranslateUnit::executeTextTranslation()
         return;
     }
 
-    if (HistoryManager* historyManager = finCore->historyManager())
+    if (HistoryManager* historyManager = solCore->historyManager())
     {
         auto [bIsFind, findCache] = historyManager->lookupHistory(_trReqData.engineType
                                                                 , _trReqData.originText
@@ -51,13 +51,13 @@ void TranslateUnit::executeTextTranslation()
 
 void TranslateUnit::get(const QNetworkRequest& request)
 {
-    _reply = finCore->translateManager()->getNetworkAccessManager()->get(request);
+    _reply = solCore->translateManager()->getNetworkAccessManager()->get(request);
     postProcess();
 }
 
 void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming)
 {
-    _reply = finCore->translateManager()->getNetworkAccessManager()->post(request, data);
+    _reply = solCore->translateManager()->getNetworkAccessManager()->post(request, data);
 
     if (bIsStreaming)
     {
@@ -120,7 +120,7 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
     {
         return;
     }
-    if (HistoryManager* historyManager = finCore->historyManager())
+    if (HistoryManager* historyManager = solCore->historyManager())
     {
         historyManager->addHistory(_trReqData.engineType
                                  , _trReqData.sourceLang

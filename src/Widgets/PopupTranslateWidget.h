@@ -7,14 +7,14 @@
 
 #include "ITranslateWidget.h"
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 class LoadingBar;
 class QPushButton;
 class QSizeGrip;
 class QScrollBar;
 class QPropertyAnimation;
-class FinTranslatorCore;
+class SolTranslatorCore;
 class QVBoxLayout;
 class QLabel;
 
@@ -124,7 +124,7 @@ protected:
     QString _translatedText;
     QPropertyAnimation* _animation;
 
-    FinWidgetModeFlags _widgetModeFlags; 
+    SolWidgetModeFlags _widgetModeFlags; 
 
 
     QSize _textEditSize;

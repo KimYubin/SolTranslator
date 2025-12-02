@@ -9,14 +9,14 @@
 
 enum class HotkeyType;
 class QHotkey;
-class FinTranslatorCore;
+class SolTranslatorCore;
 
 class GlobalHotKeyManager : public AbstractManager
 {
     Q_OBJECT
 
 public:
-    explicit GlobalHotKeyManager(FinTranslatorCore* parent);
+    explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
 private slots:
     void RegisterHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);

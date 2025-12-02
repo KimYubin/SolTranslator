@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINPOINT_H
-#define FINPOINT_H
+#ifndef SOLPOINT_H
+#define SOLPOINT_H
 #include "EngineUnits/TranslateUnit.h"
 
 class FinPointTrUnit final : public TranslateUnit
@@ -27,4 +27,4 @@ private:
 };
 
 
-#endif //FINPOINT_H
+#endif //SOLPOINT_H

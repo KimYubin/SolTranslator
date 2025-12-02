@@ -4,7 +4,7 @@
 
 #include <QRegularExpression>
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
 
 #include "Managers/HistoryManager.h"
@@ -12,7 +12,7 @@
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    connect(finCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::updateTranslateCache);
+    connect(solCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::updateTranslateCache);
 }
 
 HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)

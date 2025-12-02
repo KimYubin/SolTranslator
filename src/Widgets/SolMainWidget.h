@@ -1,13 +1,13 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATORMAINWIDGET_H
-#define FINTRANSLATORMAINWIDGET_H
+#ifndef SOLMAINWIDGET_H
+#define SOLMAINWIDGET_H
 
 #include <QPointer>
 #include <QSystemTrayIcon>
 #include <QWidget>
 
-#include "IFinWidget.h"
+#include "ISolWidget.h"
 
 
 class QPushButton;
@@ -16,7 +16,7 @@ class QComboBox;
 class QButtonGroup;
 class SettingsWidget;
 class TextEditTranslateWidget;
-class FinTranslatorCore;
+class SolTranslatorCore;
 class GlobalHotKeyManager;
 class TranslateManager;
 class DataManager;
@@ -25,18 +25,18 @@ QT_BEGIN_NAMESPACE
 
 namespace Ui
 {
-class FinTranslatorMainWidget;
+class SolMainWidget;
 }
 
 QT_END_NAMESPACE
 
-class FinTranslatorMainWidget : public IFinWidget
+class SolMainWidget : public ISolWidget
 {
     Q_OBJECT
 
 public:
-    explicit FinTranslatorMainWidget(QWidget* parent = nullptr);
-    ~FinTranslatorMainWidget() override;
+    explicit SolMainWidget(QWidget* parent = nullptr);
+    ~SolMainWidget() override;
 
     virtual void setVisible(bool visible) override;
 
@@ -63,7 +63,7 @@ private:
     void createTrayIcon();
     void popupTrayMenu();
 
-    Ui::FinTranslatorMainWidget* ui;
+    Ui::SolMainWidget* ui;
 
     DropdownMenu* _engineSelector;
 
@@ -85,7 +85,7 @@ private:
     QAction* _settingAction;
     QAction* _quitAction;
 
-    QIcon _finIcon;
+    QIcon _solIcon;
     QSystemTrayIcon* _trayIcon;
     QMenu* _trayIconMenu;
 
@@ -96,4 +96,4 @@ private:
 };
 
 
-#endif //FINTRANSLATORMAINWIDGET_H
+#endif //SOLMAINWIDGET_H

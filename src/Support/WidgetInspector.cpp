@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <QApplication>
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 
@@ -49,7 +49,7 @@ void WidgetInspector::updateInfo(QObject* watched, QEvent* event)
         label->setText(QString("Class: %1\nObject: %2\nevent: %3")
                        .arg(widget->metaObject()->className())
                        .arg(widget->objectName().isEmpty() ? "<no name>" : widget->objectName())
-                       .arg(Fin::enumToQStr(event->type())));
+                       .arg(sol::enumToQStr(event->type())));
     }
     else
     {

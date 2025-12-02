@@ -5,14 +5,14 @@
 
 #include <qdatetime.h>
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
 // 로그 파일 스트림
 QFile logFile;
 QTextStream logStream;
 
 // 메시지 핸들러 함수
-void finMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     QString logType;
 
@@ -44,7 +44,7 @@ void finMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
 void setupLogFile()
 {
     // 로그 파일 열기
-    logFile.setFileName(FinPaths::getLogPath());
+    logFile.setFileName(SolPaths::getLogPath());
     if (!logFile.open(QIODevice::Append | QIODevice::Text))
     {
         qCritical() << "Cannot open the log file.";
@@ -53,13 +53,13 @@ void setupLogFile()
     logStream.setDevice(&logFile);
 
     // 메시지 핸들러 등록
-    qInstallMessageHandler(finMessageHandler);
+    qInstallMessageHandler(solMessageHandler);
 }
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    FinTranslatorCore finTranslatorCore(&app);
+    SolTranslatorCore solTranslatorCore(&app);
 
     // setupLogFile();
 

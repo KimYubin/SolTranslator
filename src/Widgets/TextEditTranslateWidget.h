@@ -10,7 +10,7 @@
 
 class LanguageSelector;
 enum class TextStyle;
-class FinTranslatorCore;
+class SolTranslatorCore;
 QT_BEGIN_NAMESPACE
 
 namespace Ui

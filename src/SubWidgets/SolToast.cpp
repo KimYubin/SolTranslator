@@ -1,6 +1,6 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinToast.h"
+#include "SolToast.h"
 
 #include <QLabel>
 #include <QTimer>
@@ -11,12 +11,12 @@
 
 #include <qgraphicseffect.h>
 
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
-#include "Widgets/FinTranslatorMainWidget.h"
+#include "Widgets/SolMainWidget.h"
 
 
-class FinToastWidget : public QWidget
+class SolToastWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(int showPos READ getshowPos WRITE setshowPos)
@@ -24,11 +24,11 @@ class FinToastWidget : public QWidget
     Q_PROPERTY(float toastRatio READ getToastRatio WRITE setToastRatio)
 
 public:
-    explicit FinToastWidget(const QString& inMsg
+    explicit SolToastWidget(const QString& inMsg
                           , QWidget* targetWidget
                           , QWidget* parent
                           , const int inExpireTime);
-    ~FinToastWidget() override;
+    ~SolToastWidget() override;
 
 private:
     int getshowPos() const { return _showPos; };
@@ -56,9 +56,9 @@ private:
     float _toastRatio; // 시작, 종료 애니메이션에서 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
 };
 
-#include "FinToast.moc"
+#include "SolToast.moc"
 
-FinToastWidget::FinToastWidget(const QString& inMsg
+SolToastWidget::SolToastWidget(const QString& inMsg
                              , QWidget* targetWidget
                              , QWidget* parent
                              , const int inExpireTime)
@@ -127,10 +127,10 @@ FinToastWidget::FinToastWidget(const QString& inMsg
     show();
 }
 
-FinToastWidget::~FinToastWidget() {
+SolToastWidget::~SolToastWidget() {
 }
 
-void FinToastWidget::setToastRatio(const float inToastRatio)
+void SolToastWidget::setToastRatio(const float inToastRatio)
 {
     _toastRatio = qBound(0.0f, inToastRatio, 2.0f);
 
@@ -172,22 +172,22 @@ void FinToastWidget::setToastRatio(const float inToastRatio)
     _effect->setOpacity(toastOpacity);
 }
 
-FinToast::FinToast(QObject* parent) : QObject(parent)
+SolToast::SolToast(QObject* parent) : QObject(parent)
 {
 }
 
-FinToast::~FinToast() {
+SolToast::~SolToast() {
 }
 
 // todo: 중복 메시지를 모아서 내보내는 기능 추가
 // todo: 여러 메시지가 나올때 채팅창처럼 순차적으로 표기되도록 해야함.
-// FinToastWidget map
-void FinToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration)
+// SolToastWidget map
+void SolToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration)
 {
-    new FinToastWidget(inMessage, nullptr, inToastParent, inDuration);
+    new SolToastWidget(inMessage, nullptr, inToastParent, inDuration);
 }
 
-void FinToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDuration)
+void SolToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDuration)
 {
-    new FinToastWidget(inMessage, inTargetWidget, nullptr, inDuration);
+    new SolToastWidget(inMessage, inTargetWidget, nullptr, inDuration);
 }

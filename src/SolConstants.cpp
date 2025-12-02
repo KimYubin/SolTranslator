@@ -1,8 +1,8 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinConstants.h"
+#include "SolConstants.h"
 
-namespace Fin
+namespace sol
 {
 const QString CmdLineOptions::START_UP_RUN = "startup_run";
 

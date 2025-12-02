@@ -10,8 +10,8 @@
 
 #include "../../external/magic_enum.hpp"
 
-#include "FinConstants.h"
-#include "FinTypes.h"
+#include "SolConstants.h"
+#include "SolTypes.h"
 
 
 const QString Engine_Type = "Engine_Type";
@@ -35,7 +35,7 @@ const QString IsPopupTrWindowTemp = "IsPopupTrWindowTemp";
 
 ConfigManager::ConfigManager()
 {
-    _settings = new QSettings(FinPaths::getConfigPath(), QSettings::IniFormat, this);
+    _settings = new QSettings(SolPaths::getConfigPath(), QSettings::IniFormat, this);
 }
 
 
@@ -85,7 +85,7 @@ double ConfigManager::getOpenAI_Temperature()
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {
-    _settings->setValue(Fin::CmdLineOptions::START_UP_RUN, inStartRun);
+    _settings->setValue(sol::CmdLineOptions::START_UP_RUN, inStartRun);
 
     const QString appName = QCoreApplication::applicationName();
     const QString appPath = QCoreApplication::applicationFilePath();
@@ -94,7 +94,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
     
     if (inStartRun)
     {
-        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Fin::CmdLineOptions::START_UP_RUN);
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + sol::CmdLineOptions::START_UP_RUN);
 
         QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
                                  , QSettings::NativeFormat);
@@ -115,7 +115,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
 bool ConfigManager::getStartRun()
 {
-    return _settings->value(Fin::CmdLineOptions::START_UP_RUN, false).toBool();
+    return _settings->value(sol::CmdLineOptions::START_UP_RUN, false).toBool();
 }
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)
@@ -158,14 +158,14 @@ QRect ConfigManager::getSimplePopupGeometry()
     return _settings->value(SimplePopupGeometry).toRect();
 }
 
-void ConfigManager::setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inPolicy)
+void ConfigManager::setSimplePopupScreenPolicy(const sol::ScreenPopupPolicy& inPolicy)
 {
     setEnumValue(SimplePopupScreenPolicy, inPolicy);
 }
 
-Fin::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
+sol::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
 {
-    return getEnumValue(SimplePopupScreenPolicy, Fin::ScreenPopupPolicy::CursorScreen);
+    return getEnumValue(SimplePopupScreenPolicy, sol::ScreenPopupPolicy::CursorScreen);
 }
 
 void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)

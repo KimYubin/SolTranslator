@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QPointer>
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 
 class QNetworkReply;

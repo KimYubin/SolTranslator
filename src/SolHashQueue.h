@@ -1,13 +1,13 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINHASHQUEUE_H
-#define FINHASHQUEUE_H
+#ifndef SOLHASHQUEUE_H
+#define SOLHASHQUEUE_H
 #include <unordered_map>
 
 #include <QString>
 #include <QHashFunctions>
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 
 /**
@@ -246,4 +246,4 @@ struct cache_ky_eq
 using cache_queue = hash_queue<TextCacheKey, QString, cache_ky_hasher, cache_ky_eq>;
 
 
-#endif //FINHASHQUEUE_H
+#endif //SOLHASHQUEUE_H

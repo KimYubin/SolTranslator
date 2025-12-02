@@ -8,13 +8,13 @@
 #include <QScrollArea>
 #include <QWidget>
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
 class QGroupBox;
-class FinTranslatorCore;
+class SolTranslatorCore;
 class IOptionPage;
 
 class IOptionWidget : public QWidget

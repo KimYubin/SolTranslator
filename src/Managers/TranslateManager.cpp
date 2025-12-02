@@ -10,7 +10,7 @@
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
-#include "FinTranslatorCore.h"
+#include "SolTranslatorCore.h"
 
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
@@ -20,7 +20,7 @@
 #include "Widgets/PopupTranslateWidget.h"
 
 
-TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(parent)
+TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(parent)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
 }
@@ -28,7 +28,7 @@ TranslateManager::TranslateManager(FinTranslatorCore* parent): AbstractManager(p
 TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;
-    const EngineType currentEngine = finConfig.getCurrentEngineType();
+    const EngineType currentEngine = solConfig.getCurrentEngineType();
     switch (currentEngine)
     {
     case EngineType::Default: // break;
@@ -96,7 +96,7 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
     {
         translateText(TranslateRequestInfo{
             simple
-          , finConfig.getCurrentEngineType()
+          , solConfig.getCurrentEngineType()
           , inOriginText
           , inTextStyle
           , inSourceLang

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(FinTranslator VERSION 0.1 LANGUAGES CXX)
+project(SolTranslator VERSION 0.1 LANGUAGES CXX)
 
 
 set(CMAKE_AUTOUIC ON)
@@ -34,7 +34,7 @@ file(GLOB_RECURSE PROJECT_SOURCES
 )
 
 
-qt_add_executable(FinTranslator
+qt_add_executable(SolTranslator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
@@ -42,16 +42,16 @@ qt_add_executable(FinTranslator
         src/Widgets/HistoryModel.h
         src/SubWidgets/ResultTextEdit.cpp
         src/SubWidgets/ResultTextEdit.h
-        src/FinDatabase.cpp
-        src/FinDatabase.h
-        src/FinLog.cpp
-        src/FinLog.h
+        src/SolDatabase.cpp
+        src/SolDatabase.h
+        src/SolLog.cpp
+        src/SolLog.h
 )
 
 if (WIN32)
     #! [appicon_windows]
-    set(app_icon_resource_windows "resource/image/icon/FinTranslator.rc")
-    target_sources(FinTranslator PRIVATE ${app_icon_resource_windows})
+    set(app_icon_resource_windows "resource/image/icon/SolTranslator.rc")
+    target_sources(SolTranslator PRIVATE ${app_icon_resource_windows})
     #! [appicon_windows]
 endif ()
 
@@ -59,13 +59,13 @@ endif ()
 # Define target properties for Android with Qt 6 as:
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 if (ANDROID)
-    set_property(TARGET FinTranslator APPEND PROPERTY
+    set_property(TARGET SolTranslator APPEND PROPERTY
             QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
     )
 endif ()
 
-target_include_directories(FinTranslator PUBLIC src/)
-target_link_libraries(FinTranslator PRIVATE
+target_include_directories(SolTranslator PUBLIC src/)
+target_link_libraries(SolTranslator PRIVATE
         Qt6::Widgets
         Qt6::Svg
         Qt6::SvgWidgets
@@ -100,11 +100,11 @@ else ()
     target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_x11.cpp)
 endif ()
 
-target_link_libraries(FinTranslator PRIVATE QHotkey::QHotkey)
+target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
 
 
-#[[
+##[[
 #### 현지화
 qt_standard_project_setup(
         I18N_SOURCE_LANGUAGE ko
@@ -114,15 +114,15 @@ file(GLOB_RECURSE SOURCES_TO_TRANSLATE
         "src/*.cpp"
         "src/*.h"
 )
-qt_add_translations(FinTranslator
-        TS_FILE_BASE fin
+qt_add_translations(SolTranslator
+        TS_FILE_BASE sol
         TS_OUTPUT_DIRECTORY localization
         QM_OUTPUT_DIRECTORY translations
         MERGE_QT_TRANSLATIONS
         SOURCES ${SOURCES_TO_TRANSLATE}
 )
 
-add_dependencies(FinTranslator update_translations)
+add_dependencies(SolTranslator update_translations)
 # ]]
 
 
@@ -131,9 +131,9 @@ add_dependencies(FinTranslator update_translations)
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if (${QT_VERSION} VERSION_LESS 6.1.0)
-    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.FinTranslator)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.SolTranslator)
 endif ()
-set_target_properties(FinTranslator PROPERTIES
+set_target_properties(SolTranslator PROPERTIES
         ${BUNDLE_ID_OPTION}
         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -142,12 +142,12 @@ set_target_properties(FinTranslator PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS FinTranslator
+install(TARGETS SolTranslator
         BUNDLE DESTINATION .
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if (QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(FinTranslator)
+    qt_finalize_executable(SolTranslator)
 endif ()

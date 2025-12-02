@@ -2,6 +2,6 @@
 
 #include "AsyncManager.h"
 
-AsyncManager::AsyncManager(FinTranslatorCore* parent) : AbstractManager(parent)
+AsyncManager::AsyncManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
 }

@@ -10,8 +10,8 @@
 #include <qstringlistmodel.h>
 
 #include "Managers/ConfigManager.h"
-#include "FinTranslatorCore.h"
-#include "Widgets/FinTranslatorMainWidget.h"
+#include "SolTranslatorCore.h"
+#include "Widgets/SolMainWidget.h"
 #include "SubWidgets/DropdownMenu.h"
 
 #include "ui_EngineOptionWidget.h"
@@ -45,7 +45,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     {
         const int payload    = ui->enginSelectCombo->itemData(inIdx).toInt();
         const EngineType eg  = static_cast<EngineType>(payload);
-        const QString apiKey = finConfig.getAPIKey(eg);
+        const QString apiKey = solConfig.getAPIKey(eg);
         const int apiSize    = apiKey.size();
 
         QString phStr;
@@ -76,11 +76,11 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         const int payload   = ui->enginSelectCombo->currentData().toInt();
         const EngineType eg = static_cast<EngineType>(payload);
 
-        finConfig.setAPIKey(eg, inputApiKey);
+        solConfig.setAPIKey(eg, inputApiKey);
     });
 
 
-    ui->enginSelectCombo->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
+    ui->enginSelectCombo->setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
 
 
     // AI 옵션
@@ -97,10 +97,10 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         spinBox->setRange(0.0, 1.5);
         spinBox->setDecimals(2);
         spinBox->setSingleStep(0.1);
-        spinBox->setValue(finConfig.getOpenAI_Temperature());
+        spinBox->setValue(solConfig.getOpenAI_Temperature());
         connect(spinBox, &QDoubleSpinBox::valueChanged, this, [](const double inTemper)
         {
-            finConfig.setOpenAI_Temperature(inTemper);
+            solConfig.setOpenAI_Temperature(inTemper);
         });
 
 

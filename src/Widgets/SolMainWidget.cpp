@@ -1,6 +1,6 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinTranslatorMainWidget.h"
+#include "SolMainWidget.h"
 
 #include <QButtonGroup>
 #include <QDir>
@@ -14,12 +14,12 @@
 #include <QTimer>
 #include <qevent.h>
 
-#include "FinTranslatorCore.h"
-#include "FinUtilibrary.h"
+#include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
 #include "TextEditTranslateWidget.h"
 #include "HistoryWidget.h"
 
-#include "SubWidgets/FinToolTip.h"
+#include "SubWidgets/SolToolTip.h"
 
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -28,23 +28,23 @@
 
 #include "SubWidgets/DropdownMenu.h"
 
-#include "Widgets/ui_FinTranslatorMainWidget.h"
+#include "Widgets/ui_SolMainWidget.h"
 
 
-FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
-    : IFinWidget(parent)
-    , ui(new Ui::FinTranslatorMainWidget)
+SolMainWidget::SolMainWidget(QWidget* parent)
+    : ISolWidget(parent)
+    , ui(new Ui::SolMainWidget)
 {
     qApp->setQuitOnLastWindowClosed(false);
 
     ui->setupUi(this);
 
-    setWindowTitle(tr("FinTranslator"));
+    setWindowTitle(tr("SolTranslator"));
 
     setLayout(ui->mainLayout);
 
-    _finIcon = QIcon(":/img/icon_img");
-    qApp->setWindowIcon(_finIcon);
+    _solIcon = QIcon(":/img/icon_img");
+    qApp->setWindowIcon(_solIcon);
 
     ui->tabBarLayout->setSpacing(20);
 
@@ -116,14 +116,14 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     }
 
     _engineSelector->setEditable(false);
-    _engineSelector->setCurrentIndex(static_cast<int>(finConfig.getCurrentEngineType()));
-    FinTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
+    _engineSelector->setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
+    SolTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
 
     connect(_engineSelector, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
     {
         const int payload      = _engineSelector->itemData(inIdx).toInt();
         const EngineType curEg = static_cast<EngineType>(payload);
-        finConfig.setCurrentEngineType(curEg);
+        solConfig.setCurrentEngineType(curEg);
     });
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignmentFlag::AlignRight);
@@ -135,7 +135,7 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     ui->settingsButton->setText(tr("설정"));
     ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
-    connect(ui->settingsButton, &QAbstractButton::clicked, this, &FinTranslatorMainWidget::showSettingsWidget);
+    connect(ui->settingsButton, &QAbstractButton::clicked, this, &SolMainWidget::showSettingsWidget);
 
 
     // ~====================
@@ -147,18 +147,18 @@ FinTranslatorMainWidget::FinTranslatorMainWidget(QWidget* parent)
     QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_W), this);
     connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
 
-    finConfig.restoreWidgetGeometry(this);
-    connect(qApp, &QCoreApplication::aboutToQuit, this, &FinTranslatorMainWidget::onAppQuitEvent);
+    solConfig.restoreWidgetGeometry(this);
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &SolMainWidget::onAppQuitEvent);
 
     setTabOrder({ui->mainStackedWidget, textTabButton, _engineSelector, ui->settingsButton});
 }
 
-FinTranslatorMainWidget::~FinTranslatorMainWidget()
+SolMainWidget::~SolMainWidget()
 {
     delete ui;
 }
 
-void FinTranslatorMainWidget::setVisible(bool visible)
+void SolMainWidget::setVisible(bool visible)
 {
     if (visible)
     {
@@ -171,7 +171,7 @@ void FinTranslatorMainWidget::setVisible(bool visible)
     QWidget::setVisible(visible);
 }
 
-void FinTranslatorMainWidget::showSettingsWidget()
+void SolMainWidget::showSettingsWidget()
 {
     if (_settingsWidget.isNull())
     {
@@ -193,7 +193,7 @@ void FinTranslatorMainWidget::showSettingsWidget()
     }
 }
 
-void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
+void SolMainWidget::closeEvent(QCloseEvent* event)
 {
     if (event->spontaneous() == false || isVisible() == false)
     {
@@ -201,15 +201,15 @@ void FinTranslatorMainWidget::closeEvent(QCloseEvent* event)
     }
     if (_trayIcon->isVisible())
     {
-        if (finConfig.isFirstCloseToTray())
+        if (solConfig.isFirstCloseToTray())
         {
-            finConfig.setFirstCloseToTray();
+            solConfig.setFirstCloseToTray();
             _trayIcon->showMessage(tr("트레이로 최소화되었습니다.")
-                                 , tr("Fin.번역기가 아직 실행 중입니다.\n"
+                                 , tr("Sol 번역기가 아직 실행 중입니다.\n"
                                        "아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.")
                                  , QSystemTrayIcon::NoIcon, 20'000);
         }
-        finConfig.saveWidgetGeometry(this);
+        solConfig.saveWidgetGeometry(this);
         hide();
         event->ignore();
     }
@@ -250,11 +250,11 @@ QMessageBox::StandardButton showNewMessageBox(QWidget* inParent
     return msgBox.standardButton(msgBox.clickedButton());
 }
 
-void FinTranslatorMainWidget::quitApp()
+void SolMainWidget::quitApp()
 {
     const auto reply = showNewMessageBox(this
                                        , QMessageBox::Icon::Question
-                                       , tr("Fin.Translator")
+                                       , tr("Sol Translator")
                                        , tr("정말 종료할까요?")
                                        , {{tr("종료"), QMessageBox::Yes}, {tr("취소"), QMessageBox::Cancel}}
                                        , QMessageBox::Cancel);
@@ -267,12 +267,12 @@ void FinTranslatorMainWidget::quitApp()
     
 }
 
-void FinTranslatorMainWidget::onAppQuitEvent() const
+void SolMainWidget::onAppQuitEvent() const
 {
-    finConfig.saveWidgetGeometry(this);
+    solConfig.saveWidgetGeometry(this);
 }
 
-void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
+void SolMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     // 클릭시 마우스 위치 저장합니다.
     // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다. 
@@ -314,7 +314,7 @@ void FinTranslatorMainWidget::iconActivated(QSystemTrayIcon::ActivationReason re
     }
 }
 
-void FinTranslatorMainWidget::createActions()
+void SolMainWidget::createActions()
 {
     _miniToTrayAction = new QAction(tr("트레이로 최소화(&M)"), this);
     connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
@@ -323,13 +323,13 @@ void FinTranslatorMainWidget::createActions()
     connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
 
     _settingAction = new QAction(tr("설정(&S)"), this);
-    connect(_settingAction, &QAction::triggered, this, &FinTranslatorMainWidget::showSettingsWidget);
+    connect(_settingAction, &QAction::triggered, this, &SolMainWidget::showSettingsWidget);
     
     _quitAction = new QAction(tr("종료(&Q)"), this);
-    connect(_quitAction, &QAction::triggered, this, &FinTranslatorMainWidget::quitApp, Qt::QueuedConnection);
+    connect(_quitAction, &QAction::triggered, this, &SolMainWidget::quitApp, Qt::QueuedConnection);
 }
 
-void FinTranslatorMainWidget::createTrayIcon()
+void SolMainWidget::createTrayIcon()
 {
     _trayIconMenu = new QMenu(this);
     _trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);
@@ -344,10 +344,10 @@ void FinTranslatorMainWidget::createTrayIcon()
     _trayIconMenu->addAction(_quitAction);
 
     _trayIcon = new QSystemTrayIcon(this);
-    _trayIcon->setIcon(_finIcon);
+    _trayIcon->setIcon(_solIcon);
     _trayIcon->setContextMenu(_trayIconMenu);
     _trayIcon->setVisible(true);
-    _trayIcon->setToolTip(tr("FinTranslator"));
+    _trayIcon->setToolTip(tr("SolTranslator"));
 
 
     _doubleClickTimer = new QTimer(this);
@@ -358,12 +358,12 @@ void FinTranslatorMainWidget::createTrayIcon()
         popupTrayMenu();
     });
 
-    connect(_trayIcon, &QSystemTrayIcon::activated, this, &FinTranslatorMainWidget::iconActivated);
+    connect(_trayIcon, &QSystemTrayIcon::activated, this, &SolMainWidget::iconActivated);
 
     _trayIcon->show();
 }
 
-void FinTranslatorMainWidget::popupTrayMenu()
+void SolMainWidget::popupTrayMenu()
 {
     if (_trayIcon && _trayIcon->contextMenu())
     {
@@ -380,8 +380,8 @@ void FinTranslatorMainWidget::popupTrayMenu()
         QRect popupGeo = QRect(popupPos, menuSize);
 
         // 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정.
-        const QRect availableGeo = Fin::availableGeometryAt(_prevMousePos);
-        popupGeo = Fin::moveToInside(availableGeo, popupGeo);
+        const QRect availableGeo = sol::availableGeometryAt(_prevMousePos);
+        popupGeo = sol::moveToInside(availableGeo, popupGeo);
 
         _trayIcon->contextMenu()->popup(popupGeo.topLeft());
     }

@@ -1,6 +1,6 @@
 ﻿<RCC>
     <qresource prefix="/theme">
-        <file>dark/FinTranslatorMainWidget_Main.qss</file>
+        <file>dark/SolMainWidget_Main.qss</file>
         <file>dark/TextEditTranslate.qss</file>
         <file>dark/Settings.qss</file>
         <file>dark/SettingCard.qss</file>

@@ -5,8 +5,8 @@
 #include <QApplication>
 #include <QDir>
 
-#include "Widgets/IFinWidget.h"
-#include "FinUtilibrary.h"
+#include "Widgets/ISolWidget.h"
+#include "SolUtilibrary.h"
 
 #define QSS_PALETTE_COLOR(colorName) \
 private: \
@@ -16,13 +16,13 @@ private: \
     QColor _##colorName;
 
 
-class FinPalette : public IFinWidget
+class SolPalette : public ISolWidget
 {
     Q_OBJECT
 
 public:
-    explicit FinPalette(QWidget* parent = nullptr);
-    ~FinPalette() override;
+    explicit SolPalette(QWidget* parent = nullptr);
+    ~SolPalette() override;
 
     void applyThemePrivate(const QString& inThemeName = "dark");
 
@@ -51,7 +51,7 @@ private:
 
 #include "StyleManger.moc"
 
-FinPalette::FinPalette(QWidget* parent): IFinWidget(parent)
+SolPalette::SolPalette(QWidget* parent): ISolWidget(parent)
 {
     _windowColor          = QColor(53, 53, 53);
     _windowTextColor      = Qt::white;
@@ -69,7 +69,7 @@ FinPalette::FinPalette(QWidget* parent): IFinWidget(parent)
     _disableColor = QColor(76, 76, 76);
 }
 
-FinPalette::~FinPalette() {
+SolPalette::~SolPalette() {
 }
 
 StyleManger::StyleManger(QObject* parent) : QObject(parent)
@@ -81,12 +81,12 @@ StyleManger::~StyleManger() {
 
 void StyleManger::applyTheme(const QString& inThemeName)
 {
-    FinPalette finManger;
+    SolPalette solPalette;
 
-    finManger.applyThemePrivate(inThemeName);
+    solPalette.applyThemePrivate(inThemeName);
 }
 
-void FinPalette::applyThemePrivate(const QString& inThemeName)
+void SolPalette::applyThemePrivate(const QString& inThemeName)
 {
     // hide 상태에서도 qss의 qproperty 항목 로드를 보장하기 위해 스타일 적용 전 호출.
     ensurePolished();
@@ -140,7 +140,7 @@ void FinPalette::applyThemePrivate(const QString& inThemeName)
         qApp->setStyleSheet(newStyleSheet);
         updatePaletteColor();
 
-        Fin::noHintingFont();
+        sol::noHintingFont();
 
         QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)
@@ -150,7 +150,7 @@ void FinPalette::applyThemePrivate(const QString& inThemeName)
     }
 }
 
-QString FinPalette::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
+QString SolPalette::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
 {
     QString res = templateTheme;
     for (const auto& [colorName, colorValue] : colors)
@@ -160,7 +160,7 @@ QString FinPalette::applyThemeColor(const QString& templateTheme, const std::uno
     return res;
 }
 
-void FinPalette::updatePaletteColor() const
+void SolPalette::updatePaletteColor() const
 {
     QPalette qPalette;
 

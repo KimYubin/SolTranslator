@@ -4,7 +4,7 @@
 #define ENGINEOPTIONWIDGET_H
 #include "IOptionWidget.h"
 
-class FinTranslatorCore;
+class SolTranslatorCore;
 QT_BEGIN_NAMESPACE
 namespace Ui
 {

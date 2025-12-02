@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTYPES_H
-#define FINTYPES_H
+#ifndef SOLTYPES_H
+#define SOLTYPES_H
 #include <QString>
 #include <QObject>
 #include <QPointer>
@@ -11,7 +11,7 @@ class ITranslateWidget;
 enum class EngineType;
 enum class LangType;
 
-class FinTypes
+class SolTypes
 {
 };
 
@@ -23,10 +23,10 @@ public:
 
 
 /** 유저 파일 경로 */
-struct FinPaths
+struct SolPaths
 {
 private:
-    static QString getFinAppPath(const QString& inSecondaryDir, const QString& inFilePath);
+    static QString getSolAppPath(const QString& inSecondaryDir, const QString& inFilePath);
 
 public:
     static QString getLogPath();
@@ -50,7 +50,7 @@ constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToI
     return static_cast<std::underlying_type_t<E>>(e);
 }
 
-namespace Fin
+namespace sol
 {
 Q_NAMESPACE
 
@@ -191,7 +191,7 @@ enum class LangType
   , szl, sd, si, sk, sl, so, es, su, sw, ss, sv, tg, ta, tt, te, tet, th, ti, ts, tn, tr, tk, ak, uk, ur, ug, uz, vi, cy, xh, yi, yo, yua, zu, Size
 };
 
-enum FinWidgetMode
+enum SolWidgetMode
 {
     None         = 0x00000000
   , PopupMode    = 0x00000001
@@ -199,8 +199,8 @@ enum FinWidgetMode
   , AlwaysOn     = 0x00000004
 };
 
-Q_DECLARE_FLAGS(FinWidgetModeFlags, FinWidgetMode)
-Q_DECLARE_OPERATORS_FOR_FLAGS(FinWidgetModeFlags)
+Q_DECLARE_FLAGS(SolWidgetModeFlags, SolWidgetMode)
+Q_DECLARE_OPERATORS_FOR_FLAGS(SolWidgetModeFlags)
 
 enum class OptionPriority
 {
@@ -216,4 +216,4 @@ enum class OptionPriority
 
 
 
-#endif //FINTYPES_H
+#endif //SOLTYPES_H

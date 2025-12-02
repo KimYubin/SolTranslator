@@ -1,12 +1,12 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTRANSLATOR_HISTORYMODEL_H
-#define FINTRANSLATOR_HISTORYMODEL_H
+#ifndef SOLTRANSLATOR_HISTORYMODEL_H
+#define SOLTRANSLATOR_HISTORYMODEL_H
 
 #include <QAbstractListModel>
 #include <deque>
 
-#include "FinTypes.h"
+#include "SolTypes.h"
 
 
 struct HistoryInfo
@@ -50,4 +50,4 @@ private:
 };
 
 
-#endif //FINTRANSLATOR_HISTORYMODEL_H
+#endif //SOLTRANSLATOR_HISTORYMODEL_H

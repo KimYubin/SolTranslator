@@ -1,6 +1,6 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include "FinUtilibrary.h"
+#include "SolUtilibrary.h"
 
 #include <QApplication>
 #include <QWidget>
@@ -8,7 +8,7 @@
 #include <QScreen>
 
 
-bool Fin::isThis(const QObject* inThis, const QObject* inOther)
+bool sol::isThis(const QObject* inThis, const QObject* inOther)
 {
     bool bIsOtherThis = false;
 
@@ -24,7 +24,7 @@ bool Fin::isThis(const QObject* inThis, const QObject* inOther)
     }
     return bIsOtherThis;
 }
-namespace Fin::Internal
+namespace sol::Internal
 {
 
 template <typename T>
@@ -54,17 +54,17 @@ void noHintingFont(T* inOutWidget)
 
 }
 
-void Fin::noHintingFont(QWidget* inOutWidget)
+void sol::noHintingFont(QWidget* inOutWidget)
 {
-    Fin::Internal::noHintingFont(inOutWidget);
+    sol::Internal::noHintingFont(inOutWidget);
 }
 
-void Fin::noHintingFont()
+void sol::noHintingFont()
 {
-    Fin::Internal::noHintingFont(qApp);
+    sol::Internal::noHintingFont(qApp);
 }
 
-QRect Fin::availableGeometryAt(const QPoint& inPoint)
+QRect sol::availableGeometryAt(const QPoint& inPoint)
 {
     const QScreen* cursorScreen = qApp->screenAt(inPoint);
     const QScreen* targetScreen = cursorScreen ? cursorScreen : qApp->primaryScreen();
@@ -72,7 +72,7 @@ QRect Fin::availableGeometryAt(const QPoint& inPoint)
     return targetScreen ? targetScreen->availableGeometry() : QRect();
 }
 
-QRect Fin::moveToInside(const QRect& outerRect, const QRect& innerRect)
+QRect sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
 {
     QRect res = innerRect;
     if (outerRect.left() > res.left())
@@ -95,7 +95,7 @@ QRect Fin::moveToInside(const QRect& outerRect, const QRect& innerRect)
     return res;
 }
 
-QString Fin::QStrFromStdView(const std::string_view& inStrView)
+QString sol::QStrFromStdView(const std::string_view& inStrView)
 {
     // string_view -> std::str -> QString
     return QString::fromStdString(std::string{inStrView});

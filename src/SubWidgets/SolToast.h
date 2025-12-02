@@ -1,17 +1,17 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#ifndef FINTOAST_H
-#define FINTOAST_H
+#ifndef SOLTOAST_H
+#define SOLTOAST_H
 
 #include <QObject>
 
 
-class FinToast : public QObject
+class SolToast : public QObject
 {
     Q_OBJECT
 
-    explicit FinToast(QObject* parent = nullptr);
-    ~FinToast() override;
+    explicit SolToast(QObject* parent = nullptr);
+    ~SolToast() override;
 
 public:
     /**
@@ -37,4 +37,4 @@ public:
 };
 
 
-#endif //FINTOAST_H
+#endif //SOLTOAST_H

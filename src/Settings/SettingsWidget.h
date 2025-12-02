@@ -3,7 +3,7 @@
 #ifndef SETTINGSWIDGET_H
 #define SETTINGSWIDGET_H
 
-#include "Widgets/IFinWidget.h"
+#include "Widgets/ISolWidget.h"
 
 #include <QWidget>
 
@@ -16,7 +16,7 @@ class SettingsWidget;
 
 QT_END_NAMESPACE
 
-class SettingsWidget : public IFinWidget
+class SettingsWidget : public ISolWidget
 {
     Q_OBJECT
 

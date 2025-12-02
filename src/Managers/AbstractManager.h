@@ -5,14 +5,14 @@
 #include <QObject>
 
 
-class FinTranslatorCore;
+class SolTranslatorCore;
 
 class AbstractManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AbstractManager(FinTranslatorCore* parent);
+    explicit AbstractManager(SolTranslatorCore* parent);
 
 };
 

@@ -7,8 +7,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-#include "FinConstants.h"
-#include "FinTypes.h"
+#include "SolConstants.h"
+#include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
@@ -20,8 +20,8 @@ FinPointTrUnit::FinPointTrUnit(const TranslateRequestInfo& inTranslateRequestInf
 void FinPointTrUnit::chatTranslate(const bool bIsStreaming)
 {
     const QUrl url(bDebugMode
-                       ? Fin::URLs::FIN_POINT_DEBUG
-                       : Fin::URLs::FIN_POINT);
+                       ? sol::URLs::FIN_POINT_DEBUG
+                       : sol::URLs::FIN_POINT);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 

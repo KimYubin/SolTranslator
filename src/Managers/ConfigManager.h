@@ -5,13 +5,13 @@
 #include <QObject>
 #include <QSettings>
 
-#include "FinTypes.h"
-#include "FinUtilibrary.h"
+#include "SolTypes.h"
+#include "SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 
 
-#define finConfig ConfigManager::instance()
+#define solConfig ConfigManager::instance()
 
 /**
  * 프로그램의 구성, 설정 등의 상태 정보를 저장 및 관리합니다.
@@ -61,8 +61,8 @@ public:
 
     void setSimplePopupGeometry(const QRect& inGeo);
     QRect getSimplePopupGeometry();
-    void setSimplePopupScreenPolicy(const Fin::ScreenPopupPolicy& inPolicy);
-    Fin::ScreenPopupPolicy getSimplePopupScreenPolicy();
+    void setSimplePopupScreenPolicy(const sol::ScreenPopupPolicy& inPolicy);
+    sol::ScreenPopupPolicy getSimplePopupScreenPolicy();
 
     /** 창의 위치와 크기를 기억 유무를 저장합니다. */
     void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);
@@ -121,14 +121,14 @@ template <typename EnumType>
     requires std::is_enum_v<EnumType>
 void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inVal)
 {
-    _settings->setValue(inKey, Fin::enumToQStr(inVal));
+    _settings->setValue(inKey, sol::enumToQStr(inVal));
 }
 
 template <typename EnumType>
         requires std::is_enum_v<EnumType>
 EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
 {
-    const QString defaultQStr = Fin::enumToQStr(inDefaultVal);
+    const QString defaultQStr = sol::enumToQStr(inDefaultVal);
 
     const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
 

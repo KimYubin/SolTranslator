@@ -1,6 +1,6 @@
 /* -------------------------------- */
 /* Palette Color*/
-FinPalette
+SolPalette
 {
   qproperty-windowColor: rgba(53, 53, 53, 1);
   qproperty-windowTextColor: white;

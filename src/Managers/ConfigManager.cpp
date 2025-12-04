@@ -46,7 +46,7 @@ void ConfigManager::setCurrentEngineType(EngineType inEngineType)
 
 EngineType ConfigManager::getCurrentEngineType()
 {
-    return getEnumValue(Engine_Type, EngineType::FinPoint);
+    return getEnumValue(Engine_Type, EngineType::Default);
 }
 
 

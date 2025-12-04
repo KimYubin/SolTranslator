@@ -5,8 +5,10 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include <QTextDocument>
 
 #include "SolConstants.h"
+#include "SolLog.h"
 
 GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
                          , TranslateManager* parent)
@@ -15,10 +17,17 @@ GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
 
 void GoogleTrUnit::requestTranslate()
 {
+    if (_trReqData.textFormat != TextStyle::PlainText)
+    {
+        QTextDocument txtDoc;
+        txtDoc.setMarkdown(_trReqData.originText);
+        _trReqData.originText = txtDoc.toPlainText();
+    }
+
     const QUrl url = QString(sol::URLs::GOOGLE).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
-      , QUrl::toPercentEncoding(_trReqData.originText, "()")); // ()괄호는 인코딩 변경 안합니다.
+      , QUrl::toPercentEncoding(_trReqData.originText, "()")); // '()'괄호는 인코딩 대상 제외.
 
     QNetworkRequest request(url);
 
@@ -34,14 +43,22 @@ void GoogleTrUnit::replyTranslateFinished()
     const QByteArray responseData    = _reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
     const QJsonArray jsonArr         = responseJson.array();
-    if (jsonArr.isEmpty() == false)
+    if (jsonArr.isEmpty())
     {
-        const QString replyTranslatedText = jsonArr[0].toArray()[0].toArray()[0].toString();
+        solDebug << "invalid reply";
+        return;
+    }
 
-        finishTranslateRequest(replyTranslatedText);
-    }
-    else
+    QString replyTranslatedText;
+    QJsonArray translateTextArray = jsonArr[0].toArray();
+    for (QJsonValueRef trTextData : translateTextArray)
     {
-        qDebug() << "invalid reply";
+        replyTranslatedText += trTextData.toArray()[0].toString();
     }
+
+    // 출발 언어 코드
+    //QString originLangStr = jsonArr[2].toString();
+    //QLocale locale{originLangStr};
+
+    finishTranslateRequest(replyTranslatedText);
 }

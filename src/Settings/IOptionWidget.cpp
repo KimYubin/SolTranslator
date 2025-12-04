@@ -9,6 +9,8 @@
 
 #include <unordered_set>
 
+#include "SolLog.h"
+
 IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {
     _outScrollLayout = new QHBoxLayout(this);

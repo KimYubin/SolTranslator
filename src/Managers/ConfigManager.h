@@ -82,7 +82,8 @@ public:
 
     /** 메인 창을 처음 닫은 후 호출합니다.*/
     void setFirstCloseToTray();
-    /** 메인 창을 처음 닫았나요? 트레이 아이콘으로 숨겨졌음을 안내해야 합니다. */
+
+    /** 메인 창을 처음 닫았나요? 그렇다면, 앱이 트레이로 숨겨졌음을 안내해야 합니다. */
     bool isFirstCloseToTray();
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;

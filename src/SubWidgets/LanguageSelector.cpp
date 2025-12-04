@@ -15,6 +15,7 @@
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 #include "KeySelectionList.h"
+#include "SolLog.h"
 
 #include "Managers/ConfigManager.h"
 
@@ -331,7 +332,7 @@ QPoint LanguageSelectorMenuPrivate::getTargetRelPos() const
 {
     if (_sizeWidget.isNull())
     {
-        qDebug() << "_sizeWidget is not valid.";
+        solDebug << "_sizeWidget is not valid.";
         return QPoint(0, 0);
     }
 
@@ -342,7 +343,7 @@ QSize LanguageSelectorMenuPrivate::getTargetSize() const
 {
     if (_sizeWidget.isNull())
     {
-        qDebug() << "_sizeWidget is not valid.";
+        solDebug << "_sizeWidget is not valid.";
         return QSize(200, 300);
     }
 

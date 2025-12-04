@@ -8,6 +8,7 @@
 #include <QScrollBar>
 #include <QTimer>
 
+#include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolMainWidget.h"
 #include "SolTypes.h"
@@ -78,7 +79,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         const LangType targetLangType = solConfig.getTextTargetLang();
         if (srcLangType == LangType::AUTO)
         {
-            qDebug() << "swap button is clicked, when source Language Type is AUTO.";
+            solDebug << "swap button is clicked, when source Language Type is AUTO.";
             return;
         }
 

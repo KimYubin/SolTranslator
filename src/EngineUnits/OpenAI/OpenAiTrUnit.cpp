@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 
 #include "SolConstants.h"
+#include "SolLog.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -80,7 +81,7 @@ void OpenAiTrUnit::onReadyRead()
             QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonStr.toUtf8(), &parseError);
             if (parseError.error != QJsonParseError::NoError)
             {
-                qDebug() << parseError.errorString();
+                solDebug << parseError.errorString();
                 return;
             }
 
@@ -93,8 +94,8 @@ void OpenAiTrUnit::onReadyRead()
             if (choicesArr.isEmpty())
             {
                 const QJsonObject errorObj = obj.value("error").toObject();
-                qDebug() << "openAI errorMsg:" << errorObj.value("message").toString();
-                qDebug() << "openAI errorType:" << errorObj.value("type").toString();
+                solDebug << "openAI errorMsg:" << errorObj.value("message").toString();
+                solDebug << "openAI errorType:" << errorObj.value("type").toString();
                 return;
             }
 
@@ -103,7 +104,7 @@ void OpenAiTrUnit::onReadyRead()
             QJsonValue delta = choices.toObject().value("delta");
             if (delta.isUndefined())
             {
-                qDebug() << "openAI not detected \'delta\'";
+                solDebug << "openAI not detected \'delta\'";
                 return;
             }
 
@@ -112,8 +113,8 @@ void OpenAiTrUnit::onReadyRead()
             {
                 if (choices.toObject().value("finish_reason").toString() != "stop")
                 {
-                    qDebug() << "openAI not detected \'content\'";
-                    qDebug() << "openAI last chunk:'" << chunk;
+                    solDebug << "openAI not detected \'content\'";
+                    solDebug << "openAI last chunk:'" << chunk;
                 }
                 return;
             }

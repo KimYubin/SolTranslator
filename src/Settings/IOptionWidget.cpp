@@ -170,7 +170,7 @@ IOptionPage* IOptionWidget::getOptionPage() const
 {
     if (_optionPage.isNull())
     {
-        qDebug() << "option page is null";
+        solDebug << "option page is null";
     }
 
     return _optionPage.get();

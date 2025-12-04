@@ -10,6 +10,7 @@
 #include <QString>
 #include <QtConcurrent>
 
+#include "SolLog.h"
 #include "SolUtilibrary.h"
 
 
@@ -44,7 +45,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
     {
         if (dataWatcher->future().result() == false)
         {
-            qDebug() << "failed to save cache";
+            solDebug << "failed to save cache";
         }
         dataWatcher->deleteLater();
     });

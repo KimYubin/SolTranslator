@@ -25,7 +25,7 @@ void TranslateUnit::executeTextTranslation()
 {
     if (_trReqData.originText.isEmpty())
     {
-        qDebug()<<"translate request text is empty";
+        solDebug << "translate request text is empty";
         
         completeTranslatedText(_trReqData.originText);
         return;
@@ -83,7 +83,7 @@ void TranslateUnit::onReplyFinished()
         }
         else
         {
-            qDebug() << "Error: " << _reply->errorString();
+            solDebug << "Error: " << _reply->errorString();
         }
         _reply->deleteLater();
     }
@@ -94,7 +94,7 @@ void TranslateUnit::abortTranslate()
 {
     if (_reply.isNull() == false)
     {
-        qDebug() << "abort translate request";
+        solDebug << "abort translate request";
         _reply->abort();
 
         _trReqData.streamContext              = nullptr;

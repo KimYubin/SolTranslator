@@ -25,6 +25,7 @@
 
 #include <qevent.h>
 
+#include "SolLog.h"
 #include "SolUtilibrary.h"
 
 #include "Managers/ConfigManager.h"
@@ -553,7 +554,7 @@ void PopupTranslateWidget::onAlwaysOnToggle(bool checked)
                              , SWP_NOMOVE | SWP_NOSIZE);
     if (bIsSet == false)
     {
-        qDebug() << "AlwaysOn" << (checked ? "Top" : "NoTop") << "set failed";
+        solDebug << "AlwaysOn" << (checked ? "Top" : "NoTop") << "set failed";
     }
 #else
     if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != checked)

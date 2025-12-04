@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 
 #include "SolConstants.h"
+#include "SolLog.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -66,7 +67,7 @@ void FinPointTrUnit::onReadyRead()
             }
             else
             {
-                qDebug() << parseError.errorString();
+                solDebug << parseError.errorString();
             }
         }
     }

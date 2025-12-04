@@ -8,6 +8,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include "SolLog.h"
+
 std::pair<bool, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
@@ -29,14 +31,14 @@ QSqlError SolSql::execSQL(const QString& inFilePath)
 
     if (isFileOpen == false)
     {
-        qDebug() << "not found sql files";
+        solDebug << "not found sql files";
         return QSqlError("Error executing SQL", "Could not find SQL file: " + inFilePath, QSqlError::StatementError);
     }
 
     QSqlQuery sqlQuery(sqlStr);
     if (sqlQuery.exec() == false)
     {
-        qDebug() << "Error executing SQL";
+        solDebug << "Error executing SQL";
         return QSqlError("Error executing SQL", "Could not execute sql: " + inFilePath, QSqlError::StatementError);
     }
 

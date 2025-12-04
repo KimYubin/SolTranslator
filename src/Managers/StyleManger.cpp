@@ -5,6 +5,8 @@
 #include <QApplication>
 #include <QDir>
 
+#include "SolLog.h"
+
 #include "Widgets/ISolWidget.h"
 #include "SolUtilibrary.h"
 
@@ -95,7 +97,7 @@ void SolPalette::applyThemePrivate(const QString& inThemeName)
     const QDir rtThemeDir(rtPrefixPath, {"*.qss"}, QDir::Name, QDir::Files);
     if (rtThemeDir.exists() == false)
     {
-        qDebug() << "no rt theme" << rtPrefixPath;
+        solDebug << "no rt theme" << rtPrefixPath;
     }
     QStringList rtFiles = rtThemeDir.entryList();
 
@@ -119,7 +121,7 @@ void SolPalette::applyThemePrivate(const QString& inThemeName)
     }
     else
     {
-        qDebug() << "rt theme list is different from the existing theme list." << rtPrefixPath;
+        solDebug << "rt theme list is different from the existing theme list." << rtPrefixPath;
         prefixPath    = std::move(qrcPrefixPath);
         sheetFileList = std::move(qrcFiles);
     }

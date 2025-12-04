@@ -10,6 +10,7 @@
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
+#include "SolLog.h"
 #include "SolTranslatorCore.h"
 
 #include "EngineUnits/TranslateUnit.h"
@@ -63,7 +64,7 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestI
     }
     if (bValid == false)
     {
-        qDebug() << "Invalid engine type";
+        solDebug << "Invalid engine type";
     }
 
     if (trUnit != nullptr)

@@ -4,8 +4,8 @@
 
 #include <QRegularExpression>
 
+#include "SolLog.h"
 #include "SolTranslatorCore.h"
-
 
 #include "Managers/HistoryManager.h"
 

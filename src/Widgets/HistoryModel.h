@@ -8,29 +8,12 @@
 
 #include "SolTypes.h"
 
-
-struct HistoryInfo
-{
-    QString _engine;
-    QString _sourceLang;
-    QString _targetLang;
-    QString _sourceText;
-    QString _targetText;
-    
-    bool operator==(const HistoryInfo& other) const
-    {
-        return _sourceLang == other._sourceLang && _sourceText == other._sourceText;
-    }
-};
-
-
 class HistoryModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
     explicit HistoryModel(QObject* parent = nullptr);
-    explicit HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent = nullptr);
 
     virtual int rowCount(const QModelIndex& parent) const override;
     virtual int columnCount(const QModelIndex& parent) const override;
@@ -40,13 +23,12 @@ public:
     virtual bool insertRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
     virtual bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
-    const QList<HistoryInfo>& getHistoryList() const;
+    const trDbInfo* getTranslateText(const int inIdx) const;
 
-    const std::deque<trDbInfo>& getTranslateTextCache() const; 
 private:
-    void updateTranslateCache(const std::deque<trDbInfo>& inHistoryList);
-    QList<HistoryInfo> _historyList;
-    std::deque<trDbInfo> _translateTextCache;
+    void updateTranslateCache(const std::vector<trDbInfo>& inHistoryList);
+
+    std::vector<trDbInfo> _translateTextCache;
 };
 
 

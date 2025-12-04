@@ -232,7 +232,7 @@ void HistoryManager::applyTranslateHistory()
         return;
     }
 
-    std::deque<trDbInfo> translateHistory;
+    std::vector<trDbInfo> translateHistory;
     while (sqlQuery.next())
     {
         TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);

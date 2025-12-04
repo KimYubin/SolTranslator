@@ -245,6 +245,7 @@
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="42"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="257"/>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="350"/>
         <source>SolTranslator</source>
         <translation type="unfinished"></translation>
@@ -283,11 +284,6 @@
         <location filename="../src/Widgets/SolMainWidget.cpp" line="208"/>
         <source>Sol 번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="257"/>
-        <source>Sol Translator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

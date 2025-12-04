@@ -23,7 +23,6 @@ public:
 
 private:
     void setupUI();
-    void addEntry(const QString &name, const QString &address);
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;

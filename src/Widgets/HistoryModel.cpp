@@ -15,10 +15,6 @@ HistoryModel::HistoryModel(QObject* parent)
     connect(solCore->historyManager(), &HistoryManager::translateHistoryChanged, this, &HistoryModel::updateTranslateCache);
 }
 
-HistoryModel::HistoryModel(const QList<HistoryInfo>& contacts, QObject* parent)
-    : QAbstractListModel(parent), _historyList(contacts)
-{}
-
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
     return parent.isValid() ? 0 : _translateTextCache.size();
@@ -49,8 +45,8 @@ bool HistoryModel::insertRows(int position, int rows, const QModelIndex& index)
     Q_UNUSED(index);
     beginInsertRows(QModelIndex(), position, position + rows - 1);
 
-    for (int row = 0; row < rows; ++row)
-        _historyList.insert(position, {QString(), QString()});
+    // for (int row = 0; row < rows; ++row)
+    //     _historyList.insert(position, {QString(), QString()});
 
     endInsertRows();
     return true;
@@ -61,32 +57,28 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     Q_UNUSED(index);
     beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
-    for (int row = 0; row < rows; ++row)
-        _historyList.removeAt(position);
+    // for (int row = 0; row < rows; ++row)
+        // _historyList.removeAt(position);
 
     endRemoveRows();
     return true;
+}
+
+const trDbInfo* HistoryModel::getTranslateText(const int inIdx) const
+{
+    if (0 <= inIdx && inIdx < _translateTextCache.size())
+    {
+        return &_translateTextCache[inIdx];
+    }
+    solDebug << "out of range";
+
+    return nullptr;
 }
 
 bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (index.isValid() && role == Qt::EditRole)
     {
-        const int row = index.row();
-        auto contact  = _historyList.value(row);
-
-        switch (index.column())
-        {
-        case 0:
-            contact._targetText = value.toString();
-            break;
-        default:
-            return false;
-        }
-        _historyList.replace(row, contact);
-        emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
-
-        return true;
     }
 
     return false;
@@ -100,17 +92,7 @@ Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
-const QList<HistoryInfo>& HistoryModel::getHistoryList() const
-{
-    return _historyList;
-}
-
-const std::deque<trDbInfo>& HistoryModel::getTranslateTextCache() const
-{
-    return _translateTextCache;
-}
-
-void HistoryModel::updateTranslateCache(const std::deque<trDbInfo>& inHistoryList)
+void HistoryModel::updateTranslateCache(const std::vector<trDbInfo>& inHistoryList)
 {
     beginResetModel();
     _translateTextCache = inHistoryList;

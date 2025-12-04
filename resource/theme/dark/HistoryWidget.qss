@@ -3,3 +3,16 @@
 {
   padding: 10px;
 }
+
+#HistoryWidget QListView 
+{
+  padding-left: 0px;
+  padding-right: 1px;
+}
+
+#HistoryWidget QListView QScrollBar:vertical
+{
+  width: 14px; /* 전체폭 */
+  margin: 12px 0px 12px 0px;
+  padding: 0px 3px 0px 3px; /* 핸들과 스크롤바와의 간격. 핸들의 크기를 결정합니다.*/
+}

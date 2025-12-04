@@ -134,6 +134,11 @@ struct TranslateRequestInfo
 
 struct trDbInfo
 {
+    static trDbInfo None()
+    {
+        static trDbInfo none;
+        return none;
+    };
     trDbInfo(const qint64 inId              = 0
            , const QString& inTranslateText = {}
            , const TextStyle inTextStyle    = TextStyle::PlainText)
@@ -145,8 +150,21 @@ struct trDbInfo
     qint64 _dbId;
     QString _translateText;
     TextStyle _textStyle;
+    /*
+    * 
+    QString _engine;
+    QString _sourceLang;
+    QString _targetLang;
+    QString _sourceText;
+    QString _targetText;
+
+     */
 };
 
+/**
+ * 언어 타입, 코드, 이름 등을 총괄합니다
+ * todo: QLocale로 개선해야합니다.
+ */
 struct LangInfo
 {
 public:

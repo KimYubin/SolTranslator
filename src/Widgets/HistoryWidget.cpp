@@ -81,11 +81,21 @@ void HistoryWidget::setupUI()
 
     connect(selectionModel, &QItemSelectionModel::selectionChanged, this, [this](const QItemSelection& selected, const QItemSelection& deselected)
     {
-        const QModelIndexList slist   = selected.indexes();
-        const auto& translateTextlist = _historyListModel->getTranslateTextCache();
-        const trDbInfo& selectedTr    = translateTextlist[slist.back().row()];
+        if (selected.empty())
+        {
+            return;
+        }
 
-        _selectedTextEdit->setFormattingText(selectedTr._translateText, selectedTr._textStyle);
+        const int lastestRowIndex  = selected.indexes().back().row();
+        const trDbInfo* selectedTr = _historyListModel->getTranslateText(lastestRowIndex);
+
+        if (selectedTr == nullptr)
+        {
+            solDebug << "historyList out of range";
+            return;
+        }
+
+        _selectedTextEdit->setFormattingText(selectedTr->_translateText, selectedTr->_textStyle);
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);
@@ -112,19 +122,4 @@ void HistoryWidget::setupUI()
             scrollBar->setValue(static_cast<int>(newVal));
         }
     });
-}
-
-void HistoryWidget::addEntry(const QString& name, const QString& address)
-{
-    if (_historyListModel->getHistoryList().contains({name, address}))
-        return;
-
-    _historyListModel->insertRows(0, 1, QModelIndex());
-
-    QModelIndex index;
-    index = _historyListModel->index(0, 0, QModelIndex());
-    _historyListModel->setData(index, name, Qt::EditRole);
-    index = _historyListModel->index(0, 1, QModelIndex());
-    _historyListModel->setData(index, address, Qt::EditRole);
-    
 }

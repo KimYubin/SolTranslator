@@ -4,8 +4,6 @@
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
 
-#include <deque>
-
 #include "AbstractManager.h"
 #include "SolHashQueue.h"
 #include "SolTypes.h"
@@ -47,7 +45,7 @@ public:
     void markDbDirty();
 
 signals:
-    void translateHistoryChanged(const std::deque<trDbInfo>& inHistoryList);
+    void translateHistoryChanged(const std::vector<trDbInfo>& inHistoryList);
 
 private:
     void applyTranslateHistory();

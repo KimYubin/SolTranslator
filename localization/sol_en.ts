@@ -84,7 +84,7 @@
     </message>
     <message>
         <location filename="../src/Settings/GeneralOptionWidget.cpp" line="32"/>
-        <source>시스템 시작 시 Fin번역기가 자동으로 실행됩니다.</source>
+        <source>시스템 시작 시 Sol번역기가 자동으로 실행됩니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

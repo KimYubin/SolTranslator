@@ -385,7 +385,7 @@ QToolTip
 
 }
 
-#FinToolTipBallon QLabel
+#SolToolTipBallon QLabel
 {
   font-size: 14px;
   color: rgba(204, 204, 204, 1);
@@ -393,7 +393,7 @@ QToolTip
   padding-bottom: 6px;
 }
 
-FinToolTipBallon
+SolToolTipBallon
 {
   qproperty-triangleBaseWidth: 8;
   qproperty-triangleHeight: 3;
@@ -405,13 +405,13 @@ FinToolTipBallon
   qproperty-borderColor: rgba(200, 200, 200, 1);
 }
 
-FinToastWidget
+SolToastWidget
 {
   qproperty-showPos: 15;
   qproperty-popPos: 5;
 }
 
-FinToastWidget QLabel
+SolToastWidget QLabel
 { 
   font-size: 14px;
 

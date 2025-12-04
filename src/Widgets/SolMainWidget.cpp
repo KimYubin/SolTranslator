@@ -254,7 +254,7 @@ void SolMainWidget::quitApp()
 {
     const auto reply = showNewMessageBox(this
                                        , QMessageBox::Icon::Question
-                                       , tr("Sol Translator")
+                                       , tr("SolTranslator")
                                        , tr("정말 종료할까요?")
                                        , {{tr("종료"), QMessageBox::Yes}, {tr("취소"), QMessageBox::Cancel}}
                                        , QMessageBox::Cancel);

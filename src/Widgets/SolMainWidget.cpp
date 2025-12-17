@@ -2,6 +2,7 @@
 
 #include "SolMainWidget.h"
 
+#include <vector>
 #include <QButtonGroup>
 #include <QDir>
 #include <QFile>
@@ -18,6 +19,7 @@
 #include "SolUtilibrary.h"
 #include "TextEditTranslateWidget.h"
 #include "HistoryWidget.h"
+#include "SolLog.h"
 
 #include "SubWidgets/SolToolTip.h"
 
@@ -48,12 +50,16 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     ui->tabBarLayout->setSpacing(20);
 
+    std::vector<QWidget*> tabOrderList;
+    tabOrderList.push_back(ui->mainStackedWidget);
+
     // ~======================
     // button binding
     _buttonGroup = new QButtonGroup(this);
     _buttonGroup->setExclusive(true);
 
-    auto bindButton = [this](QPushButton* button, QWidget* childWidget)
+
+    auto bindButton = [this, &tabOrderList](QPushButton* button, QWidget* childWidget)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
@@ -61,6 +67,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
+        tabOrderList.push_back(button);
     };
 
     // 텍스트 번역
@@ -150,7 +157,12 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     solConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &SolMainWidget::onAppQuitEvent);
 
-    setTabOrder({ui->mainStackedWidget, textTabButton, _engineSelector, ui->settingsButton});
+    tabOrderList.insert(tabOrderList.end(), {_engineSelector, ui->settingsButton});
+
+    for (int idx = 1; idx < tabOrderList.size(); ++idx)
+    {
+        setTabOrder(tabOrderList[idx - 1], tabOrderList[idx]);
+    }
 }
 
 SolMainWidget::~SolMainWidget()

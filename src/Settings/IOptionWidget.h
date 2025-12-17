@@ -47,12 +47,18 @@ protected:
      * @param inAlignment inParentLayout에서 Alignment
      * @return 그룹박스와 그룹박스 내부에 배치된 VBoxLayout을 반환합니다.
      */
-    std::tuple<QGroupBox*, QVBoxLayout*> newOptionGroupBox(const QString& inGroupTitle, QGridLayout* inParentLayout
-                                                         , const int inRow, const int inColumn
+    std::tuple<QGroupBox*, QVBoxLayout*> newOptionGroupBox(const QString& inGroupTitle
+                                                         , QGridLayout* inParentLayout
+                                                         , const int inRow
+                                                         , const int inColumn
                                                          , Qt::Alignment inAlignment = Qt::Alignment());
-    std::tuple<QGroupBox*, QVBoxLayout*> newOptionGroupBox(const QString& inGroupTitle, QGridLayout* inParentLayout
-                                                         , const int inRow, const int inColumn
-                                                         , const int inRowSpan, const int inColumnSpan
+
+    std::tuple<QGroupBox*, QVBoxLayout*> newOptionGroupBox(const QString& inGroupTitle
+                                                         , QGridLayout* inParentLayout
+                                                         , const int inRow
+                                                         , const int inColumn
+                                                         , const int inRowSpan
+                                                         , const int inColumnSpan
                                                          , Qt::Alignment inAlignment = Qt::Alignment());
 
     /**

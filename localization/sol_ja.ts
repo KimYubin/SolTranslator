@@ -239,85 +239,85 @@
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.ui" line="77"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="135"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="142"/>
         <source>설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="42"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="257"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="350"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="44"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="269"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="362"/>
         <source>SolTranslator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="71"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="78"/>
         <source>텍스트</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="79"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="86"/>
         <source>준비 중</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="84"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="91"/>
         <source>문서</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="95"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="102"/>
         <source>기록</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="120"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="127"/>
         <source>번역 엔진 선택</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="207"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="219"/>
         <source>트레이로 최소화되었습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="208"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="220"/>
         <source>Sol 번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="258"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="259"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="271"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="259"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="271"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="319"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="331"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="322"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="334"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="325"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="337"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="328"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="340"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,12 +371,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="104"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="105"/>
         <source>복사 완료!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="177"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="178"/>
         <source>번역 중...</source>
         <translation type="unfinished"></translation>
     </message>

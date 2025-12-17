@@ -148,6 +148,26 @@ install(TARGETS SolTranslator
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+
+# Release 빌드 후 자동 실행
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(DEPLOY_DIR "${CMAKE_BINARY_DIR}/deploy")
+
+    add_custom_command(
+            TARGET SolTranslator
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "Deploying SolTranslator (Release only)"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${DEPLOY_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:SolTranslator>" "${DEPLOY_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "$<TARGET_FILE_DIR:SolTranslator>/translations"
+                "${DEPLOY_DIR}/translations"
+
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} --release "${DEPLOY_DIR}/$<TARGET_FILE_NAME:SolTranslator>"
+            COMMENT "Copy exe and run windeployqt"
+    )
+endif ()
+
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(SolTranslator)
 endif ()

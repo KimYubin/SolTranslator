@@ -121,8 +121,10 @@ void IOptionWidget::finish()
 {
 }
 
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle, QGridLayout* inParentLayout
-                                                                    , const int inRow, const int inColumn
+std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle
+                                                                    , QGridLayout* inParentLayout
+                                                                    , const int inRow
+                                                                    , const int inColumn
                                                                     , Qt::Alignment inAlignment)
 {
     auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
@@ -132,10 +134,13 @@ std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QStr
     return {groupBox, vLayout};
 }
 
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle, QGridLayout* inParentLayout
-                                                                          , const int inRow, const int inColumn
-                                                                          , const int inRowSpan, const int inColumnSpan
-                                                                          , Qt::Alignment inAlignment)
+std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle
+                                                                    , QGridLayout* inParentLayout
+                                                                    , const int inRow
+                                                                    , const int inColumn
+                                                                    , const int inRowSpan
+                                                                    , const int inColumnSpan
+                                                                    , Qt::Alignment inAlignment)
 {
     auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
 

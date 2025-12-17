@@ -2,7 +2,7 @@
 
 #ifndef LAYOUTTEXTEDIT_H
 #define LAYOUTTEXTEDIT_H
-#include "CustomMenuTextEdit.h"
+#include "ResultTextEdit.h"
 
 
 class QHBoxLayout;
@@ -11,7 +11,7 @@ class QHBoxLayout;
  * 레이아웃이 포함된 텍스트 에디터입니다.
  * 오버레이 버튼 등을 추가할 수 있습니다.
  */
-class LayoutTextEdit : public MenuTextEdit
+class LayoutTextEdit : public ResultTextEdit
 {
     Q_OBJECT
 
@@ -21,10 +21,15 @@ public:
 
     virtual void resizeEvent(QResizeEvent* event) override;
 
-    QHBoxLayout* getLayout() const { return _layout; };
+    /**
+     * 텍스트 레이아웃 하단에 위젯을 추가합니다.
+     */
+    void addBottomWidget(QWidget* inWidget
+                       , const int inStretch = 0
+                       , const Qt::Alignment inAlignment = Qt::Alignment()) const;
 
 protected:
-    QWidget* _bottomWidget;
+    QWidget* _bottomLayoutWidget;
     QHBoxLayout* _layout;
 };
 

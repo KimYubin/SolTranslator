@@ -4,12 +4,12 @@
 
 #include <QHBoxLayout>
 
-LayoutTextEdit::LayoutTextEdit(QWidget* parent) : MenuTextEdit(parent)
+LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
 {
-    _bottomWidget = new QFrame(this);
-    _bottomWidget->setObjectName("bottomWidget");
+    _bottomLayoutWidget = new QFrame(this);
+    _bottomLayoutWidget->setObjectName("bottomWidget");
 
-    _layout = new QHBoxLayout(_bottomWidget);
+    _layout = new QHBoxLayout(_bottomLayoutWidget);
     _layout->setSpacing(0);
     _layout->setContentsMargins(0, 0, 0, 0);
 }
@@ -20,7 +20,15 @@ void LayoutTextEdit::resizeEvent(QResizeEvent* event)
 {
     QTextEdit::resizeEvent(event);
 
-    _bottomWidget->adjustSize();
-    const QSize bottomSize = _bottomWidget->size();
-    _bottomWidget->setGeometry(0, height() - bottomSize.height(), width(), bottomSize.height());
+    _bottomLayoutWidget->adjustSize();
+    const QSize bottomSize = _bottomLayoutWidget->size();
+    _bottomLayoutWidget->setGeometry(0, height() - bottomSize.height(), width(), bottomSize.height());
 }
+
+void LayoutTextEdit::addBottomWidget(QWidget* inWidget
+                                   , const int inStretch
+                                   , const Qt::Alignment inAlignment) const
+{
+    _layout->addWidget(inWidget, inStretch, inAlignment);
+}
+

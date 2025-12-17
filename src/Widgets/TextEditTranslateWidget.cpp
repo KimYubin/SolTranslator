@@ -96,7 +96,8 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     trCopy->setIcon(QIcon(":/img/copy_img"));
     trCopy->setFocusPolicy(Qt::TabFocus);
     SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
-    ui->trTextEdit->getLayout()->addWidget(trCopy, 0, Qt::AlignLeft);
+
+    ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
     connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable

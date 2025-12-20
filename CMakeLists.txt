@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 
-project(SolTranslator VERSION 0.1 LANGUAGES CXX)
+project(SolTranslator VERSION 0.0.1 LANGUAGES CXX)
 
 
 set(CMAKE_AUTOUIC ON)
@@ -12,7 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5)
 
-find_package(Qt6 REQUIRED COMPONENTS
+find_package(
+        Qt6 REQUIRED COMPONENTS
         Widgets
         Svg
         SvgWidgets
@@ -34,7 +35,8 @@ file(GLOB_RECURSE PROJECT_SOURCES
 )
 
 
-qt_add_executable(SolTranslator
+qt_add_executable(
+        SolTranslator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         external/magic_enum.hpp
@@ -65,7 +67,8 @@ if (ANDROID)
 endif ()
 
 target_include_directories(SolTranslator PUBLIC src/)
-target_link_libraries(SolTranslator PRIVATE
+target_link_libraries(
+        SolTranslator PRIVATE
         Qt6::Widgets
         Qt6::Svg
         Qt6::SvgWidgets
@@ -114,13 +117,17 @@ file(GLOB_RECURSE SOURCES_TO_TRANSLATE
         "src/*.cpp"
         "src/*.h"
 )
-qt_add_translations(SolTranslator
+qt_add_translations(
+        SolTranslator
         TS_FILE_BASE sol
         TS_OUTPUT_DIRECTORY localization
+        QM_FILES_OUTPUT_VARIABLE qm_output_files
         QM_OUTPUT_DIRECTORY translations
         MERGE_QT_TRANSLATIONS
         SOURCES ${SOURCES_TO_TRANSLATE}
 )
+install(FILES ${qm_output_files}
+        DESTINATION translations)
 
 add_dependencies(SolTranslator update_translations)
 # ]]
@@ -141,6 +148,8 @@ set_target_properties(SolTranslator PROPERTIES
         WIN32_EXECUTABLE TRUE
 )
 
+
+
 include(GNUInstallDirs)
 install(TARGETS SolTranslator
         BUNDLE DESTINATION .
@@ -148,25 +157,21 @@ install(TARGETS SolTranslator
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+# convert install path to an absolute path
+# qt.conf requires an absolute path.
+cmake_path(
+        ABSOLUTE_PATH CMAKE_INSTALL_PREFIX
+        NORMALIZE
+        OUTPUT_VARIABLE CMAKE_INSTALL_PREFIX
+)
 
-# Release 빌드 후 자동 실행
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(DEPLOY_DIR "${CMAKE_BINARY_DIR}/deploy")
+qt_generate_deploy_app_script(
+        TARGET SolTranslator
+        OUTPUT_SCRIPT deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
+)
+install(SCRIPT ${deploy_script})
 
-    add_custom_command(
-            TARGET SolTranslator
-            POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "Deploying SolTranslator (Release only)"
-            COMMAND ${CMAKE_COMMAND} -E make_directory "${DEPLOY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:SolTranslator>" "${DEPLOY_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "$<TARGET_FILE_DIR:SolTranslator>/translations"
-                "${DEPLOY_DIR}/translations"
-
-            COMMAND ${WINDEPLOYQT_EXECUTABLE} --release "${DEPLOY_DIR}/$<TARGET_FILE_NAME:SolTranslator>"
-            COMMENT "Copy exe and run windeployqt"
-    )
-endif ()
 
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(SolTranslator)

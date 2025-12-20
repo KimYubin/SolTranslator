@@ -1,16 +1,16 @@
 ﻿
 
-
-
 /build/
 
 **/noused/
 /resource/image/test/
 .sol.release/
+deploy/
 
-.O_Commit_Message.txt
-.O_Project_Memo.txt
+.Sol_Commit_Message.txt
+.Sol_Project_Memo.txt
 
+.gdbinit
 .lldbinit
 
 *.pdn
@@ -224,6 +224,10 @@ fabric.properties
 
 !.idea/codeStyles
 !.idea/runConfigurations
+
+# cmake depoly example
+!.idea/cmake.xml
+
 
 ### CLion+iml ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

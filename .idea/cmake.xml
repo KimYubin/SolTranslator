@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSharedSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Release-MinGW-Shared" ENABLED="false" CONFIG_NAME="Release" TOOLCHAIN_NAME="MinGW-qt-gcc" GENERATION_OPTIONS="-DCMAKE_PREFIX_PATH=C:\Qt\6.9.0\mingw_64 -DCMAKE_INSTALL_PREFIX:PATH=./deploy">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="QT_QPA_PLATFORM_PLUGIN_PATH" value="C:\Qt\6.9.0\mingw_64\plugins" />
+            <env name="QTDIR" value="C:\Qt\6.9.0\mingw_64" />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+    </configurations>
+  </component>
+</project>

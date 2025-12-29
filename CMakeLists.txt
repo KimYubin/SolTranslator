@@ -50,11 +50,11 @@ qt_add_executable(
         src/SolLog.h
 )
 
+# ============================
+# appicon windows
 if (WIN32)
-    #! [appicon_windows]
     set(app_icon_resource_windows "resource/image/icon/SolTranslator.rc")
     target_sources(SolTranslator PRIVATE ${app_icon_resource_windows})
-    #! [appicon_windows]
 endif ()
 
 # Android 환경일 경우에만 패키지 소스 디렉토리 설정
@@ -79,7 +79,7 @@ target_link_libraries(
         Qt6::Gui
 )
 
-
+# ============================
 # QHotkey
 add_library(qhotkey external/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)
@@ -107,8 +107,9 @@ target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
 
 
+# ============================
+# 현지화
 ##[[
-#### 현지화
 qt_standard_project_setup(
         I18N_SOURCE_LANGUAGE ko
         I18N_TRANSLATED_LANGUAGES en ja
@@ -149,7 +150,8 @@ set_target_properties(SolTranslator PROPERTIES
 )
 
 
-
+# ============================
+# deploy/install
 include(GNUInstallDirs)
 install(TARGETS SolTranslator
         BUNDLE DESTINATION .

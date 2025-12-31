@@ -1,0 +1,54 @@
+﻿name: release
+
+on:
+  push:
+    branches:
+      - release
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.9.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw'
+          tools: 'tools_mingw1310'
+          dir: '${{ github.workspace }}\qt'
+          cache: 'true'
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G "MinGW Makefiles" `
+          -DCMAKE_C_COMPILER='${{ github.workspace }}\qt\Qt\Tools\mingw1310_64\bin\gcc.exe' `
+          -DCMAKE_CXX_COMPILER='${{ github.workspace }}\qt\Qt\Tools\mingw1310_64\bin\g++.exe' `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}\deploy
+
+      - name: Build
+        run: |
+          cmake --build build --config Release
+
+      - name: Install (deploy)
+        run: |
+          cmake --install build --config Release
+
+      - name: Compress install folder
+        run: |
+          Compress-Archive -Path ${{ github.workspace }}\deploy\* -DestinationPath SolTranslator.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: SolTranslator.zip

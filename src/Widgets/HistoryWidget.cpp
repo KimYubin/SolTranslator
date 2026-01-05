@@ -10,6 +10,7 @@
 #include <QStringListModel>
 #include <QTimer>
 
+#include "HistoryListDelegate.h"
 #include "SolHashQueue.h"
 #include "SolLog.h"
 #include "SolTranslatorCore.h"
@@ -122,4 +123,6 @@ void HistoryWidget::setupUI()
             scrollBar->setValue(static_cast<int>(newVal));
         }
     });
+    
+    _historyListView->setItemDelegate(new HistoryListDelegate);
 }

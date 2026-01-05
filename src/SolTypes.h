@@ -141,15 +141,19 @@ struct trDbInfo
     };
     trDbInfo(const qint64 inId              = 0
            , const QString& inTranslateText = {}
-           , const TextStyle inTextStyle    = TextStyle::PlainText)
+           , const TextStyle inTextStyle    = TextStyle::PlainText
+           , const bool inChecked           = false)
         : _dbId(inId)
         , _translateText(inTranslateText)
         , _textStyle(inTextStyle)
+        , _bChecked(inChecked)
     {}
 
     qint64 _dbId;
     QString _translateText;
     TextStyle _textStyle;
+    bool _bChecked;
+
     /*
     * 
     QString _engine;

@@ -27,16 +27,22 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
+    if (index.isValid() == false
+        || index.row() >= _translateTextCache.size()
+        || index.row() < 0)
+    {
         return QVariant();
+    }
 
-    if (index.row() >= _translateTextCache.size() || index.row() < 0)
-        return QVariant();
-
-    if (role == Qt::DisplayRole)
+    if (role == HistoryListRole::TextRole)
     {
         return _translateTextCache[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
+    else if (role == HistoryListRole::CheckRole)
+    {
+        return _translateTextCache[index.row()]._bChecked;
+    }
+
     return QVariant();
 }
 

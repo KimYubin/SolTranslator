@@ -48,6 +48,8 @@ qt_add_executable(
         src/SolDatabase.h
         src/SolLog.cpp
         src/SolLog.h
+        src/Widgets/HistoryListDelegate.cpp
+        src/Widgets/HistoryListDelegate.h
 )
 
 # ============================

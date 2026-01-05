@@ -13,6 +13,12 @@ class HistoryModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+    enum HistoryListRole
+    {
+        TextRole = Qt::UserRole + 1
+      , CheckRole
+    };
+
     explicit HistoryModel(QObject* parent = nullptr);
 
     virtual int rowCount(const QModelIndex& parent) const override;

@@ -83,8 +83,17 @@ const trDbInfo* HistoryModel::getTranslateText(const int inIdx) const
 
 bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (index.isValid() && role == Qt::EditRole)
+    if (index.isValid() == false
+        || index.row() >= _translateTextCache.size()
+        || index.row() < 0)
     {
+        return false;
+    }
+
+    if (index.isValid() && role == HistoryModel::CheckRole)
+    {
+        _translateTextCache[index.row()]._bChecked = value.toBool();
+        return true;
     }
 
     return false;

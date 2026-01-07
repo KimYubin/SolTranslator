@@ -4,7 +4,7 @@
 #define SOLTRANSLATOR_HISTORYMODEL_H
 
 #include <QAbstractListModel>
-#include <deque>
+#include <expected>
 
 #include "SolTypes.h"
 
@@ -24,12 +24,11 @@ public:
     virtual bool insertRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
     virtual bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
-    const TrHistoryCacheData* getTranslateCache(const int inIdx) const;
+    std::expected<const TrHistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
 
 private:
-    void updateTranslateCache(const std::vector<TrHistoryCacheData>& inHistoryList);
+    void updateTranslateCache();
 
-    std::vector<TrHistoryCacheData> _translateTextCache;
 };
 
 

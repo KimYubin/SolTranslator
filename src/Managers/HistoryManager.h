@@ -4,6 +4,8 @@
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
 
+#include <expected>
+
 #include "AbstractManager.h"
 #include "SolHashQueue.h"
 #include "SolTypes.h"
@@ -42,13 +44,20 @@ public:
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang);
 
+    std::expected<const TrHistoryCacheData*, QString> getTranslateCache(const int inIdx);
+    int getTranslateCacheSize() const { return _translateTextCache.size(); };
+
+    bool setCheckState(const int inIdx, const Qt::CheckState inState);
+
     void markDbDirty();
 
 signals:
-    void translateHistoryChanged(const std::vector<TrHistoryCacheData>& inHistoryList);
+    void translateHistoryChanged();
 
 private:
     void applyTranslateHistory();
+
+    std::vector<TrHistoryCacheData> _translateTextCache;
 
     // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
     // emit translateHistoryChanged

@@ -17,7 +17,7 @@ HistoryModel::HistoryModel(QObject* parent)
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : _translateTextCache.size();
+    return parent.isValid() ? 0 : solCore->historyManager()->getTranslateCacheSize();
 }   
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -27,7 +27,9 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    if (index.isValid() == false || index.row() >= _translateTextCache.size())
+    const std::expected<const TrHistoryCacheData*, QString> trCache = getTranslateCache(index.row());
+    
+    if (trCache.has_value() == false)
     {
         return QVariant();
     }
@@ -36,11 +38,11 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
     {
     case Qt::DisplayRole:
     {
-        return _translateTextCache[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+        return trCache.value()->_translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
     case Qt::CheckStateRole:
     {
-        return _translateTextCache[index.row()]._bCheckState;
+        return trCache.value()->_bCheckState;
     }
     default:
         break;
@@ -51,7 +53,7 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
 bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (index.isValid() == false || index.row() >= _translateTextCache.size())
+    if (index.isValid() == false)
     {
         return false;
     }
@@ -64,7 +66,7 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
     }
     case Qt::CheckStateRole:
     {
-        _translateTextCache[index.row()]._bCheckState = static_cast<Qt::CheckState>(value.toInt());
+        solCore->historyManager()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
         return true;
     }
     default:
@@ -110,21 +112,15 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     return true;
 }
 
-const TrHistoryCacheData* HistoryModel::getTranslateCache(const int inIdx) const
+std::expected<const TrHistoryCacheData*, QString> HistoryModel::getTranslateCache(const int inIdx) const
 {
-    if (0 <= inIdx && inIdx < _translateTextCache.size())
-    {
-        return &_translateTextCache[inIdx];
-    }
-    solDebug << "out of range";
-
-    return nullptr;
+    return solCore->historyManager()->getTranslateCache(inIdx);
 }
 
 
-void HistoryModel::updateTranslateCache(const std::vector<TrHistoryCacheData>& inHistoryList)
+void HistoryModel::updateTranslateCache()
 {
     beginResetModel();
-    _translateTextCache = inHistoryList;
+
     endResetModel();
 }

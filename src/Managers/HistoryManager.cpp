@@ -204,6 +204,27 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     return res;
 }
 
+std::expected<const TrHistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)
+{
+    if (inIdx < 0 || inIdx >= _translateTextCache.size())
+    {
+        return std::unexpected("_translateTextCache out of range");
+    }
+
+    return &_translateTextCache[inIdx];
+}
+
+bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState)
+{
+    if (inIdx < 0 || inIdx >= _translateTextCache.size())
+    {
+        return false;
+    }
+
+    _translateTextCache[inIdx]._bCheckState = inState;
+    return true;
+}
+
 void HistoryManager::applyTranslateHistory()
 {
     if (_bIsDirtyDB == false)
@@ -232,21 +253,21 @@ void HistoryManager::applyTranslateHistory()
         return;
     }
 
-    std::vector<TrHistoryCacheData> translateHistory;
+    _translateTextCache.clear();
     while (sqlQuery.next())
     {
         TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);
 
-        translateHistory.emplace_back(sqlQuery.value(0).toLongLong()
-                                    , sqlQuery.value(1).toString()
-                                    , textStyle);
+        _translateTextCache.emplace_back(sqlQuery.value(0).toLongLong()
+                                       , sqlQuery.value(1).toString()
+                                       , textStyle);
     }
 
     transactionGuard.commit();
 
     _bIsDirtyDB = false;
 
-    emit translateHistoryChanged(translateHistory);
+    emit translateHistoryChanged();
 }
 
 void HistoryManager::markDbDirty()

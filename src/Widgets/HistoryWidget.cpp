@@ -2,6 +2,7 @@
 
 #include "HistoryWidget.h"
 
+#include <expected>
 #include <QGridLayout>
 #include <QListView>
 #include <QScrollBar>
@@ -88,15 +89,15 @@ void HistoryWidget::setupUI()
         }
 
         const int lastestRowIndex  = selected.indexes().back().row();
-        const TrHistoryCacheData* selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
+        const std::expected<const TrHistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
 
-        if (selectedTr == nullptr)
+        if (selectedTr.has_value() == false)
         {
-            solDebug << "historyList out of range";
+            solDebug << selectedTr.error();
             return;
         }
 
-        _selectedTextEdit->setFormattingText(selectedTr->_translateText, selectedTr->_textStyle);
+        _selectedTextEdit->setFormattingText(selectedTr.value()->_translateText, selectedTr.value()->_textStyle);
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);

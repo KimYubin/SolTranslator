@@ -88,7 +88,7 @@ void HistoryWidget::setupUI()
         }
 
         const int lastestRowIndex  = selected.indexes().back().row();
-        const trDbInfo* selectedTr = _historyListModel->getTranslateText(lastestRowIndex);
+        const TrHistoryCacheData* selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
 
         if (selectedTr == nullptr)
         {

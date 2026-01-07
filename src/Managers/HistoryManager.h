@@ -45,7 +45,7 @@ public:
     void markDbDirty();
 
 signals:
-    void translateHistoryChanged(const std::vector<trDbInfo>& inHistoryList);
+    void translateHistoryChanged(const std::vector<TrHistoryCacheData>& inHistoryList);
 
 private:
     void applyTranslateHistory();

@@ -132,27 +132,30 @@ struct TranslateRequestInfo
     std::optional<std::function<void(const QString&)>> callbackTranslateStreaming;
 };
 
-struct trDbInfo
+struct TrHistoryCacheData
 {
-    static trDbInfo None()
+    static TrHistoryCacheData None()
     {
-        static trDbInfo none;
+        static TrHistoryCacheData none;
         return none;
     };
-    trDbInfo(const qint64 inId              = 0
-           , const QString& inTranslateText = {}
-           , const TextStyle inTextStyle    = TextStyle::PlainText
-           , const bool inChecked           = false)
+
+    TrHistoryCacheData(
+        const qint64 inId                 = 0
+      , const QString& inTranslateText    = {}
+      , const TextStyle inTextStyle       = TextStyle::PlainText
+      , const Qt::CheckState inCheckState = Qt::Unchecked
+    )
         : _dbId(inId)
         , _translateText(inTranslateText)
         , _textStyle(inTextStyle)
-        , _bChecked(inChecked)
+        , _bCheckState(inCheckState)
     {}
 
     qint64 _dbId;
     QString _translateText;
     TextStyle _textStyle;
-    bool _bChecked;
+    Qt::CheckState _bCheckState;
 
     /*
     * 

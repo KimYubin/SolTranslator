@@ -27,23 +27,63 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    if (index.isValid() == false
-        || index.row() >= _translateTextCache.size()
-        || index.row() < 0)
+    if (index.isValid() == false || index.row() >= _translateTextCache.size())
     {
         return QVariant();
     }
 
-    if (role == HistoryListRole::TextRole)
+    switch (role)
+    {
+    case Qt::DisplayRole:
     {
         return _translateTextCache[index.row()]._translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
-    else if (role == HistoryListRole::CheckRole)
+    case Qt::CheckStateRole:
     {
-        return _translateTextCache[index.row()]._bChecked;
+        return _translateTextCache[index.row()]._bCheckState;
+    }
+    default:
+        break;
     }
 
     return QVariant();
+}
+
+bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (index.isValid() == false || index.row() >= _translateTextCache.size())
+    {
+        return false;
+    }
+
+    switch (role)
+    {
+    case Qt::DisplayRole:
+    {
+        return true;
+    }
+    case Qt::CheckStateRole:
+    {
+        _translateTextCache[index.row()]._bCheckState = static_cast<Qt::CheckState>(value.toInt());
+        return true;
+    }
+    default:
+        break;
+    }
+
+    return false;
+}
+
+Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
+{
+    if (index.isValid() == false)
+    {
+        return Qt::ItemIsEnabled;
+    }
+
+    return QAbstractListModel::flags(index)
+            | Qt::ItemIsEnabled
+            | Qt::ItemIsUserCheckable;
 }
 
 bool HistoryModel::insertRows(int position, int rows, const QModelIndex& index)
@@ -70,7 +110,7 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     return true;
 }
 
-const trDbInfo* HistoryModel::getTranslateText(const int inIdx) const
+const TrHistoryCacheData* HistoryModel::getTranslateCache(const int inIdx) const
 {
     if (0 <= inIdx && inIdx < _translateTextCache.size())
     {
@@ -81,33 +121,8 @@ const trDbInfo* HistoryModel::getTranslateText(const int inIdx) const
     return nullptr;
 }
 
-bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
-{
-    if (index.isValid() == false
-        || index.row() >= _translateTextCache.size()
-        || index.row() < 0)
-    {
-        return false;
-    }
 
-    if (index.isValid() && role == HistoryModel::CheckRole)
-    {
-        _translateTextCache[index.row()]._bChecked = value.toBool();
-        return true;
-    }
-
-    return false;
-}
-
-Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
-{
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
-
-    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
-}
-
-void HistoryModel::updateTranslateCache(const std::vector<trDbInfo>& inHistoryList)
+void HistoryModel::updateTranslateCache(const std::vector<TrHistoryCacheData>& inHistoryList)
 {
     beginResetModel();
     _translateTextCache = inHistoryList;

@@ -227,12 +227,12 @@ void SolMainWidget::closeEvent(QCloseEvent* event)
     }
 }
 
-QMessageBox::StandardButton showNewMessageBox(QWidget* inParent
-                                            , const QMessageBox::Icon inIcon
+QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon
                                             , const QString& inTitle
                                             , const QString& inText
                                             , const std::vector<std::pair<QString, QMessageBox::StandardButton>>& inButtons
                                             , const QMessageBox::StandardButton inDefaultButton
+                                            , QWidget* inParent = nullptr
 )
 {
     QMessageBox msgBox(inIcon, inTitle, inText, QMessageBox::NoButton, inParent);
@@ -264,8 +264,7 @@ QMessageBox::StandardButton showNewMessageBox(QWidget* inParent
 
 void SolMainWidget::quitApp()
 {
-    const auto reply = showNewMessageBox(this
-                                       , QMessageBox::Icon::Question
+    const auto reply = showNewMessageBox(QMessageBox::Icon::Question
                                        , tr("SolTranslator")
                                        , tr("정말 종료할까요?")
                                        , {{tr("종료"), QMessageBox::Yes}, {tr("취소"), QMessageBox::Cancel}}

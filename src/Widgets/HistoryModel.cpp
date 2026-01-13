@@ -36,11 +36,11 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-    case Qt::DisplayRole:
+    case sol::TargetTextRole:
     {
         return trCache.value()->_translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
     }
-    case Qt::CheckStateRole:
+    case sol::CheckRole:
     {
         return trCache.value()->_bCheckState;
     }
@@ -60,11 +60,11 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
 
     switch (role)
     {
-    case Qt::DisplayRole:
+    case sol::TargetTextRole:
     {
         return true;
     }
-    case Qt::CheckStateRole:
+    case sol::CheckRole:
     {
         solCore->historyManager()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
         return true;

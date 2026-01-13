@@ -67,6 +67,16 @@ enum class ScreenPopupPolicy
 Q_ENUM_NS(ScreenPopupPolicy)
 
 
+enum HistoryItemRole
+{
+    CheckRole = Qt::UserRole + 1
+  , SourceLangRole
+  , TagetLangRole
+  , SourceTextRole
+  , TargetTextRole
+  , TimeStampRole
+  , Size
+};
 }
 
 enum class EngineType

@@ -3,10 +3,14 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QTextLayout>
 
 #include <qevent.h>
+#include <qpainterstateguard.h>
+
 
 #include "HistoryModel.h"
+#include "HistoryWidget.h"
 #include "SolLog.h"
 
 constexpr int CheckBoxSize = 20;
@@ -29,7 +33,7 @@ void HistoryListDelegate::paint(QPainter* painter
         return;
     }
 
-    painter->save();
+    QPainterStateGuard psg(painter);
 
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);
@@ -42,25 +46,12 @@ void HistoryListDelegate::paint(QPainter* painter
     // text
     opt.text = index.data(sol::TargetTextRole).toString();
     appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
-    // int flags = align | (d->textDirection() == Qt::LeftToRight ? Qt::TextForceLeftToRight                                                           : Qt::TextForceRightToLeft);
-    opt.rect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
+    
+    // int flags = align | (d->textDirection() == Qt::LeftToRight ? Qt::TextForceLeftToRight: Qt::TextForceRightToLeft);
 
-    QPalette::ColorRole textColorRole = QPalette::NoRole;
-    if (opt.state & QStyle::State_Selected)
-    {
-        textColorRole = QPalette::HighlightedText;
-    }
-    else
-    {
-        textColorRole = QPalette::Text;
-    }
-    if (opt.state & QStyle::State_Editing)
-    {
-        textColorRole = QPalette::Text;
-    }
+    QRect textRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
 
-
-    appStyle->drawItemText(painter, opt.rect, Qt::TextForceLeftToRight, opt.palette, true, opt.text, textColorRole);
+    drawText(painter, opt, textRect, index.data(sol::TargetTextRole).toString());
 
 
     // check
@@ -74,7 +65,6 @@ void HistoryListDelegate::paint(QPainter* painter
 
     appStyle->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &checkOpt, painter, widget);
 
-    painter->restore();
 }
 
 bool HistoryListDelegate::editorEvent(QEvent* event
@@ -157,4 +147,81 @@ bool HistoryListDelegate::editorEvent(QEvent* event
     return model->setData(index, state, sol::CheckRole);
 }
 
+static QSizeF viewItemTextLayout(QTextLayout& textLayout
+                               , const int lineWidth)
+{
+    qreal height    = 0;
+    qreal widthUsed = 0;
+    textLayout.beginLayout();
+    int i = 0;
+    while (true)
+    {
+        QTextLine line = textLayout.createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lineWidth);
+        line.setPosition(QPointF(0, height));
+        height    += line.height();
+        widthUsed = qMax(widthUsed, line.naturalTextWidth());
+        // we assume that the height of the next line is the same as the current one
+        ++i;
+    }
+    textLayout.endLayout();
+    return QSizeF(widthUsed, height);
 }
+
+void HistoryListDelegate::drawText(QPainter* painter
+                                 , const QStyleOptionViewItem& inOption
+                                 , const QRect& inTextRect
+                                 , const QString& inText) const
+{
+    QStyleOptionViewItem opt{inOption};
+    QPalette::ColorGroup cg = opt.state.testFlag(QStyle::State_Enabled)
+                                  ? QPalette::Normal
+                                  : QPalette::Disabled;
+    // if (cg == QPalette::Normal && !(opt.state.testFlag(QStyle::State_Active)))
+        // cg = QPalette::Inactive;
+
+    const QWidget* widget  = opt.widget;
+    const QStyle* appStyle = widget ? widget->style() : QApplication::style();
+    const HistoryListView* historyListView = qobject_cast<HistoryListView*>(const_cast<QWidget*>(opt.widget));
+    
+    if (historyListView == nullptr)
+    {
+        solDebug<<"historyListView is not valid";
+        return;
+    }
+
+    // appStyle->drawItemText
+    opt.palette.setColor(cg, QPalette::Text, historyListView->getItemColor(sol::itemTextColorRole));
+
+    opt.palette.setColor(cg, QPalette::HighlightedText, historyListView->getItemColor(sol::itemSelectionTextColorRole));
+    // painter->drawText
+    QPalette::ColorRole textColorRole = QPalette::NoRole;
+    if (opt.state.testFlag(QStyle::State_Selected))
+    {
+        textColorRole = QPalette::HighlightedText;
+        painter->setPen(historyListView->getItemColor(sol::itemSelectionTextColorRole));
+    }
+    else if (opt.state.testFlag(QStyle::State_MouseOver))
+    {
+        painter->setPen(historyListView->getItemColor(sol::itemHoverTextColorRole));
+    }
+    else
+    {
+        textColorRole = QPalette::Text;
+        painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
+    }
+    
+    if (opt.state.testFlag(QStyle::State_Editing))
+    {
+        textColorRole = QPalette::Text;
+        painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
+    }
+
+    appStyle->drawItemText(painter, inTextRect, Qt::TextForceLeftToRight, opt.palette, true, inText, textColorRole);
+    
+    // painter->drawText(inTextRect, Qt::TextForceLeftToRight, inText);
+
+}
+

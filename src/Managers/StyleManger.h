@@ -4,6 +4,7 @@
 #define PALETTEMANGER_H
 #include <QObject>
 
+class SolPalette;
 
 class StyleManger  : public QObject
 {
@@ -14,6 +15,9 @@ public:
     ~StyleManger() override;
 
     static void applyTheme(const QString& inThemeName = "dark");
+
+private:
+    SolPalette* _solPalette;
 };
 
 

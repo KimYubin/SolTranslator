@@ -23,6 +23,25 @@
 #include "SubWidgets/ResultTextEdit.h"
 
 
+HistoryListView::HistoryListView(QWidget* parent):QListView(parent) 
+{}
+
+HistoryListView::~HistoryListView() 
+{}
+
+QColor HistoryListView::getItemColor(const sol::ItemColorRole inColorRole) const 
+{
+    switch (inColorRole)
+    {
+    case sol::itemTextColorRole:          return _itemTextColor;
+    case sol::itemSelectionTextColorRole: return _itemSelectionTextColor;
+    case sol::itemHoverTextColorRole:     return _itemHoverTextColor;
+    case sol::itemDisableColorRole:       return _itemDisableColor;
+    default: ;
+    }
+    return QColor();
+}
+
 HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
@@ -47,7 +66,7 @@ void HistoryWidget::setupUI()
 
     _mainLayout->addWidget(_splitter);
 
-    _historyListView = new QListView(_splitter);
+    _historyListView = new HistoryListView(_splitter);
     _historyListView->setMinimumWidth(150);
     _historyListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _historyListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);

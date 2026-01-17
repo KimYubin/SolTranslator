@@ -5,6 +5,15 @@
 #include <QRect>
 #include "../../external/magic_enum.hpp"
 
+
+#define SOL_QSS_COLOR(colorName) \
+private: \
+    Q_PROPERTY(QColor colorName READ get##colorName WRITE set##colorName) \
+    void set##colorName(const QColor& inColor) { _##colorName = inColor; }; \
+    QColor get##colorName() const { return _##colorName; }; \
+    QColor _##colorName;
+
+
 class QObject;
 class QWidget;
 

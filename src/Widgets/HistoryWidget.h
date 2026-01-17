@@ -2,7 +2,11 @@
 
 #ifndef SOLTRANSLATOR_HISTORYWIDGET_H
 #define SOLTRANSLATOR_HISTORYWIDGET_H
+#include <QListView>
+
 #include "ISolWidget.h"
+#include "SolTypes.h"
+#include "SolUtilibrary.h"
 
 
 class HistoryModel;
@@ -12,6 +16,23 @@ class QListWidget;
 class ResultTextEdit;
 class QSplitter;
 class QGridLayout;
+
+class HistoryListView : public QListView
+{
+    Q_OBJECT
+
+    // HistoryListDelegate
+    SOL_QSS_COLOR(itemTextColor)
+    SOL_QSS_COLOR(itemSelectionTextColor)
+    SOL_QSS_COLOR(itemHoverTextColor)
+    SOL_QSS_COLOR(itemDisableColor)
+
+public:
+    explicit HistoryListView(QWidget* parent = nullptr);
+    ~HistoryListView() override;
+
+    QColor getItemColor(const sol::ItemColorRole inColorRole) const;
+};
 
 class HistoryWidget : public ISolWidget
 {
@@ -26,7 +47,7 @@ private:
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;
-    QListView* _historyListView;
+    HistoryListView* _historyListView;
     HistoryModel* _historyListModel;
     ResultTextEdit* _selectedTextEdit;
 

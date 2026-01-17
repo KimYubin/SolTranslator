@@ -77,6 +77,14 @@ enum HistoryItemRole
   , TimeStampRole
   , Size
 };
+
+enum ItemColorRole
+{
+    itemTextColorRole
+  , itemSelectionTextColorRole
+  , itemHoverTextColorRole
+  , itemDisableColorRole
+};
 }
 
 enum class EngineType

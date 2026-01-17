@@ -10,21 +10,23 @@
 #include "Widgets/ISolWidget.h"
 #include "SolUtilibrary.h"
 
-#define QSS_PALETTE_COLOR(colorName) \
-private: \
-    Q_PROPERTY(QColor colorName READ get##colorName WRITE set##colorName) \
-    void set##colorName(const QColor& inColor) { _##colorName = inColor; }; \
-    QColor get##colorName() const { return _##colorName; }; \
-    QColor _##colorName;
+class SolPalette
+{
+public:
+    SolPalette();
+    ~SolPalette();
+    
+    QString _themeName;
+    
+};
 
-
-class SolPalette : public ISolWidget
+class SolPaletteWidget : public ISolWidget
 {
     Q_OBJECT
 
 public:
-    explicit SolPalette(QWidget* parent = nullptr);
-    ~SolPalette() override;
+    explicit SolPaletteWidget(QWidget* parent = nullptr);
+    ~SolPaletteWidget() override;
 
     void applyThemePrivate(const QString& inThemeName = "dark");
 
@@ -33,27 +35,28 @@ public:
     void updatePaletteColor() const;
 
 private:
-    QSS_PALETTE_COLOR(windowColor);
-    QSS_PALETTE_COLOR(windowTextColor);
-    QSS_PALETTE_COLOR(baseColor);
-    QSS_PALETTE_COLOR(textColor);
-    QSS_PALETTE_COLOR(buttonColor);
-    QSS_PALETTE_COLOR(buttonTextColor);
-    QSS_PALETTE_COLOR(highlightColor);
-    QSS_PALETTE_COLOR(highlightedTextColor);
-    QSS_PALETTE_COLOR(linkColor);
+    SOL_QSS_COLOR(windowColor);
+    SOL_QSS_COLOR(windowTextColor);
+    SOL_QSS_COLOR(baseColor);
+    SOL_QSS_COLOR(textColor);
+    SOL_QSS_COLOR(buttonColor);
+    SOL_QSS_COLOR(buttonTextColor);
+    SOL_QSS_COLOR(highlightColor);
+    SOL_QSS_COLOR(highlightedTextColor);
+    SOL_QSS_COLOR(linkColor);
 
     // focus out
-    QSS_PALETTE_COLOR(inact_highlightColor);
-    QSS_PALETTE_COLOR(inact_highlightedTextColor);
+    SOL_QSS_COLOR(inact_highlightColor);
+    SOL_QSS_COLOR(inact_highlightedTextColor);
 
     // 비활성화
-    QSS_PALETTE_COLOR(disableColor);
+    SOL_QSS_COLOR(disableColor);
+
 };
 
 #include "StyleManger.moc"
 
-SolPalette::SolPalette(QWidget* parent): ISolWidget(parent)
+SolPaletteWidget::SolPaletteWidget(QWidget* parent): ISolWidget(parent)
 {
     _windowColor          = QColor(53, 53, 53);
     _windowTextColor      = Qt::white;
@@ -71,24 +74,26 @@ SolPalette::SolPalette(QWidget* parent): ISolWidget(parent)
     _disableColor = QColor(76, 76, 76);
 }
 
-SolPalette::~SolPalette() {
+SolPaletteWidget::~SolPaletteWidget() 
+{
 }
 
 StyleManger::StyleManger(QObject* parent) : QObject(parent)
 {
 }
 
-StyleManger::~StyleManger() {
+StyleManger::~StyleManger() 
+{
 }
 
 void StyleManger::applyTheme(const QString& inThemeName)
 {
-    SolPalette solPalette;
+    SolPaletteWidget solPalette;
 
     solPalette.applyThemePrivate(inThemeName);
 }
 
-void SolPalette::applyThemePrivate(const QString& inThemeName)
+void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)
 {
     // hide 상태에서도 qss의 qproperty 항목 로드를 보장하기 위해 스타일 적용 전 호출.
     ensurePolished();
@@ -152,7 +157,7 @@ void SolPalette::applyThemePrivate(const QString& inThemeName)
     }
 }
 
-QString SolPalette::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
+QString SolPaletteWidget::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
 {
     QString res = templateTheme;
     for (const auto& [colorName, colorValue] : colors)
@@ -162,7 +167,7 @@ QString SolPalette::applyThemeColor(const QString& templateTheme, const std::uno
     return res;
 }
 
-void SolPalette::updatePaletteColor() const
+void SolPaletteWidget::updatePaletteColor() const
 {
     QPalette qPalette;
 

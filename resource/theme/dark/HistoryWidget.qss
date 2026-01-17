@@ -4,8 +4,9 @@
   padding: 10px;
 }
 
-#HistoryWidget QListView 
+#HistoryWidget QListView
 {
+  font-size: 12px;
   padding-left: 0px;
   padding-right: 1px;
 }
@@ -18,8 +19,16 @@
 }
 
 /* listview checkbox */
-#HistoryWidget QListView::indicator:unchecked
+#HistoryWidget QListView::indicator
 {
   /* background-color: #ff0000; */
+  
+}
+
+HistoryListView
+{
+  qproperty-itemTextColor: rgba(255, 255, 255, 0.9);
+  qproperty-itemSelectionTextColor: rgba(255, 255, 255, 1);
+  qproperty-itemHoverTextColor:rgba(0, 0, 0, 0.8);
   
 }

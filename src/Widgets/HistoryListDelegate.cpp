@@ -179,8 +179,6 @@ void HistoryListDelegate::drawText(QPainter* painter
     QPalette::ColorGroup cg = opt.state.testFlag(QStyle::State_Enabled)
                                   ? QPalette::Normal
                                   : QPalette::Disabled;
-    // if (cg == QPalette::Normal && !(opt.state.testFlag(QStyle::State_Active)))
-        // cg = QPalette::Inactive;
 
     const QWidget* widget  = opt.widget;
     const QStyle* appStyle = widget ? widget->style() : QApplication::style();
@@ -192,15 +190,9 @@ void HistoryListDelegate::drawText(QPainter* painter
         return;
     }
 
-    // appStyle->drawItemText
-    opt.palette.setColor(cg, QPalette::Text, historyListView->getItemColor(sol::itemTextColorRole));
-
-    opt.palette.setColor(cg, QPalette::HighlightedText, historyListView->getItemColor(sol::itemSelectionTextColorRole));
     // painter->drawText
-    QPalette::ColorRole textColorRole = QPalette::NoRole;
     if (opt.state.testFlag(QStyle::State_Selected))
     {
-        textColorRole = QPalette::HighlightedText;
         painter->setPen(historyListView->getItemColor(sol::itemSelectionTextColorRole));
     }
     else if (opt.state.testFlag(QStyle::State_MouseOver))
@@ -209,19 +201,22 @@ void HistoryListDelegate::drawText(QPainter* painter
     }
     else
     {
-        textColorRole = QPalette::Text;
         painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
     }
-    
+
     if (opt.state.testFlag(QStyle::State_Editing))
     {
-        textColorRole = QPalette::Text;
         painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
     }
 
-    appStyle->drawItemText(painter, inTextRect, Qt::TextForceLeftToRight, opt.palette, true, inText, textColorRole);
-    
-    // painter->drawText(inTextRect, Qt::TextForceLeftToRight, inText);
+    QRect newrec = inTextRect.translated(15,0);
 
+    painter->drawText(newrec, Qt::TextForceLeftToRight, inText);
+
+    // appStyle->drawItemText
+
+    newrec = newrec.translated(0,12);
+    
+    appStyle->drawItemText(painter, newrec, Qt::TextForceLeftToRight, opt.palette, true, inText, QPalette::NoRole);
 }
 

@@ -1,13 +1,13 @@
 ﻿// Copyright (c) 2026 Kim Yubin. All rights reserved.
-#include "TrHistoryCacheData.h"
+#include "HistoryCacheData.h"
 
 
-TrHistoryCacheData::TrHistoryCacheData()
+HistoryCacheData::HistoryCacheData()
     : _dbId(0)
     , _textStyle(TextStyle::PlainText)
     , _bCheckState(Qt::Unchecked) {}
 
-TrHistoryCacheData::TrHistoryCacheData(const qint64 inDbId
+HistoryCacheData::HistoryCacheData(const qint64 inDbId
                                  , const QString& inEngine
                                  , const QString& inSourceLang
                                  , const QString& inTargetLang
@@ -27,45 +27,45 @@ TrHistoryCacheData::TrHistoryCacheData(const qint64 inDbId
     , _bCheckState(inCheckState)
 {}
 
-qint64 TrHistoryCacheData::getDbId() const
+qint64 HistoryCacheData::getDbId() const
 {
     return _dbId; 
 }
-TextStyle TrHistoryCacheData::getTextStyle() const
+TextStyle HistoryCacheData::getTextStyle() const
 {
     return _textStyle; 
 }
-Qt::CheckState TrHistoryCacheData::getCheckState() const
+Qt::CheckState HistoryCacheData::getCheckState() const
 {
     return _bCheckState; 
 }
 
-void TrHistoryCacheData::setCheckState(const Qt::CheckState inState) 
+void HistoryCacheData::setCheckState(const Qt::CheckState inState) 
 {
     _bCheckState = inState;    
 }
 
-QString TrHistoryCacheData::getEngine() const
+QString HistoryCacheData::getEngine() const
 {
     return _engine; 
 }
-QString TrHistoryCacheData::getSourceLang() const
+QString HistoryCacheData::getSourceLang() const
 {
     return _sourceLang; 
 }
-QString TrHistoryCacheData::getTargetLang() const
+QString HistoryCacheData::getTargetLang() const
 {
     return _targetLang; 
 }
-QString TrHistoryCacheData::getSourceText() const
+QString HistoryCacheData::getSourceText() const
 {
     return _sourceText; 
 }
-QString TrHistoryCacheData::getTargetText() const
+QString HistoryCacheData::getTargetText() const
 {
     return _targetText; 
 }
-QString TrHistoryCacheData::getTimeStamp() const
+QString HistoryCacheData::getTimeStamp() const
 {
     return _timeStamp; 
 }

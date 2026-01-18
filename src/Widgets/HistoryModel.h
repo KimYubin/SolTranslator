@@ -8,7 +8,7 @@
 
 #include "SolTypes.h"
 
-class TrHistoryCacheData;
+class HistoryCacheData;
 
 class HistoryModel : public QAbstractListModel
 {
@@ -26,7 +26,7 @@ public:
     virtual bool insertRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
     virtual bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
-    std::expected<const TrHistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
+    std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
 
 private:
     void updateTranslateCache();

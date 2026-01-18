@@ -108,7 +108,7 @@ void HistoryWidget::setupUI()
         }
 
         const int lastestRowIndex  = selected.indexes().back().row();
-        const std::expected<const TrHistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
+        const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
 
         if (selectedTr.has_value() == false)
         {

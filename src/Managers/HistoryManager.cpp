@@ -204,7 +204,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     return res;
 }
 
-std::expected<const TrHistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)
+std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)
 {
     if (inIdx < 0 || inIdx >= _translateTextCache.size())
     {

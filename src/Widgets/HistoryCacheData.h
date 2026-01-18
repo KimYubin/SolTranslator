@@ -10,14 +10,14 @@
 
 enum class TextStyle;
 
-class TrHistoryCacheData
+class HistoryCacheData
 {
 public:
-    explicit TrHistoryCacheData();
+    explicit HistoryCacheData();
 
     // order by db table and sql select 
     // create_history_data.sql /  select_translation_timeline.sql
-    explicit TrHistoryCacheData(const qint64 inDbId
+    explicit HistoryCacheData(const qint64 inDbId
                             , const QString& inEngine
                             , const QString& inSourceLang
                             , const QString& inTargetLang

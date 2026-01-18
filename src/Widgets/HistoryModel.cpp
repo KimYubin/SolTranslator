@@ -8,7 +8,7 @@
 #include "SolTranslatorCore.h"
 
 #include "Managers/HistoryManager.h"
-#include "Widgets/TrHistoryCacheData.h"
+#include "Widgets/HistoryCacheData.h"
 
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -28,7 +28,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    const std::expected<const TrHistoryCacheData*, QString> trCache = getTranslateCache(index.row());
+    const std::expected<const HistoryCacheData*, QString> trCache = getTranslateCache(index.row());
     
     if (trCache.has_value() == false)
     {
@@ -131,7 +131,7 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     return true;
 }
 
-std::expected<const TrHistoryCacheData*, QString> HistoryModel::getTranslateCache(const int inIdx) const
+std::expected<const HistoryCacheData*, QString> HistoryModel::getTranslateCache(const int inIdx) const
 {
     return solCore->historyManager()->getTranslateCache(inIdx);
 }

@@ -221,7 +221,7 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
         return false;
     }
 
-    _translateTextCache[inIdx]._bCheckState = inState;
+    _translateTextCache[inIdx].setCheckState(inState);
     return true;
 }
 
@@ -256,11 +256,16 @@ void HistoryManager::applyTranslateHistory()
     _translateTextCache.clear();
     while (sqlQuery.next())
     {
-        TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(2).toString(), TextStyle::PlainText);
+        const TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(6).toString(), TextStyle::PlainText);
 
         _translateTextCache.emplace_back(sqlQuery.value(0).toLongLong()
                                        , sqlQuery.value(1).toString()
-                                       , textStyle);
+                                       , sqlQuery.value(2).toString()
+                                       , sqlQuery.value(3).toString()
+                                       , sqlQuery.value(4).toString()
+                                       , sqlQuery.value(5).toString()
+                                       , textStyle
+                                       , sqlQuery.value(7).toString());
     }
 
     transactionGuard.commit();

@@ -8,6 +8,8 @@
 
 #include "SolTypes.h"
 
+class TrHistoryCacheData;
+
 class HistoryModel : public QAbstractListModel
 {
     Q_OBJECT

@@ -150,41 +150,6 @@ struct TranslateRequestInfo
     std::optional<std::function<void(const QString&)>> callbackTranslateStreaming;
 };
 
-struct TrHistoryCacheData
-{
-    static TrHistoryCacheData None()
-    {
-        static TrHistoryCacheData none;
-        return none;
-    };
-
-    TrHistoryCacheData(
-        const qint64 inId                 = 0
-      , const QString& inTranslateText    = {}
-      , const TextStyle inTextStyle       = TextStyle::PlainText
-      , const Qt::CheckState inCheckState = Qt::Unchecked
-    )
-        : _dbId(inId)
-        , _translateText(inTranslateText)
-        , _textStyle(inTextStyle)
-        , _bCheckState(inCheckState)
-    {}
-
-    qint64 _dbId;
-    QString _translateText;
-    TextStyle _textStyle;
-    Qt::CheckState _bCheckState;
-
-    /*
-    * 
-    QString _engine;
-    QString _sourceLang;
-    QString _targetLang;
-    QString _sourceText;
-    QString _targetText;
-
-     */
-};
 
 /**
  * 언어 타입, 코드, 이름 등을 총괄합니다

@@ -116,7 +116,7 @@ void HistoryWidget::setupUI()
             return;
         }
 
-        _selectedTextEdit->setFormattingText(selectedTr.value()->_translateText, selectedTr.value()->_textStyle);
+        _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);

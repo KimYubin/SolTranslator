@@ -8,6 +8,7 @@
 #include "SolTranslatorCore.h"
 
 #include "Managers/HistoryManager.h"
+#include "Widgets/TrHistoryCacheData.h"
 
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -36,16 +37,34 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
+    case sol::SourceLangRole:
+    {
+        return trCache.value()->getSourceLang();
+    }
+    case sol::TagetLangRole:
+    {
+        return trCache.value()->getTargetLang();
+    }
+    case sol::SourceTextRole:
+    {
+        return trCache.value()->getSourceText();
+    }
     case sol::TargetTextRole:
     {
-        return trCache.value()->_translateText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+        return trCache.value()->getTargetText().left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+    }
+    case sol::TimeStampRole:
+    {
+        return trCache.value()->getTimeStamp();
     }
     case sol::CheckRole:
     {
-        return trCache.value()->_bCheckState;
+        return trCache.value()->getCheckState();
     }
     default:
+    {
         break;
+    }
     }
 
     return QVariant();

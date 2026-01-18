@@ -11,6 +11,7 @@
 
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
+#include "SolGuard.h"
 #include "SolLog.h"
 
 constexpr int CheckBoxSize = 20;
@@ -41,19 +42,6 @@ void HistoryListDelegate::paint(QPainter* painter
     const QWidget* widget  = opt.widget;
     const QStyle* appStyle = widget ? widget->style() : QApplication::style();
 
-    int align = Qt::AlignLeft; //QStyle::visualAlignment(Qt::AlignLeft, QFlag(d->align));
-
-    // text
-    opt.text = index.data(sol::TargetTextRole).toString();
-    appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
-    
-    // int flags = align | (d->textDirection() == Qt::LeftToRight ? Qt::TextForceLeftToRight: Qt::TextForceRightToLeft);
-
-    QRect textRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
-
-    drawText(painter, opt, textRect, index.data(sol::TargetTextRole).toString());
-
-
     // check
     const Qt::CheckState checkState = static_cast<Qt::CheckState>(index.data(sol::CheckRole).toInt());
 
@@ -65,6 +53,20 @@ void HistoryListDelegate::paint(QPainter* painter
 
     appStyle->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &checkOpt, painter, widget);
 
+    appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
+
+    // text
+    const QRect itemTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
+
+    const QRect langTextRect   = itemTextRect.translated(checkOpt.rect.right() + CheckBoxMargin, 0);
+    const QRect sourceTextRect = langTextRect.translated(0, itemTextRect.height()/3);
+    const QRect targetTextRect = sourceTextRect.translated(0, itemTextRect.height()/3);
+
+    const QString langText = index.data(sol::SourceLangRole).toString() + "->" + index.data(sol::TagetLangRole).toString();
+
+    drawText(painter, opt, langTextRect, langText);
+    drawText(painter, opt, sourceTextRect, index.data(sol::SourceTextRole).toString());
+    drawText(painter, opt, targetTextRect, index.data(sol::TargetTextRole).toString());
 }
 
 bool HistoryListDelegate::editorEvent(QEvent* event
@@ -175,27 +177,22 @@ void HistoryListDelegate::drawText(QPainter* painter
                                  , const QRect& inTextRect
                                  , const QString& inText) const
 {
-    QStyleOptionViewItem opt{inOption};
-    QPalette::ColorGroup cg = opt.state.testFlag(QStyle::State_Enabled)
-                                  ? QPalette::Normal
-                                  : QPalette::Disabled;
+    const QWidget* widget  = inOption.widget;
+    const HistoryListView* historyListView = qobject_cast<const HistoryListView*>(widget);
 
-    const QWidget* widget  = opt.widget;
-    const QStyle* appStyle = widget ? widget->style() : QApplication::style();
-    const HistoryListView* historyListView = qobject_cast<HistoryListView*>(const_cast<QWidget*>(opt.widget));
-    
     if (historyListView == nullptr)
     {
-        solDebug<<"historyListView is not valid";
+        solDebug << "historyListView is not valid";
         return;
     }
 
-    // painter->drawText
-    if (opt.state.testFlag(QStyle::State_Selected))
+    SolTemplateGuard<QPainter> stg(painter);
+
+    if (inOption.state.testFlag(QStyle::State_Selected))
     {
         painter->setPen(historyListView->getItemColor(sol::itemSelectionTextColorRole));
     }
-    else if (opt.state.testFlag(QStyle::State_MouseOver))
+    else if (inOption.state.testFlag(QStyle::State_MouseOver))
     {
         painter->setPen(historyListView->getItemColor(sol::itemHoverTextColorRole));
     }
@@ -204,19 +201,13 @@ void HistoryListDelegate::drawText(QPainter* painter
         painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
     }
 
-    if (opt.state.testFlag(QStyle::State_Editing))
+    if (inOption.state.testFlag(QStyle::State_Editing))
     {
         painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
     }
 
-    QRect newrec = inTextRect.translated(15,0);
+    const QStyle* appStyle = widget ? widget->style() : QApplication::style();
 
-    painter->drawText(newrec, Qt::TextForceLeftToRight, inText);
-
-    // appStyle->drawItemText
-
-    newrec = newrec.translated(0,12);
-    
-    appStyle->drawItemText(painter, newrec, Qt::TextForceLeftToRight, opt.palette, true, inText, QPalette::NoRole);
+    appStyle->drawItemText(painter, inTextRect, Qt::TextForceLeftToRight, inOption.palette, true, inText, QPalette::NoRole);
 }
 

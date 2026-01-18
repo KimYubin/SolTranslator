@@ -10,6 +10,9 @@
 #include "SolHashQueue.h"
 #include "SolTypes.h"
 
+#include "Widgets/TrHistoryCacheData.h"
+
+class TrHistoryCacheData;
 class SolTranslatorCore;
 class QSqlError;
 class QTimer;

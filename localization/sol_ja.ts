@@ -245,8 +245,8 @@
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="44"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="269"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="362"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="268"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="361"/>
         <source>SolTranslator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,37 +287,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="269"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="271"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="271"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="331"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="330"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="334"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="333"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="337"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="336"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="340"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="339"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>

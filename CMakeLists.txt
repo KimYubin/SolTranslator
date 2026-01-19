@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 4.1.2)
 
 project(SolTranslator VERSION 0.0.1 LANGUAGES CXX)
 
@@ -24,7 +24,7 @@ find_package(
         Gui
         LinguistTools
 )
-include_directories("C:/Qt/6.9.0/Src")
+include_directories("C:/Qt/6.10.1/Src")
 
 file(GLOB_RECURSE PROJECT_SOURCES
         "src/*.cpp"
@@ -33,7 +33,6 @@ file(GLOB_RECURSE PROJECT_SOURCES
         "src/*.qml"
         "resource/*.qrc"
 )
-
 
 qt_add_executable(
         SolTranslator
@@ -50,6 +49,10 @@ qt_add_executable(
         src/SolLog.h
         src/Widgets/HistoryListDelegate.cpp
         src/Widgets/HistoryListDelegate.h
+        src/Widgets/HistoryCacheData.cpp
+        src/Widgets/HistoryCacheData.h
+        src/SolGuard.cpp
+        src/SolGuard.h
 )
 
 # ============================

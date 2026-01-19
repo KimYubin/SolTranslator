@@ -34,12 +34,10 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
 
-QString EngineName::getName(EngineType inEngineType)
+QString EngineHelper::getName(EngineType inEngineType)
 {
     switch (inEngineType)
     {
-    case EngineType::Default:
-        break;
     case EngineType::Google:
         break;
     case EngineType::OpenAI:
@@ -50,6 +48,11 @@ QString EngineName::getName(EngineType inEngineType)
     }
 
     return sol::enumToQStr(inEngineType);
+}
+
+EngineType EngineHelper::getDefaultEngineType() 
+{
+    return EngineType::Google;
 }
 
 QString SolPaths::getSolAppPath(const QString& inSecondaryDir, const QString& inFilePath)

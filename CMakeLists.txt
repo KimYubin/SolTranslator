@@ -53,6 +53,8 @@ qt_add_executable(
         src/Widgets/HistoryCacheData.h
         src/SolGuard.cpp
         src/SolGuard.h
+        src/SubWidgets/EnginSelector.cpp
+        src/SubWidgets/EnginSelector.h
 )
 
 # ============================

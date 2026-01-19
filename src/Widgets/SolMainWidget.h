@@ -10,8 +10,8 @@
 #include "ISolWidget.h"
 
 
+class EnginSelector;
 class QPushButton;
-class DropdownMenu;
 class QComboBox;
 class QButtonGroup;
 class SettingsWidget;
@@ -65,7 +65,7 @@ private:
 
     Ui::SolMainWidget* ui;
 
-    DropdownMenu* _engineSelector;
+    EnginSelector* _engineSelector;
 
     // ~==============
     // sub widgets

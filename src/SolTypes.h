@@ -15,10 +15,11 @@ class SolTypes
 {
 };
 
-struct EngineName
+struct EngineHelper
 {
 public:
     static QString getName(EngineType inEngineType);
+    static EngineType getDefaultEngineType();
 };
 
 
@@ -89,9 +90,7 @@ enum ItemColorRole
 
 enum class EngineType
 {
-    Default = 0
-
-  , Google
+    Google
   , OpenAI
   , FinPoint
   , FinPointDebug

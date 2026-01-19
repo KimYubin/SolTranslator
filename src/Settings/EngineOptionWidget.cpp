@@ -30,18 +30,9 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         ui->setupUi(engineGroup);
         engineVLay->addWidget(ui->gridLayoutWidget, 0, Qt::AlignmentFlag::AlignTop);
     }
-    
-
-    ui->enginSelectCombo->setEditable(false);
-
-    // 엔진 선택 초기화
-    for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
-    {
-        ui->enginSelectCombo->addItem(EngineName::getName(eg), static_cast<int>(eg));
-    }
 
     // 번역 엔진 변경.
-    connect(ui->enginSelectCombo, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
+    ui->enginSelectCombo->setCurrentIndexChanged([this](const int inIdx)
     {
         const int payload    = ui->enginSelectCombo->itemData(inIdx).toInt();
         const EngineType eg  = static_cast<EngineType>(payload);
@@ -79,8 +70,6 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         solConfig.setAPIKey(eg, inputApiKey);
     });
 
-
-    ui->enginSelectCombo->setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
 
 
     // AI 옵션

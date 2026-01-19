@@ -29,6 +29,7 @@
 #include "Settings/SettingsWidget.h"
 
 #include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/EnginSelector.h"
 
 #include "Widgets/ui_SolMainWidget.h"
 
@@ -115,23 +116,15 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     // ~=========================
     // 번역 엔진 선택
-    _engineSelector = new DropdownMenu(this);
-
-    for (EngineType eg = EngineType::Default; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
-    {
-        _engineSelector->addItem(EngineName::getName(eg), static_cast<int>(eg));
-    }
-
-    _engineSelector->setEditable(false);
-    _engineSelector->setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
-    SolTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
-
-    connect(_engineSelector, &QComboBox::currentIndexChanged, this, [this](const int inIdx)
+    _engineSelector = new EnginSelector(this);
+    _engineSelector->setCurrentIndexChanged([this](const int inIdx)
     {
         const int payload      = _engineSelector->itemData(inIdx).toInt();
         const EngineType curEg = static_cast<EngineType>(payload);
         solConfig.setCurrentEngineType(curEg);
     });
+
+    SolTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignmentFlag::AlignRight);
 

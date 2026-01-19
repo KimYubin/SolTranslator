@@ -32,7 +32,6 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestI
     const EngineType currentEngine = solConfig.getCurrentEngineType();
     switch (currentEngine)
     {
-    case EngineType::Default: // break;
     case EngineType::Google:
         trUnit = new GoogleTrUnit(inTranslateRequestInfo, this);
         break;

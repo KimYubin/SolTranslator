@@ -46,19 +46,19 @@ void ConfigManager::setCurrentEngineType(EngineType inEngineType)
 
 EngineType ConfigManager::getCurrentEngineType()
 {
-    return getEnumValue(Engine_Type, EngineType::Default);
+    return getEnumValue(Engine_Type, EngineHelper::getDefaultEngineType());
 }
 
 
 void ConfigManager::setAPIKey(EngineType inEngineType, const QString& inAPIKey)
 {
-    _settings->setValue(API_Key + EngineName::getName(inEngineType), inAPIKey);
+    _settings->setValue(API_Key + EngineHelper::getName(inEngineType), inAPIKey);
     _settings->sync();
 }
 
 QString ConfigManager::getAPIKey(EngineType inEngineType)
 {
-    return _settings->value(API_Key + EngineName::getName(inEngineType)).toString();
+    return _settings->value(API_Key + EngineHelper::getName(inEngineType)).toString();
 }
 
 

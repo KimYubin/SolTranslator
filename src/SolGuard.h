@@ -7,52 +7,52 @@
 
 #include <functional>
 
-
-class SolGuard {
-};
-
 /**
- * 범위를 벗어날 때, 지정된 동작을 수행하는 간단한 RAII 가드 클래스.
- * 스코프를 벗어나 객체가 소멸될 때, endFunctor가 호출됩니다. 
+ * RAII 스타일 가드 클래스입니다.
+ * 두 함수를 등록해 균형 잡힌 함수 호출(like new / delete)을 하거나,
+ * endFunctor만 등록해, 범위를 벗어날 때, 지정된 동작을 수행하도록 설정할 수 있습니다.
+ * 
  */
 class SolGeneralGuard
 {
-protected:
-    explicit SolGeneralGuard() = default;
-
 public:
-    explicit SolGeneralGuard(std::function<void()>&& inEndFunctor)
-    : _endFunctor(inEndFunctor) {};
+    explicit SolGeneralGuard(std::function<void()>&& inStartFunctor
+                           , std::function<void()>&& inEndFunctor)
+        : _startFunctor(inStartFunctor), _endFunctor(inEndFunctor)
+    {
+        _startFunctor();
+    };
 
-    ~SolGeneralGuard() { _endFunctor(); } ;
+    /**
+     * 
+     */
+    explicit SolGeneralGuard(std::function<void()>&& inEndFunctor)
+        : _endFunctor(inEndFunctor) {};
+
+    ~SolGeneralGuard()
+    {
+        _endFunctor();
+    };
 
 private:
+    std::function<void()> _startFunctor;
     std::function<void()> _endFunctor;
 
     Q_DISABLE_COPY_MOVE(SolGeneralGuard)
 };
 
+
 /**
- * 균형 잡힌 함수 호출을 위한 
- * RAII기반 가드 클래스입니다.
- * (like new / delete)
- * 생성자 템플릿 특수화를 통해 사용할 수 있습니다.
+ * Painter의 pen을 rollback하기 위한 RAII 스타일 가드 클래스입니다.
  */
-template <typename T>
-class SolTemplateGuard: public SolGeneralGuard
+class PainterPenStateGuard : public SolGeneralGuard
 {
 public:
-    /** QPainter 특수화 */
-    explicit SolTemplateGuard(QPainter* inIns) requires std::same_as<T, QPainter>
-        : SolGeneralGuard([inIns, prvPen = inIns->pen()]()
+    explicit PainterPenStateGuard(QPainter* inPainter)
+        : SolGeneralGuard([inPainter, prvPen = inPainter->pen()]()
         {
-            inIns->setPen(prvPen);
+            inPainter->setPen(prvPen);
         }) {}
-
-private:
-    std::function<void()> _startFunctor;
-
-    Q_DISABLE_COPY_MOVE(SolTemplateGuard)
 };
 
 

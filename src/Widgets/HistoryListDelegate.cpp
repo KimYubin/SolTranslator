@@ -186,7 +186,7 @@ void HistoryListDelegate::drawText(QPainter* painter
         return;
     }
 
-    SolTemplateGuard<QPainter> stg(painter);
+    PainterPenStateGuard stg{painter};
 
     if (inOption.state.testFlag(QStyle::State_Selected))
     {

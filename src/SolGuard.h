@@ -9,16 +9,18 @@
 
 /**
  * RAII 스타일 가드 클래스입니다.
- * 두 함수를 등록해 균형 잡힌 함수 호출(like new / delete)을 하거나,
- * endFunctor만 등록해, 범위를 벗어날 때, 지정된 동작을 수행하도록 설정할 수 있습니다.
- * 
+ * endFunctor만 등록하면, 범위를 벗어날 때 함수를 호출할 수 있습니다. 
+ * 두 함수를 등록하면, 균형 잡힌 함수 호출(like new / delete)을 할 수 있습니다.
  */
+template <typename Func>
 class SolGeneralGuard
 {
 public:
-    explicit SolGeneralGuard(std::function<void()>&& inStartFunctor
-                           , std::function<void()>&& inEndFunctor)
-        : _startFunctor(inStartFunctor), _endFunctor(inEndFunctor)
+    Q_NODISCARD_CTOR
+    explicit SolGeneralGuard(std::function<Func>&& inStartFunctor
+                           , std::function<Func>&& inEndFunctor)
+        : _startFunctor(std::move(inStartFunctor))
+        , _endFunctor(std::move(inEndFunctor))
     {
         _startFunctor();
     };
@@ -26,8 +28,10 @@ public:
     /**
      * 
      */
-    explicit SolGeneralGuard(std::function<void()>&& inEndFunctor)
-        : _endFunctor(inEndFunctor) {};
+    Q_NODISCARD_CTOR
+    explicit SolGeneralGuard(std::function<Func>&& inEndFunctor)
+        : _endFunctor(inEndFunctor) 
+    {};
 
     ~SolGeneralGuard()
     {
@@ -35,8 +39,8 @@ public:
     };
 
 private:
-    std::function<void()> _startFunctor;
-    std::function<void()> _endFunctor;
+    std::function<Func> _startFunctor;
+    std::function<Func> _endFunctor;
 
     Q_DISABLE_COPY_MOVE(SolGeneralGuard)
 };
@@ -44,10 +48,12 @@ private:
 
 /**
  * Painter의 pen을 rollback하기 위한 RAII 스타일 가드 클래스입니다.
+ * @see 
  */
-class PainterPenStateGuard : public SolGeneralGuard
+class PainterPenStateGuard : public SolGeneralGuard<void()>
 {
 public:
+    Q_NODISCARD_CTOR
     explicit PainterPenStateGuard(QPainter* inPainter)
         : SolGeneralGuard([inPainter, prvPen = inPainter->pen()]()
         {

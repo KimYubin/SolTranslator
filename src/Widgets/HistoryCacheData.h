@@ -2,6 +2,8 @@
 #ifndef SOLTRANSLATOR_HISTORYCACHEDATA_H
 #define SOLTRANSLATOR_HISTORYCACHEDATA_H
 
+#include <QDateTime>
+
 #include <SolTypes.h>
 
 #include <QtTypes>
@@ -24,7 +26,7 @@ public:
                             , const QString& inSourceText
                             , const QString& inTargetText
                             , TextStyle inTextStyle
-                            , const QString& inTimeStamp
+                            , const qint64& inTimeStamp
                             , Qt::CheckState inCheckState = Qt::Unchecked);
 
 
@@ -38,8 +40,12 @@ public:
     QString getTargetLang() const;
     QString getSourceText() const;
     QString getTargetText() const;
+    /** 미리보기용 간략화된 원문을 반환합니다. */
+    QString getSimplifiedSourceText() const;
+    /** 미리보기용 간략화된 원문을 반환합니다. */
+    QString getSimplifiedTargetText() const;
 
-    QString getTimeStamp() const;
+    QString getTimeStampString() const;
 
 private:
     qint64 _dbId;
@@ -49,7 +55,7 @@ private:
     QString _sourceText;
     QString _targetText;
     TextStyle _textStyle;
-    QString _timeStamp;
+    QDateTime _timeStamp;
 
     Qt::CheckState _bCheckState;
 };

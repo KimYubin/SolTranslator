@@ -47,15 +47,15 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
     }
     case sol::SourceTextRole:
     {
-        return trCache.value()->getSourceText();
+        return trCache.value()->getSimplifiedSourceText();
     }
     case sol::TargetTextRole:
     {
-        return trCache.value()->getTargetText().left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+        return trCache.value()->getSimplifiedTargetText();
     }
     case sol::TimeStampRole:
     {
-        return trCache.value()->getTimeStamp();
+        return trCache.value()->getTimeStampString();
     }
     case sol::CheckRole:
     {

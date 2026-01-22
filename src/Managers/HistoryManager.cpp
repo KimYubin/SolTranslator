@@ -71,6 +71,31 @@ QSqlError HistoryManager::initializeDB()
     return QSqlError();
 }
 
+std::expected<bool, QString> updateTimeStamp(const QVariant& inHistoryDataId)
+{
+    const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
+
+    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
+    if (isOpenTimeline == false)
+    {
+        return std::unexpected("not found sql files");
+    }
+
+    QSqlQuery sqlQuery;
+    sqlQuery.prepare(insertTimelineQuery);
+
+    sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
+    sqlQuery.bindValue(":history_data_id", inHistoryDataId);
+
+    if (sqlQuery.exec() == false)
+    {
+        solDebug << sqlQuery.lastError();
+        return std::unexpected("Error executing SQL");
+    }
+
+    return true;
+}
+
 void HistoryManager::addHistory(const EngineType inEngineType
                               , const LangType inSourceLang
                               , const LangType inTargetLang
@@ -82,9 +107,8 @@ void HistoryManager::addHistory(const EngineType inEngineType
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
     
     const auto [isOpenData, insertDataQuery] = SolSql::readSqlFromFile(insertDataFilePath);
-    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
 
-    if ((isOpenData && isOpenTimeline) == false)
+    if (isOpenData == false)
     {
         solDebug << "not found sql files";
         return;
@@ -114,19 +138,11 @@ void HistoryManager::addHistory(const EngineType inEngineType
         historyDataId = sqlQuery.lastInsertId();
     }
 
-    // insert history timeline (update)
+    const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
+    if (insertRes.has_value() == false)
     {
-        QSqlQuery sqlQuery;
-        sqlQuery.prepare(insertTimelineQuery);
-
-        sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
-        sqlQuery.bindValue(":history_data_id", historyDataId);
-
-        if (sqlQuery.exec() == false)
-        {
-            solDebug << "Error executing SQL" << sqlQuery.lastError();
-            return;
-        }
+        solDebug << insertRes.value();
+        return;
     }
 
     transactionGuard.commit();
@@ -141,12 +157,10 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     std::tuple<bool, QString> res = {false, QString()};
 
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
-    const QString insertTimelineFilePath    = ":/sql/insert_translation_timeline.sql";
 
     const auto [isOpenData, selectHistoryQuery]      = SolSql::readSqlFromFile(selectHistoryDataFilePath);
-    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
 
-    if ((isOpenData && isOpenTimeline) == false)
+    if (isOpenData == false)
     {
         solDebug << "not found sql files";
         return res;
@@ -154,7 +168,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 
     SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
-    qint64 historyDataId{-1};
+    QVariant historyDataId;
     QString targetText;
 
     // find history
@@ -179,24 +193,17 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
             return res;
         }
 
-        historyDataId = sqlQuery.value(0).toLongLong();
+        historyDataId = sqlQuery.value(0);
         targetText    = sqlQuery.value(1).toString();
         res           = {true, targetText};
     }
 
     // insert history timeline (update)
+    const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
+    if (insertRes.has_value() == false)
     {
-        QSqlQuery sqlQuery;
-        sqlQuery.prepare(insertTimelineQuery);
-
-        sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
-        sqlQuery.bindValue(":history_data_id", historyDataId);
-
-        if (sqlQuery.exec() == false)
-        {
-            solDebug << "Error executing SQL" << sqlQuery.lastError();
-            return res;
-        }
+        solDebug << insertRes.value();
+        return res;
     }
 
     transactionGuard.commit();
@@ -265,7 +272,7 @@ void HistoryManager::applyTranslateHistory()
                                        , sqlQuery.value(4).toString()
                                        , sqlQuery.value(5).toString()
                                        , textStyle
-                                       , sqlQuery.value(7).toString());
+                                       , sqlQuery.value(7).toLongLong());
     }
 
     transactionGuard.commit();

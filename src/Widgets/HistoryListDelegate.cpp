@@ -42,7 +42,10 @@ void HistoryListDelegate::paint(QPainter* painter
     const QWidget* widget  = opt.widget;
     const QStyle* appStyle = widget ? widget->style() : QApplication::style();
 
-    // check
+    // item
+    appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
+
+    // checkbox
     const Qt::CheckState checkState = static_cast<Qt::CheckState>(index.data(sol::CheckRole).toInt());
 
     QStyleOptionButton checkOpt;
@@ -53,16 +56,16 @@ void HistoryListDelegate::paint(QPainter* painter
 
     appStyle->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &checkOpt, painter, widget);
 
-    appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
-
     // text
     const QRect itemTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
 
     const QRect langTextRect   = itemTextRect.translated(checkOpt.rect.right() + CheckBoxMargin, 0);
-    const QRect sourceTextRect = langTextRect.translated(0, itemTextRect.height()/3);
-    const QRect targetTextRect = sourceTextRect.translated(0, itemTextRect.height()/3);
+    const QRect sourceTextRect = langTextRect.translated(0, itemTextRect.height() / 3);
+    const QRect targetTextRect = sourceTextRect.translated(0, itemTextRect.height() / 3);
 
-    const QString langText = index.data(sol::SourceLangRole).toString() + "->" + index.data(sol::TagetLangRole).toString();
+    const QString langText = index.data(sol::SourceLangRole).toString()
+            + "->" + index.data(sol::TagetLangRole).toString()
+            + "     " + index.data(sol::TimeStampRole).toString();
 
     drawText(painter, opt, langTextRect, langText);
     drawText(painter, opt, sourceTextRect, index.data(sol::SourceTextRole).toString());
@@ -149,27 +152,19 @@ bool HistoryListDelegate::editorEvent(QEvent* event
     return model->setData(index, state, sol::CheckRole);
 }
 
-static QSizeF viewItemTextLayout(QTextLayout& textLayout
-                               , const int lineWidth)
+QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    qreal height    = 0;
-    qreal widthUsed = 0;
-    textLayout.beginLayout();
-    int i = 0;
-    while (true)
-    {
-        QTextLine line = textLayout.createLine();
-        if (!line.isValid())
-            break;
-        line.setLineWidth(lineWidth);
-        line.setPosition(QPointF(0, height));
-        height    += line.height();
-        widthUsed = qMax(widthUsed, line.naturalTextWidth());
-        // we assume that the height of the next line is the same as the current one
-        ++i;
-    }
-    textLayout.endLayout();
-    return QSizeF(widthUsed, height);
+    const QWidget* widget  = option.widget;
+    const QStyle* appStyle = widget ? widget->style() : QApplication::style();
+
+    const int textHeight   = option.fontMetrics.height();
+    const int textMargin   = textHeight * 0.2;
+    const int frameHMargin = appStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, &option, widget);
+
+    QSize superSize = QStyledItemDelegate::sizeHint(option, index);
+    superSize.setHeight(textHeight * 3 + textMargin * 2 + frameHMargin * 2);
+
+    return superSize;
 }
 
 void HistoryListDelegate::drawText(QPainter* painter

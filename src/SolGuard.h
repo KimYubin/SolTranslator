@@ -30,7 +30,7 @@ public:
      */
     Q_NODISCARD_CTOR
     explicit SolGeneralGuard(std::function<Func>&& inEndFunctor)
-        : _endFunctor(inEndFunctor) 
+        : _endFunctor(inEndFunctor)
     {};
 
     ~SolGeneralGuard()
@@ -58,7 +58,8 @@ public:
         : SolGeneralGuard([inPainter, prvPen = inPainter->pen()]()
         {
             inPainter->setPen(prvPen);
-        }) {}
+        })
+    {}
 };
 
 

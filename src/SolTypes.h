@@ -161,7 +161,8 @@ public:
         : langType(inLangType)
         , codeName(inCodeName)
         , engName(inEngName)
-        , endonymName(inEndonymName) {}
+        , endonymName(inEndonymName)
+    {}
 
 
     LangType langType;   // 언어 타입

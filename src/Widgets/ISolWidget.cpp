@@ -4,10 +4,7 @@
 
 ISolWidget::ISolWidget(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
-{
-
-}
+{}
 
 ISolWidget::~ISolWidget()
-{
-}
+{}

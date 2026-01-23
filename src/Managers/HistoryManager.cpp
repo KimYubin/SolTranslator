@@ -111,7 +111,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
 {
     const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
-    
+
     const auto [isOpenData, insertDataQuery] = SolSql::readSqlFromFile(insertDataFilePath);
 
     if (isOpenData == false)

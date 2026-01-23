@@ -53,7 +53,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
     parser.addOption({sol::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
     parser.process(*qApp);
 
-    // 시작 프로그램 실행시 시스템 트레이에서 실행 
+    // 시작 프로그램 실행시 시스템 트레이에서 실행
     if (parser.isSet(sol::CmdLineOptions::START_UP_RUN))
     {
         _solMainWidget->hide();
@@ -69,8 +69,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 }
 
 SolTranslatorCore::~SolTranslatorCore()
-{
-}
+{}
 
 void SolTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
 {

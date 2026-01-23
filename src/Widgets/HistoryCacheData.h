@@ -17,7 +17,7 @@ class HistoryCacheData
 public:
     explicit HistoryCacheData();
 
-    // order by db table and sql select 
+    // order by db table and sql select
     // create_history_data.sql /  select_translation_timeline.sql
     explicit HistoryCacheData(const qint64 inDbId
                             , const QString& inEngine

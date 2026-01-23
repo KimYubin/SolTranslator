@@ -14,7 +14,8 @@ LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
     _layout->setContentsMargins(0, 0, 0, 0);
 }
 
-LayoutTextEdit::~LayoutTextEdit() {}
+LayoutTextEdit::~LayoutTextEdit()
+{}
 
 void LayoutTextEdit::resizeEvent(QResizeEvent* event)
 {

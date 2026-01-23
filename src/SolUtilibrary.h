@@ -63,7 +63,7 @@ QString QStrFromStdView(const std::string_view& inStrView);
 
 
 /**
- * enum 열거자의 이름을 QString으로 변환해서 반환합니다.
+ * enum 열거자의 이름을 QString으로 변환합니다.
  */
 template <typename EnumType>
     requires std::is_enum_v<EnumType>

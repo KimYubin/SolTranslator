@@ -23,13 +23,13 @@
 #include "SubWidgets/ResultTextEdit.h"
 
 
-HistoryListView::HistoryListView(QWidget* parent):QListView(parent) 
+HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
 {}
 
-HistoryListView::~HistoryListView() 
+HistoryListView::~HistoryListView()
 {}
 
-QColor HistoryListView::getItemColor(const sol::ItemColorRole inColorRole) const 
+QColor HistoryListView::getItemColor(const sol::ItemColorRole inColorRole) const
 {
     switch (inColorRole)
     {
@@ -48,8 +48,7 @@ HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 }
 
 HistoryWidget::~HistoryWidget()
-{
-}
+{}
 
 void HistoryWidget::setupUI()
 {
@@ -143,6 +142,6 @@ void HistoryWidget::setupUI()
             scrollBar->setValue(static_cast<int>(newVal));
         }
     });
-    
+
     _historyListView->setItemDelegate(new HistoryListDelegate);
 }

@@ -5,6 +5,5 @@
 #include "SolTranslatorCore.h"
 
 AbstractManager::AbstractManager(SolTranslatorCore* parent) : QObject(parent)
-{
-}
+{}
 

@@ -268,7 +268,6 @@ void SolMainWidget::quitApp()
     {
         qApp->quit();
     }
-    
 }
 
 void SolMainWidget::onAppQuitEvent() const
@@ -279,7 +278,7 @@ void SolMainWidget::onAppQuitEvent() const
 void SolMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     // 클릭시 마우스 위치 저장합니다.
-    // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다. 
+    // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다.
     _prevMousePos = QCursor::pos();
 
     switch (reason)
@@ -328,7 +327,7 @@ void SolMainWidget::createActions()
 
     _settingAction = new QAction(tr("설정(&S)"), this);
     connect(_settingAction, &QAction::triggered, this, &SolMainWidget::showSettingsWidget);
-    
+
     _quitAction = new QAction(tr("종료(&Q)"), this);
     connect(_quitAction, &QAction::triggered, this, &SolMainWidget::quitApp, Qt::QueuedConnection);
 }

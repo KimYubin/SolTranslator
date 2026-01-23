@@ -124,7 +124,7 @@ protected:
     QString _translatedText;
     QPropertyAnimation* _animation;
 
-    SolWidgetModeFlags _widgetModeFlags; 
+    SolWidgetModeFlags _widgetModeFlags;
 
 
     QSize _textEditSize;

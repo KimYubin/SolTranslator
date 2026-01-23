@@ -89,7 +89,7 @@ void OpenAiTrUnit::onReadyRead()
 
             // choices가 없다면,
             // value는 QJsonValue(QJsonValue::Undefined)을 반환하고,
-            // toArray()는 빈 Array를 반환합니다. 
+            // toArray()는 빈 Array를 반환합니다.
             QJsonArray choicesArr = obj.value("choices").toArray();
             if (choicesArr.isEmpty())
             {

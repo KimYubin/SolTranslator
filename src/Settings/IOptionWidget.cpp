@@ -18,7 +18,7 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
     _outScrollLayout->setContentsMargins(0, 0, 4, 0);
 
 
-    // _srollArea 
+    // _srollArea
     _srollArea = new QScrollArea(this);
     _srollArea->setWidgetResizable(true);
     _srollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -37,7 +37,7 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
     _mainLayout->setObjectName("_mainLayout");
     _mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    
+
     // _outScrollLayout -> _srollArea -> _scrollContent -> _wrapMainLayout -> _mainLayout -> innerWidgets
     _wrapMainLayout->addLayout(_mainLayout, 0, 0, 1, 1, Qt::AlignmentFlag::AlignTop);
     _scrollContent->setLayout(_wrapMainLayout);
@@ -74,8 +74,7 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 }
 
 IOptionWidget::~IOptionWidget()
-{
-}
+{}
 
 void IOptionWidget::initializeAfterCtor()
 {
@@ -110,16 +109,13 @@ void IOptionWidget::syncInOutScrollbar()
 }
 
 void IOptionWidget::apply()
-{
-}
+{}
 
 void IOptionWidget::cancel()
-{
-}
+{}
 
 void IOptionWidget::finish()
-{
-}
+{}
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle
                                                                     , QGridLayout* inParentLayout
@@ -278,12 +274,10 @@ QWidget* IOptionPage::getOptionWidget()
 }
 
 void IOptionPage::apply()
-{
-}
+{}
 
 void IOptionPage::cancel()
-{
-}
+{}
 
 void IOptionPage::finish()
 {

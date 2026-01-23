@@ -64,7 +64,7 @@ void SwitchButton::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    // 펜이 그려지기 위해 절반만큼 안쪽으로 들어가서 그려야함. 
+    // 펜이 그려지기 위해 절반만큼 안쪽으로 들어가서 그려야함.
     const qreal defaultDrawMargin = qCeil(_barPen.width() / 2.0);
     const QRectF cntRectF = contentsRect().toRectF().marginsRemoved(QMargins(defaultDrawMargin, defaultDrawMargin, defaultDrawMargin, defaultDrawMargin));
 

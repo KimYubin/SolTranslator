@@ -115,13 +115,12 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 }
 
 GeneralOptionWidget::~GeneralOptionWidget()
-{
-}
+{}
 
 
 
 // ~======================
-// GeneralOption 
+// GeneralOption
 GeneralOption::GeneralOption()
 {
     setDisplayName(tr("일반"));
@@ -131,8 +130,7 @@ GeneralOption::GeneralOption()
 }
 
 GeneralOption::~GeneralOption()
-{
-}
+{}
 
 namespace
 {

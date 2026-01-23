@@ -184,7 +184,7 @@ void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
     const int topBottomX = wCenterPos.x() - ((labelRect.width() / 2) + _borderWidth);
     const int lefRightY  = wCenterPos.y() - ((labelRect.height() / 2) + _borderWidth);
 
-    const int topY    = wGlobalPos.y() - labelRect.height() - _spacing - (_triangleHeight + _borderWidth); // 위젯 방향 마진 반영 
+    const int topY    = wGlobalPos.y() - labelRect.height() - _spacing - (_triangleHeight + _borderWidth); // 위젯 방향 마진 반영
     const int bottomY = wGlobalPos.y() + wRect.height()     + _spacing;
     const int rightX  = wGlobalPos.x() + wRect.width()      + _spacing;
     const int leftX   = wGlobalPos.x() - labelRect.width()  - _spacing - (_triangleHeight + _borderWidth);
@@ -466,7 +466,7 @@ QMargins SolToolTipBallon::triMargins(const ShowDirection inDirection) const
 }
 
 // ~==================================
-// SolTooltipFilter 
+// SolTooltipFilter
 
 void SolTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
 {
@@ -505,9 +505,8 @@ void SolTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget
     });
 }
 
-SolTooltipFilter::SolTooltipFilter(QObject* parent): QObject(parent)
-{
-}
+SolTooltipFilter::SolTooltipFilter(QObject* parent) : QObject(parent)
+{}
 
 bool SolTooltipFilter::eventFilter(QObject* obj, QEvent* event)
 {
@@ -542,7 +541,7 @@ bool SolTooltipFilter::eventFilter(QObject* obj, QEvent* event)
         SolToolTipBallon::instance()->hideTipImmediately();
         break;
     }
-    default: break;  
+    default: break;
     }
 
     return QObject::eventFilter(obj, event);

@@ -15,9 +15,8 @@ class SolPalette
 public:
     SolPalette();
     ~SolPalette();
-    
+
     QString _themeName;
-    
 };
 
 class SolPaletteWidget : public ISolWidget
@@ -74,23 +73,20 @@ SolPaletteWidget::SolPaletteWidget(QWidget* parent): ISolWidget(parent)
     _disableColor = QColor(76, 76, 76);
 }
 
-SolPaletteWidget::~SolPaletteWidget() 
-{
-}
+SolPaletteWidget::~SolPaletteWidget()
+{}
 
 StyleManger::StyleManger(QObject* parent) : QObject(parent)
-{
-}
+{}
 
-StyleManger::~StyleManger() 
-{
-}
+StyleManger::~StyleManger()
+{}
 
 void StyleManger::applyTheme(const QString& inThemeName)
 {
-    SolPaletteWidget solPalette;
+    SolPaletteWidget solPaletteWidget;
 
-    solPalette.applyThemePrivate(inThemeName);
+    solPaletteWidget.applyThemePrivate(inThemeName);
 }
 
 void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)

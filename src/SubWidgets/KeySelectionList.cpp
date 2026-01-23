@@ -4,9 +4,8 @@
 
 #include <QKeyEvent>
 
-KeySelectionList::KeySelectionList(QWidget* parent): QListWidget(parent)
-{
-}
+KeySelectionList::KeySelectionList(QWidget* parent) : QListWidget(parent)
+{}
 
 void KeySelectionList::keyPressEvent(QKeyEvent* event)
 {

@@ -26,7 +26,7 @@ void TranslateUnit::executeTextTranslation()
     if (_trReqData.originText.isEmpty())
     {
         solDebug << "translate request text is empty";
-        
+
         completeTranslatedText(_trReqData.originText);
         return;
     }

@@ -313,7 +313,7 @@ void LanguageSelectorMenuPrivate::filterItems(const QString& inText)
 void LanguageSelectorMenuPrivate::onItemClicked(QListWidgetItem* inItem)
 {
     const int payload = inItem->data(LangTypeRole).toInt();
-    
+
     emit itemSelected(static_cast<LangType>(payload));
 
     closeMenuPopup();

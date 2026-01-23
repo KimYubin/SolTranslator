@@ -105,13 +105,12 @@ EngineOptionWidget::~EngineOptionWidget()
 }
 
 void EngineOptionWidget::setEngineGroupUI()
-{
-}
+{}
 
 
 
 // ~======================
-// EngineOption 
+// EngineOption
 EngineOption::EngineOption()
 {
     setDisplayName(tr("번역 엔진"));

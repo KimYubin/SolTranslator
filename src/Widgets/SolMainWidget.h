@@ -76,7 +76,7 @@ private:
 
     TextEditTranslateWidget* _textEditTranslate;
     QPointer<SettingsWidget> _settingsWidget;
-    
+
 
     // ~==============
     // trayIcon

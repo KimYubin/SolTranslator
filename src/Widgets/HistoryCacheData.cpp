@@ -8,7 +8,8 @@
 HistoryCacheData::HistoryCacheData()
     : _dbId(0)
     , _textStyle(TextStyle::PlainText)
-    , _bCheckState(Qt::Unchecked) {}
+    , _bCheckState(Qt::Unchecked)
+{}
 
 HistoryCacheData::HistoryCacheData(const qint64 inDbId
                                  , const QString& inEngine
@@ -32,20 +33,22 @@ HistoryCacheData::HistoryCacheData(const qint64 inDbId
 
 qint64 HistoryCacheData::getDbId() const
 {
-    return _dbId; 
-}
-TextStyle HistoryCacheData::getTextStyle() const
-{
-    return _textStyle; 
-}
-Qt::CheckState HistoryCacheData::getCheckState() const
-{
-    return _bCheckState; 
+    return _dbId;
 }
 
-void HistoryCacheData::setCheckState(const Qt::CheckState inState) 
+TextStyle HistoryCacheData::getTextStyle() const
 {
-    _bCheckState = inState;    
+    return _textStyle;
+}
+
+Qt::CheckState HistoryCacheData::getCheckState() const
+{
+    return _bCheckState;
+}
+
+void HistoryCacheData::setCheckState(const Qt::CheckState inState)
+{
+    _bCheckState = inState;
 }
 
 QString HistoryCacheData::getEngine() const

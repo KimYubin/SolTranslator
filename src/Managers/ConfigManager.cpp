@@ -99,7 +99,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
     const QString appPath = QCoreApplication::applicationFilePath();
     QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
                      , QSettings::NativeFormat);
-    
+
     if (inStartRun)
     {
         settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + sol::CmdLineOptions::START_UP_RUN);

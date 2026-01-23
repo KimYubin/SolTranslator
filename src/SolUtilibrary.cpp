@@ -47,11 +47,9 @@ void noHintingFontInternal(T* inOutWidget)
     //
     // [Platforms]
     // WindowsArguments = fontengine=freetype
-    // 
+    //
     // 또한 다음을 적용해야합니다.
-    // qfont.setStyleStrategy(QFont::NoSubpixelAntialias);    
-}
-
+    // qfont.setStyleStrategy(QFont::NoSubpixelAntialias);
 }
 } // anonymous namespace
 

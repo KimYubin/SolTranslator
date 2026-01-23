@@ -3,5 +3,4 @@
 #include "AsyncManager.h"
 
 AsyncManager::AsyncManager(SolTranslatorCore* parent) : AbstractManager(parent)
-{
-}
+{}

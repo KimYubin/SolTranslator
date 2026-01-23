@@ -207,7 +207,8 @@ struct TextCacheKey
         : engineType(inEngineType)
         , originText(inOriginText)
         , sourceLang(inSourceLang)
-        , targetLang(inTargetLang) {}
+        , targetLang(inTargetLang)
+    {}
 
     EngineType engineType;
     QString originText;

@@ -38,7 +38,8 @@ ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
     setOpenLinks(true);
 }
 
-ResultTextEdit::~ResultTextEdit() {}
+ResultTextEdit::~ResultTextEdit()
+{}
 
 void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle inTextStyle)
 {

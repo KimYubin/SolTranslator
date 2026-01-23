@@ -127,8 +127,8 @@ SolToastWidget::SolToastWidget(const QString& inMsg
     show();
 }
 
-SolToastWidget::~SolToastWidget() {
-}
+SolToastWidget::~SolToastWidget()
+{}
 
 void SolToastWidget::setToastRatio(const float inToastRatio)
 {
@@ -173,11 +173,10 @@ void SolToastWidget::setToastRatio(const float inToastRatio)
 }
 
 SolToast::SolToast(QObject* parent) : QObject(parent)
-{
-}
+{}
 
-SolToast::~SolToast() {
-}
+SolToast::~SolToast()
+{}
 
 // todo: 중복 메시지를 모아서 내보내는 기능 추가
 // todo: 여러 메시지가 나올때 채팅창처럼 순차적으로 표기되도록 해야함.

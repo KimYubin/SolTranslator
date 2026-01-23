@@ -14,11 +14,11 @@ EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
     {
         addItem(EngineHelper::getName(eg), static_cast<int>(eg));
     }
-    
+
     setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
 }
 
-void EnginSelector::setCurrentIndexChanged(std::function<void(const int)>&& inFunctor) 
+void EnginSelector::setCurrentIndexChanged(std::function<void(const int)>&& inFunctor)
 {
     connect(this, &QComboBox::currentIndexChanged, this, std::move(inFunctor));
 }

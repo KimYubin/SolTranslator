@@ -35,8 +35,7 @@ void GoogleTrUnit::requestTranslate()
 }
 
 void GoogleTrUnit::onReadyRead()
-{
-}
+{}
 
 void GoogleTrUnit::replyTranslateFinished()
 {

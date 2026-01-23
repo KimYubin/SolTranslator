@@ -24,7 +24,7 @@ public:
      * @tparam ret 비동기 함수 반환값입니다. 
      * @param inWatcherContext watcher의 수명을 관리하는 QObject 객체입니다.
      * @param inAsyncFunc worker thread에서 실행할 펑터입니다.
-     * @param inMainThreadFunc main thread에서 계산 결과를 동기화하는 펑터입니다. 계산 완료 후 반환 값을 받습니다. inAsyncFunc의 반환값을 매개변수로 받아야합니다. 
+     * @param inMainThreadFunc main thread에서 계산 결과를 동기화하는 펑터입니다. inAsyncFunc의 반환값을 매개변수로 받아야합니다.
      */
     template <typename ret>
     static void asyncLaunch(QObject* inWatcherContext
@@ -41,7 +41,7 @@ public:
 
         watcher->setFuture(future);
     }
-    
+
     template <typename>
     static void asyncLaunch(QObject* inWatcherContext
                           , std::function<void()>&& inAsyncFunc

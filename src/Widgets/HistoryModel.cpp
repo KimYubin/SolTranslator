@@ -19,7 +19,7 @@ HistoryModel::HistoryModel(QObject* parent)
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
     return parent.isValid() ? 0 : solCore->historyManager()->getTranslateCacheSize();
-}   
+}
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
 {
@@ -29,7 +29,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
     const std::expected<const HistoryCacheData*, QString> trCache = getTranslateCache(index.row());
-    
+
     if (trCache.has_value() == false)
     {
         return QVariant();

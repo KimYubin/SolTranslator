@@ -179,13 +179,14 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 
     // position
     const QSizeF screenSize   = currentScreen ? currentScreen->size().toSizeF() : QSizeF(1920, 1080);
-    const QPoint targetCenter = screenTopLeft.toPoint() + QPointF(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y()).toPoint();
-    const QPoint recCenter    = rect().center();
+    const QPoint targetCenter = screenTopLeft.toPoint()
+            + QPointF(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y()).toPoint();
+    const QPoint recCenter = rect().center();
 
     QPoint targetPos = targetCenter - recCenter;
     targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - size().width()));
-    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height()* _yPosMaxRatio));
-    
+    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height() * _yPosMaxRatio));
+
     move(targetPos);
 
     update();
@@ -293,7 +294,7 @@ void PopupTranslateWidget::setupUI()
     // right side
 
     // ~===========
-    // minimaize button    
+    // minimize button
     _minimizedButton = new QPushButton(this);
     _minimizedButton->setObjectName("minimizedButton");
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
@@ -336,7 +337,7 @@ void PopupTranslateWidget::setupUI()
     ui->statusLayout->setContentsMargins(5, 0, 5, 5);
 
     // ~===========
-    // 복사 버튼 
+    // 복사 버튼
     QPushButton* trCopy = new QPushButton(this);
     trCopy->setIcon(QIcon(":/img/copy_img"));
     trCopy->setShortcut(Qt::Key_C);
@@ -826,7 +827,7 @@ void PopupTranslateWidget::mouseDoubleClickEvent(QMouseEvent* event)
 
         event->accept();
     }
-    
+
     QWidget::mouseDoubleClickEvent(event);
 }
 

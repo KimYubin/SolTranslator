@@ -45,8 +45,7 @@ SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos c
 }
 
 SettingCard::~SettingCard()
-{
-}
+{}
 
 void SettingCard::setHeader(const QString& inStr)
 {

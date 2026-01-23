@@ -17,9 +17,7 @@
 #include "../../external/magic_enum.hpp"
 
 DataManager::DataManager(SolTranslatorCore* parent): AbstractManager(parent)
-{
-    
-}
+{}
 
 cache_queue DataManager::loadTranslateCache()
 {
@@ -88,7 +86,7 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
         arr.append(cacheObject);
     }
     res["CacheList"] = arr;
-    
+
     return res;
 }
 

@@ -20,6 +20,12 @@ class SettingsWidget : public ISolWidget
 {
     Q_OBJECT
 
+    enum SettingsListItemRole
+    {
+        stackIndexRole = Qt::ItemDataRole::UserRole + 1
+      , OptionPageRole
+    };
+
 public:
     explicit SettingsWidget(QWidget* parent = nullptr);
     ~SettingsWidget() override;

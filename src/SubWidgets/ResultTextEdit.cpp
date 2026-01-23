@@ -7,6 +7,8 @@
 #include <QRegularExpression>
 #include <QTextBlock>
 
+namespace
+{
 constexpr QColor codeBgColor(29, 29, 29, 255);
 
 const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
@@ -14,6 +16,7 @@ const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
                                .arg(codeBgColor.green())
                                .arg(codeBgColor.blue())
                                .arg(codeBgColor.alpha());
+} // anonymous namespace
 
 ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
 {

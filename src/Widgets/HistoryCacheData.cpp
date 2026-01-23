@@ -3,6 +3,7 @@
 
 #include <QRegularExpression>
 
+#include "Managers/ConfigManager.h"
 
 HistoryCacheData::HistoryCacheData()
     : _dbId(0)
@@ -84,5 +85,5 @@ QString HistoryCacheData::getSimplifiedTargetText() const
 
 QString HistoryCacheData::getTimeStampString() const
 {
-    return QLocale::system().toString(_timeStamp, "yyyy MM dd ddd hh:mm:ss");
+    return QLocale::system().toString(_timeStamp, solConfig.getHistoryTimeFormat());
 }

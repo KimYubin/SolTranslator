@@ -13,7 +13,8 @@
 #include "SolConstants.h"
 #include "SolTypes.h"
 
-
+namespace
+{
 const QString Engine_Type = "Engine_Type";
 const QString API_Key     = "API_Key/";
 
@@ -32,6 +33,13 @@ const QString IsRememberWindowGeo = "IsRememberWindowGeo";
 const QString WidgetGeometry      = "WidgetGeometry";
 
 const QString IsPopupTrWindowTemp = "IsPopupTrWindowTemp";
+
+const QString UserGuide        = "UserGuide/";
+const QString FirstCloseToTray = "FirstCloseToTray";
+
+const QString TimeFormat    = "TimeFormat/";
+const QString HistoryFormat = "HistoryFormat";
+} // anonymous namespace
 
 ConfigManager::ConfigManager()
 {
@@ -212,12 +220,22 @@ bool ConfigManager::getIsPopupTrWindowTemp()
 
 void ConfigManager::setFirstCloseToTray()
 {
-    _settings->setValue("UserGuide/FirstCloseToTray", false);
+    _settings->setValue(UserGuide + FirstCloseToTray, false);
 }
 
 bool ConfigManager::isFirstCloseToTray()
 {
-    return _settings->value("UserGuide/FirstCloseToTray", true).toBool();
+    return _settings->value(UserGuide + FirstCloseToTray, true).toBool();
+}
+
+void ConfigManager::setHistoryTimeFormat(const QString& inFormat)
+{
+    _settings->setValue(TimeFormat + HistoryFormat, inFormat);
+}
+
+QString ConfigManager::getHistoryTimeFormat()
+{
+    return _settings->value(TimeFormat + HistoryFormat, "yyyy/MM/dd (ddd) hh:mm").toString();
 }
 
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const

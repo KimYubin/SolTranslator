@@ -36,14 +36,6 @@
 
 #include "Widgets/ui_PopupTranslateWidget.h"
 
-constexpr QColor codeBgColor(29, 29, 29, 255);
-
-const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
-                               .arg(codeBgColor.red())
-                               .arg(codeBgColor.green())
-                               .arg(codeBgColor.blue())
-                               .arg(codeBgColor.alpha());
-
 PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     : ITranslateWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , _minSizeRatio(0.15, 0.15)

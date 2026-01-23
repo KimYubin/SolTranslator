@@ -134,4 +134,7 @@ GeneralOption::~GeneralOption()
 {
 }
 
-const GeneralOption engineOption;
+namespace
+{
+const GeneralOption generalOption;
+} // anonymous namespace

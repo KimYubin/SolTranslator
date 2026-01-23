@@ -24,9 +24,9 @@ bool sol::isThis(const QObject* inThis, const QObject* inOther)
     }
     return bIsOtherThis;
 }
-namespace sol::Internal
-{
 
+namespace
+{
 template <typename T>
 concept HasFontFunctions = requires(T* t)
 {
@@ -35,7 +35,7 @@ concept HasFontFunctions = requires(T* t)
 };
 
 template <HasFontFunctions T>
-void noHintingFont(T* inOutWidget)
+void noHintingFontInternal(T* inOutWidget)
 {
     QFont qfont = inOutWidget->font();
     qfont.setHintingPreference(QFont::PreferNoHinting);
@@ -53,15 +53,16 @@ void noHintingFont(T* inOutWidget)
 }
 
 }
+} // anonymous namespace
 
 void sol::noHintingFont(QWidget* inOutWidget)
 {
-    sol::Internal::noHintingFont(inOutWidget);
+    noHintingFontInternal(inOutWidget);
 }
 
 void sol::noHintingFont()
 {
-    sol::Internal::noHintingFont(qApp);
+    noHintingFontInternal(qApp);
 }
 
 QRect sol::availableGeometryAt(const QPoint& inPoint)

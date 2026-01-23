@@ -85,6 +85,10 @@ public:
 
     /** 메인 창을 처음 닫았나요? 그렇다면, 앱이 트레이로 숨겨졌음을 안내해야 합니다. */
     bool isFirstCloseToTray();
+
+    void setHistoryTimeFormat(const QString& inFormat);
+    QString getHistoryTimeFormat();
+
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;
     std::tuple<bool, QByteArray> getSaveGeometry(const QAnyStringView& inKey) const;

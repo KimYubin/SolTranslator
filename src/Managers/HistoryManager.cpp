@@ -14,8 +14,11 @@
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 
+namespace
+{
 const char* db_type = "QSQLITE";
 const char* db_connectionName = "sol_db";
+} // anonymous namespace
 
 HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
@@ -71,6 +74,8 @@ QSqlError HistoryManager::initializeDB()
     return QSqlError();
 }
 
+namespace
+{
 std::expected<bool, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 {
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
@@ -95,6 +100,7 @@ std::expected<bool, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 
     return true;
 }
+} // anonymous namespace
 
 void HistoryManager::addHistory(const EngineType inEngineType
                               , const LangType inSourceLang

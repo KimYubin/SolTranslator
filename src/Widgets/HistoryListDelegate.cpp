@@ -14,8 +14,11 @@
 #include "SolGuard.h"
 #include "SolLog.h"
 
+namespace
+{
 constexpr int CheckBoxSize = 20;
 constexpr int CheckBoxMargin = 5;
+}// anonymous namespace
 
 QRect checkBoxRect(const QStyleOptionViewItem& option)
 {

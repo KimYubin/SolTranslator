@@ -124,4 +124,7 @@ EngineOption::~EngineOption()
 {
 }
 
+namespace
+{
 const EngineOption engineOption;
+} // anonymous namespace

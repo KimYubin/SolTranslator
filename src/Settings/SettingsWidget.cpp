@@ -22,12 +22,6 @@
 #include "Managers/ConfigManager.h"
 
 
-enum
-{
-    stackIndexRole = Qt::ItemDataRole::UserRole + 1
-  , OptionPageRole
-};
-
 SettingsWidget::SettingsWidget(QWidget* parent)
     : ISolWidget(parent)
     , ui(new Ui::SettingsWidget)

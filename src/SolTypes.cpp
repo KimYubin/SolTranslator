@@ -11,19 +11,24 @@
 
 #include "../external/magic_enum.hpp"
 
-namespace sol::Internal::DirName
+namespace
 {
-const QString SAVE = "save";
+
+namespace DirName
+{
+const QString SAVE    = "save";
 const QString HISTORY = "history";
-}
-namespace sol::Internal::FileName
+} // namespace DirName
+
+namespace FileName
 {
 const QString API_KEY = "api";
 const QString CONFIG_FILE = "SolConfig.ini";
 const QString TRANSLATE_HISTORY = "Translate_History.json";
 const QString HISTORY_DB = "Sol_Translation_History.sqlite";
-}
+} // namespace DirName
 
+} // anonymous namespace
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
@@ -50,7 +55,7 @@ QString EngineHelper::getName(EngineType inEngineType)
     return sol::enumToQStr(inEngineType);
 }
 
-EngineType EngineHelper::getDefaultEngineType() 
+EngineType EngineHelper::getDefaultEngineType()
 {
     return EngineType::Google;
 }
@@ -85,22 +90,22 @@ QString SolPaths::getLogPath()
 
 QString SolPaths::getConfigPath()
 {
-    return getSolAppPath(sol::Internal::DirName::SAVE, sol::Internal::FileName::CONFIG_FILE);
+    return getSolAppPath(DirName::SAVE, FileName::CONFIG_FILE);
 }
 
 QString SolPaths::getApiKeyPath()
 {
-    return getSolAppPath(sol::Internal::DirName::SAVE, sol::Internal::FileName::API_KEY);
+    return getSolAppPath(DirName::SAVE, FileName::API_KEY);
 }
 
 QString SolPaths::getTranslateHistoryFilePath()
 {
-    return getSolAppPath(sol::Internal::DirName::HISTORY, sol::Internal::FileName::TRANSLATE_HISTORY);
+    return getSolAppPath(DirName::HISTORY, FileName::TRANSLATE_HISTORY);
 }
 
 QString SolPaths::getHistoryDBFilePath()
 {
-    return getSolAppPath(sol::Internal::DirName::HISTORY, sol::Internal::FileName::HISTORY_DB);
+    return getSolAppPath(DirName::HISTORY, FileName::HISTORY_DB);
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget

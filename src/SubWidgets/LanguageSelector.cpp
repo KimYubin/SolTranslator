@@ -19,16 +19,17 @@
 
 #include "Managers/ConfigManager.h"
 
-enum
-{
-    LangTypeRole = Qt::ItemDataRole::UserRole + 1
-  , 
-};
 
 /** LanguageSelector에서 사용하는 메뉴 */
 class LanguageSelectorMenuPrivate : public QWidget
 {
     Q_OBJECT
+
+    enum MenuItemRole
+    {
+        LangTypeRole = Qt::ItemDataRole::UserRole + 1
+       ,
+    };
 
 public:
     explicit LanguageSelectorMenuPrivate(LanguageSelector* inLangSelector, QWidget* inParentWidget);

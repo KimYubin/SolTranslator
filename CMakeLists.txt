@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31.6)
+cmake_minimum_required(VERSION 3.30.5)
 
 project(SolTranslator VERSION 0.0.1 LANGUAGES CXX)
 
@@ -9,8 +9,6 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(QT NAMES Qt6 Qt5)
 
 find_package(
         Qt6 REQUIRED COMPONENTS
@@ -24,37 +22,128 @@ find_package(
         Gui
         LinguistTools
 )
-include_directories("C:/Qt/6.10.1/Src")
-
-file(GLOB_RECURSE PROJECT_SOURCES
-        "src/*.cpp"
-        "src/*.h"
-        "src/*.ui"
-        "src/*.qml"
-        "resource/*.qrc"
-)
 
 qt_add_executable(
         SolTranslator
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        external/magic_enum.hpp
-        src/Widgets/HistoryModel.cpp
-        src/Widgets/HistoryModel.h
-        src/SubWidgets/ResultTextEdit.cpp
-        src/SubWidgets/ResultTextEdit.h
+
+        src/main.cpp
+
+        src/SolConstants.cpp
+        src/SolConstants.h
         src/SolDatabase.cpp
         src/SolDatabase.h
-        src/SolLog.cpp
-        src/SolLog.h
-        src/Widgets/HistoryListDelegate.cpp
-        src/Widgets/HistoryListDelegate.h
-        src/Widgets/HistoryCacheData.cpp
-        src/Widgets/HistoryCacheData.h
         src/SolGuard.cpp
         src/SolGuard.h
+        src/SolHashQueue.cpp
+        src/SolHashQueue.h
+        src/SolLog.cpp
+        src/SolLog.h
+        src/SolTranslatorCore.cpp
+        src/SolTranslatorCore.h
+        src/SolTypes.cpp
+        src/SolTypes.h
+        src/SolUtilibrary.cpp
+        src/SolUtilibrary.h
+        src/QuickTextEdit.qml
+
+        resource/image/image.qrc
+        resource/sql/sql.qrc
+        resource/theme/theme.qrc
+        external/magic_enum.hpp
+
+        src/EngineUnits/FinPoint/FinPointTrUnit.cpp
+        src/EngineUnits/FinPoint/FinPointTrUnit.h
+        src/EngineUnits/GoogleEngine/GoogleTrUnit.cpp
+        src/EngineUnits/GoogleEngine/GoogleTrUnit.h
+        src/EngineUnits/OpenAI/OpenAiTrUnit.cpp
+        src/EngineUnits/OpenAI/OpenAiTrUnit.h
+        src/EngineUnits/TranslateUnit.cpp
+        src/EngineUnits/TranslateUnit.h
+
+        src/Managers/AbstractManager.cpp
+        src/Managers/AbstractManager.h
+        src/Managers/AsyncManager.cpp
+        src/Managers/AsyncManager.h
+        src/Managers/ConfigManager.cpp
+        src/Managers/ConfigManager.h
+        src/Managers/DataManager.cpp
+        src/Managers/DataManager.h
+        src/Managers/GlobalHotKeyManager.cpp
+        src/Managers/GlobalHotKeyManager.h
+        src/Managers/HistoryManager.cpp
+        src/Managers/HistoryManager.h
+        src/Managers/RunCopKey.cpp
+        src/Managers/RunCopKey.h
+        src/Managers/RunCopy_Impl_Linux.cpp
+        src/Managers/RunCopy_Impl_Mac.cpp
+        src/Managers/RunCopy_Impl_Win.cpp
+        src/Managers/StyleManger.cpp
+        src/Managers/StyleManger.h
+        src/Managers/TranslateManager.cpp
+        src/Managers/TranslateManager.h
+
+        src/Settings/EngineOptionWidget.cpp
+        src/Settings/EngineOptionWidget.h
+        src/Settings/EngineOptionWidget.ui
+        src/Settings/GeneralOptionWidget.cpp
+        src/Settings/GeneralOptionWidget.h
+        src/Settings/IOptionWidget.cpp
+        src/Settings/IOptionWidget.h
+        src/Settings/SettingsWidget.cpp
+        src/Settings/SettingsWidget.h
+        src/Settings/SettingsWidget.ui
+
+        src/SubWidgets/CustomMenuTextEdit.cpp
+        src/SubWidgets/CustomMenuTextEdit.h
+        src/SubWidgets/DropdownMenu.cpp
+        src/SubWidgets/DropdownMenu.h
         src/SubWidgets/EnginSelector.cpp
         src/SubWidgets/EnginSelector.h
+        src/SubWidgets/KeySelectionList.cpp
+        src/SubWidgets/KeySelectionList.h
+        src/SubWidgets/LanguageSelector.cpp
+        src/SubWidgets/LanguageSelector.h
+        src/SubWidgets/LayoutTextEdit.cpp
+        src/SubWidgets/LayoutTextEdit.h
+        src/SubWidgets/LoadingBar.cpp
+        src/SubWidgets/LoadingBar.h
+        src/SubWidgets/ResultTextEdit.cpp
+        src/SubWidgets/ResultTextEdit.h
+        src/SubWidgets/SettingCard.cpp
+        src/SubWidgets/SettingCard.h
+        src/SubWidgets/SolToast.cpp
+        src/SubWidgets/SolToast.h
+        src/SubWidgets/SolToolTip.cpp
+        src/SubWidgets/SolToolTip.h
+        src/SubWidgets/SwitchButton.cpp
+        src/SubWidgets/SwitchButton.h
+
+        src/Support/WidgetInspector.cpp
+        src/Support/WidgetInspector.h
+
+        src/Widgets/HistoryCacheData.cpp
+        src/Widgets/HistoryCacheData.h
+        src/Widgets/HistoryListDelegate.cpp
+        src/Widgets/HistoryListDelegate.h
+        src/Widgets/HistoryModel.cpp
+        src/Widgets/HistoryModel.h
+        src/Widgets/HistoryWidget.cpp
+        src/Widgets/HistoryWidget.h
+        src/Widgets/ISolWidget.cpp
+        src/Widgets/ISolWidget.h
+        src/Widgets/ITranslateWidget.cpp
+        src/Widgets/ITranslateWidget.h
+        src/Widgets/PopupTranslateWidget.cpp
+        src/Widgets/PopupTranslateWidget.h
+        src/Widgets/PopupTranslateWidget.ui
+        src/Widgets/SolMainWidget.cpp
+        src/Widgets/SolMainWidget.h
+        src/Widgets/SolMainWidget.ui
+        src/Widgets/TextEditTranslateWidget.cpp
+        src/Widgets/TextEditTranslateWidget.h
+        src/Widgets/TextEditTranslateWidget.ui
+
 )
 
 # ============================
@@ -145,7 +234,7 @@ add_dependencies(SolTranslator update_translations)
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
-if (${QT_VERSION} VERSION_LESS 6.1.0)
+if (${Qt6_VERSION} VERSION_LESS 6.1.0)
     set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.SolTranslator)
 endif ()
 set_target_properties(SolTranslator PROPERTIES
@@ -182,6 +271,4 @@ qt_generate_deploy_app_script(
 install(SCRIPT ${deploy_script})
 
 
-if (QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(SolTranslator)
-endif ()
+qt_finalize_executable(SolTranslator)

@@ -4,12 +4,12 @@
 <context>
     <name>EngineOption</name>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="128"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="116"/>
         <source>번역 엔진</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="129"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="117"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -42,17 +42,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="87"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="76"/>
         <source>AI 옵션</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="92"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="81"/>
         <source>OpenAI 온도 설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="93"/>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="82"/>
         <source>(기본값: 0.5)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,12 +60,12 @@
 <context>
     <name>GeneralOption</name>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="127"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="126"/>
         <source>일반</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="128"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="127"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -141,7 +141,7 @@
 <context>
     <name>LanguageSelectorMenuPrivate</name>
     <message>
-        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="176"/>
+        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="177"/>
         <source>언어 검색</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,57 +149,57 @@
 <context>
     <name>PopupTranslateWidget</name>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="58"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="50"/>
         <source>sol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="281"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="274"/>
         <source>항상 위 켜기(&lt;u&gt;T&lt;\u&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="281"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="274"/>
         <source>항상 위 끄기(&lt;u&gt;T&lt;\u&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="294"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="287"/>
         <source>임시창을 일반창으로 승격(&lt;u&gt;T&lt;\u&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="294"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="287"/>
         <source>임시 창모드(N)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="310"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="303"/>
         <source>최소화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="325"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="318"/>
         <source>최대화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="325"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="318"/>
         <source>이전 크기로 복원</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="335"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="328"/>
         <source>닫기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="352"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="345"/>
         <source>번역 복사(&lt;u&gt;C&lt;\u&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="357"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="350"/>
         <source>복사 완료!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -225,7 +225,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Settings/SettingsWidget.cpp" line="36"/>
+        <location filename="../src/Settings/SettingsWidget.cpp" line="30"/>
         <source>설정</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,34 +239,34 @@
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.ui" line="77"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="142"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="135"/>
         <source>설정</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="44"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="268"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="361"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="45"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="261"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="353"/>
         <source>SolTranslator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="78"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="79"/>
         <source>텍스트</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="86"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="87"/>
         <source>준비 중</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="91"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="92"/>
         <source>문서</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="102"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="103"/>
         <source>기록</source>
         <translation type="unfinished"></translation>
     </message>
@@ -276,48 +276,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="219"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="212"/>
         <source>트레이로 최소화되었습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="220"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="213"/>
         <source>Sol 번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="269"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="262"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="263"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="270"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="263"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="330"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="322"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="333"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="325"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="336"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="328"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="339"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="331"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>

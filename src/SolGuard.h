@@ -63,4 +63,21 @@ public:
 };
 
 
+/**
+ * Painter의 font를 rollback하기 위한 RAII 스타일 가드 클래스입니다.
+ * @see 
+ */
+class PainterFontStateGuard : public SolGeneralGuard<void()>
+{
+public:
+    Q_NODISCARD_CTOR
+    explicit PainterFontStateGuard(QPainter* inPainter)
+        : SolGeneralGuard([inPainter, prevFont = inPainter->font()]()
+        {
+            inPainter->setFont(prevFont);
+        })
+    {}
+};
+
+
 #endif //SOLTRANSLATOR_SOLGUARD_H

@@ -10,6 +10,7 @@
   font-weight: 400;
   padding-left: 0px;
   padding-right: 1px;
+  
 }
 
 #HistoryWidget QListView QScrollBar:vertical
@@ -22,11 +23,16 @@
 #HistoryWidget QListView:focus
 {
   /* outline-style: none; */
+  outline-style:solid;
+  outline-radius: 4px;
+  outline-width: 0.5px;
+  outline-color: rgba(249, 250, 255, 0.5);
 }
 
 #HistoryWidget QListView::item
 { 
   padding: 4px 2px;
+  
 }
 
 /* listview checkbox */
@@ -38,7 +44,7 @@
 
 HistoryListView
 {
-  qproperty-itemTextColor: rgba(255, 255, 255, 0.9);
+  qproperty-itemTextColor: rgba(235, 235, 235, 1);
   qproperty-itemSelectionTextColor: rgba(255, 255, 255, 1);
   qproperty-itemHoverTextColor:rgba(0, 0, 0, 0.9);
   

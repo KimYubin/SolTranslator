@@ -92,12 +92,12 @@ void HistoryListDelegate::paint(QPainter* painter
     const int textHeight     = option.fontMetrics.height() * (1.0f + textMarginRatio);
     const int langTextHeight = textHeight * langFontRatio;
 
-    const int textLeft           = checkOpt.rect.right() + checkOpt.rect.left(); // checkbox right + checkbox margin
-    const QRect itemViewTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
-    const int scrollBarExtent    = appStyle->pixelMetric(QStyle::PM_ScrollBarExtent, &opt, widget);
+    const int textLeft       = checkOpt.rect.right() + checkOpt.rect.left(); // checkbox area. checkbox right + checkbox margin
+    const QRect itemTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
+    constexpr int focusMargin = 2;
 
-    const QPoint textTopLeft = itemViewTextRect.topLeft() + QPoint{textLeft, 0};
-    const int textWidth      = itemViewTextRect.width() - scrollBarExtent;
+    const QPoint textTopLeft = itemTextRect.topLeft() + QPoint{textLeft, 0};
+    const int textWidth      = itemTextRect.width() - textLeft - focusMargin;
 
     const QRect langTextRect   = QRect{textTopLeft, QSize{textWidth, langTextHeight}};
     const QRect sourceTextRect = QRect{langTextRect.bottomLeft(), QSize{textWidth, textHeight}};

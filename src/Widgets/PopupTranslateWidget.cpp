@@ -746,6 +746,7 @@ void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
 
 void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
 {
+    manualSizeMode();
     if (QWindow* win = windowHandle())
     {
         const QRect geo    = frameGeometry();

@@ -45,6 +45,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     ui->listWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     ui->listWidget->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    ui->listWidget->setFocusPolicy(Qt::TabFocus);
 
     const std::vector<IOptionPage*> options = IOptionPage::sortedOptionsPages();
     for (IOptionPage* option : options)
@@ -68,6 +69,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     });
 
     ui->listWidget->setCurrentRow(0);
+    ui->optionNameLabel->setFocus();
 
     QShortcut* closeShortcut = new QShortcut(this);
     closeShortcut->setKeys(QList{QKeySequence(Qt::Key_Escape), QKeySequence(Qt::CTRL | Qt::Key_W)});

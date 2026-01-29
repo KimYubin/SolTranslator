@@ -25,6 +25,7 @@ private:
     void drawText(QPainter* painter
                 , const QStyleOptionViewItem& inOption
                 , const QRect& inTextRect
+                , const int flags
                 , const QString& inText) const;
 
 };

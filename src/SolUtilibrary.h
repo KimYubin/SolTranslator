@@ -5,13 +5,33 @@
 #include <QRect>
 #include "../../external/magic_enum.hpp"
 
-
-#define SOL_QSS_COLOR(colorName) \
+/**
+ * style sheet을 통한 값 변경을 위한 qproperty helper 입니다.
+ * 
+ * QWidget을 상속하는 클래스에서 사용할 수 있습니다.
+ * 
+ * style sheet에서 다음 예시의 형태로 사용할 수 있습니다.
+ * @code
+ * HistoryListView
+ * {
+ *     qproperty-<varName> : ${value};
+ *     qproperty-itemTextColor: rgba(255, 255, 255, 0.9);
+ * }
+ * @endcode 
+ * 
+ * @param type: 변수 타입 
+ * @param varName: 변수 이름 
+ * 
+ */
+#define SOL_QSS_TYPE(type, varName) \
 private: \
-    Q_PROPERTY(QColor colorName READ get##colorName WRITE set##colorName) \
-    void set##colorName(const QColor& inColor) { _##colorName = inColor; }; \
-    QColor get##colorName() const { return _##colorName; }; \
-    QColor _##colorName;
+    Q_PROPERTY(type varName READ get##varName WRITE set##varName) \
+    void set##varName(const type& inColor) { _##varName = inColor; }; \
+    type get##varName() const { return _##varName; }; \
+    type _##varName;
+
+
+#define SOL_QSS_COLOR(colorName) SOL_QSS_TYPE(QColor, colorName)
 
 
 class QObject;

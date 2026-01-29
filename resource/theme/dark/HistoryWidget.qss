@@ -6,7 +6,8 @@
 
 #HistoryWidget QListView
 {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 400;
   padding-left: 0px;
   padding-right: 1px;
 }
@@ -16,6 +17,16 @@
   width: 14px; /* 전체폭 */
   margin: 12px 0px 12px 0px;
   padding: 0px 3px 0px 3px; /* 핸들과 스크롤바와의 간격. 핸들의 크기를 결정합니다.*/
+}
+
+#HistoryWidget QListView:focus
+{
+  /* outline-style: none; */
+}
+
+#HistoryWidget QListView::item
+{ 
+  padding: 4px 2px;
 }
 
 /* listview checkbox */
@@ -29,6 +40,6 @@ HistoryListView
 {
   qproperty-itemTextColor: rgba(255, 255, 255, 0.9);
   qproperty-itemSelectionTextColor: rgba(255, 255, 255, 1);
-  qproperty-itemHoverTextColor:rgba(0, 0, 0, 0.8);
+  qproperty-itemHoverTextColor:rgba(0, 0, 0, 0.9);
   
 }

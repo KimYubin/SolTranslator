@@ -16,7 +16,8 @@
 
 namespace
 {
-constexpr int CheckBoxMargin = 5;
+constexpr float langFontRatio = 0.9;
+constexpr float textMarginRatio = 0.1f;
 
 /** 유효한 option.widget이 있다면 widget의 style을 반환하고, 그렇지 않다면, QApplication::style()을 반환합니다. */
 QStyle* getOptStyle(const QStyleOptionViewItem& inOpt)
@@ -25,14 +26,34 @@ QStyle* getOptStyle(const QStyleOptionViewItem& inOpt)
     return widget ? widget->style() : QApplication::style();
 }
 
+QSize getCheckBoxSize(const QStyleOptionViewItem& inOpt)
+{
+    const QStyle* optStyle = getOptStyle(inOpt);
+    return QSize(optStyle->pixelMetric(QStyle::PM_IndicatorWidth, &inOpt, inOpt.widget)
+               , optStyle->pixelMetric(QStyle::PM_IndicatorHeight, &inOpt, inOpt.widget));
+}
+
+QMargins getFocusMargins(const QStyleOptionViewItem& inOpt)
+{
+    const QStyle* optStyle    = getOptStyle(inOpt);
+    const QRect itemFocusRect = optStyle->subElementRect(QStyle::SE_ItemViewItemFocusRect, &inOpt, inOpt.widget);
+    QMargins res{
+        itemFocusRect.left() - inOpt.rect.left()
+      , itemFocusRect.top() - inOpt.rect.top()
+      , inOpt.rect.right() - itemFocusRect.right()
+      , inOpt.rect.bottom() - itemFocusRect.bottom()
+    };
+    return res;
+}
+
 QRect checkBoxRect(const QStyleOptionViewItem& inOpt)
 {
-    const QStyle* optStyle   = getOptStyle(inOpt);
-    const QSize CheckboxSize = QSize(optStyle->pixelMetric(QStyle::PM_IndicatorWidth, &inOpt, inOpt.widget)
-                                   , optStyle->pixelMetric(QStyle::PM_IndicatorHeight, &inOpt, inOpt.widget));
+    const QStyle* optStyle    = getOptStyle(inOpt);
+    const QSize checkboxSize  = getCheckBoxSize(inOpt);
+    const QRect itemFocusRect = optStyle->subElementRect(QStyle::SE_ItemViewItemFocusRect, &inOpt, inOpt.widget);
 
-    return QRect(QPoint{inOpt.rect.left() + CheckBoxMargin, inOpt.rect.top() + CheckBoxMargin}
-               , CheckboxSize);
+    return QRect(itemFocusRect.topLeft()
+               , checkboxSize);
 }
 
 } // anonymous namespace
@@ -53,10 +74,7 @@ void HistoryListDelegate::paint(QPainter* painter
 
     const QWidget* widget  = opt.widget;
     const QStyle* appStyle = getOptStyle(opt);
-    opt.state.setFlag(true ? QStyle::State_On : QStyle::State_Off);
-    opt.features.setFlag(QStyleOptionViewItem::HasCheckIndicator);
-    opt.checkState = true ? Qt::Checked : Qt::Unchecked;
-    
+
     // item
     appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
 
@@ -67,50 +85,39 @@ void HistoryListDelegate::paint(QPainter* painter
     checkOpt.state = (checkState == Qt::Checked) ? QStyle::State_On : QStyle::State_Off;
     checkOpt.state.setFlag(QStyle::State_Enabled);
     checkOpt.rect = checkBoxRect(opt);
-    checkOpt.rect = appStyle->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &checkOpt, widget);
 
     appStyle->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &checkOpt, painter, widget);
 
-    // text
-    const int textHeight   = option.fontMetrics.height();
-    const int textMargin   = textHeight * 0;
-    const int frameHMargin = appStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, &option, widget);
+    // calculate text rect
+    const int textHeight     = option.fontMetrics.height() * (1.0f + textMarginRatio);
+    const int langTextHeight = textHeight * langFontRatio;
 
-    // test
-    {
-        PainterPenStateGuard ppsg{painter};
+    const int textLeft           = checkOpt.rect.right() + checkOpt.rect.left(); // checkbox right + checkbox margin
+    const QRect itemViewTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
+    const int scrollBarExtent    = appStyle->pixelMetric(QStyle::PM_ScrollBarExtent, &opt, widget);
 
-        QRect itemViewTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
-        painter->setPen(QColor{0,255,0});
-        painter->drawRect(itemViewTextRect);
-        
-        itemViewTextRect.setHeight(textHeight);
-        painter->setPen(QColor{255,0,0});
-        painter->drawRect(itemViewTextRect);
-    }
-    
-    
-    QRect itemViewTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
-    itemViewTextRect.setHeight(textHeight);
+    const QPoint textTopLeft = itemViewTextRect.topLeft() + QPoint{textLeft, 0};
+    const int textWidth      = itemViewTextRect.width() - scrollBarExtent;
 
-    const QRect itemTextRect = itemViewTextRect;
-    const QRect langTextRect   = itemTextRect.translated(checkOpt.rect.right() + checkOpt.rect.left(), 0);
-    const QRect sourceTextRect = langTextRect.translated(0, textHeight + textMargin);
-    const QRect targetTextRect = sourceTextRect.translated(0, textHeight + textMargin);
+    const QRect langTextRect   = QRect{textTopLeft, QSize{textWidth, langTextHeight}};
+    const QRect sourceTextRect = QRect{langTextRect.bottomLeft(), QSize{textWidth, textHeight}};
+    const QRect targetTextRect = QRect{sourceTextRect.bottomLeft(), QSize{textWidth, textHeight}};
 
-    const QString langText = index.data(sol::SourceLangRole).toString()
-            + "->" + index.data(sol::TagetLangRole).toString()
-            + "     " + index.data(sol::TimeStampRole).toString();
-
+    // language text & time stamp
     {
         PainterFontStateGuard pfsg{painter};
+
         QFont newFont = painter->font();
-        newFont.setPixelSize(painter->font().pixelSize() * 0.8);
+        newFont.setPixelSize(painter->font().pixelSize() * langFontRatio);
         painter->setFont(newFont);
-        drawText(painter, opt, langTextRect, langText);
+
+        const QString langText = index.data(sol::SourceLangRole).toString() + " → " + index.data(sol::TagetLangRole).toString();
+
+        drawText(painter, opt, langTextRect, Qt::TextForceLeftToRight | Qt::AlignLeft, langText);
+        drawText(painter, opt, langTextRect, Qt::AlignRight, index.data(sol::TimeStampRole).toString());
     }
-    drawText(painter, opt, sourceTextRect, index.data(sol::SourceTextRole).toString());
-    drawText(painter, opt, targetTextRect, index.data(sol::TargetTextRole).toString());
+    drawText(painter, opt, sourceTextRect, Qt::TextForceLeftToRight, index.data(sol::SourceTextRole).toString());
+    drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(sol::TargetTextRole).toString());
 }
 
 bool HistoryListDelegate::editorEvent(QEvent* event
@@ -141,14 +148,7 @@ bool HistoryListDelegate::editorEvent(QEvent* event
         QStyleOptionViewItem viewOpt(option);
         initStyleOption(&viewOpt, index);
 
-        const QWidget* widget  = option.widget;
-        const QStyle* appStyle = getOptStyle(viewOpt);
-
-        QStyleOptionButton checkOpt;
-        checkOpt.rect = checkBoxRect(viewOpt);
-        checkOpt.rect = appStyle->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &checkOpt, widget);
-
-        const QRect checkRect = appStyle->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &checkOpt, widget);
+        const QRect checkRect = checkBoxRect(viewOpt);
 
         const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() != Qt::LeftButton
@@ -195,22 +195,21 @@ bool HistoryListDelegate::editorEvent(QEvent* event
 
 QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    const QWidget* widget  = option.widget;
-    const QStyle* appStyle = getOptStyle(option);
+    const int textHeight        = option.fontMetrics.height();
+    const int textMargin        = textHeight * textMarginRatio;
+    const QMargins focusMargins = getFocusMargins(option);
+    const int frameVMargin      = focusMargins.top() + focusMargins.bottom();
 
-    const int textHeight   = option.fontMetrics.height();
-    const int textMargin   = textHeight * 0.2;
-    const int frameHMargin = appStyle->pixelMetric(QStyle::PM_FocusFrameHMargin, &option, widget);
+    QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
+    sizeHint.setHeight(textHeight * (2 + langFontRatio) + textMargin * 2 + frameVMargin);
 
-    QSize superSize = QStyledItemDelegate::sizeHint(option, index);
-    superSize.setHeight(textHeight * 3 + textMargin * 2 + frameHMargin * 2);
-
-    return superSize;
+    return sizeHint;
 }
 
 void HistoryListDelegate::drawText(QPainter* painter
                                  , const QStyleOptionViewItem& inOption
                                  , const QRect& inTextRect
+                                 , const int flags
                                  , const QString& inText) const
 {
     const HistoryListView* historyListView = qobject_cast<const HistoryListView*>(inOption.widget);
@@ -243,6 +242,6 @@ void HistoryListDelegate::drawText(QPainter* painter
 
     const QStyle* appStyle = getOptStyle(inOption);
 
-    appStyle->drawItemText(painter, inTextRect, Qt::TextForceLeftToRight, inOption.palette, true, inText, QPalette::NoRole);
+    appStyle->drawItemText(painter, inTextRect, flags, inOption.palette, true, inText, QPalette::NoRole);
 }
 

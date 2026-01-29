@@ -27,6 +27,7 @@ class HistoryListView : public QListView
     SOL_QSS_COLOR(itemHoverTextColor)
     SOL_QSS_COLOR(itemDisableColor)
 
+    SOL_QSS_TYPE(float, textMarginRatio)
 public:
     explicit HistoryListView(QWidget* parent = nullptr);
     ~HistoryListView() override;

@@ -23,16 +23,16 @@
 #HistoryWidget QListView:focus
 {
   /* outline-style: none; */
-  outline-style:solid;
-  outline-radius: 4px;
-  outline-width: 0.5px;
-  outline-color: rgba(249, 250, 255, 0.5);
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: rgb(153, 154, 158);
+  outline-radius: 2px;
 }
 
 #HistoryWidget QListView::item
 { 
-  padding: 4px 2px;
-  
+  padding: 2px;
+  border-radius: 2px;
 }
 
 /* listview checkbox */

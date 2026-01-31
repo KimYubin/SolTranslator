@@ -16,8 +16,10 @@
 
 namespace
 {
-constexpr float langFontRatio = 0.9;
-constexpr float textMarginRatio = 0.1f;
+constexpr float langFontSizeRatio   = 0.9f;
+constexpr float textVMarginRatio    = 0.1f;
+constexpr int checkBoxToTextSpacing = 5;
+constexpr QPoint focusInnerPadding{3, 3};
 
 /** 유효한 option.widget이 있다면 widget의 style을 반환하고, 그렇지 않다면, QApplication::style()을 반환합니다. */
 QStyle* getOptStyle(const QStyleOptionViewItem& inOpt)
@@ -52,7 +54,7 @@ QRect checkBoxRect(const QStyleOptionViewItem& inOpt)
     const QSize checkboxSize  = getCheckBoxSize(inOpt);
     const QRect itemFocusRect = optStyle->subElementRect(QStyle::SE_ItemViewItemFocusRect, &inOpt, inOpt.widget);
 
-    return QRect(itemFocusRect.topLeft()
+    return QRect(itemFocusRect.topLeft() + focusInnerPadding
                , checkboxSize);
 }
 
@@ -89,10 +91,10 @@ void HistoryListDelegate::paint(QPainter* painter
     appStyle->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &checkOpt, painter, widget);
 
     // calculate text rect
-    const int textHeight     = option.fontMetrics.height() * (1.0f + textMarginRatio);
-    const int langTextHeight = textHeight * langFontRatio;
+    const int textHeight     = option.fontMetrics.height() * (1.0f + textVMarginRatio);
+    const int langTextHeight = textHeight * langFontSizeRatio;
 
-    const int textLeft       = checkOpt.rect.right() + checkOpt.rect.left(); // checkbox area. checkbox right + checkbox margin
+    const int textLeft       = checkOpt.rect.right() + checkBoxToTextSpacing; // checkbox area. checkbox right + checkbox space
     const QRect itemTextRect = appStyle->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
     constexpr int focusMargin = 2;
 
@@ -108,7 +110,7 @@ void HistoryListDelegate::paint(QPainter* painter
         PainterFontStateGuard pfsg{painter};
 
         QFont newFont = painter->font();
-        newFont.setPixelSize(painter->font().pixelSize() * langFontRatio);
+        newFont.setPixelSize(painter->font().pixelSize() * langFontSizeRatio);
         painter->setFont(newFont);
 
         const QString langText = index.data(sol::SourceLangRole).toString() + " → " + index.data(sol::TagetLangRole).toString();
@@ -196,12 +198,12 @@ bool HistoryListDelegate::editorEvent(QEvent* event
 QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     const int textHeight        = option.fontMetrics.height();
-    const int textMargin        = textHeight * textMarginRatio;
+    const int textMargin        = textHeight * textVMarginRatio;
     const QMargins focusMargins = getFocusMargins(option);
     const int frameVMargin      = focusMargins.top() + focusMargins.bottom();
 
     QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
-    sizeHint.setHeight(textHeight * (2 + langFontRatio) + textMargin * 2 + frameVMargin);
+    sizeHint.setHeight(textHeight * (2 + langFontSizeRatio) + textMargin * 2 + frameVMargin);
 
     return sizeHint;
 }

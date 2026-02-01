@@ -8,6 +8,7 @@
 #include <QScrollBar>
 #include <QTimer>
 
+#include "HistoryCacheData.h"
 #include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolMainWidget.h"
@@ -90,37 +91,54 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         _targetLangSelector->onSelectedLanguage(srcLangType);
     });
 
-
-    // 전체 복사 버튼
-    QPushButton* trCopy = new QPushButton(ui->trTextEdit);
-    trCopy->setIcon(QIcon(":/img/copy_img"));
-    trCopy->setFocusPolicy(Qt::TabFocus);
-    SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
-
-    ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
-    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
     {
-        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
-        {
-            SolToast::popToastOnWidget(tr("복사 완료!"), trCopy);
-        }, Qt::SingleShotConnection);
+        // 전체 복사 버튼
+        QPushButton* trCopy = new QPushButton(ui->trTextEdit);
+        trCopy->setIcon(QIcon(":/img/copy_img"));
+        trCopy->setFocusPolicy(Qt::TabFocus);
+        SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
 
-        // 연결 대기 시간 제한.
-        // 비어있는 복사와 무제한 대기를 방지합니다.
-        QTimer::singleShot(500, this, [connection]()
+        ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
+        connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
         {
-            disconnect(connection);
+            QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
+            {
+                SolToast::popToastOnWidget(tr("복사 완료!"), trCopy);
+            }, Qt::SingleShotConnection);
+
+            // 연결 대기 시간 제한.
+            // 비어있는 복사와 무제한 대기를 방지합니다.
+            QTimer::singleShot(500, this, [connection]()
+            {
+                disconnect(connection);
+            });
+
+            QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
         });
+    }
+    {
+        // 다시 번역 버튼
+        QPushButton* trRefresh = new QPushButton(ui->trTextEdit);
+        trRefresh->setIcon(QIcon(":/img/refresh_img"));
+        trRefresh->setFocusPolicy(Qt::TabFocus);
+        SolTooltipFilter::setBubbleToolTip(trRefresh, tr("다시 번역"));
 
-        QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-    });
+        ui->trTextEdit->addBottomWidget(trRefresh, 0, Qt::AlignRight);
+        connect(trRefresh, &QPushButton::clicked, this, [this, trRefresh]()
+        {
+            QTimer::singleShot(500, this, [this]()
+            {
+                onExecuteTranslate(true);
+            });
+        });
+    }
 
 
     // 번역 실행 타이머
     _translationExecutionTimer = new QTimer(this);
     _translationExecutionTimer->setInterval(500);
     _translationExecutionTimer->setSingleShot(true);
-    connect(_translationExecutionTimer, &QTimer::timeout, this, &TextEditTranslateWidget::onExecuteTranslate);
+    connect(_translationExecutionTimer, &QTimer::timeout, this, [this]() { onExecuteTranslate(false); });
     connect(ui->srcTextEdit, &QTextEdit::textChanged, this, [this]()
     {
         _translationExecutionTimer->start();
@@ -165,7 +183,18 @@ void TextEditTranslateWidget::focusTextOrigin()
     ui->srcTextEdit->setFocus();
 }
 
-void TextEditTranslateWidget::onExecuteTranslate()
+void TextEditTranslateWidget::importExistingTranslation(const HistoryCacheData* inHistoryCache) const
+{
+    if (inHistoryCache == nullptr)
+    {
+        solDebug << "inHistoryCache == nullptr";
+        return;
+    }
+    ui->srcTextEdit->setText(inHistoryCache->getSourceText());
+    ui->trTextEdit->setFormattingText(inHistoryCache->getTargetText(), inHistoryCache->getTextStyle());
+}
+
+void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
 {
     abortTrUnit();
 
@@ -179,6 +208,7 @@ void TextEditTranslateWidget::onExecuteTranslate()
 
     solCore->translateManager()->translateText(TranslateRequestInfo{
         this
+      , inIgnoreCache
       , solConfig.getCurrentEngineType()
       , orignText
       , TextStyle::PlainText

@@ -49,6 +49,8 @@ protected:
     /** 받은 응답에서 번역문을 추출합니다. */
     virtual void replyTranslateFinished() = 0;
 
+    virtual void replyFailed();
+
     /** 번역 스트리밍 중간 내용을 반영합니다. */
     void addTranslatedText(const QString& inTranslatedText);
 

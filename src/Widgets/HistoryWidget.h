@@ -9,6 +9,7 @@
 #include "SolUtilibrary.h"
 
 
+class HistoryCacheData;
 class HistoryModel;
 class QStringListModel;
 class QListView;
@@ -27,7 +28,6 @@ class HistoryListView : public QListView
     SOL_QSS_COLOR(itemHoverTextColor)
     SOL_QSS_COLOR(itemDisableColor)
 
-    SOL_QSS_TYPE(float, textMarginRatio)
 public:
     explicit HistoryListView(QWidget* parent = nullptr);
     ~HistoryListView() override;
@@ -43,8 +43,15 @@ public:
     explicit HistoryWidget(QWidget* parent = nullptr);
     ~HistoryWidget() override;
 
+public:
+signals:
+    void exportHistoryData(const HistoryCacheData* inHistoryCache);
+
 private:
     void setupUI();
+
+    // export selected history data to TextEditTranslateWidget, etc.
+    void exportSelectedHistoryData();
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;

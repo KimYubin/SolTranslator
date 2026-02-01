@@ -30,8 +30,8 @@ void TranslateUnit::executeTextTranslation()
         completeTranslatedText(_trReqData.originText);
         return;
     }
-
-    if (HistoryManager* historyManager = solCore->historyManager())
+    HistoryManager* historyManager = solCore->historyManager();
+    if (_trReqData.bIgnoreCache == false && historyManager != nullptr)
     {
         auto [bIsFind, findCache] = historyManager->lookupHistory(_trReqData.engineType
                                                                 , _trReqData.originText
@@ -39,7 +39,6 @@ void TranslateUnit::executeTextTranslation()
                                                                 , _trReqData.targetLang);
         if (bIsFind)
         {
-            // 캐싱되어있다면 업데이트 합니다.
             completeTranslatedText(findCache);
             return;
         }
@@ -83,7 +82,7 @@ void TranslateUnit::onReplyFinished()
         }
         else
         {
-            solDebug << "Error: " << _reply->errorString();
+            replyFailed();
         }
         _reply->deleteLater();
     }
@@ -102,6 +101,15 @@ void TranslateUnit::abortTranslate()
         _trReqData.completeContext            = nullptr;
         _trReqData.callbackTranslateComplete  = nullptr;
     }
+}
+
+void TranslateUnit::replyFailed() 
+{
+    solDebug << "Error: " << _reply->errorString();
+
+    // 사용자가 history에서 재번역 시도를 할 수 있습니다. 
+    updateHistory(_reply->errorString());
+    completeTranslatedText(_reply->errorString());
 }
 
 void TranslateUnit::addTranslatedText(const QString& inTranslatedText)

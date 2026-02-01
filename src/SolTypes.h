@@ -127,6 +127,7 @@ struct TranslateRequestInfo
      * @param incallbackTranslateStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
      */
     TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
+                       , const bool inIgnoreCache
                        , const EngineType inEngineType
                        , const QString& inOriginText
                        , const TextStyle inTextFormat
@@ -138,6 +139,7 @@ struct TranslateRequestInfo
                        , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt);
 
     QPointer<ITranslateWidget> trTargetWidget;
+    bool bIgnoreCache;
     EngineType engineType;
     QString originText;
     TextStyle textFormat;

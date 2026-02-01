@@ -8,6 +8,7 @@
 #include "ITranslateWidget.h"
 
 
+class HistoryCacheData;
 class LanguageSelector;
 enum class TextStyle;
 class SolTranslatorCore;
@@ -29,7 +30,6 @@ public:
     ~TextEditTranslateWidget() override;
 
 protected:
-    /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
     virtual QScrollBar* getVerticalScrollBar() override;
@@ -39,9 +39,10 @@ protected:
 
 public:
     void focusTextOrigin();
+    void importExistingTranslation(const HistoryCacheData* inHistoryCache) const;
 
 private slots:
-    void onExecuteTranslate();
+    void onExecuteTranslate(const bool inIgnoreCache = false);
     void onSourceLanguageChanged(const LangType inlangType) const;
     void onTargetLanguageChanged(const LangType inlangType) const;
 

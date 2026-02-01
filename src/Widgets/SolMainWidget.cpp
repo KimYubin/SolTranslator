@@ -106,6 +106,9 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     bindButton(historyTabButton, historyWidget);
 
+    // apply an existing history to TextEditTranslateWidget.
+    connect(historyWidget, &HistoryWidget::exportHistoryData, _textEditTranslate, &TextEditTranslateWidget::importExistingTranslation);
+
     connect(_buttonGroup, &QButtonGroup::idClicked, this, [this](const int inButtonId)
     {
         ui->mainStackedWidget->setCurrentIndex(inButtonId);

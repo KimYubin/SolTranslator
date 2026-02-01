@@ -96,6 +96,7 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
     {
         translateText(TranslateRequestInfo{
             simple
+          , false
           , solConfig.getCurrentEngineType()
           , inOriginText
           , inTextStyle

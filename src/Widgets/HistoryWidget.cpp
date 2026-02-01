@@ -16,6 +16,7 @@
 #include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "HistoryModel.h"
+#include "SolMainWidget.h"
 
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
@@ -144,4 +145,19 @@ void HistoryWidget::setupUI()
     });
 
     _historyListView->setItemDelegate(new HistoryListDelegate);
+}
+
+void HistoryWidget::exportSelectedHistoryData()
+{
+    const QModelIndex curIdx  = _historyListView->currentIndex();
+    const int lastestRowIndex = curIdx.row();
+    const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
+
+    if (selectedTr.has_value() == false)
+    {
+        solDebug << selectedTr.error();
+        return;
+    }
+
+    emit exportHistoryData(selectedTr.value());
 }

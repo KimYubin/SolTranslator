@@ -109,6 +109,7 @@ QString SolPaths::getHistoryDBFilePath()
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
+                                         , const bool inIgnoreCache
                                          , const EngineType inEngineType
                                          , const QString& inOriginText
                                          , const TextStyle inTextFormat
@@ -119,6 +120,7 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
                                          , QObject* inStreamContext
                                          , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming)
     : trTargetWidget(inTrTargetWidget)
+    , bIgnoreCache(inIgnoreCache)
     , engineType(inEngineType)
     , originText(inOriginText)
     , textFormat(inTextFormat)

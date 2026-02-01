@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/11/07 금.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_RESULTTEXTEDIT_H
 #define SOLTRANSLATOR_RESULTTEXTEDIT_H

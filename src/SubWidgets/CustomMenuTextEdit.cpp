@@ -4,6 +4,8 @@
 
 #include <QMenu>
 
+namespace
+{
 void customMenu(QContextMenuEvent* event, QMenu* menu)
 {
     menu->setAttribute(Qt::WA_TranslucentBackground);
@@ -13,6 +15,7 @@ void customMenu(QContextMenuEvent* event, QMenu* menu)
 
     event->accept();
 }
+} // anonymous namespace
 
 // ~============================================
 // PlainTextEdit

@@ -147,7 +147,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
     const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
     if (insertRes.has_value() == false)
     {
-        solDebug << insertRes.value();
+        solDebug << insertRes.error();
         return;
     }
 
@@ -208,7 +208,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
     if (insertRes.has_value() == false)
     {
-        solDebug << insertRes.value();
+        solDebug << insertRes.error();
         return res;
     }
 

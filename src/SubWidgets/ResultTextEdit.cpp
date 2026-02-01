@@ -1,6 +1,4 @@
-﻿//
-// Created by YubinKim on 25/11/07 금.
-//
+﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
 #include "ResultTextEdit.h"
 

@@ -10,7 +10,6 @@
   font-weight: 400;
   padding-left: 0px;
   padding-right: 1px;
-  
 }
 
 #HistoryWidget QListView QScrollBar:vertical

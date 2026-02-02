@@ -123,16 +123,35 @@ QListView
   padding: 0px;
   margin: 0px;
   border: 0px;
+
+  outline: none;
 }
 
 QListView::item
 {
-  padding: 6px 2px;
   min-height: 32px;
   color: rgba(255, 255, 255, 0.9);
   selection-color: rgb(220, 222, 223);
+  height: 40px;
+
+  /* for focus */
   border-color: transparent;
+  padding: 1px;
+
+  
 }
+
+QListView::item:focus
+{
+  /* for fixing content area */
+  padding: 0px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(177, 179, 182);
+  border-color: rgb(217, 220, 224);
+  border-radius: 2px;
+}
+
 
 QListView::item:hover
 {
@@ -301,12 +320,6 @@ QComboBox::drop-down
 {
   color: #ffffff;
   width: 20px;
-}
-
-QComboBox QListView::item
-{
-  padding: 4px 4px;
-  min-height: 28px;
 }
 
 

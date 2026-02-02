@@ -122,7 +122,7 @@ void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)
     }
     else
     {
-        solDebug << "rt theme list is different from the existing theme list." << rtPrefixPath;
+        solDebug << "rt theme list is different from the existing theme list. apply qrc version." << rtPrefixPath;
         prefixPath    = std::move(qrcPrefixPath);
         sheetFileList = std::move(qrcFiles);
     }

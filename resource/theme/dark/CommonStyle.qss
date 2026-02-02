@@ -134,20 +134,16 @@ QListView::item
   selection-color: rgb(220, 222, 223);
   height: 40px;
 
-  /* for focus */
-  border-color: transparent;
-  padding: 1px;
+  padding-left: 2px;
 
-  
+  /* for fixing content area */
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px;
 }
 
 QListView::item:focus
 {
-  /* for fixing content area */
-  padding: 0px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb(177, 179, 182);
   border-color: rgb(217, 220, 224);
   border-radius: 2px;
 }

@@ -19,19 +19,9 @@
   padding: 0px 3px 0px 3px; /* 핸들과 스크롤바와의 간격. 핸들의 크기를 결정합니다.*/
 }
 
-#HistoryWidget QListView:focus
-{
-  /* outline-style: none; */
-  outline-style: solid;
-  outline-width: 1px;
-  outline-color: rgb(153, 154, 158);
-  outline-radius: 2px;
-}
-
 #HistoryWidget QListView::item
 { 
-  padding: 2px;
-  border-radius: 2px;
+  padding: 2px 2px 2px 0px;
 }
 
 /* listview checkbox */

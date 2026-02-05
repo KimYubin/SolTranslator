@@ -40,14 +40,14 @@ HistoryManager::~HistoryManager()
     historyDB.close();
 }
 
-QSqlError HistoryManager::initializeDB()
+void HistoryManager::initializeDB()
 {
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
     historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
     if (historyDB.open() == false)
     {
-        solDebug << "Could not connect to history database";
-        return historyDB.lastError();
+        solDebug << "Could not connect to history database" << historyDB.lastError();
+        return;
     }
 
     QStringList db_tables = {
@@ -64,14 +64,21 @@ QSqlError HistoryManager::initializeDB()
 
     for (QString& tableName : db_tables)
     {
-        SolSql::execSQL(":/sql/create_" + tableName + ".sql");
-    }
-    for (QString& indexName : db_indexes)
-    {
-        SolSql::execSQL(":/sql/create_" + indexName + ".sql");
+        const auto [bSucceed, sqlError] = SolSql::execSQL(":/sql/create_" + tableName + ".sql");
+        if (bSucceed == false)
+        {
+            solDebug << sqlError;
+        }
     }
 
-    return QSqlError();
+    for (QString& indexName : db_indexes)
+    {
+        const auto [bSucceed, sqlError] = SolSql::execSQL(":/sql/create_" + indexName + ".sql");
+        if (bSucceed == false)
+        {
+            solDebug << sqlError;
+        }
+    }
 }
 
 namespace
@@ -164,7 +171,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
 
-    const auto [isOpenData, selectHistoryQuery]      = SolSql::readSqlFromFile(selectHistoryDataFilePath);
+    const auto [isOpenData, selectHistoryQuery] = SolSql::readSqlFromFile(selectHistoryDataFilePath);
 
     if (isOpenData == false)
     {

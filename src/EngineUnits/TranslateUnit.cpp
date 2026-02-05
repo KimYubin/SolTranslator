@@ -7,6 +7,8 @@
 #include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
+#include "SolUtilibrary.h"
+
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
@@ -103,9 +105,11 @@ void TranslateUnit::abortTranslate()
     }
 }
 
-void TranslateUnit::replyFailed() 
+void TranslateUnit::replyFailed()
 {
     solDebug << "Error: " << _reply->errorString();
+    solDebug << "EngineType:" << sol::enumToQStr(_trReqData.engineType);
+    solDebug << "Source Text:" << _trReqData.originText.left(50);
 
     // 사용자가 history에서 재번역 시도를 할 수 있습니다. 
     updateHistory(_reply->errorString());
@@ -128,6 +132,8 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
     {
         return;
     }
+
+    // todo: 재번역 시도시 이미 있는 번역을 넣는 시도가 있음. 개선 예정. 
     if (HistoryManager* historyManager = solCore->historyManager())
     {
         historyManager->addHistory(_trReqData.engineType

@@ -25,28 +25,29 @@ std::pair<bool, QString> SolSql::readSqlFromFile(const QString& inFilePath)
     return {true, sqlStr};
 }
 
-QSqlError SolSql::execSQL(const QString& inFilePath)
+std::pair<bool, QSqlError> SolSql::execSQL(const QString& inFilePath)
 {
     const auto [isFileOpen, sqlStr] = readSqlFromFile(inFilePath);
 
     if (isFileOpen == false)
     {
         solDebug << "not found sql files";
-        return QSqlError("Error executing SQL", "Could not find SQL file: " + inFilePath, QSqlError::StatementError);
+        return {false, QSqlError("Error executing SQL", "Could not find SQL file: " + inFilePath, QSqlError::StatementError)};
     }
 
     QSqlQuery sqlQuery(sqlStr);
     if (sqlQuery.exec() == false)
     {
-        solDebug << "Error executing SQL";
-        return QSqlError("Error executing SQL", "Could not execute sql: " + inFilePath, QSqlError::StatementError);
+        solDebug << "Error executing SQL." << "Could not execute sql: " << inFilePath;
+        return {false, sqlQuery.lastError()};
     }
 
-    return QSqlError();
+    return {true, QSqlError()};
 }
 
 SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDB)
-    :_database(inDB)
+    : _database(inDB)
+    , duringTransaction(false)
 {
     transaction();
 }
@@ -58,15 +59,44 @@ SolSqlTransactionGuard::~SolSqlTransactionGuard()
 
 void SolSqlTransactionGuard::transaction()
 {
-    _database.transaction();
+    if (duringTransaction)
+    {
+        return;
+    }
+    
+    if (_database.transaction() == false)
+    {
+        solDebug << "transaction failed" << _database.lastError();
+        return;
+    }
+
+    duringTransaction = true;
 }
 
 void SolSqlTransactionGuard::commit()
 {
-    _database.commit();
+    if (duringTransaction == false)
+    {
+        return;
+    }
+
+    if (_database.commit() == false)
+    {
+        solDebug << "commit failed" << _database.lastError();
+    }
+    duringTransaction = false;
 }
 
 void SolSqlTransactionGuard::rollback()
 {
-    _database.rollback();
+    if (duringTransaction == false)
+    {
+        return;
+    }
+
+    if (_database.rollback() == false)
+    {
+        solDebug << "commit failed" << _database.lastError();
+    }
+    duringTransaction = false;
 }

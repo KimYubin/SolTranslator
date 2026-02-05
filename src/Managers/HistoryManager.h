@@ -26,7 +26,7 @@ public:
     virtual ~HistoryManager() override;
 
 private:
-    QSqlError initializeDB();
+    void initializeDB();
 
 public:
     void addHistory(const EngineType inEngineType

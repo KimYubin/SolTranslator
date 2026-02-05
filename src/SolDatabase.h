@@ -19,7 +19,7 @@ class SolSql
 {
 public:
     static std::pair<bool, QString> readSqlFromFile(const QString& inFilePath);
-    static QSqlError execSQL(const QString& inFilePath);
+    static std::pair<bool, QSqlError> execSQL(const QString& inFilePath);
 };
 
 class SolSqlTransactionGuard
@@ -36,6 +36,7 @@ public:
 
 private:
     QSqlDatabase _database;
+    bool duringTransaction;
 };
 
 #endif //SOLTRANSLATOR_SOLDATABASE_H

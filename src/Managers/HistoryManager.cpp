@@ -64,48 +64,47 @@ void HistoryManager::initializeDB()
 
     for (QString& tableName : db_tables)
     {
-        const auto [bSucceed, sqlError] = SolSql::execSQL(":/sql/create_" + tableName + ".sql");
-        if (bSucceed == false)
+        const std::expected sqlExec = SolSql::execSQL(":/sql/create_" + tableName + ".sql");
+        if (sqlExec.has_value() == false)
         {
-            solDebug << sqlError;
+            solDebug << sqlExec.error();
         }
     }
 
     for (QString& indexName : db_indexes)
     {
-        const auto [bSucceed, sqlError] = SolSql::execSQL(":/sql/create_" + indexName + ".sql");
-        if (bSucceed == false)
+        const std::expected sqlExec = SolSql::execSQL(":/sql/create_" + indexName + ".sql");
+        if (sqlExec.has_value() == false)
         {
-            solDebug << sqlError;
+            solDebug << sqlExec.error();
         }
     }
 }
 
 namespace
 {
-std::expected<bool, QString> updateTimeStamp(const QVariant& inHistoryDataId)
+std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 {
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
 
-    const auto [isOpenTimeline, insertTimelineQuery] = SolSql::readSqlFromFile(insertTimelineFilePath);
-    if (isOpenTimeline == false)
+    const std::expected<QString, QString> insertTimelineQuery = SolSql::readSqlFromFile(insertTimelineFilePath);
+    if (insertTimelineQuery.has_value() == false)
     {
-        return std::unexpected("not found sql files");
+        return std::unexpected(insertTimelineQuery.error() + "insert_history_timeline");
     }
 
     QSqlQuery sqlQuery;
-    sqlQuery.prepare(insertTimelineQuery);
+    sqlQuery.prepare(insertTimelineQuery.value());
 
     sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
     sqlQuery.bindValue(":history_data_id", inHistoryDataId);
 
     if (sqlQuery.exec() == false)
     {
-        solDebug << sqlQuery.lastError();
-        return std::unexpected("Error executing SQL");
+        return std::unexpected("Error executing SQL: updateTimeStamp" + sqlQuery.lastError().text());
     }
 
-    return true;
+    return {};
 }
 } // anonymous namespace
 
@@ -119,11 +118,11 @@ void HistoryManager::addHistory(const EngineType inEngineType
     const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
 
-    const auto [isOpenData, insertDataQuery] = SolSql::readSqlFromFile(insertDataFilePath);
+    const std::expected<QString, QString> insertDataQuery = SolSql::readSqlFromFile(insertDataFilePath);
 
-    if (isOpenData == false)
+    if (insertDataQuery.has_value() == false)
     {
-        solDebug << "not found sql files";
+        solDebug << insertDataQuery.error() + "insert_history_data";
         return;
     }
 
@@ -134,7 +133,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
     // insert history data
     {
         QSqlQuery sqlQuery;
-        sqlQuery.prepare(insertDataQuery);
+        sqlQuery.prepare(insertDataQuery.value());
 
         sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
         sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
@@ -151,7 +150,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
         historyDataId = sqlQuery.lastInsertId();
     }
 
-    const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
+    const std::expected insertRes = updateTimeStamp(historyDataId);
     if (insertRes.has_value() == false)
     {
         solDebug << insertRes.error();
@@ -171,9 +170,9 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
 
     const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
 
-    const auto [isOpenData, selectHistoryQuery] = SolSql::readSqlFromFile(selectHistoryDataFilePath);
+    const std::expected<QString, QString> selectHistoryQuery = SolSql::readSqlFromFile(selectHistoryDataFilePath);
 
-    if (isOpenData == false)
+    if (selectHistoryQuery.has_value() == false)
     {
         solDebug << "not found sql files";
         return res;
@@ -187,7 +186,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     // find history
     {
         QSqlQuery sqlQuery;
-        sqlQuery.prepare(selectHistoryQuery);
+        sqlQuery.prepare(selectHistoryQuery.value());
 
         sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
         sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
@@ -212,7 +211,7 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     }
 
     // insert history timeline (update)
-    const std::expected<bool, QString> insertRes = updateTimeStamp(historyDataId);
+    const std::expected insertRes = updateTimeStamp(historyDataId);
     if (insertRes.has_value() == false)
     {
         solDebug << insertRes.error();
@@ -258,15 +257,15 @@ void HistoryManager::applyTranslateHistory()
     QSqlQuery sqlQuery;
     const QString selectTimelineFilePath = ":/sql/select_translation_timeline.sql";
 
-    const auto [isOpenData, selectTimelineQuery] = SolSql::readSqlFromFile(selectTimelineFilePath);
+    const std::expected<QString, QString> selectTimelineQuery = SolSql::readSqlFromFile(selectTimelineFilePath);
 
-    if (isOpenData == false)
+    if (selectTimelineQuery.has_value() == false)
     {
-        solDebug << "not found sql files";
+        solDebug << selectTimelineQuery.error() << "select_translation_timeline";
         return;
     }
 
-    sqlQuery.prepare(selectTimelineQuery);
+    sqlQuery.prepare(selectTimelineQuery.value());
     if (sqlQuery.exec() == false)
     {
         solDebug << "Error executing SQL" << sqlQuery.lastError();

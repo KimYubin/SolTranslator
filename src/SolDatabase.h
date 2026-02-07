@@ -5,7 +5,7 @@
 
 #include <QSqlDatabase>
 
-#include <utility>
+#include <expected>
 
 class QString;
 class QSqlError;
@@ -18,8 +18,8 @@ class SolDatabase
 class SolSql
 {
 public:
-    static std::pair<bool, QString> readSqlFromFile(const QString& inFilePath);
-    static std::pair<bool, QSqlError> execSQL(const QString& inFilePath);
+    static std::expected<QString, QString> readSqlFromFile(const QString& inFilePath);
+    static std::expected<void, QString> execSQL(const QString& inFilePath);
 };
 
 class SolSqlTransactionGuard

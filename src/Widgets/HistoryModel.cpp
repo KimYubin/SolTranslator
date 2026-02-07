@@ -32,6 +32,7 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     if (trCache.has_value() == false)
     {
+        solDebug << trCache.error();
         return QVariant();
     }
 

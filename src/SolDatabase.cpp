@@ -8,41 +8,40 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include "SolGuard.h"
 #include "SolLog.h"
 
-std::pair<bool, QString> SolSql::readSqlFromFile(const QString& inFilePath)
+std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
+    SolGeneralGuard<void()> fileGuard([&sqlFile]() mutable { sqlFile.close(); });
 
     if (sqlFile.open(QFile::ReadOnly) == false)
     {
-        return {false, {}};
+        return std::unexpected("file open failed");
     }
 
     QString sqlStr = sqlFile.readAll();
 
-    sqlFile.close();
-    return {true, sqlStr};
+    return sqlStr;
 }
 
-std::pair<bool, QSqlError> SolSql::execSQL(const QString& inFilePath)
+std::expected<void, QString> SolSql::execSQL(const QString& inFilePath)
 {
-    const auto [isFileOpen, sqlStr] = readSqlFromFile(inFilePath);
+    const std::expected<QString, QString> sqlStr = readSqlFromFile(inFilePath);
 
-    if (isFileOpen == false)
+    if (sqlStr.has_value() == false)
     {
-        solDebug << "not found sql files";
-        return {false, QSqlError("Error executing SQL", "Could not find SQL file: " + inFilePath, QSqlError::StatementError)};
+        return std::unexpected("Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error());
     }
 
-    QSqlQuery sqlQuery(sqlStr);
+    QSqlQuery sqlQuery(sqlStr.value());
     if (sqlQuery.exec() == false)
     {
-        solDebug << "Error executing SQL." << "Could not execute sql: " << inFilePath;
-        return {false, sqlQuery.lastError()};
+        return std::unexpected("Error: Could not execute sql: " + inFilePath + " " + sqlQuery.lastError().text());
     }
 
-    return {true, QSqlError()};
+    return {};
 }
 
 SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDB)
@@ -96,7 +95,7 @@ void SolSqlTransactionGuard::rollback()
 
     if (_database.rollback() == false)
     {
-        solDebug << "commit failed" << _database.lastError();
+        solDebug << "rollback failed" << _database.lastError();
     }
     duringTransaction = false;
 }

@@ -1,0 +1,28 @@
+﻿// Copyright (c) 2026 Kim Yubin. All rights reserved.
+#ifndef SOLTRANSLATOR_SOLWIDGETFACTORY_H
+#define SOLTRANSLATOR_SOLWIDGETFACTORY_H
+#include <QObject>
+#include <QString>
+
+#include <functional>
+
+
+class QPushButton;
+
+class SolWidgetFactory : public QObject
+{
+    Q_OBJECT
+
+public:
+    /**
+     * Create a common usable copy button.
+     * 
+     * @param inParent The parent widget of the copy button. Also used for the position of the copy completion pop-up.
+     * @param inCopyStringFunc A functor that provides the string to copy.
+     * @return 
+     */
+    static QPushButton* createCopyButton(QWidget* inParent, std::function<QString(void)>&& inCopyStringFunc);
+};
+
+
+#endif //SOLTRANSLATOR_SOLWIDGETFACTORY_H

@@ -5,6 +5,7 @@
 #include "ResultTextEdit.h"
 
 
+class QPushButton;
 class QHBoxLayout;
 
 /**
@@ -27,6 +28,13 @@ public:
     void addBottomWidget(QWidget* inWidget
                        , const int inStretch = 0
                        , const Qt::Alignment inAlignment = Qt::Alignment()) const;
+    
+    /** add button at layout bottm */
+    QPushButton* addBottomButton(const QIcon& inIcon
+                               , const Qt::FocusPolicy policy
+                               , const QString& inToolTip
+                               , const int inStretch = 0
+                               , const Qt::Alignment inAlignment = Qt::Alignment());
 
 protected:
     QWidget* _bottomLayoutWidget;

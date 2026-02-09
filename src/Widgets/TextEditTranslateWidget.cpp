@@ -21,6 +21,7 @@
 #include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LanguageSelector.h"
+#include "SubWidgets/SolWidgetFactory.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
@@ -93,38 +94,18 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     {
         // 전체 복사 버튼
-        QPushButton* trCopy = new QPushButton(ui->trTextEdit);
-        trCopy->setIcon(QIcon(":/img/copy_img"));
-        trCopy->setFocusPolicy(Qt::TabFocus);
-        SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사"));
-
+        QPushButton* trCopy = SolWidgetFactory::createCopyButton(ui->trTextEdit, [this]() { return ui->trTextEdit->toPlainText(); });
         ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
-        connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
-        {
-            QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
-            {
-                SolToast::popToastOnWidget(tr("복사 완료!"), trCopy);
-            }, Qt::SingleShotConnection);
-
-            // 연결 대기 시간 제한.
-            // 비어있는 복사와 무제한 대기를 방지합니다.
-            QTimer::singleShot(500, this, [connection]()
-            {
-                disconnect(connection);
-            });
-
-            QGuiApplication::clipboard()->setText(ui->trTextEdit->toPlainText());
-        });
     }
     {
         // 다시 번역 버튼
-        QPushButton* trRefresh = new QPushButton(ui->trTextEdit);
-        trRefresh->setIcon(QIcon(":/img/refresh_img"));
-        trRefresh->setFocusPolicy(Qt::TabFocus);
-        SolTooltipFilter::setBubbleToolTip(trRefresh, tr("다시 번역"));
+        QPushButton* trRefresh = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
+                                                               , Qt::TabFocus
+                                                               , tr("다시 번역")
+                                                               , 0
+                                                               , Qt::AlignRight);
 
-        ui->trTextEdit->addBottomWidget(trRefresh, 0, Qt::AlignRight);
-        connect(trRefresh, &QPushButton::clicked, this, [this, trRefresh]()
+        connect(trRefresh, &QPushButton::clicked, this, [this]()
         {
             QTimer::singleShot(500, this, [this]()
             {

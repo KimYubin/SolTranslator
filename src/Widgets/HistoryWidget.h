@@ -9,12 +9,12 @@
 #include "SolUtilibrary.h"
 
 
+class LayoutTextEdit;
 class HistoryCacheData;
 class HistoryModel;
 class QStringListModel;
 class QListView;
 class QListWidget;
-class ResultTextEdit;
 class QSplitter;
 class QGridLayout;
 
@@ -57,7 +57,7 @@ private:
     QSplitter* _splitter;
     HistoryListView* _historyListView;
     HistoryModel* _historyListModel;
-    ResultTextEdit* _selectedTextEdit;
+    LayoutTextEdit* _selectedTextEdit;
 
     qreal _listScrollBarRatio = 0.0;
 };

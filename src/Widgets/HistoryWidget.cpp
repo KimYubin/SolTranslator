@@ -2,9 +2,12 @@
 
 #include "HistoryWidget.h"
 
+#include <QClipboard>
+
 #include <expected>
 #include <QGridLayout>
 #include <QListView>
+#include <QPushButton>
 #include <QScrollBar>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
@@ -21,7 +24,9 @@
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
-#include "SubWidgets/ResultTextEdit.h"
+#include "SubWidgets/LayoutTextEdit.h"
+#include "SubWidgets/SolToast.h"
+#include "SubWidgets/SolWidgetFactory.h"
 
 
 HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
@@ -74,12 +79,15 @@ void HistoryWidget::setupUI()
     _historyListView->setLayoutMode(QListView::Batched);
     _historyListView->setBatchSize(10);
 
-
     _splitter->addWidget(_historyListView);
 
-    _selectedTextEdit = new ResultTextEdit(_splitter);
+    _selectedTextEdit = new LayoutTextEdit(_splitter);
     _selectedTextEdit->setObjectName("historySelectedDetail");
     _selectedTextEdit->setMinimumWidth(150);
+
+    // 전체 복사 버튼
+    QPushButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]() { return _selectedTextEdit->toPlainText(); });
+    _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
     _splitter->addWidget(_selectedTextEdit);
     _splitter->setStretchFactor(0, 1);

@@ -143,6 +143,8 @@ qt_add_executable(
         src/Widgets/TextEditTranslateWidget.cpp
         src/Widgets/TextEditTranslateWidget.h
         src/Widgets/TextEditTranslateWidget.ui
+        src/SubWidgets/SolWidgetFactory.cpp
+        src/SubWidgets/SolWidgetFactory.h
 
 )
 

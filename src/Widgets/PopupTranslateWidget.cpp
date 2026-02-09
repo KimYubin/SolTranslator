@@ -33,6 +33,7 @@
 #include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LoadingBar.h"
+#include "SubWidgets/SolWidgetFactory.h"
 
 #include "Widgets/ui_PopupTranslateWidget.h"
 
@@ -338,27 +339,7 @@ void PopupTranslateWidget::setupUI()
 
     // ~===========
     // 복사 버튼
-    QPushButton* trCopy = new QPushButton(this);
-    trCopy->setIcon(QIcon(":/img/copy_img"));
-    trCopy->setShortcut(Qt::Key_C);
-    trCopy->setFocusPolicy(Qt::TabFocus);
-    SolTooltipFilter::setBubbleToolTip(trCopy, tr("번역 복사(<u>C<\\u>)"));
-    connect(trCopy, &QPushButton::clicked, this, [this, trCopy]()
-    {
-        QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, trCopy, [trCopy]() mutable
-        {
-            SolToast::popToastOnWidget(tr("복사 완료!"), trCopy, 50);
-        }, Qt::SingleShotConnection);
-
-        // 연결 대기 시간 제한.
-        // 비어있는 복사와 무제한 대기를 방지합니다.
-        QTimer::singleShot(500, this, [connection]()
-        {
-            disconnect(connection);
-        });
-
-        QGuiApplication::clipboard()->setText(_translatedText);
-    });
+    QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return _translatedText; });
 
     ui->statusLayout->addWidget(trCopy, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
 

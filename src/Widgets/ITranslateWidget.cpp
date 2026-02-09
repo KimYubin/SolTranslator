@@ -18,7 +18,7 @@ ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     _streamUpdateTimer->setSingleShot(true);
     connect(_streamUpdateTimer, &QTimer::timeout, this, [this]()
     {
-        setTranslationWithFixedScroll(_translatedText, _translatedTextStyle);
+        setTranslationWithFixedScroll();
     });
 }
 
@@ -39,7 +39,7 @@ void ITranslateWidget::completeTransText(const QString& inTranslatedText, const 
     _translatedText      = inTranslatedText;
     _translatedTextStyle = inTextStyle;
     _streamUpdateTimer->stop();
-    setTranslationWithFixedScroll(inTranslatedText, inTextStyle);
+    setTranslationWithFixedScroll();
 }
 
 void ITranslateWidget::abortTrUnit()
@@ -56,13 +56,13 @@ void ITranslateWidget::setTrUnit(TranslateUnit* inTrUnit)
     _trUnit = inTrUnit;
 }
 
-void ITranslateWidget::setTranslationWithFixedScroll(const QString& inTranslatedText, const TextStyle inTextStyle)
+void ITranslateWidget::setTranslationWithFixedScroll()
 {
     const int prevVerticalScrollVal   = getVerticalScrollBar()->value();
     const int prevHorizontalScrollVal = getHorizontalScrollBar()->value();
     const int prevTextCursorPos       = getTextCursor().position();
 
-    applyTranslation(inTranslatedText, inTextStyle);
+    applyTranslation();
 
     // 스트리밍 간 커서 현재 위치 유지
     QTextCursor textCursor = getTextCursor();

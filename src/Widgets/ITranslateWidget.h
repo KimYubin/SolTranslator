@@ -33,19 +33,13 @@ protected:
     /**
      * 번역 텍스트를 에디터에 적용합니다.
      * 에디터 크기 변경과 무관하게 스크롤바 위치를 고정합니다.
-     * 
-     * @param inTranslatedText 
-     * @param inTextStyle 
      */
-    void setTranslationWithFixedScroll(const QString& inTranslatedText, const TextStyle inTextStyle);
+    void setTranslationWithFixedScroll();
 
     /**
-     * 번역을 텍스트 에디터에 적용합니다.
-     * 
-     * @param inTranslatedText 
-     * @param inTextStyle 
+     * 번역을 텍스트 에디터에 적용합니다. 
      */
-    virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) = 0;
+    virtual void applyTranslation() = 0;
 
     /**
      * 스크롤바 위치를 고정하기 위해 사용할 스크롤바를 반환합니다
@@ -60,6 +54,10 @@ protected:
     virtual QTextCursor getTextCursor() = 0;
     virtual void setTextCursor(const QTextCursor& cursor) = 0;
 
+    const QString& getTranslatedText() const { return _translatedText; };
+    TextStyle getTranslatedTextStyle() const { return _translatedTextStyle; };
+
+private:
     QPointer<TranslateUnit> _trUnit;
 
     QString _translatedText;        // 번역문자열 보관

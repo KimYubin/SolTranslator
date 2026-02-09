@@ -94,7 +94,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     {
         // 전체 복사 버튼
-        QPushButton* trCopy = SolWidgetFactory::createCopyButton(ui->trTextEdit, [this]() { return ui->trTextEdit->toPlainText(); });
+        QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
         ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
     }
     {
@@ -134,9 +134,9 @@ TextEditTranslateWidget::~TextEditTranslateWidget()
     delete ui;
 }
 
-void TextEditTranslateWidget::applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle)
+void TextEditTranslateWidget::applyTranslation()
 {
-    ui->trTextEdit->setPlainText(inTranslatedText);
+    ui->trTextEdit->setPlainText(getTranslatedText());
 }
 
 QScrollBar* TextEditTranslateWidget::getVerticalScrollBar()

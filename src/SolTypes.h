@@ -73,8 +73,8 @@ enum HistoryItemRole
     CheckRole = Qt::UserRole + 1
   , SourceLangRole
   , TagetLangRole
-  , SourceTextRole
-  , TargetTextRole
+  , SourceSimplifiedTextRole
+  , TargetSimplifiedTextRole
   , TimeStampRole
   , Size
 };

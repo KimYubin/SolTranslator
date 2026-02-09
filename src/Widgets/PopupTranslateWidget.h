@@ -42,7 +42,7 @@ public:
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
 protected:
-    virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
+    virtual void applyTranslation() override;
 
     virtual QScrollBar* getVerticalScrollBar() override;
     virtual QScrollBar* getHorizontalScrollBar() override;
@@ -51,7 +51,7 @@ protected:
 
 
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
-    void showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle);
+    void showTranslationPopup();
 
     QSize getTextEditSize() const { return _textEditSize; };
 
@@ -121,7 +121,6 @@ protected:
 
     virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
-    QString _translatedText;
     QPropertyAnimation* _animation;
 
     SolWidgetModeFlags _widgetModeFlags;

@@ -97,7 +97,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     // animation start size 지정.
     ui->resultText->setFixedSize(20, 20);
     adjustSize();
-    showTranslationPopup("", TextStyle::PlainText);
+    showTranslationPopup();
 }
 
 PopupTranslateWidget::~PopupTranslateWidget()
@@ -113,9 +113,9 @@ void PopupTranslateWidget::completeTransText(const QString& inTranslatedText, co
     _loadingBar->stop();
 }
 
-void PopupTranslateWidget::applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle)
+void PopupTranslateWidget::applyTranslation()
 {
-    showTranslationPopup(inTranslatedText, inTextStyle);
+    showTranslationPopup();
 }
 
 QScrollBar* PopupTranslateWidget::getVerticalScrollBar()
@@ -139,17 +139,16 @@ void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
 }
 
 
-void PopupTranslateWidget::showTranslationPopup(const QString& inTranslatedText, const TextStyle inTextStyle)
+void PopupTranslateWidget::showTranslationPopup()
 {
-    _translatedText = inTranslatedText;
     if ((_prevSize.width() < _maxEditSize.width())
         || (_prevSize.height() < _maxEditSize.height()))
     {
-        const QSize newSize = calculateTextEditSize(_translatedText);
+        const QSize newSize = calculateTextEditSize(getTranslatedText());
         animateTextEditResize(newSize);
     }
 
-    ui->resultText->setFormattingText(inTranslatedText, inTextStyle);
+    ui->resultText->setFormattingText(getTranslatedText(), getTranslatedTextStyle());
 }
 
 void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
@@ -339,7 +338,7 @@ void PopupTranslateWidget::setupUI()
 
     // ~===========
     // 복사 버튼
-    QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return _translatedText; });
+    QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
 
     ui->statusLayout->addWidget(trCopy, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
 

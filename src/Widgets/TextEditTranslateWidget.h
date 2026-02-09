@@ -30,7 +30,7 @@ public:
     ~TextEditTranslateWidget() override;
 
 protected:
-    virtual void applyTranslation(const QString& inTranslatedText, const TextStyle inTextStyle) override;
+    virtual void applyTranslation() override;
 
     virtual QScrollBar* getVerticalScrollBar() override;
     virtual QScrollBar* getHorizontalScrollBar() override;

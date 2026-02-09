@@ -20,6 +20,7 @@ public:
      */
     void setFormattingText(const QString& inText, const TextStyle inTextStyle);
 
+protected:
     /**
      * 마크다운 string의 스타일 일부를 HTML로 재조정한 후 적용합니다.
      * setMarkdown을 대체합니다.
@@ -27,7 +28,6 @@ public:
     void setAdjustMarkdown(const QString& inMarkdownStr);
 
 private:
-    
     qreal _fontSize = 14.0;
 };
 

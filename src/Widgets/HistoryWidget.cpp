@@ -85,8 +85,13 @@ void HistoryWidget::setupUI()
     _selectedTextEdit->setObjectName("historySelectedDetail");
     _selectedTextEdit->setMinimumWidth(150);
 
-    // 전체 복사 버튼
-    QPushButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]() { return _selectedTextEdit->toPlainText(); });
+    // 복사 버튼
+    QPushButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
+    {
+        const QModelIndex curIdx = _historyListView->currentIndex();
+
+        return _historyListModel->data(curIdx, sol::TargetFullTextRole).toString();
+    });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
     _splitter->addWidget(_selectedTextEdit);

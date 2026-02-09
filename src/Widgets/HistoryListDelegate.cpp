@@ -118,8 +118,8 @@ void HistoryListDelegate::paint(QPainter* painter
         drawText(painter, opt, langTextRect, Qt::TextForceLeftToRight | Qt::AlignLeft, langText);
         drawText(painter, opt, langTextRect, Qt::AlignRight, index.data(sol::TimeStampRole).toString());
     }
-    drawText(painter, opt, sourceTextRect, Qt::TextForceLeftToRight, index.data(sol::SourceTextRole).toString());
-    drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(sol::TargetTextRole).toString());
+    drawText(painter, opt, sourceTextRect, Qt::TextForceLeftToRight, index.data(sol::SourceSimplifiedTextRole).toString());
+    drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(sol::TargetSimplifiedTextRole).toString());
 }
 
 bool HistoryListDelegate::editorEvent(QEvent* event

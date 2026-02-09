@@ -76,12 +76,12 @@ QString HistoryCacheData::getTargetText() const
     return _targetText;
 }
 
-QString HistoryCacheData::getSimplifiedSourceText() const
+QString HistoryCacheData::getSourceSimplifiedText() const
 {
     return _sourceText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
 }
 
-QString HistoryCacheData::getSimplifiedTargetText() const
+QString HistoryCacheData::getTargetSimplifiedText() const
 {
     return _targetText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
 }

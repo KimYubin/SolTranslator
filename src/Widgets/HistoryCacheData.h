@@ -41,9 +41,9 @@ public:
     QString getSourceText() const;
     QString getTargetText() const;
     /** 미리보기용 간략화된 원문을 반환합니다. */
-    QString getSimplifiedSourceText() const;
-    /** 미리보기용 간략화된 원문을 반환합니다. */
-    QString getSimplifiedTargetText() const;
+    QString getSourceSimplifiedText() const;
+    /** 미리보기용 간략화된 번역문을 반환합니다. */
+    QString getTargetSimplifiedText() const;
 
     QString getTimeStampString() const;
 

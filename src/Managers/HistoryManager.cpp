@@ -227,7 +227,9 @@ std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCach
 {
     if (inIdx < 0 || inIdx >= _translateTextCache.size())
     {
-        return std::unexpected("_translateTextCache out of range");
+        return std::unexpected("_translateTextCache out of range :"
+            "\n - size: " + QString::number(_translateTextCache.size())
+            + "\n - inIdx: " + QString::number(inIdx));
     }
 
     return &_translateTextCache[inIdx];

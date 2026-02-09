@@ -75,6 +75,8 @@ enum HistoryItemRole
   , TagetLangRole
   , SourceSimplifiedTextRole
   , TargetSimplifiedTextRole
+  , SourceFullTextRole
+  , TargetFullTextRole
   , TimeStampRole
   , Size
 };

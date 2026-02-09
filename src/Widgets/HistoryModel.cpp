@@ -32,7 +32,7 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     if (trCache.has_value() == false)
     {
-        solDebug << trCache.error();
+        solDebug << trCache.error() << "- role :" << role;
         return QVariant();
     }
 
@@ -46,13 +46,21 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
     {
         return trCache.value()->getTargetLang();
     }
-    case sol::SourceTextRole:
+    case sol::SourceSimplifiedTextRole:
     {
-        return trCache.value()->getSimplifiedSourceText();
+        return trCache.value()->getSourceSimplifiedText();
     }
-    case sol::TargetTextRole:
+    case sol::TargetSimplifiedTextRole:
     {
-        return trCache.value()->getSimplifiedTargetText();
+        return trCache.value()->getTargetSimplifiedText();
+    }
+    case sol::SourceFullTextRole:
+    {
+        return trCache.value()->getSourceText();
+    }
+    case sol::TargetFullTextRole:
+    {
+        return trCache.value()->getTargetText();
     }
     case sol::TimeStampRole:
     {
@@ -80,10 +88,6 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
 
     switch (role)
     {
-    case sol::TargetTextRole:
-    {
-        return true;
-    }
     case sol::CheckRole:
     {
         solCore->historyManager()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));

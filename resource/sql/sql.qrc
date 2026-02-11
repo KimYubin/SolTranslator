@@ -4,17 +4,18 @@
         <file>create_history_favorite.sql</file>
         <file>create_history_favorite_group.sql</file>
         <file>create_history_timeline.sql</file>
-        <file>create_index_favorite.sql</file>
-        <file>create_index_timeline.sql</file>
-        <file>create_index_translation_text.sql</file>
 
-        <file>insert_translation_data.sql</file>
-        <file>insert_translation_timeline.sql</file>
-        
+        <file>create_index_favorite.sql</file>
+        <file>create_index_history_data.sql</file>
+        <file>create_index_timeline_accessed_index.sql</file>
+        <file>create_index_timeline_data_id.sql</file>
+
+        <file>insert_history_data.sql</file>
+        <file>insert_history_timeline.sql</file>
+
         <file>select_history_data.sql</file>
         <file>select_translation_timeline.sql</file>
 
-        
     </qresource>
 
 </RCC>

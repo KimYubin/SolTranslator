@@ -17,9 +17,9 @@ HistoryCacheData::HistoryCacheData(const qint64 inDbId
                                  , const QString& inTargetLang
                                  , const QString& inSourceText
                                  , const QString& inTargetText
-                                 , TextStyle inTextStyle
+                                 , const TextStyle inTextStyle
                                  , const qint64& inTimeStamp
-                                 , Qt::CheckState inCheckState)
+                                 , const Qt::CheckState inCheckState)
     : _dbId(inDbId)
     , _engine(inEngine)
     , _sourceLang(inSourceLang)

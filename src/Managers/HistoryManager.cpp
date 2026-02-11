@@ -58,8 +58,9 @@ void HistoryManager::initializeDB()
     };
     QStringList db_indexes = {
         "index_favorite"
-      , "index_timeline"
-      , "index_translation_text"
+      , "index_history_data"
+      , "index_timeline_accessed_index"
+      , "index_timeline_data_id"
     };
 
     for (QString& tableName : db_tables)
@@ -85,7 +86,7 @@ namespace
 {
 std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 {
-    const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
+    const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
 
     const std::expected<QString, QString> insertTimelineQuery = SolSql::readSqlFromFile(insertTimelineFilePath);
     if (insertTimelineQuery.has_value() == false)
@@ -115,8 +116,8 @@ void HistoryManager::addHistory(const EngineType inEngineType
                               , const QString& inTranslateText
                               , const TextStyle inTextStyle)
 {
-    const QString insertDataFilePath     = ":/sql/insert_translation_data.sql";
-    const QString insertTimelineFilePath = ":/sql/insert_translation_timeline.sql";
+    const QString insertDataFilePath     = ":/sql/insert_history_data.sql";
+    const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
 
     const std::expected<QString, QString> insertDataQuery = SolSql::readSqlFromFile(insertDataFilePath);
 

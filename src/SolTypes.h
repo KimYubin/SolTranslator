@@ -118,6 +118,7 @@ struct TranslateRequestInfo
      * 번역 요청에 필요한 정보를 모아놓은 구조체입니다.
      * 
      * @param inTrTargetWidget trUnit의 번역값을 표기하는 ITranslateWidget입니다.
+     * @param inIgnoreCache true면 캐시에서 찾지 않고 번역을 요청합니다. 재번역시 사용됩니다.
      * @param inEngineType 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
      * @param inOriginText 번역 원문
      * @param inTextFormat 원문 텍스트의 종류.

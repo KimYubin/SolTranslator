@@ -25,9 +25,9 @@ public:
                             , const QString& inTargetLang
                             , const QString& inSourceText
                             , const QString& inTargetText
-                            , TextStyle inTextStyle
+                            , const TextStyle inTextStyle
                             , const qint64& inTimeStamp
-                            , Qt::CheckState inCheckState = Qt::Unchecked);
+                            , const Qt::CheckState inCheckState = Qt::Unchecked);
 
 
     qint64 getDbId() const;
@@ -40,7 +40,7 @@ public:
     QString getTargetLang() const;
     QString getSourceText() const;
     QString getTargetText() const;
-    /** 미리보기용 간략화된 원문을 반환합니다. */
+    /** simplified Source text for preview. */
     QString getSourceSimplifiedText() const;
     /** 미리보기용 간략화된 번역문을 반환합니다. */
     QString getTargetSimplifiedText() const;

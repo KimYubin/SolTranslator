@@ -4,5 +4,3 @@
     created_time INTEGER, /*그룹 생성시간*/
     name         TEXT
 );
-
-

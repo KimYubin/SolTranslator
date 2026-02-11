@@ -111,9 +111,8 @@ void TranslateUnit::replyFailed()
     solDebug << "EngineType:" << sol::enumToQStr(_trReqData.engineType);
     solDebug << "Source Text:" << _trReqData.originText.left(50);
 
-    // 사용자가 history에서 재번역 시도를 할 수 있습니다. 
-    updateHistory(_reply->errorString());
-    completeTranslatedText(_reply->errorString());
+    // 사용자가 history에서 재번역 시도를 할 수 있습니다.
+    finishTranslateRequest(_reply->errorString());
 }
 
 void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
@@ -133,7 +132,6 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
         return;
     }
 
-    // todo: 재번역 시도시 이미 있는 번역을 넣는 시도가 있음. 개선 예정. 
     if (HistoryManager* historyManager = solCore->historyManager())
     {
         historyManager->addHistory(_trReqData.engineType

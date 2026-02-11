@@ -6,5 +6,6 @@
     target_lang TEXT,
     source_text TEXT,
     target_text TEXT,
-    text_style  TEXT
+    text_style  TEXT,
+    revision    INTEGER
 );

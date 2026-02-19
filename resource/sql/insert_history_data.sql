@@ -17,5 +17,4 @@ WHERE history_data.source_text = :source_text
   AND history_data.engine_type = :engine_type
   AND history_data.source_lang = :source_lang
   AND history_data.target_lang = :target_lang
-  AND history_data.text_style = :text_style;
 

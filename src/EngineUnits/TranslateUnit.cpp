@@ -19,8 +19,8 @@ TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
     : QObject(parent)
     , _trReqData(inTranslateRequestInfo)
 {
-    Q_ASSERT(_trReqData.trTargetWidget);
-    _trReqData.trTargetWidget->setTrUnit(this);
+    Q_ASSERT(_trReqData.trDisplayWidget);
+    _trReqData.trDisplayWidget->setTrUnit(this);
 }
 
 void TranslateUnit::executeTextTranslation()
@@ -91,18 +91,37 @@ void TranslateUnit::onReplyFinished()
     deleteLater();
 }
 
-void TranslateUnit::abortTranslate()
+void TranslateUnit::disconnectTranslateDisplay()
 {
-    if (_reply.isNull() == false)
-    {
-        solDebug << "abort translate request";
-        _reply->abort();
+    _trReqData.trDisplayWidget->setTrUnit(nullptr);
+    _trReqData.trDisplayWidget            = nullptr;
+    _trReqData.streamContext              = nullptr;
+    _trReqData.callbackTranslateStreaming = nullptr;
+    _trReqData.completeContext            = nullptr;
+    _trReqData.callbackTranslateComplete  = nullptr;
+}
 
-        _trReqData.streamContext              = nullptr;
-        _trReqData.callbackTranslateStreaming = nullptr;
-        _trReqData.completeContext            = nullptr;
-        _trReqData.callbackTranslateComplete  = nullptr;
+void TranslateUnit::detachDisplayWidget()
+{
+    disconnectTranslateDisplay();
+
+    if (_reply.isNull())
+    {
+        deleteLater();
     }
+}
+
+void TranslateUnit::abortTranslateRequest()
+{
+    if (_reply)
+    {
+        _reply->abort();
+    }
+    solDebug << "abort translate request";
+
+    disconnectTranslateDisplay();
+
+    deleteLater();
 }
 
 void TranslateUnit::replyFailed()

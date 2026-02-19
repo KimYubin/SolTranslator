@@ -177,7 +177,7 @@ void TextEditTranslateWidget::importExistingTranslation(const HistoryCacheData* 
 
 void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
 {
-    abortTrUnit();
+    detachTrUnit();
 
     const QString orignText = ui->srcTextEdit->toPlainText();
     if (orignText.isEmpty())

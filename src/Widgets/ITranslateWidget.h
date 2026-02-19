@@ -25,7 +25,8 @@ public:
 
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
 
-    void abortTrUnit();
+    void detachTrUnit() const;
+    void abortTrUnit() const;
 
     void setTrUnit(TranslateUnit* inTrUnit);
 
@@ -34,7 +35,7 @@ protected:
      * 번역 텍스트를 에디터에 적용합니다.
      * 에디터 크기 변경과 무관하게 스크롤바 위치를 고정합니다.
      */
-    void setTranslationWithFixedScroll();
+    void applyTranslationWithFixedScroll();
 
     /**
      * 번역을 텍스트 에디터에 적용합니다. 

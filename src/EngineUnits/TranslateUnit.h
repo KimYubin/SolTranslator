@@ -42,8 +42,15 @@ protected:
 private slots:
     void onReplyFinished();
 
-public slots:
-    void abortTranslate();
+    void disconnectTranslateDisplay();
+public:
+    /**
+     * 번역 결과를 출력하지 않게 변경합니다.
+     * 번역 결과는 history에만 저장됩니다.
+     */
+    void detachDisplayWidget();
+
+    void abortTranslateRequest();
 
 protected:
     /** 받은 응답에서 번역문을 추출합니다. */

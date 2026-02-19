@@ -108,7 +108,7 @@ QString SolPaths::getHistoryDBFilePath()
     return getSolAppPath(DirName::HISTORY, FileName::HISTORY_DB);
 }
 
-TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
+TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                                          , const bool inIgnoreCache
                                          , const EngineType inEngineType
                                          , const QString& inOriginText
@@ -119,7 +119,7 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrTargetWidget
                                          , std::function<void(const QString&)>&& inCallbackTranslateComplete
                                          , QObject* inStreamContext
                                          , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming)
-    : trTargetWidget(inTrTargetWidget)
+    : trDisplayWidget(inTrDisplayWidget)
     , bIgnoreCache(inIgnoreCache)
     , engineType(inEngineType)
     , originText(inOriginText)

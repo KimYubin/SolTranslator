@@ -23,7 +23,7 @@ public:
     explicit TranslateManager(SolTranslatorCore* parent);
 
     TranslateUnit* executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo);
-    
+
     QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
 
     void translateAtPopup(const QMimeData* inMimeData

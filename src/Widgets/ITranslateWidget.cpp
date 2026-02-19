@@ -19,13 +19,13 @@ ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     _streamUpdateTimer->setSingleShot(true);
     connect(_streamUpdateTimer, &QTimer::timeout, this, [this]()
     {
-        setTranslationWithFixedScroll();
+        applyTranslationWithFixedScroll();
     });
 }
 
 ITranslateWidget::~ITranslateWidget()
 {
-    // abortTrUnit();
+    detachTrUnit();
 }
 
 void ITranslateWidget::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
@@ -40,15 +40,22 @@ void ITranslateWidget::completeTransText(const QString& inTranslatedText, const 
     _translatedText      = inTranslatedText;
     _translatedTextStyle = inTextStyle;
     _streamUpdateTimer->stop();
-    setTranslationWithFixedScroll();
+    applyTranslationWithFixedScroll();
 }
 
-void ITranslateWidget::abortTrUnit()
+void ITranslateWidget::detachTrUnit() const
 {
     if (_trUnit)
     {
-        // todo: history 개발 후, 중단 대신 history에 기록하도록 해야합니다.
-        _trUnit->abortTranslate();
+        _trUnit->detachDisplayWidget();
+    }
+}
+
+void ITranslateWidget::abortTrUnit() const
+{
+    if (_trUnit)
+    {
+        _trUnit->abortTranslateRequest();
     }
 }
 
@@ -57,7 +64,7 @@ void ITranslateWidget::setTrUnit(TranslateUnit* inTrUnit)
     _trUnit = inTrUnit;
 }
 
-void ITranslateWidget::setTranslationWithFixedScroll()
+void ITranslateWidget::applyTranslationWithFixedScroll()
 {
     const int prevVerticalScrollVal   = getVerticalScrollBar()->value();
     const int prevHorizontalScrollVal = getHorizontalScrollBar()->value();

@@ -71,6 +71,7 @@ Q_ENUM_NS(ScreenPopupPolicy)
 enum HistoryItemRole
 {
     CheckRole = Qt::UserRole + 1
+  , DbIdRole
   , SourceLangRole
   , TagetLangRole
   , SourceSimplifiedTextRole
@@ -109,7 +110,7 @@ enum class TextStyle
   , Size
 };
 
-/** 번역 요청에 필요한 정보를 모아놓은 구조체입니다. */
+
 struct TranslateRequestInfo
 {
     TranslateRequestInfo() = default;

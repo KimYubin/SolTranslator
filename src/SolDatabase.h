@@ -20,6 +20,7 @@ class SolSql
 public:
     static std::expected<QString, QString> readSqlFromFile(const QString& inFilePath);
     static std::expected<void, QString> execSQL(const QString& inFilePath);
+    static std::expected<void, QString> execSqlQuery(const QString& inQueryName, const QString& inQuery);
 };
 
 class SolSqlTransactionGuard

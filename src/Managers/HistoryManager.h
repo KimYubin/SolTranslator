@@ -36,6 +36,8 @@ public:
                   , const QString& inTranslateText
                   , const TextStyle inTextStyle);
 
+    void deleteHistory(const qint64 inDbId);
+
     /**
      * 번역 기록이 있다면, 번역문을 반환합니다.
      * 해당 번역의 최근 기록을 추가합니다.

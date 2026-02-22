@@ -10,6 +10,8 @@
         <file>create_index_timeline_accessed_index.sql</file>
         <file>create_index_timeline_data_id.sql</file>
 
+        <file>delete_history_data.sql</file>
+
         <file>insert_history_data.sql</file>
         <file>insert_history_timeline.sql</file>
 

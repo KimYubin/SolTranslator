@@ -38,6 +38,10 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
+    case sol::DbIdRole:
+    {
+        return trCache.value()->getDbId();
+    }
     case sol::SourceLangRole:
     {
         return trCache.value()->getSourceLang();

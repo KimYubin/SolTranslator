@@ -50,6 +50,11 @@ void HistoryManager::initializeDB()
         return;
     }
 
+    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+
+    // Enable foreign key constraints for SQLite.
+    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
+
     QStringList db_tables = {
         "history_data"
       , "history_favorite"
@@ -80,6 +85,8 @@ void HistoryManager::initializeDB()
             solDebug << sqlExec.error();
         }
     }
+
+    transactionGuard.commit();
 }
 
 namespace
@@ -156,6 +163,38 @@ void HistoryManager::addHistory(const EngineType inEngineType
     {
         solDebug << insertRes.error();
         return;
+    }
+
+    transactionGuard.commit();
+    markDbDirty();
+}
+
+void HistoryManager::deleteHistory(const qint64 inDbId)
+{
+    const QString deleteDataFilePath     = ":/sql/delete_history_data.sql";
+
+    const std::expected<QString, QString> deleteDataQuery = SolSql::readSqlFromFile(deleteDataFilePath);
+
+    if (deleteDataQuery.has_value() == false)
+    {
+        solDebug << deleteDataQuery.error() + "delete_history_data";
+        return;
+    }
+
+    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+
+    // delete history data
+    {
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(deleteDataQuery.value());
+
+        sqlQuery.bindValue(":history_id", inDbId);
+
+        if (sqlQuery.exec() == false)
+        {
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
+            return;
+        }
     }
 
     transactionGuard.commit();

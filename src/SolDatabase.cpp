@@ -38,7 +38,18 @@ std::expected<void, QString> SolSql::execSQL(const QString& inFilePath)
     QSqlQuery sqlQuery(sqlStr.value());
     if (sqlQuery.exec() == false)
     {
-        return std::unexpected("Error: Could not execute sql: " + inFilePath + " " + sqlQuery.lastError().text());
+        return std::unexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
+    }
+
+    return {};
+}
+
+std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, const QString& inQuery)
+{
+    QSqlQuery sqlQuery(inQuery);
+    if (sqlQuery.exec() == false)
+    {
+        return std::unexpected("Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text());
     }
 
     return {};

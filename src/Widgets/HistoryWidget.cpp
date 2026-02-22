@@ -94,6 +94,23 @@ void HistoryWidget::setupUI()
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
+    // 기록 삭제
+    {
+        QPushButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
+                                                                     , Qt::TabFocus
+                                                                     , tr("번역 삭제")
+                                                                     , 0
+                                                                     , Qt::AlignRight);
+
+        connect(deleteButton, &QPushButton::clicked, this, [this]()
+        {
+            const QModelIndex curIdx = _historyListView->currentIndex();
+            const qlonglong dbId     = _historyListModel->data(curIdx, sol::DbIdRole).toLongLong();
+            solCore->historyManager()->deleteHistory(dbId);
+            _selectedTextEdit->setText("");
+        });
+    }
+
     _splitter->addWidget(_selectedTextEdit);
     _splitter->setStretchFactor(0, 1);
     _splitter->setStretchFactor(1, 2);

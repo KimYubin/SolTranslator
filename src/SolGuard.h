@@ -1,4 +1,5 @@
-﻿// Copyright (c) 2026 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+
 #ifndef SOLTRANSLATOR_SOLGUARD_H
 #define SOLTRANSLATOR_SOLGUARD_H
 

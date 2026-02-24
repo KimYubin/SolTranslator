@@ -54,6 +54,8 @@ public:
 
     bool setCheckState(const int inIdx, const Qt::CheckState inState);
 
+    int findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp);
+
     void markDbDirty();
 
 signals:

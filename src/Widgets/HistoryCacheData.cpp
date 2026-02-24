@@ -8,6 +8,7 @@
 
 HistoryCacheData::HistoryCacheData()
     : _dbId(0)
+    , _timelineId(-1)
     , _textStyle(TextStyle::PlainText)
     , _bCheckState(Qt::Unchecked)
 {}
@@ -18,8 +19,9 @@ HistoryCacheData::HistoryCacheData(const qint64 inDbId
                                  , const QString& inTargetLang
                                  , const QString& inSourceText
                                  , const QString& inTargetText
+                                 , const qint64 inTimelineId
+                                 , const qint64 inTimeStamp
                                  , const TextStyle inTextStyle
-                                 , const qint64& inTimeStamp
                                  , const Qt::CheckState inCheckState)
     : _dbId(inDbId)
     , _engine(inEngine)
@@ -27,8 +29,9 @@ HistoryCacheData::HistoryCacheData(const qint64 inDbId
     , _targetLang(inTargetLang)
     , _sourceText(inSourceText)
     , _targetText(inTargetText)
-    , _textStyle(inTextStyle)
+    , _timelineId(inTimelineId)
     , _timeStamp(QDateTime::fromMSecsSinceEpoch(inTimeStamp))
+    , _textStyle(inTextStyle)
     , _bCheckState(inCheckState)
 {}
 
@@ -85,6 +88,16 @@ QString HistoryCacheData::getSourceSimplifiedText() const
 QString HistoryCacheData::getTargetSimplifiedText() const
 {
     return _targetText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));
+}
+
+qint64 HistoryCacheData::getTimelineId() const
+{
+    return _timelineId;
+}
+
+QDateTime HistoryCacheData::getTimeStamp() const
+{
+    return _timeStamp;
 }
 
 QString HistoryCacheData::getTimeStampString() const

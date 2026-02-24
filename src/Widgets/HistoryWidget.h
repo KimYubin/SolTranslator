@@ -2,6 +2,7 @@
 
 #ifndef SOLTRANSLATOR_HISTORYWIDGET_H
 #define SOLTRANSLATOR_HISTORYWIDGET_H
+#include <QDateTime>
 #include <QListView>
 
 #include "ISolWidget.h"
@@ -64,6 +65,9 @@ private:
     qreal _listScrollBarRatio = 0.0;
 
     sol::HistoryItemRole _currentTextRole = sol::TargetFullTextRole;
+
+    qint64 _currentTimelineId = -1;
+    QDateTime _currentTimeStamp;
 };
 
 

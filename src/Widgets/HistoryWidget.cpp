@@ -143,15 +143,14 @@ void HistoryWidget::setupUI()
 
     // select item
     QItemSelectionModel* selectionModel = _historyListView->selectionModel();
-
-    connect(selectionModel, &QItemSelectionModel::selectionChanged, this, [this](const QItemSelection& selected, const QItemSelection& deselected)
+    connect(selectionModel, &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& current, const QModelIndex& previous)
     {
-        if (selected.empty())
+        if (current.isValid() == false)
         {
             return;
         }
 
-        const int lastestRowIndex  = selected.indexes().back().row();
+        const int lastestRowIndex  = current.row();
         const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
 
         if (selectedTr.has_value() == false)
@@ -160,7 +159,15 @@ void HistoryWidget::setupUI()
             return;
         }
 
-        _currentTextRole = sol::TargetFullTextRole;
+        // only db update
+        const qint64 newCurrentTimelineId = selectedTr.value()->getTimelineId();
+        if (newCurrentTimelineId == _currentTimelineId)
+        {
+            return;
+        }
+        _currentTimelineId = newCurrentTimelineId;
+        _currentTimeStamp  = selectedTr.value()->getTimeStamp();
+        _currentTextRole   = sol::TargetFullTextRole;
 
         _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
 
@@ -170,20 +177,41 @@ void HistoryWidget::setupUI()
     });
 
 
-    // 모델 리셋 시, 스크롤 위치 유지
-    connect(_historyListModel, &QAbstractItemModel::modelAboutToBeReset, _historyListView, [this]()
+    connect(_historyListModel, &QAbstractItemModel::modelReset, this, [this]()
     {
+        // Fix scrollbar
         const QScrollBar* scrollBar = _historyListView->verticalScrollBar();
         const qreal currentScroll   = scrollBar->value();
         const qreal maxScroll       = scrollBar->maximum();
         _listScrollBarRatio         = (maxScroll > 0) ? (currentScroll / maxScroll) : 0.0;
+
+        // Restore previous selection
+        if (_currentTimelineId < 0)
+        {
+            return;
+        }
+
+        const int findIdx = solCore->historyManager()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
+        if (findIdx < 0)
+        {
+            _currentTimelineId = -1;
+            return;
+        }
+
+        QModelIndex curIdx = _historyListModel->index(findIdx);
+        if (const QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(_historyListView->model()))
+        {
+            curIdx = proxy->mapFromSource(curIdx);
+        }
+
+        _historyListView->setCurrentIndex(curIdx);
     });
 
     connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](const int min, const int max)
     {
         QScrollBar* scrollBar = _historyListView->verticalScrollBar();
 
-        if ((min < max) && scrollBar->value() == 0)
+        if (min < max)
         {
             const qreal newVal = _listScrollBarRatio * scrollBar->maximum();
             scrollBar->setValue(static_cast<int>(newVal));
@@ -210,20 +238,22 @@ void HistoryWidget::exportSelectedHistoryData()
 
 void HistoryWidget::toggleTranslationText()
 {
-    const QModelIndex curIdx   = _historyListView->currentIndex();
-    const QString textStyleStr = _historyListModel->data(curIdx, sol::TextStyleStringRole).toString();
-
-    if (_currentTextRole == sol::TargetFullTextRole)
+    const QModelIndex curIdx = _historyListView->currentIndex();
+    if (curIdx.isValid() == false)
     {
-        _currentTextRole = sol::SourceFullTextRole;
+        return;
     }
-    else if (_currentTextRole == sol::SourceFullTextRole)
-    {
-        _currentTextRole = sol::TargetFullTextRole;
-    }
-    const QString nextText = _historyListModel->data(curIdx, _currentTextRole).toString();
 
+    // fix scrollbar
     const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
-    _selectedTextEdit->setFormattingText(nextText, sol::qStrToEnum(textStyleStr, TextStyle::PlainText));
+
+    // toggle
+    _currentTextRole = (_currentTextRole == sol::TargetFullTextRole) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
+
+    const QString nextText  = _historyListModel->data(curIdx, _currentTextRole).toString();
+    const QString textStyle = _historyListModel->data(curIdx, sol::TextStyleStringRole).toString();
+
+    _selectedTextEdit->setFormattingText(nextText, sol::qStrToEnum(textStyle, TextStyle::PlainText));
+
     _selectedTextEdit->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }

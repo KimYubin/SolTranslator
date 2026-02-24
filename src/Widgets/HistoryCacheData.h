@@ -18,7 +18,6 @@ class HistoryCacheData
 public:
     explicit HistoryCacheData();
 
-    // order by db table and sql select
     // create_history_data.sql /  select_translation_timeline.sql
     explicit HistoryCacheData(const qint64 inDbId
                             , const QString& inEngine
@@ -26,8 +25,9 @@ public:
                             , const QString& inTargetLang
                             , const QString& inSourceText
                             , const QString& inTargetText
+                            , const qint64 inTimelineId
+                            , const qint64 inTimeStamp
                             , const TextStyle inTextStyle
-                            , const qint64& inTimeStamp
                             , const Qt::CheckState inCheckState = Qt::Unchecked);
 
 
@@ -46,6 +46,8 @@ public:
     /** 미리보기용 간략화된 번역문을 반환합니다. */
     QString getTargetSimplifiedText() const;
 
+    qint64 getTimelineId() const;
+    QDateTime getTimeStamp() const;
     QString getTimeStampString() const;
 
 private:
@@ -55,9 +57,11 @@ private:
     QString _targetLang;
     QString _sourceText;
     QString _targetText;
-    TextStyle _textStyle;
+
+    qint64 _timelineId;
     QDateTime _timeStamp;
 
+    TextStyle _textStyle;
     Qt::CheckState _bCheckState;
 };
 

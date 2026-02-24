@@ -171,7 +171,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
 
 void HistoryManager::deleteHistory(const qint64 inDbId)
 {
-    const QString deleteDataFilePath     = ":/sql/delete_history_data.sql";
+    const QString deleteDataFilePath = ":/sql/delete_history_data.sql";
 
     const std::expected<QString, QString> deleteDataQuery = SolSql::readSqlFromFile(deleteDataFilePath);
 
@@ -286,6 +286,30 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
     return true;
 }
 
+int HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
+                                             , const QDateTime& inTimeStamp)
+{
+    const auto lowIt = std::ranges::lower_bound(_translateTextCache, inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
+    if (lowIt == _translateTextCache.end() || lowIt->getTimeStamp() != inTimeStamp)
+    {
+        return -1;
+    }
+    const auto upperIt = std::ranges::upper_bound(lowIt, _translateTextCache.end(), inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
+
+    const std::vector<HistoryCacheData>::iterator findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)
+    {
+        return inCache.getTimelineId() == inTimelineId;
+    });
+
+    if (findIt == _translateTextCache.end())
+    {
+        return -1;
+    }
+
+    return findIt - _translateTextCache.begin();
+}
+
+
 void HistoryManager::applyTranslateHistory()
 {
     if (_bIsDirtyDB == false)
@@ -317,16 +341,15 @@ void HistoryManager::applyTranslateHistory()
     _translateTextCache.clear();
     while (sqlQuery.next())
     {
-        const TextStyle textStyle = sol::qStrToEnum(sqlQuery.value(6).toString(), TextStyle::PlainText);
-
         _translateTextCache.emplace_back(sqlQuery.value(0).toLongLong()
                                        , sqlQuery.value(1).toString()
                                        , sqlQuery.value(2).toString()
                                        , sqlQuery.value(3).toString()
                                        , sqlQuery.value(4).toString()
                                        , sqlQuery.value(5).toString()
-                                       , textStyle
-                                       , sqlQuery.value(7).toLongLong());
+                                       , sqlQuery.value(6).toLongLong()
+                                       , sqlQuery.value(7).toLongLong()
+                                       , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
     }
 
     transactionGuard.commit();

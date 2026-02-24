@@ -1,0 +1,32 @@
+/* ----------------------------------------------------- */
+LayoutTextEdit
+{
+  padding-bottom: 44px;
+}
+
+/* CustomTextEdit 하단 버튼 위젯 */
+QWidget#bottomWidget
+{
+  background-color: transparent;
+  border: none;
+  padding-bottom: 4px;
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+#bottomWidget QPushButton
+{
+  padding: 0px; /* 필수 pushbutton override */
+  icon-size: 24px;
+  height: 40px; /* textEdit padding-bottom */
+  width:  40px;
+  border: 1.5px;
+  border-radius: 20px;
+}
+
+#bottomWidget QPushButton:focus
+{
+  border:1.5px solid rgba(214, 214, 214, 1);
+  border-radius: 20px;
+}
+

@@ -6,13 +6,15 @@
         <file>dark/SettingCard.qss</file>
         <file>dark/MessageBox.qss</file>
         <file>dark/CommonStyle.qss</file>
-        
+
         <file>dark/PopupTranslateWidget_Main.qss</file>
         <file>dark/PopupTranslateWidget_PushButton.qss</file>
         <file>dark/PopupTranslateWidget_TextEdit.qss</file>
 
         <file>dark/ResultTextEdit.qss</file>
         <file>dark/HistoryWidget.qss</file>
+
+        <file>dark/TextEdit.qss</file>
     </qresource>
 
 </RCC>

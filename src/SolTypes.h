@@ -78,6 +78,7 @@ enum HistoryItemRole
   , TargetSimplifiedTextRole
   , SourceFullTextRole
   , TargetFullTextRole
+  , TextStyleStringRole
   , TimeStampRole
   , Size
 };

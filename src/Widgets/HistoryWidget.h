@@ -53,6 +53,8 @@ private:
     // export selected history data to TextEditTranslateWidget, etc.
     void exportSelectedHistoryData();
 
+    void toggleTranslationText();
+
     QGridLayout* _mainLayout;
     QSplitter* _splitter;
     HistoryListView* _historyListView;
@@ -60,6 +62,8 @@ private:
     LayoutTextEdit* _selectedTextEdit;
 
     qreal _listScrollBarRatio = 0.0;
+
+    sol::HistoryItemRole _currentTextRole = sol::TargetFullTextRole;
 };
 
 

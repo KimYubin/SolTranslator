@@ -6,7 +6,7 @@
 
 
 /**
- * 엔진 선택 콤보박스
+ * Engine selection combo box
  */
 class EnginSelector : public DropdownMenu
 {
@@ -14,7 +14,7 @@ class EnginSelector : public DropdownMenu
 
 public:
     explicit EnginSelector(QWidget* parent = nullptr);
-    
+
     void setCurrentIndexChanged(std::function<void(const int)>&& inFunctor);
 
 };

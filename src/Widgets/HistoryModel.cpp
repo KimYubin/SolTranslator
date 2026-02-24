@@ -6,6 +6,7 @@
 
 #include "SolLog.h"
 #include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
 
 #include "Managers/HistoryManager.h"
 #include "Widgets/HistoryCacheData.h"
@@ -65,6 +66,10 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
     case sol::TargetFullTextRole:
     {
         return trCache.value()->getTargetText();
+    }
+    case sol::TextStyleStringRole:
+    {
+        return sol::enumToQStr(trCache.value()->getTextStyle());
     }
     case sol::TimeStampRole:
     {

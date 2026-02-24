@@ -51,6 +51,8 @@ QColor HistoryListView::getItemColor(const sol::ItemColorRole inColorRole) const
 HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
+
+    _currentTextRole = sol::TargetFullTextRole;
 }
 
 HistoryWidget::~HistoryWidget()
@@ -94,12 +96,24 @@ void HistoryWidget::setupUI()
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
+    // 원문/번역 토글
+    {
+        QPushButton* textToggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
+                                                                         , Qt::TabFocus
+                                                                         , tr("원문/번역 토글(<u>T<\\u>)")
+                                                                         , 0
+                                                                         , Qt::AlignLeft);
+
+        textToggleButton->setShortcut(Qt::Key_T);
+        connect(textToggleButton, &QPushButton::clicked, this, [this]() { toggleTranslationText(); });
+    }
+
     // 기록 삭제
     {
         QPushButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
                                                                      , Qt::TabFocus
                                                                      , tr("번역 삭제")
-                                                                     , 0
+                                                                     , 1
                                                                      , Qt::AlignRight);
 
         connect(deleteButton, &QPushButton::clicked, this, [this]()
@@ -146,6 +160,8 @@ void HistoryWidget::setupUI()
             return;
         }
 
+        _currentTextRole = sol::TargetFullTextRole;
+
         _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
@@ -190,4 +206,24 @@ void HistoryWidget::exportSelectedHistoryData()
     }
 
     emit exportHistoryData(selectedTr.value());
+}
+
+void HistoryWidget::toggleTranslationText()
+{
+    const QModelIndex curIdx   = _historyListView->currentIndex();
+    const QString textStyleStr = _historyListModel->data(curIdx, sol::TextStyleStringRole).toString();
+
+    if (_currentTextRole == sol::TargetFullTextRole)
+    {
+        _currentTextRole = sol::SourceFullTextRole;
+    }
+    else if (_currentTextRole == sol::SourceFullTextRole)
+    {
+        _currentTextRole = sol::TargetFullTextRole;
+    }
+    const QString nextText = _historyListModel->data(curIdx, _currentTextRole).toString();
+
+    const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
+    _selectedTextEdit->setFormattingText(nextText, sol::qStrToEnum(textStyleStr, TextStyle::PlainText));
+    _selectedTextEdit->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }

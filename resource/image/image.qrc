@@ -33,6 +33,6 @@
         <file alias="refresh_img">refresh_48dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.svg</file>
 
         <file alias="delete_img">delete_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg</file>
-        
+        <file alias="swap_text_img">sync_alt_48dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.svg</file>
     </qresource>
 </RCC>

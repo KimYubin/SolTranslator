@@ -2,10 +2,11 @@
 
 #ifdef _WIN32
 
-#include <QThread>
+#include "InputSimulator.h"
+
+#include <array>
 #include <vector>
 
-#include "RunCopKey.h"
 #include <Windows.h>
 
 namespace
@@ -26,7 +27,6 @@ INPUT make_INPUT(DWORD in_type, WORD in_wVK, DWORD in_dwFlags = 0)
     res.ki.dwFlags = in_dwFlags;
     return res;
 }
-} // anonymous namespace
 
 /**
  * 컨트롤 키가 눌린 상태에서 다른 모든키를 릴리즈 합니다.
@@ -51,8 +51,9 @@ void ReleaseAllKeysOnPressedControlKey()
 
     SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
+} // anonymous namespace
 
-void RunCopKey::DoCopy()
+void InputSimulator::triggerCopy()
 {
     ReleaseAllKeysOnPressedControlKey();
 

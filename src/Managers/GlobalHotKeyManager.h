@@ -18,11 +18,11 @@ class GlobalHotKeyManager : public AbstractManager
 public:
     explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
-private slots:
-    void RegisterHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);
+private:
+    void registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);
 
 public:
-    void FireSimpleTranslate();
+    void fireSimpleTranslate();
 
 private:
     std::unordered_map<HotkeyType, QHotkey*> hotKeys;

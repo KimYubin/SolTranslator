@@ -27,7 +27,7 @@ HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(pare
     _dbUpdateTimer = new QTimer(this);
     _dbUpdateTimer->setInterval(500);
     _dbUpdateTimer->setSingleShot(true);
-    _dbUpdateTimer->callOnTimeout(this, &HistoryManager::applyTranslateHistory);
+    _dbUpdateTimer->callOnTimeout(this, &HistoryManager::updateDbCache);
 
     markDbDirty();
 }
@@ -310,7 +310,7 @@ int HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
 }
 
 
-void HistoryManager::applyTranslateHistory()
+void HistoryManager::updateDbCache()
 {
     if (_bIsDirtyDB == false)
     {

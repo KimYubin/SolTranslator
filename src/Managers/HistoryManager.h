@@ -62,7 +62,7 @@ signals:
     void translateHistoryChanged();
 
 private:
-    void applyTranslateHistory();
+    void updateDbCache();
 
     std::vector<HistoryCacheData> _translateTextCache;
 

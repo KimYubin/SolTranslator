@@ -15,14 +15,14 @@
 #include <QHotkey>
 
 #include "SolTranslatorCore.h"
-#include "RunCopKey.h"
+#include "InputSimulator.h"
 
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent): AbstractManager(parent)
 {
-    RegisterHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::FireSimpleTranslate);
+    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::fireSimpleTranslate);
 }
 
-void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)
+void GlobalHotKeyManager::registerHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)
 {
     std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(InHotkey);
 
@@ -41,7 +41,7 @@ void GlobalHotKeyManager::RegisterHotKey(const HotkeyType InHotkey, const QKeySe
     connect(hotkey, &QHotkey::activated, this, std::bind(InFunction, this));
 }
 
-void GlobalHotKeyManager::FireSimpleTranslate()
+void GlobalHotKeyManager::fireSimpleTranslate()
 {
     const QMimeData* prevMime = QApplication::clipboard()->mimeData();
     QStringList formatsList   = prevMime->formats();
@@ -113,5 +113,5 @@ void GlobalHotKeyManager::FireSimpleTranslate()
     });
 
     // 복사 실행
-    RunCopKey::DoCopy();
+    InputSimulator::triggerCopy();
 }

@@ -73,11 +73,11 @@ qt_add_executable(
         src/Managers/GlobalHotKeyManager.h
         src/Managers/HistoryManager.cpp
         src/Managers/HistoryManager.h
-        src/Managers/RunCopKey.cpp
-        src/Managers/RunCopKey.h
-        src/Managers/RunCopy_Impl_Linux.cpp
-        src/Managers/RunCopy_Impl_Mac.cpp
-        src/Managers/RunCopy_Impl_Win.cpp
+        src/Managers/InputSimulator.cpp
+        src/Managers/InputSimulator.h
+        src/Managers/InputSimulator_Impl_Linux.cpp
+        src/Managers/InputSimulator_Impl_Mac.cpp
+        src/Managers/InputSimulator_Impl_Win.cpp
         src/Managers/StyleManger.cpp
         src/Managers/StyleManger.h
         src/Managers/TranslateManager.cpp

@@ -127,9 +127,9 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
     , sourceLang(inSourceLang)
     , targetLang(inTargetLang)
     , completeContext(inCompleteContext)
-    , callbackTranslateComplete(inCallbackTranslateComplete)
+    , callbackTranslateComplete(std::move(inCallbackTranslateComplete))
     , streamContext(inStreamContext)
-    , callbackTranslateStreaming(incallbackTranslateStreaming)
+    , callbackTranslateStreaming(std::move(incallbackTranslateStreaming))
 {}
 
 LangInfo Langs::GetLangInfo(const LangType inLangType)

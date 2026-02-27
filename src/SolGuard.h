@@ -31,7 +31,7 @@ public:
      */
     Q_NODISCARD_CTOR
     explicit SolGeneralGuard(std::function<Func>&& inEndFunctor)
-        : _endFunctor(inEndFunctor)
+        : _endFunctor(std::move(inEndFunctor))
     {};
 
     ~SolGeneralGuard()

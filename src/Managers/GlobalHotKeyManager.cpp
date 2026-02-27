@@ -16,13 +16,14 @@
 
 #include "SolTranslatorCore.h"
 #include "InputSimulator.h"
+#include "SolUtilibrary.h"
 
-GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent): AbstractManager(parent)
+GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), &GlobalHotKeyManager::fireSimpleTranslate);
+    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), this, [this]() { fireSimpleTranslate(); });
 }
 
-void GlobalHotKeyManager::registerHotKey(const HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction)
+void GlobalHotKeyManager::registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::function<void()>&& InFunction)
 {
     std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(InHotkey);
 
@@ -38,24 +39,37 @@ void GlobalHotKeyManager::registerHotKey(const HotkeyType InHotkey, const QKeySe
         hotkey->setShortcut(shortcut, true);
     }
 
-    connect(hotkey, &QHotkey::activated, this, std::bind(InFunction, this));
+    connect(hotkey, &QHotkey::activated, inContext, std::move(InFunction));
+}
+
+std::expected<void, QString> GlobalHotKeyManager::changeShortcut(HotkeyType InHotkey, const QKeySequence& shortcut)
+{
+    std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(InHotkey);
+    if (findIt == hotKeys.end())
+    {
+        return std::unexpected("not found registered hotkeys:" + sol::enumToQStr(InHotkey) + shortcut.toString());
+    }
+
+    findIt->second->setShortcut(shortcut, true);
+
+    return {};
 }
 
 void GlobalHotKeyManager::fireSimpleTranslate()
 {
-    const QMimeData* prevMime = QApplication::clipboard()->mimeData();
-    QStringList formatsList   = prevMime->formats();
+    const QMimeData* prevClipboard = QApplication::clipboard()->mimeData();
+    QStringList formatsList = prevClipboard->formats();
 
-    std::unique_ptr<QMimeData> prevMimePtr = std::make_unique<QMimeData>();
+    std::unique_ptr<QMimeData> prevMime = std::make_unique<QMimeData>();
 
     for (QString& prevFormat : formatsList)
     {
-        prevMimePtr->setData(std::move(prevFormat), prevMime->data(prevFormat));
+        prevMime->setData(std::move(prevFormat), prevClipboard->data(prevFormat));
     }
 
     // 클립보드 갱신(복사) 대기
     QMetaObject::Connection clipboardConnection
-        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimePtrChanged = std::move(prevMimePtr)](QClipboard::Mode mode) mutable
+        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](QClipboard::Mode mode) mutable
     {
         const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
 
@@ -71,23 +85,23 @@ void GlobalHotKeyManager::fireSimpleTranslate()
             // 번역 실행
             solCore->onSimpleTranslate(selectedMime);
 
-            if (prevMimePtrChanged->text() == selectedMime->text())
+            if (prevMimeChanged->text() == selectedMime->text())
             {
                 break;
             }
 
             // 이전 클립보드 원상복구. 클립보드 clear() 대기
-            connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this, prevMimePtrDataChanged = std::move(prevMimePtrChanged)]() mutable
+            connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this, prevMimeDataChanged = std::move(prevMimeChanged)]() mutable
             {
                 // 잠시 대기 후 원복
-                QTimer::singleShot(100, this, [this, prevMimePtrTimer = std::move(prevMimePtrDataChanged)]()
+                QTimer::singleShot(100, this, [this, prevMimeTimer = std::move(prevMimeDataChanged)]()
                 {
                     QMimeData* copyMimeData = new QMimeData;
 
-                    QStringList formatsList = prevMimePtrTimer->formats();
+                    QStringList formatsList = prevMimeTimer->formats();
                     for (QString& prevFormat : formatsList)
                     {
-                        copyMimeData->setData(std::move(prevFormat), prevMimePtrTimer->data(prevFormat));
+                        copyMimeData->setData(std::move(prevFormat), prevMimeTimer->data(prevFormat));
                     }
 
                     QApplication::clipboard()->setMimeData(copyMimeData);

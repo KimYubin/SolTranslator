@@ -32,12 +32,12 @@ public:
                           , std::function<void(ret)>&& inMainThreadFunc)
     {
         QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::forward<std::function<void(ret)>>(inMainThreadFunc)]
+        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]
         {
             mtFunc(watcher->future().result());
             watcher->deleteLater();
         });
-        QFuture<ret> future = QtConcurrent::run(std::forward<std::function<ret()>>(inAsyncFunc));
+        QFuture<ret> future = QtConcurrent::run(std::move(inAsyncFunc));
 
         watcher->setFuture(future);
     }
@@ -48,11 +48,12 @@ public:
                           , std::function<void(void)>&& inMainThreadFunc)
     {
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::forward<std::function<void(void)>>(inMainThreadFunc)]
+        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]
         {
+            mtFunc();
             watcher->deleteLater();
         });
-        QFuture<void> future = QtConcurrent::run(std::forward<std::function<void()>>(inAsyncFunc));
+        QFuture<void> future = QtConcurrent::run(std::move(inAsyncFunc));
 
         watcher->setFuture(future);
     }

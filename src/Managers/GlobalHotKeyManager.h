@@ -4,6 +4,8 @@
 #define GLOBALHOTKEYMANAGER_H
 #include <QObject>
 
+#include <expected>
+
 #include "AbstractManager.h"
 
 
@@ -19,7 +21,8 @@ public:
     explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
 private:
-    void registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, std::function<void(GlobalHotKeyManager*)> InFunction);
+    void registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::function<void(void)>&& InFunction);
+    std::expected<void, QString> changeShortcut(HotkeyType InHotkey, const QKeySequence& shortcut);
 
 public:
     void fireSimpleTranslate();

@@ -299,9 +299,9 @@ void IOptionPage::setIconPath(const QString& inIconPath)
     _iconPath = inIconPath;
 }
 
-void IOptionPage::setOptionWidgetCtor(const std::function<IOptionWidget*()>& inOptionWidgetCtor)
+void IOptionPage::setOptionWidgetCtor(std::move_only_function<IOptionWidget*()>&& inOptionWidgetCtor)
 {
-    _optionWidgetCtor = inOptionWidgetCtor;
+    _optionWidgetCtor = std::move(inOptionWidgetCtor);
 }
 
 void IOptionPage::setPriority(const OptionPriority inPriority)

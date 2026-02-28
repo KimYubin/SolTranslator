@@ -11,7 +11,7 @@
 #include "SolToolTip.h"
 
 
-QPushButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::function<QString()>&& inCopyStringFunc)
+QPushButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
 {
     QPushButton* copyButton = new QPushButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));
@@ -20,7 +20,7 @@ QPushButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::function
 
     SolTooltipFilter::setBubbleToolTip(copyButton, tr("번역 복사(<u>C<\\u>)"));
 
-    connect(copyButton, &QPushButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]()
+    connect(copyButton, &QPushButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, copyButton, [copyButton]() mutable
         {

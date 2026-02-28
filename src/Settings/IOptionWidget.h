@@ -122,7 +122,7 @@ public:
 protected:
     void setDisplayName(const QString& inDisplayName);
     void setIconPath(const QString& inIconPath);
-    void setOptionWidgetCtor(const std::function<IOptionWidget*()>& inOptionWidgetCtor);
+    void setOptionWidgetCtor(std::move_only_function<IOptionWidget*()>&& inOptionWidgetCtor);
     void setPriority(const OptionPriority inPriority);
 
 private:
@@ -130,7 +130,7 @@ private:
 
     QString _displayName;
     QString _iconPath;
-    std::function<IOptionWidget*()> _optionWidgetCtor;
+    std::move_only_function<IOptionWidget*()> _optionWidgetCtor;
     OptionPriority _priority = OptionPriority::None; // 옵션 정렬 우선 순위
 
     int _optionStkId;

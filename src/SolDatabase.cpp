@@ -14,7 +14,7 @@
 std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
-    SolGeneralGuard<void()> fileGuard([&sqlFile]() mutable { sqlFile.close(); });
+    SolGeneralGuard fileGuard([&sqlFile]() mutable { sqlFile.close(); });
 
     if (sqlFile.open(QFile::ReadOnly) == false)
     {

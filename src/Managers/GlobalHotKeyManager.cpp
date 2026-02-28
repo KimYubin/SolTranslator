@@ -23,7 +23,7 @@ GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractMa
     registerHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), this, [this]() { fireSimpleTranslate(); });
 }
 
-void GlobalHotKeyManager::registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::function<void()>&& inFunction)
+void GlobalHotKeyManager::registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::move_only_function<void()>&& inFunction)
 {
     std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(InHotkey);
 

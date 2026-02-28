@@ -19,7 +19,7 @@ EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
     setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
 }
 
-void EnginSelector::setCurrentIndexChanged(std::function<void(const int)>&& inFunctor)
+void EnginSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)
 {
     connect(this, &QComboBox::currentIndexChanged, this, std::move(inFunctor));
 }

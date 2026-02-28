@@ -28,11 +28,11 @@ public:
      */
     template <typename ret>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::function<ret()>&& inAsyncFunc
-                          , std::function<void(ret)>&& inMainThreadFunc)
+                          , std::move_only_function<ret()>&& inAsyncFunc
+                          , std::move_only_function<void(ret)>&& inMainThreadFunc)
     {
         QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]
+        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)] () mutable
         {
             mtFunc(watcher->future().result());
             watcher->deleteLater();
@@ -44,11 +44,11 @@ public:
 
     template <typename>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::function<void()>&& inAsyncFunc
-                          , std::function<void(void)>&& inMainThreadFunc)
+                          , std::move_only_function<void()>&& inAsyncFunc
+                          , std::move_only_function<void(void)>&& inMainThreadFunc)
     {
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]
+        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)] () mutable
         {
             mtFunc();
             watcher->deleteLater();

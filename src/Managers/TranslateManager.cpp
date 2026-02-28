@@ -103,9 +103,9 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
           , inSourceLang
           , inTargetLang
           , simple
-          , [=](const QString& inStr) { simple->completeTransText(inStr, inTextStyle); }
+          , [simple, inTextStyle](const QString& inStr) { simple->completeTransText(inStr, inTextStyle); }
           , simple
-          , [=](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
+          , [simple, inTextStyle](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
         });
     };
 
@@ -122,9 +122,9 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
 
                 return txtDoc.toMarkdown();
             },
-            [=](const QString& inMd)
+            [runPopupTranslateAsync = std::move(runPopupTranslate)](const QString& inMd)
             {
-                runPopupTranslate(inMd, TextStyle::MarkDown);
+                runPopupTranslateAsync(inMd, TextStyle::MarkDown);
             });
     }
     else

@@ -15,7 +15,7 @@ class EnginSelector : public DropdownMenu
 public:
     explicit EnginSelector(QWidget* parent = nullptr);
 
-    void setCurrentIndexChanged(std::function<void(const int)>&& inFunctor);
+    void setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor);
 
 };
 

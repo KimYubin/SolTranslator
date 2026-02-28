@@ -11,8 +11,7 @@ class OpenAiTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                        , TranslateManager* parent);
+    explicit OpenAiTrUnit(TranslateManager* parent);
 
 protected:
     void chatTranslate(const bool bIsStreaming);

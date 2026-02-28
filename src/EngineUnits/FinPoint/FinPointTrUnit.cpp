@@ -13,9 +13,8 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-FinPointTrUnit::FinPointTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                             , TranslateManager* parent)
-    : TranslateUnit(inTranslateRequestInfo, parent)
+FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
+    : TranslateUnit(parent)
 {}
 
 void FinPointTrUnit::chatTranslate(const bool bIsStreaming)

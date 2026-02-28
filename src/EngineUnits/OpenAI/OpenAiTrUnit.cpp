@@ -13,9 +13,8 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-OpenAiTrUnit::OpenAiTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                         , TranslateManager* parent)
-    : TranslateUnit(inTranslateRequestInfo, parent)
+OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
+    : TranslateUnit(parent)
 {}
 
 void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)

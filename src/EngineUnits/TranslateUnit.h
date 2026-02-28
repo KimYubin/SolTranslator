@@ -23,10 +23,9 @@ class TranslateUnit : public QObject
     Q_OBJECT
 
 public:
-    explicit TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                         , TranslateManager* parent);
+    explicit TranslateUnit(TranslateManager* parent);
 
-    void executeTextTranslation();
+    void executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo);
 
 protected:
     void get(const QNetworkRequest& request);

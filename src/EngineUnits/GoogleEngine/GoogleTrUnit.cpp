@@ -10,9 +10,8 @@
 #include "SolConstants.h"
 #include "SolLog.h"
 
-GoogleTrUnit::GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                         , TranslateManager* parent)
-    : TranslateUnit(inTranslateRequestInfo, parent)
+GoogleTrUnit::GoogleTrUnit(TranslateManager* parent)
+    : TranslateUnit(parent)
 {}
 
 void GoogleTrUnit::requestTranslate()

@@ -14,17 +14,20 @@
 
 #include "Widgets/ITranslateWidget.h"
 
-TranslateUnit::TranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                           , TranslateManager* parent)
+TranslateUnit::TranslateUnit(TranslateManager* parent)
     : QObject(parent)
-    , _trReqData(inTranslateRequestInfo)
-{
-    Q_ASSERT(_trReqData.trDisplayWidget);
-    _trReqData.trDisplayWidget->setTrUnit(this);
-}
+    , _trReqData()
+{}
 
-void TranslateUnit::executeTextTranslation()
+void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo)
 {
+    _trReqData = std::move(inTranslateRequestInfo);
+
+    if (_trReqData.trDisplayWidget)
+    {
+        _trReqData.trDisplayWidget->setTrUnit(this);
+    }
+
     if (_trReqData.originText.isEmpty())
     {
         solDebug << "translate request text is empty";

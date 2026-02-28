@@ -109,16 +109,16 @@ QString SolPaths::getHistoryDBFilePath()
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
-                                         , const bool inIgnoreCache
-                                         , const EngineType inEngineType
-                                         , const QString& inOriginText
-                                         , const TextStyle inTextFormat
-                                         , const LangType inSourceLang
-                                         , const LangType inTargetLang
-                                         , QObject* inCompleteContext
-                                         , std::function<void(const QString&)>&& inCallbackTranslateComplete
-                                         , QObject* inStreamContext
-                                         , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming)
+                       , const bool inIgnoreCache
+                       , const EngineType inEngineType
+                       , const QString& inOriginText
+                       , const TextStyle inTextFormat
+                       , const LangType inSourceLang
+                       , const LangType inTargetLang
+                       , QObject* inCompleteContext
+                       , std::move_only_function<void(const QString&)>&& inFuncComplete
+                       , QObject* inStreamContext
+                       , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
     : trDisplayWidget(inTrDisplayWidget)
     , bIgnoreCache(inIgnoreCache)
     , engineType(inEngineType)
@@ -127,9 +127,9 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
     , sourceLang(inSourceLang)
     , targetLang(inTargetLang)
     , completeContext(inCompleteContext)
-    , callbackTranslateComplete(std::move(inCallbackTranslateComplete))
+    , callbackTranslateComplete(std::move(inFuncComplete))
     , streamContext(inStreamContext)
-    , callbackTranslateStreaming(std::move(incallbackTranslateStreaming))
+    , callbackTranslateStreaming(std::move(inFuncStreaming))
 {}
 
 LangInfo Langs::GetLangInfo(const LangType inLangType)

@@ -26,24 +26,24 @@ TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(p
     _networkAccessManager = new QNetworkAccessManager(this);
 }
 
-TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo)
+TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;
     const EngineType currentEngine = solConfig.getCurrentEngineType();
     switch (currentEngine)
     {
     case EngineType::Google:
-        trUnit = new GoogleTrUnit(inTranslateRequestInfo, this);
+        trUnit = new GoogleTrUnit(this);
         break;
     case EngineType::OpenAI:
-        trUnit = new OpenAiTrUnit(inTranslateRequestInfo, this);
+        trUnit = new OpenAiTrUnit(this);
         break;
     case EngineType::FinPoint:
-        trUnit = new FinPointTrUnit(inTranslateRequestInfo, this);
+        trUnit = new FinPointTrUnit(this);
         break;
     case EngineType::FinPointDebug:
     {
-        FinPointTrUnit* finPointTr = new FinPointTrUnit(inTranslateRequestInfo, this);
+        FinPointTrUnit* finPointTr = new FinPointTrUnit(this);
         finPointTr->setDebugMode(true);
         trUnit = finPointTr;
         break;
@@ -68,15 +68,15 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(const TranslateRequestI
 
     if (trUnit != nullptr)
     {
-        trUnit->executeTextTranslation();
+        trUnit->executeTextTranslation(std::move(inTranslateRequestInfo));
     }
 
     return trUnit;
 }
 
-QPointer<TranslateUnit> TranslateManager::translateText(const TranslateRequestInfo& inTranslateRequestInfo)
+QPointer<TranslateUnit> TranslateManager::translateText(TranslateRequestInfo&& inTranslateRequestInfo)
 {
-    TranslateUnit* transUnit = executeNewTranslateUnit(inTranslateRequestInfo);
+    TranslateUnit* transUnit = executeNewTranslateUnit(std::move(inTranslateRequestInfo));
 
     return QPointer<TranslateUnit>{transUnit};
 }

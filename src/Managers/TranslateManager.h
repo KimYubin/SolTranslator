@@ -22,9 +22,9 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(SolTranslatorCore* parent);
 
-    TranslateUnit* executeNewTranslateUnit(const TranslateRequestInfo& inTranslateRequestInfo);
+    TranslateUnit* executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
 
-    QPointer<TranslateUnit> translateText(const TranslateRequestInfo& inTranslateRequestInfo);
+    QPointer<TranslateUnit> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
 
     void translateAtPopup(const QMimeData* inMimeData
                         , const LangType inSourceLang

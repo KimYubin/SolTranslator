@@ -11,8 +11,7 @@ class GoogleTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit GoogleTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                        , TranslateManager* parent);
+    explicit GoogleTrUnit(TranslateManager* parent);
 
 protected:
     virtual void requestTranslate() override;

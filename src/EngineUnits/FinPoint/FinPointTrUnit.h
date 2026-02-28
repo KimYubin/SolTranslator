@@ -9,8 +9,7 @@ class FinPointTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit FinPointTrUnit(const TranslateRequestInfo& inTranslateRequestInfo
-                          , TranslateManager* parent);
+    explicit FinPointTrUnit(TranslateManager* parent);
 
 protected:
     void chatTranslate(const bool bIsStreaming);

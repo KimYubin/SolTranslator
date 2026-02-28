@@ -127,9 +127,9 @@ struct TranslateRequestInfo
      * @param inSourceLang 출발 언어
      * @param inTargetLang 도착 언어
      * @param inCompleteContext callbackTranslateComplete 수명을 관리하는 객체입니다.
-     * @param inCallbackTranslateComplete 번역이 완료되면 호출되는 콜백입니다.
+     * @param inFuncComplete 번역이 완료되면 호출되는 콜백입니다.
      * @param inStreamContext callbackTranslateStreaming 수명을 관리하는 객체입니다.
-     * @param incallbackTranslateStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
+     * @param inFuncStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
      */
     TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                        , const bool inIgnoreCache
@@ -139,9 +139,9 @@ struct TranslateRequestInfo
                        , const LangType inSourceLang
                        , const LangType inTargetLang
                        , QObject* inCompleteContext
-                       , std::function<void(const QString&)>&& inCallbackTranslateComplete
+                       , std::move_only_function<void(const QString&)>&& inFuncComplete
                        , QObject* inStreamContext = nullptr
-                       , std::optional<std::function<void(const QString&)>>&& incallbackTranslateStreaming = std::nullopt);
+                       , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming = std::nullopt);
 
     QPointer<ITranslateWidget> trDisplayWidget;
     bool bIgnoreCache;
@@ -151,9 +151,9 @@ struct TranslateRequestInfo
     LangType sourceLang;
     LangType targetLang;
     QPointer<QObject> completeContext;
-    std::function<void(const QString&)> callbackTranslateComplete;
+    std::move_only_function<void(const QString&)> callbackTranslateComplete;
     QPointer<QObject> streamContext;
-    std::optional<std::function<void(const QString&)>>  callbackTranslateStreaming;
+    std::optional<std::move_only_function<void(const QString&)>>  callbackTranslateStreaming;
 };
 
 

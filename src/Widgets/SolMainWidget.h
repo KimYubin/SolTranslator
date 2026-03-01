@@ -61,7 +61,11 @@ private slots:
 private:
     void createActions();
     void createTrayIcon();
+    void setupShortcuts();
     void popupTrayMenu();
+
+    enum class TabMovement { Previous, Next };
+    void moveTab(const TabMovement inMovement) const;
 
     Ui::SolMainWidget* ui;
 

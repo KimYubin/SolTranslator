@@ -64,7 +64,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     {
         button->setCheckable(true);
         button->setFocusPolicy(Qt::TabFocus);
-        ui->tabBarLayout->addWidget(button, 0, Qt::AlignmentFlag::AlignLeft);
+        ui->tabBarLayout->addWidget(button, 0, Qt::AlignLeft);
 
         const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
         _buttonGroup->addButton(button, stkIdx);
@@ -78,7 +78,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     textTabButton->setObjectName("textTabButton");
     textTabButton->setText(tr("텍스트"));
     textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
-    ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+    ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignLeft);
 
     bindButton(textTabButton, _textEditTranslate);
 
@@ -91,7 +91,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     docTabButton->setObjectName("docTabButton");
     docTabButton->setText(tr("문서"));
     docTabButton->setIcon(QIcon(":/img/document_img"));
-    ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+    ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignLeft);
 
     bindButton(docTabButton, docTranslateWidget);
 
@@ -102,7 +102,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     historyTabButton->setObjectName("historyTabButton");
     historyTabButton->setText(tr("기록"));
     historyTabButton->setIcon(QIcon(":/img/history_img"));
-    ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignmentFlag::AlignLeft);
+    ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignLeft);
 
     bindButton(historyTabButton, historyWidget);
 
@@ -129,7 +129,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     SolTooltipFilter::setBubbleToolTip(_engineSelector, tr("번역 엔진 선택"));
 
-    ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignmentFlag::AlignRight);
+    ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignRight);
 
 
     // ~====================
@@ -137,6 +137,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     ui->settingsButton->setCheckable(false);
     ui->settingsButton->setText(tr("설정"));
     ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
+    ui->settingsButton->setShortcut(QKeySequence(Qt::Key_F5));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
     connect(ui->settingsButton, &QAbstractButton::clicked, this, &SolMainWidget::showSettingsWidget);
 
@@ -146,9 +147,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     createActions();
     createTrayIcon();
 
-
-    QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_W), this);
-    connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
+    setupShortcuts();
 
     solConfig.restoreWidgetGeometry(this);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &SolMainWidget::onAppQuitEvent);
@@ -369,6 +368,19 @@ void SolMainWidget::createTrayIcon()
     _trayIcon->show();
 }
 
+void SolMainWidget::setupShortcuts()
+{
+    const QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_W), this);
+    connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
+
+    const QShortcut* nextTab = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Tab), this);
+    connect(nextTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Next); });
+
+    const QShortcut* prvTab = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab), this);
+    connect(prvTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Previous); });
+
+}
+
 void SolMainWidget::popupTrayMenu()
 {
     if (_trayIcon && _trayIcon->contextMenu())
@@ -390,6 +402,26 @@ void SolMainWidget::popupTrayMenu()
         popupGeo = sol::moveToInside(availableGeo, popupGeo);
 
         _trayIcon->contextMenu()->popup(popupGeo.topLeft());
+    }
+}
+
+void SolMainWidget::moveTab(const TabMovement inMovement) const
+{
+    int moveIdx = ui->mainStackedWidget->currentIndex();
+
+    if (inMovement == TabMovement::Next)
+    {
+        moveIdx += 1;
+    }
+    else
+    {
+        moveIdx += -1 + ui->mainStackedWidget->count();
+    }
+    moveIdx %= ui->mainStackedWidget->count();
+
+    if (QAbstractButton* nextButton = _buttonGroup->button(moveIdx))
+    {
+        nextButton->click();
     }
 }
 

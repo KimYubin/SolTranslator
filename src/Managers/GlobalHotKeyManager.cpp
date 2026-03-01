@@ -20,7 +20,7 @@
 
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence("Alt+C"), this, [this]() { fireSimpleTranslate(); });
+    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence(Qt::ALT | Qt::Key_C), this, [this]() { fireSimpleTranslate(); });
 }
 
 void GlobalHotKeyManager::registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::move_only_function<void()>&& inFunction)

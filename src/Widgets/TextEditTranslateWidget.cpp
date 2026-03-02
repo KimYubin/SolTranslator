@@ -21,6 +21,7 @@
 #include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LanguageSelector.h"
+#include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
@@ -99,11 +100,12 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     }
     {
         // 다시 번역 버튼
-        QPushButton* trRefresh = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
-                                                               , Qt::TabFocus
-                                                               , tr("다시 번역")
-                                                               , 0
-                                                               , Qt::AlignRight);
+        SolButton* trRefresh = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
+                                                             , Qt::TabFocus
+                                                             , tr("다시 번역")
+                                                             , QKeySequence()
+                                                             , 0
+                                                             , Qt::AlignRight);
 
         connect(trRefresh, &QPushButton::clicked, this, [this]()
         {

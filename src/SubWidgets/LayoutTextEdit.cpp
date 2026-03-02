@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 
+#include "SolButton.h"
 #include "SolToolTip.h"
 
 LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
@@ -36,19 +37,19 @@ void LayoutTextEdit::addBottomWidget(QWidget* inWidget
     _layout->addWidget(inWidget, inStretch, inAlignment);
 }
 
-QPushButton* LayoutTextEdit::addBottomButton(const QIcon& inIcon
-                                           , const Qt::FocusPolicy policy
-                                           , const QString& inToolTip
-                                           , const int inStretch
-                                           , const Qt::Alignment inAlignment)
+SolButton* LayoutTextEdit::addBottomButton(const QIcon& inIcon
+                                         , const Qt::FocusPolicy policy
+                                         , const QString& inToolTip
+                                         , const QKeySequence& inKey
+                                         , const int inStretch
+                                         , const Qt::Alignment inAlignment)
 {
-    QPushButton* newButton = new QPushButton(this);
+    SolButton* newButton = new SolButton(this);
     newButton->setIcon(inIcon);
     newButton->setFocusPolicy(policy);
-    SolTooltipFilter::setBubbleToolTip(newButton, inToolTip);
+    newButton->setToolTipShortcut(inToolTip, inKey);
 
     addBottomWidget(newButton, inStretch, inAlignment);
 
     return newButton;
 }
-

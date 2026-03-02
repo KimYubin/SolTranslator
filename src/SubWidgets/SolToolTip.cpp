@@ -51,8 +51,8 @@ public:
     void hideTipDelay();
 
     /**
-     * 위젯의 툴팁이 변경될 때 사용합니다.
-     * 해당 위젯의 툴팁이 보여지고 있다면, 새로운 툴팁으로 업데이트 합니다.
+     * 툴팁 내용이 변경될 때 사용합니다.
+     * 툴팁이 보여지고 있다면, 새로운 툴팁으로 업데이트 합니다.
      */
     void updateWidgetToolTip(const QWidget* inWidget);
 
@@ -477,27 +477,20 @@ void SolTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& 
 
 void SolTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
 {
-    QString currentToolTip = inOnCheckToolTip;
-    if (inTargetWidget->isCheckable())
-    {
-        if (inTargetWidget->isChecked())
-        {
-            currentToolTip = inOffCheckToolTip;
-        }
-    }
+    const bool isChecked = (inTargetWidget->isCheckable() && inTargetWidget->isChecked());
 
-    setBubbleToolTip(inTargetWidget, currentToolTip);
+    setBubbleToolTip(inTargetWidget, isChecked ? inOnCheckToolTip : inOffCheckToolTip);
 
     connect(inTargetWidget, &QAbstractButton::toggled, inTargetWidget, [inTargetWidget, inOnCheckToolTip, inOffCheckToolTip](const bool checked)
     {
         QString toolTip;
         if (checked)
         {
-            toolTip = inOffCheckToolTip;
+            toolTip = inOnCheckToolTip;
         }
         else
         {
-            toolTip = inOnCheckToolTip;
+            toolTip = inOffCheckToolTip;
         }
         inTargetWidget->setToolTip(toolTip);
 

@@ -33,6 +33,7 @@
 #include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LoadingBar.h"
+#include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
 #include "Widgets/ui_PopupTranslateWidget.h"
@@ -258,33 +259,28 @@ void PopupTranslateWidget::setupUI()
 
     // ~===========
     // keepPinButton
-    _AlwaysOnButton = new QPushButton(this);
+    _AlwaysOnButton = new SolButton(this);
     _AlwaysOnButton->setCheckable(true);
     _AlwaysOnButton->setObjectName("alwaysOnButton");
-    QIcon alwaysIcon;
-    alwaysIcon.addFile(":/img/keep_pin_clock45d", QSize(), QIcon::Normal, QIcon::Off);
-    alwaysIcon.addFile(":/img/keep_pin_fill_v", QSize(), QIcon::Normal, QIcon::On);
-    _AlwaysOnButton->setIcon(alwaysIcon);
-    _AlwaysOnButton->setShortcut(Qt::Key_T);
+    _AlwaysOnButton->setCheckIcon(":/img/keep_pin_fill_v", ":/img/keep_pin_clock45d");
+    _AlwaysOnButton->setCheckToolTipShortcut(tr("항상 위 끄기"), tr("항상 위 켜기"), Qt::Key_A);
     _AlwaysOnButton->hide();
 
     setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_AlwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
-    SolTooltipFilter::setCheckableButtonToolTip(_AlwaysOnButton, tr("항상 위 켜기(<u>T<\\u>)"), tr("항상 위 끄기(<u>T<\\u>)"));
 
     // ~===========
     // windowModeButton
-    _windowModeButton = new QPushButton(this);
+    _windowModeButton = new SolButton(this);
     _windowModeButton->setCheckable(true);
     _windowModeButton->setObjectName("windowModeButton");
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
-    _windowModeButton->setShortcut(Qt::Key_N);
+    _windowModeButton->setCheckToolTipShortcut(tr("임시창 모드"), tr("일반창 모드"), Qt::Key_N);
 
     setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_windowModeButton, &QPushButton::toggled, this, &PopupTranslateWidget::onWindowModeToggle);
-    SolTooltipFilter::setCheckableButtonToolTip(_windowModeButton, tr("임시창을 일반창으로 승격(<u>T<\\u>)"), tr("임시 창모드(N)"));
 
 
     // 좌우 버튼 분리
@@ -295,37 +291,35 @@ void PopupTranslateWidget::setupUI()
 
     // ~===========
     // minimize button
-    _minimizedButton = new QPushButton(this);
+    _minimizedButton = new SolButton(this);
     _minimizedButton->setObjectName("minimizedButton");
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
+    _minimizedButton->setToolTipShortcut(tr("최소화"), Qt::Key_M);
 
     setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
-    SolTooltipFilter::setBubbleToolTip(_minimizedButton, tr("최소화"));
+
     connect(_minimizedButton, &QPushButton::clicked, this, &PopupTranslateWidget::onMinimized);
 
     // ~===========
     // max button
-    _maxRestoreButton = new QPushButton(this);
+    _maxRestoreButton = new SolButton(this);
     _maxRestoreButton->setCheckable(true);
     _maxRestoreButton->setObjectName("maxRestoreButton");
-    QIcon maxRestoreIcon;
-    maxRestoreIcon.addFile(":/img/maximize_button_img", QSize(), QIcon::Normal, QIcon::Off);
-    maxRestoreIcon.addFile(":/img/restore_button_img", QSize(), QIcon::Normal, QIcon::On);
-    _maxRestoreButton->setIcon(maxRestoreIcon);
+    _maxRestoreButton->setCheckIcon(":/img/restore_button_img", ":/img/maximize_button_img");
+    _maxRestoreButton->setCheckToolTipShortcut(tr("이전 크기로 복원"), tr("최대화"), Qt::Key_G);
 
     setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
     connect(_maxRestoreButton, &QPushButton::toggled, this, &PopupTranslateWidget::onMaxNormalToggle);
-    SolTooltipFilter::setCheckableButtonToolTip(_maxRestoreButton, tr("최대화"), tr("이전 크기로 복원"));
+
 
     // ~===========
     // close button
-    _closeButton = new QPushButton(this);
+    _closeButton = new SolButton(this);
     _closeButton->setObjectName("closeButton");
     _closeButton->setIcon(QIcon(":/img/close_button_img"));
-    _closeButton->setShortcut(Qt::Key_Escape);
+    _closeButton->setToolTipShortcut(tr("닫기"), Qt::Key_Escape);
 
     setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
-    SolTooltipFilter::setBubbleToolTip(_closeButton, tr("닫기"));
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 

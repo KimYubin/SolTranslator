@@ -9,6 +9,7 @@
 
 #include "SolTypes.h"
 
+class SolButton;
 class LoadingBar;
 class QPushButton;
 class QSizeGrip;
@@ -166,12 +167,12 @@ protected:
 private:
     Ui::PopupTranslateWidget* ui;
 
-    QPushButton* _AlwaysOnButton;
-    QPushButton* _windowModeButton;
+    SolButton* _AlwaysOnButton;
+    SolButton* _windowModeButton;
 
-    QPushButton* _maxRestoreButton;
-    QPushButton* _minimizedButton;
-    QPushButton* _closeButton;
+    SolButton* _maxRestoreButton;
+    SolButton* _minimizedButton;
+    SolButton* _closeButton;
 
     LoadingBar* _loadingBar;
 

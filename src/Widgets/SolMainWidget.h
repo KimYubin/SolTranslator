@@ -10,6 +10,7 @@
 #include "ISolWidget.h"
 
 
+class SolButton;
 class EnginSelector;
 class QPushButton;
 class QComboBox;
@@ -74,9 +75,9 @@ private:
     // ~==============
     // sub widgets
     QButtonGroup* _buttonGroup;
-    QPushButton* textTabButton;
-    QPushButton* docTabButton;
-    QPushButton* historyTabButton;
+    SolButton* textTabButton;
+    SolButton* docTabButton;
+    SolButton* historyTabButton;
 
     TextEditTranslateWidget* _textEditTranslate;
     QPointer<SettingsWidget> _settingsWidget;

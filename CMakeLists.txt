@@ -145,6 +145,8 @@ qt_add_executable(
         src/Widgets/TextEditTranslateWidget.ui
         src/SubWidgets/SolWidgetFactory.cpp
         src/SubWidgets/SolWidgetFactory.h
+        src/SubWidgets/SolButton.cpp
+        src/SubWidgets/SolButton.h
 
 )
 

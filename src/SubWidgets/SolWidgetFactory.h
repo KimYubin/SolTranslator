@@ -8,7 +8,7 @@
 #include <functional>
 
 
-class QPushButton;
+class SolButton;
 
 class SolWidgetFactory : public QObject
 {
@@ -22,7 +22,7 @@ public:
      * @param inCopyStringFunc A functor that provides the string to copy.
      * @return 
      */
-    static QPushButton* createCopyButton(QWidget* inParent, std::move_only_function<QString(void)>&& inCopyStringFunc);
+    static SolButton* createCopyButton(QWidget* inParent, std::move_only_function<QString(void)>&& inCopyStringFunc);
 };
 
 

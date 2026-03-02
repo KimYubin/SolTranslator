@@ -30,6 +30,7 @@
 
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/EnginSelector.h"
+#include "SubWidgets/SolButton.h"
 
 #include "Widgets/ui_SolMainWidget.h"
 
@@ -74,7 +75,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     // 텍스트 번역
     _textEditTranslate = new TextEditTranslateWidget();
 
-    textTabButton = new QPushButton(this);
+    textTabButton = new SolButton(this);
     textTabButton->setObjectName("textTabButton");
     textTabButton->setText(tr("텍스트"));
     textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
@@ -87,7 +88,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     QLabel* docTranslateWidget = new QLabel(tr("준비 중"));
     docTranslateWidget->setAlignment(Qt::AlignCenter);
 
-    docTabButton = new QPushButton(this);
+    docTabButton = new SolButton(this);
     docTabButton->setObjectName("docTabButton");
     docTabButton->setText(tr("문서"));
     docTabButton->setIcon(QIcon(":/img/document_img"));
@@ -98,7 +99,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     // 번역 기록
     HistoryWidget* historyWidget = new HistoryWidget();
 
-    historyTabButton = new QPushButton(this);
+    historyTabButton = new SolButton(this);
     historyTabButton->setObjectName("historyTabButton");
     historyTabButton->setText(tr("기록"));
     historyTabButton->setIcon(QIcon(":/img/history_img"));

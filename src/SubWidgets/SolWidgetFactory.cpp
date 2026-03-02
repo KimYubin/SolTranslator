@@ -7,20 +7,18 @@
 #include <QPushButton>
 #include <QTimer>
 
+#include "SolButton.h"
 #include "SolToast.h"
 #include "SolToolTip.h"
 
-
-QPushButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
+SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
 {
-    QPushButton* copyButton = new QPushButton(inParent);
+    SolButton* copyButton = new SolButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));
-    copyButton->setShortcut(Qt::Key_C);
     copyButton->setFocusPolicy(Qt::TabFocus);
+    copyButton->setToolTipShortcut(tr("번역 복사"), Qt::Key_C);
 
-    SolTooltipFilter::setBubbleToolTip(copyButton, tr("번역 복사(<u>C<\\u>)"));
-
-    connect(copyButton, &QPushButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
+    connect(copyButton, &SolButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, copyButton, [copyButton]() mutable
         {

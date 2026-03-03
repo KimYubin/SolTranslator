@@ -111,6 +111,11 @@ enum class TextStyle
   , Size
 };
 
+enum class TextType
+{
+    OriginText
+  , TranslateText
+};
 
 struct TranslateRequestInfo
 {

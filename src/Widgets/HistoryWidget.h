@@ -64,7 +64,7 @@ private:
 
     qreal _listScrollBarRatio = 0.0;
 
-    sol::HistoryItemRole _currentTextRole = sol::TargetFullTextRole;
+    TextType _currentTextType = TextType::TranslateText;
 
     qint64 _currentTimelineId = -1;
     QDateTime _currentTimeStamp;

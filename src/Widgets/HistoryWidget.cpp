@@ -52,7 +52,7 @@ HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
 
-    _currentTextRole = sol::TargetFullTextRole;
+    _currentTextType = TextType::TranslateText;
 }
 
 HistoryWidget::~HistoryWidget()
@@ -168,7 +168,7 @@ void HistoryWidget::setupUI()
         }
         _currentTimelineId = newCurrentTimelineId;
         _currentTimeStamp  = selectedTr.value()->getTimeStamp();
-        _currentTextRole   = sol::TargetFullTextRole;
+        _currentTextType   = TextType::TranslateText;
 
         _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
 
@@ -249,9 +249,10 @@ void HistoryWidget::toggleTranslationText()
     const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
 
     // toggle
-    _currentTextRole = (_currentTextRole == sol::TargetFullTextRole) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
+    _currentTextType = (_currentTextType == TextType::OriginText) ? TextType::TranslateText : TextType::OriginText;
+    const sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::OriginText) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
 
-    const QString nextText  = _historyListModel->data(curIdx, _currentTextRole).toString();
+    const QString nextText  = _historyListModel->data(curIdx, currentTextTypeRole).toString();
     const QString textStyle = _historyListModel->data(curIdx, sol::TextStyleStringRole).toString();
 
     _selectedTextEdit->setFormattingText(nextText, sol::qStrToEnum(textStyle, TextStyle::PlainText));

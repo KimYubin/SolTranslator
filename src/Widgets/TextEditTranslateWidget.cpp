@@ -197,9 +197,9 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
       , TextStyle::PlainText
       , solConfig.getTextSrcLang()
       , solConfig.getTextTargetLang()
-      , ui->trTextEdit
+      , this
       , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }
-      , ui->trTextEdit
+      , this
       , [this](const QString& inStr) { streamTransText(inStr, TextStyle::PlainText); }
     });
 }

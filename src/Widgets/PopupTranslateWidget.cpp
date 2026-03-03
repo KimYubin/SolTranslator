@@ -11,6 +11,7 @@
 #include <QClipboard>
 #include <QFuturewatcher>
 #include <QGraphicsDropShadowEffect>
+#include <QMimeData>
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -26,9 +27,12 @@
 #include <qevent.h>
 
 #include "SolLog.h"
+#include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 
+#include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
 
 #include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
@@ -108,10 +112,66 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
+void PopupTranslateWidget::executeTranslate(const QMimeData* inMimeData
+                                          , const LangType inSourceLang
+                                          , const LangType inTargetLang)
+{
+    if (inMimeData->hasText() == false)
+    {
+        deleteLater();
+        return;
+    }
+
+    auto runPopupTranslate = [this, inSourceLang, inTargetLang](const QString& inOriginText, const TextStyle inTextStyle)
+    {
+        _originText = inOriginText;
+        _textStyle  = inTextStyle;
+        solCore->translateManager()->translateText(TranslateRequestInfo{
+            this
+          , false
+          , solConfig.getCurrentEngineType()
+          , inOriginText
+          , inTextStyle
+          , inSourceLang
+          , inTargetLang
+          , this
+          , [this, inTextStyle](const QString& inStr) { completeTransText(inStr, inTextStyle); }
+          , this
+          , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
+        });
+    };
+
+
+    if (inMimeData->hasHtml() == false)
+    {
+        runPopupTranslate(inMimeData->text(), TextStyle::PlainText);
+        return;
+    }
+
+    AsyncManager::asyncLaunch<QString>(
+        this,
+        [htmlStr = std::move(inMimeData->html())]() mutable
+        {
+            // list 무시하는 문법 제거.
+            QTextDocument txtDoc;
+            txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
+
+            return txtDoc.toMarkdown();
+        },
+        [runPopupTranslateAsync = std::move(runPopupTranslate)](const QString& inMd)
+        {
+            runPopupTranslateAsync(inMd, TextStyle::MarkDown);
+        });
+}
+
+
 void PopupTranslateWidget::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
 {
     ITranslateWidget::completeTransText(inTranslatedText, inTextStyle);
+
     _loadingBar->stop();
+    _isTranslateComplete = true;
+    _textToggleButton->show();
 }
 
 void PopupTranslateWidget::applyTranslation()
@@ -323,27 +383,35 @@ void PopupTranslateWidget::setupUI()
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 
-    // top title layout end
-    // ~===========
 
     // ~===========
     // bottom statusLayout
     ui->statusLayout->setContentsMargins(5, 0, 5, 5);
 
-    // ~===========
     // 복사 버튼
     QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
 
-    ui->statusLayout->addWidget(trCopy, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
+    ui->statusLayout->addWidget(trCopy, 0, Qt::AlignBottom | Qt::AlignLeft);
 
+    // 원문/번역 토글
+    _textToggleButton = new SolButton(this);
+    _textToggleButton->setIcon(QIcon(":/img/swap_text_img"));
+    _textToggleButton->setFocusPolicy(Qt::TabFocus);
+    _textToggleButton->setToolTipShortcut(tr("원문/번역 토글"), Qt::Key_T);
 
-    // ~===========
+    ui->statusLayout->addWidget(_textToggleButton, 0, Qt::AlignBottom | Qt::AlignLeft);
+
+    connect(_textToggleButton, &QPushButton::clicked, this, &PopupTranslateWidget::toggleTranslationText);
+    _textToggleButton->hide();
+
+    ui->statusLayout->addStretch(1);
+
     // sizeGrip
     _sizeGrip = new QSizeGrip(this);
     _sizeGrip->show();
     _sizeGrip->installEventFilter(this);
 
-    ui->statusLayout->addWidget(_sizeGrip, 0, 1, Qt::AlignBottom | Qt::AlignRight);
+    ui->statusLayout->addWidget(_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight);
 
 
     // ~===========
@@ -619,6 +687,34 @@ void PopupTranslateWidget::onMinimized()
     manualSizeMode();
     changeNormalWindowMode();
     showMinimized();
+}
+
+void PopupTranslateWidget::toggleTranslationText()
+{
+    if (_isTranslateComplete == false)
+    {
+        return;
+    }
+
+    // fix scrollbar
+    const int prevVerticalScrollVal = ui->resultText->verticalScrollBar()->value();
+
+    // toggle
+    QString nextText;
+    if (_currentTextType == TextType::OriginText)
+    {
+        _currentTextType = TextType::TranslateText;
+        nextText = getTranslatedText();
+    }
+    else
+    {
+        _currentTextType = TextType::OriginText;
+        nextText = _originText;
+    }
+    ui->resultText->setFormattingText(nextText, _textStyle);
+
+    // fix scrollbar
+    ui->resultText->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }
 
 void PopupTranslateWidget::setShadowEffectEnabled(const bool bIsEnable)

@@ -9,6 +9,7 @@
 
 #include "SolTypes.h"
 
+class QMimeData;
 class SolButton;
 class LoadingBar;
 class QPushButton;
@@ -39,6 +40,10 @@ public:
     explicit PopupTranslateWidget(QWidget* parent = nullptr);
 
     ~PopupTranslateWidget() override;
+
+    void executeTranslate(const QMimeData* inMimeData
+                        , const LangType inSourceLang
+                        , const LangType inTargetLang);
 
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
@@ -82,7 +87,6 @@ private:
      */
     void syncInOutScrollbar();
 
-    
 protected:
     void onAlwaysOnToggle(bool checked);
     void onWindowModeToggle(bool checked);
@@ -94,6 +98,8 @@ protected:
     void onMaxNormalToggle(const bool bMaximize);
 
     void onMinimized();
+
+    void toggleTranslationText();
 
     void setShadowEffectEnabled(const bool bIsEnable);
 
@@ -163,6 +169,10 @@ protected:
     bool _bIsDrag = false;
     QPoint _dragPoint;
 
+    QString _originText;
+    TextStyle _textStyle;
+    bool _isTranslateComplete = false;
+    TextType _currentTextType = TextType::TranslateText;
 
 private:
     Ui::PopupTranslateWidget* ui;
@@ -176,6 +186,7 @@ private:
 
     LoadingBar* _loadingBar;
 
+    SolButton* _textToggleButton;
     QSizeGrip* _sizeGrip;
 };
 

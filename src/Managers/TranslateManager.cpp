@@ -90,47 +90,8 @@ void TranslateManager::translateAtPopup(const QMimeData* inMimeData
         return;
     }
 
-    PopupTranslateWidget* simple = new PopupTranslateWidget();
-
-    auto runPopupTranslate = [this, inSourceLang, inTargetLang, simple](const QString& inOriginText, const TextStyle inTextStyle)
-    {
-        translateText(TranslateRequestInfo{
-            simple
-          , false
-          , solConfig.getCurrentEngineType()
-          , inOriginText
-          , inTextStyle
-          , inSourceLang
-          , inTargetLang
-          , simple
-          , [simple, inTextStyle](const QString& inStr) { simple->completeTransText(inStr, inTextStyle); }
-          , simple
-          , [simple, inTextStyle](const QString& inStr) { simple->streamTransText(inStr, inTextStyle); }
-        });
-    };
-
-
-    if (inMimeData->hasHtml())
-    {
-        AsyncManager::asyncLaunch<QString>(
-            simple,
-            [htmlStr = std::move(inMimeData->html())]() mutable
-            {
-                // list 무시하는 문법 제거.
-                QTextDocument txtDoc;
-                txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
-
-                return txtDoc.toMarkdown();
-            },
-            [runPopupTranslateAsync = std::move(runPopupTranslate)](const QString& inMd)
-            {
-                runPopupTranslateAsync(inMd, TextStyle::MarkDown);
-            });
-    }
-    else
-    {
-        runPopupTranslate(inMimeData->text(), TextStyle::PlainText);
-    }
+    PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
+    popupWidget->executeTranslate(inMimeData, inSourceLang, inTargetLang);
 }
 
 

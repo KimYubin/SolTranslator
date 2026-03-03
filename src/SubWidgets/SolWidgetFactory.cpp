@@ -22,7 +22,7 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, copyButton, [copyButton]() mutable
         {
-            SolToast::popToastOnWidget(tr("복사 완료!"), copyButton, 50);
+            SolToast::popToastOnWidget(tr("복사 완료!"), copyButton, 150);
         }, Qt::SingleShotConnection);
 
         // connection timeout limit.

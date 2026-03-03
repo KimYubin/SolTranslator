@@ -21,9 +21,9 @@ public:
      * 
      * @param inMessage 메시지 내용
      * @param inToastParent 메시지를 띄울 부모 위젯. 없다면 주 화면 우측 하단에 위치합니다.
-     * @param inDuration 메시지 지속 시간. msec
+     * @param inDurationMsec 메시지 지속 시간. msec
      */
-    static void showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration = 1'500);
+    static void showToast(const QString& inMessage, QWidget* inToastParent, const int inDurationMsec = 1'500);
 
     /**
      * 토스트 메시지를 띄웁니다.
@@ -31,9 +31,9 @@ public:
      * 
      * @param inMessage 메시지 내용
      * @param inTargetWidget 대상 위젯. 메시지는 대상 위젯 바깥 위쪽에 위치합니다.
-     * @param inDuration 메시지 지속 시간. msec
+     * @param inDurationMsec 메시지 지속 시간. msec
      */
-    static void popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDuration = 500);
+    static void popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDurationMsec = 500);
 };
 
 

@@ -21,7 +21,7 @@ public:
     explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
 private:
-    void registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::move_only_function<void(void)>&& inFunction);
+    void registerHotKey(HotkeyType inHotkey, const QKeySequence& inShortcut, const QObject* inContext, std::move_only_function<void(void)>&& inFunction);
 
     std::expected<void, QString> changeShortcut(HotkeyType inHotkey, const QKeySequence& shortcut);
 

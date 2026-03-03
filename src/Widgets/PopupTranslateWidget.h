@@ -40,6 +40,10 @@ public:
 
     ~PopupTranslateWidget() override;
 
+    void executeTranslateImpl(const QString& inOriginText
+                            , const TextStyle inTextStyle
+                            , const LangType inSourceLang
+                            , const LangType inTargetLang);
     void executeTranslate(const QString& inOriginText
                         , const TextStyle inTextStyle
                         , const LangType inSourceLang

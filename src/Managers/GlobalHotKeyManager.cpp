@@ -24,20 +24,23 @@ GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractMa
     registerHotKey(HotkeyType::SimpleTranslate, QKeySequence(Qt::ALT | Qt::Key_C), this, [this]() { fireSimpleTranslate(); });
 }
 
-void GlobalHotKeyManager::registerHotKey(HotkeyType InHotkey, const QKeySequence& shortcut, QObject* inContext, std::move_only_function<void()>&& inFunction)
+void GlobalHotKeyManager::registerHotKey(const HotkeyType inHotkey
+                                       , const QKeySequence& inShortcut
+                                       , const QObject* inContext
+                                       , std::move_only_function<void()>&& inFunction)
 {
-    std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(InHotkey);
+    std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(inHotkey);
 
     QHotkey* hotkey;
     if (findIt == hotKeys.end())
     {
-        hotkey            = new QHotkey{shortcut, true, this};
-        hotKeys[InHotkey] = hotkey;
+        hotkey = new QHotkey{inShortcut, true, this};
+        hotKeys[inHotkey] = hotkey;
     }
     else
     {
         hotkey = findIt->second;
-        hotkey->setShortcut(shortcut, true);
+        hotkey->setShortcut(inShortcut, true);
     }
 
     connect(hotkey, &QHotkey::activated, inContext, std::move(inFunction));
@@ -59,13 +62,13 @@ std::expected<void, QString> GlobalHotKeyManager::changeShortcut(HotkeyType inHo
 void GlobalHotKeyManager::fireSimpleTranslate()
 {
     const QMimeData* prevClipboard = QApplication::clipboard()->mimeData();
-    QStringList formatsList = prevClipboard->formats();
+    const QStringList formatsList = prevClipboard->formats();
 
     std::unique_ptr<QMimeData> prevMime = std::make_unique<QMimeData>();
 
-    for (QString& prevFormat : formatsList)
+    for (const QString& prevFormat : formatsList)
     {
-        prevMime->setData(std::move(prevFormat), prevClipboard->data(prevFormat));
+        prevMime->setData(prevFormat, prevClipboard->data(prevFormat));
     }
 
     // 클립보드 갱신(복사) 대기
@@ -74,7 +77,7 @@ void GlobalHotKeyManager::fireSimpleTranslate()
     {
         const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
 
-        if (selectedMime->hasText() == false)
+        if (selectedMime == nullptr || selectedMime->hasText() == false)
         {
             return;
         }
@@ -101,22 +104,20 @@ void GlobalHotKeyManager::fireSimpleTranslate()
 
             connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this, prevMimeDataChanged = std::move(prevMimeChanged)]() mutable
             {
-                // 잠시 대기 후 원복
                 QTimer::singleShot(100, this, [this, prevMimeTimer = std::move(prevMimeDataChanged)]()
                 {
                     QMimeData* copyMimeData = new QMimeData;
 
-                    QStringList formatsList = prevMimeTimer->formats();
-                    for (QString& prevFormat : formatsList)
+                    const QStringList formatsList = prevMimeTimer->formats();
+                    for (const QString& prevFormat : formatsList)
                     {
-                        copyMimeData->setData(std::move(prevFormat), prevMimeTimer->data(prevFormat));
+                        copyMimeData->setData(prevFormat, prevMimeTimer->data(prevFormat));
                     }
-
+                    // Transfer ownership
                     QApplication::clipboard()->setMimeData(copyMimeData);
                 });
             }, Qt::SingleShotConnection);
 
-            // 번역에 이용한 클립보드 내용 제거.
             QApplication::clipboard()->clear();
 
             break;

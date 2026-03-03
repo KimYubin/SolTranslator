@@ -27,7 +27,7 @@ public:
     explicit SolToastWidget(const QString& inMsg
                           , QWidget* targetWidget
                           , QWidget* parent
-                          , const int inExpireTime);
+                          , const int inDurationMsec);
     ~SolToastWidget() override;
 
 private:
@@ -61,7 +61,7 @@ private:
 SolToastWidget::SolToastWidget(const QString& inMsg
                              , QWidget* targetWidget
                              , QWidget* parent
-                             , const int inExpireTime)
+                             , const int inDurationMsec)
     : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
     , _targetWidget(targetWidget)
 {
@@ -103,7 +103,7 @@ SolToastWidget::SolToastWidget(const QString& inMsg
         _endAnim->setEndValue(2);
     }
 
-    _expireTimer.setInterval(inExpireTime);
+    _expireTimer.setInterval(inDurationMsec);
     _expireTimer.setSingleShot(true);
 
     connect(_startAnim, &QAbstractAnimation::finished, this, [this]()
@@ -181,12 +181,12 @@ SolToast::~SolToast()
 // todo: 중복 메시지를 모아서 내보내는 기능 추가
 // todo: 여러 메시지가 나올때 채팅창처럼 순차적으로 표기되도록 해야함.
 // SolToastWidget map
-void SolToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDuration)
+void SolToast::showToast(const QString& inMessage, QWidget* inToastParent, const int inDurationMsec)
 {
-    new SolToastWidget(inMessage, nullptr, inToastParent, inDuration);
+    new SolToastWidget(inMessage, nullptr, inToastParent, inDurationMsec);
 }
 
-void SolToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDuration)
+void SolToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDurationMsec)
 {
-    new SolToastWidget(inMessage, inTargetWidget, nullptr, inDuration);
+    new SolToastWidget(inMessage, inTargetWidget, nullptr, inDurationMsec);
 }

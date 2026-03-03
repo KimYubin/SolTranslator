@@ -91,8 +91,9 @@ void HistoryWidget::setupUI()
     SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
     {
         const QModelIndex curIdx = _historyListView->currentIndex();
+        const sol::HistoryItemRole curRole = (_currentTextType == TextType::OriginText) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
 
-        return _historyListModel->data(curIdx, sol::TargetFullTextRole).toString();
+        return _historyListModel->data(curIdx, curRole).toString();
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 

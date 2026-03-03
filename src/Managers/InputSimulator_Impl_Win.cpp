@@ -30,6 +30,7 @@ INPUT make_INPUT(DWORD in_type, WORD in_wVK, DWORD in_dwFlags = 0)
 
 /**
  * 컨트롤 키가 눌린 상태에서 다른 모든키를 릴리즈 합니다.
+ * Release all other keys while the Control key is held down.
  */
 void ReleaseAllKeysOnPressedControlKey()
 {

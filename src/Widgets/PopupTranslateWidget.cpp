@@ -112,34 +112,36 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
+void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
+                                              , const TextStyle inTextStyle
+                                              , const LangType inSourceLang
+                                              , const LangType inTargetLang)
+{
+    _originText = inOriginText;
+    _textStyle  = inTextStyle;
+    solCore->translateManager()->translateText(TranslateRequestInfo{
+        this
+      , false
+      , solConfig.getCurrentEngineType()
+      , inOriginText
+      , inTextStyle
+      , inSourceLang
+      , inTargetLang
+      , this
+      , [this, inTextStyle](const QString& inStr) { completeTransText(inStr, inTextStyle); }
+      , this
+      , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
+    });
+}
+
 void PopupTranslateWidget::executeTranslate(const QString& inOriginText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang)
 {
-    auto runPopupTranslate = [this, inSourceLang, inTargetLang](const QString& inRunOriginText, const TextStyle inRunTextStyle)
-    {
-        _originText = inRunOriginText;
-        _textStyle  = inRunTextStyle;
-        solCore->translateManager()->translateText(TranslateRequestInfo{
-            this
-          , false
-          , solConfig.getCurrentEngineType()
-          , inRunOriginText
-          , inRunTextStyle
-          , inSourceLang
-          , inTargetLang
-          , this
-          , [this, inRunTextStyle](const QString& inStr) { completeTransText(inStr, inRunTextStyle); }
-          , this
-          , [this, inRunTextStyle](const QString& inStr) { streamTransText(inStr, inRunTextStyle); }
-        });
-    };
-
-
     if (inTextStyle == TextStyle::PlainText)
     {
-        runPopupTranslate(inOriginText, TextStyle::PlainText);
+        executeTranslateImpl(inOriginText, TextStyle::PlainText, inSourceLang, inTargetLang);
         return;
     }
 
@@ -153,9 +155,9 @@ void PopupTranslateWidget::executeTranslate(const QString& inOriginText
 
             return txtDoc.toMarkdown();
         },
-        [runPopupTranslateAsync = std::move(runPopupTranslate)](const QString& inMd)
+        [this, inSourceLang, inTargetLang](const QString& inMd)
         {
-            runPopupTranslateAsync(inMd, TextStyle::MarkDown);
+            executeTranslateImpl(inMd, TextStyle::PlainText, inSourceLang, inTargetLang);
         });
 }
 
@@ -384,7 +386,17 @@ void PopupTranslateWidget::setupUI()
     ui->statusLayout->setContentsMargins(5, 0, 5, 5);
 
     // 복사 버튼
-    QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
+    QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]()
+    {
+        if (_currentTextType == TextType::OriginText)
+        {
+            return _originText;
+        }
+        else
+        {
+            return getTranslatedText();
+        }
+    });
 
     ui->statusLayout->addWidget(trCopy, 0, Qt::AlignBottom | Qt::AlignLeft);
 

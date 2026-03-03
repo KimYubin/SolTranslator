@@ -81,17 +81,16 @@ QPointer<TranslateUnit> TranslateManager::translateText(TranslateRequestInfo&& i
     return QPointer<TranslateUnit>{transUnit};
 }
 
-void TranslateManager::translateAtPopup(const QMimeData* inMimeData
-                                      , const LangType inSourceLang
-                                      , const LangType inTargetLang)
+void TranslateManager::translateAtPopup(const QString& inOriginText
+                                      , const TextStyle inTextStyle)
 {
-    if (inMimeData->hasText() == false)
+    if (inOriginText.isEmpty())
     {
         return;
     }
 
     PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
-    popupWidget->executeTranslate(inMimeData, inSourceLang, inTargetLang);
+    popupWidget->executeTranslate(inOriginText, inTextStyle, LangType::AUTO, solConfig.getPopupTargetLang());
 }
 
 

@@ -17,6 +17,7 @@
 #include "SolTranslatorCore.h"
 #include "InputSimulator.h"
 #include "SolUtilibrary.h"
+#include "TranslateManager.h"
 
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
@@ -83,14 +84,21 @@ void GlobalHotKeyManager::fireSimpleTranslate()
         case QClipboard::Clipboard:
         {
             // 번역 실행
-            solCore->onSimpleTranslate(selectedMime);
+            if (selectedMime->hasHtml())
+            {
+                solCore->translateManager()->translateAtPopup(selectedMime->html(), TextStyle::Html);
+            }
+            else
+            {
+                solCore->translateManager()->translateAtPopup(selectedMime->text(), TextStyle::PlainText);
+            }
 
+            // 이전 클립보드 원상복구. 클립보드 clear() 대기
             if (prevMimeChanged->text() == selectedMime->text())
             {
                 break;
             }
 
-            // 이전 클립보드 원상복구. 클립보드 clear() 대기
             connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this, prevMimeDataChanged = std::move(prevMimeChanged)]() mutable
             {
                 // 잠시 대기 후 원복

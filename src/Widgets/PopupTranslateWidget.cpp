@@ -112,45 +112,40 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
-void PopupTranslateWidget::executeTranslate(const QMimeData* inMimeData
+void PopupTranslateWidget::executeTranslate(const QString& inOriginText
+                                          , const TextStyle inTextStyle
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang)
 {
-    if (inMimeData->hasText() == false)
+    auto runPopupTranslate = [this, inSourceLang, inTargetLang](const QString& inRunOriginText, const TextStyle inRunTextStyle)
     {
-        deleteLater();
-        return;
-    }
-
-    auto runPopupTranslate = [this, inSourceLang, inTargetLang](const QString& inOriginText, const TextStyle inTextStyle)
-    {
-        _originText = inOriginText;
-        _textStyle  = inTextStyle;
+        _originText = inRunOriginText;
+        _textStyle  = inRunTextStyle;
         solCore->translateManager()->translateText(TranslateRequestInfo{
             this
           , false
           , solConfig.getCurrentEngineType()
-          , inOriginText
-          , inTextStyle
+          , inRunOriginText
+          , inRunTextStyle
           , inSourceLang
           , inTargetLang
           , this
-          , [this, inTextStyle](const QString& inStr) { completeTransText(inStr, inTextStyle); }
+          , [this, inRunTextStyle](const QString& inStr) { completeTransText(inStr, inRunTextStyle); }
           , this
-          , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
+          , [this, inRunTextStyle](const QString& inStr) { streamTransText(inStr, inRunTextStyle); }
         });
     };
 
 
-    if (inMimeData->hasHtml() == false)
+    if (inTextStyle == TextStyle::PlainText)
     {
-        runPopupTranslate(inMimeData->text(), TextStyle::PlainText);
+        runPopupTranslate(inOriginText, TextStyle::PlainText);
         return;
     }
 
     AsyncManager::asyncLaunch<QString>(
         this,
-        [htmlStr = std::move(inMimeData->html())]() mutable
+        [htmlStr = std::move(inOriginText)]() mutable
         {
             // list 무시하는 문법 제거.
             QTextDocument txtDoc;

@@ -9,7 +9,6 @@
 
 #include "SolTypes.h"
 
-class QMimeData;
 class SolButton;
 class LoadingBar;
 class QPushButton;
@@ -41,7 +40,8 @@ public:
 
     ~PopupTranslateWidget() override;
 
-    void executeTranslate(const QMimeData* inMimeData
+    void executeTranslate(const QString& inOriginText
+                        , const TextStyle inTextStyle
                         , const LangType inSourceLang
                         , const LangType inTargetLang);
 

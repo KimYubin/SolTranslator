@@ -33,8 +33,6 @@ public:
     static SolTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    void onSimpleTranslate(const QMimeData* inMimeData);
-
     DataManager* dataManager() const { return _dataManager; }
     TranslateManager* translateManager() const { return _translateManager; }
     HistoryManager* historyManager() const { return _historyManager; }

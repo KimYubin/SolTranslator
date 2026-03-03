@@ -70,8 +70,3 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 
 SolTranslatorCore::~SolTranslatorCore()
 {}
-
-void SolTranslatorCore::onSimpleTranslate(const QMimeData* inMimeData)
-{
-    _translateManager->translateAtPopup(inMimeData, LangType::AUTO, solConfig.getPopupTargetLang());
-}

@@ -26,9 +26,8 @@ public:
 
     QPointer<TranslateUnit> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
 
-    void translateAtPopup(const QMimeData* inMimeData
-                        , const LangType inSourceLang
-                        , const LangType inTargetLang);
+    void translateAtPopup(const QString& inOriginText
+                        , const TextStyle inTextStyle);
 
 public:
     QNetworkAccessManager* getNetworkAccessManager() const { return _networkAccessManager; };

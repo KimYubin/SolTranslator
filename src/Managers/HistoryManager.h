@@ -19,7 +19,7 @@ class SolTranslatorCore;
 class QSqlError;
 class QTimer;
 
-using LookupResult = const std::tuple<bool, QString>;
+using LookupResult = std::tuple<bool, QString>;
 
 class HistoryManager : public AbstractManager
 {
@@ -28,19 +28,6 @@ class HistoryManager : public AbstractManager
 public:
     explicit HistoryManager(SolTranslatorCore* parent);
     virtual ~HistoryManager() override;
-
-private:
-    void initializeDB();
-
-public:
-    void addHistory(const EngineType inEngineType
-                  , const LangType inSourceLang
-                  , const LangType inTargetLang
-                  , const QString& inOriginText
-                  , const QString& inTranslateText
-                  , const TextStyle inTextStyle);
-
-    void deleteHistory(const qint64 inDbId);
 
     void asyncAddHistory(const EngineType inEngineType
                        , const LangType inSourceLang
@@ -57,11 +44,6 @@ public:
      * 
      * @return first - 번역이 있다면 true. second - 번역문
      */
-    std::tuple<bool, QString> lookupHistory(const EngineType inEngineType
-                                          , const QString& inOriginText
-                                          , const LangType inSourceLang
-                                          , const LangType inTargetLang);
-
     void asyncLookupHistory(const EngineType inEngineType
                           , const QString& inOriginText
                           , const LangType inSourceLang
@@ -69,9 +51,8 @@ public:
                           , QObject* inContext
                           , std::move_only_function<void(const LookupResult&)> inFinishedFunction);
 
-private:
-signals:
-    void fetchLookupHistory(const EngineType inEngineType
+private: signals :
+    void sigLookupHistory(const EngineType inEngineType
                           , const QString& inOriginText
                           , const LangType inSourceLang
                           , const LangType inTargetLang
@@ -83,10 +64,11 @@ signals:
                      , const QString& inTranslateText
                      , const TextStyle inTextStyle);
     void sigDeleteHistory(const qint64 inDbId);
+    void sigChangeTranslateHistory();
 
 public slots :
-    void onLookupFinished(const LookupResult& inLookup, QObject* inContext);
-    void onHistoryUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
+    void lookupFinished(const LookupResult& inLookup, QObject* inContext);
+    void historyUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
     std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx);
     int getTranslateCacheSize() const { return _translateTextCache.size(); };
@@ -95,23 +77,12 @@ public slots :
 
     int findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp);
 
-    void markDbDirty();
-
-signals:
-    void translateHistoryChanged();
 
 private:
-    void updateDbCache();
-
     std::vector<HistoryCacheData> _translateTextCache;
 
-    // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
-    // emit translateHistoryChanged
-    QTimer* _dbUpdateTimer;
-
-    bool _bIsDirtyDB = true;
-
     QThread m_workerThread;
+
     std::unordered_map<QObject*, std::move_only_function<void(const LookupResult&)>> _requestCallbacks;
 };
 

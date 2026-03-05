@@ -207,6 +207,15 @@ void DbWorker::deleteHistory(const qint64 inDbId)
     markDbDirty();
 }
 
+void DbWorker::lookupHistory(const EngineType inEngineType
+                           , const QString& inOriginText
+                           , const LangType inSourceLang
+                           , const LangType inTargetLang
+                           , QObject* inContext)
+{
+    emit sigFinishLookup(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
+}
+
 std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineType
                                                     , const QString& inOriginText
                                                     , const LangType inSourceLang
@@ -269,15 +278,6 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
     return res;
 }
 
-void DbWorker::lookupHistory(const EngineType inEngineType
-                           , const QString& inOriginText
-                           , const LangType inSourceLang
-                           , const LangType inTargetLang
-                           , QObject* inContext)
-{
-    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
-}
-
 void DbWorker::updateDbCache()
 {
     std::vector<HistoryCacheData> cacheDatas;
@@ -326,7 +326,7 @@ void DbWorker::updateDbCache()
 
     _bIsDirtyDB = false;
 
-    emit sigHistoryUpdated(cacheDatas);
+    emit sigUpdateHistoryCache(cacheDatas);
 }
 
 void DbWorker::markDbDirty()

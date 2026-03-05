@@ -32,16 +32,8 @@ slots :
 
     void deleteHistory(const qint64 inDbId);
 
-private:
-    std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
-                                              , const QString& inOriginText
-                                              , const LangType inSourceLang
-                                              , const LangType inTargetLang);
     /**
-     * 번역 기록이 있다면, 번역문을 반환합니다.
-     * 해당 번역의 최근 기록을 추가합니다.
-     * 
-     * @return first - 번역이 있다면 true. second - 번역문
+     * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
      */
 public:
     void lookupHistory(const EngineType inEngineType
@@ -50,11 +42,17 @@ public:
                      , const LangType inTargetLang
                      , QObject* inContext);
 
+private:
+    std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
+                                              , const QString& inOriginText
+                                              , const LangType inSourceLang
+                                              , const LangType inTargetLang);
+
 public:
-signals :
-    void lookupFinished(const std::tuple<bool, QString>& inLookup
-                      , QObject* inContext);
-    void sigHistoryUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
+signals:
+    void sigFinishLookup(const std::tuple<bool, QString>& inLookup
+                       , QObject* inContext);
+    void sigUpdateHistoryCache(const std::vector<HistoryCacheData>& inCacheDatas);
 
 private:
     void updateDbCache();
@@ -62,11 +60,10 @@ private:
     void markDbDirty();
 
     // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
-    // emit sigHistoryUpdated
+    // emit sigUpdateHistoryCache
     QTimer* _dbUpdateTimer;
 
     bool _bIsDirtyDB = true;
-
 };
 
 #endif //SOLTRANSLATOR_DBWORKER_H

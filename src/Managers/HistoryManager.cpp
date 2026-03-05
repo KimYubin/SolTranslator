@@ -2,47 +2,30 @@
 
 #include "HistoryManager.h"
 
-#include <QFile>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
 #include <QDateTime>
-#include <QTimer>
 
 #include "DbWorker.h"
-#include "SolDatabase.h"
-#include "SolLog.h"
 #include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
-
-namespace
-{
-const char* db_type = "QSQLITE";
-const char* db_connectionName = "sol_db";
-} // anonymous namespace
 
 HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    DbWorker* worker = new DbWorker();
-    connect(&m_workerThread, &QThread::started, worker, &DbWorker::initializeDB);
-    connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
-    worker->moveToThread(&m_workerThread);
+    DbWorker* dbWorker = new DbWorker();
+    connect(&_workerThread, &QThread::started, dbWorker, &DbWorker::initialize);
+    connect(&_workerThread, &QThread::finished, dbWorker, &QObject::deleteLater);
+    dbWorker->moveToThread(&_workerThread);
 
-    connect(this, &HistoryManager::sigLookupHistory, worker, &DbWorker::lookupHistory);
-    connect(worker, &DbWorker::sigFinishLookup, this, &HistoryManager::lookupFinished);
+    connect(this, &HistoryManager::requestHistoryLookup, dbWorker, &DbWorker::processLookupHistory);
+    connect(dbWorker, &DbWorker::lookupFinished, this, &HistoryManager::onLookupFinished);
 
-    connect(this, &HistoryManager::sigAddHistory, worker, &DbWorker::addHistory);
-    connect(this, &HistoryManager::sigDeleteHistory, worker, &DbWorker::deleteHistory);
-    connect(worker, &DbWorker::sigUpdateHistoryCache, this, &HistoryManager::historyUpdated);
+    connect(this, &HistoryManager::requestAddHistory, dbWorker, &DbWorker::processAddHistory);
+    connect(this, &HistoryManager::requestDeleteHistory, dbWorker, &DbWorker::processDeleteHistory);
+    connect(dbWorker, &DbWorker::historyCacheUpdated, this, &HistoryManager::onDbCacheUpdated);
 
-    m_workerThread.start();
+    _workerThread.start();
 }
 
 HistoryManager::~HistoryManager()
-{
-    QSqlDatabase historyDB = QSqlDatabase::database();
-    historyDB.close();
-}
+{}
 
 void HistoryManager::asyncAddHistory(const EngineType inEngineType
                                    , const LangType inSourceLang
@@ -51,17 +34,17 @@ void HistoryManager::asyncAddHistory(const EngineType inEngineType
                                    , const QString& inTranslateText
                                    , const TextStyle inTextStyle)
 {
-    emit sigAddHistory(inEngineType
-                     , inSourceLang
-                     , inTargetLang
-                     , inOriginText
-                     , inTranslateText
-                     , inTextStyle);
+    emit requestAddHistory(inEngineType
+                         , inSourceLang
+                         , inTargetLang
+                         , inOriginText
+                         , inTranslateText
+                         , inTextStyle);
 }
 
 void HistoryManager::asyncDeleteHistory(const qint64 inDbId)
 {
-    emit sigDeleteHistory(inDbId);
+    emit requestDeleteHistory(inDbId);
 }
 
 void HistoryManager::asyncLookupHistory(const EngineType inEngineType
@@ -74,10 +57,10 @@ void HistoryManager::asyncLookupHistory(const EngineType inEngineType
     _requestCallbacks[inContext] = std::move(inFinishedFunction);
     connect(inContext, &QObject::destroyed, this, [this, inContext]() { _requestCallbacks.erase(inContext); });
 
-    emit sigLookupHistory(inEngineType, inOriginText, inSourceLang, inTargetLang, inContext);
+    emit requestHistoryLookup(inEngineType, inOriginText, inSourceLang, inTargetLang, inContext);
 }
 
-void HistoryManager::lookupFinished(const LookupResult& inLookup, QObject* inContext)
+void HistoryManager::onLookupFinished(const LookupResult& inLookup, QObject* inContext)
 {
     const auto it = _requestCallbacks.
             find(inContext);
@@ -89,11 +72,11 @@ void HistoryManager::lookupFinished(const LookupResult& inLookup, QObject* inCon
     _requestCallbacks.erase(it);
 }
 
-void HistoryManager::historyUpdated(const std::vector<HistoryCacheData>& inCacheDatas)
+void HistoryManager::onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas)
 {
     _translateTextCache = inCacheDatas;
 
-    emit sigChangeTranslateHistory();
+    emit translateHistoryUpdated();
 }
 
 std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)

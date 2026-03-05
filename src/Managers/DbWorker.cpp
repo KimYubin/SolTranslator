@@ -22,11 +22,8 @@ const char* db_connectionName = "sol_db";
 } // anonymous namespace
 
 DbWorker::DbWorker(QObject* parent)
-    : QObject(parent)
-{
-    // initializeDB();
-
-}
+    : QObject(parent), _dbUpdateTimer(nullptr)
+{}
 
 DbWorker::~DbWorker()
 {
@@ -36,7 +33,7 @@ DbWorker::~DbWorker()
     historyDB.close();
 }
 
-void DbWorker::initializeDB()
+void DbWorker::initialize()
 {
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
     historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
@@ -122,7 +119,7 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 }
 } // anonymous namespace
 
-void DbWorker::addHistory(const EngineType inEngineType
+void DbWorker::processAddHistory(const EngineType inEngineType
                         , const LangType inSourceLang
                         , const LangType inTargetLang
                         , const QString& inOriginText
@@ -175,7 +172,7 @@ void DbWorker::addHistory(const EngineType inEngineType
     markDbDirty();
 }
 
-void DbWorker::deleteHistory(const qint64 inDbId)
+void DbWorker::processDeleteHistory(const qint64 inDbId)
 {
     const QString deleteDataFilePath = ":/sql/delete_history_data.sql";
 
@@ -207,13 +204,13 @@ void DbWorker::deleteHistory(const qint64 inDbId)
     markDbDirty();
 }
 
-void DbWorker::lookupHistory(const EngineType inEngineType
+void DbWorker::processLookupHistory(const EngineType inEngineType
                            , const QString& inOriginText
                            , const LangType inSourceLang
                            , const LangType inTargetLang
                            , QObject* inContext)
 {
-    emit sigFinishLookup(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
+    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
 }
 
 std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineType
@@ -326,7 +323,7 @@ void DbWorker::updateDbCache()
 
     _bIsDirtyDB = false;
 
-    emit sigUpdateHistoryCache(cacheDatas);
+    emit historyCacheUpdated(cacheDatas);
 }
 
 void DbWorker::markDbDirty()

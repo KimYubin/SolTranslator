@@ -19,24 +19,23 @@ public:
     explicit DbWorker(QObject* parent = nullptr);
     virtual ~DbWorker() override;
 
-    void initializeDB();
+    void initialize();
 
 public
 slots :
-    void addHistory(const EngineType inEngineType
+    void processAddHistory(const EngineType inEngineType
                   , const LangType inSourceLang
                   , const LangType inTargetLang
                   , const QString& inOriginText
                   , const QString& inTranslateText
                   , const TextStyle inTextStyle);
 
-    void deleteHistory(const qint64 inDbId);
+    void processDeleteHistory(const qint64 inDbId);
 
     /**
      * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
      */
-public:
-    void lookupHistory(const EngineType inEngineType
+    void processLookupHistory(const EngineType inEngineType
                      , const QString& inOriginText
                      , const LangType inSourceLang
                      , const LangType inTargetLang
@@ -50,17 +49,19 @@ private:
 
 public:
 signals:
-    void sigFinishLookup(const std::tuple<bool, QString>& inLookup
+    void lookupFinished(const std::tuple<bool, QString>& inLookup
                        , QObject* inContext);
-    void sigUpdateHistoryCache(const std::vector<HistoryCacheData>& inCacheDatas);
+    void historyCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
 private:
     void updateDbCache();
 
     void markDbDirty();
 
-    // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
-    // emit sigUpdateHistoryCache
+    /**
+     * 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
+     * emit historyCacheUpdated
+     */
     QTimer* _dbUpdateTimer;
 
     bool _bIsDirtyDB = true;

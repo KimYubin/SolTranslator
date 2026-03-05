@@ -14,7 +14,7 @@
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    connect(solCore->historyManager(), &HistoryManager::sigChangeTranslateHistory, this, &HistoryModel::updateTranslateCache);
+    connect(solCore->historyManager(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateTranslateCache);
 }
 
 int HistoryModel::rowCount(const QModelIndex& parent) const

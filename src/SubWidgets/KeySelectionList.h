@@ -15,7 +15,7 @@ public:
 protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
 
-protected: signals:
+signals:
     void itemKeyPressed(QListWidgetItem* item);
     
 };

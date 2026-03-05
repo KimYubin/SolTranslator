@@ -157,7 +157,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inOriginText
         },
         [this, inSourceLang, inTargetLang](const QString& inMd)
         {
-            executeTranslateImpl(inMd, TextStyle::PlainText, inSourceLang, inTargetLang);
+            executeTranslateImpl(inMd, TextStyle::MarkDown, inSourceLang, inTargetLang);
         });
 }
 

@@ -122,7 +122,7 @@ void HistoryWidget::setupUI()
         {
             const QModelIndex curIdx = _historyListView->currentIndex();
             const qlonglong dbId     = _historyListModel->data(curIdx, sol::DbIdRole).toLongLong();
-            solCore->historyManager()->deleteHistory(dbId);
+            solCore->historyManager()->asyncDeleteHistory(dbId);
             _selectedTextEdit->setText("");
         });
     }

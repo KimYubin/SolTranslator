@@ -147,6 +147,8 @@ qt_add_executable(
         src/SubWidgets/SolWidgetFactory.h
         src/SubWidgets/SolButton.cpp
         src/SubWidgets/SolButton.h
+        src/Managers/DbWorker.cpp
+        src/Managers/DbWorker.h
 
 )
 

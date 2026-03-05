@@ -38,6 +38,7 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
     HistoryManager* historyManager = solCore->historyManager();
     if (_trReqData.bIgnoreCache == false && historyManager != nullptr)
     {
+        /*
         auto [bIsFind, findCache] = historyManager->lookupHistory(_trReqData.engineType
                                                                 , _trReqData.originText
                                                                 , _trReqData.sourceLang
@@ -47,10 +48,34 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
             completeTranslatedText(findCache);
             return;
         }
+        */
+        historyManager->asyncLookupHistory(
+            _trReqData.engineType
+          , _trReqData.originText
+          , _trReqData.sourceLang
+          , _trReqData.targetLang
+          , this
+          , [inThis = QPointer{this}, this](const std::tuple<bool, QString>& inRes)
+            {
+                if (inThis.isNull())
+                {
+                    solDebug << "The trUnit was destroyed before the database search was completed.";
+                    return;
+                }
+                auto [isFind, findCache] = inRes;
+                if (isFind)
+                {
+                    completeTranslatedText(findCache);
+                }
+                else
+                {
+                    requestTranslate();
+                }
+            });
     }
 
     // to subclass
-    requestTranslate();
+    // requestTranslate();
 }
 
 void TranslateUnit::get(const QNetworkRequest& request)
@@ -156,7 +181,7 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
 
     if (HistoryManager* historyManager = solCore->historyManager())
     {
-        historyManager->addHistory(_trReqData.engineType
+        historyManager->asyncAddHistory(_trReqData.engineType
                                  , _trReqData.sourceLang
                                  , _trReqData.targetLang
                                  , _trReqData.originText

@@ -1,19 +1,19 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
-
-#include "HistoryManager.h"
-
-#include <QFile>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QDateTime>
-#include <QTimer>
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "DbWorker.h"
+
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QTimer>
+
 #include "SolDatabase.h"
 #include "SolLog.h"
-#include "SolTranslatorCore.h"
+#include "SolTypes.h"
 #include "SolUtilibrary.h"
+
+#include "Widgets/HistoryCacheData.h"
+
 
 namespace
 {
@@ -21,34 +21,14 @@ const char* db_type = "QSQLITE";
 const char* db_connectionName = "sol_db";
 } // anonymous namespace
 
-HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
+DbWorker::DbWorker(QObject* parent)
+    : QObject(parent)
 {
     // initializeDB();
-    //
-    _dbUpdateTimer = new QTimer(this);
-    // _dbUpdateTimer->setInterval(500);
-    // _dbUpdateTimer->setSingleShot(true);
-    // _dbUpdateTimer->callOnTimeout(this, &HistoryManager::updateDbCache);
-    //
-    // markDbDirty();
 
-    DbWorker* worker = new DbWorker();
-    connect(&m_workerThread, &QThread::started, worker, &DbWorker::initializeDB);
-    connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
-    worker->moveToThread(&m_workerThread);
-
-
-    connect(this, &HistoryManager::fetchLookupHistory, worker, &DbWorker::lookupHistory);
-    connect(worker, &DbWorker::lookupFinished, this, &HistoryManager::onLookupFinished);
-
-    connect(this, &HistoryManager::sigAddHistory, worker, &DbWorker::addHistory);
-    connect(this, &HistoryManager::sigDeleteHistory, worker, &DbWorker::deleteHistory);
-    connect(worker, &DbWorker::sigHistoryUpdated, this, &HistoryManager::onHistoryUpdated);
-    
-    m_workerThread.start();
 }
 
-HistoryManager::~HistoryManager()
+DbWorker::~DbWorker()
 {
     _dbUpdateTimer->stop();
 
@@ -56,7 +36,7 @@ HistoryManager::~HistoryManager()
     historyDB.close();
 }
 
-void HistoryManager::initializeDB()
+void DbWorker::initializeDB()
 {
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
     historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
@@ -70,6 +50,8 @@ void HistoryManager::initializeDB()
 
     // Enable foreign key constraints for SQLite.
     SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
+    // WAL mode on
+    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL");
 
     QStringList db_tables = {
         "history_data"
@@ -103,6 +85,14 @@ void HistoryManager::initializeDB()
     }
 
     transactionGuard.commit();
+
+
+    _dbUpdateTimer = new QTimer(this);
+    _dbUpdateTimer->setInterval(500);
+    _dbUpdateTimer->setSingleShot(true);
+    _dbUpdateTimer->callOnTimeout(this, &DbWorker::updateDbCache);
+
+    markDbDirty();
 }
 
 namespace
@@ -132,12 +122,12 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 }
 } // anonymous namespace
 
-void HistoryManager::addHistory(const EngineType inEngineType
-                              , const LangType inSourceLang
-                              , const LangType inTargetLang
-                              , const QString& inOriginText
-                              , const QString& inTranslateText
-                              , const TextStyle inTextStyle)
+void DbWorker::addHistory(const EngineType inEngineType
+                        , const LangType inSourceLang
+                        , const LangType inTargetLang
+                        , const QString& inOriginText
+                        , const QString& inTranslateText
+                        , const TextStyle inTextStyle)
 {
     const QString insertDataFilePath     = ":/sql/insert_history_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
@@ -185,7 +175,7 @@ void HistoryManager::addHistory(const EngineType inEngineType
     markDbDirty();
 }
 
-void HistoryManager::deleteHistory(const qint64 inDbId)
+void DbWorker::deleteHistory(const qint64 inDbId)
 {
     const QString deleteDataFilePath = ":/sql/delete_history_data.sql";
 
@@ -217,30 +207,10 @@ void HistoryManager::deleteHistory(const qint64 inDbId)
     markDbDirty();
 }
 
-void HistoryManager::asyncAddHistory(const EngineType inEngineType
-                                   , const LangType inSourceLang
-                                   , const LangType inTargetLang
-                                   , const QString& inOriginText
-                                   , const QString& inTranslateText
-                                   , const TextStyle inTextStyle)
-{
-    emit sigAddHistory(inEngineType
-                     , inSourceLang
-                     , inTargetLang
-                     , inOriginText
-                     , inTranslateText
-                     , inTextStyle);
-}
-
-void HistoryManager::asyncDeleteHistory(const qint64 inDbId)
-{
-    emit sigDeleteHistory(inDbId);
-}
-
-std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngineType
-                                                      , const QString& inOriginText
-                                                      , const LangType inSourceLang
-                                                      , const LangType inTargetLang)
+std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineType
+                                                    , const QString& inOriginText
+                                                    , const LangType inSourceLang
+                                                    , const LangType inTargetLang)
 {
     std::tuple<bool, QString> res = {false, QString()};
 
@@ -299,89 +269,19 @@ std::tuple<bool, QString> HistoryManager::lookupHistory(const EngineType inEngin
     return res;
 }
 
-void HistoryManager::asyncLookupHistory(const EngineType inEngineType
-                                      , const QString& inOriginText
-                                      , const LangType inSourceLang
-                                      , const LangType inTargetLang
-                                      , QObject* inContext
-                                      , std::move_only_function<void(const std::tuple<bool, QString>&)> inFinishedFunction)
+void DbWorker::lookupHistory(const EngineType inEngineType
+                           , const QString& inOriginText
+                           , const LangType inSourceLang
+                           , const LangType inTargetLang
+                           , QObject* inContext)
 {
-    _requestCallbacks[inContext] = std::move(inFinishedFunction);
-    connect(inContext, &QObject::destroyed, this, [this, inContext]() { _requestCallbacks.erase(inContext); });
-
-    emit fetchLookupHistory(inEngineType, inOriginText, inSourceLang, inTargetLang, inContext);
+    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
 }
 
-void HistoryManager::onLookupFinished(const std::tuple<bool, QString>& inLookup, QObject* inContext)
+void DbWorker::updateDbCache()
 {
-    const auto it = _requestCallbacks.
-            find(inContext);
-    if (it == _requestCallbacks.end())
-    {
-        return;
-    }
-    it->second(inLookup);
-    _requestCallbacks.erase(it);
-}
+    std::vector<HistoryCacheData> cacheDatas;
 
-void HistoryManager::onHistoryUpdated(const std::vector<HistoryCacheData>& inCacheDatas)
-{
-    _translateTextCache = inCacheDatas;
-
-    _bIsDirtyDB = false;
-
-    emit translateHistoryChanged();
-}
-
-std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)
-{
-    if (inIdx < 0 || inIdx >= _translateTextCache.size())
-    {
-        return std::unexpected("_translateTextCache out of range :"
-            "\n - size: " + QString::number(_translateTextCache.size())
-            + "\n - inIdx: " + QString::number(inIdx));
-    }
-
-    return &_translateTextCache[inIdx];
-}
-
-bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState)
-{
-    if (inIdx < 0 || inIdx >= _translateTextCache.size())
-    {
-        return false;
-    }
-
-    _translateTextCache[inIdx].setCheckState(inState);
-    return true;
-}
-
-int HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
-                                             , const QDateTime& inTimeStamp)
-{
-    const auto lowIt = std::ranges::lower_bound(_translateTextCache, inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
-    if (lowIt == _translateTextCache.end() || lowIt->getTimeStamp() != inTimeStamp)
-    {
-        return -1;
-    }
-    const auto upperIt = std::ranges::upper_bound(lowIt, _translateTextCache.end(), inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
-
-    const std::vector<HistoryCacheData>::iterator findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)
-    {
-        return inCache.getTimelineId() == inTimelineId;
-    });
-
-    if (findIt == _translateTextCache.end())
-    {
-        return -1;
-    }
-
-    return findIt - _translateTextCache.begin();
-}
-
-
-void HistoryManager::updateDbCache()
-{
     if (_bIsDirtyDB == false)
     {
         solDebug << "DB is not dirty";
@@ -408,10 +308,10 @@ void HistoryManager::updateDbCache()
         return;
     }
 
-    _translateTextCache.clear();
+    cacheDatas.clear();
     while (sqlQuery.next())
     {
-        _translateTextCache.emplace_back(sqlQuery.value(0).toLongLong()
+        cacheDatas.emplace_back(sqlQuery.value(0).toLongLong()
                                        , sqlQuery.value(1).toString()
                                        , sqlQuery.value(2).toString()
                                        , sqlQuery.value(3).toString()
@@ -426,12 +326,11 @@ void HistoryManager::updateDbCache()
 
     _bIsDirtyDB = false;
 
-    emit translateHistoryChanged();
+    emit sigHistoryUpdated(cacheDatas);
 }
 
-void HistoryManager::markDbDirty()
+void DbWorker::markDbDirty()
 {
     _bIsDirtyDB = true;
     _dbUpdateTimer->start();
 }
-

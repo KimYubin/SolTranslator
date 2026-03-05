@@ -4,6 +4,8 @@
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
 
+#include <QThread>
+
 #include <expected>
 
 #include "AbstractManager.h"
@@ -16,6 +18,8 @@ class HistoryCacheData;
 class SolTranslatorCore;
 class QSqlError;
 class QTimer;
+
+using LookupResult = const std::tuple<bool, QString>;
 
 class HistoryManager : public AbstractManager
 {
@@ -38,6 +42,15 @@ public:
 
     void deleteHistory(const qint64 inDbId);
 
+    void asyncAddHistory(const EngineType inEngineType
+                       , const LangType inSourceLang
+                       , const LangType inTargetLang
+                       , const QString& inOriginText
+                       , const QString& inTranslateText
+                       , const TextStyle inTextStyle);
+
+    void asyncDeleteHistory(const qint64 inDbId);
+
     /**
      * 번역 기록이 있다면, 번역문을 반환합니다.
      * 해당 번역의 최근 기록을 추가합니다.
@@ -48,6 +61,32 @@ public:
                                           , const QString& inOriginText
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang);
+
+    void asyncLookupHistory(const EngineType inEngineType
+                          , const QString& inOriginText
+                          , const LangType inSourceLang
+                          , const LangType inTargetLang
+                          , QObject* inContext
+                          , std::move_only_function<void(const LookupResult&)> inFinishedFunction);
+
+private:
+signals:
+    void fetchLookupHistory(const EngineType inEngineType
+                          , const QString& inOriginText
+                          , const LangType inSourceLang
+                          , const LangType inTargetLang
+                          , QObject* inContext);
+    void sigAddHistory(const EngineType inEngineType
+                     , const LangType inSourceLang
+                     , const LangType inTargetLang
+                     , const QString& inOriginText
+                     , const QString& inTranslateText
+                     , const TextStyle inTextStyle);
+    void sigDeleteHistory(const qint64 inDbId);
+
+public slots :
+    void onLookupFinished(const LookupResult& inLookup, QObject* inContext);
+    void onHistoryUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
     std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx);
     int getTranslateCacheSize() const { return _translateTextCache.size(); };
@@ -71,6 +110,9 @@ private:
     QTimer* _dbUpdateTimer;
 
     bool _bIsDirtyDB = true;
+
+    QThread m_workerThread;
+    std::unordered_map<QObject*, std::move_only_function<void(const LookupResult&)>> _requestCallbacks;
 };
 
 

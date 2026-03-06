@@ -58,6 +58,7 @@ private:
 
     void markDbDirty();
 
+    void runCheckpoint(const bool inIsTRUNCATE = false);
     /**
      * 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
      * emit historyCacheUpdated

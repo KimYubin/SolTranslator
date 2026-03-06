@@ -25,7 +25,11 @@ HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(pare
 }
 
 HistoryManager::~HistoryManager()
-{}
+{
+    _workerThread.requestInterruption();
+    _workerThread.quit();
+    _workerThread.wait();
+}
 
 void HistoryManager::asyncAddHistory(const EngineType inEngineType
                                    , const LangType inSourceLang

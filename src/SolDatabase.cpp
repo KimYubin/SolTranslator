@@ -26,7 +26,7 @@ std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePat
     return sqlStr;
 }
 
-std::expected<void, QString> SolSql::execSQL(const QString& inFilePath)
+std::expected<void, QString> SolSql::execSqlFile(const QString& inFilePath)
 {
     const std::expected<QString, QString> sqlStr = readSqlFromFile(inFilePath);
 
@@ -35,8 +35,8 @@ std::expected<void, QString> SolSql::execSQL(const QString& inFilePath)
         return std::unexpected("Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error());
     }
 
-    QSqlQuery sqlQuery(sqlStr.value());
-    if (sqlQuery.exec() == false)
+    QSqlQuery sqlQuery;
+    if (sqlQuery.exec(sqlStr.value()) == false)
     {
         return std::unexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
     }
@@ -46,8 +46,8 @@ std::expected<void, QString> SolSql::execSQL(const QString& inFilePath)
 
 std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, const QString& inQuery)
 {
-    QSqlQuery sqlQuery(inQuery);
-    if (sqlQuery.exec() == false)
+    QSqlQuery sqlQuery;
+    if (sqlQuery.exec(inQuery) == false)
     {
         return std::unexpected("Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text());
     }
@@ -73,7 +73,7 @@ void SolSqlTransactionGuard::transaction()
     {
         return;
     }
-    
+
     if (_database.transaction() == false)
     {
         solDebug << "transaction failed" << _database.lastError();
@@ -87,6 +87,7 @@ void SolSqlTransactionGuard::commit()
 {
     if (duringTransaction == false)
     {
+        solDebug << "not during transaction";
         return;
     }
 

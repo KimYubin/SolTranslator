@@ -29,8 +29,9 @@ DbWorker::~DbWorker()
 {
     _dbUpdateTimer->stop();
 
-    QSqlDatabase historyDB = QSqlDatabase::database();
-    historyDB.close();
+    runCheckpoint(true);
+
+    QSqlDatabase::database().close();
 }
 
 void DbWorker::initialize()
@@ -43,12 +44,11 @@ void DbWorker::initialize()
         return;
     }
 
-    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(historyDB);
 
-    // Enable foreign key constraints for SQLite.
-    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
-    // WAL mode on
-    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL");
+    auto errorDebugLog = [](const QString& inError) { solDebug << inError; return inError; };
+    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON").transform_error(errorDebugLog);
+    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL").transform_error(errorDebugLog);
 
     QStringList db_tables = {
         "history_data"
@@ -65,7 +65,7 @@ void DbWorker::initialize()
 
     for (QString& tableName : db_tables)
     {
-        const std::expected sqlExec = SolSql::execSQL(":/sql/create_" + tableName + ".sql");
+        const std::expected sqlExec = SolSql::execSqlFile(":/sql/create_" + tableName + ".sql");
         if (sqlExec.has_value() == false)
         {
             solDebug << sqlExec.error();
@@ -74,7 +74,7 @@ void DbWorker::initialize()
 
     for (QString& indexName : db_indexes)
     {
-        const std::expected sqlExec = SolSql::execSQL(":/sql/create_" + indexName + ".sql");
+        const std::expected sqlExec = SolSql::execSqlFile(":/sql/create_" + indexName + ".sql");
         if (sqlExec.has_value() == false)
         {
             solDebug << sqlExec.error();
@@ -120,11 +120,11 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 } // anonymous namespace
 
 void DbWorker::processAddHistory(const EngineType inEngineType
-                        , const LangType inSourceLang
-                        , const LangType inTargetLang
-                        , const QString& inOriginText
-                        , const QString& inTranslateText
-                        , const TextStyle inTextStyle)
+                               , const LangType inSourceLang
+                               , const LangType inTargetLang
+                               , const QString& inOriginText
+                               , const QString& inTranslateText
+                               , const TextStyle inTextStyle)
 {
     const QString insertDataFilePath     = ":/sql/insert_history_data.sql";
     const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
@@ -170,6 +170,7 @@ void DbWorker::processAddHistory(const EngineType inEngineType
 
     transactionGuard.commit();
     markDbDirty();
+    runCheckpoint();
 }
 
 void DbWorker::processDeleteHistory(const qint64 inDbId)
@@ -205,10 +206,10 @@ void DbWorker::processDeleteHistory(const qint64 inDbId)
 }
 
 void DbWorker::processLookupHistory(const EngineType inEngineType
-                           , const QString& inOriginText
-                           , const LangType inSourceLang
-                           , const LangType inTargetLang
-                           , QObject* inContext)
+                                  , const QString& inOriginText
+                                  , const LangType inSourceLang
+                                  , const LangType inTargetLang
+                                  , QObject* inContext)
 {
     emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
 }
@@ -309,14 +310,14 @@ void DbWorker::updateDbCache()
     while (sqlQuery.next())
     {
         cacheDatas.emplace_back(sqlQuery.value(0).toLongLong()
-                                       , sqlQuery.value(1).toString()
-                                       , sqlQuery.value(2).toString()
-                                       , sqlQuery.value(3).toString()
-                                       , sqlQuery.value(4).toString()
-                                       , sqlQuery.value(5).toString()
-                                       , sqlQuery.value(6).toLongLong()
-                                       , sqlQuery.value(7).toLongLong()
-                                       , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
+                              , sqlQuery.value(1).toString()
+                              , sqlQuery.value(2).toString()
+                              , sqlQuery.value(3).toString()
+                              , sqlQuery.value(4).toString()
+                              , sqlQuery.value(5).toString()
+                              , sqlQuery.value(6).toLongLong()
+                              , sqlQuery.value(7).toLongLong()
+                              , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
     }
 
     transactionGuard.commit();
@@ -330,4 +331,32 @@ void DbWorker::markDbDirty()
 {
     _bIsDirtyDB = true;
     _dbUpdateTimer->start();
+}
+
+void DbWorker::runCheckpoint(const bool inIsTRUNCATE)
+{
+    QString queryParam;
+    if (inIsTRUNCATE)
+    {
+        queryParam = "TRUNCATE";
+    }
+    else
+    {
+        queryParam = "PASSIVE";
+    }
+
+    QSqlQuery sqlQuery;
+    if (sqlQuery.exec("PRAGMA wal_checkpoint(" + queryParam + ")"))
+    {
+        while (sqlQuery.next())
+        {
+            solDebug << "complete:" << sqlQuery.value(0);
+            solDebug << "modified pages:" << sqlQuery.value(1);
+            solDebug << "moved pages:" << sqlQuery.value(2);
+        }
+    }
+    else
+    {
+        solDebug << "run checkpoint failed" << sqlQuery.lastError();
+    }
 }

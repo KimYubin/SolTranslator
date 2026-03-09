@@ -19,6 +19,17 @@ namespace
 {
 const char* db_type = "QSQLITE";
 const char* db_connectionName = "sol_db";
+
+namespace Path
+{
+const char* InsertTimeline      = ":/sql/insert_history_timeline.sql";
+const char* InsertHistoryData   = ":/sql/insert_history_data.sql";
+const char* DeleteHistoryData   = ":/sql/delete_history_data.sql";
+const char* SelectHistoryData   = ":/sql/select_history_data.sql";
+const char* SelectTimelineCount = ":/sql/select_timeline_count.sql";
+const char* SelectTimeline      = ":/sql/select_translation_timeline.sql";
+} // Path
+
 } // anonymous namespace
 
 DbWorker::DbWorker(QObject* parent)
@@ -112,12 +123,10 @@ namespace
 {
 std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 {
-    const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
-
-    const std::expected<QString, QString> insertTimelineQuery = SolSql::readSqlFromFile(insertTimelineFilePath);
+    const std::expected<QString, QString> insertTimelineQuery = SolSql::readSqlFromFile(Path::InsertTimeline);
     if (insertTimelineQuery.has_value() == false)
     {
-        return std::unexpected(insertTimelineQuery.error() + "insert_history_timeline");
+        return std::unexpected(insertTimelineQuery.error() + Path::InsertTimeline);
     }
 
     QSqlQuery sqlQuery;
@@ -142,14 +151,11 @@ void DbWorker::processAddHistory(const EngineType inEngineType
                                , const QString& inTranslateText
                                , const TextStyle inTextStyle)
 {
-    const QString insertDataFilePath     = ":/sql/insert_history_data.sql";
-    const QString insertTimelineFilePath = ":/sql/insert_history_timeline.sql";
-
-    const std::expected<QString, QString> insertDataQuery = SolSql::readSqlFromFile(insertDataFilePath);
+    const std::expected<QString, QString> insertDataQuery = SolSql::readSqlFromFile(Path::InsertHistoryData);
 
     if (insertDataQuery.has_value() == false)
     {
-        solDebug << insertDataQuery.error() + "insert_history_data";
+        solDebug << insertDataQuery.error() << Path::InsertHistoryData;
         return;
     }
 
@@ -191,13 +197,11 @@ void DbWorker::processAddHistory(const EngineType inEngineType
 
 void DbWorker::processDeleteHistory(const qint64 inDbId)
 {
-    const QString deleteDataFilePath = ":/sql/delete_history_data.sql";
-
-    const std::expected<QString, QString> deleteDataQuery = SolSql::readSqlFromFile(deleteDataFilePath);
+    const std::expected<QString, QString> deleteDataQuery = SolSql::readSqlFromFile(Path::DeleteHistoryData);
 
     if (deleteDataQuery.has_value() == false)
     {
-        solDebug << deleteDataQuery.error() + "delete_history_data";
+        solDebug << deleteDataQuery.error() << Path::DeleteHistoryData;
         return;
     }
 
@@ -237,10 +241,7 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
 {
     std::tuple<bool, QString> res = {false, QString()};
 
-    const QString selectHistoryDataFilePath = ":/sql/select_history_data.sql";
-
-    const std::expected<QString, QString> selectHistoryQuery = SolSql::readSqlFromFile(selectHistoryDataFilePath);
-
+    const std::expected<QString, QString> selectHistoryQuery = SolSql::readSqlFromFile(Path::SelectHistoryData);
     if (selectHistoryQuery.has_value() == false)
     {
         solDebug << "not found sql files";
@@ -294,51 +295,73 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
 
 void DbWorker::updateDbCache()
 {
-    std::vector<HistoryCacheData> cacheDatas;
-
     if (_bIsDirtyDB == false)
     {
         solDebug << "DB is not dirty";
         return;
     }
+    _bIsDirtyDB = false;
 
     SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
-    QSqlQuery sqlQuery;
-    const QString selectTimelineFilePath = ":/sql/select_translation_timeline.sql";
+    std::vector<HistoryCacheData> cacheDatas;
 
-    const std::expected<QString, QString> selectTimelineQuery = SolSql::readSqlFromFile(selectTimelineFilePath);
-
-    if (selectTimelineQuery.has_value() == false)
+    // reserve vector with timeline count
     {
-        solDebug << selectTimelineQuery.error() << "select_translation_timeline";
-        return;
+        const std::expected<QString, QString> timelineCountQuery = SolSql::readSqlFromFile(Path::SelectTimelineCount);
+
+        if (timelineCountQuery.has_value() == false)
+        {
+            solDebug << timelineCountQuery.error() << "select_timeline_count";
+            return;
+        }
+
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(timelineCountQuery.value());
+        if (sqlQuery.exec() == false)
+        {
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
+            return;
+        }
+        if (sqlQuery.next())
+        {
+            cacheDatas.reserve(sqlQuery.value(0).toLongLong());
+        }
     }
 
-    sqlQuery.prepare(selectTimelineQuery.value());
-    if (sqlQuery.exec() == false)
     {
-        solDebug << "Error executing SQL" << sqlQuery.lastError();
-        return;
-    }
+        const std::expected<QString, QString> selectTimelineQuery = SolSql::readSqlFromFile(Path::SelectTimeline);
 
-    cacheDatas.clear();
-    while (sqlQuery.next())
-    {
-        cacheDatas.emplace_back(sqlQuery.value(0).toLongLong()
-                              , sqlQuery.value(1).toString()
-                              , sqlQuery.value(2).toString()
-                              , sqlQuery.value(3).toString()
-                              , sqlQuery.value(4).toString()
-                              , sqlQuery.value(5).toString()
-                              , sqlQuery.value(6).toLongLong()
-                              , sqlQuery.value(7).toLongLong()
-                              , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
+        if (selectTimelineQuery.has_value() == false)
+        {
+            solDebug << selectTimelineQuery.error() << Path::SelectTimeline;
+            return;
+        }
+
+        QSqlQuery sqlQuery;
+        sqlQuery.prepare(selectTimelineQuery.value());
+        if (sqlQuery.exec() == false)
+        {
+            solDebug << "Error executing SQL" << sqlQuery.lastError();
+            return;
+        }
+
+        cacheDatas.clear();
+        while (sqlQuery.next())
+        {
+            cacheDatas.emplace_back(sqlQuery.value(0).toLongLong()
+                                  , sqlQuery.value(1).toString()
+                                  , sqlQuery.value(2).toString()
+                                  , sqlQuery.value(3).toString()
+                                  , sqlQuery.value(4).toString()
+                                  , sqlQuery.value(5).toString()
+                                  , sqlQuery.value(6).toLongLong()
+                                  , sqlQuery.value(7).toLongLong()
+                                  , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
+        }
     }
 
     transactionGuard.commit();
-
-    _bIsDirtyDB = false;
 
     emit historyCacheUpdated(cacheDatas);
 }

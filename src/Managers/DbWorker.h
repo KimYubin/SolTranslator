@@ -21,14 +21,17 @@ public:
 
     void initialize();
 
+private:
+    void initDB();
+
 public
 slots :
     void processAddHistory(const EngineType inEngineType
-                  , const LangType inSourceLang
-                  , const LangType inTargetLang
-                  , const QString& inOriginText
-                  , const QString& inTranslateText
-                  , const TextStyle inTextStyle);
+                         , const LangType inSourceLang
+                         , const LangType inTargetLang
+                         , const QString& inOriginText
+                         , const QString& inTranslateText
+                         , const TextStyle inTextStyle);
 
     void processDeleteHistory(const qint64 inDbId);
 
@@ -36,10 +39,10 @@ slots :
      * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
      */
     void processLookupHistory(const EngineType inEngineType
-                     , const QString& inOriginText
-                     , const LangType inSourceLang
-                     , const LangType inTargetLang
-                     , QObject* inContext);
+                            , const QString& inOriginText
+                            , const LangType inSourceLang
+                            , const LangType inTargetLang
+                            , QObject* inContext);
 
 private:
     std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
@@ -50,7 +53,7 @@ private:
 public:
 signals:
     void lookupFinished(const std::tuple<bool, QString>& inLookup
-                       , QObject* inContext);
+                      , QObject* inContext);
     void historyCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
 private:

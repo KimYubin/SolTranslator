@@ -22,7 +22,8 @@ const char* db_connectionName = "sol_db";
 } // anonymous namespace
 
 DbWorker::DbWorker(QObject* parent)
-    : QObject(parent), _dbUpdateTimer(nullptr)
+    : QObject(parent)
+    , _dbUpdateTimer(nullptr)
 {}
 
 DbWorker::~DbWorker()
@@ -36,6 +37,18 @@ DbWorker::~DbWorker()
 
 void DbWorker::initialize()
 {
+    initDB();
+
+    _dbUpdateTimer = new QTimer(this);
+    _dbUpdateTimer->setInterval(500);
+    _dbUpdateTimer->setSingleShot(true);
+    _dbUpdateTimer->callOnTimeout(this, &DbWorker::updateDbCache);
+
+    markDbDirty();
+}
+
+void DbWorker::initDB()
+{
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
     historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
     if (historyDB.open() == false)
@@ -46,9 +59,20 @@ void DbWorker::initialize()
 
     SolSqlTransactionGuard transactionGuard(historyDB);
 
-    auto errorDebugLog = [](const QString& inError) { solDebug << inError; return inError; };
-    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON").transform_error(errorDebugLog);
-    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL").transform_error(errorDebugLog);
+    bool isValidInitDB = true;
+
+    // To validate the remaining queries, do not stop even if an error occurs.
+    auto errorLogging = [&isValidInitDB](const QString& inError)
+    {
+        solDebug << inError;
+        isValidInitDB = false;
+        return inError;
+    };
+
+    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON")
+            .transform_error(errorLogging);
+    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL")
+            .transform_error(errorLogging);
 
     QStringList db_tables = {
         "history_data"
@@ -65,31 +89,22 @@ void DbWorker::initialize()
 
     for (QString& tableName : db_tables)
     {
-        const std::expected sqlExec = SolSql::execSqlFile(":/sql/create_" + tableName + ".sql");
-        if (sqlExec.has_value() == false)
-        {
-            solDebug << sqlExec.error();
-        }
+        SolSql::execSqlFile(":/sql/create_" + tableName + ".sql")
+                .transform_error(errorLogging);
     }
 
     for (QString& indexName : db_indexes)
     {
-        const std::expected sqlExec = SolSql::execSqlFile(":/sql/create_" + indexName + ".sql");
-        if (sqlExec.has_value() == false)
-        {
-            solDebug << sqlExec.error();
-        }
+        SolSql::execSqlFile(":/sql/create_" + indexName + ".sql")
+                .transform_error(errorLogging);
+    }
+
+    if (isValidInitDB == false)
+    {
+        return;
     }
 
     transactionGuard.commit();
-
-
-    _dbUpdateTimer = new QTimer(this);
-    _dbUpdateTimer->setInterval(500);
-    _dbUpdateTimer->setSingleShot(true);
-    _dbUpdateTimer->callOnTimeout(this, &DbWorker::updateDbCache);
-
-    markDbDirty();
 }
 
 namespace

@@ -17,7 +17,7 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
 
-void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
+void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     const QUrl url(sol::URLs::OPEN_AI);
     QNetworkRequest request(url);
@@ -27,9 +27,9 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     QJsonObject chatBodyJson;
 
     chatBodyJson["model"] = solConfig.getOpenAIModel();
-    if (bIsStreaming)
+    if (inIsStreaming)
     {
-        chatBodyJson["stream"] = bIsStreaming; // streaming
+        chatBodyJson["stream"] = inIsStreaming; // streaming
     }
     chatBodyJson["temperature"] = solConfig.getOpenAI_Temperature();
 
@@ -52,7 +52,7 @@ void OpenAiTrUnit::chatTranslate(const bool bIsStreaming)
     QJsonDocument doc(chatBodyJson);
     QByteArray data = doc.toJson();
 
-    post(request, data, bIsStreaming);
+    post(request, data, inIsStreaming);
 }
 
 void OpenAiTrUnit::requestTranslate()

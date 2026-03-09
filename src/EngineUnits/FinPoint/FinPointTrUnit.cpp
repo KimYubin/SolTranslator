@@ -17,9 +17,9 @@ FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
 
-void FinPointTrUnit::chatTranslate(const bool bIsStreaming)
+void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    const QUrl url(bDebugMode
+    const QUrl url(_isDebugMode
                        ? sol::URLs::FIN_POINT_DEBUG
                        : sol::URLs::FIN_POINT);
     QNetworkRequest request(url);
@@ -29,12 +29,12 @@ void FinPointTrUnit::chatTranslate(const bool bIsStreaming)
     jsonObj["sourceLang"] = Langs::GetEnglishName(_trReqData.sourceLang);
     jsonObj["targetLang"] = Langs::GetEnglishName(_trReqData.targetLang);
     jsonObj["originText"] = _trReqData.originText;
-    jsonObj["bIsStream"]  = bIsStreaming; // streaming
+    jsonObj["bIsStream"]  = inIsStreaming; // streaming
 
     const QJsonDocument doc(jsonObj);
     const QByteArray data = doc.toJson();
 
-    post(request, data, bIsStreaming);
+    post(request, data, inIsStreaming);
 }
 
 void FinPointTrUnit::requestTranslate()

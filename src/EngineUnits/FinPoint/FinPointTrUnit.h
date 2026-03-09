@@ -12,17 +12,17 @@ public:
     explicit FinPointTrUnit(TranslateManager* parent);
 
 protected:
-    void chatTranslate(const bool bIsStreaming);
+    void chatTranslate(const bool inIsStreaming);
 
     virtual void requestTranslate() override;
     virtual void onReadyRead() override;
     virtual void replyTranslateFinished() override;
 
 public:
-    void setDebugMode(const bool inDebugMode) { bDebugMode = inDebugMode; };
+    void setDebugMode(const bool inIsDebugMode) { _isDebugMode = inIsDebugMode; };
 
 private:
-    bool bDebugMode = false;
+    bool _isDebugMode = false;
 };
 
 

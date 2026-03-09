@@ -580,36 +580,36 @@ void PopupTranslateWidget::syncInOutScrollbar()
     }
 }
 
-void PopupTranslateWidget::onAlwaysOnToggle(bool checked)
+void PopupTranslateWidget::onAlwaysOnToggle(const bool inChecked)
 {
-    if (_AlwaysOnButton->isChecked() != checked)
+    if (_AlwaysOnButton->isChecked() != inChecked)
     {
-        _AlwaysOnButton->setChecked(checked);
+        _AlwaysOnButton->setChecked(inChecked);
     }
 
     manualSizeMode();
 
 #ifdef _WIN32
-    BOOL bIsSet = SetWindowPos(reinterpret_cast<HWND>(winId())
-                             , checked ? HWND_TOPMOST : HWND_NOTOPMOST
-                             , 0, 0, 0, 0
-                             , SWP_NOMOVE | SWP_NOSIZE);
+    const BOOL bIsSet = SetWindowPos(reinterpret_cast<HWND>(winId())
+                                   , inChecked ? HWND_TOPMOST : HWND_NOTOPMOST
+                                   , 0, 0, 0, 0
+                                   , SWP_NOMOVE | SWP_NOSIZE);
     if (bIsSet == false)
     {
-        solDebug << "AlwaysOn" << (checked ? "Top" : "NoTop") << "set failed";
+        solDebug << "AlwaysOn" << (inChecked ? "Top" : "NoTop") << "set failed";
     }
 #else
-    if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != checked)
+    if (windowFlags().testFlag(Qt::WindowStaysOnTopHint) != inChecked)
     {
-        setWindowFlag(Qt::WindowStaysOnTopHint, checked);
+        setWindowFlag(Qt::WindowStaysOnTopHint, inChecked);
         show();
     }
 #endif
 }
 
-void PopupTranslateWidget::onWindowModeToggle(bool checked)
+void PopupTranslateWidget::onWindowModeToggle(const bool inChecked)
 {
-    if (checked)
+    if (inChecked)
     {
         changeNormalWindowMode();
     }
@@ -631,7 +631,7 @@ void PopupTranslateWidget::changeNormalWindowMode()
     }
     _widgetModeFlags.setFlag(SolWidgetMode::PopupMode, false);
 
-    const bool bHasWModeBtnFocus = _windowModeButton->hasFocus();
+    const bool hasWModeBtnFocus = _windowModeButton->hasFocus();
     _windowModeButton->hide();
     if (_AlwaysOnButton->isHidden())
     {
@@ -639,7 +639,7 @@ void PopupTranslateWidget::changeNormalWindowMode()
     }
 
     // 대체되는 버튼에 포커스 이동.
-    if (bHasWModeBtnFocus)
+    if (hasWModeBtnFocus)
     {
         _AlwaysOnButton->setFocus(Qt::TabFocusReason);
     }
@@ -658,19 +658,19 @@ void PopupTranslateWidget::changePopupMode()
     }
 }
 
-void PopupTranslateWidget::setMaxNormal(const bool bMaximize)
+void PopupTranslateWidget::setMaxNormal(const bool inIsMaximize)
 {
-    _maxRestoreButton->setChecked(bMaximize);
+    _maxRestoreButton->setChecked(inIsMaximize);
 }
 
-void PopupTranslateWidget::onMaxNormalToggle(const bool bMaximize)
+void PopupTranslateWidget::onMaxNormalToggle(const bool inIsMaximize)
 {
-    if (_bMaximizedMode == bMaximize)
+    if (_bMaximizedMode == inIsMaximize)
     {
         return;
     }
 
-    if (bMaximize)
+    if (inIsMaximize)
     {
         manualSizeMode();
         changeNormalWindowMode();
@@ -686,7 +686,7 @@ void PopupTranslateWidget::onMaxNormalToggle(const bool bMaximize)
             showNormal();
         }
     }
-    _bMaximizedMode = bMaximize;
+    _bMaximizedMode = inIsMaximize;
 }
 
 void PopupTranslateWidget::onMinimized()
@@ -724,9 +724,9 @@ void PopupTranslateWidget::toggleTranslationText()
     ui->resultText->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }
 
-void PopupTranslateWidget::setShadowEffectEnabled(const bool bIsEnable)
+void PopupTranslateWidget::setShadowEffectEnabled(const bool inIsEnable)
 {
-    ui->bgFrame->graphicsEffect()->setEnabled(bIsEnable);
+    ui->bgFrame->graphicsEffect()->setEnabled(inIsEnable);
 }
 
 void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
@@ -812,8 +812,8 @@ void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
     {
         if (QWindow* win = windowHandle())
         {
-            const bool bSystemMove = win->startSystemMove();
-            if (bSystemMove == false)
+            const bool isSupportSystemMove = win->startSystemMove();
+            if (isSupportSystemMove == false)
             {
                 move(inMousePos - _dragPoint);
             }

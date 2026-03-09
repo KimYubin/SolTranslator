@@ -28,8 +28,8 @@ public:
     void executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo);
 
 protected:
-    void get(const QNetworkRequest& request);
-    void post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming);
+    void get(const QNetworkRequest& inRequest);
+    void post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming);
 
 private:
     void postProcess();

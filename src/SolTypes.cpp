@@ -109,18 +109,18 @@ QString SolPaths::getHistoryDBFilePath()
 }
 
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
-                       , const bool inIgnoreCache
-                       , const EngineType inEngineType
-                       , const QString& inOriginText
-                       , const TextStyle inTextFormat
-                       , const LangType inSourceLang
-                       , const LangType inTargetLang
-                       , QObject* inCompleteContext
-                       , std::move_only_function<void(const QString&)>&& inFuncComplete
-                       , QObject* inStreamContext
-                       , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
+                                         , const bool inIsIgnoreCache
+                                         , const EngineType inEngineType
+                                         , const QString& inOriginText
+                                         , const TextStyle inTextFormat
+                                         , const LangType inSourceLang
+                                         , const LangType inTargetLang
+                                         , QObject* inCompleteContext
+                                         , std::move_only_function<void(const QString&)>&& inFuncComplete
+                                         , QObject* inStreamContext
+                                         , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
     : trDisplayWidget(inTrDisplayWidget)
-    , bIgnoreCache(inIgnoreCache)
+    , isIgnoreCache(inIsIgnoreCache)
     , engineType(inEngineType)
     , originText(inOriginText)
     , textFormat(inTextFormat)

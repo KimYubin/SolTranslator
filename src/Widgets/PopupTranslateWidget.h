@@ -92,20 +92,20 @@ private:
     void syncInOutScrollbar();
 
 protected:
-    void onAlwaysOnToggle(bool checked);
-    void onWindowModeToggle(bool checked);
+    void onAlwaysOnToggle(const bool inChecked);
+    void onWindowModeToggle(const bool inChecked);
 
     void changeNormalWindowMode();
     void changePopupMode();
 
-    void setMaxNormal(const bool bMaximize);
-    void onMaxNormalToggle(const bool bMaximize);
+    void setMaxNormal(const bool inIsMaximize);
+    void onMaxNormalToggle(const bool inIsMaximize);
 
     void onMinimized();
 
     void toggleTranslationText();
 
-    void setShadowEffectEnabled(const bool bIsEnable);
+    void setShadowEffectEnabled(const bool inIsEnable);
 
 protected slots:
     void detectFocusInOut(QWidget* old, QWidget* now);

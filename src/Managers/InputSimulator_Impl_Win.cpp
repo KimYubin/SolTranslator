@@ -43,8 +43,8 @@ void ReleaseAllKeysOnPressedControlKey()
 
     for (int vkey = 0; vkey < KeyCount; ++vkey)
     {
-        const bool pressed = (GetAsyncKeyState(vkey) & (1 << 15)) != 0;
-        if (vkey != VK_CONTROL && pressed)
+        const bool isPressed = (GetAsyncKeyState(vkey) & (1 << 15)) != 0;
+        if (vkey != VK_CONTROL && isPressed)
         {
             inputs.push_back(make_INPUT(INPUT_KEYBOARD, vkey, KEYEVENTF_KEYUP));
         }

@@ -53,15 +53,15 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& 
     }
 
     // string 기반 enum과 class 매칭 유효성 검사
-    bool bValid = false;
+    bool isValidEngineName = false;
     if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
     {
         if (magic_enum::enum_name(currentEngine).find(className))
         {
-            bValid = true;
+            isValidEngineName = true;
         }
     }
-    if (bValid == false)
+    if (isValidEngineName == false)
     {
         solDebug << "Invalid engine type";
     }

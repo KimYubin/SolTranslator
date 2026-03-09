@@ -166,7 +166,7 @@ SolMainWidget::~SolMainWidget()
     delete ui;
 }
 
-void SolMainWidget::setVisible(bool visible)
+void SolMainWidget::setVisible(const bool visible)
 {
     if (visible)
     {

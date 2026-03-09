@@ -39,7 +39,7 @@ public:
     explicit SolMainWidget(QWidget* parent = nullptr);
     ~SolMainWidget() override;
 
-    virtual void setVisible(bool visible) override;
+    virtual void setVisible(const bool visible) override;
 
     void showSettingsWidget();
 

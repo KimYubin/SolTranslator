@@ -10,19 +10,19 @@
 
 bool sol::isThis(const QObject* inThis, const QObject* inOther)
 {
-    bool bIsOtherThis = false;
+    bool isOtherThis = false;
 
     const QObject* parentObj = inOther;
     while (parentObj != nullptr)
     {
         if (parentObj == inThis)
         {
-            bIsOtherThis = true;
+            isOtherThis = true;
             break;
         }
         parentObj = parentObj->parent();
     }
-    return bIsOtherThis;
+    return isOtherThis;
 }
 
 namespace

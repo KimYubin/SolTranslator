@@ -36,7 +36,7 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
         return;
     }
 
-    if (_trReqData.bIgnoreCache)
+    if (_trReqData.isIgnoreCache)
     {
         requestTranslate();
         return;
@@ -74,17 +74,17 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
         });
 }
 
-void TranslateUnit::get(const QNetworkRequest& request)
+void TranslateUnit::get(const QNetworkRequest& inRequest)
 {
-    _reply = solCore->translateManager()->getNetworkAccessManager()->get(request);
+    _reply = solCore->translateManager()->getNetworkAccessManager()->get(inRequest);
     postProcess();
 }
 
-void TranslateUnit::post(const QNetworkRequest& request, const QByteArray& data, const bool bIsStreaming)
+void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming)
 {
-    _reply = solCore->translateManager()->getNetworkAccessManager()->post(request, data);
+    _reply = solCore->translateManager()->getNetworkAccessManager()->post(inRequest, inPayload);
 
-    if (bIsStreaming)
+    if (inIsStreaming)
     {
         connect(_reply, &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
     }
@@ -178,11 +178,11 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
     if (HistoryManager* historyManager = solCore->historyManager())
     {
         historyManager->asyncAddHistory(_trReqData.engineType
-                                 , _trReqData.sourceLang
-                                 , _trReqData.targetLang
-                                 , _trReqData.originText
-                                 , inTranslatedText
-                                 , _trReqData.textFormat);
+                                      , _trReqData.sourceLang
+                                      , _trReqData.targetLang
+                                      , _trReqData.originText
+                                      , inTranslatedText
+                                      , _trReqData.textFormat);
     }
 }
 

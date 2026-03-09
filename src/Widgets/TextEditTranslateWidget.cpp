@@ -70,8 +70,8 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     // 언어 교환 버튼
-    const bool bIsAuto = (solConfig.getTextSrcLang() == LangType::AUTO);
-    ui->languageSwapButton->setEnabled(bIsAuto == false);
+    const bool isAuto = (solConfig.getTextSrcLang() == LangType::AUTO);
+    ui->languageSwapButton->setEnabled(isAuto == false);
     ui->languageSwapButton->setFocusPolicy(Qt::TabFocus);
     ui->languageSwapButton->setAccessibleName(tr("언어 바꾸기"));
     ui->languageSwapButton->setAccessibleDescription(tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다."));
@@ -206,8 +206,8 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
 
 void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType) const
 {
-    const bool bIsAuto = (inlangType == LangType::AUTO);
-    ui->languageSwapButton->setEnabled(bIsAuto == false);
+    const bool isAuto = (inlangType == LangType::AUTO);
+    ui->languageSwapButton->setEnabled(isAuto == false);
 
     if (solConfig.getTextSrcLang() != inlangType)
     {

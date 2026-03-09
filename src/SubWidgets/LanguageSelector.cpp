@@ -228,7 +228,7 @@ void LanguageSelectorMenuPrivate::closeMenuPopup()
 bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 {
     const QEvent::Type eventType = event->type();
-    bool bIsCloseEvent = (eventType == QEvent::NonClientAreaMouseButtonPress);
+    bool isCloseEvent = (eventType == QEvent::NonClientAreaMouseButtonPress);
 
     if (eventType == QEvent::MouseButtonPress)
     {
@@ -238,23 +238,23 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
             const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();
 
             // 마우스가 메뉴 위에 있는지 확인
-            const QPoint menuGlobalPos     = mapToGlobal(QPoint(0, 0));
-            const QRect menuGlobalRect     = QRect(menuGlobalPos, size());
-            const bool bIsMenuContainMouse = menuGlobalRect.contains(mouseGlobalPos);
+            const QPoint menuGlobalPos    = mapToGlobal(QPoint(0, 0));
+            const QRect menuGlobalRect    = QRect(menuGlobalPos, size());
+            const bool isMenuContainMouse = menuGlobalRect.contains(mouseGlobalPos);
 
             // 마우스가 드롭다운 버튼 위에 있는지 확인
-            bool bIsButtonContainMouse = false;
+            bool isButtonContainMouse = false;
             if (const QPushButton* dropButton = _langSelector ? _langSelector->_button : nullptr)
             {
                 const QPoint buttonGlobalPos = dropButton->mapToGlobal(QPoint(0, 0));
                 const QRect buttonGlobalRect = QRect(buttonGlobalPos, dropButton->size());
 
-                bIsButtonContainMouse = buttonGlobalRect.contains(mouseGlobalPos);
+                isButtonContainMouse = buttonGlobalRect.contains(mouseGlobalPos);
             }
 
-            if (bIsMenuContainMouse == false && bIsButtonContainMouse == false)
+            if (isMenuContainMouse == false && isButtonContainMouse == false)
             {
-                bIsCloseEvent = true;
+                isCloseEvent = true;
             }
         }
     }
@@ -265,7 +265,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
         // esc 종료
         if (pressedKey == Qt::Key_Escape)
         {
-            bIsCloseEvent = true;
+            isCloseEvent = true;
         }
         // 탭 순환
         else if (pressedKey == Qt::Key_Tab)
@@ -284,7 +284,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
     }
 
     // 클릭 위치가 외부이거나 esc키를 눌렀다면 닫음. Popup 행동
-    if (bIsCloseEvent)
+    if (isCloseEvent)
     {
         closeMenuPopup();
         event->accept();

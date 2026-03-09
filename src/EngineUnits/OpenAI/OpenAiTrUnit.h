@@ -14,7 +14,7 @@ public:
     explicit OpenAiTrUnit(TranslateManager* parent);
 
 protected:
-    void chatTranslate(const bool bIsStreaming);
+    void chatTranslate(const bool inIsStreaming);
 
     virtual void requestTranslate() override;
     virtual void onReadyRead() override;

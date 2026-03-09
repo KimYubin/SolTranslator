@@ -125,7 +125,7 @@ struct TranslateRequestInfo
      * 번역 요청에 필요한 정보를 모아놓은 구조체입니다.
      * 
      * @param inTrDisplayWidget trUnit의 번역값을 표기하는 ITranslateWidget입니다.
-     * @param inIgnoreCache true면 캐시에서 찾지 않고 번역을 요청합니다. 재번역시 사용됩니다.
+     * @param inIsIgnoreCache true면 캐시에서 찾지 않고 번역을 요청합니다. 재번역시 사용됩니다.
      * @param inEngineType 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
      * @param inOriginText 번역 원문
      * @param inTextFormat 원문 텍스트의 종류.
@@ -137,7 +137,7 @@ struct TranslateRequestInfo
      * @param inFuncStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
      */
     TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
-                       , const bool inIgnoreCache
+                       , const bool inIsIgnoreCache
                        , const EngineType inEngineType
                        , const QString& inOriginText
                        , const TextStyle inTextFormat
@@ -149,7 +149,7 @@ struct TranslateRequestInfo
                        , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming = std::nullopt);
 
     QPointer<ITranslateWidget> trDisplayWidget;
-    bool bIgnoreCache;
+    bool isIgnoreCache;
     EngineType engineType;
     QString originText;
     TextStyle textFormat;

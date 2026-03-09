@@ -35,47 +35,43 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
         completeTranslatedText(_trReqData.originText);
         return;
     }
-    HistoryManager* historyManager = solCore->historyManager();
-    if (_trReqData.bIgnoreCache == false && historyManager != nullptr)
+
+    if (_trReqData.bIgnoreCache)
     {
-        /*
-        auto [bIsFind, findCache] = historyManager->lookupHistory(_trReqData.engineType
-                                                                , _trReqData.originText
-                                                                , _trReqData.sourceLang
-                                                                , _trReqData.targetLang);
-        if (bIsFind)
-        {
-            completeTranslatedText(findCache);
-            return;
-        }
-        */
-        historyManager->asyncLookupHistory(
-            _trReqData.engineType
-          , _trReqData.originText
-          , _trReqData.sourceLang
-          , _trReqData.targetLang
-          , this
-          , [inThis = QPointer{this}, this](const std::tuple<bool, QString>& inRes)
-            {
-                if (inThis.isNull())
-                {
-                    solDebug << "The trUnit was destroyed before the database search was completed.";
-                    return;
-                }
-                auto [isFind, findCache] = inRes;
-                if (isFind)
-                {
-                    completeTranslatedText(findCache);
-                }
-                else
-                {
-                    requestTranslate();
-                }
-            });
+        requestTranslate();
+        return;
     }
 
-    // to subclass
-    // requestTranslate();
+    HistoryManager* historyManager = solCore->historyManager();
+    if (historyManager == nullptr)
+    {
+        solDebug << "historyManager is null";
+        return;
+    }
+
+    historyManager->asyncLookupHistory(
+        _trReqData.engineType
+      , _trReqData.originText
+      , _trReqData.sourceLang
+      , _trReqData.targetLang
+      , this
+      , [inThis = QPointer{this}, this](const std::tuple<bool, QString>& inRes)
+        {
+            if (inThis.isNull())
+            {
+                solDebug << "The trUnit was destroyed before the database lookup was completed.";
+                return;
+            }
+            auto [isFind, findCache] = inRes;
+            if (isFind)
+            {
+                completeTranslatedText(findCache);
+            }
+            else
+            {
+                requestTranslate();
+            }
+        });
 }
 
 void TranslateUnit::get(const QNetworkRequest& request)

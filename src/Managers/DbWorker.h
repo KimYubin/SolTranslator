@@ -36,7 +36,7 @@ slots :
     void processDeleteHistory(const qint64 inDbId);
 
     /**
-     * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
+     * Lookup translation history, and if found, update the most recent history.
      */
     void processLookupHistory(const EngineType inEngineType
                             , const QString& inOriginText
@@ -61,7 +61,12 @@ private:
 
     void markDbDirty();
 
+    /**
+     * Run wal_checkpoint. If processed with TRUNCATE, it may take more time.
+     * @param inIsTRUNCATE If true, processed with TRUNCATE; otherwise with PASSIVE.
+     */
     void runCheckpoint(const bool inIsTRUNCATE = false);
+
     /**
      * 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
      * emit historyCacheUpdated

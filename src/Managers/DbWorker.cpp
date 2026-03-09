@@ -57,8 +57,6 @@ void DbWorker::initDB()
         return;
     }
 
-    SolSqlTransactionGuard transactionGuard(historyDB);
-
     bool isValidInitDB = true;
 
     // To validate the remaining queries, do not stop even if an error occurs.
@@ -69,10 +67,13 @@ void DbWorker::initDB()
         return inError;
     };
 
+    // Do not modify inside a transaction.
     SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON")
             .transform_error(errorLogging);
     SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL")
             .transform_error(errorLogging);
+
+    SolSqlTransactionGuard transactionGuard(historyDB);
 
     QStringList db_tables = {
         "history_data"

@@ -371,16 +371,13 @@ void SolMainWidget::createTrayIcon()
 
 void SolMainWidget::setupShortcuts()
 {
-    const QShortcut* closeShortcut
-            = new QShortcut(solConfig.shortcut(Action::MainClose), this);
-    connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
+    const QShortcut* closeWidget = new QShortcut(solConfig.shortcut(Action::MainClose), this);
+    connect(closeWidget, &QShortcut::activated, this, &QWidget::close);
 
-    const QShortcut* nextTab
-            = new QShortcut(solConfig.shortcut(Action::MainNextTab), this);
+    const QShortcut* nextTab = new QShortcut(solConfig.shortcut(Action::MainNextTab), this);
     connect(nextTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Next); });
 
-    const QShortcut* prvTab
-            = new QShortcut(solConfig.shortcut(Action::MainPrevTab), this);
+    const QShortcut* prvTab = new QShortcut(solConfig.shortcut(Action::MainPrevTab), this);
     connect(prvTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Previous); });
 
 }

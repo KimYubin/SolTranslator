@@ -9,6 +9,7 @@
 
 #include <QHotkey>
 
+#include "ConfigManager.h"
 #include "SolUtilibrary.h"
 #include "TranslateManager.h"
 #include "SolTypes.h"
@@ -16,6 +17,16 @@
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
     : AbstractManager(parent)
 {}
+
+void GlobalHotKeyManager::registerAction(const Action inShortCutType
+                                       , const QObject* inContext
+                                       , std::move_only_function<void()>&& inFunction)
+{
+    registerHotKey(inShortCutType
+                 , solConfig.shortcut(inShortCutType)
+                 , inContext
+                 , std::move(inFunction));
+}
 
 void GlobalHotKeyManager::registerHotKey(const Action inShortCutType
                                        , const QKeySequence& inKeySeq

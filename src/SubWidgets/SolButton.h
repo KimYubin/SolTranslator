@@ -4,6 +4,10 @@
 #define SOLTRANSLATOR_SOLPUSHBUTTON_H
 #include <QPushButton>
 
+#include "SolTypes.h"
+
+
+enum class Action;
 
 class SolButton : public QPushButton
 {
@@ -23,12 +27,16 @@ public:
     {}
 
     void setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
+    void setToolTipAction(const QString& inToolTip, const Action inAction = Action::None);
 
     void setCheckIcon(const QString& inOnFileName, const QString& inOffFileName);
 
     void setCheckToolTipShortcut(const QString& inOnToolTip
                                , const QString& inOffToolTip
                                , const QKeySequence& inKey = QKeySequence());
+    void setCheckToolTipAction(const QString& inOnToolTip
+                             , const QString& inOffToolTip
+                             , const Action inAction = Action::None);
 
     /**
      * 

@@ -18,7 +18,7 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_
     SolButton* copyButton = new SolButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));
     copyButton->setFocusPolicy(Qt::TabFocus);
-    copyButton->setToolTipShortcut(tr("번역 복사"), solConfig.shortcut(Action::DocCopyButton));
+    copyButton->setToolTipAction(tr("번역 복사"), Action::DocCopyButton);
 
     connect(copyButton, &SolButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
     {

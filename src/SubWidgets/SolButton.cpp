@@ -4,6 +4,8 @@
 
 #include "SolToolTip.h"
 
+#include "Managers/ConfigManager.h"
+
 namespace
 {
 QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
@@ -24,6 +26,11 @@ void SolButton::setToolTipShortcut(const QString& inToolTip, const QKeySequence&
     SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey.toString()));
 }
 
+void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction)
+{
+    setToolTipShortcut(inToolTip, solConfig.shortcut(inAction));
+}
+
 void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFileName)
 {
     QIcon checkIcon;
@@ -41,6 +48,13 @@ void SolButton::setCheckToolTipShortcut(const QString& inOnToolTip
     SolTooltipFilter::setCheckableButtonToolTip(this
                                               , toolTipShortcut(inOnToolTip, inKey.toString())
                                               , toolTipShortcut(inOffToolTip, inKey.toString()));
+}
+
+void SolButton::setCheckToolTipAction(const QString& inOnToolTip
+                                    , const QString& inOffToolTip
+                                    , const Action inAction)
+{
+    setCheckToolTipShortcut(inOnToolTip, inOffToolTip, solConfig.shortcut(inAction));
 }
 
 void SolButton::changeShortcut(const QKeySequence& inKey)

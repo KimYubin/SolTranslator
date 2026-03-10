@@ -42,6 +42,8 @@ public:
     SolMainWidget* solMainWidget() const { return _solMainWidget; }
 
 private:
+    void postInitialize();
+
     static SolTranslatorCore* _self;
 
     DataManager* _dataManager;

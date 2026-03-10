@@ -89,6 +89,11 @@ public:
     void setHistoryTimeFormat(const QString& inFormat);
     QString getHistoryTimeFormat();
 
+    // ~======================
+    // shortcut
+    void setShortCut(const ShortCutType inShortCut, const QKeySequence& inKeySequence);
+    QKeySequence getShortCut(const ShortCutType inShortCut);
+
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;
     std::tuple<bool, QByteArray> getSaveGeometry(const QAnyStringView& inKey) const;

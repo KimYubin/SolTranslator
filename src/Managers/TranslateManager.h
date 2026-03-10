@@ -5,9 +5,10 @@
 
 
 #include "AbstractManager.h"
-#include "SolTypes.h"
 
 
+enum class TextStyle;
+struct TranslateRequestInfo;
 class QNetworkAccessManager;
 class QTextEdit;
 class TranslateUnit;
@@ -21,6 +22,7 @@ class TranslateManager : public AbstractManager
 
 public:
     explicit TranslateManager(SolTranslatorCore* parent);
+    virtual void postInitialize() override;
 
     TranslateUnit* executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
 
@@ -33,6 +35,8 @@ public:
     QNetworkAccessManager* getNetworkAccessManager() const { return _networkAccessManager; };
 
 private:
+    void processPopupTranslate();
+
     QNetworkAccessManager* _networkAccessManager;
 
 };

@@ -20,18 +20,19 @@ class GlobalHotKeyManager : public AbstractManager
 public:
     explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
-private:
-    void registerHotKey(ShortCutType inHotkey, const QKeySequence& inShortcut, const QObject* inContext, std::move_only_function<void(void)>&& inFunction);
+    void registerHotKey(const ShortCutType inShortCutType
+                      , const QKeySequence& inKeySeq
+                      , const QObject* inContext
+                      , std::move_only_function<void(void)>&& inFunction);
 
-    std::expected<void, QString> changeShortcut(ShortCutType inHotkey, const QKeySequence& shortcut);
+    std::expected<void, QString> changeHotkey(const ShortCutType inShortCutType
+                                            , const QKeySequence& inKeySeq);
 
-public:
-    void fireSimpleTranslate();
+    std::expected<void, QString> removeHotkey(const ShortCutType inShortCutType);
 
 private:
     std::unordered_map<ShortCutType, QHotkey*> hotKeys;
 };
-
 
 
 #endif //GLOBALHOTKEYMANAGER_H

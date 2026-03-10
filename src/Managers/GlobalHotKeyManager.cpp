@@ -2,139 +2,66 @@
 
 #include "GlobalHotKeyManager.h"
 
-#include <QApplication>
 #include <QClipboard>
 #include <QKeyEvent>
-#include <QMimeData>
-#include <QRegularExpression>
-#include <QTextDocument>
 #include <QThread>
 #include <QTimer>
-#include <QWindow>
 
 #include <QHotkey>
 
-#include "SolTranslatorCore.h"
-#include "InputSimulator.h"
 #include "SolUtilibrary.h"
 #include "TranslateManager.h"
+#include "SolTypes.h"
 
-GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractManager(parent)
-{
-    registerHotKey(ShortCutType::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C), this, [this]() { fireSimpleTranslate(); });
-}
+GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
+    : AbstractManager(parent)
+{}
 
-void GlobalHotKeyManager::registerHotKey(const ShortCutType inShortCut
-                                       , const QKeySequence& inShortcut
+void GlobalHotKeyManager::registerHotKey(const ShortCutType inShortCutType
+                                       , const QKeySequence& inKeySeq
                                        , const QObject* inContext
                                        , std::move_only_function<void()>&& inFunction)
 {
-    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCut);
+    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
 
     QHotkey* hotkey;
     if (findIt == hotKeys.end())
     {
-        hotkey = new QHotkey{inShortcut, true, this};
-        hotKeys[inShortCut] = hotkey;
+        hotkey = new QHotkey{inKeySeq, true, this};
+        hotKeys[inShortCutType] = hotkey;
     }
     else
     {
         hotkey = findIt->second;
-        hotkey->setShortcut(inShortcut, true);
+        hotkey->setShortcut(inKeySeq, true);
     }
 
     connect(hotkey, &QHotkey::activated, inContext, std::move(inFunction));
 }
 
-std::expected<void, QString> GlobalHotKeyManager::changeShortcut(ShortCutType inHotkey, const QKeySequence& shortcut)
+std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const ShortCutType inShortCutType, const QKeySequence& inKeySeq)
 {
-    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inHotkey);
+    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
     if (findIt == hotKeys.end())
     {
-        return std::unexpected("not found registered hotkeys:" + sol::enumToQStr(inHotkey) + shortcut.toString());
+        return std::unexpected("not found registered hotkeys: " + sol::enumToQStr(inShortCutType) + inKeySeq.toString());
     }
 
-    findIt->second->setShortcut(shortcut, true);
+    findIt->second->setShortcut(inKeySeq, true);
 
     return {};
 }
 
-void GlobalHotKeyManager::fireSimpleTranslate()
+std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const ShortCutType inShortCutType)
 {
-    const QMimeData* prevClipboard = QApplication::clipboard()->mimeData();
-    const QStringList formatsList = prevClipboard->formats();
-
-    std::unique_ptr<QMimeData> prevMime = std::make_unique<QMimeData>();
-
-    for (const QString& prevFormat : formatsList)
+    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
+    if (findIt == hotKeys.end())
     {
-        prevMime->setData(prevFormat, prevClipboard->data(prevFormat));
+        return std::unexpected("not existent shortcut remove: " + sol::enumToQStr(inShortCutType));
     }
 
-    // 클립보드 갱신(복사) 대기
-    QMetaObject::Connection clipboardConnection
-        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](QClipboard::Mode mode) mutable
-    {
-        const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
+    findIt->second->deleteLater();
+    hotKeys.erase(findIt);
 
-        if (selectedMime == nullptr || selectedMime->hasText() == false)
-        {
-            return;
-        }
-
-        switch (mode)
-        {
-        case QClipboard::Clipboard:
-        {
-            // 번역 실행
-            if (selectedMime->hasHtml())
-            {
-                solCore->translateManager()->translateAtPopup(selectedMime->html(), TextStyle::Html);
-            }
-            else
-            {
-                solCore->translateManager()->translateAtPopup(selectedMime->text(), TextStyle::PlainText);
-            }
-
-            // 이전 클립보드 원상복구. 클립보드 clear() 대기
-            if (prevMimeChanged->text() == selectedMime->text())
-            {
-                break;
-            }
-
-            connect(QApplication::clipboard(), &QClipboard::dataChanged, this, [this, prevMimeDataChanged = std::move(prevMimeChanged)]() mutable
-            {
-                QTimer::singleShot(100, this, [this, prevMimeTimer = std::move(prevMimeDataChanged)]()
-                {
-                    QMimeData* copyMimeData = new QMimeData;
-
-                    const QStringList formatsList = prevMimeTimer->formats();
-                    for (const QString& prevFormat : formatsList)
-                    {
-                        copyMimeData->setData(prevFormat, prevMimeTimer->data(prevFormat));
-                    }
-                    // Transfer ownership
-                    QApplication::clipboard()->setMimeData(copyMimeData);
-                });
-            }, Qt::SingleShotConnection);
-
-            QApplication::clipboard()->clear();
-
-            break;
-        }
-        case QClipboard::Selection: break;
-        case QClipboard::FindBuffer: break;
-        default: ;
-        }
-    }, Qt::SingleShotConnection);
-
-    // 연결 대기 시간 제한.
-    // 비어있는 복사와 무제한 대기를 방지합니다.
-    QTimer::singleShot(500, this, [clipboardConnection]()
-    {
-        disconnect(clipboardConnection);
-    });
-
-    // 복사 실행
-    InputSimulator::triggerCopy();
+    return {};
 }

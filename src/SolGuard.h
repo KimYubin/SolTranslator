@@ -3,10 +3,11 @@
 #ifndef SOLTRANSLATOR_SOLGUARD_H
 #define SOLTRANSLATOR_SOLGUARD_H
 
-#include <QPainter>
 #include <qtclasshelpermacros.h>
 
 #include <functional>
+
+class QPainter;
 
 /**
  * RAII 스타일 가드 클래스입니다.
@@ -54,12 +55,7 @@ class PainterPenStateGuard : public SolGeneralGuard
 {
 public:
     Q_NODISCARD_CTOR
-    explicit PainterPenStateGuard(QPainter* inPainter)
-        : SolGeneralGuard([inPainter, prvPen = inPainter->pen()]()
-        {
-            inPainter->setPen(prvPen);
-        })
-    {}
+    explicit PainterPenStateGuard(QPainter* inPainter);
 };
 
 
@@ -71,12 +67,7 @@ class PainterFontStateGuard : public SolGeneralGuard
 {
 public:
     Q_NODISCARD_CTOR
-    explicit PainterFontStateGuard(QPainter* inPainter)
-        : SolGeneralGuard([inPainter, prevFont = inPainter->font()]()
-        {
-            inPainter->setFont(prevFont);
-        })
-    {}
+    explicit PainterFontStateGuard(QPainter* inPainter);
 };
 
 

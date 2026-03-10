@@ -2,8 +2,12 @@
 
 #include "AbstractManager.h"
 
+#include "SolLog.h"
 #include "SolTranslatorCore.h"
 
 AbstractManager::AbstractManager(SolTranslatorCore* parent) : QObject(parent)
+{}
+
+void AbstractManager::postInitialize()
 {}
 

@@ -14,6 +14,7 @@ class AbstractManager : public QObject
 public:
     explicit AbstractManager(SolTranslatorCore* parent);
 
+    virtual void postInitialize();
 };
 
 

@@ -238,6 +238,24 @@ QString ConfigManager::getHistoryTimeFormat()
     return _settings->value(TimeFormat + HistoryFormat, "yyyy/MM/dd (ddd) hh:mm").toString();
 }
 
+namespace
+{
+std::unordered_map<ShortCutType, QKeySequence> defaultShortCuts
+{
+    {ShortCutType::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C)}
+};
+
+} // anonymous namespace
+void ConfigManager::setShortCut(const ShortCutType inShortCut, const QKeySequence& inKeySequence)
+{
+    _settings->setValue("shortcut/" + sol::enumToQStr(inShortCut), inKeySequence);
+}
+
+QKeySequence ConfigManager::getShortCut(const ShortCutType inShortCut)
+{
+    return _settings->value("shortcut/" + sol::enumToQStr(inShortCut), defaultShortCuts[inShortCut]).value<QKeySequence>();
+}
+
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const
 {
     _settings->setValue(inKey, inGeoData);

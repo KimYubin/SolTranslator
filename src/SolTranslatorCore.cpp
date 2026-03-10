@@ -66,7 +66,19 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 #ifdef QT_DEBUG
     // WidgetInspector* inspector = new WidgetInspector();
 #endif
+
+    postInitialize();
 }
 
 SolTranslatorCore::~SolTranslatorCore()
 {}
+
+
+void SolTranslatorCore::postInitialize()
+{
+    QList<AbstractManager*> managers = findChildren<AbstractManager*>();
+    for (AbstractManager* mng : managers)
+    {
+        mng->postInitialize();
+    }
+}

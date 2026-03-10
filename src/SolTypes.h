@@ -163,11 +163,27 @@ struct TranslateRequestInfo
 };
 
 
-enum class ShortCut
+enum class Action
 {
     None
 
   , PopupTranslate
+
+  , SettingsOpen
+  , SettingsClose
+  , MainClose
+  , MainNextTab
+  , MainPrevTab
+  , HistoryToggle
+  , DocCopyButton
+
+  , PopupAlwaysOn
+  , PopupWindowMode
+  , PopupMinimize
+  , PopupMaxRestore
+
+  , PopupClose
+  , PopupToggle
 
   , Size
 };

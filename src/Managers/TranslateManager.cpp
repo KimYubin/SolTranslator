@@ -33,8 +33,8 @@ TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(p
 void TranslateManager::postInitialize()
 {
     // global popup translate
-    solCore->globalHotKeyManager()->registerHotKey(ShortCut::PopupTranslate
-                                                 , QKeySequence(Qt::ALT | Qt::Key_C)
+    solCore->globalHotKeyManager()->registerHotKey(Action::PopupTranslate
+                                                 , solConfig.shortcut(Action::PopupTranslate)
                                                  , this
                                                  , [this]() { processPopupTranslate(); });
 

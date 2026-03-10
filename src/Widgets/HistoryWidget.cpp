@@ -21,6 +21,7 @@
 #include "HistoryModel.h"
 #include "SolMainWidget.h"
 
+#include "Managers/ConfigManager.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 
@@ -102,7 +103,7 @@ void HistoryWidget::setupUI()
         SolButton* textToggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
                                                                        , Qt::TabFocus
                                                                        , tr("원문/번역 토글")
-                                                                       , Qt::Key_T
+                                                                       , solConfig.shortcut(Action::HistoryToggle)
                                                                        , 0
                                                                        , Qt::AlignLeft);
 

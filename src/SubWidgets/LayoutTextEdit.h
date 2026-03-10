@@ -32,11 +32,11 @@ public:
 
     /** add button at layout bottm */
     SolButton* addBottomButton(const QIcon& inIcon
-                                 , const Qt::FocusPolicy policy
-                                 , const QString& inToolTip
-                                 , const QKeySequence& inKey       = QKeySequence()
-                                 , const int inStretch             = 0
-                                 , const Qt::Alignment inAlignment = Qt::Alignment());
+                             , const Qt::FocusPolicy policy
+                             , const QString& inToolTip
+                             , const QKeySequence& inKey       = QKeySequence()
+                             , const int inStretch             = 0
+                             , const Qt::Alignment inAlignment = Qt::Alignment());
 
 protected:
     QWidget* _bottomLayoutWidget;

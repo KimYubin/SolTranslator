@@ -11,12 +11,14 @@
 #include "SolToast.h"
 #include "SolToolTip.h"
 
+#include "Managers/ConfigManager.h"
+
 SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
 {
     SolButton* copyButton = new SolButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));
     copyButton->setFocusPolicy(Qt::TabFocus);
-    copyButton->setToolTipShortcut(tr("번역 복사"), Qt::Key_C);
+    copyButton->setToolTipShortcut(tr("번역 복사"), solConfig.shortcut(Action::DocCopyButton));
 
     connect(copyButton, &SolButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
     {

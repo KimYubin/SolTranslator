@@ -138,7 +138,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     ui->settingsButton->setCheckable(false);
     ui->settingsButton->setText(tr("설정"));
     ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
-    ui->settingsButton->setShortcut(QKeySequence(Qt::Key_F5));
+    ui->settingsButton->setShortcut(solConfig.shortcut(Action::SettingsOpen));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
     connect(ui->settingsButton, &QAbstractButton::clicked, this, &SolMainWidget::showSettingsWidget);
 
@@ -371,13 +371,16 @@ void SolMainWidget::createTrayIcon()
 
 void SolMainWidget::setupShortcuts()
 {
-    const QShortcut* closeShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_W), this);
+    const QShortcut* closeShortcut
+            = new QShortcut(solConfig.shortcut(Action::MainClose), this);
     connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
 
-    const QShortcut* nextTab = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Tab), this);
+    const QShortcut* nextTab
+            = new QShortcut(solConfig.shortcut(Action::MainNextTab), this);
     connect(nextTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Next); });
 
-    const QShortcut* prvTab = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab), this);
+    const QShortcut* prvTab
+            = new QShortcut(solConfig.shortcut(Action::MainPrevTab), this);
     connect(prvTab, &QShortcut::activated, this, [this]() { moveTab(TabMovement::Previous); });
 
 }

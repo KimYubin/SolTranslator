@@ -91,8 +91,8 @@ public:
 
     // ~======================
     // shortcut
-    void setShortCut(const ShortCut inShortCut, const QKeySequence& inKeySequence);
-    QKeySequence getShortCut(const ShortCut inShortCut);
+    void setShortCut(const Action inShortCut, const QKeySequence& inKeySequence);
+    QKeySequence shortcut(const Action inShortCut);
 
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;

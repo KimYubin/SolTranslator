@@ -240,22 +240,38 @@ QString ConfigManager::getHistoryTimeFormat()
 
 namespace
 {
-std::unordered_map<ShortCut, QKeySequence> defaultShortCuts
+const std::unordered_map<Action, QKeySequence> defaultShortCuts
 {
-    {ShortCut::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C)}
+    {Action::None, QKeySequence()}
+  , {Action::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C)}
+  , {Action::SettingsClose, QKeySequence(Qt::CTRL | Qt::Key_W)}
+  , {Action::SettingsOpen, QKeySequence(Qt::Key_F5)}
+  , {Action::MainClose, QKeySequence(Qt::CTRL | Qt::Key_W)}
+  , {Action::MainNextTab, QKeySequence(Qt::CTRL | Qt::Key_Tab)}
+  , {Action::MainPrevTab, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab)}
+
+  , {Action::HistoryToggle, QKeySequence(Qt::Key_T)}
+  , {Action::DocCopyButton, QKeySequence(Qt::Key_C)}
+
+  , {Action::PopupAlwaysOn, QKeySequence(Qt::Key_A)}
+  , {Action::PopupWindowMode, QKeySequence(Qt::Key_N)}
+  , {Action::PopupMinimize, QKeySequence(Qt::Key_M)}
+  , {Action::PopupMaxRestore, QKeySequence(Qt::Key_G)}
+  , {Action::PopupClose, QKeySequence(Qt::Key_Escape)}
+  , {Action::PopupToggle, QKeySequence(Qt::Key_T)}
 
 };
-const QString Shortcut = "Shortcut/";
+const QString Shortcuts = "Shortcuts/";
 } // anonymous namespace
 
-void ConfigManager::setShortCut(const ShortCut inShortCut, const QKeySequence& inKeySequence)
+void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inKeySequence)
 {
-    _settings->setValue(Shortcut + sol::enumToQStr(inShortCut), inKeySequence);
+    _settings->setValue(Shortcuts + sol::enumToQStr(inShortCut), inKeySequence);
 }
 
-QKeySequence ConfigManager::getShortCut(const ShortCut inShortCut)
+QKeySequence ConfigManager::shortcut(const Action inShortCut)
 {
-    return _settings->value(Shortcut + sol::enumToQStr(inShortCut), defaultShortCuts[inShortCut]).value<QKeySequence>();
+    return _settings->value(Shortcuts + sol::enumToQStr(inShortCut), defaultShortCuts.at(inShortCut)).value<QKeySequence>();
 }
 
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const

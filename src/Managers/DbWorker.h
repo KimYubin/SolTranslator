@@ -73,7 +73,7 @@ private:
      */
     QTimer* _dbUpdateTimer;
 
-    bool _bIsDirtyDB = true;
+    bool _isDirtyDB = true;
 };
 
 #endif //SOLTRANSLATOR_DBWORKER_H

@@ -295,12 +295,12 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
 
 void DbWorker::updateDbCache()
 {
-    if (_bIsDirtyDB == false)
+    if (_isDirtyDB == false)
     {
         solDebug << "DB is not dirty";
         return;
     }
-    _bIsDirtyDB = false;
+    _isDirtyDB = false;
 
     SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
 
@@ -368,7 +368,7 @@ void DbWorker::updateDbCache()
 
 void DbWorker::markDbDirty()
 {
-    _bIsDirtyDB = true;
+    _isDirtyDB = true;
     _dbUpdateTimer->start();
 }
 

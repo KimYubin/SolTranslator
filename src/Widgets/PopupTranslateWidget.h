@@ -166,11 +166,11 @@ protected:
      */
     const qreal _yPosMaxRatio;
 
-    bool _bManualSizeMode = false;
+    bool _isManualSizeMode = false;
 
-    bool _bMaximizedMode = false;
+    bool _isMaximizedMode = false;
 
-    bool _bIsDrag = false;
+    bool _isDrag = false;
     QPoint _dragPoint;
 
     QString _originText;

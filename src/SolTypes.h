@@ -90,7 +90,8 @@ enum ItemColorRole
   , itemHoverTextColorRole
   , itemDisableColorRole
 };
-}
+
+} // sol
 
 enum class EngineType
 {
@@ -159,6 +160,16 @@ struct TranslateRequestInfo
     std::move_only_function<void(const QString&)> callbackTranslateComplete;
     QPointer<QObject> streamContext;
     std::optional<std::move_only_function<void(const QString&)>>  callbackTranslateStreaming;
+};
+
+
+enum class ShortCutType
+{
+    None
+
+  , PopupTranslate
+
+  , Size
 };
 
 

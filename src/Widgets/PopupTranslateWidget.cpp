@@ -252,11 +252,11 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 
 void PopupTranslateWidget::manualSizeMode()
 {
-    if (_bManualSizeMode)
+    if (_isManualSizeMode)
     {
         return;
     }
-    _bManualSizeMode = true;
+    _isManualSizeMode = true;
 
     // 매뉴얼 사이즈 모드를 위해 등록된 사이즈 그립 이벤트 필터 해제
     _sizeGrip->removeEventFilter(this);
@@ -665,7 +665,7 @@ void PopupTranslateWidget::setMaxNormal(const bool inIsMaximize)
 
 void PopupTranslateWidget::onMaxNormalToggle(const bool inIsMaximize)
 {
-    if (_bMaximizedMode == inIsMaximize)
+    if (_isMaximizedMode == inIsMaximize)
     {
         return;
     }
@@ -674,19 +674,20 @@ void PopupTranslateWidget::onMaxNormalToggle(const bool inIsMaximize)
     {
         manualSizeMode();
         changeNormalWindowMode();
-        if (_bMaximizedMode == false)
+        if (_isMaximizedMode == false)
         {
             showMaximized();
         }
     }
     else
     {
-        if (_bMaximizedMode)
+        if (_isMaximizedMode)
         {
             showNormal();
         }
     }
-    _bMaximizedMode = inIsMaximize;
+
+    _isMaximizedMode = inIsMaximize;
 }
 
 void PopupTranslateWidget::onMinimized()
@@ -758,7 +759,7 @@ QRect PopupTranslateWidget::getInnerGeometry() const
 
 void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
 {
-    if (_bMaximizedMode)
+    if (_isMaximizedMode)
     {
         // 내부 QFrame의 절대 좌표와, QFrame 기준 상대 좌표 계산
         const QPoint outMarginTopLeft = QPoint(_outMargins.left(), _outMargins.top());
@@ -887,8 +888,8 @@ void PopupTranslateWidget::mousePressEvent(QMouseEvent* event)
     {
         _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
 
-        _bIsDrag = true;
-        if (_bMaximizedMode == false)
+        _isDrag = true;
+        if (_isMaximizedMode == false)
         {
             resizeWindow(event->globalPosition().toPoint());
         }
@@ -901,7 +902,7 @@ void PopupTranslateWidget::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        setMaxNormal(!_bMaximizedMode);
+        setMaxNormal(!_isMaximizedMode);
 
         event->accept();
     }
@@ -913,12 +914,12 @@ void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* event)
 {
     const QPoint eventPoint = event->globalPosition().toPoint();
 
-    if (_bMaximizedMode == false)
+    if (_isMaximizedMode == false)
     {
         setCursorShape(eventPoint);
     }
 
-    if (_bIsDrag == false)
+    if (_isDrag == false)
     {
         return;
     }
@@ -933,7 +934,7 @@ void PopupTranslateWidget::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        _bIsDrag = false;
+        _isDrag = false;
         event->accept();
     }
 }

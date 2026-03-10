@@ -21,21 +21,21 @@
 
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    registerHotKey(HotkeyType::SimpleTranslate, QKeySequence(Qt::ALT | Qt::Key_C), this, [this]() { fireSimpleTranslate(); });
+    registerHotKey(ShortCutType::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C), this, [this]() { fireSimpleTranslate(); });
 }
 
-void GlobalHotKeyManager::registerHotKey(const HotkeyType inHotkey
+void GlobalHotKeyManager::registerHotKey(const ShortCutType inShortCut
                                        , const QKeySequence& inShortcut
                                        , const QObject* inContext
                                        , std::move_only_function<void()>&& inFunction)
 {
-    std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(inHotkey);
+    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCut);
 
     QHotkey* hotkey;
     if (findIt == hotKeys.end())
     {
         hotkey = new QHotkey{inShortcut, true, this};
-        hotKeys[inHotkey] = hotkey;
+        hotKeys[inShortCut] = hotkey;
     }
     else
     {
@@ -46,9 +46,9 @@ void GlobalHotKeyManager::registerHotKey(const HotkeyType inHotkey
     connect(hotkey, &QHotkey::activated, inContext, std::move(inFunction));
 }
 
-std::expected<void, QString> GlobalHotKeyManager::changeShortcut(HotkeyType inHotkey, const QKeySequence& shortcut)
+std::expected<void, QString> GlobalHotKeyManager::changeShortcut(ShortCutType inHotkey, const QKeySequence& shortcut)
 {
-    std::unordered_map<HotkeyType, QHotkey*>::iterator findIt = hotKeys.find(inHotkey);
+    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inHotkey);
     if (findIt == hotKeys.end())
     {
         return std::unexpected("not found registered hotkeys:" + sol::enumToQStr(inHotkey) + shortcut.toString());

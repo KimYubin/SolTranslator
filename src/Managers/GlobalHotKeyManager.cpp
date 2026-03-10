@@ -17,12 +17,12 @@ GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
     : AbstractManager(parent)
 {}
 
-void GlobalHotKeyManager::registerHotKey(const ShortCutType inShortCutType
+void GlobalHotKeyManager::registerHotKey(const ShortCut inShortCutType
                                        , const QKeySequence& inKeySeq
                                        , const QObject* inContext
                                        , std::move_only_function<void()>&& inFunction)
 {
-    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
+    std::unordered_map<ShortCut, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
 
     QHotkey* hotkey;
     if (findIt == hotKeys.end())
@@ -39,9 +39,9 @@ void GlobalHotKeyManager::registerHotKey(const ShortCutType inShortCutType
     connect(hotkey, &QHotkey::activated, inContext, std::move(inFunction));
 }
 
-std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const ShortCutType inShortCutType, const QKeySequence& inKeySeq)
+std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const ShortCut inShortCutType, const QKeySequence& inKeySeq)
 {
-    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
+    std::unordered_map<ShortCut, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
     if (findIt == hotKeys.end())
     {
         return std::unexpected("not found registered hotkeys: " + sol::enumToQStr(inShortCutType) + inKeySeq.toString());
@@ -52,9 +52,9 @@ std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const ShortCutTyp
     return {};
 }
 
-std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const ShortCutType inShortCutType)
+std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const ShortCut inShortCutType)
 {
-    std::unordered_map<ShortCutType, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
+    std::unordered_map<ShortCut, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
     if (findIt == hotKeys.end())
     {
         return std::unexpected("not existent shortcut remove: " + sol::enumToQStr(inShortCutType));

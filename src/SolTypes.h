@@ -163,7 +163,7 @@ struct TranslateRequestInfo
 };
 
 
-enum class ShortCutType
+enum class ShortCut
 {
     None
 

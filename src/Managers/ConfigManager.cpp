@@ -240,20 +240,22 @@ QString ConfigManager::getHistoryTimeFormat()
 
 namespace
 {
-std::unordered_map<ShortCutType, QKeySequence> defaultShortCuts
+std::unordered_map<ShortCut, QKeySequence> defaultShortCuts
 {
-    {ShortCutType::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C)}
-};
+    {ShortCut::PopupTranslate, QKeySequence(Qt::ALT | Qt::Key_C)}
 
+};
+const QString Shortcut = "Shortcut/";
 } // anonymous namespace
-void ConfigManager::setShortCut(const ShortCutType inShortCut, const QKeySequence& inKeySequence)
+
+void ConfigManager::setShortCut(const ShortCut inShortCut, const QKeySequence& inKeySequence)
 {
-    _settings->setValue("shortcut/" + sol::enumToQStr(inShortCut), inKeySequence);
+    _settings->setValue(Shortcut + sol::enumToQStr(inShortCut), inKeySequence);
 }
 
-QKeySequence ConfigManager::getShortCut(const ShortCutType inShortCut)
+QKeySequence ConfigManager::getShortCut(const ShortCut inShortCut)
 {
-    return _settings->value("shortcut/" + sol::enumToQStr(inShortCut), defaultShortCuts[inShortCut]).value<QKeySequence>();
+    return _settings->value(Shortcut + sol::enumToQStr(inShortCut), defaultShortCuts[inShortCut]).value<QKeySequence>();
 }
 
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const

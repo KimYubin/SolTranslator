@@ -9,7 +9,7 @@
 #include "AbstractManager.h"
 
 
-enum class ShortCutType;
+enum class ShortCut;
 class QHotkey;
 class SolTranslatorCore;
 
@@ -20,18 +20,18 @@ class GlobalHotKeyManager : public AbstractManager
 public:
     explicit GlobalHotKeyManager(SolTranslatorCore* parent);
 
-    void registerHotKey(const ShortCutType inShortCutType
+    void registerHotKey(const ShortCut inShortCutType
                       , const QKeySequence& inKeySeq
                       , const QObject* inContext
                       , std::move_only_function<void(void)>&& inFunction);
 
-    std::expected<void, QString> changeHotkey(const ShortCutType inShortCutType
+    std::expected<void, QString> changeHotkey(const ShortCut inShortCutType
                                             , const QKeySequence& inKeySeq);
 
-    std::expected<void, QString> removeHotkey(const ShortCutType inShortCutType);
+    std::expected<void, QString> removeHotkey(const ShortCut inShortCutType);
 
 private:
-    std::unordered_map<ShortCutType, QHotkey*> hotKeys;
+    std::unordered_map<ShortCut, QHotkey*> hotKeys;
 };
 
 

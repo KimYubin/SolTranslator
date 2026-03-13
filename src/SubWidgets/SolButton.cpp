@@ -23,7 +23,7 @@ void SolButton::setToolTipShortcut(const QString& inToolTip, const QKeySequence&
 {
     setShortcut(inKey);
 
-    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey.toString()));
+    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey));
 }
 
 void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction)
@@ -46,8 +46,8 @@ void SolButton::setCheckToolTipShortcut(const QString& inOnToolTip
     setShortcut(inKey);
 
     SolTooltipFilter::setCheckableButtonToolTip(this
-                                              , toolTipShortcut(inOnToolTip, inKey.toString())
-                                              , toolTipShortcut(inOffToolTip, inKey.toString()));
+                                              , toolTipShortcut(inOnToolTip, inKey)
+                                              , toolTipShortcut(inOffToolTip, inKey));
 }
 
 void SolButton::setCheckToolTipAction(const QString& inOnToolTip
@@ -61,5 +61,5 @@ void SolButton::changeShortcut(const QKeySequence& inKey)
 {
     setShortcut(inKey);
 
-    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(toolTip(), inKey.toString()));
+    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(toolTip(), inKey));
 }

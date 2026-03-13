@@ -2,7 +2,6 @@
 
 #include "GlobalHotKeyManager.h"
 
-#include <QClipboard>
 #include <QKeyEvent>
 #include <QThread>
 #include <QTimer>
@@ -10,6 +9,7 @@
 #include <QHotkey>
 
 #include "ConfigManager.h"
+#include "SolLog.h"
 #include "SolUtilibrary.h"
 #include "TranslateManager.h"
 #include "SolTypes.h"
@@ -18,44 +18,39 @@ GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
     : AbstractManager(parent)
 {}
 
-void GlobalHotKeyManager::registerAction(const Action inShortCutType
+void GlobalHotKeyManager::registerAction(const Action inActionType
                                        , const QObject* inContext
                                        , std::move_only_function<void()>&& inFunction)
 {
-    registerHotKey(inShortCutType
-                 , solConfig.shortcut(inShortCutType)
+    registerHotKey(inActionType
+                 , solConfig.shortcut(inActionType)
                  , inContext
                  , std::move(inFunction));
 }
 
-void GlobalHotKeyManager::registerHotKey(const Action inShortCutType
+void GlobalHotKeyManager::registerHotKey(const Action inActionType
                                        , const QKeySequence& inKeySeq
                                        , const QObject* inContext
                                        , std::move_only_function<void()>&& inFunction)
 {
-    std::unordered_map<Action, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
+    if (_hotKeys.contains(inActionType))
+    {
+        solDebug << "The Action that already exists has been re-register.";
+    }
 
-    QHotkey* hotkey;
-    if (findIt == hotKeys.end())
-    {
-        hotkey = new QHotkey{inKeySeq, true, this};
-        hotKeys[inShortCutType] = hotkey;
-    }
-    else
-    {
-        hotkey = findIt->second;
-        hotkey->setShortcut(inKeySeq, true);
-    }
+    _hotKeys[inActionType] = std::make_unique<QHotkey>(inKeySeq, true);
+    const QHotkey* hotkey  = _hotKeys[inActionType].get();
 
     connect(hotkey, &QHotkey::activated, inContext, std::move(inFunction));
 }
 
-std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const Action inShortCutType, const QKeySequence& inKeySeq)
+std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const Action inActionType
+                                                             , const QKeySequence& inKeySeq)
 {
-    std::unordered_map<Action, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
-    if (findIt == hotKeys.end())
+    const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
+    if (findIt == _hotKeys.end())
     {
-        return std::unexpected("not found registered hotkeys: " + sol::enumToQStr(inShortCutType) + inKeySeq.toString());
+        return std::unexpected("Attempt to change non-existent shortcut: " + sol::enumToQStr(inActionType) + inKeySeq.toString());
     }
 
     findIt->second->setShortcut(inKeySeq, true);
@@ -63,16 +58,15 @@ std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const Action inSh
     return {};
 }
 
-std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const Action inShortCutType)
+std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const Action inActionType)
 {
-    std::unordered_map<Action, QHotkey*>::iterator findIt = hotKeys.find(inShortCutType);
-    if (findIt == hotKeys.end())
+    const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
+    if (findIt == _hotKeys.end())
     {
-        return std::unexpected("not existent shortcut remove: " + sol::enumToQStr(inShortCutType));
+        return std::unexpected("Attempt to remove non-existent shortcut: " + sol::enumToQStr(inActionType));
     }
 
-    findIt->second->deleteLater();
-    hotKeys.erase(findIt);
+    _hotKeys.erase(findIt);
 
     return {};
 }

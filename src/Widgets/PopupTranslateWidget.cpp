@@ -825,32 +825,34 @@ void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
 void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
 {
     manualSizeMode();
-    if (QWindow* win = windowHandle())
+
+    QWindow* win = windowHandle();
+
+    const QRect geo    = frameGeometry();
+    const QRect innGeo = getInnerGeometry();
+
+    if (win == nullptr || innGeo.contains(inMousePos))
     {
-        const QRect geo    = frameGeometry();
-        const QRect innGeo = getInnerGeometry();
-
-        if (innGeo.contains(inMousePos))
-            return;
-
-        const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
-        const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
-        const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
-        const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
-        const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
-        const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
-        const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
-        const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
-
-        if (topLeftArea.contains(inMousePos))          win->startSystemResize(Qt::TopEdge | Qt::LeftEdge);
-        else if (topRightArea.contains(inMousePos))    win->startSystemResize(Qt::TopEdge | Qt::RightEdge);
-        else if (bottomLeftArea.contains(inMousePos))  win->startSystemResize(Qt::BottomEdge | Qt::LeftEdge);
-        else if (bottomRightArea.contains(inMousePos)) win->startSystemResize(Qt::BottomEdge | Qt::RightEdge);
-        else if (topArea.contains(inMousePos))         win->startSystemResize(Qt::TopEdge);
-        else if (bottomArea.contains(inMousePos))      win->startSystemResize(Qt::BottomEdge);
-        else if (LeftArea.contains(inMousePos))        win->startSystemResize(Qt::LeftEdge);
-        else if (RightArea.contains(inMousePos))       win->startSystemResize(Qt::RightEdge);
+        return;
     }
+
+    const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
+    const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
+    const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
+    const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
+    const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
+    const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
+    const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
+    const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
+
+    if (topLeftArea.contains(inMousePos))          win->startSystemResize(Qt::TopEdge | Qt::LeftEdge);
+    else if (topRightArea.contains(inMousePos))    win->startSystemResize(Qt::TopEdge | Qt::RightEdge);
+    else if (bottomLeftArea.contains(inMousePos))  win->startSystemResize(Qt::BottomEdge | Qt::LeftEdge);
+    else if (bottomRightArea.contains(inMousePos)) win->startSystemResize(Qt::BottomEdge | Qt::RightEdge);
+    else if (topArea.contains(inMousePos))         win->startSystemResize(Qt::TopEdge);
+    else if (bottomArea.contains(inMousePos))      win->startSystemResize(Qt::BottomEdge);
+    else if (LeftArea.contains(inMousePos))        win->startSystemResize(Qt::LeftEdge);
+    else if (RightArea.contains(inMousePos))       win->startSystemResize(Qt::RightEdge);
 }
 
 void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)

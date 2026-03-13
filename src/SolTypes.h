@@ -51,6 +51,29 @@ constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToI
     return static_cast<std::underlying_type_t<E>>(e);
 }
 
+/**
+ * QObject unique pointer using deleteLater()
+ */
+struct QObjectDeleter
+{
+    void operator()(QObject* obj) const noexcept
+    {
+        if (obj)
+            obj->deleteLater();
+    }
+};
+
+template <typename T>
+    requires std::is_base_of_v<QObject, T>
+using unique_qobject = std::unique_ptr<T, QObjectDeleter>;
+
+template <typename T, typename... Args>
+auto make_unique_qobject(Args&&... args)
+{
+    return unique_qobject<T>(new T(std::forward<Args>(args)...));
+}
+
+
 namespace sol
 {
 Q_NAMESPACE

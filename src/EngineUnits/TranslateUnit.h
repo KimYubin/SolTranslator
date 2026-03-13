@@ -73,12 +73,11 @@ protected:
 
 
     /**
-     * 추출 완료된 번역문에 대한 후처리를 합니다.
-     * 캐시를 업데이트하고, 번역문을 등록된 펑터에 반영하고,
+     * DB 업데이트와 번역문 개시 처리를 합니다.
      * 본 객체를 파괴합니다.(deleteLater)
      *
      * @see replyTranslate
-     * @see ApplyCompletedTranslate
+     * @see completeTranslatedText
      * @param inTranslatedText
      */
     void finishTranslateRequest(const QString& inTranslatedText);
@@ -87,6 +86,9 @@ protected:
     QPointer<QNetworkReply> _reply;
 
     TranslateRequestInfo _trReqData;
+
+    // SSE buffer
+    QByteArray _buffer;
 
     QString _translatedText;
 

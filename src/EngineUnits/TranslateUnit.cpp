@@ -199,6 +199,7 @@ void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
 
 void TranslateUnit::finishTranslateRequest(const QString& inTranslatedText)
 {
+    _translatedText = inTranslatedText;
     updateHistory(inTranslatedText);
     completeTranslatedText(inTranslatedText);
 }

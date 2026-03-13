@@ -19,6 +19,8 @@ protected:
     virtual void requestTranslate() override;
     virtual void onReadyRead() override;
     virtual void replyTranslateFinished() override;
+
+    QString chunkToContent();
 };
 
 

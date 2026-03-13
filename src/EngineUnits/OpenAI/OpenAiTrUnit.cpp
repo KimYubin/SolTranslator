@@ -19,8 +19,7 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
 
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    const QUrl url(sol::URLs::OPEN_AI);
-    QNetworkRequest request(url);
+    QNetworkRequest request(sol::URLs::OPEN_AI);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
 
@@ -49,8 +48,8 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
     chatBodyJson["messages"] = messages;
 
 
-    QJsonDocument doc(chatBodyJson);
-    QByteArray data = doc.toJson();
+    const QJsonDocument doc(chatBodyJson);
+    const QByteArray data = doc.toJson();
 
     post(request, data, inIsStreaming);
 }
@@ -62,74 +61,16 @@ void OpenAiTrUnit::requestTranslate()
 
 void OpenAiTrUnit::onReadyRead()
 {
-    QByteArray chunk  = _reply->readAll();
-    QString dataChunk = QString::fromUtf8(chunk);
-
-    QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
-    for (const QString& line : lines)
+    const QString content = chunkToContent();
+    if (content.isEmpty() == false)
     {
-        if (line.startsWith("data: "))
-        {
-            QString jsonStr = line.sliced(6).trimmed();
-            if (jsonStr == "[DONE]")
-            {
-                return;
-            }
-
-            QJsonParseError parseError;
-            QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonStr.toUtf8(), &parseError);
-            if (parseError.error != QJsonParseError::NoError)
-            {
-                solDebug << parseError.errorString();
-                return;
-            }
-
-            QJsonObject obj = jsonDoc.object();
-
-            // choices가 없다면,
-            // value는 QJsonValue(QJsonValue::Undefined)을 반환하고,
-            // toArray()는 빈 Array를 반환합니다.
-            QJsonArray choicesArr = obj.value("choices").toArray();
-            if (choicesArr.isEmpty())
-            {
-                const QJsonObject errorObj = obj.value("error").toObject();
-                solDebug << "openAI errorMsg:" << errorObj.value("message").toString();
-                solDebug << "openAI errorType:" << errorObj.value("type").toString();
-                return;
-            }
-
-            auto choices = choicesArr[0];
-
-            QJsonValue delta = choices.toObject().value("delta");
-            if (delta.isUndefined())
-            {
-                solDebug << "openAI not detected \'delta\'";
-                return;
-            }
-
-            QJsonValue content = delta.toObject().value("content");
-            if (content.isUndefined())
-            {
-                if (choices.toObject().value("finish_reason").toString() != "stop")
-                {
-                    solDebug << "openAI not detected \'content\'";
-                    solDebug << "openAI last chunk:'" << chunk;
-                }
-                return;
-            }
-
-            QString contentStr = content.toString();
-
-            if (contentStr.isEmpty() == false)
-            {
-                addTranslatedText(contentStr);
-            }
-        }
+        addTranslatedText(content);
     }
 }
 
 void OpenAiTrUnit::replyTranslateFinished()
 {
+    // chatComplete no streaming
     const QByteArray responseData    = _reply->readAll();
     const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
     const QJsonObject jsonObject     = responseJson.object();
@@ -139,5 +80,74 @@ void OpenAiTrUnit::replyTranslateFinished()
         const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
         _translatedText.append(lastTranslatedText);
     }
+
     finishTranslateRequest(_translatedText);
+}
+
+QString OpenAiTrUnit::chunkToContent()
+{
+    _buffer += _reply->readAll();
+    QString contentStr;
+
+    while (_buffer.isEmpty() == false)
+    {
+        const int pos = _buffer.indexOf("\n\n");
+        if (pos < 0)
+        {
+            break;
+        }
+
+        QByteArray event = _buffer.left(pos);
+        _buffer.remove(0, pos + 2);
+
+        if (event.startsWith("data: ") == false)
+        {
+            break;
+        }
+
+        QByteArray json = event.sliced(6);
+
+        if (json == "[DONE]")
+        {
+            break;
+        }
+
+        QJsonParseError parseError;
+        QJsonDocument rootDoc = QJsonDocument::fromJson(json, &parseError);
+        QJsonObject rootObj   = rootDoc.object();
+
+        QJsonArray choicesArr = rootObj.value("choices").toArray();
+        if (choicesArr.isEmpty())
+        {
+            const QJsonObject errorObj = rootObj.value("error").toObject();
+            solDebug << "errorMsg:" << errorObj.value("message");
+            solDebug << "errorType:" << errorObj.value("type");
+            continue;
+        }
+
+        QJsonObject choiceObj = choicesArr[0].toObject();
+
+        QJsonValue delta = choiceObj.value("delta");
+        if (delta.isUndefined())
+        {
+            solDebug << "not detected \'delta\'";
+            continue;
+        }
+
+        QJsonValue content = delta.toObject().value("content");
+        if (content.isUndefined())
+        {
+            if (choiceObj.value("finish_reason").toString() != "stop")
+            {
+                solDebug << "not detected \'content\'";
+                solDebug << "last chunk:'" << event;
+            }
+            continue;
+        }
+
+        // contentStr += choicesArr[0].toObject()["delta"].toObject()["content"].toString();
+        contentStr += content.toString();
+    }
+
+    return contentStr;
 }

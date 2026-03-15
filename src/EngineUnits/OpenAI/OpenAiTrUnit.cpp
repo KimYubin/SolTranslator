@@ -13,6 +13,8 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
+#include "Utils/SolJson.h"
+
 OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
@@ -70,15 +72,20 @@ void OpenAiTrUnit::onReadyRead()
 
 void OpenAiTrUnit::replyTranslateFinished()
 {
-    // chatComplete no streaming
-    const QByteArray responseData    = _reply->readAll();
-    const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
-    const QJsonObject jsonObject     = responseJson.object();
-    const QJsonArray choices         = jsonObject["choices"].toArray();
-    if (choices.isEmpty() == false)
+    const QByteArray responseData = _reply->readAll();
+
+    // chatComplete no streaming.
+    if (responseData.isEmpty() == false)
     {
-        const QString lastTranslatedText = choices.first().toObject()["message"].toObject()["content"].toString();
-        _translatedText.append(lastTranslatedText);
+        const SolJson rootJson{responseData};
+        if (const SolJson::Expected& resExp = rootJson.value("choices")[0].value("message").value("content").expected())
+        {
+            _translatedText += resExp.value().toString();
+        }
+        else
+        {
+            solDebug << resExp.error();
+        }
     }
 
     finishTranslateRequest(_translatedText);
@@ -102,51 +109,51 @@ QString OpenAiTrUnit::chunkToContent()
 
         if (event.startsWith("data: ") == false)
         {
-            break;
+            solDebug << "not detected \'data\':" << event;
+            continue;
         }
 
         QByteArray json = event.sliced(6);
-
         if (json == "[DONE]")
         {
             break;
         }
 
-        QJsonParseError parseError;
-        QJsonDocument rootDoc = QJsonDocument::fromJson(json, &parseError);
-        QJsonObject rootObj   = rootDoc.object();
+        const SolJson rootJson{json};
 
-        QJsonArray choicesArr = rootObj.value("choices").toArray();
-        if (choicesArr.isEmpty())
+        // content
+        const SolJson::Expected& resExp = rootJson.value("choices")[0].value("delta").value("content").expected();
+        if (resExp)
         {
-            const QJsonObject errorObj = rootObj.value("error").toObject();
+            contentStr += resExp.value().toString();
+            continue;
+        }
+
+
+        const SolJson::Expected& finishExp = rootJson.value("choices")[0].value("finish_reason").expected();
+        if (finishExp)
+        {
+            if (finishExp.value() != "stop")
+            {
+                solDebug << "\'finish_reason\' is not \'stop\':" << finishExp.value();
+            }
+            continue;
+        }
+
+        const SolJson::Expected& errorExp = rootJson.value("error").expected();
+        if (errorExp)
+        {
+            const QJsonObject errorObj = errorExp.value().toObject();
+            solDebug << "response error.";
             solDebug << "errorMsg:" << errorObj.value("message");
             solDebug << "errorType:" << errorObj.value("type");
             continue;
         }
 
-        QJsonObject choiceObj = choicesArr[0].toObject();
-
-        QJsonValue delta = choiceObj.value("delta");
-        if (delta.isUndefined())
-        {
-            solDebug << "not detected \'delta\'";
-            continue;
-        }
-
-        QJsonValue content = delta.toObject().value("content");
-        if (content.isUndefined())
-        {
-            if (choiceObj.value("finish_reason").toString() != "stop")
-            {
-                solDebug << "not detected \'content\'";
-                solDebug << "last chunk:'" << event;
-            }
-            continue;
-        }
-
-        // contentStr += choicesArr[0].toObject()["delta"].toObject()["content"].toString();
-        contentStr += content.toString();
+        solDebug << resExp.error();
+        solDebug << finishExp.error();
+        solDebug << errorExp.error();
+        solDebug << "last event:'" << event;
     }
 
     return contentStr;

@@ -10,6 +10,8 @@
 #include "SolConstants.h"
 #include "SolLog.h"
 
+#include "Utils/SolJson.h"
+
 GoogleTrUnit::GoogleTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
@@ -38,9 +40,9 @@ void GoogleTrUnit::onReadyRead()
 
 void GoogleTrUnit::replyTranslateFinished()
 {
-    const QByteArray responseData    = _reply->readAll();
-    const QJsonDocument responseJson = QJsonDocument::fromJson(responseData);
-    const QJsonArray jsonArr         = responseJson.array();
+    const QByteArray chunk      = _reply->readAll();
+    const QJsonDocument jsonDoc = QJsonDocument::fromJson(chunk);
+    const QJsonArray jsonArr    = jsonDoc.array();
     if (jsonArr.isEmpty())
     {
         solDebug << "invalid reply";
@@ -51,12 +53,12 @@ void GoogleTrUnit::replyTranslateFinished()
     QJsonArray translateTextArray = jsonArr[0].toArray();
     for (QJsonValueRef trTextData : translateTextArray)
     {
-        replyTranslatedText += trTextData.toArray()[0].toString();
+        replyTranslatedText += trTextData[0].toString();
     }
 
     // 출발 언어 코드
-    //QString originLangStr = jsonArr[2].toString();
-    //QLocale locale{originLangStr};
+    //QString sourceLangStr = jsonArr[2].toString();
+    //QLocale locale{sourceLangStr};
 
     finishTranslateRequest(replyTranslatedText);
 }

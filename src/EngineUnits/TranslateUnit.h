@@ -94,6 +94,8 @@ protected:
 
     QMetaObject::Connection _streamConnection;
     QMetaObject::Connection _completeConnection;
+
+    bool _isStream = false;
 };
 
 

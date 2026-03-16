@@ -82,9 +82,11 @@ void TranslateUnit::get(const QNetworkRequest& inRequest)
 
 void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming)
 {
+    _isStream = inIsStreaming;
+
     _reply = solCore->translateManager()->getNetworkAccessManager()->post(inRequest, inPayload);
 
-    if (inIsStreaming)
+    if (_isStream)
     {
         connect(_reply, &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
     }

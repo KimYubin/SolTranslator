@@ -23,14 +23,14 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     QNetworkRequest request(sol::URLs::OPEN_AI);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toStdString().c_str());
+    request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toUtf8());
 
     QJsonObject chatBodyJson;
 
     chatBodyJson["model"] = solConfig.getOpenAIModel();
     if (inIsStreaming)
     {
-        chatBodyJson["stream"] = inIsStreaming; // streaming
+        chatBodyJson["stream"] = inIsStreaming;
     }
     chatBodyJson["temperature"] = solConfig.getOpenAI_Temperature();
 
@@ -72,19 +72,16 @@ void OpenAiTrUnit::onReadyRead()
 
 void OpenAiTrUnit::replyTranslateFinished()
 {
-    const QByteArray responseData = _reply->readAll();
-
-    // chatComplete no streaming.
-    if (responseData.isEmpty() == false)
+    if (_isStream == false)
     {
-        const SolJson rootJson{responseData};
-        if (const SolJson::Expected& resExp = rootJson.value("choices")[0].value("message").value("content").expected())
+        const SolJson rootJson{_reply->readAll()};
+        if (const SolJson resJson = rootJson.value("choices")[0].value("message").value("content"))
         {
-            _translatedText += resExp.value().toString();
+            _translatedText += resJson.toString();
         }
         else
         {
-            solDebug << resExp.error();
+            solDebug << resJson.error();
         }
     }
 
@@ -122,37 +119,37 @@ QString OpenAiTrUnit::chunkToContent()
         const SolJson rootJson{json};
 
         // content
-        const SolJson::Expected& resExp = rootJson.value("choices")[0].value("delta").value("content").expected();
-        if (resExp)
+        const SolJson resJson = rootJson.value("choices")[0].value("delta").value("content");
+        if (resJson)
         {
-            contentStr += resExp.value().toString();
+            contentStr += resJson.toString();
             continue;
         }
 
 
-        const SolJson::Expected& finishExp = rootJson.value("choices")[0].value("finish_reason").expected();
-        if (finishExp)
+        const SolJson finishJson = rootJson.value("choices")[0].value("finish_reason");
+        if (finishJson)
         {
-            if (finishExp.value() != "stop")
+            if (finishJson.toString() != "stop")
             {
-                solDebug << "\'finish_reason\' is not \'stop\':" << finishExp.value();
+                solDebug << "\'finish_reason\' is not \'stop\':" << finishJson.toString();
             }
             continue;
         }
 
-        const SolJson::Expected& errorExp = rootJson.value("error").expected();
-        if (errorExp)
+        const SolJson errorJson = rootJson.value("error");
+        if (errorJson)
         {
-            const QJsonObject errorObj = errorExp.value().toObject();
+            const QJsonObject errorObj = errorJson.toObject();
             solDebug << "response error.";
             solDebug << "errorMsg:" << errorObj.value("message");
             solDebug << "errorType:" << errorObj.value("type");
             continue;
         }
 
-        solDebug << resExp.error();
-        solDebug << finishExp.error();
-        solDebug << errorExp.error();
+        solDebug << resJson.error();
+        solDebug << finishJson.error();
+        solDebug << errorJson.error();
         solDebug << "last event:'" << event;
     }
 

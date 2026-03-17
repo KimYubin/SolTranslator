@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule:
-    - cron: "10 10 * * *"  # UTC 00:00
+    - cron: "10 13 * * *"  # UTC 00:00
 
 jobs:
   build:
@@ -16,10 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set nightly tag
+      # [수정됨] 기존 릴리즈/태그 삭제 로직 추가
+      - name: Delete nightly release and tag
         if: github.event_name == 'schedule'
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "TAG_NAME=nightly" >> $env:GITHUB_ENV
+          echo "TAG_NAME=nightly" >> $GITHUB_ENV
+          gh release delete nightly --cleanup-tag --yes || echo "No existing nightly"
 
       - name: Set release tag
         if: github.event_name == 'push'
@@ -63,4 +68,5 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           name: ${{ github.event_name == 'schedule' && 'nightly' || format('SolTranslator {0}', env.TAG_NAME) }}
           prerelease: ${{ github.event_name == 'schedule' }}
+          target_commitish: ${{ github.sha }}
           files: SolTranslator.zip

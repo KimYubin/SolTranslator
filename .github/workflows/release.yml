@@ -5,8 +5,8 @@ on:
     tags:
       - "v*"
 
-  schedule:
-    - cron: "10 13 * * *"  # UTC 00:00
+  schedule: 
+    - cron: "13 23 * * *" # Avoiding peak times.
 
 jobs:
   build:
@@ -16,7 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # [수정됨] 기존 릴리즈/태그 삭제 로직 추가
       - name: Delete nightly release and tag
         if: github.event_name == 'schedule'
         shell: bash

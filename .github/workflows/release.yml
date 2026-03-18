@@ -6,15 +6,38 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "13 23 * * *" # Avoiding peak times.
+    - cron: "53 11 * * *" # Avoid peak time.
 
 jobs:
+  check-run:
+    runs-on: ubuntu-latest
+    outputs:
+      is_run: ${{ steps.set-is_run.outputs.is_run }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check and set is_run
+        id: set-is_run
+        run: 
+          IS_RUN=true
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            HEAD=$(git rev-parse HEAD)
+            NIGHTLY=$(git ls-remote --tags origin nightly^{} | awk '{print $1}')
+
+            if [ -n "$NIGHTLY" ] && [ "$HEAD" = "$NIGHTLY" ]; then
+              IS_RUN=false
+            fi
+          fi
+
+          echo "is_run=$IS_RUN" >> "$GITHUB_OUTPUT"
+
   build:
     runs-on: windows-latest
+    needs: check-run
+    if: needs.check-run.outputs.is_run == 'true'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Delete nightly release and tag
         if: github.event_name == 'schedule'

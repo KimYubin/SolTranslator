@@ -92,7 +92,7 @@ public:
     // ~======================
     // shortcut
     void setShortCut(const Action inShortCut, const QKeySequence& inKeySequence);
-    QKeySequence shortcut(const Action inShortCut);
+    QKeySequence shortcut(const Action inShortCut) const;
 
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;
@@ -135,7 +135,7 @@ void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inV
 }
 
 template <typename EnumType>
-        requires std::is_enum_v<EnumType>
+    requires std::is_enum_v<EnumType>
 EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
 {
     const QString defaultQStr = sol::enumToQStr(inDefaultVal);

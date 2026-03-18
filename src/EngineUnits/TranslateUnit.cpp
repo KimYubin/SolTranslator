@@ -62,7 +62,7 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
                 solDebug << "The trUnit was destroyed before the database lookup was completed.";
                 return;
             }
-            auto [isFind, findCache] = inRes;
+            auto& [isFind, findCache] = inRes;
             if (isFind)
             {
                 completeTranslatedText(findCache);

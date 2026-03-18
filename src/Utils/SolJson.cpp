@@ -71,40 +71,44 @@ SolJson SolJson::operator[](const qsizetype inIdx) const
     return SolJson{arr[inIdx]};
 }
 
-bool SolJson::toBool(const bool defaultValue) const
+
+// ~============================================
+/** QJsonValue interface */
+
+bool SolJson::toBool(const bool inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toBool();
+    return _expected->toBool(inDefaultValue);
 }
 
-int SolJson::toInt(const int defaultValue) const
+int SolJson::toInt(const int inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toInt();
+    return _expected->toInt(inDefaultValue);
 }
 
-qint64 SolJson::toInteger(const qint64 defaultValue) const
+qint64 SolJson::toInteger(const qint64 inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toInteger();
+    return _expected->toInteger(inDefaultValue);
 }
 
-double SolJson::toDouble(const double defaultValue) const
+double SolJson::toDouble(const double inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toDouble();
+    return _expected->toDouble(inDefaultValue);
 }
 
 QString SolJson::toString() const
@@ -113,25 +117,25 @@ QString SolJson::toString() const
     {
         return QString();
     }
-    return _expected.value().toString();
+    return _expected->toString();
 }
 
-QString SolJson::toString(const QString& defaultValue) const
+QString SolJson::toString(const QString& inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toString();
+    return _expected->toString(inDefaultValue);
 }
 
-QAnyStringView SolJson::toStringView(const QAnyStringView defaultValue) const
+QAnyStringView SolJson::toStringView(const QAnyStringView inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toStringView();
+    return _expected->toStringView(inDefaultValue);
 }
 
 QJsonArray SolJson::toArray() const
@@ -140,16 +144,16 @@ QJsonArray SolJson::toArray() const
     {
         return QJsonArray();
     }
-    return _expected.value().toArray();
+    return _expected->toArray();
 }
 
-QJsonArray SolJson::toArray(const QJsonArray& defaultValue) const
+QJsonArray SolJson::toArray(const QJsonArray& inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toArray();
+    return _expected->toArray(inDefaultValue);
 }
 
 QJsonObject SolJson::toObject() const
@@ -158,14 +162,14 @@ QJsonObject SolJson::toObject() const
     {
         return QJsonObject();
     }
-    return _expected.value().toObject();
+    return _expected->toObject();
 }
 
-QJsonObject SolJson::toObject(const QJsonObject& defaultValue) const
+QJsonObject SolJson::toObject(const QJsonObject& inDefaultValue) const
 {
     if (hasValue() == false)
     {
-        return defaultValue;
+        return inDefaultValue;
     }
-    return _expected.value().toObject();
+    return _expected->toObject(inDefaultValue);
 }

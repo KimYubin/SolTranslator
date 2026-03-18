@@ -47,21 +47,21 @@ public:
 
     QString error() const { return _expected.has_value() ? "" : _expected.error(); };
 
-    /** QJsonValue interface */
-    bool toBool(const bool defaultValue = false) const;
-    int toInt(const int defaultValue = 0) const;
-    qint64 toInteger(const qint64 defaultValue = 0) const;
-    double toDouble(const double defaultValue = 0) const;
-    QString toString() const;
-    QString toString(const QString& defaultValue) const;
-    QAnyStringView toStringView(const QAnyStringView defaultValue = {}) const;
-    QJsonArray toArray() const;
-    QJsonArray toArray(const QJsonArray& defaultValue) const;
-    QJsonObject toObject() const;
-    QJsonObject toObject(const QJsonObject& defaultValue) const;
-
-
     const Expected& expected() const { return _expected; };
+
+    // ~============================================
+    /** QJsonValue interface */
+    bool toBool(const bool inDefaultValue = false) const;
+    int toInt(const int inDefaultValue = 0) const;
+    qint64 toInteger(const qint64 inDefaultValue = 0) const;
+    double toDouble(const double inDefaultValue = 0) const;
+    QString toString() const;
+    QString toString(const QString& inDefaultValue) const;
+    QAnyStringView toStringView(const QAnyStringView inDefaultValue = {}) const;
+    QJsonArray toArray() const;
+    QJsonArray toArray(const QJsonArray& inDefaultValue) const;
+    QJsonObject toObject() const;
+    QJsonObject toObject(const QJsonObject& inDefaultValue) const;
 
 private:
     Expected _expected;

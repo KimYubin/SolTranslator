@@ -273,7 +273,7 @@ void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inK
     _settings->setValue(Shortcuts + sol::enumToQStr(inShortCut), inKeySequence);
 }
 
-QKeySequence ConfigManager::shortcut(const Action inShortCut)
+QKeySequence ConfigManager::shortcut(const Action inShortCut) const
 {
     return _settings->value(Shortcuts + sol::enumToQStr(inShortCut), defaultShortcut.at(inShortCut)).value<QKeySequence>();
 }

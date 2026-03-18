@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "53 11 * * *" # Avoid peak time.
+    - cron: "15 12 * * *" # Avoid peak time.
 
 jobs:
   check-run:
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Check and set is_run
         id: set-is_run
-        run: 
+        run: |
           IS_RUN=true
           if [ "${{ github.event_name }}" = "schedule" ]; then
             HEAD=$(git rev-parse HEAD)

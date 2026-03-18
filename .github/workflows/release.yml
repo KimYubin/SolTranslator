@@ -6,17 +6,17 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "15 12 * * *" # Avoid peak time.
+    - cron: "13 23 * * *" # Avoid peak time.
 
 jobs:
-  check-run:
+  check-run-build:
     runs-on: ubuntu-latest
     outputs:
-      is_run: ${{ steps.set-is_run.outputs.is_run }}
+      run-build: ${{ steps.set-run-build.outputs.run-build }}
     steps:
       - uses: actions/checkout@v6
-      - name: Check and set is_run
-        id: set-is_run
+      - name: Check run-build
+        id: set-run-build
         run: |
           IS_RUN=true
           if [ "${{ github.event_name }}" = "schedule" ]; then
@@ -28,12 +28,12 @@ jobs:
             fi
           fi
 
-          echo "is_run=$IS_RUN" >> "$GITHUB_OUTPUT"
+          echo "run-build=$IS_RUN" >> "$GITHUB_OUTPUT"
 
   build:
     runs-on: windows-latest
-    needs: check-run
-    if: needs.check-run.outputs.is_run == 'true'
+    needs: check-run-build
+    if: needs.check-run-build.outputs.run-build == 'true'
 
     steps:
       - name: Checkout

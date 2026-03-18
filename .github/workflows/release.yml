@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "45 17 * * *" # Avoid peak time.
+    - cron: "5 18 * * *" # Avoid peak time.
 
 jobs:
   check-run-build:

@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "31 11 * * *"
+    - cron: "18 12 * * *"
 
 jobs:
   check-run-build:
@@ -81,7 +81,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete nightly --cleanup-tag --yes --repo $GITHUB_REPOSITORY
+          gh release delete nightly --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
         continue-on-error: true
 
       - name: Create GitHub Release

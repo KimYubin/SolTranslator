@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "55 7 * * *"
+    - cron: "13 23 * * *"
 
 jobs:
   check-run-build:
@@ -25,6 +25,7 @@ jobs:
 
             if [ -n "$NIGHTLY" ] && [ "$HEAD" = "$NIGHTLY" ]; then
               IS_RUN=false
+              echo "::notice::No new commit. Terminate the nightly build."
             fi
           fi
 
@@ -78,7 +79,7 @@ jobs:
       - name: Delete nightly tag
         if: github.event_name == 'schedule'
         run: |
-          gh release delete nightly --cleanup-tag --yes || echo "No existing nightly"
+          gh release delete nightly --cleanup-tag --yes --repo $GITHUB_REPOSITORY
         continue-on-error: true
 
       - name: Create GitHub Release

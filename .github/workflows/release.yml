@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "13 23 * * *"
+    - cron: "31 11 * * *"
 
 jobs:
   check-run-build:
@@ -38,7 +38,7 @@ jobs:
 
     env:
       TAG_NAME: ${{ github.event_name == 'schedule' && 'nightly' || github.ref_name }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
@@ -78,6 +78,8 @@ jobs:
 
       - name: Delete nightly tag
         if: github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release delete nightly --cleanup-tag --yes --repo $GITHUB_REPOSITORY
         continue-on-error: true
@@ -85,7 +87,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.TAG_NAME }}
           name: ${{ github.event_name == 'schedule' && 'nightly' || format('SolTranslator {0}', env.TAG_NAME) }}
           prerelease: ${{ github.event_name == 'schedule' }}

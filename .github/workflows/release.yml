@@ -6,7 +6,7 @@ on:
       - "v*"
 
   schedule: 
-    - cron: "36 3 * * *"
+    - cron: "55 7 * * *"
 
 jobs:
   check-run-build:
@@ -37,17 +37,11 @@ jobs:
 
     env:
       TAG_NAME: ${{ github.event_name == 'schedule' && 'nightly' || github.ref_name }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Delete nightly release and tag
-        if: github.event_name == 'schedule'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release delete nightly --cleanup-tag --yes || echo "No existing nightly"
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -79,6 +73,13 @@ jobs:
       - name: Compress install folder
         run: |
           Compress-Archive -Path ${{ github.workspace }}\deploy\* -DestinationPath SolTranslator.zip
+
+
+      - name: Delete nightly tag
+        if: github.event_name == 'schedule'
+        run: |
+          gh release delete nightly --cleanup-tag --yes || echo "No existing nightly"
+        continue-on-error: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

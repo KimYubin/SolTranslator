@@ -151,6 +151,8 @@ qt_add_executable(
         src/Managers/DbWorker.h
         src/Utils/SolJson.cpp
         src/Utils/SolJson.h
+        src/Utils/Tr.cpp
+        src/Utils/Tr.h
 )
 
 # ============================

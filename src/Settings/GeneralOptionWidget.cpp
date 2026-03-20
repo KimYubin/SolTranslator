@@ -72,7 +72,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     // 팝업번역 도착언어 선택
     {
         SettingCard* selectTargetLang = new SettingCard(new DropdownMenu, popupTrGroup);
-        selectTargetLang->setHeader(tr("목표 언어"));
+        selectTargetLang->setHeader(tr("도착 언어"));
         selectTargetLang->setDescription(tr("팝업 번역의 목표가 되는 언어를 선택합니다."));
 
         DropdownMenu* selectCombo = selectTargetLang->getContent<DropdownMenu>();

@@ -42,10 +42,11 @@ public:
     /** for array */
     SolJson operator[](const qsizetype inIdx) const;
 
-    bool hasValue() const { return _expected.has_value(); }
     constexpr explicit operator bool() const noexcept { return _expected.has_value(); }
+    bool hasValue() const { return _expected.has_value(); }
+    bool isError() const { return (_expected.has_value() == false); }
 
-    QString error() const { return _expected.has_value() ? "" : _expected.error(); };
+    QString error() const { return _expected.has_value() ? "No error. exist value" : _expected.error(); };
 
     const Expected& expected() const { return _expected; };
 

@@ -30,7 +30,7 @@ SolJson SolJson::fromJson(const QByteArray& inJson)
 
 SolJson SolJson::value(const QString& inKey) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return SolJson{_expected};
     }
@@ -41,7 +41,7 @@ SolJson SolJson::value(const QString& inKey) const
     }
 
     const QJsonValue val = _expected->toObject().value(inKey);
-    if (val == QJsonValue::Undefined)
+    if (val.isUndefined())
     {
         return SolJson{std::unexpected("not detected key: " + inKey)};
     }
@@ -51,7 +51,7 @@ SolJson SolJson::value(const QString& inKey) const
 
 SolJson SolJson::operator[](const qsizetype inIdx) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return SolJson{_expected};
     }
@@ -77,7 +77,7 @@ SolJson SolJson::operator[](const qsizetype inIdx) const
 
 bool SolJson::toBool(const bool inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -86,7 +86,7 @@ bool SolJson::toBool(const bool inDefaultValue) const
 
 int SolJson::toInt(const int inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -95,7 +95,7 @@ int SolJson::toInt(const int inDefaultValue) const
 
 qint64 SolJson::toInteger(const qint64 inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -104,7 +104,7 @@ qint64 SolJson::toInteger(const qint64 inDefaultValue) const
 
 double SolJson::toDouble(const double inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -113,7 +113,7 @@ double SolJson::toDouble(const double inDefaultValue) const
 
 QString SolJson::toString() const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return QString();
     }
@@ -122,7 +122,7 @@ QString SolJson::toString() const
 
 QString SolJson::toString(const QString& inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -131,7 +131,7 @@ QString SolJson::toString(const QString& inDefaultValue) const
 
 QAnyStringView SolJson::toStringView(const QAnyStringView inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -140,7 +140,7 @@ QAnyStringView SolJson::toStringView(const QAnyStringView inDefaultValue) const
 
 QJsonArray SolJson::toArray() const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return QJsonArray();
     }
@@ -149,7 +149,7 @@ QJsonArray SolJson::toArray() const
 
 QJsonArray SolJson::toArray(const QJsonArray& inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }
@@ -158,7 +158,7 @@ QJsonArray SolJson::toArray(const QJsonArray& inDefaultValue) const
 
 QJsonObject SolJson::toObject() const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return QJsonObject();
     }
@@ -167,7 +167,7 @@ QJsonObject SolJson::toObject() const
 
 QJsonObject SolJson::toObject(const QJsonObject& inDefaultValue) const
 {
-    if (hasValue() == false)
+    if (isError())
     {
         return inDefaultValue;
     }

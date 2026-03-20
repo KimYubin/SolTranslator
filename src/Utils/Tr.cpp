@@ -12,6 +12,9 @@ class TrImpl
     Q_DECLARE_TR_FUNCTIONS(Tr)
 };
 
+constexpr int TrKeyCheck = 59;
+static_assert(static_cast<int>(TrKey::Size) == TrKeyCheck, "TrKey changed: update Tr::tr()");
+
 } // anonymous namespace
 
 QString Tr::tr(const TrKey inTr)
@@ -40,8 +43,8 @@ QString Tr::tr(const TrKey inTr)
     case Popup_Temp_Window:              return TrImpl::tr("팝업 번역창을 임시창으로 열기");
     case Popup_Temp_Window_Desc:         return TrImpl::tr("팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.");
     case Source_Target_Toggle:           return TrImpl::tr("원문/번역 토글");
-    case Delete_Translation:             return TrImpl::tr("번역 삭제");
-    case Language_Search:                return TrImpl::tr("언어 검색");
+    case Delete_Translation:             return TrImpl::tr("번역 삭제", "번역 기록을 삭제합니다.");
+    case Language_Search:                return TrImpl::tr("언어 검색", "번역 출발, 도착 언어를 찾는 검색창");
     case Sol:                            return TrImpl::tr("sol");
     case Always_On_Top_Off:              return TrImpl::tr("항상 위 끄기");
     case Always_On_Top_On:               return TrImpl::tr("항상 위 켜기");
@@ -53,10 +56,10 @@ QString Tr::tr(const TrKey inTr)
     case Close:                          return TrImpl::tr("닫기");
     case Register_Failed:                return TrImpl::tr("Failed to register %1. Error: %2");
     case Unregister_Failed:              return TrImpl::tr("Failed to unregister %1. Error: %2");
-    case Settings:                       return TrImpl::tr("설정");
+    case Settings:                       return TrImpl::tr("설정", "Settings나 Options");
     case Sol_Translator:                 return TrImpl::tr("SolTranslator");
     case Text:                           return TrImpl::tr("텍스트", "텍스트 번역 탭의 이름");
-    case Preparing:                      return TrImpl::tr("준비 중");
+    case Preparing:                      return TrImpl::tr("준비 중", "미완성된 기능에 대한 안내입니다.");
     case Document:                       return TrImpl::tr("문서", "문서 번역 탭의 이름");
     case History:                        return TrImpl::tr("기록", "이전 번역 기록");
     case Select_Translation_Engine:      return TrImpl::tr("번역 엔진 선택");
@@ -78,8 +81,11 @@ QString Tr::tr(const TrKey inTr)
     case Swap_Language:                  return TrImpl::tr("언어 바꾸기");
     case Swap_Language_Desc:             return TrImpl::tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다.");
     case Re_Translate:                   return TrImpl::tr("다시 번역");
-    case Translating:                    return TrImpl::tr("번역 중...");
+    case Translating:                    return TrImpl::tr("번역 중...", "번역 결과를 받기 전에 대기 중임을 안내합니다.");
+
+
+    case Size: Q_UNREACHABLE();
     // default: Should not be used. There must be a 'case' for every enum class member.
     }
-    return "";
+    Q_UNREACHABLE();
 }

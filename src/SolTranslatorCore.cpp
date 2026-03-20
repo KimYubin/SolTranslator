@@ -32,7 +32,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 
     QTranslator* qtTranslator = new QTranslator(this);
     if (qtTranslator->load(QLocale::system(), "sol", "_"
-                        , QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
+                         , QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
     {
         qApp->installTranslator(qtTranslator);
     }

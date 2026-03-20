@@ -74,6 +74,8 @@ enum class TrKey
   , Swap_Language_Desc
   , Re_Translate
   , Translating
+
+  , Size
 };
 
 #endif //SOLTRANSLATOR_TR_H

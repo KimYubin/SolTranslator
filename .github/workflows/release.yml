@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-run-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       run-build: ${{ steps.set-run-build.outputs.run-build }}
     steps:

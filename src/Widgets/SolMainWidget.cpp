@@ -36,6 +36,7 @@
 
 #include "Widgets/ui_SolMainWidget.h"
 
+using sol::i18n;
 
 SolMainWidget::SolMainWidget(QWidget* parent)
     : ISolWidget(parent)
@@ -45,7 +46,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     ui->setupUi(this);
 
-    setWindowTitle(Tr::tr("SolTranslator"));
+    setWindowTitle(i18n(Tr::Sol_Translator));
 
     setLayout(ui->mainLayout);
 
@@ -79,7 +80,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     textTabButton = new SolButton(this);
     textTabButton->setObjectName("textTabButton");
-    textTabButton->setText(Tr::tr("텍스트"));
+    textTabButton->setText(i18n(Tr::Text));
     textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
     ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignLeft);
 
@@ -87,12 +88,12 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
 
     // 문서 번역
-    QLabel* docTranslateWidget = new QLabel(Tr::tr("준비 중"));
+    QLabel* docTranslateWidget = new QLabel(i18n(Tr::Preparing));
     docTranslateWidget->setAlignment(Qt::AlignCenter);
 
     docTabButton = new SolButton(this);
     docTabButton->setObjectName("docTabButton");
-    docTabButton->setText(Tr::tr("문서"));
+    docTabButton->setText(i18n(Tr::Document));
     docTabButton->setIcon(QIcon(":/img/document_img"));
     ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignLeft);
 
@@ -103,7 +104,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     historyTabButton = new SolButton(this);
     historyTabButton->setObjectName("historyTabButton");
-    historyTabButton->setText(Tr::tr("기록"));
+    historyTabButton->setText(i18n(Tr::History));
     historyTabButton->setIcon(QIcon(":/img/history_img"));
     ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignLeft);
 
@@ -130,7 +131,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
         solConfig.setCurrentEngineType(curEg);
     });
 
-    SolTooltipFilter::setBubbleToolTip(_engineSelector, Tr::tr("번역 엔진 선택"));
+    SolTooltipFilter::setBubbleToolTip(_engineSelector, i18n(Tr::Select_Translation_Engine));
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignRight);
 
@@ -138,7 +139,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     // ~====================
     // setting button
     ui->settingsButton->setCheckable(false);
-    ui->settingsButton->setText(Tr::tr("설정"));
+    ui->settingsButton->setText(i18n(Tr::Settings));
     ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
     ui->settingsButton->setShortcut(solConfig.shortcut(Action::SettingsOpen));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
@@ -214,16 +215,9 @@ void SolMainWidget::closeEvent(QCloseEvent* event)
         if (solConfig.isFirstCloseToTray())
         {
             solConfig.setFirstCloseToTray();
-            /*
-            _trayIcon->showMessage(tr("트레이로 최소화되었습니다.")
-                                 , tr("Sol 번역기가 아직 실행 중입니다.\n"
-                                       "아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.")
+            _trayIcon->showMessage(i18n(Tr::First_To_Tray_Noti)
+                                 , i18n(Tr::First_To_Tray_Message)
                                  , QSystemTrayIcon::NoIcon, 20'000);
-            */
-            _trayIcon->showMessage(Tr::tr(TrKey::First_To_Tray_Noti)
-                                 , Tr::tr(TrKey::First_To_Tray_Message)
-                                 , QSystemTrayIcon::NoIcon, 20'000);
-
         }
         solConfig.saveWidgetGeometry(this);
         hide();
@@ -269,9 +263,9 @@ QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon
 void SolMainWidget::quitApp()
 {
     const auto reply = showNewMessageBox(QMessageBox::Icon::Question
-                                       , Tr::tr("SolTranslator")
-                                       , Tr::tr("정말 종료할까요?")
-                                       , {{Tr::tr("종료"), QMessageBox::Yes}, {Tr::tr("취소"), QMessageBox::Cancel}}
+                                       , i18n(Tr::Sol_Translator)
+                                       , i18n(Tr::Confirm_Quit)
+                                       , {{i18n(Tr::Quit), QMessageBox::Yes}, {i18n(Tr::Cancel), QMessageBox::Cancel}}
                                        , QMessageBox::Cancel);
 
 
@@ -330,16 +324,16 @@ void SolMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void SolMainWidget::createActions()
 {
-    _miniToTrayAction = new QAction(Tr::tr("트레이로 최소화(&M)"), this);
+    _miniToTrayAction = new QAction(i18n(Tr::Tray_Menu_Minimize), this);
     connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
 
-    _restoreAction = new QAction(Tr::tr("창 복원(&R)"), this);
+    _restoreAction = new QAction(i18n(Tr::Tray_Menu_Restore), this);
     connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
 
-    _settingAction = new QAction(Tr::tr("설정(&S)"), this);
+    _settingAction = new QAction(i18n(Tr::Tray_Menu_Settings), this);
     connect(_settingAction, &QAction::triggered, this, &SolMainWidget::showSettingsWidget);
 
-    _quitAction = new QAction(Tr::tr("종료(&Q)"), this);
+    _quitAction = new QAction(i18n(Tr::Tray_Menu_Quit), this);
     connect(_quitAction, &QAction::triggered, this, &SolMainWidget::quitApp, Qt::QueuedConnection);
 }
 
@@ -361,7 +355,7 @@ void SolMainWidget::createTrayIcon()
     _trayIcon->setIcon(_solIcon);
     _trayIcon->setContextMenu(_trayIconMenu);
     _trayIcon->setVisible(true);
-    _trayIcon->setToolTip(Tr::tr("SolTranslator"));
+    _trayIcon->setToolTip(i18n(Tr::Sol_Translator));
 
 
     _doubleClickTimer = new QTimer(this);

@@ -28,6 +28,7 @@
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
+using sol::i18n;
 
 TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     : ITranslateWidget(parent)
@@ -39,11 +40,11 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     ui->TextEditLayout->setSpacing(8);
 
-    ui->srcTextEdit->setAccessibleName(Tr::tr("번역 원문 입력 편집기"));
+    ui->srcTextEdit->setAccessibleName(i18n(Tr::Source_Text_Editor));
     ui->srcTextEdit->setTabChangesFocus(true);
     ui->srcTextEdit->setAcceptRichText(false);
 
-    ui->trTextEdit->setAccessibleName(Tr::tr("번역 결과"));
+    ui->trTextEdit->setAccessibleName(i18n(Tr::Translation_Result));
     ui->trTextEdit->setTabChangesFocus(true);
     ui->trTextEdit->setReadOnly(true);
     ui->trTextEdit->setMouseTracking(false);
@@ -57,7 +58,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 출발언어 선택기
     _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, solConfig.getTextSrcLang());
-    _srcLangSelector->setBubbleToolTip(Tr::tr("출발 언어"));
+    _srcLangSelector->setBubbleToolTip(i18n(Tr::Source_Language));
     connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(0, _srcLangSelector, 1);
@@ -65,7 +66,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 도착언어 선택기
     _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, ui->srcTextEdit, solConfig.getTextTargetLang());
-    _targetLangSelector->setBubbleToolTip(Tr::tr("도착 언어"));
+    _targetLangSelector->setBubbleToolTip(i18n(Tr::Target_Language));
     connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(2, _targetLangSelector, 1);
@@ -75,9 +76,9 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     const bool isAuto = (solConfig.getTextSrcLang() == LangType::AUTO);
     ui->languageSwapButton->setEnabled(isAuto == false);
     ui->languageSwapButton->setFocusPolicy(Qt::TabFocus);
-    ui->languageSwapButton->setAccessibleName(Tr::tr("언어 바꾸기"));
-    ui->languageSwapButton->setAccessibleDescription(Tr::tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다."));
-    SolTooltipFilter::setBubbleToolTip(ui->languageSwapButton, Tr::tr("언어 바꾸기"));
+    ui->languageSwapButton->setAccessibleName(i18n(Tr::Swap_Language));
+    ui->languageSwapButton->setAccessibleDescription(i18n(Tr::Swap_Language_Desc));
+    SolTooltipFilter::setBubbleToolTip(ui->languageSwapButton, i18n(Tr::Swap_Language));
     connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {
         const LangType srcLangType    = solConfig.getTextSrcLang();
@@ -104,8 +105,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
         // 다시 번역 버튼
         SolButton* trRefresh = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
                                                              , Qt::TabFocus
-                                                             // , tr("다시 번역")
-                                                             , Tr::tr(TrKey::Re_Translate)
+                                                             , i18n(Tr::Re_Translate)
                                                              , QKeySequence()
                                                              , 0
                                                              , Qt::AlignRight);
@@ -190,7 +190,7 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
         ui->trTextEdit->setPlainText("");
         return;
     }
-    ui->trTextEdit->setPlainText(Tr::tr("번역 중..."));
+    ui->trTextEdit->setPlainText(i18n(Tr::Translating));
 
     solCore->translateManager()->translateText(TranslateRequestInfo{
         this

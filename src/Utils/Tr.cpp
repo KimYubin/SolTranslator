@@ -12,17 +12,12 @@ class TrImpl
     Q_DECLARE_TR_FUNCTIONS(Tr)
 };
 
-
 } // anonymous namespace
 
-QString Tr::tr(const QString& inTr)
-{
-    return TrImpl::tr(inTr.toUtf8());
-}
 
-QString Tr::tr(const TrKey inTr)
+QString sol::i18n(const Tr inTr)
 {
-    using enum TrKey;
+    using enum Tr;
 
     switch (inTr)
     {
@@ -36,8 +31,8 @@ QString Tr::tr(const TrKey inTr)
     case Appearance_Behavior:            return TrImpl::tr("모양 및 동작");
     case Run_On_Start:                   return TrImpl::tr("시작 시 실행");
     case Run_On_Start_Desc:              return TrImpl::tr("시스템 시작 시 Sol번역기가 자동으로 실행됩니다.");
-    case Memory_Window_Geometry:         return TrImpl::tr("창 위치, 크기 기억");
-    case Memory_Window_Geometry_Desc:    return TrImpl::tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.");
+    case Remember_Geometry:              return TrImpl::tr("창 위치, 크기 기억");
+    case Remember_Geometry_Desc:         return TrImpl::tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.");
     case Apply:                          return TrImpl::tr("적용");
     case Apply_Theme:                    return TrImpl::tr("테마 적용");
     case Apply_Theme_Desc:               return TrImpl::tr("테마를 적용합니다.");
@@ -97,5 +92,5 @@ QString Tr::tr(const TrKey inTr)
 namespace
 {
 constexpr int TrKeyCheck = 59;
-static_assert(static_cast<int>(TrKey::Size) == TrKeyCheck, "TrKey changed: update Tr::tr()");
+static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

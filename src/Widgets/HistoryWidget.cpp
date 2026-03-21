@@ -31,6 +31,8 @@
 
 #include "Utils/Tr.h"
 
+using sol::i18n;
+
 
 HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
 {}
@@ -104,7 +106,7 @@ void HistoryWidget::setupUI()
     {
         const SolButton* toggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
                                                                          , Qt::TabFocus
-                                                                         , Tr::tr("원문/번역 토글")
+                                                                         , i18n(Tr::Source_Target_Toggle)
                                                                          , solConfig.shortcut(Action::HistoryToggle)
                                                                          , 0
                                                                          , Qt::AlignLeft);
@@ -116,7 +118,7 @@ void HistoryWidget::setupUI()
     {
         const SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
                                                                          , Qt::TabFocus
-                                                                         , Tr::tr("번역 삭제")
+                                                                         , i18n(Tr::Delete_Translation)
                                                                          , QKeySequence()
                                                                          , 1
                                                                          , Qt::AlignRight);

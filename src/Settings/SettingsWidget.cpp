@@ -22,13 +22,14 @@
 
 #include "ui_SettingsWidget.h"
 
+using sol::i18n;
 
 SettingsWidget::SettingsWidget(QWidget* parent)
     : ISolWidget(parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
-    setWindowTitle(Tr::tr("설정"));
+    setWindowTitle(i18n(Tr::Settings));
     resize(640, 600);
 
     setLayout(ui->mainLayout);

@@ -4,18 +4,17 @@
 #define SOLTRANSLATOR_TR_H
 
 class QString;
-enum class TrKey;
+enum class Tr;
 
-class Tr
+namespace sol
 {
-public:
-    static QString tr(const QString& inTr);
-    static QString tr(const TrKey inTr);
+/**
+ * 
+ */
+QString i18n(const Tr inTr);
+}
 
-};
-
-
-enum class TrKey
+enum class Tr
 {
     Translation_Engine
   , Save
@@ -27,8 +26,8 @@ enum class TrKey
   , Appearance_Behavior
   , Run_On_Start
   , Run_On_Start_Desc
-  , Memory_Window_Geometry
-  , Memory_Window_Geometry_Desc
+  , Remember_Geometry
+  , Remember_Geometry_Desc
   , Apply
   , Apply_Theme
   , Apply_Theme_Desc

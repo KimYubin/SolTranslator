@@ -20,6 +20,7 @@
 #include "Managers/ConfigManager.h"
 #include "Utils/Tr.h"
 
+using sol::i18n;
 
 /** LanguageSelector에서 사용하는 메뉴 */
 class LanguageSelectorMenuPrivate : public QWidget
@@ -175,7 +176,7 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
 
     _searchLine = new QLineEdit(this);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
-    _searchLine->setPlaceholderText(Tr::tr("언어 검색"));
+    _searchLine->setPlaceholderText(i18n(Tr::Language_Search));
     layout->addWidget(_searchLine);
 
     _listWidget = new KeySelectionList(this);

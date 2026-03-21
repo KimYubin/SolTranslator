@@ -12,10 +12,13 @@ class TrImpl
     Q_DECLARE_TR_FUNCTIONS(Tr)
 };
 
-constexpr int TrKeyCheck = 59;
-static_assert(static_cast<int>(TrKey::Size) == TrKeyCheck, "TrKey changed: update Tr::tr()");
 
 } // anonymous namespace
+
+QString Tr::tr(const QString& inTr)
+{
+    return TrImpl::tr(inTr.toUtf8());
+}
 
 QString Tr::tr(const TrKey inTr)
 {
@@ -28,7 +31,7 @@ QString Tr::tr(const TrKey inTr)
     case Translation_Engine_Settings:    return TrImpl::tr("번역 엔진 설정");
     case Ai_Options:                     return TrImpl::tr("AI 옵션");
     case OpenAi_Temperature:             return TrImpl::tr("OpenAI 온도 설정");
-    case Default_Temperature_Hint:       return TrImpl::tr("(기본값: 0.5)");
+    case Default_Value_Hint:             return TrImpl::tr("(기본값: %1)");
     case General:                        return TrImpl::tr("일반");
     case Appearance_Behavior:            return TrImpl::tr("모양 및 동작");
     case Run_On_Start:                   return TrImpl::tr("시작 시 실행");
@@ -45,7 +48,7 @@ QString Tr::tr(const TrKey inTr)
     case Source_Target_Toggle:           return TrImpl::tr("원문/번역 토글");
     case Delete_Translation:             return TrImpl::tr("번역 삭제", "번역 기록을 삭제합니다.");
     case Language_Search:                return TrImpl::tr("언어 검색", "번역 출발, 도착 언어를 찾는 검색창");
-    case Sol:                            return TrImpl::tr("sol");
+    case Sol:                            return TrImpl::tr("Sol");
     case Always_On_Top_Off:              return TrImpl::tr("항상 위 끄기");
     case Always_On_Top_On:               return TrImpl::tr("항상 위 켜기");
     case Temp_Window_Mode:               return TrImpl::tr("임시창 모드");
@@ -63,13 +66,13 @@ QString Tr::tr(const TrKey inTr)
     case Document:                       return TrImpl::tr("문서", "문서 번역 탭의 이름");
     case History:                        return TrImpl::tr("기록", "이전 번역 기록");
     case Select_Translation_Engine:      return TrImpl::tr("번역 엔진 선택");
-    case Minimized_To_Tray_Noti:         return TrImpl::tr("트레이로 최소화되었습니다.");
-    case Minimized_To_Tray_Message:      return TrImpl::tr("Sol 번역기가 아직 실행 중입니다.\n""아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.");
+    case First_To_Tray_Noti:             return TrImpl::tr("트레이로 최소화되었습니다.");
+    case First_To_Tray_Message:          return TrImpl::tr("Sol 번역기가 아직 실행 중입니다.\n""아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.");
     case Confirm_Quit:                   return TrImpl::tr("정말 종료할까요?");
     case Quit:                           return TrImpl::tr("종료");
     case Cancel:                         return TrImpl::tr("취소");
-    case Tray_Menu_Minimize_To_Tray:     return TrImpl::tr("트레이로 최소화(&M)");
-    case Tray_Menu_Restore_Window:       return TrImpl::tr("창 복원(&R)");
+    case Tray_Menu_Minimize:             return TrImpl::tr("트레이로 최소화(&M)");
+    case Tray_Menu_Restore:              return TrImpl::tr("창 복원(&R)");
     case Tray_Menu_Settings:             return TrImpl::tr("설정(&S)");
     case Tray_Menu_Quit:                 return TrImpl::tr("종료(&Q)");
     case Copy_Translation:               return TrImpl::tr("번역 복사");
@@ -89,3 +92,10 @@ QString Tr::tr(const TrKey inTr)
     }
     Q_UNREACHABLE();
 }
+
+
+namespace
+{
+constexpr int TrKeyCheck = 59;
+static_assert(static_cast<int>(TrKey::Size) == TrKeyCheck, "TrKey changed: update Tr::tr()");
+} // anonymous namespace

@@ -29,6 +29,8 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
+#include "Utils/Tr.h"
+
 
 HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
 {}
@@ -100,24 +102,24 @@ void HistoryWidget::setupUI()
 
     // 원문/번역 토글
     {
-        SolButton* textToggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
-                                                                       , Qt::TabFocus
-                                                                       , tr("원문/번역 토글")
-                                                                       , solConfig.shortcut(Action::HistoryToggle)
-                                                                       , 0
-                                                                       , Qt::AlignLeft);
+        const SolButton* toggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
+                                                                         , Qt::TabFocus
+                                                                         , Tr::tr("원문/번역 토글")
+                                                                         , solConfig.shortcut(Action::HistoryToggle)
+                                                                         , 0
+                                                                         , Qt::AlignLeft);
 
-        connect(textToggleButton, &QPushButton::clicked, this, [this]() { toggleTranslationText(); });
+        connect(toggleButton, &QPushButton::clicked, this, [this]() { toggleTranslationText(); });
     }
 
     // 기록 삭제
     {
-        SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
-                                                                   , Qt::TabFocus
-                                                                   , tr("번역 삭제")
-                                                                   , QKeySequence()
-                                                                   , 1
-                                                                   , Qt::AlignRight);
+        const SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
+                                                                         , Qt::TabFocus
+                                                                         , Tr::tr("번역 삭제")
+                                                                         , QKeySequence()
+                                                                         , 1
+                                                                         , Qt::AlignRight);
 
         connect(deleteButton, &QPushButton::clicked, this, [this]()
         {

@@ -9,7 +9,9 @@ enum class TrKey;
 class Tr
 {
 public:
+    static QString tr(const QString& inTr);
     static QString tr(const TrKey inTr);
+
 };
 
 
@@ -20,7 +22,7 @@ enum class TrKey
   , Translation_Engine_Settings
   , Ai_Options
   , OpenAi_Temperature
-  , Default_Temperature_Hint
+  , Default_Value_Hint
   , General
   , Appearance_Behavior
   , Run_On_Start
@@ -55,13 +57,13 @@ enum class TrKey
   , Document
   , History
   , Select_Translation_Engine
-  , Minimized_To_Tray_Noti
-  , Minimized_To_Tray_Message
+  , First_To_Tray_Noti
+  , First_To_Tray_Message
   , Confirm_Quit
   , Quit
   , Cancel
-  , Tray_Menu_Minimize_To_Tray
-  , Tray_Menu_Restore_Window
+  , Tray_Menu_Minimize
+  , Tray_Menu_Restore
   , Tray_Menu_Settings
   , Tray_Menu_Quit
   , Copy_Translation

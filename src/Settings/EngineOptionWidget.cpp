@@ -13,10 +13,12 @@
 #include "SolTranslatorCore.h"
 #include "Widgets/SolMainWidget.h"
 #include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/SettingCard.h"
+#include "Utils/Tr.h"
 
 #include "ui_EngineOptionWidget.h"
 
-#include "SubWidgets/SettingCard.h"
+
 
 EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
@@ -24,7 +26,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 {
     setObjectName("EngineOptionWidget");
 
-    auto [engineGroup, engineVLay] = addNewOptionGroupBox(tr("번역 엔진 설정"));
+    auto [engineGroup, engineVLay] = addNewOptionGroupBox(Tr::tr("번역 엔진 설정"));
 
     {
         ui->setupUi(engineGroup);
@@ -73,15 +75,15 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 
 
     // AI 옵션
-    auto [aiOptionGroup, aiOptionVLay] = addNewOptionGroupBox(tr("AI 옵션"));
+    auto [aiOptionGroup, aiOptionVLay] = addNewOptionGroupBox(Tr::tr("AI 옵션"));
 
     // 온도 설정
     {
         SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), aiOptionGroup);
-        openAiTemper->setHeader(tr("OpenAI 온도 설정"));
-        openAiTemper->setDescription(tr("(기본값: 0.5)"));
+        openAiTemper->setHeader(Tr::tr("OpenAI 온도 설정"));
+        openAiTemper->setDescription(Tr::tr("(기본값: %1)").arg(solConfig.defaultAI_Temperature()));
 
-        // openAiTemper->setDescription(tr("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
+        // openAiTemper->setDescription(Tr::tr("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
         QDoubleSpinBox* spinBox = openAiTemper->getContent<QDoubleSpinBox>();
         spinBox->setRange(0.0, 1.5);
         spinBox->setDecimals(2);
@@ -113,8 +115,8 @@ void EngineOptionWidget::setEngineGroupUI()
 // EngineOption
 EngineOption::EngineOption()
 {
-    setDisplayName(tr("번역 엔진"));
-    setIconPath(tr(""));
+    setDisplayName(Tr::tr("번역 엔진"));
+    setIconPath("");
     setOptionWidgetCtor([]() { return new EngineOptionWidget(); });
     setPriority(OptionPriority::EngineOption);
 }

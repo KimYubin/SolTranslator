@@ -17,19 +17,21 @@
 
 #include "SubWidgets/DropdownMenu.h"
 
+#include "Utils/Tr.h"
+
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
 {
     setObjectName("GeneralOptionWidget");
 
-    auto [shapeBehaviorGroup, shapeBehaviorVLay] = addNewOptionGroupBox(tr("모양 및 동작"));
+    auto [shapeBehaviorGroup, shapeBehaviorVLay] = addNewOptionGroupBox(Tr::tr("모양 및 동작"));
 
     // 시작시 실행
     {
         SettingCard* startRunCard = new SettingCard(new SwitchButton(solConfig.getStartRun()), shapeBehaviorGroup);
-        startRunCard->setHeader(tr("시작 시 실행"));
-        startRunCard->setDescription(tr("시스템 시작 시 Sol번역기가 자동으로 실행됩니다."));
+        startRunCard->setHeader(Tr::tr("시작 시 실행"));
+        startRunCard->setDescription(Tr::tr("시스템 시작 시 Sol번역기가 자동으로 실행됩니다."));
         SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
         connect(startRunSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
         {
@@ -41,8 +43,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     // 창 위치 크기 기억
     {
         SettingCard* rememberWindow = new SettingCard(new SwitchButton(solConfig.getIsRememberWindowGeometry()), shapeBehaviorGroup);
-        rememberWindow->setHeader(tr("창 위치, 크기 기억"));
-        rememberWindow->setDescription(tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다."));
+        rememberWindow->setHeader(Tr::tr("창 위치, 크기 기억"));
+        rememberWindow->setDescription(Tr::tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다."));
         SwitchButton* remWindowSwitch = rememberWindow->getContent<SwitchButton>();
         connect(remWindowSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
         {
@@ -54,9 +56,9 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 테마 적용 버튼
     {
-        SettingCard* themeCard = new SettingCard(new QPushButton(tr("적용")), shapeBehaviorGroup);
-        themeCard->setHeader(tr("테마 적용"));
-        themeCard->setDescription(tr("테마를 적용합니다."));
+        SettingCard* themeCard = new SettingCard(new QPushButton(Tr::tr("적용")), shapeBehaviorGroup);
+        themeCard->setHeader(Tr::tr("테마 적용"));
+        themeCard->setDescription(Tr::tr("테마를 적용합니다."));
         QPushButton* themeButton = themeCard->getContent<QPushButton>();
         themeButton->setFocusPolicy(Qt::TabFocus);
         themeButton->setCheckable(false);
@@ -67,13 +69,13 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
     }
 
-    auto [popupTrGroup, popupTrVLay] = addNewOptionGroupBox(tr("팝업 번역"));
+    auto [popupTrGroup, popupTrVLay] = addNewOptionGroupBox(Tr::tr("팝업 번역"));
 
     // 팝업번역 도착언어 선택
     {
         SettingCard* selectTargetLang = new SettingCard(new DropdownMenu, popupTrGroup);
-        selectTargetLang->setHeader(tr("도착 언어"));
-        selectTargetLang->setDescription(tr("팝업 번역의 목표가 되는 언어를 선택합니다."));
+        selectTargetLang->setHeader(Tr::tr("도착 언어"));
+        selectTargetLang->setDescription(Tr::tr("팝업 번역의 목표가 되는 언어를 선택합니다."));
 
         DropdownMenu* selectCombo = selectTargetLang->getContent<DropdownMenu>();
 
@@ -100,8 +102,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     // 팝업 임시창 선택
     {
         SettingCard* popupTempCard = new SettingCard(new SwitchButton(solConfig.getIsPopupTrWindowTemp()), popupTrGroup);
-        popupTempCard->setHeader(tr("팝업 번역창을 임시창으로 열기"));
-        popupTempCard->setDescription(tr("팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다."));
+        popupTempCard->setHeader(Tr::tr("팝업 번역창을 임시창으로 열기"));
+        popupTempCard->setDescription(Tr::tr("팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다."));
         SwitchButton* popupTempSwitch = popupTempCard->getContent<SwitchButton>();
         connect(popupTempSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
         {
@@ -123,8 +125,8 @@ GeneralOptionWidget::~GeneralOptionWidget()
 // GeneralOption
 GeneralOption::GeneralOption()
 {
-    setDisplayName(tr("일반"));
-    setIconPath(tr(""));
+    setDisplayName(Tr::tr("일반"));
+    setIconPath("");
     setOptionWidgetCtor([]() { return new GeneralOptionWidget(); });
     setPriority(OptionPriority::GeneralOption);
 }

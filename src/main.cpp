@@ -7,6 +7,8 @@
 
 #include "SolTranslatorCore.h"
 
+namespace
+{
 // 로그 파일 스트림
 QFile logFile;
 QTextStream logStream;
@@ -55,6 +57,7 @@ void setupLogFile()
     // 메시지 핸들러 등록
     qInstallMessageHandler(solMessageHandler);
 }
+} // anonymous namespace
 
 int main(int argc, char* argv[])
 {

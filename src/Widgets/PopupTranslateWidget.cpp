@@ -40,6 +40,8 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
+#include "Utils/Tr.h"
+
 #include "Widgets/ui_PopupTranslateWidget.h"
 
 PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
@@ -53,7 +55,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
 {
     QIcon icon = QIcon(":/img/icon_img");
     setWindowIcon(icon);
-    setWindowTitle(tr("sol"));
+    setWindowTitle(Tr::tr("Sol"));
 
     // ~===========
     // config
@@ -320,7 +322,7 @@ void PopupTranslateWidget::setupUI()
     _AlwaysOnButton->setCheckable(true);
     _AlwaysOnButton->setObjectName("alwaysOnButton");
     _AlwaysOnButton->setCheckIcon(":/img/keep_pin_fill_v", ":/img/keep_pin_clock45d");
-    _AlwaysOnButton->setCheckToolTipAction(tr("항상 위 끄기"), tr("항상 위 켜기"), Action::PopupAlwaysOn);
+    _AlwaysOnButton->setCheckToolTipAction(Tr::tr("항상 위 끄기"), Tr::tr("항상 위 켜기"), Action::PopupAlwaysOn);
     _AlwaysOnButton->hide();
 
     setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
@@ -333,7 +335,7 @@ void PopupTranslateWidget::setupUI()
     _windowModeButton->setCheckable(true);
     _windowModeButton->setObjectName("windowModeButton");
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
-    _windowModeButton->setCheckToolTipAction(tr("임시창 모드"), tr("일반창 모드"), Action::PopupWindowMode);
+    _windowModeButton->setCheckToolTipAction(Tr::tr("임시창 모드"), Tr::tr("일반창 모드"), Action::PopupWindowMode);
 
     setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
@@ -351,7 +353,7 @@ void PopupTranslateWidget::setupUI()
     _minimizedButton = new SolButton(this);
     _minimizedButton->setObjectName("minimizedButton");
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
-    _minimizedButton->setToolTipAction(tr("최소화"), Action::PopupMinimize);
+    _minimizedButton->setToolTipAction(Tr::tr("최소화"), Action::PopupMinimize);
 
     setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
 
@@ -363,7 +365,7 @@ void PopupTranslateWidget::setupUI()
     _maxRestoreButton->setCheckable(true);
     _maxRestoreButton->setObjectName("maxRestoreButton");
     _maxRestoreButton->setCheckIcon(":/img/restore_button_img", ":/img/maximize_button_img");
-    _maxRestoreButton->setCheckToolTipAction(tr("이전 크기로 복원"), tr("최대화"), Action::PopupMaxRestore);
+    _maxRestoreButton->setCheckToolTipAction(Tr::tr("이전 크기로 복원"), Tr::tr("최대화"), Action::PopupMaxRestore);
 
     setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
     connect(_maxRestoreButton, &QPushButton::toggled, this, &PopupTranslateWidget::onMaxNormalToggle);
@@ -374,7 +376,7 @@ void PopupTranslateWidget::setupUI()
     _closeButton = new SolButton(this);
     _closeButton->setObjectName("closeButton");
     _closeButton->setIcon(QIcon(":/img/close_button_img"));
-    _closeButton->setToolTipAction(tr("닫기"), Action::PopupClose);
+    _closeButton->setToolTipAction(Tr::tr("닫기"), Action::PopupClose);
 
     setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
 
@@ -404,7 +406,7 @@ void PopupTranslateWidget::setupUI()
     _textToggleButton = new SolButton(this);
     _textToggleButton->setIcon(QIcon(":/img/swap_text_img"));
     _textToggleButton->setFocusPolicy(Qt::TabFocus);
-    _textToggleButton->setToolTipAction(tr("원문/번역 토글"), Action::PopupToggle);
+    _textToggleButton->setToolTipAction(Tr::tr("원문/번역 토글"), Action::PopupToggle);
 
     ui->statusLayout->addWidget(_textToggleButton, 0, Qt::AlignBottom | Qt::AlignLeft);
 

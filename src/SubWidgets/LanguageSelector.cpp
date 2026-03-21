@@ -18,6 +18,7 @@
 #include "SolLog.h"
 
 #include "Managers/ConfigManager.h"
+#include "Utils/Tr.h"
 
 
 /** LanguageSelector에서 사용하는 메뉴 */
@@ -174,7 +175,7 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
 
     _searchLine = new QLineEdit(this);
     _searchLine->setAttribute(Qt::WA_InputMethodEnabled, true);
-    _searchLine->setPlaceholderText(tr("언어 검색"));
+    _searchLine->setPlaceholderText(Tr::tr("언어 검색"));
     layout->addWidget(_searchLine);
 
     _listWidget = new KeySelectionList(this);

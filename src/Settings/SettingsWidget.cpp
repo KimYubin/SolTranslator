@@ -16,10 +16,11 @@
 
 #include "Widgets/SolMainWidget.h"
 #include "IOptionWidget.h"
+#include "Managers/ConfigManager.h"
+
+#include "Utils/Tr.h"
 
 #include "ui_SettingsWidget.h"
-
-#include "Managers/ConfigManager.h"
 
 
 SettingsWidget::SettingsWidget(QWidget* parent)
@@ -27,7 +28,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
-    setWindowTitle(tr("설정"));
+    setWindowTitle(Tr::tr("설정"));
     resize(640, 600);
 
     setLayout(ui->mainLayout);

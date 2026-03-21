@@ -41,6 +41,7 @@ public:
     void setOpenAIModel(const QString& inModelName);
     QString getOpenAIModel();
 
+    double defaultAI_Temperature() const;
     void setOpenAI_Temperature(const double inTemperature);
     double getOpenAI_Temperature();
 

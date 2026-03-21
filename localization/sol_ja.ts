@@ -2,19 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ja" sourcelanguage="ko">
 <context>
-    <name>EngineOption</name>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="116"/>
-        <source>번역 엔진</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="117"/>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>EngineOptionWidget</name>
     <message>
         <location filename="../src/Settings/EngineOptionWidget.ui" line="14"/>
@@ -34,181 +21,6 @@
     <message>
         <location filename="../src/Settings/EngineOptionWidget.ui" line="81"/>
         <source>저장</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="27"/>
-        <source>번역 엔진 설정</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="76"/>
-        <source>AI 옵션</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="81"/>
-        <source>OpenAI 온도 설정</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/EngineOptionWidget.cpp" line="82"/>
-        <source>(기본값: 0.5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>GeneralOption</name>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="126"/>
-        <source>일반</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="127"/>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>GeneralOptionWidget</name>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="26"/>
-        <source>모양 및 동작</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="31"/>
-        <source>시작 시 실행</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="32"/>
-        <source>시스템 시작 시 Sol번역기가 자동으로 실행됩니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="44"/>
-        <source>창 위치, 크기 기억</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="45"/>
-        <source>다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="57"/>
-        <source>적용</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="58"/>
-        <source>테마 적용</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="59"/>
-        <source>테마를 적용합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="70"/>
-        <source>팝업 번역</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="75"/>
-        <source>도착 언어</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="76"/>
-        <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="103"/>
-        <source>팝업 번역창을 임시창으로 열기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="104"/>
-        <source>팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>HistoryWidget</name>
-    <message>
-        <location filename="../src/Widgets/HistoryWidget.cpp" line="105"/>
-        <source>원문/번역 토글</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/HistoryWidget.cpp" line="117"/>
-        <source>번역 삭제</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>LanguageSelectorMenuPrivate</name>
-    <message>
-        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="177"/>
-        <source>언어 검색</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PopupTranslateWidget</name>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="56"/>
-        <source>sol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="323"/>
-        <source>항상 위 끄기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="323"/>
-        <source>항상 위 켜기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="336"/>
-        <source>임시창 모드</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="336"/>
-        <source>일반창 모드</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="354"/>
-        <source>최소화</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="366"/>
-        <source>최대화</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="366"/>
-        <source>이전 크기로 복원</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="377"/>
-        <source>닫기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="407"/>
-        <source>원문/번역 토글</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -232,11 +44,6 @@
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../src/Settings/SettingsWidget.cpp" line="30"/>
-        <source>설정</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SolMainWidget</name>
@@ -247,15 +54,279 @@
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.ui" line="77"/>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="141"/>
         <source>설정</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TextEditTranslateWidget</name>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="14"/>
+        <source>TextEditTranslateWidget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="40"/>
+        <source>⮂</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Tr</name>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="118"/>
+        <location filename="../src/Utils/Tr.cpp" line="29"/>
+        <source>번역 엔진</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="30"/>
+        <source>저장</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="29"/>
+        <location filename="../src/Utils/Tr.cpp" line="31"/>
+        <source>번역 엔진 설정</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="78"/>
+        <location filename="../src/Utils/Tr.cpp" line="32"/>
+        <source>AI 옵션</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="83"/>
+        <location filename="../src/Utils/Tr.cpp" line="33"/>
+        <source>OpenAI 온도 설정</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/EngineOptionWidget.cpp" line="84"/>
+        <location filename="../src/Utils/Tr.cpp" line="34"/>
+        <source>(기본값: %1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="128"/>
+        <location filename="../src/Utils/Tr.cpp" line="35"/>
+        <source>일반</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="28"/>
+        <location filename="../src/Utils/Tr.cpp" line="36"/>
+        <source>모양 및 동작</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="33"/>
+        <location filename="../src/Utils/Tr.cpp" line="37"/>
+        <source>시작 시 실행</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="34"/>
+        <location filename="../src/Utils/Tr.cpp" line="38"/>
+        <source>시스템 시작 시 Sol번역기가 자동으로 실행됩니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="46"/>
+        <location filename="../src/Utils/Tr.cpp" line="39"/>
+        <source>창 위치, 크기 기억</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="47"/>
+        <location filename="../src/Utils/Tr.cpp" line="40"/>
+        <source>다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="59"/>
+        <location filename="../src/Utils/Tr.cpp" line="41"/>
+        <source>적용</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="60"/>
+        <location filename="../src/Utils/Tr.cpp" line="42"/>
+        <source>테마 적용</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="61"/>
+        <location filename="../src/Utils/Tr.cpp" line="43"/>
+        <source>테마를 적용합니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="72"/>
+        <location filename="../src/Utils/Tr.cpp" line="44"/>
+        <source>팝업 번역</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="78"/>
+        <location filename="../src/Utils/Tr.cpp" line="45"/>
+        <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="105"/>
+        <location filename="../src/Utils/Tr.cpp" line="46"/>
+        <source>팝업 번역창을 임시창으로 열기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="106"/>
+        <location filename="../src/Utils/Tr.cpp" line="47"/>
+        <source>팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/HistoryWidget.cpp" line="107"/>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="409"/>
+        <location filename="../src/Utils/Tr.cpp" line="48"/>
+        <source>원문/번역 토글</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/HistoryWidget.cpp" line="119"/>
+        <source>번역 삭제</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="58"/>
+        <location filename="../src/Utils/Tr.cpp" line="51"/>
+        <source>Sol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="325"/>
+        <location filename="../src/Utils/Tr.cpp" line="52"/>
+        <source>항상 위 끄기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="325"/>
+        <location filename="../src/Utils/Tr.cpp" line="53"/>
+        <source>항상 위 켜기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="338"/>
+        <location filename="../src/Utils/Tr.cpp" line="54"/>
+        <source>임시창 모드</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="338"/>
+        <location filename="../src/Utils/Tr.cpp" line="55"/>
+        <source>일반창 모드</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="356"/>
+        <location filename="../src/Utils/Tr.cpp" line="56"/>
+        <source>최소화</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="368"/>
+        <location filename="../src/Utils/Tr.cpp" line="57"/>
+        <source>이전 크기로 복원</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="368"/>
+        <location filename="../src/Utils/Tr.cpp" line="58"/>
+        <source>최대화</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/PopupTranslateWidget.cpp" line="379"/>
+        <location filename="../src/Utils/Tr.cpp" line="59"/>
+        <source>닫기</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="60"/>
+        <source>Failed to register %1. Error: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="61"/>
+        <source>Failed to unregister %1. Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="48"/>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="272"/>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="364"/>
+        <location filename="../src/Utils/Tr.cpp" line="63"/>
         <source>SolTranslator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="64"/>
+        <source>텍스트</source>
+        <comment>텍스트 번역 탭의 이름</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="49"/>
+        <source>번역 삭제</source>
+        <comment>번역 기록을 삭제합니다.</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="50"/>
+        <source>언어 검색</source>
+        <comment>번역 출발, 도착 언어를 찾는 검색창</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="62"/>
+        <source>설정</source>
+        <comment>Settings나 Options</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="65"/>
+        <source>준비 중</source>
+        <comment>미완성된 기능에 대한 안내입니다.</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="66"/>
+        <source>문서</source>
+        <comment>문서 번역 탭의 이름</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="67"/>
+        <source>기록</source>
+        <comment>이전 번역 기록</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="133"/>
+        <location filename="../src/Utils/Tr.cpp" line="68"/>
+        <source>번역 엔진 선택</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="69"/>
+        <source>트레이로 최소화되었습니다.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="70"/>
+        <source>Sol 번역기가 아직 실행 중입니다.
+아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -279,100 +350,75 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Widgets/SolMainWidget.cpp" line="133"/>
-        <source>번역 엔진 선택</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="273"/>
+        <location filename="../src/Utils/Tr.cpp" line="71"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="274"/>
+        <location filename="../src/Utils/Tr.cpp" line="72"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="274"/>
+        <location filename="../src/Utils/Tr.cpp" line="73"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="333"/>
+        <location filename="../src/Utils/Tr.cpp" line="74"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="336"/>
+        <location filename="../src/Utils/Tr.cpp" line="75"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="339"/>
+        <location filename="../src/Utils/Tr.cpp" line="76"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/SolMainWidget.cpp" line="342"/>
+        <location filename="../src/Utils/Tr.cpp" line="77"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>SolWidgetFactory</name>
     <message>
-        <location filename="../src/SubWidgets/SolWidgetFactory.cpp" line="21"/>
+        <location filename="../src/SubWidgets/SolWidgetFactory.cpp" line="22"/>
+        <location filename="../src/Utils/Tr.cpp" line="78"/>
         <source>번역 복사</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/SubWidgets/SolWidgetFactory.cpp" line="27"/>
+        <location filename="../src/SubWidgets/SolWidgetFactory.cpp" line="28"/>
+        <location filename="../src/Utils/Tr.cpp" line="79"/>
         <source>복사 완료!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TextEditTranslateWidget</name>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="14"/>
-        <source>TextEditTranslateWidget</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.ui" line="40"/>
-        <source>⮂</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="42"/>
+        <location filename="../src/Utils/Tr.cpp" line="80"/>
         <source>번역 원문 입력 편집기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="46"/>
+        <location filename="../src/Utils/Tr.cpp" line="81"/>
         <source>번역 결과</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="60"/>
+        <location filename="../src/Utils/Tr.cpp" line="82"/>
         <source>출발 언어</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="68"/>
-        <source>도착 언어</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="78"/>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="80"/>
-        <source>언어 바꾸기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="79"/>
-        <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -380,311 +426,46 @@
         <source>번역 중...</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Tr</name>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="26"/>
-        <source>번역 엔진</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="27"/>
-        <source>저장</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="28"/>
-        <source>번역 엔진 설정</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="29"/>
-        <source>AI 옵션</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="30"/>
-        <source>OpenAI 온도 설정</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="31"/>
-        <source>(기본값: 0.5)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="32"/>
-        <source>일반</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="33"/>
-        <source>모양 및 동작</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="34"/>
-        <source>시작 시 실행</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="35"/>
-        <source>시스템 시작 시 Sol번역기가 자동으로 실행됩니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="36"/>
-        <source>창 위치, 크기 기억</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="37"/>
-        <source>다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="38"/>
-        <source>적용</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="39"/>
-        <source>테마 적용</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="40"/>
-        <source>테마를 적용합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="41"/>
-        <source>팝업 번역</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="42"/>
-        <source>팝업 번역의 목표가 되는 언어를 선택합니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="43"/>
-        <source>팝업 번역창을 임시창으로 열기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="44"/>
-        <source>팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="45"/>
-        <source>원문/번역 토글</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="48"/>
-        <source>sol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="49"/>
-        <source>항상 위 끄기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="50"/>
-        <source>항상 위 켜기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="51"/>
-        <source>임시창 모드</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="52"/>
-        <source>일반창 모드</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="53"/>
-        <source>최소화</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="54"/>
-        <source>이전 크기로 복원</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="55"/>
-        <source>최대화</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="56"/>
-        <source>닫기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="57"/>
-        <source>Failed to register %1. Error: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="58"/>
-        <source>Failed to unregister %1. Error: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="60"/>
-        <source>SolTranslator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="61"/>
-        <source>텍스트</source>
-        <comment>텍스트 번역 탭의 이름</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="46"/>
-        <source>번역 삭제</source>
-        <comment>번역 기록을 삭제합니다.</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="47"/>
-        <source>언어 검색</source>
-        <comment>번역 출발, 도착 언어를 찾는 검색창</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="59"/>
-        <source>설정</source>
-        <comment>Settings나 Options</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="62"/>
-        <source>준비 중</source>
-        <comment>미완성된 기능에 대한 안내입니다.</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="63"/>
-        <source>문서</source>
-        <comment>문서 번역 탭의 이름</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="64"/>
-        <source>기록</source>
-        <comment>이전 번역 기록</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="65"/>
-        <source>번역 엔진 선택</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="66"/>
-        <source>트레이로 최소화되었습니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="67"/>
-        <source>Sol 번역기가 아직 실행 중입니다.
-아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="68"/>
-        <source>정말 종료할까요?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="69"/>
-        <source>종료</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="70"/>
-        <source>취소</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="71"/>
-        <source>트레이로 최소화(&amp;M)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="72"/>
-        <source>창 복원(&amp;R)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="73"/>
-        <source>설정(&amp;S)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="74"/>
-        <source>종료(&amp;Q)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="75"/>
-        <source>번역 복사</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="76"/>
-        <source>복사 완료!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="77"/>
-        <source>번역 원문 입력 편집기</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="78"/>
-        <source>번역 결과</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="79"/>
-        <source>출발 언어</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/Utils/Tr.cpp" line="80"/>
+        <location filename="../src/Settings/GeneralOptionWidget.cpp" line="77"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="68"/>
+        <location filename="../src/Utils/Tr.cpp" line="83"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="81"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="78"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="80"/>
+        <location filename="../src/Utils/Tr.cpp" line="84"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="82"/>
+        <location filename="../src/Widgets/TextEditTranslateWidget.cpp" line="79"/>
+        <location filename="../src/Utils/Tr.cpp" line="85"/>
         <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="83"/>
+        <location filename="../src/Utils/Tr.cpp" line="86"/>
         <source>다시 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="84"/>
+        <location filename="../src/Utils/Tr.cpp" line="87"/>
         <source>번역 중...</source>
         <comment>번역 결과를 받기 전에 대기 중임을 안내합니다.</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/SettingsWidget.cpp" line="31"/>
+        <location filename="../src/Widgets/SolMainWidget.cpp" line="141"/>
+        <source>설정</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/SubWidgets/LanguageSelector.cpp" line="178"/>
+        <source>언어 검색</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

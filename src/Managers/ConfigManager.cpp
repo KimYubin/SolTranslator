@@ -83,6 +83,11 @@ QString ConfigManager::getOpenAIModel()
     return _settings->value(OpenAI_Model, "gpt-4o-mini").toString();
 }
 
+double ConfigManager::defaultAI_Temperature() const
+{
+    return 0.5;
+}
+
 void ConfigManager::setOpenAI_Temperature(const double inTemperature)
 {
     _settings->setValue(OpenAI_Temperature, inTemperature);
@@ -90,7 +95,7 @@ void ConfigManager::setOpenAI_Temperature(const double inTemperature)
 
 double ConfigManager::getOpenAI_Temperature()
 {
-    return _settings->value(OpenAI_Temperature, 0.5).toDouble();
+    return _settings->value(OpenAI_Temperature, defaultAI_Temperature()).toDouble();
 }
 
 void ConfigManager::setStartRun(const bool inStartRun)

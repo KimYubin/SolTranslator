@@ -27,7 +27,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
     _self = this;
 
-    qApp->setOrganizationDomain("sol");
+    qApp->setOrganizationDomain("Sol");
     qApp->setApplicationName("SolTranslator");
 
     QTranslator* qtTranslator = new QTranslator(this);

@@ -15,7 +15,7 @@ class TrImpl
 } // anonymous namespace
 
 
-QString sol::i18n(const Tr inTr)
+QString Sol::i18n(const Tr inTr)
 {
     using enum Tr;
 

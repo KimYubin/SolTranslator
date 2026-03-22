@@ -20,7 +20,7 @@
 #include "Managers/ConfigManager.h"
 #include "Utils/Tr.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 /** LanguageSelector에서 사용하는 메뉴 */
 class LanguageSelectorMenuPrivate : public QWidget
@@ -234,7 +234,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 
     if (eventType == QEvent::MouseButtonPress)
     {
-        if (sol::isThis(this, obj) == false)
+        if (Sol::isThis(this, obj) == false)
         {
             const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
             const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();

@@ -19,7 +19,7 @@
 
 #include "Utils/Tr.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
     : IOptionWidget(parent)

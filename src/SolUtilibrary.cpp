@@ -8,7 +8,7 @@
 #include <QScreen>
 
 
-bool sol::isThis(const QObject* inThis, const QObject* inOther)
+bool Sol::isThis(const QObject* inThis, const QObject* inOther)
 {
     bool isOtherThis = false;
 
@@ -53,17 +53,17 @@ void noHintingFontInternal(T* inOutWidget)
 }
 } // anonymous namespace
 
-void sol::noHintingFont(QWidget* inOutWidget)
+void Sol::noHintingFont(QWidget* inOutWidget)
 {
     noHintingFontInternal(inOutWidget);
 }
 
-void sol::noHintingFont()
+void Sol::noHintingFont()
 {
     noHintingFontInternal(qApp);
 }
 
-QRect sol::availableGeometryAt(const QPoint& inPoint)
+QRect Sol::availableGeometryAt(const QPoint& inPoint)
 {
     const QScreen* cursorScreen = qApp->screenAt(inPoint);
     const QScreen* targetScreen = cursorScreen ? cursorScreen : qApp->primaryScreen();
@@ -71,7 +71,7 @@ QRect sol::availableGeometryAt(const QPoint& inPoint)
     return targetScreen ? targetScreen->availableGeometry() : QRect();
 }
 
-QRect sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
+QRect Sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
 {
     QRect res = innerRect;
     if (outerRect.left() > res.left())
@@ -94,7 +94,7 @@ QRect sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
     return res;
 }
 
-QString sol::QStrFromStdView(const std::string_view& inStrView)
+QString Sol::QStrFromStdView(const std::string_view& inStrView)
 {
     // string_view -> std::str -> QString
     return QString::fromStdString(std::string{inStrView});

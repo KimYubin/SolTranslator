@@ -21,7 +21,7 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
 
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    QNetworkRequest request(sol::URLs::OPEN_AI);
+    QNetworkRequest request(Sol::URLs::OPEN_AI);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toUtf8());
 
@@ -39,7 +39,7 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 
     QJsonObject developerMessage;
     developerMessage["role"] = "developer";
-    developerMessage["content"] = QString(sol::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
     messages.append(developerMessage);
 
     QJsonObject userMessage;

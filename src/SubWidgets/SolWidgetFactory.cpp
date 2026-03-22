@@ -14,7 +14,7 @@
 #include "Managers/ConfigManager.h"
 #include "Utils/Tr.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
 {

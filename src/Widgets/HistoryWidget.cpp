@@ -31,7 +31,7 @@
 
 #include "Utils/Tr.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 
 HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
@@ -40,14 +40,14 @@ HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
 HistoryListView::~HistoryListView()
 {}
 
-QColor HistoryListView::getItemColor(const sol::ItemColorRole inColorRole) const
+QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
 {
     switch (inColorRole)
     {
-    case sol::itemTextColorRole:          return _itemTextColor;
-    case sol::itemSelectionTextColorRole: return _itemSelectionTextColor;
-    case sol::itemHoverTextColorRole:     return _itemHoverTextColor;
-    case sol::itemDisableColorRole:       return _itemDisableColor;
+    case Sol::itemTextColorRole:          return _itemTextColor;
+    case Sol::itemSelectionTextColorRole: return _itemSelectionTextColor;
+    case Sol::itemHoverTextColorRole:     return _itemHoverTextColor;
+    case Sol::itemDisableColorRole:       return _itemDisableColor;
     default: ;
     }
     return QColor();
@@ -96,7 +96,7 @@ void HistoryWidget::setupUI()
     SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
     {
         const QModelIndex curIdx = _historyListView->currentIndex();
-        const sol::HistoryItemRole curRole = (_currentTextType == TextType::OriginText) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
+        const Sol::HistoryItemRole curRole = (_currentTextType == TextType::OriginText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
 
         return _historyListModel->data(curIdx, curRole).toString();
     });
@@ -126,7 +126,7 @@ void HistoryWidget::setupUI()
         connect(deleteButton, &QPushButton::clicked, this, [this]()
         {
             const QModelIndex curIdx = _historyListView->currentIndex();
-            const qlonglong dbId     = _historyListModel->data(curIdx, sol::DbIdRole).toLongLong();
+            const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
             solCore->historyManager()->asyncDeleteHistory(dbId);
             _selectedTextEdit->setText("");
         });
@@ -256,12 +256,12 @@ void HistoryWidget::toggleTranslationText()
 
     // toggle
     _currentTextType = (_currentTextType == TextType::OriginText) ? TextType::TranslateText : TextType::OriginText;
-    const sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::OriginText) ? sol::SourceFullTextRole : sol::TargetFullTextRole;
+    const Sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::OriginText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
 
     const QString nextText  = _historyListModel->data(curIdx, currentTextTypeRole).toString();
-    const QString textStyle = _historyListModel->data(curIdx, sol::TextStyleStringRole).toString();
+    const QString textStyle = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
 
-    _selectedTextEdit->setFormattingText(nextText, sol::qStrToEnum(textStyle, TextStyle::PlainText));
+    _selectedTextEdit->setFormattingText(nextText, Sol::qStrToEnum(textStyle, TextStyle::PlainText));
 
     _selectedTextEdit->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }

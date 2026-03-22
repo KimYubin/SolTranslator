@@ -50,7 +50,7 @@ std::expected<void, QString> GlobalHotKeyManager::changeHotkey(const Action inAc
     const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
     if (findIt == _hotKeys.end())
     {
-        return std::unexpected("Attempt to change non-existent shortcut: " + sol::enumToQStr(inActionType) + inKeySeq.toString());
+        return std::unexpected("Attempt to change non-existent shortcut: " + Sol::enumToQStr(inActionType) + inKeySeq.toString());
     }
 
     findIt->second->setShortcut(inKeySeq, true);
@@ -63,7 +63,7 @@ std::expected<void, QString> GlobalHotKeyManager::removeHotkey(const Action inAc
     const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
     if (findIt == _hotKeys.end())
     {
-        return std::unexpected("Attempt to remove non-existent shortcut: " + sol::enumToQStr(inActionType));
+        return std::unexpected("Attempt to remove non-existent shortcut: " + Sol::enumToQStr(inActionType));
     }
 
     _hotKeys.erase(findIt);

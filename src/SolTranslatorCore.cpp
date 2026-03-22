@@ -50,11 +50,11 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 
     // parsing
     QCommandLineParser parser;
-    parser.addOption({sol::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
+    parser.addOption({Sol::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
     parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행
-    if (parser.isSet(sol::CmdLineOptions::START_UP_RUN))
+    if (parser.isSet(Sol::CmdLineOptions::START_UP_RUN))
     {
         _solMainWidget->hide();
     }

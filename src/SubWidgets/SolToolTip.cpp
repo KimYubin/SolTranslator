@@ -194,7 +194,7 @@ void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
     const QPoint newBottomPos = {topBottomX, bottomY};
     const QPoint newLeftPos   = {leftX, lefRightY};
 
-    const QRect availableGeo = sol::availableGeometryAt(QCursor::pos());
+    const QRect availableGeo = Sol::availableGeometryAt(QCursor::pos());
 
     // 교집합 면적 최대값 계산하고, _direction을 업데이트합니다.
     // 겹치는 면적이 가장 넓은 방향으로 생성합니다.
@@ -244,7 +244,7 @@ void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
     }
 
     // 벗어나면 안쪽으로 이동
-    newRect = sol::moveToInside(availableGeo, newRect);
+    newRect = Sol::moveToInside(availableGeo, newRect);
     move(newRect.topLeft());
 
     // 계산된 마진 및 사이즈로 업데이트

@@ -100,7 +100,7 @@ double ConfigManager::getOpenAI_Temperature()
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {
-    _settings->setValue(sol::CmdLineOptions::START_UP_RUN, inStartRun);
+    _settings->setValue(Sol::CmdLineOptions::START_UP_RUN, inStartRun);
 
     const QString appName = QCoreApplication::applicationName();
     const QString appPath = QCoreApplication::applicationFilePath();
@@ -109,7 +109,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
     if (inStartRun)
     {
-        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + sol::CmdLineOptions::START_UP_RUN);
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Sol::CmdLineOptions::START_UP_RUN);
 
         QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
                                  , QSettings::NativeFormat);
@@ -130,7 +130,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
 bool ConfigManager::getStartRun()
 {
-    return _settings->value(sol::CmdLineOptions::START_UP_RUN, false).toBool();
+    return _settings->value(Sol::CmdLineOptions::START_UP_RUN, false).toBool();
 }
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)
@@ -173,14 +173,14 @@ QRect ConfigManager::getSimplePopupGeometry()
     return _settings->value(SimplePopupGeometry).toRect();
 }
 
-void ConfigManager::setSimplePopupScreenPolicy(const sol::ScreenPopupPolicy& inPolicy)
+void ConfigManager::setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy)
 {
     setEnumValue(SimplePopupScreenPolicy, inPolicy);
 }
 
-sol::ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
+ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy()
 {
-    return getEnumValue(SimplePopupScreenPolicy, sol::ScreenPopupPolicy::CursorScreen);
+    return getEnumValue(SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
 }
 
 void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)
@@ -275,12 +275,12 @@ const std::unordered_map<Action, QKeySequence> defaultShortcut
 
 void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inKeySequence)
 {
-    _settings->setValue(Shortcuts + sol::enumToQStr(inShortCut), inKeySequence);
+    _settings->setValue(Shortcuts + Sol::enumToQStr(inShortCut), inKeySequence);
 }
 
 QKeySequence ConfigManager::shortcut(const Action inShortCut) const
 {
-    return _settings->value(Shortcuts + sol::enumToQStr(inShortCut), defaultShortcut.at(inShortCut)).value<QKeySequence>();
+    return _settings->value(Shortcuts + Sol::enumToQStr(inShortCut), defaultShortcut.at(inShortCut)).value<QKeySequence>();
 }
 
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const

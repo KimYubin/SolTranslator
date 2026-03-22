@@ -62,8 +62,8 @@ public:
 
     void setSimplePopupGeometry(const QRect& inGeo);
     QRect getSimplePopupGeometry();
-    void setSimplePopupScreenPolicy(const sol::ScreenPopupPolicy& inPolicy);
-    sol::ScreenPopupPolicy getSimplePopupScreenPolicy();
+    void setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy);
+    ScreenPopupPolicy getSimplePopupScreenPolicy();
 
     /** 창의 위치와 크기를 기억 유무를 저장합니다. */
     void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);
@@ -132,14 +132,14 @@ template <typename EnumType>
     requires std::is_enum_v<EnumType>
 void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inVal)
 {
-    _settings->setValue(inKey, sol::enumToQStr(inVal));
+    _settings->setValue(inKey, Sol::enumToQStr(inVal));
 }
 
 template <typename EnumType>
     requires std::is_enum_v<EnumType>
 EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
 {
-    const QString defaultQStr = sol::enumToQStr(inDefaultVal);
+    const QString defaultQStr = Sol::enumToQStr(inDefaultVal);
 
     const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
 

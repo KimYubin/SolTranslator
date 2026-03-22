@@ -37,7 +37,7 @@ private: \
 class QObject;
 class QWidget;
 
-namespace sol
+namespace Sol
 {
 /**
  * Other QObject와 그 부모가 this인지 재귀적으로 확인합니다.
@@ -104,7 +104,7 @@ EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
     return magic_enum::enum_cast<EnumType>(inString.toStdString()).value_or(inDefaultVal);
 }
 
-} // namespace sol
+} // namespace Sol
 
 
 

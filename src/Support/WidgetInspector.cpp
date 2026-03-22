@@ -49,7 +49,7 @@ void WidgetInspector::updateInfo(QObject* watched, QEvent* event)
         label->setText(QString("Class: %1\nObject: %2\nevent: %3")
                        .arg(widget->metaObject()->className())
                        .arg(widget->objectName().isEmpty() ? "<no name>" : widget->objectName())
-                       .arg(sol::enumToQStr(event->type())));
+                       .arg(Sol::enumToQStr(event->type())));
     }
     else
     {

@@ -22,7 +22,7 @@
 
 #include "ui_SettingsWidget.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 SettingsWidget::SettingsWidget(QWidget* parent)
     : ISolWidget(parent)

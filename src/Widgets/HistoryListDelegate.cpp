@@ -82,7 +82,7 @@ void HistoryListDelegate::paint(QPainter* painter
     appStyle->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
 
     // checkbox
-    const Qt::CheckState checkState = static_cast<Qt::CheckState>(index.data(sol::CheckRole).toInt());
+    const Qt::CheckState checkState = static_cast<Qt::CheckState>(index.data(Sol::CheckRole).toInt());
 
     QStyleOptionButton checkOpt;
     checkOpt.state = (checkState == Qt::Checked) ? QStyle::State_On : QStyle::State_Off;
@@ -114,13 +114,13 @@ void HistoryListDelegate::paint(QPainter* painter
         newFont.setPixelSize(painter->font().pixelSize() * langFontSizeRatio);
         painter->setFont(newFont);
 
-        const QString langText = index.data(sol::SourceLangRole).toString() + " → " + index.data(sol::TagetLangRole).toString();
+        const QString langText = index.data(Sol::SourceLangRole).toString() + " → " + index.data(Sol::TagetLangRole).toString();
 
         drawText(painter, opt, langTextRect, Qt::TextForceLeftToRight | Qt::AlignLeft, langText);
-        drawText(painter, opt, langTextRect, Qt::AlignRight, index.data(sol::TimeStampRole).toString());
+        drawText(painter, opt, langTextRect, Qt::AlignRight, index.data(Sol::TimeStampRole).toString());
     }
-    drawText(painter, opt, sourceTextRect, Qt::TextForceLeftToRight, index.data(sol::SourceSimplifiedTextRole).toString());
-    drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(sol::TargetSimplifiedTextRole).toString());
+    drawText(painter, opt, sourceTextRect, Qt::TextForceLeftToRight, index.data(Sol::SourceSimplifiedTextRole).toString());
+    drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(Sol::TargetSimplifiedTextRole).toString());
 }
 
 bool HistoryListDelegate::editorEvent(QEvent* event
@@ -136,7 +136,7 @@ bool HistoryListDelegate::editorEvent(QEvent* event
         return false;
     }
 
-    const QVariant value = index.data(sol::CheckRole);
+    const QVariant value = index.data(Sol::CheckRole);
     if (value.isValid() == false)
     {
         return false;
@@ -183,7 +183,7 @@ bool HistoryListDelegate::editorEvent(QEvent* event
         return false;
     }
 
-    Qt::CheckState state = static_cast<Qt::CheckState>(index.data(sol::CheckRole).toInt());
+    Qt::CheckState state = static_cast<Qt::CheckState>(index.data(Sol::CheckRole).toInt());
     if (flags.testFlag(Qt::ItemIsUserTristate))
     {
         state = static_cast<Qt::CheckState>((state + 1) % 3);
@@ -193,7 +193,7 @@ bool HistoryListDelegate::editorEvent(QEvent* event
         state = (state == Qt::Checked) ? Qt::Unchecked : Qt::Checked;
     }
 
-    return model->setData(index, state, sol::CheckRole);
+    return model->setData(index, state, Sol::CheckRole);
 }
 
 QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -227,20 +227,20 @@ void HistoryListDelegate::drawText(QPainter* painter
 
     if (inOption.state.testFlag(QStyle::State_Selected))
     {
-        painter->setPen(historyListView->getItemColor(sol::itemSelectionTextColorRole));
+        painter->setPen(historyListView->getItemColor(Sol::itemSelectionTextColorRole));
     }
     else if (inOption.state.testFlag(QStyle::State_MouseOver))
     {
-        painter->setPen(historyListView->getItemColor(sol::itemHoverTextColorRole));
+        painter->setPen(historyListView->getItemColor(Sol::itemHoverTextColorRole));
     }
     else
     {
-        painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
+        painter->setPen(historyListView->getItemColor(Sol::itemTextColorRole));
     }
 
     if (inOption.state.testFlag(QStyle::State_Editing))
     {
-        painter->setPen(historyListView->getItemColor(sol::itemTextColorRole));
+        painter->setPen(historyListView->getItemColor(Sol::itemTextColorRole));
     }
 
     const QStyle* appStyle = getOptStyle(inOption);

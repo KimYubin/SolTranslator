@@ -33,7 +33,7 @@ public:
     explicit HistoryListView(QWidget* parent = nullptr);
     ~HistoryListView() override;
 
-    QColor getItemColor(const sol::ItemColorRole inColorRole) const;
+    QColor getItemColor(const Sol::ItemColorRole inColorRole) const;
 };
 
 class HistoryWidget : public ISolWidget

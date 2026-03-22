@@ -28,7 +28,7 @@
 
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     : ITranslateWidget(parent)

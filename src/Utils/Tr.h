@@ -6,13 +6,13 @@
 class QString;
 enum class Tr;
 
-namespace sol
+namespace Sol
 {
 /**
  * 
  */
 QString i18n(const Tr inTr);
-}
+} // namespace Sol
 
 enum class Tr
 {

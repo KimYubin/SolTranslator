@@ -168,12 +168,12 @@ void DbWorker::processAddHistory(const EngineType inEngineType
         QSqlQuery sqlQuery;
         sqlQuery.prepare(insertDataQuery.value());
 
-        sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
-        sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", sol::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inOriginText);
         sqlQuery.bindValue(":target_text", inTranslateText);
-        sqlQuery.bindValue(":text_style",  sol::enumToQStr(inTextStyle));
+        sqlQuery.bindValue(":text_style",  Sol::enumToQStr(inTextStyle));
 
         if (sqlQuery.exec() == false)
         {
@@ -258,9 +258,9 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
         QSqlQuery sqlQuery;
         sqlQuery.prepare(selectHistoryQuery.value());
 
-        sqlQuery.bindValue(":engine_type", sol::enumToQStr(inEngineType));
-        sqlQuery.bindValue(":source_lang", sol::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", sol::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
+        sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inOriginText);
 
         // error sql
@@ -357,7 +357,7 @@ void DbWorker::updateDbCache()
                                   , sqlQuery.value(5).toString()
                                   , sqlQuery.value(6).toLongLong()
                                   , sqlQuery.value(7).toLongLong()
-                                  , sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
+                                  , Sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
         }
     }
 

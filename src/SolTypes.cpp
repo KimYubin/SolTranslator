@@ -32,7 +32,7 @@ const QString HISTORY_DB = "Sol_Translation_History.sqlite";
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
-    {LangType::NONE, {LangType::NONE, sol::enumToQStr(LangType::NONE), u8"NONE", u8"NONE"}}
+    {LangType::NONE, {LangType::NONE, Sol::enumToQStr(LangType::NONE), u8"NONE", u8"NONE"}}
   , {LangType::AUTO, {LangType::AUTO, u8"Auto", u8"Auto", u8"Auto"}}
   , {LangType::en, {LangType::en, u8"en", u8"English", u8"English"}}
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
@@ -52,7 +52,7 @@ QString EngineHelper::getName(EngineType inEngineType)
     default: ;
     }
 
-    return sol::enumToQStr(inEngineType);
+    return Sol::enumToQStr(inEngineType);
 }
 
 EngineType EngineHelper::getDefaultEngineType()

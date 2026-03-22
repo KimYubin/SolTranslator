@@ -74,22 +74,9 @@ auto make_unique_qobject(Args&&... args)
 }
 
 
-namespace sol
+namespace Sol
 {
 Q_NAMESPACE
-
-enum class ScreenPopupPolicy
-{
-    Default
-
-  , PrimaryScreen
-  , FixedScreen
-  , CursorScreen
-
-  , Size
-};
-Q_ENUM_NS(ScreenPopupPolicy)
-
 
 enum HistoryItemRole
 {
@@ -114,7 +101,19 @@ enum ItemColorRole
   , itemDisableColorRole
 };
 
-} // sol
+} // namespace Sol
+
+enum class ScreenPopupPolicy
+{
+    Default
+
+  , PrimaryScreen
+  , FixedScreen
+  , CursorScreen
+
+  , Size
+};
+
 
 enum class EngineType
 {

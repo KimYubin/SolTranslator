@@ -25,7 +25,7 @@ void GoogleTrUnit::requestTranslate()
         _trReqData.originText = txtDoc.toPlainText();
     }
 
-    const QUrl url = QString(sol::URLs::GOOGLE).arg(
+    const QUrl url = QString(Sol::URLs::GOOGLE).arg(
         Langs::GetCodeName(_trReqData.sourceLang)
       , Langs::GetCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.originText, "()")); // '()'괄호는 인코딩 대상 제외.

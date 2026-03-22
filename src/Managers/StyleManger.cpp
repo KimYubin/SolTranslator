@@ -143,7 +143,7 @@ void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)
         qApp->setStyleSheet(newStyleSheet);
         updatePaletteColor();
 
-        sol::noHintingFont();
+        Sol::noHintingFont();
 
         QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)

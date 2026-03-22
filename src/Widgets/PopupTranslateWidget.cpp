@@ -36,7 +36,7 @@
 
 #include "Widgets/ui_PopupTranslateWidget.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 
 PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
@@ -216,17 +216,17 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
     QScreen* currentScreen = nullptr;
     switch (solConfig.getSimplePopupScreenPolicy())
     {
-    case sol::ScreenPopupPolicy::Default:
-    case sol::ScreenPopupPolicy::PrimaryScreen:
+    case ScreenPopupPolicy::Default:
+    case ScreenPopupPolicy::PrimaryScreen:
         currentScreen = qApp->primaryScreen();
         break;
-    case sol::ScreenPopupPolicy::FixedScreen:
+    case ScreenPopupPolicy::FixedScreen:
         currentScreen = qApp->primaryScreen(); // 임시. 추후 저장된 스크린 위치 사용
         break;
-    case sol::ScreenPopupPolicy::CursorScreen:
+    case ScreenPopupPolicy::CursorScreen:
         currentScreen = qApp->screenAt(QCursor::pos());
         break;
-    case sol::ScreenPopupPolicy::Size:
+    case ScreenPopupPolicy::Size:
         break;
     }
 
@@ -729,9 +729,9 @@ void PopupTranslateWidget::setShadowEffectEnabled(const bool inIsEnable)
 
 void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
 {
-    if (sol::isThis(this, old))
+    if (Sol::isThis(this, old))
     {
-        if (sol::isThis(this, now))
+        if (Sol::isThis(this, now))
         {
             return;
         }
@@ -741,7 +741,7 @@ void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
             return;
         }
     }
-    if (sol::isThis(this, now))
+    if (Sol::isThis(this, now))
     {
         setShadowEffectEnabled(true);
     }

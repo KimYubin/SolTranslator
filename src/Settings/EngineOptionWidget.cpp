@@ -18,7 +18,7 @@
 
 #include "ui_EngineOptionWidget.h"
 
-using sol::i18n;
+using Sol::i18n;
 
 EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)

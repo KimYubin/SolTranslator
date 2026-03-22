@@ -4,7 +4,7 @@
 #define SOLCONSTANTS_H
 #include <QString>
 
-namespace sol
+namespace Sol
 {
 
 /** 커맨드라인 명령줄 옵션 */
@@ -29,7 +29,7 @@ struct Prompt
     static const QString OPEN_AI;
 };
 
-}
+} // namespace Sol
 
 
 #endif //SOLCONSTANTS_H

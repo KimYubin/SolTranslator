@@ -39,43 +39,43 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
 
     switch (role)
     {
-    case sol::DbIdRole:
+    case Sol::DbIdRole:
     {
         return trCache.value()->getDbId();
     }
-    case sol::SourceLangRole:
+    case Sol::SourceLangRole:
     {
         return trCache.value()->getSourceLang();
     }
-    case sol::TagetLangRole:
+    case Sol::TagetLangRole:
     {
         return trCache.value()->getTargetLang();
     }
-    case sol::SourceSimplifiedTextRole:
+    case Sol::SourceSimplifiedTextRole:
     {
         return trCache.value()->getSourceSimplifiedText();
     }
-    case sol::TargetSimplifiedTextRole:
+    case Sol::TargetSimplifiedTextRole:
     {
         return trCache.value()->getTargetSimplifiedText();
     }
-    case sol::SourceFullTextRole:
+    case Sol::SourceFullTextRole:
     {
         return trCache.value()->getSourceText();
     }
-    case sol::TargetFullTextRole:
+    case Sol::TargetFullTextRole:
     {
         return trCache.value()->getTargetText();
     }
-    case sol::TextStyleStringRole:
+    case Sol::TextStyleStringRole:
     {
-        return sol::enumToQStr(trCache.value()->getTextStyle());
+        return Sol::enumToQStr(trCache.value()->getTextStyle());
     }
-    case sol::TimeStampRole:
+    case Sol::TimeStampRole:
     {
         return trCache.value()->getTimeStampString();
     }
-    case sol::CheckRole:
+    case Sol::CheckRole:
     {
         return trCache.value()->getCheckState();
     }
@@ -97,7 +97,7 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int 
 
     switch (role)
     {
-    case sol::CheckRole:
+    case Sol::CheckRole:
     {
         solCore->historyManager()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
         return true;

@@ -54,7 +54,7 @@ protected slots:
      * 앱 종료 이벤트로 발생하는 신호를 받습니다.
      * @see QCoreApplication::aboutToQuit
      */
-    void onAppQuitEvent() const;
+    void onAppQuitEvent();
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -66,7 +66,7 @@ private:
     void popupTrayMenu();
 
     enum class TabMovement { Previous, Next };
-    void moveTab(const TabMovement inMovement) const;
+    void moveTab(const TabMovement inMovement);
 
     Ui::SolMainWidget* ui;
 

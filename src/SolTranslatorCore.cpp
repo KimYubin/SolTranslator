@@ -45,6 +45,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
 
 
     StyleManger::applyTheme();
+
     // generate GUI widget
     _solMainWidget = new SolMainWidget();
 

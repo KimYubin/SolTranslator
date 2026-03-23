@@ -82,7 +82,7 @@ private:
     void   setBarBorderWidth(const float inWidth);
     float  getBarFocusBorderWidth() const;
     void   setBarFocusBorderWidth(const float inWidth);
-    
+
     QColor getHandleCheckedBorderColor() const;
     void   setHandleCheckedBorderColor(const QColor& inColor);
     QColor getHandleUncheckedBorderColor() const;

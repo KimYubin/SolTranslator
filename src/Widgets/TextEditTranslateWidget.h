@@ -32,19 +32,19 @@ public:
 protected:
     virtual void applyTranslation() override;
 
-    virtual QScrollBar* getVerticalScrollBar() override;
-    virtual QScrollBar* getHorizontalScrollBar() override;
-    virtual QTextCursor getTextCursor() override;
+    virtual QScrollBar* getVerticalScrollBar() const override;
+    virtual QScrollBar* getHorizontalScrollBar() const override;
+    virtual QTextCursor getTextCursor() const override;
     virtual void setTextCursor(const QTextCursor& cursor) override;
 
 public:
     void focusTextOrigin();
-    void importExistingTranslation(const HistoryCacheData* inHistoryCache) const;
+    void importExistingTranslation(const HistoryCacheData* inHistoryCache);
 
 private slots:
     void onExecuteTranslate(const bool inIgnoreCache = false);
-    void onSourceLanguageChanged(const LangType inlangType) const;
-    void onTargetLanguageChanged(const LangType inlangType) const;
+    void onSourceLanguageChanged(const LangType inlangType);
+    void onTargetLanguageChanged(const LangType inlangType);
 
 private:
     Ui::TextEditTranslateWidget* ui;

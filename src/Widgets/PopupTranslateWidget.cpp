@@ -173,17 +173,17 @@ void PopupTranslateWidget::applyTranslation()
     showTranslationPopup();
 }
 
-QScrollBar* PopupTranslateWidget::getVerticalScrollBar()
+QScrollBar* PopupTranslateWidget::getVerticalScrollBar() const
 {
     return ui->resultText->verticalScrollBar();
 }
 
-QScrollBar* PopupTranslateWidget::getHorizontalScrollBar()
+QScrollBar* PopupTranslateWidget::getHorizontalScrollBar() const
 {
     return ui->resultText->horizontalScrollBar();
 }
 
-QTextCursor PopupTranslateWidget::getTextCursor()
+QTextCursor PopupTranslateWidget::getTextCursor() const
 {
     return ui->resultText->textCursor();
 }

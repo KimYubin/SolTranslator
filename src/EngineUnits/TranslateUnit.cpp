@@ -76,7 +76,7 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
 
 void TranslateUnit::get(const QNetworkRequest& inRequest)
 {
-    _reply = solCore->translateManager()->getNetworkAccessManager()->get(inRequest);
+    _reply = solCore->translateManager()->get(inRequest);
     postProcess();
 }
 
@@ -84,7 +84,7 @@ void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inP
 {
     _isStream = inIsStreaming;
 
-    _reply = solCore->translateManager()->getNetworkAccessManager()->post(inRequest, inPayload);
+    _reply = solCore->translateManager()->post(inRequest, inPayload);
 
     if (_isStream)
     {

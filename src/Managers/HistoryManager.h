@@ -66,13 +66,12 @@ public slots :
     void onLookupFinished(const LookupResult& inLookup, QObject* inContext);
     void onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
-    std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx);
+    std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
     int getTranslateCacheSize() const { return _translateTextCache.size(); };
 
     bool setCheckState(const int inIdx, const Qt::CheckState inState);
 
-    int findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp);
-
+    std::expected<int, QString> findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp) const;
 
 private:
     std::vector<HistoryCacheData> _translateTextCache;

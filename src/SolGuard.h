@@ -17,7 +17,7 @@ class QPainter;
 class SolGeneralGuard
 {
 public:
-    Q_NODISCARD_CTOR
+    [[nodiscard]]
     explicit SolGeneralGuard(std::move_only_function<void(void)>&& inStartFunctor
                            , std::move_only_function<void(void)>&& inEndFunctor)
         : _startFunctor(std::move(inStartFunctor))
@@ -29,7 +29,7 @@ public:
     /**
      * 
      */
-    Q_NODISCARD_CTOR
+    [[nodiscard]]
     explicit SolGeneralGuard(std::move_only_function<void(void)>&& inEndFunctor)
         : _endFunctor(std::move(inEndFunctor))
     {};
@@ -54,7 +54,7 @@ private:
 class PainterPenStateGuard : public SolGeneralGuard
 {
 public:
-    Q_NODISCARD_CTOR
+    [[nodiscard]]
     explicit PainterPenStateGuard(QPainter* inPainter);
 };
 
@@ -66,7 +66,7 @@ public:
 class PainterFontStateGuard : public SolGeneralGuard
 {
 public:
-    Q_NODISCARD_CTOR
+    [[nodiscard]]
     explicit PainterFontStateGuard(QPainter* inPainter);
 };
 

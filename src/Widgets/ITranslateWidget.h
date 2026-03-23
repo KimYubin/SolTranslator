@@ -46,13 +46,13 @@ protected:
      * 스크롤바 위치를 고정하기 위해 사용할 스크롤바를 반환합니다
      * 자식 클래스에서 이를 지정합니다.
      */
-    virtual QScrollBar* getVerticalScrollBar() = 0;
-    virtual QScrollBar* getHorizontalScrollBar() = 0;
+    virtual QScrollBar* getVerticalScrollBar() const = 0;
+    virtual QScrollBar* getHorizontalScrollBar() const = 0;
 
     /**
      * 번역 중, 커서 위치를 고정하기 위해 사용할 텍스트 커서
      */
-    virtual QTextCursor getTextCursor() = 0;
+    virtual QTextCursor getTextCursor() const = 0;
     virtual void setTextCursor(const QTextCursor& cursor) = 0;
 
     const QString& getTranslatedText() const { return _translatedText; };

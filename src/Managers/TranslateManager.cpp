@@ -40,6 +40,16 @@ void TranslateManager::postInitialize()
     AbstractManager::postInitialize();
 }
 
+QNetworkReply* TranslateManager::get(const QNetworkRequest& inRequest)
+{
+    return _networkAccessManager->get(inRequest);
+}
+
+QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QByteArray& inPayload)
+{
+    return _networkAccessManager->post(inRequest, inPayload);
+}
+
 TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;

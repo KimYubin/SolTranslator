@@ -34,7 +34,7 @@ protected:
     virtual void closeEvent(QCloseEvent* event) override;
 
 protected slots:
-    void appQuitEvent() const;
+    void appQuitEvent();
 
 private:
     Ui::SettingsWidget* ui;

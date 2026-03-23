@@ -198,14 +198,15 @@ void HistoryWidget::setupUI()
             return;
         }
 
-        const int findIdx = solCore->historyManager()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
-        if (findIdx < 0)
+        const std::expected<int, QString> findIdx = solCore->historyManager()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
+        if (findIdx.has_value() == false)
         {
+            solDebug << findIdx.error();
             _currentTimelineId = -1;
             return;
         }
 
-        QModelIndex curIdx = _historyListModel->index(findIdx);
+        QModelIndex curIdx = _historyListModel->index(findIdx.value());
         if (const QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(_historyListView->model()))
         {
             curIdx = proxy->mapFromSource(curIdx);

@@ -26,7 +26,7 @@ public:
 class SolSqlTransactionGuard
 {
 public:
-    Q_NODISCARD_CTOR
+    [[nodiscard]]
     explicit SolSqlTransactionGuard(QSqlDatabase inDB);
 
     ~SolSqlTransactionGuard();

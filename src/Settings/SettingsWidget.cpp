@@ -104,7 +104,7 @@ void SettingsWidget::closeEvent(QCloseEvent* event)
     ISolWidget::closeEvent(event);
 }
 
-void SettingsWidget::appQuitEvent() const
+void SettingsWidget::appQuitEvent()
 {
     solConfig.saveWidgetGeometry(this);
 }

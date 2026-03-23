@@ -54,9 +54,9 @@ public:
 protected:
     virtual void applyTranslation() override;
 
-    virtual QScrollBar* getVerticalScrollBar() override;
-    virtual QScrollBar* getHorizontalScrollBar() override;
-    virtual QTextCursor getTextCursor() override;
+    virtual QScrollBar* getVerticalScrollBar() const override;
+    virtual QScrollBar* getHorizontalScrollBar() const override;
+    virtual QTextCursor getTextCursor() const override;
     virtual void setTextCursor(const QTextCursor& cursor) override;
 
 

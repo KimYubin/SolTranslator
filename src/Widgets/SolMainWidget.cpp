@@ -275,7 +275,7 @@ void SolMainWidget::quitApp()
     }
 }
 
-void SolMainWidget::onAppQuitEvent() const
+void SolMainWidget::onAppQuitEvent()
 {
     solConfig.saveWidgetGeometry(this);
 }
@@ -408,7 +408,7 @@ void SolMainWidget::popupTrayMenu()
     }
 }
 
-void SolMainWidget::moveTab(const TabMovement inMovement) const
+void SolMainWidget::moveTab(const TabMovement inMovement)
 {
     int moveIdx = ui->mainStackedWidget->currentIndex();
 

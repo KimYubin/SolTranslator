@@ -33,45 +33,45 @@ public:
     }
 
     void setCurrentEngineType(EngineType inEngineType);
-    EngineType getCurrentEngineType();
+    EngineType getCurrentEngineType() const;
 
     void setAPIKey(EngineType inEngineType, const QString& inAPIKey);
-    QString getAPIKey(EngineType inEngineType);
+    QString getAPIKey(EngineType inEngineType) const;
 
     void setOpenAIModel(const QString& inModelName);
-    QString getOpenAIModel();
+    QString getOpenAIModel() const;
 
     double defaultAI_Temperature() const;
     void setOpenAI_Temperature(const double inTemperature);
-    double getOpenAI_Temperature();
+    double getOpenAI_Temperature() const;
 
     void setStartRun(const bool inStartRun);
-    bool getStartRun();
+    bool getStartRun() const;
 
     /** 팝업 번역 도착 언어 */
     void setPopupTargetLang(const LangType inLangType);
-    LangType getPopupTargetLang();
+    LangType getPopupTargetLang() const;
 
     /** TextEdit 번역 출발 언어 */
     void setTextSrcLang(const LangType inLangType);
-    LangType getTextSrcLang();
+    LangType getTextSrcLang() const;
 
     /** TextEdit 번역 도착 언어 */
     void setTextTargetLang(const LangType inLangType);
-    LangType getTextTargetLang();
+    LangType getTextTargetLang() const;
 
     void setSimplePopupGeometry(const QRect& inGeo);
-    QRect getSimplePopupGeometry();
+    QRect getSimplePopupGeometry() const;
     void setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy);
-    ScreenPopupPolicy getSimplePopupScreenPolicy();
+    ScreenPopupPolicy getSimplePopupScreenPolicy() const;
 
     /** 창의 위치와 크기를 기억 유무를 저장합니다. */
     void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);
-    bool getIsRememberWindowGeometry();
+    bool getIsRememberWindowGeometry() const;
 
     /** 창의 위치와 크기를 저장합니다. */
     void saveWidgetGeometry(const QWidget* inWidget);
-    bool restoreWidgetGeometry(QWidget* inWidget);
+    bool restoreWidgetGeometry(QWidget* inWidget) const;
 
     /**
      * 팝업 번역창의 임시창 유무.
@@ -79,16 +79,16 @@ public:
      * 기본값은 false입니다.
      */
     void setIsPopupTrWindowTemp(const bool inTemp);
-    bool getIsPopupTrWindowTemp();
+    bool getIsPopupTrWindowTemp() const;
 
     /** 메인 창을 처음 닫은 후 호출합니다.*/
     void setFirstCloseToTray();
 
     /** 메인 창을 처음 닫았나요? 그렇다면, 앱이 트레이로 숨겨졌음을 안내해야 합니다. */
-    bool isFirstCloseToTray();
+    bool isFirstCloseToTray() const;
 
     void setHistoryTimeFormat(const QString& inFormat);
-    QString getHistoryTimeFormat();
+    QString getHistoryTimeFormat() const;
 
     // ~======================
     // shortcut
@@ -96,7 +96,7 @@ public:
     QKeySequence shortcut(const Action inShortCut) const;
 
 private:
-    void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData) const;
+    void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData);
     std::tuple<bool, QByteArray> getSaveGeometry(const QAnyStringView& inKey) const;
 
     /**
@@ -116,12 +116,12 @@ private:
      * 
      * @tparam EnumType 
      * @param inKey 설정 key
-     * @param inDefaultVal 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
+     * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
      * @return 
      */
     template <typename EnumType>
         requires std::is_enum_v<EnumType>
-    EnumType getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal);
+    EnumType getEnumValue(const QAnyStringView& inKey, const EnumType inDefault) const;
 
 private:
     QSettings* _settings;
@@ -137,13 +137,13 @@ void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inV
 
 template <typename EnumType>
     requires std::is_enum_v<EnumType>
-EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefaultVal)
+EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefault) const
 {
-    const QString defaultQStr = Sol::enumToQStr(inDefaultVal);
+    const QString defaultQStr = Sol::enumToQStr(inDefault);
 
     const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
 
-    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefaultVal);
+    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefault);
 
     return policy;
 }

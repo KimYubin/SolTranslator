@@ -14,6 +14,9 @@ class AbstractManager : public QObject
 public:
     explicit AbstractManager(SolTranslatorCore* parent);
 
+protected:
+    friend class SolTranslatorCore;
+
     virtual void postInitialize();
 };
 

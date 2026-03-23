@@ -16,15 +16,16 @@ class LoadingBar : public QWidget
     Q_PROPERTY(float animRatio READ getAnimRatio WRITE setAnimRatio)
 
 public:
-    explicit LoadingBar(const QString &file, QWidget *parent = nullptr);
+    explicit LoadingBar(const QString& inFile, QWidget* parent = nullptr);
 
     void run();
     void stop();
+
 private:
     QSvgWidget* svg;
     QPropertyAnimation* animation;
 
-    float getAnimRatio() const {return _animRatio;};
+    float getAnimRatio() const { return _animRatio; };
     void setAnimRatio(const float inAnimRatio);
     float _animRatio;
     float _prevRatio;

@@ -144,17 +144,17 @@ void TextEditTranslateWidget::applyTranslation()
     ui->trTextEdit->setPlainText(getTranslatedText());
 }
 
-QScrollBar* TextEditTranslateWidget::getVerticalScrollBar()
+QScrollBar* TextEditTranslateWidget::getVerticalScrollBar() const
 {
     return ui->trTextEdit->verticalScrollBar();
 }
 
-QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar()
+QScrollBar* TextEditTranslateWidget::getHorizontalScrollBar() const
 {
     return ui->trTextEdit->horizontalScrollBar();
 }
 
-QTextCursor TextEditTranslateWidget::getTextCursor()
+QTextCursor TextEditTranslateWidget::getTextCursor() const
 {
     return ui->trTextEdit->textCursor();
 }
@@ -169,7 +169,7 @@ void TextEditTranslateWidget::focusTextOrigin()
     ui->srcTextEdit->setFocus();
 }
 
-void TextEditTranslateWidget::importExistingTranslation(const HistoryCacheData* inHistoryCache) const
+void TextEditTranslateWidget::importExistingTranslation(const HistoryCacheData* inHistoryCache)
 {
     if (inHistoryCache == nullptr)
     {
@@ -207,7 +207,7 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
     });
 }
 
-void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType) const
+void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
 {
     const bool isAuto = (inlangType == LangType::AUTO);
     ui->languageSwapButton->setEnabled(isAuto == false);
@@ -219,7 +219,7 @@ void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
     }
 }
 
-void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType) const
+void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType)
 {
     if (solConfig.getTextTargetLang() != inlangType)
     {

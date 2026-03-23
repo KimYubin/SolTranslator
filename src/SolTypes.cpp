@@ -6,6 +6,7 @@
 
 #include <qstandardpaths.h>
 
+#include "SolLog.h"
 #include "SolUtilibrary.h"
 #include "Widgets/ITranslateWidget.h"
 

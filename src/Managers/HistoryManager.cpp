@@ -83,7 +83,7 @@ void HistoryManager::onDbCacheUpdated(const std::vector<HistoryCacheData>& inCac
     emit translateHistoryUpdated();
 }
 
-std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx)
+std::expected<const HistoryCacheData*, QString> HistoryManager::getTranslateCache(const int inIdx) const
 {
     if (inIdx < 0 || inIdx >= _translateTextCache.size())
     {
@@ -106,24 +106,24 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
     return true;
 }
 
-int HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
-                                             , const QDateTime& inTimeStamp)
+std::expected<int, QString> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
+                                                                     , const QDateTime& inTimeStamp) const
 {
     const auto lowIt = std::ranges::lower_bound(_translateTextCache, inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
     if (lowIt == _translateTextCache.end() || lowIt->getTimeStamp() != inTimeStamp)
     {
-        return -1;
+        return std::unexpected{"not found TimeStamp. TimeStamp: " + inTimeStamp.toString()};
     }
     const auto upperIt = std::ranges::upper_bound(lowIt, _translateTextCache.end(), inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
 
-    const std::vector<HistoryCacheData>::iterator findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)
+    const auto findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)
     {
         return inCache.getTimelineId() == inTimelineId;
     });
 
     if (findIt == _translateTextCache.end())
     {
-        return -1;
+        return std::unexpected{QString{"not found Timeline ID. TimeStamp: %1, ID: %2"}.arg(inTimeStamp.toString(), inTimelineId)};
     }
 
     return findIt - _translateTextCache.begin();

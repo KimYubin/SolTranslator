@@ -40,13 +40,13 @@ QMargins getFocusMargins(const QStyleOptionViewItem& inOpt)
 {
     const QStyle* optStyle    = getOptStyle(inOpt);
     const QRect itemFocusRect = optStyle->subElementRect(QStyle::SE_ItemViewItemFocusRect, &inOpt, inOpt.widget);
-    QMargins res{
+
+    return {
         itemFocusRect.left() - inOpt.rect.left()
       , itemFocusRect.top() - inOpt.rect.top()
       , inOpt.rect.right() - itemFocusRect.right()
       , inOpt.rect.bottom() - itemFocusRect.bottom()
     };
-    return res;
 }
 
 QRect checkBoxRect(const QStyleOptionViewItem& inOpt)
@@ -60,6 +60,8 @@ QRect checkBoxRect(const QStyleOptionViewItem& inOpt)
 }
 
 } // anonymous namespace
+
+
 
 void HistoryListDelegate::paint(QPainter* painter
                               , const QStyleOptionViewItem& option

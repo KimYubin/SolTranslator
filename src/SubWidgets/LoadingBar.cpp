@@ -5,9 +5,9 @@
 #include <QPropertyAnimation>
 #include <QSvgWidget>
 
-LoadingBar::LoadingBar(const QString& file, QWidget* parent): QWidget(parent)
+LoadingBar::LoadingBar(const QString& inFile, QWidget* parent): QWidget(parent)
 {
-    svg = new QSvgWidget(file, this);
+    svg = new QSvgWidget(inFile, this);
 
     setFixedHeight(4);
     svg->setFixedSize(350, 4);

@@ -28,7 +28,7 @@ public:
      */
     void addBottomWidget(QWidget* inWidget
                        , const int inStretch = 0
-                       , const Qt::Alignment inAlignment = Qt::Alignment()) const;
+                       , const Qt::Alignment inAlignment = Qt::Alignment());
 
     /** add button at layout bottm */
     SolButton* addBottomButton(const QIcon& inIcon

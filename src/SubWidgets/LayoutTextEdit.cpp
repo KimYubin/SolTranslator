@@ -32,7 +32,7 @@ void LayoutTextEdit::resizeEvent(QResizeEvent* event)
 
 void LayoutTextEdit::addBottomWidget(QWidget* inWidget
                                    , const int inStretch
-                                   , const Qt::Alignment inAlignment) const
+                                   , const Qt::Alignment inAlignment)
 {
     _layout->addWidget(inWidget, inStretch, inAlignment);
 }

@@ -57,7 +57,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     // 출발언어 선택기
-    _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, solConfig.getTextSrcLang());
+    _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, solConfig.textSrcLang());
     _srcLangSelector->setBubbleToolTip(i18n(Tr::Source_Language));
     connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
@@ -65,7 +65,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     // 도착언어 선택기
-    _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, ui->srcTextEdit, solConfig.getTextTargetLang());
+    _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, ui->srcTextEdit, solConfig.textTargetLang());
     _targetLangSelector->setBubbleToolTip(i18n(Tr::Target_Language));
     connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
@@ -73,7 +73,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
 
     // 언어 교환 버튼
-    const bool isAuto = (solConfig.getTextSrcLang() == LangType::AUTO);
+    const bool isAuto = (solConfig.textSrcLang() == LangType::AUTO);
     ui->languageSwapButton->setEnabled(isAuto == false);
     ui->languageSwapButton->setFocusPolicy(Qt::TabFocus);
     ui->languageSwapButton->setAccessibleName(i18n(Tr::Swap_Language));
@@ -81,8 +81,8 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     SolTooltipFilter::setBubbleToolTip(ui->languageSwapButton, i18n(Tr::Swap_Language));
     connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {
-        const LangType srcLangType    = solConfig.getTextSrcLang();
-        const LangType targetLangType = solConfig.getTextTargetLang();
+        const LangType srcLangType    = solConfig.textSrcLang();
+        const LangType targetLangType = solConfig.textTargetLang();
         if (srcLangType == LangType::AUTO)
         {
             solDebug << "swap button is clicked, when source Language Type is AUTO.";
@@ -195,11 +195,11 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
     solCore->translateManager()->translateText(TranslateRequestInfo{
         this
       , inIgnoreCache
-      , solConfig.getCurrentEngineType()
+      , solConfig.currentEngineType()
       , orignText
       , TextStyle::PlainText
-      , solConfig.getTextSrcLang()
-      , solConfig.getTextTargetLang()
+      , solConfig.textSrcLang()
+      , solConfig.textTargetLang()
       , this
       , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }
       , this
@@ -212,7 +212,7 @@ void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
     const bool isAuto = (inlangType == LangType::AUTO);
     ui->languageSwapButton->setEnabled(isAuto == false);
 
-    if (solConfig.getTextSrcLang() != inlangType)
+    if (solConfig.textSrcLang() != inlangType)
     {
         solConfig.setTextSrcLang(inlangType);
         _translationExecutionTimer->start();
@@ -221,7 +221,7 @@ void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
 
 void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType)
 {
-    if (solConfig.getTextTargetLang() != inlangType)
+    if (solConfig.textTargetLang() != inlangType)
     {
         solConfig.setTextTargetLang(inlangType);
         _translationExecutionTimer->start();

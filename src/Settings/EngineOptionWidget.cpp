@@ -38,7 +38,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     {
         const int payload    = ui->enginSelectCombo->itemData(inIdx).toInt();
         const EngineType eg  = static_cast<EngineType>(payload);
-        const QString apiKey = solConfig.getAPIKey(eg);
+        const QString apiKey = solConfig.apiKey(eg);
         const int apiSize    = apiKey.size();
 
         QString phStr;
@@ -69,7 +69,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         const int payload   = ui->enginSelectCombo->currentData().toInt();
         const EngineType eg = static_cast<EngineType>(payload);
 
-        solConfig.setAPIKey(eg, inputApiKey);
+        solConfig.setApiKey(eg, inputApiKey);
     });
 
 
@@ -88,7 +88,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         spinBox->setRange(0.0, 1.5);
         spinBox->setDecimals(2);
         spinBox->setSingleStep(0.1);
-        spinBox->setValue(solConfig.getOpenAI_Temperature());
+        spinBox->setValue(solConfig.openAI_Temperature());
         connect(spinBox, &QDoubleSpinBox::valueChanged, this, [](const double inTemper)
         {
             solConfig.setOpenAI_Temperature(inTemper);

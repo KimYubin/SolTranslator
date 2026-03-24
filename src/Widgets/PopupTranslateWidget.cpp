@@ -86,7 +86,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     ui->bgFrame->setMouseTracking(true);
     ui->bgFrame->installEventFilter(this);
 
-    if (solConfig.getIsPopupTrWindowTemp())
+    if (solConfig.isPopupTrWindowTemp())
     {
         changePopupMode();
     }
@@ -119,7 +119,7 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
     solCore->translateManager()->translateText(TranslateRequestInfo{
         this
       , false
-      , solConfig.getCurrentEngineType()
+      , solConfig.currentEngineType()
       , inOriginText
       , inTextStyle
       , inSourceLang
@@ -214,7 +214,7 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 
     // 생성될 스크린 위치 추적
     QScreen* currentScreen = nullptr;
-    switch (solConfig.getSimplePopupScreenPolicy())
+    switch (solConfig.simplePopupScreenPolicy())
     {
     case ScreenPopupPolicy::Default:
     case ScreenPopupPolicy::PrimaryScreen:

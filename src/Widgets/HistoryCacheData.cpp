@@ -104,5 +104,5 @@ QDateTime HistoryCacheData::getTimeStamp() const
 
 QString HistoryCacheData::getTimeStampString() const
 {
-    return QLocale::system().toString(_timeStamp, solConfig.getHistoryTimeFormat());
+    return QLocale::system().toString(_timeStamp, solConfig.historyTimeFormat());
 }

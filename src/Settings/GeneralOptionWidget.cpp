@@ -30,7 +30,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 시작시 실행
     {
-        SettingCard* startRunCard = new SettingCard(new SwitchButton(solConfig.getStartRun()), shapeBehaviorGroup);
+        SettingCard* startRunCard = new SettingCard(new SwitchButton(solConfig.startRun()), shapeBehaviorGroup);
         startRunCard->setHeader(i18n(Tr::Run_On_Start));
         startRunCard->setDescription(i18n(Tr::Run_On_Start_Desc));
         SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
@@ -43,7 +43,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 창 위치 크기 기억
     {
-        SettingCard* rememberWindow = new SettingCard(new SwitchButton(solConfig.getIsRememberWindowGeometry()), shapeBehaviorGroup);
+        SettingCard* rememberWindow = new SettingCard(new SwitchButton(solConfig.isRememberWindowGeometry()), shapeBehaviorGroup);
         rememberWindow->setHeader(i18n(Tr::Remember_Geometry));
         rememberWindow->setDescription(i18n(Tr::Remember_Geometry_Desc));
         const SwitchButton* remWindowSwitch = rememberWindow->getContent<SwitchButton>();
@@ -93,7 +93,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
             solConfig.setPopupTargetLang(static_cast<LangType>(payload));
         });
 
-        const LangType curTargetLang = solConfig.getPopupTargetLang();
+        const LangType curTargetLang = solConfig.popupTargetLang();
         const int curLangIdx         = selectCombo->findData(static_cast<int>(curTargetLang));
         selectCombo->setCurrentIndex(curLangIdx);
 
@@ -102,7 +102,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
     // 팝업 임시창 선택
     {
-        SettingCard* popupTempCard = new SettingCard(new SwitchButton(solConfig.getIsPopupTrWindowTemp()), popupTrGroup);
+        SettingCard* popupTempCard = new SettingCard(new SwitchButton(solConfig.isPopupTrWindowTemp()), popupTrGroup);
         popupTempCard->setHeader(i18n(Tr::Popup_Temp_Window));
         popupTempCard->setDescription(i18n(Tr::Popup_Temp_Window_Desc));
         SwitchButton* popupTempSwitch = popupTempCard->getContent<SwitchButton>();

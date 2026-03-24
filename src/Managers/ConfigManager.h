@@ -26,41 +26,41 @@ public:
     explicit ConfigManager(SolTranslatorCore* parent);
 
     void setCurrentEngineType(const EngineType inEngineType);
-    EngineType getCurrentEngineType() const;
+    EngineType currentEngineType() const;
 
-    void setAPIKey(const EngineType inEngineType, const QString& inAPIKey);
-    QString getAPIKey(const EngineType inEngineType) const;
+    void setApiKey(const EngineType inEngineType, const QString& inAPIKey);
+    QString apiKey(const EngineType inEngineType) const;
 
     void setOpenAIModel(const QString& inModelName);
-    QString getOpenAIModel() const;
+    QString openAIModel() const;
 
     double defaultAI_Temperature() const;
     void setOpenAI_Temperature(const double inTemperature);
-    double getOpenAI_Temperature() const;
+    double openAI_Temperature() const;
 
     void setStartRun(const bool inStartRun);
-    bool getStartRun() const;
+    bool startRun() const;
 
     /** 팝업 번역 도착 언어 */
     void setPopupTargetLang(const LangType inLangType);
-    LangType getPopupTargetLang() const;
+    LangType popupTargetLang() const;
 
     /** TextEdit 번역 출발 언어 */
     void setTextSrcLang(const LangType inLangType);
-    LangType getTextSrcLang() const;
+    LangType textSrcLang() const;
 
     /** TextEdit 번역 도착 언어 */
     void setTextTargetLang(const LangType inLangType);
-    LangType getTextTargetLang() const;
+    LangType textTargetLang() const;
 
     void setSimplePopupGeometry(const QRect& inGeo);
-    QRect getSimplePopupGeometry() const;
+    QRect simplePopupGeometry() const;
     void setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy);
-    ScreenPopupPolicy getSimplePopupScreenPolicy() const;
+    ScreenPopupPolicy simplePopupScreenPolicy() const;
 
     /** 창의 위치와 크기를 기억 유무를 저장합니다. */
     void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);
-    bool getIsRememberWindowGeometry() const;
+    bool isRememberWindowGeometry() const;
 
     /** 창의 위치와 크기를 저장합니다. */
     void saveWidgetGeometry(const QWidget* inWidget);
@@ -72,7 +72,7 @@ public:
      * 기본값은 false입니다.
      */
     void setIsPopupTrWindowTemp(const bool inTemp);
-    bool getIsPopupTrWindowTemp() const;
+    bool isPopupTrWindowTemp() const;
 
     /** 메인 창을 처음 닫은 후 호출합니다.*/
     void setFirstCloseToTray();
@@ -81,7 +81,7 @@ public:
     bool isFirstCloseToTray() const;
 
     void setHistoryTimeFormat(const QString& inFormat);
-    QString getHistoryTimeFormat() const;
+    QString historyTimeFormat() const;
 
     // ~======================
     // shortcut
@@ -90,7 +90,7 @@ public:
 
 private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData);
-    std::tuple<bool, QByteArray> getSaveGeometry(const QAnyStringView& inKey) const;
+    std::tuple<bool, QByteArray> saveGeometry(const QAnyStringView& inKey) const;
 
     /**
      * enum type 설정을 문자열로 저장합니다.
@@ -114,7 +114,7 @@ private:
      */
     template <typename EnumType>
         requires std::is_enum_v<EnumType>
-    EnumType getEnumValue(const QAnyStringView& inKey, const EnumType inDefault) const;
+    EnumType enumValue(const QAnyStringView& inKey, const EnumType inDefault) const;
 
 private:
     QSettings* _settings;
@@ -130,7 +130,7 @@ void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inV
 
 template <typename EnumType>
     requires std::is_enum_v<EnumType>
-EnumType ConfigManager::getEnumValue(const QAnyStringView& inKey, const EnumType inDefault) const
+EnumType ConfigManager::enumValue(const QAnyStringView& inKey, const EnumType inDefault) const
 {
     const QString defaultQStr = Sol::enumToQStr(inDefault);
 

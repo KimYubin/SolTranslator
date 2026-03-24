@@ -24,16 +24,16 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     QNetworkRequest request(Sol::URLs::OPEN_AI);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + solConfig.getAPIKey(EngineType::OpenAI)).toUtf8());
+    request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(EngineType::OpenAI)).toUtf8());
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = solConfig.getOpenAIModel();
+    chatBodyJson["model"] = solConfig.openAIModel();
     if (inIsStreaming)
     {
         chatBodyJson["stream"] = inIsStreaming;
     }
-    chatBodyJson["temperature"] = solConfig.getOpenAI_Temperature();
+    chatBodyJson["temperature"] = solConfig.openAI_Temperature();
 
 
     QJsonArray messages;

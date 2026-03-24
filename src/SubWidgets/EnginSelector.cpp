@@ -17,7 +17,7 @@ EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
         addItem(EngineHelper::getName(eg), static_cast<int>(eg));
     }
 
-    setCurrentIndex(static_cast<int>(solConfig.getCurrentEngineType()));
+    setCurrentIndex(static_cast<int>(solConfig.currentEngineType()));
 }
 
 void EnginSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)

@@ -54,19 +54,19 @@ void ConfigManager::setCurrentEngineType(const EngineType inEngineType)
     setEnumValue(Engine_Type, inEngineType);
 }
 
-EngineType ConfigManager::getCurrentEngineType() const
+EngineType ConfigManager::currentEngineType() const
 {
-    return getEnumValue(Engine_Type, EngineHelper::getDefaultEngineType());
+    return enumValue(Engine_Type, EngineHelper::getDefaultEngineType());
 }
 
 
-void ConfigManager::setAPIKey(const EngineType inEngineType, const QString& inAPIKey)
+void ConfigManager::setApiKey(const EngineType inEngineType, const QString& inAPIKey)
 {
     _settings->setValue(API_Key + EngineHelper::getName(inEngineType), inAPIKey);
     _settings->sync();
 }
 
-QString ConfigManager::getAPIKey(const EngineType inEngineType) const
+QString ConfigManager::apiKey(const EngineType inEngineType) const
 {
     return _settings->value(API_Key + EngineHelper::getName(inEngineType)).toString();
 }
@@ -77,7 +77,7 @@ void ConfigManager::setOpenAIModel(const QString& inModelName)
     _settings->setValue(OpenAI_Model, inModelName);
 }
 
-QString ConfigManager::getOpenAIModel() const
+QString ConfigManager::openAIModel() const
 {
     // gpt-4o-mini / gpt-4.1-mini
     return _settings->value(OpenAI_Model, "gpt-4o-mini").toString();
@@ -93,7 +93,7 @@ void ConfigManager::setOpenAI_Temperature(const double inTemperature)
     _settings->setValue(OpenAI_Temperature, inTemperature);
 }
 
-double ConfigManager::getOpenAI_Temperature() const
+double ConfigManager::openAI_Temperature() const
 {
     return _settings->value(OpenAI_Temperature, defaultAI_Temperature()).toDouble();
 }
@@ -128,7 +128,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
     }
 }
 
-bool ConfigManager::getStartRun() const
+bool ConfigManager::startRun() const
 {
     return _settings->value(Sol::CmdLineOptions::START_UP_RUN, false).toBool();
 }
@@ -138,9 +138,9 @@ void ConfigManager::setPopupTargetLang(const LangType inLangType)
     setEnumValue(PopupTargetLanguageType, inLangType);
 }
 
-LangType ConfigManager::getPopupTargetLang() const
+LangType ConfigManager::popupTargetLang() const
 {
-    return getEnumValue(PopupTargetLanguageType, LangType::ko);
+    return enumValue(PopupTargetLanguageType, LangType::ko);
 }
 
 void ConfigManager::setTextSrcLang(const LangType inLangType)
@@ -148,9 +148,9 @@ void ConfigManager::setTextSrcLang(const LangType inLangType)
     setEnumValue(TextSrcLangType, inLangType);
 }
 
-LangType ConfigManager::getTextSrcLang() const
+LangType ConfigManager::textSrcLang() const
 {
-    return getEnumValue(TextSrcLangType, LangType::AUTO);
+    return enumValue(TextSrcLangType, LangType::AUTO);
 }
 
 void ConfigManager::setTextTargetLang(const LangType inLangType)
@@ -158,9 +158,9 @@ void ConfigManager::setTextTargetLang(const LangType inLangType)
     setEnumValue(TextTargetLangType, inLangType);
 }
 
-LangType ConfigManager::getTextTargetLang() const
+LangType ConfigManager::textTargetLang() const
 {
-    return getEnumValue(TextTargetLangType, LangType::ko);
+    return enumValue(TextTargetLangType, LangType::ko);
 }
 
 void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)
@@ -168,7 +168,7 @@ void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)
     _settings->setValue(SimplePopupGeometry, inGeo);
 }
 
-QRect ConfigManager::getSimplePopupGeometry() const
+QRect ConfigManager::simplePopupGeometry() const
 {
     return _settings->value(SimplePopupGeometry).toRect();
 }
@@ -178,9 +178,9 @@ void ConfigManager::setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy
     setEnumValue(SimplePopupScreenPolicy, inPolicy);
 }
 
-ScreenPopupPolicy ConfigManager::getSimplePopupScreenPolicy() const
+ScreenPopupPolicy ConfigManager::simplePopupScreenPolicy() const
 {
-    return getEnumValue(SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
+    return enumValue(SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
 }
 
 void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)
@@ -188,7 +188,7 @@ void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeo
     _settings->setValue(IsRememberWindowGeo, inIsRememberWindowGeometry);
 }
 
-bool ConfigManager::getIsRememberWindowGeometry() const
+bool ConfigManager::isRememberWindowGeometry() const
 {
     return _settings->value(IsRememberWindowGeo, false).toBool();
 }
@@ -200,12 +200,12 @@ void ConfigManager::saveWidgetGeometry(const QWidget* inWidget)
 
 bool ConfigManager::restoreWidgetGeometry(QWidget* inWidget) const
 {
-    if (getIsRememberWindowGeometry() == false)
+    if (isRememberWindowGeometry() == false)
     {
         return false;
     }
 
-    const auto [bIsExistGeo, geoByteArr] = getSaveGeometry(inWidget->objectName() + WidgetGeometry);
+    const auto [bIsExistGeo, geoByteArr] = saveGeometry(inWidget->objectName() + WidgetGeometry);
 
     if (bIsExistGeo)
     {
@@ -219,7 +219,7 @@ void ConfigManager::setIsPopupTrWindowTemp(const bool inTemp)
     _settings->setValue(IsPopupTrWindowTemp, inTemp);
 }
 
-bool ConfigManager::getIsPopupTrWindowTemp() const
+bool ConfigManager::isPopupTrWindowTemp() const
 {
     return _settings->value(IsPopupTrWindowTemp, false).toBool();
 }
@@ -240,7 +240,7 @@ void ConfigManager::setHistoryTimeFormat(const QString& inFormat)
     _settings->setValue(TimeFormat + HistoryFormat, inFormat);
 }
 
-QString ConfigManager::getHistoryTimeFormat() const
+QString ConfigManager::historyTimeFormat() const
 {
     return _settings->value(TimeFormat + HistoryFormat, "yyyy/MM/dd (ddd) hh:mm").toString();
 }
@@ -288,7 +288,7 @@ void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArra
     _settings->setValue(inKey, inGeoData);
 }
 
-std::tuple<bool, QByteArray> ConfigManager::getSaveGeometry(const QAnyStringView& inKey) const
+std::tuple<bool, QByteArray> ConfigManager::saveGeometry(const QAnyStringView& inKey) const
 {
     const QVariant valVariant = _settings->value(inKey);
 

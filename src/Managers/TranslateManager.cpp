@@ -53,7 +53,7 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
 TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;
-    const EngineType currentEngine = solConfig.getCurrentEngineType();
+    const EngineType currentEngine = solConfig.currentEngineType();
     switch (currentEngine)
     {
     case EngineType::Google:
@@ -115,7 +115,7 @@ void TranslateManager::translateAtPopup(const QString& inOriginText
     }
 
     PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
-    popupWidget->executeTranslate(inOriginText, inTextStyle, LangType::AUTO, solConfig.getPopupTargetLang());
+    popupWidget->executeTranslate(inOriginText, inTextStyle, LangType::AUTO, solConfig.popupTargetLang());
 }
 
 void TranslateManager::processPopupTranslate()

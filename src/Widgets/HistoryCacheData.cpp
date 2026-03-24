@@ -4,6 +4,8 @@
 
 #include <QRegularExpression>
 
+#include "SolTranslatorCore.h"
+
 #include "Managers/ConfigManager.h"
 
 HistoryCacheData::HistoryCacheData()

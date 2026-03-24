@@ -76,7 +76,10 @@ SolPaletteWidget::SolPaletteWidget(QWidget* parent): ISolWidget(parent)
 SolPaletteWidget::~SolPaletteWidget()
 {}
 
-StyleManger::StyleManger(QObject* parent) : QObject(parent)
+
+StyleManger::StyleManger(QObject* parent)
+    : QObject(parent)
+    , _solPalette(nullptr)
 {}
 
 StyleManger::~StyleManger()
@@ -167,26 +170,26 @@ void SolPaletteWidget::updatePaletteColor() const
 {
     QPalette qPalette;
 
-    qPalette.setColor(QPalette::Window,           _windowColor);
-    qPalette.setColor(QPalette::WindowText,       _windowTextColor);
-    qPalette.setColor(QPalette::Base,             _baseColor);
-    qPalette.setColor(QPalette::Text,             _textColor);
-    qPalette.setColor(QPalette::Button,           _buttonColor);
-    qPalette.setColor(QPalette::ButtonText,       _buttonTextColor);
-    qPalette.setColor(QPalette::Highlight,        _highlightColor);
-    qPalette.setColor(QPalette::HighlightedText,  _highlightedTextColor);
-    qPalette.setColor(QPalette::Link,             _linkColor);
+    qPalette.setColor(QPalette::Window,          _windowColor);
+    qPalette.setColor(QPalette::WindowText,      _windowTextColor);
+    qPalette.setColor(QPalette::Base,            _baseColor);
+    qPalette.setColor(QPalette::Text,            _textColor);
+    qPalette.setColor(QPalette::Button,          _buttonColor);
+    qPalette.setColor(QPalette::ButtonText,      _buttonTextColor);
+    qPalette.setColor(QPalette::Highlight,       _highlightColor);
+    qPalette.setColor(QPalette::HighlightedText, _highlightedTextColor);
+    qPalette.setColor(QPalette::Link,            _linkColor);
 
-    qPalette.setColor(QPalette::Inactive, QPalette::Highlight, _inact_highlightColor);
+    qPalette.setColor(QPalette::Inactive, QPalette::Highlight,       _inact_highlightColor);
     qPalette.setColor(QPalette::Inactive, QPalette::HighlightedText, _inact_highlightedTextColor);
 
-    qPalette.setColor(QPalette::Disabled, QPalette::Window, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::WindowText, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::Base, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::Text, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::Button, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::ButtonText, _disableColor);
-    qPalette.setColor(QPalette::Disabled, QPalette::Highlight, _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Window,          _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::WindowText,      _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Base,            _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Text,            _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Button,          _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::ButtonText,      _disableColor);
+    qPalette.setColor(QPalette::Disabled, QPalette::Highlight,       _disableColor);
     qPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, _disableColor);
 
     QApplication::setPalette(qPalette);

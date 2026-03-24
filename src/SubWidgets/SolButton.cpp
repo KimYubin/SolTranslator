@@ -3,6 +3,7 @@
 #include "SolButton.h"
 
 #include "SolToolTip.h"
+#include "SolTranslatorCore.h"
 
 #include "Managers/ConfigManager.h"
 

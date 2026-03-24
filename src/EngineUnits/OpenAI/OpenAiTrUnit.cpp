@@ -9,6 +9,7 @@
 
 #include "SolConstants.h"
 #include "SolLog.h"
+#include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"

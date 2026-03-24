@@ -2,41 +2,34 @@
 
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
-#include <QObject>
 #include <QSettings>
 
+#include "AbstractManager.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 
-
-#define solConfig ConfigManager::instance()
+#if defined(solConfig)
+#undef solConfig
+#endif
+#define solConfig (*solCore->configManager())
 
 /**
- * 프로그램의 구성, 설정 등의 상태 정보를 저장 및 관리합니다.
- * 영구 저장이 필요한 관리 데이터는 이곳에서 저장합니다.
- * 전역에서 접근할 수 있는 싱글톤 객체로 사용합니다.
+ *The ConfigManager class stores and manages configuration/settings.
  */
-class ConfigManager : public QObject
+class ConfigManager: public AbstractManager
 {
     Q_OBJECT
 
-private:
-    ConfigManager();
-
 public:
-    static ConfigManager& instance()
-    {
-        static ConfigManager* configInstance = new ConfigManager();
-        return *configInstance;
-    }
+    explicit ConfigManager(SolTranslatorCore* parent);
 
-    void setCurrentEngineType(EngineType inEngineType);
+    void setCurrentEngineType(const EngineType inEngineType);
     EngineType getCurrentEngineType() const;
 
-    void setAPIKey(EngineType inEngineType, const QString& inAPIKey);
-    QString getAPIKey(EngineType inEngineType) const;
+    void setAPIKey(const EngineType inEngineType, const QString& inAPIKey);
+    QString getAPIKey(const EngineType inEngineType) const;
 
     void setOpenAIModel(const QString& inModelName);
     QString getOpenAIModel() const;

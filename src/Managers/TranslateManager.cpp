@@ -67,15 +67,15 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& 
         break;
     case EngineType::FinPointDebug:
     {
-        FinPointTrUnit* finPointTr = new FinPointTrUnit(this);
-        finPointTr->setDebugMode(true);
-        trUnit = finPointTr;
+        trUnit = new FinPointTrUnit(this);
+        static_cast<FinPointTrUnit*>(trUnit)->setDebugMode(true);
         break;
     }
     case EngineType::Size:
         break;
     }
 
+#ifdef QT_DEBUG
     // string 기반 enum과 class 매칭 유효성 검사
     bool isValidEngineName = false;
     if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
@@ -89,6 +89,7 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& 
     {
         solDebug << "Invalid engine type";
     }
+#endif
 
     if (trUnit != nullptr)
     {

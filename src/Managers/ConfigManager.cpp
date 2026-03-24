@@ -43,13 +43,13 @@ const QString HistoryFormat = "HistoryFormat";
 const QString Shortcuts = "Shortcuts/";
 } // anonymous namespace
 
-ConfigManager::ConfigManager()
+ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
     _settings = new QSettings(SolPaths::getConfigPath(), QSettings::IniFormat, this);
 }
 
 
-void ConfigManager::setCurrentEngineType(EngineType inEngineType)
+void ConfigManager::setCurrentEngineType(const EngineType inEngineType)
 {
     setEnumValue(Engine_Type, inEngineType);
 }
@@ -60,13 +60,13 @@ EngineType ConfigManager::getCurrentEngineType() const
 }
 
 
-void ConfigManager::setAPIKey(EngineType inEngineType, const QString& inAPIKey)
+void ConfigManager::setAPIKey(const EngineType inEngineType, const QString& inAPIKey)
 {
     _settings->setValue(API_Key + EngineHelper::getName(inEngineType), inAPIKey);
     _settings->sync();
 }
 
-QString ConfigManager::getAPIKey(EngineType inEngineType) const
+QString ConfigManager::getAPIKey(const EngineType inEngineType) const
 {
     return _settings->value(API_Key + EngineHelper::getName(inEngineType)).toString();
 }

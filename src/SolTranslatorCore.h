@@ -8,6 +8,7 @@
 #include "SolTypes.h"
 
 
+class ConfigManager;
 class HistoryManager;
 class AsyncManager;
 class QMimeData;
@@ -16,7 +17,10 @@ class GlobalHotKeyManager;
 class TranslateManager;
 class DataManager;
 
-#define solCore SolTranslatorCore::instance()
+#if defined(solCore)
+#undef solCore
+#endif
+#define solCore (SolTranslatorCore::instance())
 
 /**
  * SolTranslator의 Non-UI 관련 기능과 mainWidget을 관리하는 최상위 객체입니다.
@@ -33,7 +37,7 @@ public:
     static SolTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    DataManager* dataManager() const { return _dataManager; }
+    ConfigManager* configManager() const { return _configManager; };
     TranslateManager* translateManager() const { return _translateManager; }
     HistoryManager* historyManager() const { return _historyManager; }
     GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
@@ -42,11 +46,15 @@ public:
     SolMainWidget* solMainWidget() const { return _solMainWidget; }
 
 private:
+signals:
+    void postInitialized();
+
+private:
     void postInitialize();
 
     static SolTranslatorCore* _self;
 
-    DataManager* _dataManager;
+    ConfigManager* _configManager;
     TranslateManager* _translateManager;
     HistoryManager* _historyManager;
     GlobalHotKeyManager* _globalHotKeyManager;

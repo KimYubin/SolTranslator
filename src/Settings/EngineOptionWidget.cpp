@@ -9,8 +9,8 @@
 #include <qsortfilterproxymodel.h>
 #include <qstringlistmodel.h>
 
-#include "Managers/ConfigManager.h"
 #include "SolTranslatorCore.h"
+#include "Managers/ConfigManager.h"
 #include "Widgets/SolMainWidget.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"

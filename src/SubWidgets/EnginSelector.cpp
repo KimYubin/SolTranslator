@@ -2,6 +2,7 @@
 
 #include "EnginSelector.h"
 
+#include "SolTranslatorCore.h"
 #include "SolTypes.h"
 
 #include "Managers/ConfigManager.h"

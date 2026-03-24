@@ -10,6 +10,7 @@
 
 #include "ConfigManager.h"
 #include "SolLog.h"
+#include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 #include "TranslateManager.h"
 #include "SolTypes.h"

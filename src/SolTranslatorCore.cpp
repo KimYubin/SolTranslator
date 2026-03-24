@@ -10,7 +10,6 @@
 
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
-#include "Managers/DataManager.h"
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
@@ -37,16 +36,17 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
         qApp->installTranslator(qtTranslator);
     }
 
-    _dataManager         = new DataManager(this);
+    _configManager       = new ConfigManager(this);
     _translateManager    = new TranslateManager(this);
     _historyManager      = new HistoryManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);
     _asyncManager        = new AsyncManager(this);
 
+    postInitialize();
 
+    // GUI setup
     StyleManger::applyTheme();
 
-    // generate GUI widget
     _solMainWidget = new SolMainWidget();
 
     // parsing
@@ -68,7 +68,6 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
     // WidgetInspector* inspector = new WidgetInspector();
 #endif
 
-    postInitialize();
 }
 
 SolTranslatorCore::~SolTranslatorCore()
@@ -77,9 +76,5 @@ SolTranslatorCore::~SolTranslatorCore()
 
 void SolTranslatorCore::postInitialize()
 {
-    QList<AbstractManager*> managers = findChildren<AbstractManager*>();
-    for (AbstractManager* mng : managers)
-    {
-        mng->postInitialize();
-    }
+    emit postInitialized();
 }

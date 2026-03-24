@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30.5)
 
-project(SolTranslator VERSION 0.0.1 LANGUAGES CXX)
+project(SolTranslator VERSION 0.1.0 LANGUAGES CXX)
 
 
 set(CMAKE_AUTOUIC ON)
@@ -162,7 +162,6 @@ if (WIN32)
     target_sources(SolTranslator PRIVATE ${app_icon_resource_windows})
 endif ()
 
-# Android 환경일 경우에만 패키지 소스 디렉토리 설정
 # Define target properties for Android with Qt 6 as:
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 if (ANDROID)
@@ -213,8 +212,7 @@ target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
 
 # ============================
-# 현지화
-##[[
+# Internationalization
 qt_standard_project_setup(
         I18N_SOURCE_LANGUAGE ko
         I18N_TRANSLATED_LANGUAGES en ja
@@ -236,7 +234,6 @@ install(FILES ${qm_output_files}
         DESTINATION translations)
 
 add_dependencies(SolTranslator update_translations)
-# ]]
 
 
 
@@ -264,7 +261,7 @@ install(TARGETS SolTranslator
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# convert install path to an absolute path
+# Convert install path to an absolute path
 # qt.conf requires an absolute path.
 cmake_path(
         ABSOLUTE_PATH CMAKE_INSTALL_PREFIX

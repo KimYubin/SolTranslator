@@ -20,7 +20,6 @@ class TextEditTranslateWidget;
 class SolTranslatorCore;
 class GlobalHotKeyManager;
 class TranslateManager;
-class DataManager;
 
 QT_BEGIN_NAMESPACE
 

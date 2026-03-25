@@ -20,7 +20,7 @@ enum class Tr
   , Save
   , Translation_Engine_Settings
   , Ai_Options
-  , OpenAi_Temperature
+  , Temperature_Option
   , Default_Value_Hint
   , General
   , Appearance_Behavior
@@ -75,6 +75,12 @@ enum class Tr
   , Swap_Language_Desc
   , Re_Translate
   , Translating
+  , GoogleTranslate
+  , MicrosoftTranslate
+  , DeepL
+  , Papago
+  , OpenAI
+  , Gemini
 
   , Size
 };

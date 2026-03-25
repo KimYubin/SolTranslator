@@ -80,7 +80,7 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     // 온도 설정
     {
         SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), aiOptionGroup);
-        openAiTemper->setHeader(i18n(Tr::OpenAi_Temperature));
+        openAiTemper->setHeader(i18n(Tr::Temperature_Option).arg(i18n(Tr::OpenAI)));
         openAiTemper->setDescription(i18n(Tr::Default_Value_Hint).arg(solConfig.defaultAI_Temperature()));
 
         // openAiTemper->setDescription(i18n("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));

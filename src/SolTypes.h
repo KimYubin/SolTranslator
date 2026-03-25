@@ -18,8 +18,8 @@ class SolTypes
 struct EngineHelper
 {
 public:
-    static QString getName(EngineType inEngineType);
-    static EngineType getDefaultEngineType();
+    static QString displayName(EngineType inEngineType);
+    static EngineType defaultEngineType();
 };
 
 

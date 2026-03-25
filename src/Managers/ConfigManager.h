@@ -16,7 +16,7 @@
 #define solConfig (*solCore->configManager())
 
 /**
- *The ConfigManager class stores and manages configuration/settings.
+ * The ConfigManager class stores and manages configuration/settings.
  */
 class ConfigManager: public AbstractManager
 {

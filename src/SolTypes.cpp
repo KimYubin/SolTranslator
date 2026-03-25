@@ -12,6 +12,8 @@
 
 #include "../external/magic_enum.hpp"
 
+#include "Utils/Tr.h"
+
 namespace
 {
 
@@ -40,23 +42,25 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
 
-QString EngineHelper::getName(EngineType inEngineType)
+QString EngineHelper::displayName(EngineType inEngineType)
 {
     switch (inEngineType)
     {
     case EngineType::Google:
+        return Sol::i18n(Tr::GoogleTranslate);
         break;
     case EngineType::OpenAI:
+        return Sol::i18n(Tr::OpenAI);
         break;
+
     case EngineType::Size:
-        break;
     default: ;
     }
 
     return Sol::enumToQStr(inEngineType);
 }
 
-EngineType EngineHelper::getDefaultEngineType()
+EngineType EngineHelper::defaultEngineType()
 {
     return EngineType::Google;
 }

@@ -94,11 +94,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="28"/>
-        <source>OpenAI 온도 설정</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/Utils/Tr.cpp" line="29"/>
         <source>(기본값: %1)</source>
         <translation type="unfinished"></translation>
@@ -240,9 +235,45 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/Utils/Tr.cpp" line="83"/>
+        <source>구글 번역</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="84"/>
+        <source>마이크로소프트 번역</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="85"/>
+        <source>DeepL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="86"/>
+        <source>파파고</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="87"/>
+        <source>OpenAI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="88"/>
+        <source>Gemini</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/Utils/Tr.cpp" line="44"/>
         <source>번역 삭제</source>
         <comment>번역 기록을 삭제합니다.</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="28"/>
+        <source>%1 온도 설정</source>
+        <comment>AI 온도 설정. 자리표시자에는 AI 서비스의 이름이 들어갑니다.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>

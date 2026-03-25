@@ -25,7 +25,7 @@ QString Sol::i18n(const Tr inTr)
     case Save:                           return TrImpl::tr("저장");
     case Translation_Engine_Settings:    return TrImpl::tr("번역 엔진 설정");
     case Ai_Options:                     return TrImpl::tr("AI 옵션");
-    case OpenAi_Temperature:             return TrImpl::tr("OpenAI 온도 설정");
+    case Temperature_Option:             return TrImpl::tr("%1 온도 설정", "AI 온도 설정. 자리표시자에는 AI 서비스의 이름이 들어갑니다.");
     case Default_Value_Hint:             return TrImpl::tr("(기본값: %1)");
     case General:                        return TrImpl::tr("일반");
     case Appearance_Behavior:            return TrImpl::tr("모양 및 동작");
@@ -80,7 +80,12 @@ QString Sol::i18n(const Tr inTr)
     case Swap_Language_Desc:             return TrImpl::tr("출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 \'자동 감지\'라면 사용할 수 없습니다.");
     case Re_Translate:                   return TrImpl::tr("다시 번역");
     case Translating:                    return TrImpl::tr("번역 중...", "번역 결과를 받기 전에 대기 중임을 안내합니다.");
-
+    case GoogleTranslate:                return TrImpl::tr("구글 번역");
+    case MicrosoftTranslate:             return TrImpl::tr("마이크로소프트 번역");
+    case DeepL:                          return TrImpl::tr("DeepL");
+    case Papago:                         return TrImpl::tr("파파고");
+    case OpenAI:                         return TrImpl::tr("OpenAI");
+    case Gemini:                         return TrImpl::tr("Gemini");
 
     case Size: Q_UNREACHABLE();
     // default: Should not be used. There must be a 'case' for every enum class member.
@@ -91,6 +96,6 @@ QString Sol::i18n(const Tr inTr)
 
 namespace
 {
-constexpr int TrKeyCheck = 59;
+constexpr int TrKeyCheck = 65;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

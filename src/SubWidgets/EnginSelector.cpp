@@ -14,7 +14,7 @@ EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
     // 엔진 선택 초기화
     for (EngineType eg = EngineType::Google; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
     {
-        addItem(EngineHelper::getName(eg), static_cast<int>(eg));
+        addItem(EngineHelper::displayName(eg), static_cast<int>(eg));
     }
 
     setCurrentIndex(static_cast<int>(solConfig.currentEngineType()));

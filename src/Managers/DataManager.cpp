@@ -102,7 +102,7 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
             QJsonObject cacheObject = cacheValue.toObject();
 
             TextCacheKey cacheKey;
-            cacheKey.engineType = Sol::qStrToEnum(cacheObject["EngineType"].toString(), EngineHelper::getDefaultEngineType());
+            cacheKey.engineType = Sol::qStrToEnum(cacheObject["EngineType"].toString(), EngineHelper::defaultEngineType());
             cacheKey.originText = cacheObject["OriginText"].toString();
             cacheKey.sourceLang = Sol::qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
             cacheKey.targetLang = Sol::qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);

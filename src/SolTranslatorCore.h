@@ -5,17 +5,13 @@
 #include <QObject>
 #include <QApplication>
 
-#include "SolTypes.h"
-
-
 class ConfigManager;
 class HistoryManager;
 class AsyncManager;
-class QMimeData;
-class SolMainWidget;
 class GlobalHotKeyManager;
 class TranslateManager;
 class DataManager;
+class SolMainWidget;
 
 #if defined(solCore)
 #undef solCore

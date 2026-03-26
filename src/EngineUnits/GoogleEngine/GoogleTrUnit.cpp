@@ -26,8 +26,8 @@ void GoogleTrUnit::requestTranslate()
     }
 
     const QUrl url = QString(Sol::URLs::GOOGLE).arg(
-        Langs::GetCodeName(_trReqData.sourceLang)
-      , Langs::GetCodeName(_trReqData.targetLang)
+        Langs::getCodeName(_trReqData.sourceLang)
+      , Langs::getCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.originText, "()")); // '()'괄호는 인코딩 대상 제외.
 
     QNetworkRequest request(url);

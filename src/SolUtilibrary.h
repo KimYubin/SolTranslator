@@ -79,7 +79,7 @@ QRect availableGeometryAt(const QPoint& inPoint);
 /**
  * std::string_view를 QString으로 변환합니다.
  */
-QString QStrFromStdView(const std::string_view& inStrView);
+QString qStrFromStdView(const std::string_view& inStrView);
 
 
 /**
@@ -89,7 +89,7 @@ template <typename EnumType>
     requires std::is_enum_v<EnumType>
 QString enumToQStr(const EnumType inDefaultVal)
 {
-    return QStrFromStdView(magic_enum::enum_name<EnumType>(inDefaultVal));
+    return qStrFromStdView(magic_enum::enum_name<EnumType>(inDefaultVal));
 }
 
 /**

@@ -120,7 +120,7 @@ LanguageSelector::~LanguageSelector()
 
 void LanguageSelector::setButtonText(const LangType inlangType)
 {
-    _button->setText(Langs::GetLocaleName(inlangType));
+    _button->setText(Langs::getLocaleName(inlangType));
 }
 
 void LanguageSelector::setBubbleToolTip(const QString& inStr)
@@ -182,7 +182,7 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     _listWidget = new KeySelectionList(this);
     layout->addWidget(_listWidget);
 
-    _allLangTypes = Langs::GetLanguageList();
+    _allLangTypes = Langs::getLanguageList();
     for (const LangType langType : _allLangTypes)
     {
         addListItem(langType);
@@ -305,7 +305,7 @@ void LanguageSelectorMenuPrivate::filterItems(const QString& inText)
     _listWidget->clear();
     for (const LangType langType : _allLangTypes)
     {
-        if (Langs::IsContainName(langType, inText))
+        if (Langs::containName(langType, inText))
         {
             addListItem(langType);
         }
@@ -323,7 +323,7 @@ void LanguageSelectorMenuPrivate::onItemClicked(QListWidgetItem* inItem)
 
 void LanguageSelectorMenuPrivate::addListItem(const LangType& inLangType)
 {
-    const QString langName = Langs::GetLocaleName(inLangType);
+    const QString langName = Langs::getLocaleName(inLangType);
     _listWidget->addItem(langName);
     if (QListWidgetItem* lastItem = _listWidget->item(_listWidget->count() - 1))
     {

@@ -80,10 +80,10 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 
         DropdownMenu* selectCombo = selectTargetLang->getContent<DropdownMenu>();
 
-        std::vector<LangType> langList = Langs::GetLanguageList();
+        std::vector<LangType> langList = Langs::getLanguageList();
         for (LangType lang : langList)
         {
-            selectCombo->addItem(Langs::GetLocaleName(lang), static_cast<int>(lang));
+            selectCombo->addItem(Langs::getLocaleName(lang), static_cast<int>(lang));
         }
 
         connect(selectCombo, &QComboBox::currentIndexChanged, this, [this, selectCombo](const int inIdx)

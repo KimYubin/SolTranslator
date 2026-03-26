@@ -94,7 +94,7 @@ QRect Sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
     return res;
 }
 
-QString Sol::QStrFromStdView(const std::string_view& inStrView)
+QString Sol::qStrFromStdView(const std::string_view& inStrView)
 {
     // string_view -> std::str -> QString
     return QString::fromStdString(std::string{inStrView});

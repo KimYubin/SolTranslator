@@ -40,7 +40,7 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 
     QJsonObject developerMessage;
     developerMessage["role"] = "developer";
-    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::GetEnglishName(_trReqData.sourceLang), Langs::GetEnglishName(_trReqData.targetLang));
+    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::getEnglishName(_trReqData.sourceLang), Langs::getEnglishName(_trReqData.targetLang));
     messages.append(developerMessage);
 
     QJsonObject userMessage;

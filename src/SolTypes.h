@@ -2,11 +2,10 @@
 
 #ifndef SOLTYPES_H
 #define SOLTYPES_H
-#include <QString>
 #include <QObject>
 #include <QPointer>
 
-
+class QString;
 class ITranslateWidget;
 enum class EngineType;
 enum class LangType;
@@ -235,15 +234,15 @@ public:
 struct Langs
 {
 public:
-    static LangInfo GetLangInfo(const LangType inLangType);
-    static QString GetCodeName(const LangType inLangType);
-    static QString GetEnglishName(const LangType inLangType);
-    static QString GetEndonymName(const LangType inLangType);
-    static QString GetLocaleName(const LangType inLangType);
+    static LangInfo getLangInfo(const LangType inLangType);
+    static QString getCodeName(const LangType inLangType);
+    static QString getEnglishName(const LangType inLangType);
+    static QString getEndonymName(const LangType inLangType);
+    static QString getLocaleName(const LangType inLangType);
 
-    static std::vector<LangType> GetLanguageList();
+    static std::vector<LangType> getLanguageList();
 
-    static bool IsContainName(const LangType inLangType, const QString& inLangName);
+    static bool containName(const LangType inLangType, const QString& inLangName);
 
 private:
     static const std::unordered_map<LangType, LangInfo> langs;

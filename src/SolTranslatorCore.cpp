@@ -3,10 +3,8 @@
 #include "SolTranslatorCore.h"
 
 #include <QApplication>
-#include <QMimeData>
 
 #include "SolConstants.h"
-#include "SolUtilibrary.h"
 
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"

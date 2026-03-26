@@ -6,6 +6,7 @@
 #include <qdatetime.h>
 
 #include "SolTranslatorCore.h"
+#include "SolTypes.h"
 
 namespace
 {

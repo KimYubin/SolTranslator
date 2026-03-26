@@ -137,7 +137,7 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
     , callbackTranslateStreaming(std::move(inFuncStreaming))
 {}
 
-LangInfo Langs::GetLangInfo(const LangType inLangType)
+LangInfo Langs::getLangInfo(const LangType inLangType)
 {
     const std::unordered_map<LangType, LangInfo>::const_iterator findIt = langs.find(inLangType);
     if (findIt != langs.end())
@@ -148,33 +148,33 @@ LangInfo Langs::GetLangInfo(const LangType inLangType)
     return langs.find(LangType::NONE)->second;
 }
 
-QString Langs::GetCodeName(LangType inLangType)
+QString Langs::getCodeName(LangType inLangType)
 {
-    return GetLangInfo(inLangType).codeName;
+    return getLangInfo(inLangType).codeName;
 }
 
-QString Langs::GetEnglishName(const LangType inLangType)
+QString Langs::getEnglishName(const LangType inLangType)
 {
-    return GetLangInfo(inLangType).engName;
+    return getLangInfo(inLangType).engName;
 }
 
-QString Langs::GetEndonymName(const LangType inLangType)
+QString Langs::getEndonymName(const LangType inLangType)
 {
-    return GetLangInfo(inLangType).endonymName;
+    return getLangInfo(inLangType).endonymName;
 }
 
-QString Langs::GetLocaleName(const LangType inLangType)
+QString Langs::getLocaleName(const LangType inLangType)
 {
     // todo: 현지화 버전으로 변경할 예정. 현재는 자국명.
-    return GetLangInfo(inLangType).endonymName;
+    return getLangInfo(inLangType).endonymName;
 }
 
-std::vector<LangType> Langs::GetLanguageList()
+std::vector<LangType> Langs::getLanguageList()
 {
     std::vector<LangType> languageList;
     for (LangType lt = LangType::AUTO; lt != LangType::Size; lt = static_cast<LangType>(static_cast<int>(lt) + 1))
     {
-        const QString langName = Langs::GetLocaleName(lt);
+        const QString langName = Langs::getLocaleName(lt);
         if (langName != "NONE")
         {
             languageList.push_back(lt);
@@ -184,10 +184,10 @@ std::vector<LangType> Langs::GetLanguageList()
     return languageList;
 }
 
-bool Langs::IsContainName(const LangType inLangType, const QString& inLangName)
+bool Langs::containName(const LangType inLangType, const QString& inLangName)
 {
     // todo: 로케일 현지화 이름 및 각국 언어별 명칭을 모두 찾도록 만들어야합니다.
     // todo: 현지명, 영어명, 코드명, 자국명(모든언어 검색X. 자국명만 따로 모아놓아야합니다.)
-    const QString LangName = Langs::GetLocaleName(inLangType);
+    const QString LangName = Langs::getLocaleName(inLangType);
     return LangName.contains(inLangName, Qt::CaseInsensitive);
 }

@@ -26,8 +26,8 @@ void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QJsonObject jsonObj;
-    jsonObj["sourceLang"] = Langs::GetEnglishName(_trReqData.sourceLang);
-    jsonObj["targetLang"] = Langs::GetEnglishName(_trReqData.targetLang);
+    jsonObj["sourceLang"] = Langs::getEnglishName(_trReqData.sourceLang);
+    jsonObj["targetLang"] = Langs::getEnglishName(_trReqData.targetLang);
     jsonObj["originText"] = _trReqData.originText;
     jsonObj["bIsStream"]  = inIsStreaming; // streaming
 

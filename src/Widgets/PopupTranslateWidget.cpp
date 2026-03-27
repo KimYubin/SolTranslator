@@ -116,7 +116,9 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
 {
     _originText = inOriginText;
     _textStyle  = inTextStyle;
-    solCore->translateManager()->translateText(TranslateRequestInfo{
+
+    std::expected<QPointer<TranslateUnit>, QString> trRes
+    = solCore->translateManager()->translateText(TranslateRequestInfo{
         this
       , false
       , solConfig.currentEngineType()
@@ -129,6 +131,10 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
       , this
       , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
     });
+    if (trRes.has_value() == false)
+    {
+        solDebug << "Translation attempt failed" << trRes.error();
+    }
 }
 
 void PopupTranslateWidget::executeTranslate(const QString& inOriginText

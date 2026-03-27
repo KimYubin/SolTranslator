@@ -192,7 +192,8 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
     }
     ui->trTextEdit->setPlainText(i18n(Tr::Translating));
 
-    solCore->translateManager()->translateText(TranslateRequestInfo{
+    std::expected<QPointer<TranslateUnit>, QString> trRes
+    = solCore->translateManager()->translateText(TranslateRequestInfo{
         this
       , inIgnoreCache
       , solConfig.currentEngineType()
@@ -205,6 +206,11 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
       , this
       , [this](const QString& inStr) { streamTransText(inStr, TextStyle::PlainText); }
     });
+
+    if (trRes.has_value() == false)
+    {
+        solDebug << "Translation attempt failed:" << trRes.error();
+    }
 }
 
 void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)

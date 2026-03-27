@@ -32,6 +32,7 @@ public:
     hash_queue(const hash_queue& inOther)
         : keyValQueue(inOther.keyValQueue)
     {
+        keyListHash.clear();
         keyListHash.reserve(inOther.keyListHash.size());
         for (auto it = keyValQueue.begin(); it != keyValQueue.end(); ++it)
         {
@@ -50,6 +51,8 @@ public:
             return *this;
 
         keyValQueue = inOther.keyValQueue;
+
+        keyListHash.clear();
         keyListHash.reserve(inOther.keyListHash.size());
         for (auto it = keyValQueue.begin(); it != keyValQueue.end(); ++it)
         {
@@ -86,7 +89,6 @@ public:
             return;
         }
 
-        // 리스트에 삽입 및 해시 테이블에 위치 저장
         keyListHash[key] = keyValQueue.emplace(keyValQueue.end(), key, value);
     }
 

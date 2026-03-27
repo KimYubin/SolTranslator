@@ -4,6 +4,8 @@
 #define TRANSLATEMANAGER_H
 
 
+#include <expected>
+
 #include "AbstractManager.h"
 
 
@@ -32,9 +34,11 @@ public:
     QNetworkReply* get(const QNetworkRequest& inRequest);
     QNetworkReply* post(const QNetworkRequest& inRequest, const QByteArray& inPayload);
 
-    TranslateUnit* executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
+private:
+    std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
 
-    QPointer<TranslateUnit> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
+public:
+    std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
 
     void translateAtPopup(const QString& inOriginText
                         , const TextStyle inTextStyle);

@@ -19,7 +19,7 @@ TranslateUnit::TranslateUnit(TranslateManager* parent)
     , _trReqData()
 {}
 
-void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo)
+std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     _trReqData = std::move(inTranslateRequestInfo);
 
@@ -33,20 +33,19 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
         solDebug << "translate request text is empty";
 
         completeTranslatedText(_trReqData.originText);
-        return;
+        return{};
     }
 
     if (_trReqData.isIgnoreCache)
     {
         requestTranslate();
-        return;
+        return{};
     }
 
     HistoryManager* historyManager = solCore->historyManager();
     if (historyManager == nullptr)
     {
-        solDebug << "historyManager is null";
-        return;
+        return std::unexpected{"historyManager does not exist"};
     }
 
     historyManager->asyncLookupHistory(
@@ -72,6 +71,7 @@ void TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateReq
                 requestTranslate();
             }
         });
+    return {};
 }
 
 void TranslateUnit::get(const QNetworkRequest& inRequest)
@@ -119,8 +119,12 @@ void TranslateUnit::onReplyFinished()
 
 void TranslateUnit::disconnectTranslateDisplay()
 {
-    _trReqData.trDisplayWidget->setTrUnit(nullptr);
-    _trReqData.trDisplayWidget            = nullptr;
+    if (_trReqData.trDisplayWidget)
+    {
+        _trReqData.trDisplayWidget->setTrUnit(nullptr);
+        _trReqData.trDisplayWidget = nullptr;
+    }
+
     _trReqData.streamContext              = nullptr;
     _trReqData.callbackTranslateStreaming = nullptr;
     _trReqData.completeContext            = nullptr;

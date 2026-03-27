@@ -14,6 +14,8 @@ namespace
 QFile logFile;
 QTextStream logStream;
 
+QtMessageHandler originalHandler = nullptr;
+
 // 메시지 핸들러 함수
 void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
@@ -42,13 +44,18 @@ void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
 
     logStream << logStr << Qt::endl;
     logStream.flush();
+
+    if (originalHandler)
+    {
+        originalHandler(type, context, msg);
+    }
 }
 
 void setupLogFile()
 {
     // 로그 파일 열기
     logFile.setFileName(SolPaths::getLogPath());
-    if (!logFile.open(QIODevice::Append | QIODevice::Text))
+    if (logFile.open(QIODevice::Append | QIODevice::Text) == false)
     {
         qCritical() << "Cannot open the log file.";
         return;
@@ -56,16 +63,18 @@ void setupLogFile()
     logStream.setDevice(&logFile);
 
     // 메시지 핸들러 등록
-    qInstallMessageHandler(solMessageHandler);
+    originalHandler = qInstallMessageHandler(solMessageHandler);
 }
 } // anonymous namespace
 
+
 int main(int argc, char* argv[])
 {
-    QApplication app(argc, argv);
-    SolTranslatorCore solTranslatorCore(&app);
+    setupLogFile();
 
-    // setupLogFile();
+    QApplication app(argc, argv);
+
+    SolTranslatorCore solTranslatorCore(&app);
 
     return app.exec();
 }

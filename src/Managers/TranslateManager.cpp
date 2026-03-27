@@ -2,6 +2,7 @@
 
 #include "TranslateManager.h"
 
+#include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
 #include <QNetworkReply>
@@ -50,7 +51,7 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
     return _networkAccessManager->post(inRequest, inPayload);
 }
 
-TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
+std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;
     const EngineType currentEngine = solConfig.currentEngineType();
@@ -75,7 +76,13 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& 
         break;
     }
 
+    if (trUnit == nullptr)
+    {
+        return std::unexpected{"Failed to create trUnit. Current engine: " + Sol::enumToQStr(currentEngine)};
+    }
+
 #ifdef QT_DEBUG
+{
     // string 기반 enum과 class 매칭 유효성 검사
     bool isValidEngineName = false;
     if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
@@ -85,25 +92,28 @@ TranslateUnit* TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& 
             isValidEngineName = true;
         }
     }
+    Q_ASSERT_X(isValidEngineName, "TranslateManager::executeNewTranslateUnit", "Invalid engine type");
     if (isValidEngineName == false)
     {
-        solDebug << "Invalid engine type";
+        trUnit->deleteLater();
+        return std::unexpected{"Invalid engine type"};
     }
+}
 #endif
 
-    if (trUnit != nullptr)
+    std::expected<void, QString> execRes = trUnit->executeTextTranslation(std::move(inTranslateRequestInfo));
+    if (execRes.has_value() == false)
     {
-        trUnit->executeTextTranslation(std::move(inTranslateRequestInfo));
+        trUnit->deleteLater();
+        return std::unexpected{execRes.error()};
     }
 
     return trUnit;
 }
 
-QPointer<TranslateUnit> TranslateManager::translateText(TranslateRequestInfo&& inTranslateRequestInfo)
+std::expected<QPointer<TranslateUnit>, QString> TranslateManager::translateText(TranslateRequestInfo&& inTranslateRequestInfo)
 {
-    TranslateUnit* transUnit = executeNewTranslateUnit(std::move(inTranslateRequestInfo));
-
-    return QPointer<TranslateUnit>{transUnit};
+    return executeNewTranslateUnit(std::move(inTranslateRequestInfo));
 }
 
 void TranslateManager::translateAtPopup(const QString& inOriginText

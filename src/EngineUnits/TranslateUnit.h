@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QPointer>
 
+#include <expected>
+
 #include "SolTypes.h"
 
 
@@ -25,7 +27,7 @@ class TranslateUnit : public QObject
 public:
     explicit TranslateUnit(TranslateManager* parent);
 
-    void executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo);
+    std::expected<void, QString> executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo);
 
 protected:
     void get(const QNetworkRequest& inRequest);

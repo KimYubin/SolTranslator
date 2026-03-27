@@ -3,7 +3,6 @@
 #ifndef SOLTRANSLATORCORE_H
 #define SOLTRANSLATORCORE_H
 #include <QObject>
-#include <QApplication>
 
 class ConfigManager;
 class HistoryManager;

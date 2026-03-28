@@ -2,14 +2,13 @@
 
 #include "SolLog.h"
 
-#include <QApplication>
-#include <QFile>
-#include <QTimer>
-
-#include <qdatetime.h>
-#include <qlogging.h>
-
 #include "SolTypes.h"
+
+#include <QApplication>
+#include <QDateTime>
+#include <QFile>
+#include <QMessageLogContext>
+#include <QTimer>
 
 namespace
 {

@@ -2,24 +2,21 @@
 
 #include "LanguageSelector.h"
 
+#include "KeySelectionList.h"
+#include "SolToolTip.h"
+#include "SolTypes.h"
+#include "SolUtilibrary.h"
+#include "Managers/ConfigManager.h"
+#include "Utils/SolLog.h"
+#include "Utils/Tr.h"
+
 #include <QApplication>
 #include <QCoreApplication>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-
 #include <qevent.h>
-
-#include "KeySelectionList.h"
-#include "SolToolTip.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
-
-#include "Managers/ConfigManager.h"
-
-#include "Utils/SolLog.h"
-#include "Utils/Tr.h"
 
 using Sol::i18n;
 

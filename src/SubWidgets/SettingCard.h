@@ -2,8 +2,8 @@
 
 #ifndef TOGGLESWITCHBOX_H
 #define TOGGLESWITCHBOX_H
-#include <QFrame>
 
+#include <QFrame>
 
 class QGridLayout;
 class QLabel;

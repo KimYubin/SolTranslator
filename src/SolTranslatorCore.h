@@ -2,6 +2,7 @@
 
 #ifndef SOLTRANSLATORCORE_H
 #define SOLTRANSLATORCORE_H
+
 #include <QObject>
 
 class ConfigManager;

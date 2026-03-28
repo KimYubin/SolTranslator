@@ -2,9 +2,8 @@
 
 #ifndef SOLTRANSLATOR_SOLPUSHBUTTON_H
 #define SOLTRANSLATOR_SOLPUSHBUTTON_H
-#include <QPushButton>
 
-#include "SolTypes.h"
+#include <QPushButton>
 
 
 enum class Action;
@@ -27,7 +26,7 @@ public:
     {}
 
     void setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
-    void setToolTipAction(const QString& inToolTip, const Action inAction = Action::None);
+    void setToolTipAction(const QString& inToolTip, const Action inAction/* = Action::None*/);
 
     void setCheckIcon(const QString& inOnFileName, const QString& inOffFileName);
 
@@ -36,7 +35,7 @@ public:
                                , const QKeySequence& inKey = QKeySequence());
     void setCheckToolTipAction(const QString& inOnToolTip
                              , const QString& inOffToolTip
-                             , const Action inAction = Action::None);
+                             , const Action inAction/* = Action::None*/);
 
     /**
      * 

@@ -3,15 +3,12 @@
 #ifndef SOLTRANSLATOR_HISTORYCACHEDATA_H
 #define SOLTRANSLATOR_HISTORYCACHEDATA_H
 
+#include "SolTypes.h"
+
 #include <QDateTime>
-
-#include <SolTypes.h>
-
-#include <QtTypes>
-#include <qnamespace.h>
 #include <QString>
-
-enum class TextStyle;
+#include <Qt>
+#include <QtTypes>
 
 class HistoryCacheData
 {

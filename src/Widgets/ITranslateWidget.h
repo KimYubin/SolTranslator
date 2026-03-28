@@ -3,10 +3,10 @@
 #ifndef ITRANSLATEWIDGET_H
 #define ITRANSLATEWIDGET_H
 
+#include "SolTypes.h"
+
 #include <QPointer>
 #include <QWidget>
-
-#include "SolTypes.h"
 
 class TranslateUnit;
 class QTextCursor;

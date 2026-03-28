@@ -3,14 +3,13 @@
 
 #include "SolDatabase.h"
 
+#include "SolGuard.h"
+#include "Utils/SolLog.h"
+
 #include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QString>
-
-#include "SolGuard.h"
-
-#include "Utils/SolLog.h"
 
 std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {

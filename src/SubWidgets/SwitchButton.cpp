@@ -2,12 +2,14 @@
 
 #include "SwitchButton.h"
 
+#include <QColor>
+#include <QEasingCurve>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QColor>
 #include <QPointF>
+#include <QPropertyAnimation>
 #include <QRectF>
-#include <QEasingCurve>
+#include <QSequentialAnimationGroup>
 
 SwitchButton::SwitchButton(const bool inChecked, QWidget* parent)
     : QCheckBox(parent)

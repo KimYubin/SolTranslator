@@ -2,17 +2,17 @@
 
 #include "ConfigManager.h"
 
+#include "SolConstants.h"
+#include "SolTypes.h"
+#include "SolUtilibrary.h"
+
+#include "../../external/magic_enum.hpp"
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QRectF>
 #include <QSettings>
 #include <QWidget>
-
-#include "../../external/magic_enum.hpp"
-
-#include "SolConstants.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
 
 namespace
 {

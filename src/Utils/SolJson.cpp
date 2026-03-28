@@ -3,6 +3,7 @@
 #include "SolJson.h"
 
 #include <QJsonArray>
+#include <QJsonObject>
 
 
 SolJson SolJson::fromJson(const QByteArray& inJson)

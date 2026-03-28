@@ -4,8 +4,8 @@
 #define SOLTRANSLATOR_RESULTTEXTEDIT_H
 
 #include "CustomMenuTextEdit.h"
-#include "SolTypes.h"
 
+enum class TextStyle;
 
 class ResultTextEdit : public MenuTextBrowser
 {

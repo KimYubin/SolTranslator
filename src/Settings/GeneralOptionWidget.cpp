@@ -2,22 +2,18 @@
 
 #include "GeneralOptionWidget.h"
 
+#include "SolTranslatorCore.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/StyleManger.h"
+#include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/SettingCard.h"
+#include "SubWidgets/SwitchButton.h"
+#include "Utils/Tr.h"
+#include "Widgets/SolMainWidget.h"
+
 #include <QGroupBox>
 #include <QPushButton>
 #include <QVBoxLayout>
-
-#include "SolTranslatorCore.h"
-#include "Managers/ConfigManager.h"
-#include "SubWidgets/SettingCard.h"
-#include "SubWidgets/SwitchButton.h"
-#include "Widgets/SolMainWidget.h"
-
-
-#include "Managers/StyleManger.h"
-
-#include "SubWidgets/DropdownMenu.h"
-
-#include "Utils/Tr.h"
 
 using Sol::i18n;
 

@@ -2,17 +2,15 @@
 
 #include "SolWidgetFactory.h"
 
+#include "SolButton.h"
+#include "SolToast.h"
+#include "SolTypes.h"
+#include "Utils/Tr.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QPushButton>
 #include <QTimer>
-
-#include "SolButton.h"
-#include "SolToast.h"
-#include "SolToolTip.h"
-
-#include "Managers/ConfigManager.h"
-#include "Utils/Tr.h"
 
 using Sol::i18n;
 

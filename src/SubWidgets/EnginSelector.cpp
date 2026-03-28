@@ -4,7 +4,6 @@
 
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
-
 #include "Managers/ConfigManager.h"
 
 EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)

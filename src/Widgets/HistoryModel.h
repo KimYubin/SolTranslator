@@ -6,8 +6,6 @@
 #include <QAbstractListModel>
 #include <expected>
 
-#include "SolTypes.h"
-
 class HistoryCacheData;
 
 class HistoryModel : public QAbstractListModel

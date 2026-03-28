@@ -2,31 +2,25 @@
 
 #include "TextEditTranslateWidget.h"
 
-#include <QClipboard>
-#include <QLineEdit>
-#include <QMenu>
-#include <QScrollBar>
-#include <QTimer>
-
 #include "HistoryCacheData.h"
 #include "SolMainWidget.h"
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
-
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
-
 #include "SubWidgets/LanguageSelector.h"
 #include "SubWidgets/SolButton.h"
-#include "SubWidgets/SolToast.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolWidgetFactory.h"
-
 #include "Utils/SolLog.h"
 #include "Utils/Tr.h"
-
 #include "Widgets/ui_TextEditTranslateWidget.h"
+
+#include <QLineEdit>
+#include <QMenu>
+#include <QScrollBar>
+#include <QTimer>
 
 using Sol::i18n;
 

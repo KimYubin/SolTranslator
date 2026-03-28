@@ -3,12 +3,12 @@
 #ifndef SWITCHBUTTON_H
 #define SWITCHBUTTON_H
 
-#include <QCheckBox>
-#include <QPropertyAnimation>
-#include <QSequentialAnimationGroup>
 #include <QBrush>
+#include <QCheckBox>
 #include <QPen>
 
+class QPropertyAnimation;
+class QSequentialAnimationGroup;
 
 class SwitchButton : public QCheckBox
 {

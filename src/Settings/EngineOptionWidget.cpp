@@ -2,21 +2,18 @@
 
 #include "EngineOptionWidget.h"
 
-#include <QString>
-#include <QDoubleSpinBox>
-#include <QGroupBox>
-
-#include <qsortfilterproxymodel.h>
-#include <qstringlistmodel.h>
-
 #include "SolTranslatorCore.h"
+#include "ui_EngineOptionWidget.h"
 #include "Managers/ConfigManager.h"
-#include "Widgets/SolMainWidget.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
 #include "Utils/Tr.h"
 
-#include "ui_EngineOptionWidget.h"
+#include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QString>
+#include <qsortfilterproxymodel.h>
+#include <qstringlistmodel.h>
 
 using Sol::i18n;
 

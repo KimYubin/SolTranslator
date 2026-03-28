@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
 
-#include <QApplication>
-
 #include "SolTranslatorCore.h"
-
 #include "Utils/SolLog.h"
+
+#include <QApplication>
 
 
 int main(int argc, char* argv[])

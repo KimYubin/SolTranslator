@@ -2,12 +2,11 @@
 
 #include "ITranslateWidget.h"
 
+#include "EngineUnits/TranslateUnit.h"
+#include "SubWidgets/CustomMenuTextEdit.h"
+
 #include <QScrollBar>
 #include <QTimer>
-
-#include "EngineUnits/TranslateUnit.h"
-
-#include "SubWidgets/CustomMenuTextEdit.h"
 
 ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)

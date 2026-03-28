@@ -17,7 +17,7 @@ protected:
 
 signals:
     void itemKeyPressed(QListWidgetItem* item);
-    
+
 };
 
 

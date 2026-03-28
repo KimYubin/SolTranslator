@@ -3,7 +3,6 @@
 #ifndef SOLTRANSLATOR_SOLJSONOBJECT_H
 #define SOLTRANSLATOR_SOLJSONOBJECT_H
 
-#include <QJsonObject>
 #include <QJsonValue>
 
 #include <expected>

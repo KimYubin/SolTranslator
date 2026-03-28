@@ -2,39 +2,31 @@
 
 #include "SolMainWidget.h"
 
+#include "HistoryWidget.h"
+#include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
+#include "TextEditTranslateWidget.h"
+#include "Managers/ConfigManager.h"
+#include "Settings/SettingsWidget.h"
+#include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/EnginSelector.h"
+#include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolToolTip.h"
+#include "Utils/SolLog.h"
+#include "Utils/Tr.h"
+#include "Widgets/ui_SolMainWidget.h"
+
 #include <QButtonGroup>
+#include <QCloseEvent>
 #include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QShortcut>
-#include <QStyle>
-#include <QTextStream>
 #include <QTimer>
 
-#include <qevent.h>
 #include <vector>
-
-#include "HistoryWidget.h"
-#include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
-#include "TextEditTranslateWidget.h"
-
-#include "Managers/ConfigManager.h"
-#include "Managers/TranslateManager.h"
-
-#include "Settings/SettingsWidget.h"
-
-#include "SubWidgets/DropdownMenu.h"
-#include "SubWidgets/EnginSelector.h"
-#include "SubWidgets/SolButton.h"
-#include "SubWidgets/SolToolTip.h"
-
-#include "Utils/SolLog.h"
-#include "Utils/Tr.h"
-
-#include "Widgets/ui_SolMainWidget.h"
 
 using Sol::i18n;
 

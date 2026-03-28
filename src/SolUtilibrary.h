@@ -2,8 +2,10 @@
 
 #ifndef SOLUTILIBRARY_H
 #define SOLUTILIBRARY_H
-#include <QRect>
+
 #include "../../external/magic_enum.hpp"
+
+#include <QRect>
 
 /**
  * style sheet을 통한 값 변경을 위한 qproperty helper 입니다.

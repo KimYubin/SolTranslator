@@ -2,39 +2,34 @@
 
 #include "PopupTranslateWidget.h"
 
-#ifdef _WIN32
-#include <qt_windows.h>
-#endif
+#include "SolTranslatorCore.h"
+#include "SolUtilibrary.h"
+#include "Managers/AsyncManager.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/TranslateManager.h"
+#include "SubWidgets/LoadingBar.h"
+#include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolWidgetFactory.h"
+#include "Utils/SolLog.h"
+#include "Utils/Tr.h"
+#include "Widgets/ui_PopupTranslateWidget.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QBoxLayout>
+#include <QEvent>
 #include <QGraphicsDropShadowEffect>
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScreen>
 #include <QSizeGrip>
-#include <QSvgWidget>
 #include <QTextBlock>
 #include <QWindow>
 
-#include <qevent.h>
+#ifdef _WIN32
+#include <qt_windows.h>
+#endif
 
-#include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
-
-#include "Managers/AsyncManager.h"
-#include "Managers/ConfigManager.h"
-#include "Managers/TranslateManager.h"
-
-#include "SubWidgets/LoadingBar.h"
-#include "SubWidgets/SolButton.h"
-#include "SubWidgets/SolWidgetFactory.h"
-
-#include "Utils/SolLog.h"
-#include "Utils/Tr.h"
-
-#include "Widgets/ui_PopupTranslateWidget.h"
 
 using Sol::i18n;
 

@@ -2,25 +2,23 @@
 
 #include "SettingsWidget.h"
 
-#include <QButtonGroup>
-#include <QListView>
-#include <QPushButton>
-#include <QScrollBar>
-#include <QStyledItemDelegate>
-#include <QScrollArea>
-#include <QListWidget>
-#include <QShortcut>
+#include "ui_SettingsWidget.h"
 
+#include "IOptionWidget.h"
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
-
-#include "Widgets/SolMainWidget.h"
-#include "IOptionWidget.h"
 #include "Managers/ConfigManager.h"
-
 #include "Utils/Tr.h"
+#include "Widgets/SolMainWidget.h"
 
-#include "ui_SettingsWidget.h"
+#include <QButtonGroup>
+#include <QListView>
+#include <QListWidget>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QShortcut>
+#include <QStyledItemDelegate>
 
 using Sol::i18n;
 

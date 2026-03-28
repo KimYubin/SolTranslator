@@ -2,16 +2,13 @@
 
 #include "HistoryModel.h"
 
-#include <QRegularExpression>
-
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
-
 #include "Managers/HistoryManager.h"
-
 #include "Utils/SolLog.h"
-
 #include "Widgets/HistoryCacheData.h"
+
+#include <QRegularExpression>
 
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)

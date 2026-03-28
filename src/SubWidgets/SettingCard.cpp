@@ -4,9 +4,8 @@
 
 #include <QGridLayout>
 #include <QLabel>
-#include <QStyleOption>
 #include <QPainter>
-
+#include <QStyleOption>
 
 
 SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos)

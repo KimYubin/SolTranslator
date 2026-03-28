@@ -2,18 +2,16 @@
 
 #include "TranslateUnit.h"
 
-#include <QNetworkReply>
-
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
-
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
-
 #include "Utils/SolLog.h"
-
 #include "Widgets/ITranslateWidget.h"
+
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 TranslateUnit::TranslateUnit(TranslateManager* parent)
     : QObject(parent)

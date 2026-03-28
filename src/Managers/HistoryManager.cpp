@@ -2,10 +2,9 @@
 
 #include "HistoryManager.h"
 
-#include <QDateTime>
-
 #include "DbWorker.h"
-#include "SolTranslatorCore.h"
+
+#include <QDateTime>
 
 HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {

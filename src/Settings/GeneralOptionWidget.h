@@ -3,7 +3,6 @@
 #ifndef GeneralOptionWIDGET_H
 #define GeneralOptionWIDGET_H
 
-#include <QWidget>
 #include "IOptionWidget.h"
 
 

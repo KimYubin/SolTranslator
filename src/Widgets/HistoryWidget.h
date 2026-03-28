@@ -2,12 +2,13 @@
 
 #ifndef SOLTRANSLATOR_HISTORYWIDGET_H
 #define SOLTRANSLATOR_HISTORYWIDGET_H
-#include <QDateTime>
-#include <QListView>
 
 #include "ISolWidget.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
+
+#include <QDateTime>
+#include <QListView>
 
 
 class LayoutTextEdit;
@@ -18,7 +19,7 @@ class QListView;
 class QListWidget;
 class QSplitter;
 class QGridLayout;
-
+// todo: cpp 옮기기
 class HistoryListView : public QListView
 {
     Q_OBJECT

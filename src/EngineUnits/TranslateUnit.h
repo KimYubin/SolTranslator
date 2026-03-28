@@ -3,15 +3,15 @@
 #ifndef TRANSLATEUNIT_H
 #define TRANSLATEUNIT_H
 
-#include <QNetworkRequest>
+#include "SolTypes.h"
+
 #include <QObject>
 #include <QPointer>
 
 #include <expected>
 
-#include "SolTypes.h"
 
-
+class QNetworkRequest;
 class QNetworkReply;
 class TranslateManager;
 

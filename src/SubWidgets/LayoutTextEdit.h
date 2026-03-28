@@ -4,7 +4,6 @@
 #define LAYOUTTEXTEDIT_H
 #include "ResultTextEdit.h"
 
-
 class SolButton;
 class QPushButton;
 class QHBoxLayout;

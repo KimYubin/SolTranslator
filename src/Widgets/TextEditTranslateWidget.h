@@ -3,15 +3,13 @@
 #ifndef TEXTEDITTRANSLATEWIDGET_H
 #define TEXTEDITTRANSLATEWIDGET_H
 
-#include <QWidget>
-
 #include "ITranslateWidget.h"
-
 
 class HistoryCacheData;
 class LanguageSelector;
-enum class TextStyle;
 class SolTranslatorCore;
+enum class TextStyle;
+
 QT_BEGIN_NAMESPACE
 
 namespace Ui

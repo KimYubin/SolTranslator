@@ -2,11 +2,11 @@
 
 #include "LayoutTextEdit.h"
 
-#include <QHBoxLayout>
-#include <QPushButton>
-
 #include "SolButton.h"
 #include "SolToolTip.h"
+
+#include <QAbstractButton>
+#include <QHBoxLayout>
 
 LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
 {

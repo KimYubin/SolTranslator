@@ -2,18 +2,17 @@
 
 #include "GlobalHotKeyManager.h"
 
-#include <QHotkey>
-#include <QKeyEvent>
-#include <QThread>
-#include <QTimer>
-
 #include "ConfigManager.h"
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 #include "TranslateManager.h"
-
 #include "Utils/SolLog.h"
+
+#include <QHotkey>
+#include <QKeyEvent>
+#include <QThread>
+#include <QTimer>
 
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
     : AbstractManager(parent)

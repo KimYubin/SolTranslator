@@ -3,10 +3,7 @@
 #ifndef POPUPTRANSLATEWIDGET_H
 #define POPUPTRANSLATEWIDGET_H
 
-#include <QWidget>
-
 #include "ITranslateWidget.h"
-
 #include "SolTypes.h"
 
 class SolButton;

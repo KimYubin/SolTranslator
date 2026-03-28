@@ -2,33 +2,28 @@
 
 #include "HistoryWidget.h"
 
-#include <QClipboard>
+#include "HistoryListDelegate.h"
+#include "HistoryModel.h"
+#include "SolHashQueue.h"
+#include "SolMainWidget.h"
+#include "SolTranslatorCore.h"
+#include "Managers/ConfigManager.h"
+#include "Managers/HistoryManager.h"
+#include "SubWidgets/LayoutTextEdit.h"
+#include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolWidgetFactory.h"
+#include "Utils/SolLog.h"
+#include "Utils/Tr.h"
+
 #include <QGridLayout>
 #include <QListView>
 #include <QPushButton>
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
 #include <QSplitter>
-#include <QStringListModel>
 #include <QTimer>
 
 #include <expected>
-
-#include "HistoryListDelegate.h"
-#include "HistoryModel.h"
-#include "SolHashQueue.h"
-#include "SolMainWidget.h"
-#include "SolTranslatorCore.h"
-
-#include "Managers/ConfigManager.h"
-#include "Managers/HistoryManager.h"
-
-#include "SubWidgets/LayoutTextEdit.h"
-#include "SubWidgets/SolButton.h"
-#include "SubWidgets/SolWidgetFactory.h"
-
-#include "Utils/SolLog.h"
-#include "Utils/Tr.h"
 
 using Sol::i18n;
 

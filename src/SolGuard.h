@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_SOLGUARD_H
 #define SOLTRANSLATOR_SOLGUARD_H
 
-#include <qtclasshelpermacros.h>
+#include <QtClassHelperMacros>
 
 #include <functional>
 

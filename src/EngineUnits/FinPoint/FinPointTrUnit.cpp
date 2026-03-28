@@ -2,16 +2,14 @@
 
 #include "FinPointTrUnit.h"
 
+#include "SolConstants.h"
+#include "SolTypes.h"
+#include "Utils/SolLog.h"
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
-
-#include "SolConstants.h"
-#include "SolTypes.h"
-#include "Managers/ConfigManager.h"
-#include "Managers/TranslateManager.h"
-#include "Utils/SolLog.h"
 
 FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)

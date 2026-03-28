@@ -2,18 +2,17 @@
 
 #include "HistoryListDelegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QTextLayout>
-
-#include <qevent.h>
-#include <qpainterstateguard.h>
-
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
 #include "SolGuard.h"
-
+#include "SolUtilibrary.h"
 #include "Utils/SolLog.h"
+
+#include <QApplication>
+#include <QPainter>
+#include <QTextLayout>
+#include <qevent.h>
+#include <qpainterstateguard.h>
 
 namespace
 {

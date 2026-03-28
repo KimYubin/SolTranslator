@@ -2,20 +2,17 @@
 
 #include "OpenAiTrUnit.h"
 
+#include "SolConstants.h"
+#include "SolTranslatorCore.h"
+#include "SolTypes.h"
+#include "Managers/ConfigManager.h"
+#include "Utils/SolJson.h"
+#include "Utils/SolLog.h"
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
-
-#include "SolConstants.h"
-#include "SolTranslatorCore.h"
-#include "SolTypes.h"
-
-#include "Managers/ConfigManager.h"
-#include "Managers/TranslateManager.h"
-
-#include "Utils/SolJson.h"
-#include "Utils/SolLog.h"
 
 OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)

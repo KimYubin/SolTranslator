@@ -5,8 +5,8 @@
 
 #include "AbstractManager.h"
 
-#include <QtConcurrent>
 #include <QFuture>
+#include <QtConcurrent>
 
 
 class SolTranslatorCore;

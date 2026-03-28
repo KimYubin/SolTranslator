@@ -3,11 +3,10 @@
 #ifndef SOLMAINWIDGET_H
 #define SOLMAINWIDGET_H
 
+#include "ISolWidget.h"
+
 #include <QPointer>
 #include <QSystemTrayIcon>
-#include <QWidget>
-
-#include "ISolWidget.h"
 
 
 class SolButton;

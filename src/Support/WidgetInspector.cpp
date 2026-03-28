@@ -3,14 +3,14 @@
 
 #include "WidgetInspector.h"
 
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QTimer>
-#include <QApplication>
-
 #include "SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
+
+#include <QApplication>
+#include <QLabel>
+#include <QTimer>
+#include <QVBoxLayout>
 
 
 WidgetInspector::WidgetInspector(QWidget* parent) : QWidget(parent)

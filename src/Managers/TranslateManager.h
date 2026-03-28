@@ -4,9 +4,9 @@
 #define TRANSLATEMANAGER_H
 
 
-#include <expected>
-
 #include "AbstractManager.h"
+
+#include <expected>
 
 
 class QNetworkRequest;

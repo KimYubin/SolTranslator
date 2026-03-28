@@ -2,8 +2,8 @@
 
 #ifndef SOLTRANSLATOR_ENGINSELECTER_H
 #define SOLTRANSLATOR_ENGINSELECTER_H
-#include "DropdownMenu.h"
 
+#include "DropdownMenu.h"
 
 /**
  * Engine selection combo box

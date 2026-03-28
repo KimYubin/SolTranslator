@@ -3,13 +3,14 @@
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
 
-#include <QObject>
-#include <QPointer>
-#include <QScrollArea>
-#include <QWidget>
-
 #include "SolTypes.h"
 
+#include <QObject>
+#include <QPointer>
+#include <QWidget>
+
+class QScrollBar;
+class QScrollArea;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;

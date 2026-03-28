@@ -2,6 +2,7 @@
 
 #ifndef SOLTYPES_H
 #define SOLTYPES_H
+
 #include <QObject>
 #include <QPointer>
 

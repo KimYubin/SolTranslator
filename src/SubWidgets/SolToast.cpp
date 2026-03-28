@@ -2,18 +2,16 @@
 
 #include "SolToast.h"
 
-#include <QLabel>
-#include <QTimer>
-#include <QVBoxLayout>
+#include "SolTranslatorCore.h"
+#include "Widgets/SolMainWidget.h"
+
 #include <QFrame>
+#include <QLabel>
 #include <QPropertyAnimation>
 #include <QScreen>
-
+#include <QTimer>
+#include <QVBoxLayout>
 #include <qgraphicseffect.h>
-
-#include "SolTranslatorCore.h"
-
-#include "Widgets/SolMainWidget.h"
 
 
 class SolToastWidget : public QWidget

@@ -2,13 +2,13 @@
 
 #ifndef SOLTRANSLATOR_HISTORYLISTDELEGATE_H
 #define SOLTRANSLATOR_HISTORYLISTDELEGATE_H
-#include <QStyledItemDelegate>
 
-#include "SolUtilibrary.h"
+#include <QStyledItemDelegate>
 
 class HistoryListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
     virtual void paint(QPainter* painter
                      , const QStyleOptionViewItem& option
@@ -28,7 +28,6 @@ private:
                 , const QRect& inTextRect
                 , const int flags
                 , const QString& inText) const;
-
 };
 
 #endif //SOLTRANSLATOR_HISTORYLISTDELEGATE_H

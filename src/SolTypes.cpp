@@ -2,17 +2,12 @@
 
 #include "SolTypes.h"
 
-#include <QDir>
-
-#include <qstandardpaths.h>
-
 #include "SolUtilibrary.h"
-
-#include "../external/magic_enum.hpp"
-
 #include "Utils/Tr.h"
-
 #include "Widgets/ITranslateWidget.h"
+
+#include <QDir>
+#include <QStandardPaths>
 
 namespace
 {

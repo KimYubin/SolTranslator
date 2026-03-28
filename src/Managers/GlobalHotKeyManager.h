@@ -3,11 +3,11 @@
 #ifndef GLOBALHOTKEYMANAGER_H
 #define GLOBALHOTKEYMANAGER_H
 
-#include <expected>
+#include "AbstractManager.h"
+
 #include <QHotkey>
 
-#include "AbstractManager.h"
-#include "SolTypes.h"
+#include <expected>
 
 
 enum class Action;

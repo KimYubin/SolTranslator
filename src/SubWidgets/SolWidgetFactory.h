@@ -2,11 +2,8 @@
 
 #ifndef SOLTRANSLATOR_SOLWIDGETFACTORY_H
 #define SOLTRANSLATOR_SOLWIDGETFACTORY_H
+
 #include <QObject>
-#include <QString>
-
-#include <functional>
-
 
 class SolButton;
 

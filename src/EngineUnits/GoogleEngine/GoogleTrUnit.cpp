@@ -2,15 +2,14 @@
 
 #include "GoogleTrUnit.h"
 
+#include "SolConstants.h"
+#include "Utils/SolJson.h"
+#include "Utils/SolLog.h"
+
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QTextDocument>
-
-#include "SolConstants.h"
-#include "Utils/SolLog.h"
-
-#include "Utils/SolJson.h"
 
 GoogleTrUnit::GoogleTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)

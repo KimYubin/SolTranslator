@@ -1,7 +1,7 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef SOLTRANSLATOR_SOLLOGHANDLER_H
-#define SOLTRANSLATOR_SOLLOGHANDLER_H
+#ifndef SOLTRANSLATOR_SOLLOG_H
+#define SOLTRANSLATOR_SOLLOG_H
 
 #define solDebug qDebug()
 
@@ -13,4 +13,4 @@ public:
 };
 
 
-#endif //SOLTRANSLATOR_SOLLOGHANDLER_H
+#endif //SOLTRANSLATOR_SOLLOG_H

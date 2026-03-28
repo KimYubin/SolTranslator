@@ -3,13 +3,12 @@
 #ifndef SOLTRANSLATOR_HISTORYMANAGER_H
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
+#include "AbstractManager.h"
+#include "Widgets/HistoryCacheData.h"
+
 #include <QThread>
 
 #include <expected>
-
-#include "AbstractManager.h"
-
-#include "Widgets/HistoryCacheData.h"
 
 enum class TextStyle;
 enum class LangType;

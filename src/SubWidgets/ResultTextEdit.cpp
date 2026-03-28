@@ -2,6 +2,8 @@
 
 #include "ResultTextEdit.h"
 
+#include "SolTypes.h"
+
 #include <QRegularExpression>
 #include <QTextBlock>
 

@@ -2,14 +2,14 @@
 
 #include "IOptionWidget.h"
 
+#include "Utils/SolLog.h"
+
 #include <QGroupBox>
 #include <QRegularExpression>
+#include <QScrollArea>
 #include <QScrollBar>
 #include <QVBoxLayout>
 
-#include <unordered_set>
-
-#include "Utils/SolLog.h"
 
 IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {

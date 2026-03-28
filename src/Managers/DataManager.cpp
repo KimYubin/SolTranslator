@@ -2,6 +2,11 @@
 
 #include "DataManager.h"
 
+#include "SolUtilibrary.h"
+#include "Utils/SolLog.h"
+
+#include "../../external/magic_enum.hpp"
+
 #include <QFile>
 #include <QFuture>
 #include <QJsonArray>
@@ -9,11 +14,6 @@
 #include <QJsonObject>
 #include <QString>
 #include <QtConcurrent>
-
-#include "SolUtilibrary.h"
-#include "Utils/SolLog.h"
-
-#include "../../external/magic_enum.hpp"
 
 DataManager::DataManager(SolTranslatorCore* parent): AbstractManager(parent)
 {}

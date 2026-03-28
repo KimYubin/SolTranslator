@@ -3,9 +3,9 @@
 #include "SolUtilibrary.h"
 
 #include <QApplication>
-#include <QWidget>
 #include <QFont>
 #include <QScreen>
+#include <QWidget>
 
 
 bool Sol::isThis(const QObject* inThis, const QObject* inOther)

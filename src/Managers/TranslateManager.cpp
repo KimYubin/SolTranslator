@@ -16,6 +16,7 @@
 #include "InputSimulator.h"
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
+#include "SolUtilibrary.h"
 
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"

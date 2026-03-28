@@ -3,7 +3,6 @@
 #ifndef SOLTRANSLATOR_HISTORYMANAGER_H
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
-
 #include <QThread>
 
 #include <expected>
@@ -18,11 +17,11 @@ enum class EngineType;
 class HistoryCacheData;
 class SolTranslatorCore;
 
-using LookupResult = std::tuple<bool, QString>;
 
 class HistoryManager : public AbstractManager
 {
     Q_OBJECT
+    using LookupResult = std::tuple<bool, QString>;
 
 public:
     explicit HistoryManager(SolTranslatorCore* parent);

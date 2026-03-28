@@ -22,7 +22,6 @@
 
 #include "Managers/ConfigManager.h"
 #include "Managers/HistoryManager.h"
-#include "Managers/TranslateManager.h"
 
 #include "SubWidgets/LayoutTextEdit.h"
 #include "SubWidgets/SolButton.h"

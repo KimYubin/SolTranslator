@@ -12,6 +12,7 @@
 
 #include "SolConstants.h"
 #include "SolTypes.h"
+#include "SolUtilibrary.h"
 
 namespace
 {
@@ -41,6 +42,45 @@ const QString TimeFormat    = "TimeFormat/";
 const QString HistoryFormat = "HistoryFormat";
 
 const QString Shortcuts = "Shortcuts/";
+
+
+/**
+ * enum type 설정을 문자열로 저장합니다.
+ * 
+ * @tparam EnumType enum, enum class
+ * @param inKey 저장에 사용할 key
+ * @param inVal 저장할 enum 
+ */
+template <typename EnumType>
+    requires std::is_enum_v<EnumType>
+void setEnumValue(QSettings* inSettings, const QAnyStringView& inKey, const EnumType inVal)
+{
+    inSettings->setValue(inKey, Sol::enumToQStr(inVal));
+}
+
+/**
+ * 문자열로 저장된 enum type 설정을 불러옵니다.
+ * EnumType과 정확히 동일한 문자열이 아니면 기본값을 반환합니다.
+ * 
+ * @tparam EnumType 
+ * @param inKey 설정 key
+ * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
+ * @return 
+ */
+template <typename EnumType>
+    requires std::is_enum_v<EnumType>
+EnumType enumValue(const QSettings* inSettings, const QAnyStringView& inKey, const EnumType inDefault)
+{
+    const QString defaultQStr = Sol::enumToQStr(inDefault);
+
+    const QString setting_value_str = inSettings->value(inKey, defaultQStr).toString();
+
+    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefault);
+
+    return policy;
+}
+
+
 } // anonymous namespace
 
 ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
@@ -51,12 +91,12 @@ ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent
 
 void ConfigManager::setCurrentEngineType(const EngineType inEngineType)
 {
-    setEnumValue(Engine_Type, inEngineType);
+    setEnumValue(_settings, Engine_Type, inEngineType);
 }
 
 EngineType ConfigManager::currentEngineType() const
 {
-    return enumValue(Engine_Type, EngineHelper::defaultEngineType());
+    return enumValue(_settings, Engine_Type, EngineHelper::defaultEngineType());
 }
 
 
@@ -134,32 +174,32 @@ bool ConfigManager::startRun() const
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)
 {
-    setEnumValue(PopupTargetLanguageType, inLangType);
+    setEnumValue(_settings, PopupTargetLanguageType, inLangType);
 }
 
 LangType ConfigManager::popupTargetLang() const
 {
-    return enumValue(PopupTargetLanguageType, LangType::ko);
+    return enumValue(_settings, PopupTargetLanguageType, LangType::ko);
 }
 
 void ConfigManager::setTextSrcLang(const LangType inLangType)
 {
-    setEnumValue(TextSrcLangType, inLangType);
+    setEnumValue(_settings, TextSrcLangType, inLangType);
 }
 
 LangType ConfigManager::textSrcLang() const
 {
-    return enumValue(TextSrcLangType, LangType::AUTO);
+    return enumValue(_settings, TextSrcLangType, LangType::AUTO);
 }
 
 void ConfigManager::setTextTargetLang(const LangType inLangType)
 {
-    setEnumValue(TextTargetLangType, inLangType);
+    setEnumValue(_settings, TextTargetLangType, inLangType);
 }
 
 LangType ConfigManager::textTargetLang() const
 {
-    return enumValue(TextTargetLangType, LangType::ko);
+    return enumValue(_settings, TextTargetLangType, LangType::ko);
 }
 
 void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)
@@ -174,12 +214,12 @@ QRect ConfigManager::simplePopupGeometry() const
 
 void ConfigManager::setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy)
 {
-    setEnumValue(SimplePopupScreenPolicy, inPolicy);
+    setEnumValue(_settings, SimplePopupScreenPolicy, inPolicy);
 }
 
 ScreenPopupPolicy ConfigManager::simplePopupScreenPolicy() const
 {
-    return enumValue(SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
+    return enumValue(_settings, SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
 }
 
 void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)

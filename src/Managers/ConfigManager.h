@@ -2,13 +2,14 @@
 
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
-#include <QSettings>
 
 #include "AbstractManager.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
 
-#include "../../external/magic_enum.hpp"
+class QSettings;
+enum class Action;
+enum class ScreenPopupPolicy;
+enum class LangType;
+enum class EngineType;
 
 #if defined(solConfig)
 #undef solConfig
@@ -92,54 +93,8 @@ private:
     void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData);
     std::tuple<bool, QByteArray> saveGeometry(const QAnyStringView& inKey) const;
 
-    /**
-     * enum type 설정을 문자열로 저장합니다.
-     * 
-     * @tparam EnumType enum, enum class
-     * @param inKey 저장에 사용할 key
-     * @param inVal 저장할 enum 
-     */
-    template <typename EnumType>
-        requires std::is_enum_v<EnumType>
-    void setEnumValue(const QAnyStringView& inKey, const EnumType inVal);
-
-    /**
-     * 문자열로 저장된 enum type 설정을 불러옵니다.
-     * EnumType과 정확히 동일한 문자열이 아니면 기본값을 반환합니다.
-     * 
-     * @tparam EnumType 
-     * @param inKey 설정 key
-     * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
-     * @return 
-     */
-    template <typename EnumType>
-        requires std::is_enum_v<EnumType>
-    EnumType enumValue(const QAnyStringView& inKey, const EnumType inDefault) const;
-
 private:
     QSettings* _settings;
 };
-
-
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
-void ConfigManager::setEnumValue(const QAnyStringView& inKey, const EnumType inVal)
-{
-    _settings->setValue(inKey, Sol::enumToQStr(inVal));
-}
-
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
-EnumType ConfigManager::enumValue(const QAnyStringView& inKey, const EnumType inDefault) const
-{
-    const QString defaultQStr = Sol::enumToQStr(inDefault);
-
-    const QString setting_value_str = _settings->value(inKey, defaultQStr).toString();
-
-    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefault);
-
-    return policy;
-}
-
 
 #endif //CONFIGMANAGER_H

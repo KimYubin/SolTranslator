@@ -153,6 +153,8 @@ qt_add_executable(
         src/Utils/SolJson.h
         src/Utils/Tr.cpp
         src/Utils/Tr.h
+        src/Utils/SolLogHandler.cpp
+        src/Utils/SolLogHandler.h
 )
 
 # ============================

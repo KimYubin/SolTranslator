@@ -2,6 +2,7 @@
 
 #include "HistoryListDelegate.h"
 
+#include "HistoryListView.h"
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
 #include "SolGuard.h"

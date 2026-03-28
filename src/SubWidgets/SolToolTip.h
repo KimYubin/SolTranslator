@@ -5,9 +5,7 @@
 
 #include <QObject>
 
-
 class QAbstractButton;
-class SolToolTipBallon;
 
 /**
  * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.

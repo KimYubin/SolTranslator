@@ -3,6 +3,7 @@
 #include "HistoryWidget.h"
 
 #include "HistoryListDelegate.h"
+#include "HistoryListView.h"
 #include "HistoryModel.h"
 #include "SolHashQueue.h"
 #include "SolMainWidget.h"
@@ -26,26 +27,6 @@
 #include <expected>
 
 using Sol::i18n;
-
-
-HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
-{}
-
-HistoryListView::~HistoryListView()
-{}
-
-QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
-{
-    switch (inColorRole)
-    {
-    case Sol::itemTextColorRole:          return _itemTextColor;
-    case Sol::itemSelectionTextColorRole: return _itemSelectionTextColor;
-    case Sol::itemHoverTextColorRole:     return _itemHoverTextColor;
-    case Sol::itemDisableColorRole:       return _itemDisableColor;
-    default: ;
-    }
-    return QColor();
-}
 
 HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {

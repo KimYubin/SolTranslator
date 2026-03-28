@@ -2,11 +2,10 @@
 
 #include "HistoryCacheData.h"
 
-#include <QRegularExpression>
-
 #include "SolTranslatorCore.h"
-
 #include "Managers/ConfigManager.h"
+
+#include <QRegularExpression>
 
 HistoryCacheData::HistoryCacheData()
     : _dbId(0)

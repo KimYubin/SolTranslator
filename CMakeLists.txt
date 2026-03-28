@@ -153,6 +153,10 @@ qt_add_executable(
         src/Utils/Tr.h
         src/Utils/SolLog.cpp
         src/Utils/SolLog.h
+        src/SubWidgets/SolToolTipBallon.cpp
+        src/SubWidgets/SolToolTipBallon.h
+        src/Widgets/HistoryListView.cpp
+        src/Widgets/HistoryListView.h
 )
 
 # ============================

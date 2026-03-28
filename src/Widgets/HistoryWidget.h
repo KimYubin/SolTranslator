@@ -5,37 +5,16 @@
 
 #include "ISolWidget.h"
 #include "SolTypes.h"
-#include "SolUtilibrary.h"
 
 #include <QDateTime>
-#include <QListView>
 
 
 class LayoutTextEdit;
 class HistoryCacheData;
 class HistoryModel;
-class QStringListModel;
-class QListView;
-class QListWidget;
 class QSplitter;
 class QGridLayout;
-// todo: cpp 옮기기
-class HistoryListView : public QListView
-{
-    Q_OBJECT
-
-    // HistoryListDelegate
-    SOL_QSS_COLOR(itemTextColor)
-    SOL_QSS_COLOR(itemSelectionTextColor)
-    SOL_QSS_COLOR(itemHoverTextColor)
-    SOL_QSS_COLOR(itemDisableColor)
-
-public:
-    explicit HistoryListView(QWidget* parent = nullptr);
-    ~HistoryListView() override;
-
-    QColor getItemColor(const Sol::ItemColorRole inColorRole) const;
-};
+class HistoryListView;
 
 class HistoryWidget : public ISolWidget
 {

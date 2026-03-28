@@ -8,7 +8,7 @@
 #include <QTextDocument>
 
 #include "SolConstants.h"
-#include "SolLog.h"
+#include "Utils/SolLog.h"
 
 #include "Utils/SolJson.h"
 

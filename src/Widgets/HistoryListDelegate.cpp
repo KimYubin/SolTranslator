@@ -9,11 +9,11 @@
 #include <qevent.h>
 #include <qpainterstateguard.h>
 
-
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
 #include "SolGuard.h"
-#include "SolLog.h"
+
+#include "Utils/SolLog.h"
 
 namespace
 {

@@ -5,10 +5,11 @@
 #include <QApplication>
 #include <QDir>
 
-#include "SolLog.h"
+#include "SolUtilibrary.h"
+
+#include "Utils/SolLog.h"
 
 #include "Widgets/ISolWidget.h"
-#include "SolUtilibrary.h"
 
 class SolPalette
 {

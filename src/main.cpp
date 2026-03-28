@@ -4,7 +4,7 @@
 
 #include "SolTranslatorCore.h"
 
-#include "Utils/SolLogHandler.h"
+#include "Utils/SolLog.h"
 
 
 int main(int argc, char* argv[])

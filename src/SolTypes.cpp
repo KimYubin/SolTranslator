@@ -6,13 +6,13 @@
 
 #include <qstandardpaths.h>
 
-#include "SolLog.h"
 #include "SolUtilibrary.h"
-#include "Widgets/ITranslateWidget.h"
 
 #include "../external/magic_enum.hpp"
 
 #include "Utils/Tr.h"
+
+#include "Widgets/ITranslateWidget.h"
 
 namespace
 {

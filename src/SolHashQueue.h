@@ -2,10 +2,10 @@
 
 #ifndef SOLHASHQUEUE_H
 #define SOLHASHQUEUE_H
-#include <unordered_map>
-
-#include <QString>
 #include <QHashFunctions>
+#include <QString>
+
+#include <unordered_map>
 
 #include "SolTypes.h"
 

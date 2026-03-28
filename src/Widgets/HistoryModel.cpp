@@ -4,11 +4,13 @@
 
 #include <QRegularExpression>
 
-#include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 
 #include "Managers/HistoryManager.h"
+
+#include "Utils/SolLog.h"
+
 #include "Widgets/HistoryCacheData.h"
 
 HistoryModel::HistoryModel(QObject* parent)

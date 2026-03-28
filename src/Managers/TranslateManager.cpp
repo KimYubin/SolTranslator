@@ -5,16 +5,15 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
+#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QRegularExpression>
 #include <QTextDocument>
-#include <QNetworkAccessManager>
 
 #include "AsyncManager.h"
 #include "ConfigManager.h"
 #include "GlobalHotKeyManager.h"
 #include "InputSimulator.h"
-#include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 
@@ -22,6 +21,8 @@
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+
+#include "Utils/SolLog.h"
 
 #include "Widgets/PopupTranslateWidget.h"
 

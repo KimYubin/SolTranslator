@@ -8,10 +8,10 @@
 #include <QNetworkReply>
 
 #include "SolConstants.h"
-#include "SolLog.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
+#include "Utils/SolLog.h"
 
 FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)

@@ -10,9 +10,8 @@
 #include <QString>
 #include <QtConcurrent>
 
-#include "SolLog.h"
 #include "SolUtilibrary.h"
-
+#include "Utils/SolLog.h"
 
 #include "../../external/magic_enum.hpp"
 

@@ -8,9 +8,10 @@
 #include <QTimer>
 
 #include "SolDatabase.h"
-#include "SolLog.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
+
+#include "Utils/SolLog.h"
 
 #include "Widgets/HistoryCacheData.h"
 

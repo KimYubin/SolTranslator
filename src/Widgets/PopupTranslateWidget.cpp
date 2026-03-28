@@ -20,7 +20,6 @@
 
 #include <qevent.h>
 
-#include "SolLog.h"
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 
@@ -32,6 +31,7 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
+#include "Utils/SolLog.h"
 #include "Utils/Tr.h"
 
 #include "Widgets/ui_PopupTranslateWidget.h"

@@ -9,7 +9,7 @@
 
 #include <unordered_set>
 
-#include "SolLog.h"
+#include "Utils/SolLog.h"
 
 IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 {

@@ -11,13 +11,14 @@
 
 #include <qevent.h>
 
+#include "KeySelectionList.h"
 #include "SolToolTip.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
-#include "KeySelectionList.h"
-#include "SolLog.h"
 
 #include "Managers/ConfigManager.h"
+
+#include "Utils/SolLog.h"
 #include "Utils/Tr.h"
 
 using Sol::i18n;

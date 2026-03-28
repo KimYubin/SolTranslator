@@ -1,9 +1,10 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "SolLogHandler.h"
+#include "SolLog.h"
 
 #include <QApplication>
 #include <QFile>
+#include <QTimer>
 
 #include <qdatetime.h>
 #include <qlogging.h>
@@ -19,35 +20,14 @@ QTextStream logStream;
 QtMessageHandler originalHandler = nullptr;
 
 
+// todo: 비동기 flush 필요.
 // 메시지 핸들러 함수
 void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-    QString logType;
-
-    switch (type)
-    {
-    case QtMsgType::QtDebugMsg:
-        logType = "Debug";
-        break;
-    case QtMsgType::QtInfoMsg:
-        logType = "Info";
-        break;
-    case QtMsgType::QtWarningMsg:
-        logType = "Warning";
-        break;
-    case QtMsgType::QtCriticalMsg:
-        logType = "Critical";
-        break;
-    case QtMsgType::QtFatalMsg:
-        logType = "Fatal";
-        break;
-    }
-
-    const QString timeStamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    const QString logStr    = QString("[%1] %2: %3").arg(timeStamp, logType, msg);
-
+    const QString logStr = qFormatLogMessage(type, context, msg);
     logStream << logStr << Qt::endl;
-    logStream.flush();
+
+    QTimer::singleShot(0, qApp, []() { logStream.flush(); });
 
     // 디버그 메시지
     if (originalHandler)
@@ -60,6 +40,17 @@ void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const 
 
 void SolLogHandler::setupLog()
 {
+    const QString format =
+            "[%{time yy-MM-dd hh:mm:ss.zzz tt}] "
+            "%{if-debug}"    "Debug"    "%{endif}"
+            "%{if-info}"     "Info"     "%{endif}"
+            "%{if-warning}"  "Warning"  "%{endif}"
+            "%{if-critical}" "Critical" "%{endif}"
+            "%{if-fatal}"    "Fatal"    "%{endif} "
+            "%{file}:%{line} - %{message}";
+
+    qSetMessagePattern(format);
+
     logFile.setFileName(SolPaths::getLogPath());
     if (logFile.open(QIODevice::Append | QIODevice::Text) == false)
     {

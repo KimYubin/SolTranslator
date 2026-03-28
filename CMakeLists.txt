@@ -37,8 +37,6 @@ qt_add_executable(
         src/SolGuard.h
         src/SolHashQueue.cpp
         src/SolHashQueue.h
-        src/SolLog.cpp
-        src/SolLog.h
         src/SolTranslatorCore.cpp
         src/SolTranslatorCore.h
         src/SolTypes.cpp
@@ -153,8 +151,8 @@ qt_add_executable(
         src/Utils/SolJson.h
         src/Utils/Tr.cpp
         src/Utils/Tr.h
-        src/Utils/SolLogHandler.cpp
-        src/Utils/SolLogHandler.h
+        src/Utils/SolLog.cpp
+        src/Utils/SolLog.h
 )
 
 # ============================

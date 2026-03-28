@@ -9,21 +9,21 @@
 #include <QTimer>
 
 #include "HistoryCacheData.h"
-#include "SolLog.h"
-#include "SolTranslatorCore.h"
 #include "SolMainWidget.h"
+#include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 
-#include "SubWidgets/SolToast.h"
-#include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/LanguageSelector.h"
 #include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolToast.h"
+#include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolWidgetFactory.h"
 
+#include "Utils/SolLog.h"
 #include "Utils/Tr.h"
 
 #include "Widgets/ui_TextEditTranslateWidget.h"

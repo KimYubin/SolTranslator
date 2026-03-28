@@ -3,7 +3,8 @@
 #ifndef SOLTRANSLATOR_SOLLOGHANDLER_H
 #define SOLTRANSLATOR_SOLLOGHANDLER_H
 
-#include <qlogging.h>
+#define solDebug qDebug()
+
 
 class SolLogHandler
 {

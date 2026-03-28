@@ -2,7 +2,6 @@
 
 #include "SolMainWidget.h"
 
-#include <vector>
 #include <QButtonGroup>
 #include <QDir>
 #include <QFile>
@@ -13,15 +12,14 @@
 #include <QStyle>
 #include <QTextStream>
 #include <QTimer>
-#include <qevent.h>
 
+#include <qevent.h>
+#include <vector>
+
+#include "HistoryWidget.h"
 #include "SolTranslatorCore.h"
 #include "SolUtilibrary.h"
 #include "TextEditTranslateWidget.h"
-#include "HistoryWidget.h"
-#include "SolLog.h"
-
-#include "SubWidgets/SolToolTip.h"
 
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -31,7 +29,9 @@
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/EnginSelector.h"
 #include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolToolTip.h"
 
+#include "Utils/SolLog.h"
 #include "Utils/Tr.h"
 
 #include "Widgets/ui_SolMainWidget.h"

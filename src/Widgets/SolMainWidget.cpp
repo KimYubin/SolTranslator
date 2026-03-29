@@ -198,23 +198,20 @@ void SolMainWidget::showSettingsWidget()
 
 void SolMainWidget::closeEvent(QCloseEvent* event)
 {
-    if (event->spontaneous() == false || isVisible() == false)
+    if (solConfig.isFirstCloseToTray())
     {
-        return;
+        solConfig.setFirstCloseToTray();
+        _trayIcon->showMessage(i18n(Tr::First_To_Tray_Noti)
+                             , i18n(Tr::First_To_Tray_Message)
+                             , QSystemTrayIcon::NoIcon
+                             , 20'000);
     }
-    if (_trayIcon->isVisible())
-    {
-        if (solConfig.isFirstCloseToTray())
-        {
-            solConfig.setFirstCloseToTray();
-            _trayIcon->showMessage(i18n(Tr::First_To_Tray_Noti)
-                                 , i18n(Tr::First_To_Tray_Message)
-                                 , QSystemTrayIcon::NoIcon, 20'000);
-        }
-        solConfig.saveWidgetGeometry(this);
-        hide();
-        event->ignore();
-    }
+
+    solConfig.saveWidgetGeometry(this);
+    hide();
+    event->ignore();
+
+    ISolWidget::closeEvent(event);
 }
 
 QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon

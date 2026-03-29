@@ -54,10 +54,10 @@ public:
     void setTextTargetLang(const LangType inLangType);
     LangType textTargetLang() const;
 
-    void setSimplePopupGeometry(const QRect& inGeo);
-    QRect simplePopupGeometry() const;
-    void setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy);
-    ScreenPopupPolicy simplePopupScreenPolicy() const;
+    void setPopupGeometry(const QRect& inGeo);
+    QRect popupGeometry() const;
+    void setPopupScreenPolicy(const ScreenPopupPolicy& inPolicy);
+    ScreenPopupPolicy popupScreenPolicy() const;
 
     /** 창의 위치와 크기를 기억 유무를 저장합니다. */
     void setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry);

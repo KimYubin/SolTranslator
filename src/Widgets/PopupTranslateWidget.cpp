@@ -215,7 +215,7 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
 
     // 생성될 스크린 위치 추적
     QScreen* currentScreen = nullptr;
-    switch (solConfig.simplePopupScreenPolicy())
+    switch (solConfig.popupScreenPolicy())
     {
     case ScreenPopupPolicy::Default:
     case ScreenPopupPolicy::PrimaryScreen:

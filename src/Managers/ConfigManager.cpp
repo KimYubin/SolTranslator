@@ -22,13 +22,13 @@ const QString API_Key     = "API_Key/";
 const QString OpenAI_Model = "openai_model";
 const QString OpenAI_Temperature = "openai_temperature";
 
-const QString PopupTargetLanguageType = "PopupTargetLanguageType";
+const QString PopupTargetLanguage = "PopupTargetLanguage";
 
 const QString TextSrcLangType    = "TextEditSourceLanguageType";
 const QString TextTargetLangType = "TextEditTargetLanguageType";
 
-const QString SimplePopupGeometry     = "SimplePopupGeometry";
-const QString SimplePopupScreenPolicy = "SimplePopupScreenPolicy";
+const QString PopupGeometry     = "PopupGeometry";
+const QString PopupScreenPolicy = "PopupScreenPolicy";
 
 const QString IsRememberWindowGeo = "IsRememberWindowGeo";
 const QString WidgetGeometry      = "WidgetGeometry";
@@ -174,12 +174,12 @@ bool ConfigManager::startRun() const
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)
 {
-    setEnumValue(_settings, PopupTargetLanguageType, inLangType);
+    setEnumValue(_settings, PopupTargetLanguage, inLangType);
 }
 
 LangType ConfigManager::popupTargetLang() const
 {
-    return enumValue(_settings, PopupTargetLanguageType, LangType::ko);
+    return enumValue(_settings, PopupTargetLanguage, LangType::ko);
 }
 
 void ConfigManager::setTextSrcLang(const LangType inLangType)
@@ -202,24 +202,24 @@ LangType ConfigManager::textTargetLang() const
     return enumValue(_settings, TextTargetLangType, LangType::ko);
 }
 
-void ConfigManager::setSimplePopupGeometry(const QRect& inGeo)
+void ConfigManager::setPopupGeometry(const QRect& inGeo)
 {
-    _settings->setValue(SimplePopupGeometry, inGeo);
+    _settings->setValue(PopupGeometry, inGeo);
 }
 
-QRect ConfigManager::simplePopupGeometry() const
+QRect ConfigManager::popupGeometry() const
 {
-    return _settings->value(SimplePopupGeometry).toRect();
+    return _settings->value(PopupGeometry).toRect();
 }
 
-void ConfigManager::setSimplePopupScreenPolicy(const ScreenPopupPolicy& inPolicy)
+void ConfigManager::setPopupScreenPolicy(const ScreenPopupPolicy& inPolicy)
 {
-    setEnumValue(_settings, SimplePopupScreenPolicy, inPolicy);
+    setEnumValue(_settings, PopupScreenPolicy, inPolicy);
 }
 
-ScreenPopupPolicy ConfigManager::simplePopupScreenPolicy() const
+ScreenPopupPolicy ConfigManager::popupScreenPolicy() const
 {
-    return enumValue(_settings, SimplePopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
+    return enumValue(_settings, PopupScreenPolicy, ScreenPopupPolicy::CursorScreen);
 }
 
 void ConfigManager::setIsRememberWindowGeometry(const bool inIsRememberWindowGeometry)

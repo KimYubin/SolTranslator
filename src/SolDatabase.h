@@ -37,7 +37,7 @@ public:
 
 private:
     QSqlDatabase _database;
-    bool duringTransaction;
+    bool _duringTransaction;
 };
 
 #endif //SOLTRANSLATOR_SOLDATABASE_H

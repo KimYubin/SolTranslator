@@ -2,6 +2,8 @@
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
 
@@ -37,7 +39,12 @@ jobs:
     if: needs.check-run-build.outputs.run-build == 'true'
 
     env:
-      TAG_NAME: ${{ github.event_name == 'schedule' && 'nightly' || github.ref_name }}
+      TAG_NAME: |-
+        ${{ case(
+          github.event_name == 'schedule', 'nightly',
+          github.event_name == 'push' && github.ref_type == 'branch', 'continuous',
+          github.ref_name
+        ) }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
@@ -58,10 +65,10 @@ jobs:
       - name: Configure
         run: |
           cmake -S . -B build -G "MinGW Makefiles" `
-          -DCMAKE_C_COMPILER='${{ github.workspace }}\Qt\Tools\mingw1310_64\bin\gcc.exe' `
-          -DCMAKE_CXX_COMPILER='${{ github.workspace }}\Qt\Tools\mingw1310_64\bin\g++.exe' `
+          -DCMAKE_C_COMPILER='${{ github.workspace }}/Qt/Tools/mingw1310_64/bin/gcc.exe' `
+          -DCMAKE_CXX_COMPILER='${{ github.workspace }}/Qt/Tools/mingw1310_64/bin/g++.exe' `
           -DCMAKE_BUILD_TYPE=Release `
-          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}\deploy
+          -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deploy
 
       - name: Build
         run: |
@@ -73,7 +80,7 @@ jobs:
 
       - name: Compress install folder
         run: |
-          Compress-Archive -Path ${{ github.workspace }}\deploy\* -DestinationPath SolTranslator.zip
+          Compress-Archive -Path ${{ github.workspace }}/deploy/* -DestinationPath SolTranslator.zip
 
 
       - name: Delete nightly tag
@@ -81,12 +88,23 @@ jobs:
         run: |
           gh release delete nightly --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
         continue-on-error: true
+      
+      - name: Delete continuous tag
+        if: github.event_name == 'push' && github.ref_type == 'branch'
+        run: |
+          gh release delete continuous --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
+        continue-on-error: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.TAG_NAME }}
-          name: ${{ github.event_name == 'schedule' && 'nightly' || format('SolTranslator {0}', env.TAG_NAME) }}
-          prerelease: ${{ github.event_name == 'schedule' }}
+          name: |-
+            ${{ case(
+              github.event_name == 'schedule', 'nightly',
+              github.event_name == 'push' && github.ref_type == 'branch', 'continuous',
+              format('SolTranslator {0}', env.TAG_NAME)
+            ) }}
+          prerelease: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && github.ref_type == 'branch') }}
           files: SolTranslator.zip

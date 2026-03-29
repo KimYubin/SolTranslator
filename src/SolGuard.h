@@ -12,7 +12,7 @@ class QPainter;
 /**
  * RAII 스타일 가드 클래스입니다.
  * endFunctor만 등록하면, 범위를 벗어날 때 함수를 호출할 수 있습니다. 
- * 두 함수를 등록하면, 균형 잡힌 함수 호출(like new / delete)을 할 수 있습니다.
+ * 두 함수를 등록하면, 균형 잡힌 함수 호출(new / delete)을 할 수 있습니다.
  */
 class SolGeneralGuard
 {

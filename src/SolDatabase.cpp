@@ -14,11 +14,11 @@
 std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
-    SolGeneralGuard fileGuard([&sqlFile]() mutable { sqlFile.close(); });
+    SolGeneralGuard fileGuard{[&sqlFile]() mutable { sqlFile.close(); }};
 
     if (sqlFile.open(QFile::ReadOnly) == false)
     {
-        return std::unexpected("file open failed");
+        return std::unexpected("file open failed: " + sqlFile.errorString());
     }
 
     QString sqlStr = sqlFile.readAll();
@@ -57,7 +57,7 @@ std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, co
 
 SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDB)
     : _database(inDB)
-    , duringTransaction(false)
+    , _duringTransaction(false)
 {
     transaction();
 }
@@ -69,7 +69,7 @@ SolSqlTransactionGuard::~SolSqlTransactionGuard()
 
 void SolSqlTransactionGuard::transaction()
 {
-    if (duringTransaction)
+    if (_duringTransaction)
     {
         return;
     }
@@ -80,12 +80,12 @@ void SolSqlTransactionGuard::transaction()
         return;
     }
 
-    duringTransaction = true;
+    _duringTransaction = true;
 }
 
 void SolSqlTransactionGuard::commit()
 {
-    if (duringTransaction == false)
+    if (_duringTransaction == false)
     {
         solDebug << "not during transaction";
         return;
@@ -95,12 +95,12 @@ void SolSqlTransactionGuard::commit()
     {
         solDebug << "commit failed" << _database.lastError();
     }
-    duringTransaction = false;
+    _duringTransaction = false;
 }
 
 void SolSqlTransactionGuard::rollback()
 {
-    if (duringTransaction == false)
+    if (_duringTransaction == false)
     {
         return;
     }
@@ -109,5 +109,5 @@ void SolSqlTransactionGuard::rollback()
     {
         solDebug << "rollback failed" << _database.lastError();
     }
-    duringTransaction = false;
+    _duringTransaction = false;
 }

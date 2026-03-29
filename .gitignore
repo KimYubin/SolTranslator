@@ -4,7 +4,6 @@
 
 **/noused/
 /resource/image/test/
-.sol.release/
 deploy/
 
 .Sol_*.txt
@@ -381,11 +380,11 @@ CMakeLists.txt.user*
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+# !.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/

@@ -3,6 +3,7 @@
 #include "HistoryManager.h"
 
 #include "DbWorker.h"
+#include "Utils/SolLog.h"
 
 #include <QDateTime>
 
@@ -50,6 +51,15 @@ void HistoryManager::asyncDeleteHistory(const qint64 inDbId)
     emit requestDeleteHistory(inDbId);
 }
 
+namespace
+{
+qint64 newRequestId()
+{
+    static qint64 requestID{0};
+    requestID++;
+    return requestID;
+}
+}
 void HistoryManager::asyncLookupHistory(const EngineType inEngineType
                                       , const QString& inOriginText
                                       , const LangType inSourceLang
@@ -57,21 +67,27 @@ void HistoryManager::asyncLookupHistory(const EngineType inEngineType
                                       , QObject* inContext
                                       , std::move_only_function<void(const LookupResult&)> inFinishedFunction)
 {
-    _requestCallbacks[inContext] = std::move(inFinishedFunction);
-    connect(inContext, &QObject::destroyed, this, [this, inContext]() { _requestCallbacks.erase(inContext); });
+    const int requestID = newRequestId();
 
-    emit requestHistoryLookup(inEngineType, inOriginText, inSourceLang, inTargetLang, inContext);
+    _requestCallbacks[requestID] = {inContext, (std::move(inFinishedFunction))};
+    connect(inContext, &QObject::destroyed, this, [this, requestID]() { _requestCallbacks.erase(requestID); });
+
+    emit requestHistoryLookup(inEngineType, inOriginText, inSourceLang, inTargetLang, requestID);
 }
 
-void HistoryManager::onLookupFinished(const LookupResult& inLookup, QObject* inContext)
+void HistoryManager::onLookupFinished(const LookupResult& inLookup, const int inReqId)
 {
-    const auto it = _requestCallbacks.
-            find(inContext);
+    const auto it = _requestCallbacks.find(inReqId);
     if (it == _requestCallbacks.end())
     {
         return;
     }
-    it->second(inLookup);
+
+    if (it->second.context)
+    {
+        it->second.callback(inLookup);
+    }
+
     _requestCallbacks.erase(it);
 }
 

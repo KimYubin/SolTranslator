@@ -6,7 +6,7 @@
 
 AbstractManager::AbstractManager(SolTranslatorCore* parent) : QObject(parent)
 {
-    connect(solCore, &SolTranslatorCore::postInitialized, this, &AbstractManager::postInitialize);
+    connect(parent, &SolTranslatorCore::postInitialized, this, &AbstractManager::postInitialize);
 }
 
 void AbstractManager::postInitialize()

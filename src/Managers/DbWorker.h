@@ -42,7 +42,7 @@ slots :
                             , const QString& inOriginText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
-                            , QObject* inContext);
+                            , const int inReqId);
 
 private:
     std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
@@ -53,7 +53,7 @@ private:
 public:
 signals:
     void lookupFinished(const std::tuple<bool, QString>& inLookup
-                      , QObject* inContext);
+                      , const int inReqId);
     void historyCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
 private:

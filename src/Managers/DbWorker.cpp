@@ -228,9 +228,9 @@ void DbWorker::processLookupHistory(const EngineType inEngineType
                                   , const QString& inOriginText
                                   , const LangType inSourceLang
                                   , const LangType inTargetLang
-                                  , QObject* inContext)
+                                  , const int inReqId)
 {
-    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inContext);
+    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inReqId);
 }
 
 std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineType

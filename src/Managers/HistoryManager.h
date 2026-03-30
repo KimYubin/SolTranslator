@@ -50,7 +50,7 @@ signals:
                             , const QString& inOriginText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
-                            , QObject* inContext);
+                            , const int inReqId);
     void requestAddHistory(const EngineType inEngineType
                          , const LangType inSourceLang
                          , const LangType inTargetLang
@@ -61,7 +61,7 @@ signals:
     void translateHistoryUpdated();
 
 public slots :
-    void onLookupFinished(const LookupResult& inLookup, QObject* inContext);
+    void onLookupFinished(const LookupResult& inLookup, const int inReqId);
     void onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
     std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
@@ -76,7 +76,12 @@ private:
 
     QThread _workerThread;
 
-    std::unordered_map<QObject*, std::move_only_function<void(const LookupResult&)>> _requestCallbacks;
+    struct reqVal
+    {
+        QPointer<QObject> context;
+        std::move_only_function<void(const LookupResult&)> callback;
+    };
+    std::unordered_map<int, reqVal> _requestCallbacks;
 };
 
 

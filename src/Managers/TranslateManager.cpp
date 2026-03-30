@@ -53,7 +53,7 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
 std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     TranslateUnit* trUnit = nullptr;
-    const EngineType currentEngine = solConfig.currentEngineType();
+    const EngineType currentEngine = inTranslateRequestInfo.engineType;
     switch (currentEngine)
     {
     case EngineType::Google:

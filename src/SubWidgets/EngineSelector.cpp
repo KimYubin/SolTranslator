@@ -1,12 +1,12 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "EnginSelector.h"
+#include "EngineSelector.h"
 
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
 
-EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
+EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
 {
     setEditable(false);
 
@@ -19,7 +19,7 @@ EnginSelector::EnginSelector(QWidget* parent) : DropdownMenu(parent)
     setCurrentIndex(static_cast<int>(solConfig.currentEngineType()));
 }
 
-void EnginSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)
+void EngineSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)
 {
     connect(this, &QComboBox::currentIndexChanged, this, std::move(inFunctor));
 }

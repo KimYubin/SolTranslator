@@ -96,8 +96,8 @@ qt_add_executable(
         src/SubWidgets/CustomMenuTextEdit.h
         src/SubWidgets/DropdownMenu.cpp
         src/SubWidgets/DropdownMenu.h
-        src/SubWidgets/EnginSelector.cpp
-        src/SubWidgets/EnginSelector.h
+        src/SubWidgets/EngineSelector.cpp
+        src/SubWidgets/EngineSelector.h
         src/SubWidgets/KeySelectionList.cpp
         src/SubWidgets/KeySelectionList.h
         src/SubWidgets/LanguageSelector.cpp

@@ -8,9 +8,7 @@ enum class Tr;
 
 namespace Sol
 {
-/**
- * 
- */
+
 QString i18n(const Tr inTr);
 } // namespace Sol
 

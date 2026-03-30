@@ -10,7 +10,7 @@
 
 
 class SolButton;
-class EnginSelector;
+class EngineSelector;
 class QPushButton;
 class QComboBox;
 class QButtonGroup;
@@ -68,7 +68,7 @@ private:
 
     Ui::SolMainWidget* ui;
 
-    EnginSelector* _engineSelector;
+    EngineSelector* _engineSelector;
 
     // ~==============
     // sub widgets

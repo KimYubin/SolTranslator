@@ -43,7 +43,7 @@
      </widget>
     </item>
     <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
-     <widget class="EnginSelector" name="enginSelectCombo">
+     <widget class="EngineSelector" name="enginSelectCombo">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -87,9 +87,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EnginSelector</class>
+   <class>EngineSelector</class>
    <extends>QComboBox</extends>
-   <header>SubWidgets/EnginSelector.h</header>
+   <header>SubWidgets/EngineSelector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -8,12 +8,12 @@
 /**
  * Engine selection combo box
  */
-class EnginSelector : public DropdownMenu
+class EngineSelector : public DropdownMenu
 {
     Q_OBJECT
 
 public:
-    explicit EnginSelector(QWidget* parent = nullptr);
+    explicit EngineSelector(QWidget* parent = nullptr);
 
     void setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor);
 

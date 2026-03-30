@@ -9,7 +9,7 @@
 #include "Managers/ConfigManager.h"
 #include "Settings/SettingsWidget.h"
 #include "SubWidgets/DropdownMenu.h"
-#include "SubWidgets/EnginSelector.h"
+#include "SubWidgets/EngineSelector.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
 #include "Utils/SolLog.h"
@@ -115,7 +115,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
 
     // ~=========================
     // 번역 엔진 선택
-    _engineSelector = new EnginSelector(this);
+    _engineSelector = new EngineSelector(this);
     _engineSelector->setCurrentIndexChanged([this](const int inIdx)
     {
         const int payload      = _engineSelector->itemData(inIdx).toInt();

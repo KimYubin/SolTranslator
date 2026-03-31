@@ -8,6 +8,9 @@
 
 int main(int argc, char* argv[])
 {
+    QCoreApplication::setOrganizationDomain("Sol");
+    QCoreApplication::setApplicationName("SolTranslator");
+
     SolLogHandler::setupLog();
 
     QApplication app(argc, argv);

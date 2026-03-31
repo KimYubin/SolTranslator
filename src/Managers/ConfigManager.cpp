@@ -3,6 +3,7 @@
 #include "ConfigManager.h"
 
 #include "SolConstants.h"
+#include "SolPath.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 
@@ -85,7 +86,7 @@ EnumType enumValue(const QSettings* inSettings, const QAnyStringView& inKey, con
 
 ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    _settings = new QSettings(SolPaths::getConfigPath(), QSettings::IniFormat, this);
+    _settings = new QSettings(SolPath::absolute(SolFile::Config), QSettings::IniFormat, this);
 }
 
 

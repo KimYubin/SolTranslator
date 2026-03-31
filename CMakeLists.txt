@@ -157,6 +157,10 @@ qt_add_executable(
         src/SubWidgets/SolToolTipBallon.h
         src/Widgets/HistoryListView.cpp
         src/Widgets/HistoryListView.h
+        src/Managers/SolPath.cpp
+        src/Managers/SolPath.h
+        src/Utils/UniqueQObjectPtr.cpp
+        src/Utils/UniqueQObjectPtr.h
 )
 
 # ============================

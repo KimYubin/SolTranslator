@@ -3,6 +3,7 @@
 #include "DbWorker.h"
 
 #include "SolDatabase.h"
+#include "SolPath.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
 #include "Utils/SolLog.h"
@@ -60,7 +61,7 @@ void DbWorker::initialize()
 void DbWorker::initDB()
 {
     QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
-    historyDB.setDatabaseName(SolPaths::getHistoryDBFilePath());
+    historyDB.setDatabaseName(SolPath::absolute(SolFile::HistoryDB));
     if (historyDB.open() == false)
     {
         solDebug << "Could not connect to history database" << historyDB.lastError();

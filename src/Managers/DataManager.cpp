@@ -2,6 +2,7 @@
 
 #include "DataManager.h"
 
+#include "SolPath.h"
 #include "SolUtilibrary.h"
 #include "Utils/SolLog.h"
 
@@ -20,7 +21,7 @@ DataManager::DataManager(SolTranslatorCore* parent): AbstractManager(parent)
 
 cache_queue DataManager::loadTranslateCache()
 {
-    QFile loadFile(SolPaths::getTranslateHistoryFilePath());
+    QFile loadFile(SolPath::absolute(SolFile::TranslateHistory));
 
     if (loadFile.open(QIODevice::ReadOnly) == false)
     {
@@ -49,7 +50,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
 
     const QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
     {
-        QFile saveFile(SolPaths::getTranslateHistoryFilePath());
+        QFile saveFile(SolPath::absolute(SolFile::TranslateHistory));
         if (saveFile.open(QIODevice::WriteOnly) == false)
         {
             qWarning() << "cannot open history file.";

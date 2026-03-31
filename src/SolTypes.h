@@ -23,20 +23,14 @@ public:
 };
 
 
-/** 유저 파일 경로 */
-struct SolPaths
+enum class SolFile
 {
-private:
-    static QString getSolAppPath(const QString& inSecondaryDir, const QString& inFilePath);
-
-public:
-    static QString getLogPath();
-    static QString getConfigPath();
-    static QString getApiKeyPath();
-    static QString getTranslateHistoryFilePath();
-    static QString getHistoryDBFilePath();
+    Log
+  , Config
+  , TranslateHistory
+  , HistoryDB
+  , Size
 };
-
 
 /**
  * enum class 값을 베이스 타입 값으로 static casting합니다.
@@ -49,28 +43,6 @@ template <typename E>
 constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToInt(E e) noexcept
 {
     return static_cast<std::underlying_type_t<E>>(e);
-}
-
-/**
- * QObject unique pointer using deleteLater()
- */
-struct QObjectDeleter
-{
-    void operator()(QObject* obj) const noexcept
-    {
-        if (obj)
-            obj->deleteLater();
-    }
-};
-
-template <typename T>
-    requires std::is_base_of_v<QObject, T>
-using unique_qobject = std::unique_ptr<T, QObjectDeleter>;
-
-template <typename T, typename... Args>
-auto make_unique_qobject(Args&&... args)
-{
-    return unique_qobject<T>(new T(std::forward<Args>(args)...));
 }
 
 

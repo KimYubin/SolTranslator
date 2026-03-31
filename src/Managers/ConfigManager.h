@@ -14,7 +14,7 @@ enum class EngineType;
 #if defined(solConfig)
 #undef solConfig
 #endif
-#define solConfig (*solCore->configManager())
+#define solConfig (*(SolTranslatorCore::instance()->configManager()))
 
 /**
  * The ConfigManager class stores and manages configuration/settings.

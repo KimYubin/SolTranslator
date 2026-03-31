@@ -3,6 +3,7 @@
 #include "SolLog.h"
 
 #include "SolTypes.h"
+#include "Managers/SolPath.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -50,7 +51,7 @@ void SolLogHandler::setupLog()
 
     qSetMessagePattern(format);
 
-    logFile.setFileName(SolPaths::getLogPath());
+    logFile.setFileName(SolPath::absolute(SolFile::Log));
     if (logFile.open(QIODevice::Append | QIODevice::Text) == false)
     {
         qCritical() << "Cannot open the log file.";

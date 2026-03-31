@@ -104,12 +104,12 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
-void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
+void PopupTranslateWidget::executeTranslateImpl(const QString& inSourceText
                                               , const TextStyle inTextStyle
                                               , const LangType inSourceLang
                                               , const LangType inTargetLang)
 {
-    _originText = inOriginText;
+    _sourceText = inSourceText;
     _textStyle  = inTextStyle;
 
     std::expected<QPointer<TranslateUnit>, QString> trRes
@@ -117,7 +117,7 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
         this
       , false
       , solConfig.currentEngineType()
-      , inOriginText
+      , inSourceText
       , inTextStyle
       , inSourceLang
       , inTargetLang
@@ -132,20 +132,20 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inOriginText
     }
 }
 
-void PopupTranslateWidget::executeTranslate(const QString& inOriginText
+void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
                                           , const LangType inTargetLang)
 {
     if (inTextStyle == TextStyle::PlainText)
     {
-        executeTranslateImpl(inOriginText, TextStyle::PlainText, inSourceLang, inTargetLang);
+        executeTranslateImpl(inSourceText, TextStyle::PlainText, inSourceLang, inTargetLang);
         return;
     }
 
     AsyncManager::asyncLaunch<QString>(
         this,
-        [htmlStr = std::move(inOriginText)]() mutable
+        [htmlStr = inSourceText]() mutable
         {
             // list 무시하는 문법 제거.
             QTextDocument txtDoc;
@@ -386,9 +386,9 @@ void PopupTranslateWidget::setupUI()
     // 복사 버튼
     QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]()
     {
-        if (_currentTextType == TextType::OriginText)
+        if (_currentTextType == TextType::SourceText)
         {
-            return _originText;
+            return _sourceText;
         }
         else
         {
@@ -707,15 +707,15 @@ void PopupTranslateWidget::toggleTranslationText()
 
     // toggle
     QString nextText;
-    if (_currentTextType == TextType::OriginText)
+    if (_currentTextType == TextType::SourceText)
     {
-        _currentTextType = TextType::TranslateText;
+        _currentTextType = TextType::TargetText;
         nextText = getTranslatedText();
     }
     else
     {
-        _currentTextType = TextType::OriginText;
-        nextText = _originText;
+        _currentTextType = TextType::SourceText;
+        nextText = _sourceText;
     }
     ui->resultText->setFormattingText(nextText, _textStyle);
 

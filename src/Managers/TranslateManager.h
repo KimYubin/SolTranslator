@@ -40,7 +40,7 @@ private:
 public:
     std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
 
-    void translateAtPopup(const QString& inOriginText
+    void translateAtPopup(const QString& inSourceText
                         , const TextStyle inTextStyle);
 
 private:

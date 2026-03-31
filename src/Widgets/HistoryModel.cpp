@@ -13,12 +13,12 @@
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    connect(solCore->historyManager(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateTranslateCache);
+    connect(solCore->historyManager(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateHistoryCache);
 }
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : solCore->historyManager()->getTranslateCacheSize();
+    return parent.isValid() ? 0 : solCore->historyManager()->getHistoryCacheSize();
 }
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -28,7 +28,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, int role) const
 {
-    const std::expected<const HistoryCacheData*, QString> trCache = getTranslateCache(index.row());
+    const std::expected<const HistoryCacheData*, QString> trCache = getHistoryCacheData(index.row());
 
     if (trCache.has_value() == false)
     {
@@ -144,13 +144,13 @@ bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
     return true;
 }
 
-std::expected<const HistoryCacheData*, QString> HistoryModel::getTranslateCache(const int inIdx) const
+std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const int inIdx) const
 {
-    return solCore->historyManager()->getTranslateCache(inIdx);
+    return solCore->historyManager()->getHistoryCacheData(inIdx);
 }
 
 
-void HistoryModel::updateTranslateCache()
+void HistoryModel::updateHistoryCache()
 {
     beginResetModel();
 

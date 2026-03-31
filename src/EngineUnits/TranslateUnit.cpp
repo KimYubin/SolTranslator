@@ -27,11 +27,11 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
         _trReqData.trDisplayWidget->setTrUnit(this);
     }
 
-    if (_trReqData.originText.isEmpty())
+    if (_trReqData.sourceText.isEmpty())
     {
         solDebug << "translate request text is empty";
 
-        completeTranslatedText(_trReqData.originText);
+        completeTranslatedText(_trReqData.sourceText);
         return{};
     }
 
@@ -49,7 +49,7 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
 
     historyManager->asyncLookupHistory(
         _trReqData.engineType
-      , _trReqData.originText
+      , _trReqData.sourceText
       , _trReqData.sourceLang
       , _trReqData.targetLang
       , this
@@ -157,7 +157,7 @@ void TranslateUnit::replyFailed()
 {
     solDebug << "Error: " << _reply->errorString();
     solDebug << "EngineType:" << Sol::enumToQStr(_trReqData.engineType);
-    solDebug << "Source Text:" << _trReqData.originText.left(50);
+    solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
     // 사용자가 history에서 재번역 시도를 할 수 있습니다.
     finishTranslateRequest(_reply->errorString());
@@ -185,7 +185,7 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
         historyManager->asyncAddHistory(_trReqData.engineType
                                       , _trReqData.sourceLang
                                       , _trReqData.targetLang
-                                      , _trReqData.originText
+                                      , _trReqData.sourceText
                                       , inTranslatedText
                                       , _trReqData.textFormat);
     }

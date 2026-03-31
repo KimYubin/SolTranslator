@@ -43,7 +43,7 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 
     QJsonObject userMessage;
     userMessage["role"] = "user";
-    userMessage["content"] = _trReqData.originText;
+    userMessage["content"] = _trReqData.sourceText;
     messages.append(userMessage);
 
     chatBodyJson["messages"] = messages;

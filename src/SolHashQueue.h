@@ -203,17 +203,17 @@ struct TextCacheKey
     TextCacheKey() = default;
 
     TextCacheKey(const EngineType inEngineType
-               , const QString& inOriginText
+               , const QString& inSourceText
                , const LangType inSourceLang
                , const LangType inTargetLang)
         : engineType(inEngineType)
-        , originText(inOriginText)
+        , sourceText(inSourceText)
         , sourceLang(inSourceLang)
         , targetLang(inTargetLang)
     {}
 
     EngineType engineType;
-    QString originText;
+    QString sourceText;
     LangType sourceLang;
     LangType targetLang;
 };
@@ -223,7 +223,7 @@ struct cache_ky_hasher
     size_t operator()(const TextCacheKey& inKy) const
     {
         return std::hash<::QString>()(
-            inKy.originText
+            inKy.sourceText
             + QChar(EnumToInt(inKy.engineType))
             + QChar(EnumToInt(inKy.sourceLang))
             + QChar(EnumToInt(inKy.targetLang)));
@@ -237,7 +237,7 @@ struct cache_ky_eq
         return (ACacheKy.engineType == BCacheKy.engineType)
                 && (ACacheKy.sourceLang == BCacheKy.sourceLang)
                 && (ACacheKy.targetLang == BCacheKy.targetLang)
-                && (ACacheKy.originText == BCacheKy.originText);
+                && (ACacheKy.sourceText == BCacheKy.sourceText);
     }
 };
 

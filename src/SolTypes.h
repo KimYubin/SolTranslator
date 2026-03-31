@@ -136,8 +136,8 @@ enum class TextStyle
 
 enum class TextType
 {
-    OriginText
-  , TranslateText
+    SourceText
+  , TargetText
 };
 
 struct TranslateRequestInfo
@@ -150,7 +150,7 @@ struct TranslateRequestInfo
      * @param inTrDisplayWidget trUnit의 번역값을 표기하는 ITranslateWidget입니다.
      * @param inIsIgnoreCache true면 캐시에서 찾지 않고 번역을 요청합니다. 재번역시 사용됩니다.
      * @param inEngineType 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
-     * @param inOriginText 번역 원문
+     * @param inSourceText 번역 원문
      * @param inTextFormat 원문 텍스트의 종류.
      * @param inSourceLang 출발 언어
      * @param inTargetLang 도착 언어
@@ -162,7 +162,7 @@ struct TranslateRequestInfo
     TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                        , const bool inIsIgnoreCache
                        , const EngineType inEngineType
-                       , const QString& inOriginText
+                       , const QString& inSourceText
                        , const TextStyle inTextFormat
                        , const LangType inSourceLang
                        , const LangType inTargetLang
@@ -174,7 +174,7 @@ struct TranslateRequestInfo
     QPointer<ITranslateWidget> trDisplayWidget;
     bool isIgnoreCache;
     EngineType engineType;
-    QString originText;
+    QString sourceText;
     TextStyle textFormat;
     LangType sourceLang;
     LangType targetLang;

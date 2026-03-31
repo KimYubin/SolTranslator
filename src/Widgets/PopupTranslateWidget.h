@@ -37,11 +37,11 @@ public:
 
     ~PopupTranslateWidget() override;
 
-    void executeTranslateImpl(const QString& inOriginText
+    void executeTranslateImpl(const QString& inSourceText
                             , const TextStyle inTextStyle
                             , const LangType inSourceLang
                             , const LangType inTargetLang);
-    void executeTranslate(const QString& inOriginText
+    void executeTranslate(const QString& inSourceText
                         , const TextStyle inTextStyle
                         , const LangType inSourceLang
                         , const LangType inTargetLang);
@@ -170,10 +170,10 @@ protected:
     bool _isDrag = false;
     QPoint _dragPoint;
 
-    QString _originText;
+    QString _sourceText;
     TextStyle _textStyle;
     bool _isTranslateComplete = false;
-    TextType _currentTextType = TextType::TranslateText;
+    TextType _currentTextType = TextType::TargetText;
 
 private:
     Ui::PopupTranslateWidget* ui;

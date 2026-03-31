@@ -44,7 +44,7 @@ private:
 
     qreal _listScrollBarRatio = 0.0;
 
-    TextType _currentTextType = TextType::TranslateText;
+    TextType _currentTextType = TextType::TargetText;
 
     qint64 _currentTimelineId = -1;
     QDateTime _currentTimeStamp;

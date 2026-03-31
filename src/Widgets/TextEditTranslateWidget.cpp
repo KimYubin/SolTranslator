@@ -178,8 +178,8 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
 {
     detachTrUnit();
 
-    const QString orignText = ui->srcTextEdit->toPlainText();
-    if (orignText.isEmpty())
+    const QString sourceText = ui->srcTextEdit->toPlainText();
+    if (sourceText.isEmpty())
     {
         ui->trTextEdit->setPlainText("");
         return;
@@ -191,7 +191,7 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
         this
       , inIgnoreCache
       , solConfig.currentEngineType()
-      , orignText
+      , sourceText
       , TextStyle::PlainText
       , solConfig.textSrcLang()
       , solConfig.textTargetLang()

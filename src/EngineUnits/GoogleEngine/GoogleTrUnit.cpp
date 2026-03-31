@@ -20,14 +20,14 @@ void GoogleTrUnit::requestTranslate()
     if (_trReqData.textFormat != TextStyle::PlainText)
     {
         QTextDocument txtDoc;
-        txtDoc.setMarkdown(_trReqData.originText);
-        _trReqData.originText = txtDoc.toPlainText();
+        txtDoc.setMarkdown(_trReqData.sourceText);
+        _trReqData.sourceText = txtDoc.toPlainText();
     }
 
     const QUrl url = QString(Sol::URLs::GOOGLE).arg(
         Langs::getCodeName(_trReqData.sourceLang)
       , Langs::getCodeName(_trReqData.targetLang)
-      , QUrl::toPercentEncoding(_trReqData.originText, "()")); // '()'괄호는 인코딩 대상 제외.
+      , QUrl::toPercentEncoding(_trReqData.sourceText, "()")); // '()'괄호는 인코딩 대상 제외.
 
     QNetworkRequest request(url);
 

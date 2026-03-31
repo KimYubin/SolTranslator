@@ -29,8 +29,8 @@ public:
     void asyncAddHistory(const EngineType inEngineType
                        , const LangType inSourceLang
                        , const LangType inTargetLang
-                       , const QString& inOriginText
-                       , const QString& inTranslateText
+                       , const QString& inSourceText
+                       , const QString& inTargetText
                        , const TextStyle inTextStyle);
 
     void asyncDeleteHistory(const qint64 inDbId);
@@ -39,7 +39,7 @@ public:
      * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
      */
     void asyncLookupHistory(const EngineType inEngineType
-                          , const QString& inOriginText
+                          , const QString& inSourceText
                           , const LangType inSourceLang
                           , const LangType inTargetLang
                           , QObject* inContext
@@ -47,15 +47,15 @@ public:
 
 signals:
     void requestHistoryLookup(const EngineType inEngineType
-                            , const QString& inOriginText
+                            , const QString& inSourceText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
                             , const int inReqId);
     void requestAddHistory(const EngineType inEngineType
                          , const LangType inSourceLang
                          , const LangType inTargetLang
-                         , const QString& inOriginText
-                         , const QString& inTranslateText
+                         , const QString& inSourceText
+                         , const QString& inTargetText
                          , const TextStyle inTextStyle);
     void requestDeleteHistory(const qint64 inDbId);
     void translateHistoryUpdated();
@@ -64,24 +64,24 @@ public slots :
     void onLookupFinished(const LookupResult& inLookup, const int inReqId);
     void onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
-    std::expected<const HistoryCacheData*, QString> getTranslateCache(const int inIdx) const;
-    int getTranslateCacheSize() const { return _translateTextCache.size(); };
+    std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const int inIdx) const;
+    int getHistoryCacheSize() const { return _historyCaches.size(); };
 
     bool setCheckState(const int inIdx, const Qt::CheckState inState);
 
     std::expected<int, QString> findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp) const;
 
 private:
-    std::vector<HistoryCacheData> _translateTextCache;
+    std::vector<HistoryCacheData> _historyCaches;
 
     QThread _workerThread;
 
-    struct reqVal
+    struct reqCallback
     {
         QPointer<QObject> context;
         std::move_only_function<void(const LookupResult&)> callback;
     };
-    std::unordered_map<int, reqVal> _requestCallbacks;
+    std::unordered_map<int, reqCallback> _requestCallbacks;
 };
 
 

@@ -146,8 +146,8 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 void DbWorker::processAddHistory(const EngineType inEngineType
                                , const LangType inSourceLang
                                , const LangType inTargetLang
-                               , const QString& inOriginText
-                               , const QString& inTranslateText
+                               , const QString& inSourceText
+                               , const QString& inTargetText
                                , const TextStyle inTextStyle)
 {
     const std::expected<QString, QString> insertDataQuery = SolSql::readSqlFromFile(Path::InsertHistoryData);
@@ -170,8 +170,8 @@ void DbWorker::processAddHistory(const EngineType inEngineType
         sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
         sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
         sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
-        sqlQuery.bindValue(":source_text", inOriginText);
-        sqlQuery.bindValue(":target_text", inTranslateText);
+        sqlQuery.bindValue(":source_text", inSourceText);
+        sqlQuery.bindValue(":target_text", inTargetText);
         sqlQuery.bindValue(":text_style",  Sol::enumToQStr(inTextStyle));
 
         if (sqlQuery.exec() == false)
@@ -225,16 +225,16 @@ void DbWorker::processDeleteHistory(const qint64 inDbId)
 }
 
 void DbWorker::processLookupHistory(const EngineType inEngineType
-                                  , const QString& inOriginText
+                                  , const QString& inSourceText
                                   , const LangType inSourceLang
                                   , const LangType inTargetLang
                                   , const int inReqId)
 {
-    emit lookupFinished(lookupHistoryImpl(inEngineType, inOriginText, inSourceLang, inTargetLang), inReqId);
+    emit lookupFinished(lookupHistoryImpl(inEngineType, inSourceText, inSourceLang, inTargetLang), inReqId);
 }
 
 std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineType
-                                                    , const QString& inOriginText
+                                                    , const QString& inSourceText
                                                     , const LangType inSourceLang
                                                     , const LangType inTargetLang)
 {
@@ -260,7 +260,7 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
         sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
         sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
         sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
-        sqlQuery.bindValue(":source_text", inOriginText);
+        sqlQuery.bindValue(":source_text", inSourceText);
 
         // error sql
         if (sqlQuery.exec() == false)

@@ -115,16 +115,16 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::translateText(
     return executeNewTranslateUnit(std::move(inTranslateRequestInfo));
 }
 
-void TranslateManager::translateAtPopup(const QString& inOriginText
+void TranslateManager::translateAtPopup(const QString& inSourceText
                                       , const TextStyle inTextStyle)
 {
-    if (inOriginText.isEmpty())
+    if (inSourceText.isEmpty())
     {
         return;
     }
 
     PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
-    popupWidget->executeTranslate(inOriginText, inTextStyle, LangType::AUTO, solConfig.popupTargetLang());
+    popupWidget->executeTranslate(inSourceText, inTextStyle, LangType::AUTO, solConfig.popupTargetLang());
 }
 
 void TranslateManager::processPopupTranslate()

@@ -32,7 +32,7 @@ HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
 
-    _currentTextType = TextType::TranslateText;
+    _currentTextType = TextType::TargetText;
 }
 
 HistoryWidget::~HistoryWidget()
@@ -71,7 +71,7 @@ void HistoryWidget::setupUI()
     SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
     {
         const QModelIndex curIdx = _historyListView->currentIndex();
-        const Sol::HistoryItemRole curRole = (_currentTextType == TextType::OriginText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
+        const Sol::HistoryItemRole curRole = (_currentTextType == TextType::SourceText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
 
         return _historyListModel->data(curIdx, curRole).toString();
     });
@@ -133,7 +133,7 @@ void HistoryWidget::setupUI()
         }
 
         const int lastestRowIndex  = current.row();
-        const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
+        const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getHistoryCacheData(lastestRowIndex);
 
         if (selectedTr.has_value() == false)
         {
@@ -149,7 +149,7 @@ void HistoryWidget::setupUI()
         }
         _currentTimelineId = newCurrentTimelineId;
         _currentTimeStamp  = selectedTr.value()->getTimeStamp();
-        _currentTextType   = TextType::TranslateText;
+        _currentTextType   = TextType::TargetText;
 
         _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
 
@@ -208,7 +208,7 @@ void HistoryWidget::exportSelectedHistoryData()
 {
     const QModelIndex curIdx  = _historyListView->currentIndex();
     const int lastestRowIndex = curIdx.row();
-    const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getTranslateCache(lastestRowIndex);
+    const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getHistoryCacheData(lastestRowIndex);
 
     if (selectedTr.has_value() == false)
     {
@@ -231,8 +231,8 @@ void HistoryWidget::toggleTranslationText()
     const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
 
     // toggle
-    _currentTextType = (_currentTextType == TextType::OriginText) ? TextType::TranslateText : TextType::OriginText;
-    const Sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::OriginText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
+    _currentTextType = (_currentTextType == TextType::SourceText) ? TextType::TargetText : TextType::SourceText;
+    const Sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::SourceText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
 
     const QString nextText  = _historyListModel->data(curIdx, currentTextTypeRole).toString();
     const QString textStyle = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();

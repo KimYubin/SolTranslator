@@ -25,8 +25,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
     qApp->setApplicationName("SolTranslator");
 
     QTranslator* qtTranslator = new QTranslator(this);
-    if (qtTranslator->load(QLocale::system(), "sol", "_"
-                         , QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
+    if (qtTranslator->load(QLocale::system(), "sol", "_", QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
     {
         qApp->installTranslator(qtTranslator);
     }

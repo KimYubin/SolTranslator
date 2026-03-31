@@ -76,11 +76,11 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
     for (auto& [cacheKey, cacheText] : CacheTextQueue)
     {
         QJsonObject cacheObject;
-        cacheObject["OriginText"]    = cacheKey.originText;
+        cacheObject["SourceText"]    = cacheKey.sourceText;
         cacheObject["EngineType"]    = Sol::enumToQStr(cacheKey.engineType);
         cacheObject["sourceLang"]    = Sol::enumToQStr(cacheKey.sourceLang);
         cacheObject["targetLang"]    = Sol::enumToQStr(cacheKey.targetLang);
-        cacheObject["TranslateText"] = cacheText;
+        cacheObject["TargetText"] = cacheText;
 
         arr.append(cacheObject);
     }
@@ -102,11 +102,11 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
 
             TextCacheKey cacheKey;
             cacheKey.engineType = Sol::qStrToEnum(cacheObject["EngineType"].toString(), EngineHelper::defaultEngineType());
-            cacheKey.originText = cacheObject["OriginText"].toString();
+            cacheKey.sourceText = cacheObject["SourceText"].toString();
             cacheKey.sourceLang = Sol::qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
             cacheKey.targetLang = Sol::qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);
 
-            QString cacheText = cacheObject["TranslateText"].toString();
+            QString cacheText = cacheObject["TargetText"].toString();
 
             res.push(cacheKey, cacheText);
         }

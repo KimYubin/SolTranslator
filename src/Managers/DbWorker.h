@@ -29,8 +29,8 @@ slots :
     void processAddHistory(const EngineType inEngineType
                          , const LangType inSourceLang
                          , const LangType inTargetLang
-                         , const QString& inOriginText
-                         , const QString& inTranslateText
+                         , const QString& inSourceText
+                         , const QString& inTargetText
                          , const TextStyle inTextStyle);
 
     void processDeleteHistory(const qint64 inDbId);
@@ -39,14 +39,14 @@ slots :
      * Lookup translation history, and if found, update the most recent history.
      */
     void processLookupHistory(const EngineType inEngineType
-                            , const QString& inOriginText
+                            , const QString& inSourceText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
                             , const int inReqId);
 
 private:
     std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
-                                              , const QString& inOriginText
+                                              , const QString& inSourceText
                                               , const LangType inSourceLang
                                               , const LangType inTargetLang);
 

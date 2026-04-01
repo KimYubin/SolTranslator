@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_WIDGETINSPECTOR_H
 #define SOLTRANSLATOR_WIDGETINSPECTOR_H
@@ -16,7 +16,7 @@ public:
 
     virtual bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void updateInfo(QObject* watched, QEvent* event);
+    void updateInfo(const QObject* watched, const QEvent* event);
 
 private:
     QLabel* label;

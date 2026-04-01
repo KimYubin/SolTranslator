@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 
 #include "WidgetInspector.h"
@@ -19,8 +19,8 @@ WidgetInspector::WidgetInspector(QWidget* parent) : QWidget(parent)
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setStyleSheet("background: rgba(0, 0, 0, 150); color: white; font: 10pt;");
 
-    label       = new QLabel("Waiting...", this);
-    auto layout = new QVBoxLayout(this);
+    label = new QLabel("Waiting...", this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(label);
     layout->setContentsMargins(5, 5, 5, 5);
 
@@ -40,7 +40,7 @@ bool WidgetInspector::eventFilter(QObject* watched, QEvent* event)
     return QWidget::eventFilter(watched, event);
 }
 
-void WidgetInspector::updateInfo(QObject* watched, QEvent* event)
+void WidgetInspector::updateInfo(const QObject* watched, const QEvent* event)
 {
     const QPoint globalPos = QCursor::pos();
 

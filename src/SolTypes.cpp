@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "SolTypes.h"
 
@@ -15,7 +15,7 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
 
-QString EngineHelper::displayName(EngineType inEngineType)
+QString EngineHelper::displayName(const EngineType inEngineType)
 {
     switch (inEngineType)
     {
@@ -74,7 +74,7 @@ LangInfo Langs::getLangInfo(const LangType inLangType)
     return langs.find(LangType::NONE)->second;
 }
 
-QString Langs::getCodeName(LangType inLangType)
+QString Langs::getCodeName(const LangType inLangType)
 {
     return getLangInfo(inLangType).codeName;
 }
@@ -100,7 +100,7 @@ std::vector<LangType> Langs::getLanguageList()
     std::vector<LangType> languageList;
     for (LangType lt = LangType::AUTO; lt != LangType::Size; lt = static_cast<LangType>(static_cast<int>(lt) + 1))
     {
-        const QString langName = Langs::getLocaleName(lt);
+        const QString langName = getLocaleName(lt);
         if (langName != "NONE")
         {
             languageList.push_back(lt);
@@ -114,6 +114,6 @@ bool Langs::containName(const LangType inLangType, const QString& inLangName)
 {
     // todo: 로케일 현지화 이름 및 각국 언어별 명칭을 모두 찾도록 만들어야합니다.
     // todo: 현지명, 영어명, 코드명, 자국명(모든언어 검색X. 자국명만 따로 모아놓아야합니다.)
-    const QString LangName = Langs::getLocaleName(inLangType);
+    const QString LangName = getLocaleName(inLangType);
     return LangName.contains(inLangName, Qt::CaseInsensitive);
 }

@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "LanguageSelector.h"
 
@@ -6,7 +6,6 @@
 #include "SolToolTip.h"
 #include "SolTypes.h"
 #include "SolUtilibrary.h"
-#include "Managers/ConfigManager.h"
 #include "Utils/SolLog.h"
 #include "Utils/Tr.h"
 
@@ -50,7 +49,7 @@ signals:
 
 private:
     void filterItems(const QString& inText);
-    void onItemClicked(QListWidgetItem* inItem);
+    void onItemClicked(const QListWidgetItem* inItem);
     void addListItem(const LangType& inLangType);
 
     QPoint getTargetRelPos() const;
@@ -310,7 +309,7 @@ void LanguageSelectorMenuPrivate::filterItems(const QString& inText)
     }
 }
 
-void LanguageSelectorMenuPrivate::onItemClicked(QListWidgetItem* inItem)
+void LanguageSelectorMenuPrivate::onItemClicked(const QListWidgetItem* inItem)
 {
     const int payload = inItem->data(LangTypeRole).toInt();
 

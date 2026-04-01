@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifdef _WIN32
 
@@ -18,7 +18,7 @@ namespace
  * @param in_dwFlags ki.dwFlags 변수값. 기본값(0)이면  KeyDown.
  * @return 
  */
-INPUT make_INPUT(DWORD in_type, WORD in_wVK, DWORD in_dwFlags = 0)
+INPUT make_INPUT(const DWORD in_type, const WORD in_wVK, const DWORD in_dwFlags = 0)
 {
     INPUT res;
     ZeroMemory(&res, sizeof(res));

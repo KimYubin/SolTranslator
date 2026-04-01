@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "GoogleTrUnit.h"
 
@@ -29,7 +29,7 @@ void GoogleTrUnit::requestTranslate()
       , Langs::getCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.sourceText, "()")); // '()'괄호는 인코딩 대상 제외.
 
-    QNetworkRequest request(url);
+    const QNetworkRequest request(url);
 
     get(request);
 }

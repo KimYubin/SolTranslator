@@ -239,7 +239,7 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
                                                     , const LangType inSourceLang
                                                     , const LangType inTargetLang)
 {
-    std::tuple<bool, QString> res = {false, QString()};
+    std::tuple res{false, QString()};
 
     const std::expected<QString, QString> selectHistoryQuery = SolSql::readSqlFromFile(Path::SelectHistoryData);
     if (selectHistoryQuery.has_value() == false)

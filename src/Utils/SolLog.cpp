@@ -22,7 +22,7 @@ QtMessageHandler originalHandler = nullptr;
 
 // todo: 비동기 flush 필요.
 // 메시지 핸들러 함수
-void solMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void solMessageHandler(const QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
     const QString logStr = qFormatLogMessage(type, context, msg);
     logStream << logStr << Qt::endl;

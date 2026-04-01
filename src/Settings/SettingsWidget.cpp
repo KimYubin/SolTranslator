@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "SettingsWidget.h"
 
@@ -11,12 +11,8 @@
 #include "Utils/Tr.h"
 #include "Widgets/SolMainWidget.h"
 
-#include <QButtonGroup>
-#include <QListView>
 #include <QListWidget>
-#include <QPushButton>
 #include <QScrollArea>
-#include <QScrollBar>
 #include <QShortcut>
 #include <QStyledItemDelegate>
 
@@ -58,13 +54,13 @@ SettingsWidget::SettingsWidget(QWidget* parent)
         listItem->setData(stackIndexRole, stkIdx);
     }
 
-    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](QListWidgetItem* current, QListWidgetItem* previous)
+    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](const QListWidgetItem* current, const QListWidgetItem* prev)
     {
         ui->optionStackedWidget->setCurrentIndex(current->data(stackIndexRole).toInt());
         QWidget* curWidget = ui->optionStackedWidget->currentWidget();
-        if (IOptionWidget* curOptionWidget = qobject_cast<IOptionWidget*>(curWidget))
+        if (const IOptionWidget* curOptWidget = qobject_cast<IOptionWidget*>(curWidget))
         {
-            ui->optionNameLabel->setText(curOptionWidget->getOptionPage()->getDisplayName());
+            ui->optionNameLabel->setText(curOptWidget->getOptionPage()->getDisplayName());
         }
     });
 

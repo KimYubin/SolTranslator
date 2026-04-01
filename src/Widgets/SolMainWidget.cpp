@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "SolMainWidget.h"
 
@@ -224,7 +224,7 @@ QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon
 {
     QMessageBox msgBox(inIcon, inTitle, inText, QMessageBox::NoButton, inParent);
 
-    QDialogButtonBox* buttonBox = msgBox.findChild<QDialogButtonBox*>();
+    const QDialogButtonBox* buttonBox = msgBox.findChild<QDialogButtonBox*>();
     Q_ASSERT(buttonBox != nullptr);
 
     for (auto& [buttonText, standButton] : inButtons)
@@ -269,7 +269,7 @@ void SolMainWidget::onAppQuitEvent()
     solConfig.saveWidgetGeometry(this);
 }
 
-void SolMainWidget::iconActivated(QSystemTrayIcon::ActivationReason reason)
+void SolMainWidget::iconActivated(const QSystemTrayIcon::ActivationReason reason)
 {
     // 클릭시 마우스 위치 저장합니다.
     // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다.

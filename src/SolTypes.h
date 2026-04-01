@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTYPES_H
 #define SOLTYPES_H
@@ -11,14 +11,11 @@ class ITranslateWidget;
 enum class EngineType;
 enum class LangType;
 
-class SolTypes
-{
-};
 
 struct EngineHelper
 {
 public:
-    static QString displayName(EngineType inEngineType);
+    static QString displayName(const EngineType inEngineType);
     static EngineType defaultEngineType();
 };
 

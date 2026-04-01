@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef LOADINGBAR_H
 #define LOADINGBAR_H
@@ -25,7 +25,7 @@ private:
     QSvgWidget* svg;
     QPropertyAnimation* animation;
 
-    float getAnimRatio() const { return _animRatio; };
+    float getAnimRatio() const { return _animRatio; }
     void setAnimRatio(const float inAnimRatio);
     float _animRatio;
     float _prevRatio;

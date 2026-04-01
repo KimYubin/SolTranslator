@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "HistoryWidget.h"
 
@@ -114,7 +114,7 @@ void HistoryWidget::setupUI()
     // _splitter->setSizes({250, 500});
     _historyListModel = new HistoryModel(this);
 
-    auto proxyModel = new QSortFilterProxyModel(this);
+    QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(_historyListModel);
     proxyModel->setFilterKeyColumn(0);
 
@@ -124,7 +124,7 @@ void HistoryWidget::setupUI()
     _historyListView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     // select item
-    QItemSelectionModel* selectionModel = _historyListView->selectionModel();
+    const QItemSelectionModel* selectionModel = _historyListView->selectionModel();
     connect(selectionModel, &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& current, const QModelIndex& previous)
     {
         if (current.isValid() == false)

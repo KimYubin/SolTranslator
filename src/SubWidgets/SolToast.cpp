@@ -1,11 +1,9 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "SolToast.h"
 
-#include "SolTranslatorCore.h"
 #include "Widgets/SolMainWidget.h"
 
-#include <QFrame>
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QScreen>
@@ -29,13 +27,13 @@ public:
     ~SolToastWidget() override;
 
 private:
-    int getshowPos() const { return _showPos; };
-    void setshowPos(const int inshowPos) { _showPos = inshowPos; };
-    int getpopPos() const { return _popPos; };
-    void setpopPos(const int inpopPos) { _popPos = inpopPos; };
+    int getshowPos() const { return _showPos; }
+    void setshowPos(const int inshowPos) { _showPos = inshowPos; }
+    int getpopPos() const { return _popPos; }
+    void setpopPos(const int inpopPos) { _popPos = inpopPos; }
 
-    float getToastRatio() const { return _toastRatio; };
-    void setToastRatio(const float inToastRatio);;
+    float getToastRatio() const { return _toastRatio; }
+    void setToastRatio(const float inToastRatio);
 
     QPointer<QWidget> _targetWidget;
 
@@ -81,7 +79,7 @@ SolToastWidget::SolToastWidget(const QString& inMsg
     _effect = new QGraphicsOpacityEffect(this);
     setGraphicsEffect(_effect);
 
-    int _animDuration = 300;
+    constexpr int _animDuration = 300;
     _startAnim = new QPropertyAnimation(this, "toastRatio", this);
     _startAnim->setDuration(_animDuration);
     _startAnim->setEasingCurve(QEasingCurve::OutCubic);

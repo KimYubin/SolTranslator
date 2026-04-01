@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLPOINT_H
 #define SOLPOINT_H
@@ -19,7 +19,7 @@ protected:
     virtual void replyTranslateFinished() override;
 
 public:
-    void setDebugMode(const bool inIsDebugMode) { _isDebugMode = inIsDebugMode; };
+    void setDebugMode(const bool inIsDebugMode) { _isDebugMode = inIsDebugMode; }
 
 private:
     bool _isDebugMode = false;

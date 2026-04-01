@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_HISTORYMANAGER_H
 #define SOLTRANSLATOR_HISTORYMANAGER_H
@@ -65,7 +65,7 @@ public slots :
     void onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
     std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const int inIdx) const;
-    int getHistoryCacheSize() const { return _historyCaches.size(); };
+    int getHistoryCacheSize() const { return _historyCaches.size(); }
 
     bool setCheckState(const int inIdx, const Qt::CheckState inState);
 

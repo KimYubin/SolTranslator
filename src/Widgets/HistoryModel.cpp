@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "HistoryModel.h"
 
@@ -26,7 +26,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
     return parent.isValid() ? 0 : 1;
 }
 
-QVariant HistoryModel::data(const QModelIndex& index, int role) const
+QVariant HistoryModel::data(const QModelIndex& index, const int role) const
 {
     const std::expected<const HistoryCacheData*, QString> trCache = getHistoryCacheData(index.row());
 
@@ -87,7 +87,7 @@ QVariant HistoryModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, const int role)
 {
     if (index.isValid() == false)
     {
@@ -120,7 +120,7 @@ Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
             | Qt::ItemIsUserCheckable;
 }
 
-bool HistoryModel::insertRows(int position, int rows, const QModelIndex& index)
+bool HistoryModel::insertRows(const int position, const int rows, const QModelIndex& index)
 {
     Q_UNUSED(index);
     beginInsertRows(QModelIndex(), position, position + rows - 1);
@@ -132,7 +132,7 @@ bool HistoryModel::insertRows(int position, int rows, const QModelIndex& index)
     return true;
 }
 
-bool HistoryModel::removeRows(int position, int rows, const QModelIndex& index)
+bool HistoryModel::removeRows(const int position, const int rows, const QModelIndex& index)
 {
     Q_UNUSED(index);
     beginRemoveRows(QModelIndex(), position, position + rows - 1);

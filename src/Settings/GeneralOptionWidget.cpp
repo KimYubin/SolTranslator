@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "GeneralOptionWidget.h"
 
@@ -29,7 +29,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         SettingCard* startRunCard = new SettingCard(new SwitchButton(solConfig.startRun()), shapeBehaviorGroup);
         startRunCard->setHeader(i18n(Tr::Run_On_Start));
         startRunCard->setDescription(i18n(Tr::Run_On_Start_Desc));
-        SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
+
+        const SwitchButton* startRunSwitch = startRunCard->getContent<SwitchButton>();
         connect(startRunSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
         {
             solConfig.setStartRun(inState == Qt::CheckState::Checked);
@@ -101,7 +102,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         SettingCard* popupTempCard = new SettingCard(new SwitchButton(solConfig.isPopupTrWindowTemp()), popupTrGroup);
         popupTempCard->setHeader(i18n(Tr::Popup_Temp_Window));
         popupTempCard->setDescription(i18n(Tr::Popup_Temp_Window_Desc));
-        SwitchButton* popupTempSwitch = popupTempCard->getContent<SwitchButton>();
+
+        const SwitchButton* popupTempSwitch = popupTempCard->getContent<SwitchButton>();
         connect(popupTempSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
         {
             solConfig.setIsPopupTrWindowTemp(inState == Qt::CheckState::Checked);

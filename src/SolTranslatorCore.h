@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATORCORE_H
 #define SOLTRANSLATORCORE_H
@@ -33,11 +33,11 @@ public:
     static SolTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    ConfigManager* configManager() const { return _configManager; };
+    ConfigManager* configManager() const { return _configManager; }
     TranslateManager* translateManager() const { return _translateManager; }
     HistoryManager* historyManager() const { return _historyManager; }
     GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
-    AsyncManager* asyncManager() const { return _asyncManager; };
+    AsyncManager* asyncManager() const { return _asyncManager; }
 
     SolMainWidget* solMainWidget() const { return _solMainWidget; }
 

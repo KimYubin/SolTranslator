@@ -233,7 +233,7 @@ QMenu#trayIconMenu::separator
 
 
 /* -------------------------------- */
-/* TextEidt QMenu */
+/* TextEdit QMenu */
 QTextEdit QMenu,
 QPlainTextEdit QMenu 
 {

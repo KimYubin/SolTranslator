@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef ASYNCMANAGER_H
 #define ASYNCMANAGER_H
@@ -28,7 +28,7 @@ public:
      */
     template <typename ret>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::move_only_function<ret()>&& inAsyncFunc
+                          , std::move_only_function<ret(void)>&& inAsyncFunc
                           , std::move_only_function<void(ret)>&& inMainThreadFunc)
     {
         QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
@@ -44,7 +44,7 @@ public:
 
     template <typename>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::move_only_function<void()>&& inAsyncFunc
+                          , std::move_only_function<void(void)>&& inAsyncFunc
                           , std::move_only_function<void(void)>&& inMainThreadFunc)
     {
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(inWatcherContext);

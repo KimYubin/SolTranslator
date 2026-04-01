@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
@@ -52,7 +52,7 @@ protected:
                                                          , QGridLayout* inParentLayout
                                                          , const int inRow
                                                          , const int inColumn
-                                                         , Qt::Alignment inAlignment = Qt::Alignment());
+                                                         , const Qt::Alignment inAlignment = Qt::Alignment());
 
     std::tuple<QGroupBox*, QVBoxLayout*> newOptionGroupBox(const QString& inGroupTitle
                                                          , QGridLayout* inParentLayout
@@ -60,7 +60,7 @@ protected:
                                                          , const int inColumn
                                                          , const int inRowSpan
                                                          , const int inColumnSpan
-                                                         , Qt::Alignment inAlignment = Qt::Alignment());
+                                                         , const Qt::Alignment inAlignment = Qt::Alignment());
 
     /**
      * 새로운 GroupBox와 GroupBox 내부에서 사용되는 VBoxLayout을 만들어 제공합니다.
@@ -123,7 +123,7 @@ public:
 protected:
     void setDisplayName(const QString& inDisplayName);
     void setIconPath(const QString& inIconPath);
-    void setOptionWidgetCtor(std::move_only_function<IOptionWidget*()>&& inOptionWidgetCtor);
+    void setOptionWidgetCtor(std::move_only_function<IOptionWidget*(void)>&& inOptionWidgetCtor);
     void setPriority(const OptionPriority inPriority);
 
 private:
@@ -131,7 +131,7 @@ private:
 
     QString _displayName;
     QString _iconPath;
-    std::move_only_function<IOptionWidget*()> _optionWidgetCtor;
+    std::move_only_function<IOptionWidget*(void)> _optionWidgetCtor;
     OptionPriority _priority = OptionPriority::None; // 옵션 정렬 우선 순위
 
     int _optionStkId;

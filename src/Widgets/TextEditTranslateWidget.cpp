@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "TextEditTranslateWidget.h"
 
@@ -97,14 +97,14 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     }
     {
         // 다시 번역 버튼
-        SolButton* trRefresh = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
-                                                             , Qt::TabFocus
-                                                             , i18n(Tr::Re_Translate)
-                                                             , QKeySequence()
-                                                             , 0
-                                                             , Qt::AlignRight);
+        const SolButton* reTr = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
+                                                              , Qt::TabFocus
+                                                              , i18n(Tr::Re_Translate)
+                                                              , QKeySequence()
+                                                              , 0
+                                                              , Qt::AlignRight);
 
-        connect(trRefresh, &QPushButton::clicked, this, [this]()
+        connect(reTr, &QPushButton::clicked, this, [this]()
         {
             QTimer::singleShot(500, this, [this]()
             {

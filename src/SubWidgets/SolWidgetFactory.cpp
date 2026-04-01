@@ -14,7 +14,7 @@
 
 using Sol::i18n;
 
-SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString()>&& inCopyStringFunc)
+SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString(void)>&& inCopyStringFunc)
 {
     SolButton* copyButton = new SolButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));

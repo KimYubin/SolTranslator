@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef ITRANSLATEWIDGET_H
 #define ITRANSLATEWIDGET_H
@@ -17,7 +17,7 @@ class ITranslateWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ITranslateWidget(QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit ITranslateWidget(QWidget* parent = nullptr, const Qt::WindowFlags flags = Qt::WindowFlags());
 
     ~ITranslateWidget() override;
 
@@ -55,8 +55,8 @@ protected:
     virtual QTextCursor getTextCursor() const = 0;
     virtual void setTextCursor(const QTextCursor& cursor) = 0;
 
-    const QString& getTranslatedText() const { return _translatedText; };
-    TextStyle getTranslatedTextStyle() const { return _translatedTextStyle; };
+    const QString& getTranslatedText() const { return _translatedText; }
+    TextStyle getTranslatedTextStyle() const { return _translatedTextStyle; }
 
 private:
     QPointer<TranslateUnit> _trUnit;

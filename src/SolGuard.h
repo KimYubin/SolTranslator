@@ -24,7 +24,7 @@ public:
         , _endFunctor(std::move(inEndFunctor))
     {
         _startFunctor();
-    };
+    }
 
     /**
      * 
@@ -32,12 +32,12 @@ public:
     [[nodiscard]]
     explicit SolGeneralGuard(std::move_only_function<void(void)>&& inEndFunctor)
         : _endFunctor(std::move(inEndFunctor))
-    {};
+    {}
 
     ~SolGeneralGuard()
     {
         _endFunctor();
-    };
+    }
 
 private:
     std::move_only_function<void(void)> _startFunctor;

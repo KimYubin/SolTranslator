@@ -45,9 +45,9 @@ public:
     bool hasValue() const { return _expected.has_value(); }
     bool isError() const { return (_expected.has_value() == false); }
 
-    QString error() const { return _expected.has_value() ? "No error. exist value" : _expected.error(); };
+    QString error() const { return _expected.has_value() ? "No error. exist value" : _expected.error(); }
 
-    const Expected& expected() const { return _expected; };
+    const Expected& expected() const { return _expected; }
 
     // ~============================================
     /** QJsonValue interface */

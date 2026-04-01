@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "TranslateManager.h"
 
@@ -141,7 +141,7 @@ void TranslateManager::processPopupTranslate()
 
     // 클립보드 갱신(복사) 대기
     QMetaObject::Connection clipboardConnection
-        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](QClipboard::Mode mode) mutable
+        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](const QClipboard::Mode mode) mutable
     {
         const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
 
@@ -176,8 +176,8 @@ void TranslateManager::processPopupTranslate()
                 {
                     QMimeData* copyMimeData = new QMimeData;
 
-                    const QStringList formatsList = prevMimeTimer->formats();
-                    for (const QString& prevFormat : formatsList)
+                    const QStringList prevMimeformats = prevMimeTimer->formats();
+                    for (const QString& prevFormat : prevMimeformats)
                     {
                         copyMimeData->setData(prevFormat, prevMimeTimer->data(prevFormat));
                     }

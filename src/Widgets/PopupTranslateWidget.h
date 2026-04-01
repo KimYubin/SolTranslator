@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef POPUPTRANSLATEWIDGET_H
 #define POPUPTRANSLATEWIDGET_H
@@ -60,7 +60,7 @@ protected:
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
     void showTranslationPopup();
 
-    QSize getTextEditSize() const { return _textEditSize; };
+    QSize getTextEditSize() const { return _textEditSize; }
 
     /** 텍스트 에디트 사이즈를 기반으로 전체 Widget의 크기와 위치를 계산 및 적용합니다. */
     void setTextEditSize(const QSize& inTextEditSize);
@@ -105,7 +105,7 @@ protected:
     void setShadowEffectEnabled(const bool inIsEnable);
 
 protected slots:
-    void detectFocusInOut(QWidget* old, QWidget* now);
+    void detectFocusInOut(const QWidget* old, const QWidget* now);
 
 private:
     /**

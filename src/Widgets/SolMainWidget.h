@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLMAINWIDGET_H
 #define SOLMAINWIDGET_H
@@ -55,7 +55,7 @@ protected slots:
     void onAppQuitEvent();
 
 private slots:
-    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void iconActivated(const QSystemTrayIcon::ActivationReason reason);
 
 private:
     void createActions();

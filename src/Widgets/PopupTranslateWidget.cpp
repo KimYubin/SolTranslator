@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "PopupTranslateWidget.h"
 
@@ -43,8 +43,7 @@ PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
     , _yPosMaxRatio((1.0 - _maxSizeRatio.height()) / 2.0)
     , ui(new Ui::PopupTranslateWidget)
 {
-    QIcon icon = QIcon(":/img/icon_img");
-    setWindowIcon(icon);
+    setWindowIcon(QIcon{":/img/icon_img"});
     setWindowTitle(i18n(Tr::Sol));
 
     // ~===========
@@ -728,7 +727,7 @@ void PopupTranslateWidget::setShadowEffectEnabled(const bool inIsEnable)
     ui->bgFrame->graphicsEffect()->setEnabled(inIsEnable);
 }
 
-void PopupTranslateWidget::detectFocusInOut(QWidget* old, QWidget* now)
+void PopupTranslateWidget::detectFocusInOut(const QWidget* old, const QWidget* now)
 {
     if (Sol::isThis(this, old))
     {
@@ -951,7 +950,7 @@ void PopupTranslateWidget::leaveEvent(QEvent* event)
     bool hasChildFocus = hasFocus();
 
     const QList<QWidget*> childList = findChildren<QWidget*>();
-    for (QWidget* childWidget : childList)
+    for (const QWidget* childWidget : childList)
     {
         if (hasChildFocus)
         {
@@ -979,7 +978,7 @@ bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
         && _widgetModeFlags.testFlag(SolWidgetMode::PopupMode)
         && event->type() == QEvent::ApplicationStateChange)
     {
-        Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
+        const Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
         if (changeState != Qt::ApplicationActive)
         {
             close();

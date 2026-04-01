@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "IOptionWidget.h"
 
@@ -121,7 +121,7 @@ std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QStr
                                                                     , QGridLayout* inParentLayout
                                                                     , const int inRow
                                                                     , const int inColumn
-                                                                    , Qt::Alignment inAlignment)
+                                                                    , const Qt::Alignment inAlignment)
 {
     auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
 
@@ -136,7 +136,7 @@ std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QStr
                                                                     , const int inColumn
                                                                     , const int inRowSpan
                                                                     , const int inColumnSpan
-                                                                    , Qt::Alignment inAlignment)
+                                                                    , const Qt::Alignment inAlignment)
 {
     auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
 
@@ -299,7 +299,7 @@ void IOptionPage::setIconPath(const QString& inIconPath)
     _iconPath = inIconPath;
 }
 
-void IOptionPage::setOptionWidgetCtor(std::move_only_function<IOptionWidget*()>&& inOptionWidgetCtor)
+void IOptionPage::setOptionWidgetCtor(std::move_only_function<IOptionWidget*(void)>&& inOptionWidgetCtor)
 {
     _optionWidgetCtor = std::move(inOptionWidgetCtor);
 }

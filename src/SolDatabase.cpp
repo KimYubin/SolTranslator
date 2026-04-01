@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 
 #include "SolDatabase.h"
@@ -55,7 +55,7 @@ std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, co
     return {};
 }
 
-SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDB)
+SolSqlTransactionGuard::SolSqlTransactionGuard(const QSqlDatabase& inDB)
     : _database(inDB)
     , _duringTransaction(false)
 {

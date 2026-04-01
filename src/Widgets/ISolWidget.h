@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef ISOLWIDGET_H
 #define ISOLWIDGET_H
@@ -10,7 +10,7 @@ class ISolWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ISolWidget(QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit ISolWidget(QWidget* parent = nullptr, const Qt::WindowFlags flags = Qt::WindowFlags());
 
     ~ISolWidget() override;
 

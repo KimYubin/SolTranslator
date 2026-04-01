@@ -1,8 +1,7 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SAVEMANAGER_H
 #define SAVEMANAGER_H
-#include <QObject>
 
 #include "AbstractManager.h"
 #include "SolHashQueue.h"

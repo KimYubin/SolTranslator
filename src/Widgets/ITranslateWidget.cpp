@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "ITranslateWidget.h"
 
@@ -8,7 +8,7 @@
 #include <QScrollBar>
 #include <QTimer>
 
-ITranslateWidget::ITranslateWidget(QWidget* parent, Qt::WindowFlags flags)
+ITranslateWidget::ITranslateWidget(QWidget* parent, const Qt::WindowFlags flags)
     : QWidget(parent, flags)
     , _translatedText("")
     , _translatedTextStyle(TextStyle::PlainText)

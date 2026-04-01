@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "ConfigManager.h"
 
@@ -49,6 +49,7 @@ const QString Shortcuts = "Shortcuts/";
  * enum type 설정을 문자열로 저장합니다.
  * 
  * @tparam EnumType enum, enum class
+ * @param inSettings QSettings 멤버
  * @param inKey 저장에 사용할 key
  * @param inVal 저장할 enum 
  */
@@ -64,6 +65,7 @@ void setEnumValue(QSettings* inSettings, const QAnyStringView& inKey, const Enum
  * EnumType과 정확히 동일한 문자열이 아니면 기본값을 반환합니다.
  * 
  * @tparam EnumType 
+ * @param inSettings QSettings 멤버
  * @param inKey 설정 key
  * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
  * @return 

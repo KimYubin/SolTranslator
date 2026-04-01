@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2025 Kim Yubin. All rights reserved.
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef LAYOUTTEXTEDIT_H
 #define LAYOUTTEXTEDIT_H
@@ -17,7 +17,7 @@ class LayoutTextEdit : public ResultTextEdit
     Q_OBJECT
 
 public:
-    LayoutTextEdit(QWidget* parent = nullptr);
+    explicit LayoutTextEdit(QWidget* parent = nullptr);
     ~LayoutTextEdit() override;
 
     virtual void resizeEvent(QResizeEvent* event) override;

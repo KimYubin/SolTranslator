@@ -22,6 +22,9 @@ public:
     static SolButton* createCopyButton(QWidget* inParent
                                      , std::move_only_function<QString(void)>&& inCopyStringFunc);
 
+    static SolButton* createToggleButton(QWidget* inParent
+                                       , std::move_only_function<void(void)>&& inToggleFunc);
+
     static SolButton* createReTranslateButton(QWidget* inParent
                                             , std::move_only_function<void(void)>&& inTranslateFunc);
 };

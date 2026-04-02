@@ -14,6 +14,24 @@
 
 using Sol::i18n;
 
+namespace
+{
+SolButton* createButton(QWidget* inParent
+                      , const QIcon& inIcon
+                      , const Qt::FocusPolicy inPolicy
+                      , const QString& inToolTip
+                      , const Action inAction
+                      , std::move_only_function<void(void)>&& inFunc)
+{
+    SolButton* newButton = new SolButton(inParent);
+    newButton->setIcon(inIcon);
+    newButton->setFocusPolicy(inPolicy);
+    newButton->setToolTipAction(inToolTip, inAction);
+
+    return newButton;
+}
+} // anonymous namespace
+
 SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
                                             , std::move_only_function<QString(void)>&& inCopyStringFunc)
 {
@@ -42,13 +60,29 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
     return copyButton;
 }
 
+SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
+                                              , std::move_only_function<void()>&& inToggleFunc)
+{
+    SolButton* toggleButton = new SolButton(inParent);
+    toggleButton->setIcon(QIcon(":/img/swap_text_img"));
+    toggleButton->setFocusPolicy(Qt::TabFocus);
+    toggleButton->setToolTipAction(i18n(Tr::Source_Target_Toggle), Action::TextToggle);
+
+    connect(toggleButton, &QPushButton::clicked, inParent, [inParent, toggleFunc = std::move(inToggleFunc)]() mutable
+    {
+        toggleFunc();
+    });
+
+    return toggleButton;
+}
+
 SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
                                                    , std::move_only_function<void(void)>&& inTranslateFunc)
 {
     SolButton* newButton = new SolButton(inParent);
     newButton->setIcon(QIcon(":/img/refresh_img"));
     newButton->setFocusPolicy(Qt::TabFocus);
-    newButton->setToolTipShortcut(i18n(Tr::Re_Translate), QKeySequence());
+    newButton->setToolTipAction(i18n(Tr::Re_Translate), Action::None);
 
     connect(newButton, &QPushButton::clicked, inParent, [inParent, trFunc = std::move(inTranslateFunc)]() mutable
     {

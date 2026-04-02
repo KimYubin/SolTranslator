@@ -64,9 +64,14 @@ void HistoryWidget::setupUI()
 
     _splitter->addWidget(_historyListView);
 
+
     _selectedTextEdit = new LayoutTextEdit(_splitter);
     _selectedTextEdit->setObjectName("historySelectedDetail");
     _selectedTextEdit->setMinimumWidth(150);
+
+
+    // ~=============
+    // buttons
 
     // 복사 버튼
     SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
@@ -78,46 +83,42 @@ void HistoryWidget::setupUI()
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
+
     // 원문/번역 토글
-    {
-        const SolButton* toggleButton = _selectedTextEdit->addBottomButton(QIcon(":/img/swap_text_img")
-                                                                         , Qt::TabFocus
-                                                                         , i18n(Tr::Source_Target_Toggle)
-                                                                         , solConfig.shortcut(Action::HistoryToggle)
-                                                                         , 0
-                                                                         , Qt::AlignLeft);
+    SolButton* toggleButton = SolWidgetFactory::createToggleButton(this, [this]() { toggleTranslationText(); });
+    _selectedTextEdit->addBottomWidget(toggleButton, 0, Qt::AlignLeft);
 
-        connect(toggleButton, &QPushButton::clicked, this, [this]() { toggleTranslationText(); });
-    }
+
     // 재번역 버튼
-    {
-        SolButton* reTranslateBtn = SolWidgetFactory::createReTranslateButton(this, [this]() { reTranslate(); });
-        _selectedTextEdit->addBottomWidget(reTranslateBtn, 0, Qt::AlignBottom | Qt::AlignLeft);
-    }
+    SolButton* reTranslateBtn = SolWidgetFactory::createReTranslateButton(this, [this]() { reTranslate(); });
+    _selectedTextEdit->addBottomWidget(reTranslateBtn, 0, Qt::AlignLeft);
 
-    // 기록 삭제
-    {
-        const SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
-                                                                         , Qt::TabFocus
-                                                                         , i18n(Tr::Delete_Translation)
-                                                                         , QKeySequence()
-                                                                         , 1
-                                                                         , Qt::AlignRight);
 
-        connect(deleteButton, &QPushButton::clicked, this, [this]()
-        {
-            const QModelIndex curIdx = _historyListView->currentIndex();
-            const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
-            solCore->historyManager()->asyncDeleteHistory(dbId);
-            _selectedTextEdit->setText("");
-        });
-    }
+    // 기록 삭제 버튼
+    const SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
+                                                                     , Qt::TabFocus
+                                                                     , i18n(Tr::Delete_Translation)
+                                                                     , QKeySequence()
+                                                                     , 1
+                                                                     , Qt::AlignRight);
+
+    connect(deleteButton, &QPushButton::clicked, this, [this]()
+    {
+        const QModelIndex curIdx = _historyListView->currentIndex();
+        const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
+        solCore->historyManager()->asyncDeleteHistory(dbId);
+        _selectedTextEdit->setText("");
+    });
+
 
     _splitter->addWidget(_selectedTextEdit);
     _splitter->setStretchFactor(0, 1);
     _splitter->setStretchFactor(1, 2);
-
     // _splitter->setSizes({250, 500});
+
+
+    // ~===========
+    // history list model
     _historyListModel = new HistoryModel(this);
 
     QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);

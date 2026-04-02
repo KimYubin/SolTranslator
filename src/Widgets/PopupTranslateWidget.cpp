@@ -401,13 +401,8 @@ void PopupTranslateWidget::setupUI()
     ui->statusLayout->addWidget(trCopy, 0, Qt::AlignBottom | Qt::AlignLeft);
 
     // 원문/번역 토글
-    _textToggleButton = new SolButton(this);
-    _textToggleButton->setIcon(QIcon(":/img/swap_text_img"));
-    _textToggleButton->setFocusPolicy(Qt::TabFocus);
-    _textToggleButton->setToolTipAction(i18n(Tr::Source_Target_Toggle), Action::PopupToggle);
+    _textToggleButton = SolWidgetFactory::createToggleButton(this, [this]() { toggleTranslationText(); });
     _textToggleButton->hide();
-
-    connect(_textToggleButton, &QPushButton::clicked, this, &PopupTranslateWidget::toggleTranslationText);
 
     ui->statusLayout->addWidget(_textToggleButton, 0, Qt::AlignBottom | Qt::AlignLeft);
 

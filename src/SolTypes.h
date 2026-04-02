@@ -165,7 +165,7 @@ enum class Action
   , MainClose
   , MainNextTab
   , MainPrevTab
-  , HistoryToggle
+  , TextToggle
   , DocCopyButton
 
   , PopupAlwaysOn
@@ -174,7 +174,6 @@ enum class Action
   , PopupMaxRestore
 
   , PopupClose
-  , PopupToggle
 
   , Size
 };

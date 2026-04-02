@@ -301,7 +301,7 @@ const std::unordered_map<Action, QKeySequence> defaultShortcut
   , {Action::MainNextTab,     QKeySequence(Qt::CTRL | Qt::Key_Tab)}
   , {Action::MainPrevTab,     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab)}
 
-  , {Action::HistoryToggle,   QKeySequence(Qt::Key_T)}
+  , {Action::TextToggle,      QKeySequence(Qt::Key_T)}
   , {Action::DocCopyButton,   QKeySequence(Qt::Key_C)}
 
   , {Action::PopupAlwaysOn,   QKeySequence(Qt::Key_A)}
@@ -309,7 +309,6 @@ const std::unordered_map<Action, QKeySequence> defaultShortcut
   , {Action::PopupMinimize,   QKeySequence(Qt::Key_M)}
   , {Action::PopupMaxRestore, QKeySequence(Qt::Key_G)}
   , {Action::PopupClose,      QKeySequence(Qt::Key_Escape)}
-  , {Action::PopupToggle,     QKeySequence(Qt::Key_T)}
 
 };
 

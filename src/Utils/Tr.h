@@ -35,6 +35,7 @@ enum class Tr
   , Popup_Temp_Window_Desc
   , Source_Target_Toggle
   , Delete_Translation
+  , View_In_Popup
   , Language_Search
   , Sol
   , Always_On_Top_Off

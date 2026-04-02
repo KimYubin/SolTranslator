@@ -54,6 +54,10 @@ public:
 
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
+    void viewTranslationText(const QString& inSourceText
+                           , const QString& inTranslatedText
+                           , const TextStyle inTextStyle);
+
 protected:
     virtual void applyTranslation() override;
 

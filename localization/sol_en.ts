@@ -169,98 +169,103 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="46"/>
-        <source>Sol</source>
+        <location filename="../src/Utils/Tr.cpp" line="45"/>
+        <source>팝업창에서 보기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="47"/>
-        <source>항상 위 끄기</source>
+        <source>Sol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="48"/>
-        <source>항상 위 켜기</source>
+        <source>항상 위 끄기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="49"/>
-        <source>임시창 모드</source>
+        <source>항상 위 켜기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="50"/>
-        <source>일반창 모드</source>
+        <source>임시창 모드</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="51"/>
-        <source>최소화</source>
+        <source>일반창 모드</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="52"/>
-        <source>이전 크기로 복원</source>
+        <source>최소화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="53"/>
-        <source>최대화</source>
+        <source>이전 크기로 복원</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="54"/>
-        <source>닫기</source>
+        <source>최대화</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="55"/>
-        <source>Failed to register %1. Error: %2</source>
+        <source>닫기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/Tr.cpp" line="56"/>
+        <source>Failed to register %1. Error: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/Tr.cpp" line="57"/>
         <source>Failed to unregister %1. Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="58"/>
+        <location filename="../src/Utils/Tr.cpp" line="59"/>
         <source>SolTranslator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="59"/>
+        <location filename="../src/Utils/Tr.cpp" line="60"/>
         <source>텍스트</source>
         <comment>텍스트 번역 탭의 이름</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="83"/>
+        <location filename="../src/Utils/Tr.cpp" line="84"/>
         <source>구글 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="84"/>
+        <location filename="../src/Utils/Tr.cpp" line="85"/>
         <source>마이크로소프트 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="85"/>
+        <location filename="../src/Utils/Tr.cpp" line="86"/>
         <source>DeepL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="86"/>
+        <location filename="../src/Utils/Tr.cpp" line="87"/>
         <source>파파고</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="87"/>
+        <location filename="../src/Utils/Tr.cpp" line="88"/>
         <source>OpenAI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="88"/>
+        <location filename="../src/Utils/Tr.cpp" line="89"/>
         <source>Gemini</source>
         <translation type="unfinished"></translation>
     </message>
@@ -277,133 +282,133 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="45"/>
+        <location filename="../src/Utils/Tr.cpp" line="46"/>
         <source>언어 검색</source>
         <comment>번역 출발, 도착 언어를 찾는 검색창</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="57"/>
+        <location filename="../src/Utils/Tr.cpp" line="58"/>
         <source>설정</source>
         <comment>Settings나 Options</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="60"/>
+        <location filename="../src/Utils/Tr.cpp" line="61"/>
         <source>준비 중</source>
         <comment>미완성된 기능에 대한 안내입니다.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="61"/>
+        <location filename="../src/Utils/Tr.cpp" line="62"/>
         <source>문서</source>
         <comment>문서 번역 탭의 이름</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="62"/>
+        <location filename="../src/Utils/Tr.cpp" line="63"/>
         <source>기록</source>
         <comment>이전 번역 기록</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="63"/>
+        <location filename="../src/Utils/Tr.cpp" line="64"/>
         <source>번역 엔진 선택</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="64"/>
+        <location filename="../src/Utils/Tr.cpp" line="65"/>
         <source>트레이로 최소화되었습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="65"/>
+        <location filename="../src/Utils/Tr.cpp" line="66"/>
         <source>Sol 번역기가 아직 실행 중입니다.
 아이콘을 클릭하여 다시 실행하거나, 종료할 수 있습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="66"/>
+        <location filename="../src/Utils/Tr.cpp" line="67"/>
         <source>정말 종료할까요?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="67"/>
+        <location filename="../src/Utils/Tr.cpp" line="68"/>
         <source>종료</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="68"/>
+        <location filename="../src/Utils/Tr.cpp" line="69"/>
         <source>취소</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="69"/>
+        <location filename="../src/Utils/Tr.cpp" line="70"/>
         <source>트레이로 최소화(&amp;M)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="70"/>
+        <location filename="../src/Utils/Tr.cpp" line="71"/>
         <source>창 복원(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="71"/>
+        <location filename="../src/Utils/Tr.cpp" line="72"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="72"/>
+        <location filename="../src/Utils/Tr.cpp" line="73"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="73"/>
+        <location filename="../src/Utils/Tr.cpp" line="74"/>
         <source>번역 복사</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="74"/>
+        <location filename="../src/Utils/Tr.cpp" line="75"/>
         <source>복사 완료!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="75"/>
+        <location filename="../src/Utils/Tr.cpp" line="76"/>
         <source>번역 원문 입력 편집기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="76"/>
+        <location filename="../src/Utils/Tr.cpp" line="77"/>
         <source>번역 결과</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="77"/>
+        <location filename="../src/Utils/Tr.cpp" line="78"/>
         <source>출발 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="78"/>
+        <location filename="../src/Utils/Tr.cpp" line="79"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="79"/>
+        <location filename="../src/Utils/Tr.cpp" line="80"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="80"/>
+        <location filename="../src/Utils/Tr.cpp" line="81"/>
         <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="81"/>
+        <location filename="../src/Utils/Tr.cpp" line="82"/>
         <source>다시 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/Tr.cpp" line="82"/>
+        <location filename="../src/Utils/Tr.cpp" line="83"/>
         <source>번역 중...</source>
         <comment>번역 결과를 받기 전에 대기 중임을 안내합니다.</comment>
         <translation type="unfinished"></translation>

@@ -301,8 +301,11 @@ const std::unordered_map<Action, QKeySequence> defaultShortcut
   , {Action::MainNextTab,     QKeySequence(Qt::CTRL | Qt::Key_Tab)}
   , {Action::MainPrevTab,     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab)}
 
-  , {Action::TextToggle,      QKeySequence(Qt::Key_T)}
-  , {Action::DocCopyButton,   QKeySequence(Qt::Key_C)}
+  , {Action::TextToggle,        QKeySequence(Qt::Key_T)}
+  , {Action::DocCopyButton,     QKeySequence(Qt::Key_C)}
+  , {Action::ViewInPopup,       QKeySequence()}
+  , {Action::DeleteTranslation, QKeySequence()}
+
 
   , {Action::PopupAlwaysOn,   QKeySequence(Qt::Key_A)}
   , {Action::PopupWindowMode, QKeySequence(Qt::Key_N)}

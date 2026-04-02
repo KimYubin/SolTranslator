@@ -5,6 +5,7 @@
 #include "HistoryListDelegate.h"
 #include "HistoryListView.h"
 #include "HistoryModel.h"
+#include "PopupTranslateWidget.h"
 #include "SolHashQueue.h"
 #include "SolMainWidget.h"
 #include "SolTranslatorCore.h"
@@ -94,21 +95,20 @@ void HistoryWidget::setupUI()
     _selectedTextEdit->addBottomWidget(reTranslateBtn, 0, Qt::AlignLeft);
 
 
-    // 기록 삭제 버튼
-    const SolButton* deleteButton = _selectedTextEdit->addBottomButton(QIcon(":/img/delete_img")
-                                                                     , Qt::TabFocus
-                                                                     , i18n(Tr::Delete_Translation)
-                                                                     , QKeySequence()
-                                                                     , 1
-                                                                     , Qt::AlignRight);
+    // 팝업
+    SolButton* popupBtn = SolWidgetFactory::createViewInPopup(this, [this](){viewPopup();});
+    _selectedTextEdit->addBottomWidget(popupBtn, 0, Qt::AlignLeft);
 
-    connect(deleteButton, &QPushButton::clicked, this, [this]()
+
+    // 기록 삭제 버튼
+    SolButton* deleteButton = SolWidgetFactory::createDeleteTranslation(this, [this]()
     {
         const QModelIndex curIdx = _historyListView->currentIndex();
         const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
         solCore->historyManager()->asyncDeleteHistory(dbId);
         _selectedTextEdit->setText("");
     });
+    _selectedTextEdit->addBottomWidget(deleteButton, 1, Qt::AlignRight);
 
 
     _splitter->addWidget(_selectedTextEdit);
@@ -261,4 +261,20 @@ void HistoryWidget::reTranslate() const
     const TextStyle textStyle  = Sol::qStrToEnum(textStyleStr, TextStyle::PlainText);
 
     solCore->translateManager()->translateAtPopup(sourceText, textStyle, true);
+}
+
+void HistoryWidget::viewPopup() const
+{
+    const QModelIndex curIdx = _historyListView->currentIndex();
+    if (curIdx.isValid() == false)
+    {
+        return;
+    }
+    const QString sourceText   = _historyListModel->data(curIdx, Sol::SourceFullTextRole).toString();
+    const QString targetText   = _historyListModel->data(curIdx, Sol::TargetFullTextRole).toString();
+    const QString textStyleStr = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
+    const TextStyle textStyle  = Sol::qStrToEnum(textStyleStr, TextStyle::PlainText);
+
+    PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
+    popupWidget->viewTranslationText(sourceText, targetText, textStyle);
 }

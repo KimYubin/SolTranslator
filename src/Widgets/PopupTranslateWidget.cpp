@@ -172,6 +172,15 @@ void PopupTranslateWidget::completeTransText(const QString& inTranslatedText, co
     _reTranslateButton->show();
 }
 
+void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
+                                             , const QString& inTranslatedText
+                                             , const TextStyle inTextStyle)
+{
+    _sourceText = inSourceText;
+    _textStyle  = inTextStyle;
+    completeTransText(inTranslatedText, _textStyle);
+}
+
 void PopupTranslateWidget::applyTranslation()
 {
     showTranslationPopup();

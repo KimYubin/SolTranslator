@@ -36,6 +36,7 @@ private:
 
     void toggleTranslationText();
     void reTranslate() const;
+    void viewPopup() const;
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;

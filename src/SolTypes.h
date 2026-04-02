@@ -167,6 +167,8 @@ enum class Action
   , MainPrevTab
   , TextToggle
   , DocCopyButton
+  , ViewInPopup
+  , DeleteTranslation
 
   , PopupAlwaysOn
   , PopupWindowMode

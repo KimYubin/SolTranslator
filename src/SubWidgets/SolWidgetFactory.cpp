@@ -20,8 +20,7 @@ SolButton* createButton(QWidget* inParent
                       , const QIcon& inIcon
                       , const Qt::FocusPolicy inPolicy
                       , const QString& inToolTip
-                      , const Action inAction
-                      , std::move_only_function<void(void)>&& inFunc)
+                      , const Action inAction)
 {
     SolButton* newButton = new SolButton(inParent);
     newButton->setIcon(inIcon);
@@ -68,9 +67,9 @@ SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
     toggleButton->setFocusPolicy(Qt::TabFocus);
     toggleButton->setToolTipAction(i18n(Tr::Source_Target_Toggle), Action::TextToggle);
 
-    connect(toggleButton, &QPushButton::clicked, inParent, [inParent, toggleFunc = std::move(inToggleFunc)]() mutable
+    connect(toggleButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inToggleFunc)]() mutable
     {
-        toggleFunc();
+        clickFunc();
     });
 
     return toggleButton;
@@ -84,10 +83,44 @@ SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
     newButton->setFocusPolicy(Qt::TabFocus);
     newButton->setToolTipAction(i18n(Tr::Re_Translate), Action::None);
 
-    connect(newButton, &QPushButton::clicked, inParent, [inParent, trFunc = std::move(inTranslateFunc)]() mutable
+    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inTranslateFunc)]() mutable
     {
-        trFunc();
+        clickFunc();
     });
 
     return newButton;
 }
+
+SolButton* SolWidgetFactory::createViewInPopup(QWidget* inParent
+                                             , std::move_only_function<void()>&& inFunc)
+{
+    SolButton* newButton = createButton(inParent
+                                      , QIcon(":/img/open_new_img")
+                                      , Qt::TabFocus
+                                      , i18n(Tr::View_In_Popup)
+                                      , Action::ViewInPopup);
+    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inFunc)]() mutable
+    {
+        clickFunc();
+    });
+
+    return newButton;
+}
+
+SolButton* SolWidgetFactory::createDeleteTranslation(QWidget* inParent
+                                                   , std::move_only_function<void()>&& inFunc)
+{
+    SolButton* newButton = createButton(inParent
+                                      , QIcon(":/img/delete_img")
+                                      , Qt::TabFocus
+                                      , i18n(Tr::Delete_Translation)
+                                      , Action::DeleteTranslation);
+    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inFunc)]() mutable
+    {
+        clickFunc();
+    });
+
+    return newButton;
+}
+
+

@@ -42,6 +42,7 @@ QString Sol::i18n(const Tr inTr)
     case Popup_Temp_Window_Desc:         return TrImpl::tr("팝업 번역창이 임시창으로 생성됩니다. 번역 중 다른 곳을 클릭하면 번역창이 닫힙니다.");
     case Source_Target_Toggle:           return TrImpl::tr("원문/번역 토글");
     case Delete_Translation:             return TrImpl::tr("번역 삭제", "번역 기록을 삭제합니다.");
+    case View_In_Popup:                  return TrImpl::tr("팝업창에서 보기");
     case Language_Search:                return TrImpl::tr("언어 검색", "번역 출발, 도착 언어를 찾는 검색창");
     case Sol:                            return TrImpl::tr("Sol");
     case Always_On_Top_Off:              return TrImpl::tr("항상 위 끄기");
@@ -96,6 +97,6 @@ QString Sol::i18n(const Tr inTr)
 
 namespace
 {
-constexpr int TrKeyCheck = 65;
+constexpr int TrKeyCheck = 66;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

@@ -27,6 +27,11 @@ public:
 
     static SolButton* createReTranslateButton(QWidget* inParent
                                             , std::move_only_function<void(void)>&& inTranslateFunc);
+    static SolButton* createViewInPopup(QWidget* inParent
+                                      , std::move_only_function<void(void)>&& inFunc);
+    static SolButton* createDeleteTranslation(QWidget* inParent
+                                            , std::move_only_function<void(void)>&& inFunc);
+    
 };
 
 

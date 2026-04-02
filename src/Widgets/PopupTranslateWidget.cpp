@@ -106,7 +106,8 @@ PopupTranslateWidget::~PopupTranslateWidget()
 void PopupTranslateWidget::executeTranslateImpl(const QString& inSourceText
                                               , const TextStyle inTextStyle
                                               , const LangType inSourceLang
-                                              , const LangType inTargetLang)
+                                              , const LangType inTargetLang
+                                              , const bool inIsIgnoreCache)
 {
     _sourceText = inSourceText;
     _textStyle  = inTextStyle;
@@ -114,7 +115,7 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inSourceText
     std::expected<QPointer<TranslateUnit>, QString> trRes
     = solCore->translateManager()->translateText(TranslateRequestInfo{
         this
-      , false
+      , inIsIgnoreCache
       , solConfig.currentEngineType()
       , inSourceText
       , inTextStyle
@@ -134,11 +135,13 @@ void PopupTranslateWidget::executeTranslateImpl(const QString& inSourceText
 void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
-                                          , const LangType inTargetLang)
+                                          , const LangType inTargetLang
+                                          , const bool inIsIgnoreCache)
 {
-    if (inTextStyle == TextStyle::PlainText)
+    if ((inTextStyle == TextStyle::PlainText) 
+        || inIsIgnoreCache)
     {
-        executeTranslateImpl(inSourceText, TextStyle::PlainText, inSourceLang, inTargetLang);
+        executeTranslateImpl(inSourceText, inTextStyle, inSourceLang, inTargetLang, inIsIgnoreCache);
         return;
     }
 
@@ -154,7 +157,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         },
         [this, inSourceLang, inTargetLang](const QString& inMd)
         {
-            executeTranslateImpl(inMd, TextStyle::MarkDown, inSourceLang, inTargetLang);
+            executeTranslateImpl(inMd, TextStyle::MarkDown, inSourceLang, inTargetLang, false);
         });
 }
 
@@ -166,6 +169,7 @@ void PopupTranslateWidget::completeTransText(const QString& inTranslatedText, co
     _loadingBar->stop();
     _isTranslateComplete = true;
     _textToggleButton->show();
+    _reTranslateButton->show();
 }
 
 void PopupTranslateWidget::applyTranslation()
@@ -394,7 +398,6 @@ void PopupTranslateWidget::setupUI()
             return getTranslatedText();
         }
     });
-
     ui->statusLayout->addWidget(trCopy, 0, Qt::AlignBottom | Qt::AlignLeft);
 
     // 원문/번역 토글
@@ -402,14 +405,29 @@ void PopupTranslateWidget::setupUI()
     _textToggleButton->setIcon(QIcon(":/img/swap_text_img"));
     _textToggleButton->setFocusPolicy(Qt::TabFocus);
     _textToggleButton->setToolTipAction(i18n(Tr::Source_Target_Toggle), Action::PopupToggle);
+    _textToggleButton->hide();
+
+    connect(_textToggleButton, &QPushButton::clicked, this, &PopupTranslateWidget::toggleTranslationText);
 
     ui->statusLayout->addWidget(_textToggleButton, 0, Qt::AlignBottom | Qt::AlignLeft);
 
-    connect(_textToggleButton, &QPushButton::clicked, this, &PopupTranslateWidget::toggleTranslationText);
-    _textToggleButton->hide();
 
+    // 재번역 버튼
+    _reTranslateButton = SolWidgetFactory::createReTranslateButton(this, [this]()
+    {
+        solCore->translateManager()->translateAtPopup(_sourceText, _textStyle, true);
+    });
+    _reTranslateButton->hide();
+
+    ui->statusLayout->addWidget(_reTranslateButton, 0, Qt::AlignBottom | Qt::AlignLeft);
+
+
+    // ~=================
+    // left/right spacing
     ui->statusLayout->addStretch(1);
 
+
+    // ~========
     // sizeGrip
     _sizeGrip = new QSizeGrip(this);
     _sizeGrip->show();

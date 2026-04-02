@@ -37,14 +37,20 @@ public:
 
     ~PopupTranslateWidget() override;
 
+private:
     void executeTranslateImpl(const QString& inSourceText
                             , const TextStyle inTextStyle
                             , const LangType inSourceLang
-                            , const LangType inTargetLang);
+                            , const LangType inTargetLang
+                            , const bool inIsIgnoreCache);
+
+public:
     void executeTranslate(const QString& inSourceText
                         , const TextStyle inTextStyle
                         , const LangType inSourceLang
-                        , const LangType inTargetLang);
+                        , const LangType inTargetLang
+                        , const bool inIsIgnoreCache);
+
 
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
 
@@ -172,6 +178,7 @@ protected:
 
     QString _sourceText;
     TextStyle _textStyle;
+
     bool _isTranslateComplete = false;
     TextType _currentTextType = TextType::TargetText;
 
@@ -187,6 +194,8 @@ private:
 
     LoadingBar* _loadingBar;
 
+
+    SolButton* _reTranslateButton;
     SolButton* _textToggleButton;
     QSizeGrip* _sizeGrip;
 };

@@ -19,7 +19,11 @@ public:
      * @param inCopyStringFunc A functor that provides the string to copy.
      * @return 
      */
-    static SolButton* createCopyButton(QWidget* inParent, std::move_only_function<QString(void)>&& inCopyStringFunc);
+    static SolButton* createCopyButton(QWidget* inParent
+                                     , std::move_only_function<QString(void)>&& inCopyStringFunc);
+
+    static SolButton* createReTranslateButton(QWidget* inParent
+                                            , std::move_only_function<void(void)>&& inTranslateFunc);
 };
 
 

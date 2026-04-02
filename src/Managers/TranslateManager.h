@@ -41,7 +41,8 @@ public:
     std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
 
     void translateAtPopup(const QString& inSourceText
-                        , const TextStyle inTextStyle);
+                        , const TextStyle inTextStyle
+                        , const bool inIsIgnoreCache = false);
 
 private:
     void processPopupTranslate();

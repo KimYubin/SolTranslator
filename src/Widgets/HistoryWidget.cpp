@@ -10,6 +10,7 @@
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/HistoryManager.h"
+#include "Managers/TranslateManager.h"
 #include "SubWidgets/LayoutTextEdit.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
@@ -87,6 +88,11 @@ void HistoryWidget::setupUI()
                                                                          , Qt::AlignLeft);
 
         connect(toggleButton, &QPushButton::clicked, this, [this]() { toggleTranslationText(); });
+    }
+    // 재번역 버튼
+    {
+        SolButton* reTranslateBtn = SolWidgetFactory::createReTranslateButton(this, [this]() { reTranslate(); });
+        _selectedTextEdit->addBottomWidget(reTranslateBtn, 0, Qt::AlignBottom | Qt::AlignLeft);
     }
 
     // 기록 삭제
@@ -240,4 +246,18 @@ void HistoryWidget::toggleTranslationText()
     _selectedTextEdit->setFormattingText(nextText, Sol::qStrToEnum(textStyle, TextStyle::PlainText));
 
     _selectedTextEdit->verticalScrollBar()->setValue(prevVerticalScrollVal);
+}
+
+void HistoryWidget::reTranslate() const
+{
+    const QModelIndex curIdx = _historyListView->currentIndex();
+    if (curIdx.isValid() == false)
+    {
+        return;
+    }
+    const QString sourceText   = _historyListModel->data(curIdx, Sol::SourceFullTextRole).toString();
+    const QString textStyleStr = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
+    const TextStyle textStyle  = Sol::qStrToEnum(textStyleStr, TextStyle::PlainText);
+
+    solCore->translateManager()->translateAtPopup(sourceText, textStyle, true);
 }

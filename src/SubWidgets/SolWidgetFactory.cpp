@@ -14,7 +14,8 @@
 
 using Sol::i18n;
 
-SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_function<QString(void)>&& inCopyStringFunc)
+SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
+                                            , std::move_only_function<QString(void)>&& inCopyStringFunc)
 {
     SolButton* copyButton = new SolButton(inParent);
     copyButton->setIcon(QIcon(":/img/copy_img"));
@@ -39,4 +40,20 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent, std::move_only_
     });
 
     return copyButton;
+}
+
+SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
+                                                   , std::move_only_function<void(void)>&& inTranslateFunc)
+{
+    SolButton* newButton = new SolButton(inParent);
+    newButton->setIcon(QIcon(":/img/refresh_img"));
+    newButton->setFocusPolicy(Qt::TabFocus);
+    newButton->setToolTipShortcut(i18n(Tr::Re_Translate), QKeySequence());
+
+    connect(newButton, &QPushButton::clicked, inParent, [inParent, trFunc = std::move(inTranslateFunc)]() mutable
+    {
+        trFunc();
+    });
+
+    return newButton;
 }

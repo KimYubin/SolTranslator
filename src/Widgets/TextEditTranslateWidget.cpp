@@ -92,25 +92,16 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     {
         // 전체 복사 버튼
-        QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
+        SolButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
         ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
     }
     {
         // 다시 번역 버튼
-        const SolButton* reTr = ui->trTextEdit->addBottomButton(QIcon(":/img/refresh_img")
-                                                              , Qt::TabFocus
-                                                              , i18n(Tr::Re_Translate)
-                                                              , QKeySequence()
-                                                              , 0
-                                                              , Qt::AlignRight);
-
-        connect(reTr, &QPushButton::clicked, this, [this]()
+        SolButton* reTr = SolWidgetFactory::createReTranslateButton(this, [this]()
         {
-            QTimer::singleShot(500, this, [this]()
-            {
-                onExecuteTranslate(true);
-            });
+            QTimer::singleShot(500, this, [this]() { onExecuteTranslate(true); });
         });
+        ui->trTextEdit->addBottomWidget(reTr, 0, Qt::AlignRight);
     }
 
 

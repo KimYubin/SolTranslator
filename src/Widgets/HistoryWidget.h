@@ -35,6 +35,7 @@ private:
     void exportSelectedHistoryData();
 
     void toggleTranslationText();
+    void reTranslate() const;
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;

@@ -3,7 +3,7 @@
 #include "GoogleTrUnit.h"
 
 #include "SolConstants.h"
-#include "Utils/SolJson.h"
+#include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>

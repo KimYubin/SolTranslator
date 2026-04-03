@@ -1,82 +1,82 @@
 ﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "SolJson.h"
+#include "ExJson.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
 
 
-SolJson SolJson::fromJson(const QByteArray& inJson)
+ExJson ExJson::fromJson(const QByteArray& inJson)
 {
     QJsonParseError parseError;
     const QJsonDocument rootDoc = QJsonDocument::fromJson(inJson, &parseError);
     if (parseError.error != QJsonParseError::NoError)
     {
-        return SolJson{std::unexpected{"Json parse error: " + parseError.errorString() + "\nJson: " + inJson}};
+        return ExJson{std::unexpected{"Json parse error: " + parseError.errorString() + "\nJson: " + inJson}};
     }
 
     if (rootDoc.isArray())
     {
-        return SolJson{rootDoc.array()};
+        return ExJson{rootDoc.array()};
     }
 
     if (rootDoc.isObject())
     {
-        return SolJson{rootDoc.object()};
+        return ExJson{rootDoc.object()};
     }
 
-    return SolJson{std::unexpected{"JsonDocument is empty."}};
+    return ExJson{std::unexpected{"JsonDocument is empty."}};
 }
 
 
-SolJson SolJson::value(const QString& inKey) const
+ExJson ExJson::value(const QString& inKey) const
 {
     if (isError())
     {
-        return SolJson{_expected};
+        return ExJson{_expected};
     }
 
     if (_expected->isObject() == false)
     {
-        return SolJson{std::unexpected("not an object: " + inKey)};
+        return ExJson{std::unexpected("not an object: " + inKey)};
     }
 
     const QJsonValue val = _expected->toObject().value(inKey);
     if (val.isUndefined())
     {
-        return SolJson{std::unexpected("not detected key: " + inKey)};
+        return ExJson{std::unexpected("not detected key: " + inKey)};
     }
 
-    return SolJson{val};
+    return ExJson{val};
 }
 
-SolJson SolJson::operator[](const qsizetype inIdx) const
+ExJson ExJson::operator[](const qsizetype inIdx) const
 {
     if (isError())
     {
-        return SolJson{_expected};
+        return ExJson{_expected};
     }
 
     if (_expected->isArray() == false)
     {
-        return SolJson{std::unexpected("not an array")};
+        return ExJson{std::unexpected("not an array")};
     }
 
     auto arr = _expected->toArray();
 
     if (inIdx < 0 || arr.size() <= inIdx)
     {
-        return SolJson{std::unexpected("out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + ".")};
+        return ExJson{std::unexpected("out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + ".")};
     }
 
-    return SolJson{arr[inIdx]};
+    return ExJson{arr[inIdx]};
 }
 
 
 // ~============================================
 /** QJsonValue interface */
 
-bool SolJson::toBool(const bool inDefaultValue) const
+bool ExJson::toBool(const bool inDefaultValue) const
 {
     if (isError())
     {
@@ -85,7 +85,7 @@ bool SolJson::toBool(const bool inDefaultValue) const
     return _expected->toBool(inDefaultValue);
 }
 
-int SolJson::toInt(const int inDefaultValue) const
+int ExJson::toInt(const int inDefaultValue) const
 {
     if (isError())
     {
@@ -94,7 +94,7 @@ int SolJson::toInt(const int inDefaultValue) const
     return _expected->toInt(inDefaultValue);
 }
 
-qint64 SolJson::toInteger(const qint64 inDefaultValue) const
+qint64 ExJson::toInteger(const qint64 inDefaultValue) const
 {
     if (isError())
     {
@@ -103,7 +103,7 @@ qint64 SolJson::toInteger(const qint64 inDefaultValue) const
     return _expected->toInteger(inDefaultValue);
 }
 
-double SolJson::toDouble(const double inDefaultValue) const
+double ExJson::toDouble(const double inDefaultValue) const
 {
     if (isError())
     {
@@ -112,7 +112,7 @@ double SolJson::toDouble(const double inDefaultValue) const
     return _expected->toDouble(inDefaultValue);
 }
 
-QString SolJson::toString() const
+QString ExJson::toString() const
 {
     if (isError())
     {
@@ -121,7 +121,7 @@ QString SolJson::toString() const
     return _expected->toString();
 }
 
-QString SolJson::toString(const QString& inDefaultValue) const
+QString ExJson::toString(const QString& inDefaultValue) const
 {
     if (isError())
     {
@@ -130,7 +130,7 @@ QString SolJson::toString(const QString& inDefaultValue) const
     return _expected->toString(inDefaultValue);
 }
 
-QAnyStringView SolJson::toStringView(const QAnyStringView inDefaultValue) const
+QAnyStringView ExJson::toStringView(const QAnyStringView inDefaultValue) const
 {
     if (isError())
     {
@@ -139,7 +139,7 @@ QAnyStringView SolJson::toStringView(const QAnyStringView inDefaultValue) const
     return _expected->toStringView(inDefaultValue);
 }
 
-QJsonArray SolJson::toArray() const
+QJsonArray ExJson::toArray() const
 {
     if (isError())
     {
@@ -148,7 +148,7 @@ QJsonArray SolJson::toArray() const
     return _expected->toArray();
 }
 
-QJsonArray SolJson::toArray(const QJsonArray& inDefaultValue) const
+QJsonArray ExJson::toArray(const QJsonArray& inDefaultValue) const
 {
     if (isError())
     {
@@ -157,7 +157,7 @@ QJsonArray SolJson::toArray(const QJsonArray& inDefaultValue) const
     return _expected->toArray(inDefaultValue);
 }
 
-QJsonObject SolJson::toObject() const
+QJsonObject ExJson::toObject() const
 {
     if (isError())
     {
@@ -166,7 +166,7 @@ QJsonObject SolJson::toObject() const
     return _expected->toObject();
 }
 
-QJsonObject SolJson::toObject(const QJsonObject& inDefaultValue) const
+QJsonObject ExJson::toObject(const QJsonObject& inDefaultValue) const
 {
     if (isError())
     {

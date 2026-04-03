@@ -147,8 +147,8 @@ qt_add_executable(
         src/SubWidgets/SolButton.h
         src/Managers/DbWorker.cpp
         src/Managers/DbWorker.h
-        src/Utils/SolJson.cpp
-        src/Utils/SolJson.h
+        src/Utils/ExJson.cpp
+        src/Utils/ExJson.h
         src/Utils/Tr.cpp
         src/Utils/Tr.h
         src/Utils/SolLog.cpp

@@ -8,38 +8,34 @@
 #include <expected>
 
 
-class SolJsonValueRef;
-class SolJsonArray;
-class SolJsonValue;
-
-
 /**
- * The SolJson class is a QJsonValue wrapper class
- * that provides safe error handling and chaining.
+ * The ExJson class is a QJsonValue wrapper class
+ * that provides safe error handling and chaining
+ * based on 'std::expected'.
  */
-class SolJson
+class ExJson
 {
 public:
     using Expected = std::expected<QJsonValue, QString>;
 
-    SolJson() = default;
+    ExJson() = default;
 
-    explicit SolJson(const Expected& r)
+    explicit ExJson(const Expected& r)
         : _expected(r)
     {}
 
-    explicit SolJson(const QByteArray& inJson)
-        : SolJson{fromJson(inJson)}
+    explicit ExJson(const QByteArray& inJson)
+        : ExJson{fromJson(inJson)}
     {}
 
     /** Parses \a inJson into an QJsonObject or QJsonArray. */
-    static SolJson fromJson(const QByteArray& inJson);
+    static ExJson fromJson(const QByteArray& inJson);
 
     /** for object */
-    SolJson value(const QString& inKey) const;
+    ExJson value(const QString& inKey) const;
 
     /** for array */
-    SolJson operator[](const qsizetype inIdx) const;
+    ExJson operator[](const qsizetype inIdx) const;
 
     constexpr explicit operator bool() const noexcept { return _expected.has_value(); }
     bool hasValue() const { return _expected.has_value(); }

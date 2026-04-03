@@ -6,7 +6,7 @@
 #include "SolTranslatorCore.h"
 #include "SolTypes.h"
 #include "Managers/ConfigManager.h"
-#include "Utils/SolJson.h"
+#include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>
@@ -73,8 +73,8 @@ void OpenAiTrUnit::replyTranslateFinished()
 {
     if (_isStream == false)
     {
-        const SolJson rootJson{_reply->readAll()};
-        if (const SolJson resJson = rootJson.value("choices")[0].value("message").value("content"))
+        const ExJson rootJson{_reply->readAll()};
+        if (const ExJson resJson = rootJson.value("choices")[0].value("message").value("content"))
         {
             _translatedText += resJson.toString();
         }
@@ -115,10 +115,10 @@ QString OpenAiTrUnit::chunkToContent()
             break;
         }
 
-        const SolJson rootJson{json};
+        const ExJson rootJson{json};
 
         // content
-        const SolJson resJson = rootJson.value("choices")[0].value("delta").value("content");
+        const ExJson resJson = rootJson.value("choices")[0].value("delta").value("content");
         if (resJson)
         {
             contentStr += resJson.toString();
@@ -126,7 +126,7 @@ QString OpenAiTrUnit::chunkToContent()
         }
 
 
-        const SolJson finishJson = rootJson.value("choices")[0].value("finish_reason");
+        const ExJson finishJson = rootJson.value("choices")[0].value("finish_reason");
         if (finishJson)
         {
             if (finishJson.toString() != "stop")
@@ -136,7 +136,7 @@ QString OpenAiTrUnit::chunkToContent()
             continue;
         }
 
-        const SolJson errorJson = rootJson.value("error");
+        const ExJson errorJson = rootJson.value("error");
         if (errorJson)
         {
             const QJsonObject errorObj = errorJson.toObject();

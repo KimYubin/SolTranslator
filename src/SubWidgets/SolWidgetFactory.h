@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+enum class Action;
 class SolButton;
 
 class SolWidgetFactory : public QObject
@@ -12,6 +13,13 @@ class SolWidgetFactory : public QObject
     Q_OBJECT
 
 public:
+    static SolButton* createButton(QWidget* inParent
+                                 , const QIcon& inIcon
+                                 , const Qt::FocusPolicy inPolicy
+                                 , const QString& inToolTip
+                                 , const Action inAction
+                                 , std::move_only_function<void()>&& inFunc);
+
     /**
      * Create a common usable copy button.
      * 
@@ -31,7 +39,6 @@ public:
                                       , std::move_only_function<void(void)>&& inFunc);
     static SolButton* createDeleteTranslation(QWidget* inParent
                                             , std::move_only_function<void(void)>&& inFunc);
-    
 };
 
 

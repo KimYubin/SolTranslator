@@ -8,6 +8,7 @@
 #include "SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
+#include "Utils/SolLog.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -287,35 +288,40 @@ QString ConfigManager::historyTimeFormat() const
     return _settings->value(TimeFormat + HistoryFormat, "yyyy/MM/dd (ddd) hh:mm").toString();
 }
 
+
 namespace
 {
-const std::unordered_map<Action, QKeySequence> defaultShortcut
+const std::unordered_map<Action, QKeySequence> defaultShortcuts
 {
-    {Action::None,            QKeySequence()}
+    {Action::None,                  QKeySequence{}}
 
-  , {Action::PopupTranslate,  QKeySequence(Qt::ALT | Qt::Key_C)}
+  , {Action::PopupTranslate,        QKeySequence{Qt::ALT | Qt::Key_C}}
 
-  , {Action::SettingsClose,   QKeySequence(Qt::CTRL | Qt::Key_W)}
-  , {Action::SettingsOpen,    QKeySequence(Qt::Key_F5)}
-  , {Action::MainClose,       QKeySequence(Qt::CTRL | Qt::Key_W)}
-  , {Action::MainNextTab,     QKeySequence(Qt::CTRL | Qt::Key_Tab)}
-  , {Action::MainPrevTab,     QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab)}
+  , {Action::SettingsClose,         QKeySequence{Qt::CTRL | Qt::Key_W}}
+  , {Action::SettingsOpen,          QKeySequence{Qt::Key_F5}}
+  , {Action::MainClose,             QKeySequence{Qt::CTRL | Qt::Key_W}}
+  , {Action::MainNextTab,           QKeySequence{Qt::CTRL | Qt::Key_Tab}}
+  , {Action::MainPrevTab,           QKeySequence{Qt::CTRL | Qt::SHIFT | Qt::Key_Tab}}
 
-  , {Action::TextToggle,        QKeySequence(Qt::Key_T)}
-  , {Action::DocCopyButton,     QKeySequence(Qt::Key_C)}
-  , {Action::ViewInPopup,       QKeySequence()}
-  , {Action::DeleteTranslation, QKeySequence()}
+  , {Action::SourceTargetToggle,    QKeySequence{Qt::Key_T}}
+  , {Action::CopyDoc,               QKeySequence{Qt::Key_C}}
+  , {Action::ViewInPopup,           QKeySequence{Qt::Key_V}}
+  , {Action::ReTranslate,           QKeySequence{Qt::CTRL | Qt::Key_R}}
+  , {Action::DeleteTranslation,     QKeySequence{/*Qt::CTRL | Qt::Key_D*/}}
 
-
-  , {Action::PopupAlwaysOn,   QKeySequence(Qt::Key_A)}
-  , {Action::PopupWindowMode, QKeySequence(Qt::Key_N)}
-  , {Action::PopupMinimize,   QKeySequence(Qt::Key_M)}
-  , {Action::PopupMaxRestore, QKeySequence(Qt::Key_G)}
-  , {Action::PopupClose,      QKeySequence(Qt::Key_Escape)}
+  , {Action::PopupAlwaysOn,         QKeySequence{Qt::Key_A}}
+  , {Action::PopupWindowMode,       QKeySequence{Qt::Key_N}}
+  , {Action::PopupMinimize,         QKeySequence{Qt::Key_M}}
+  , {Action::PopupMaxRestore,       QKeySequence{Qt::Key_G}}
+  , {Action::PopupClose,            QKeySequence{Qt::Key_Escape}}
 
 };
 
+constexpr int ActionCheck = 17;
+static_assert(static_cast<int>(Action::Size) == ActionCheck, "Action changed: update defaultShortcuts");
+
 } // anonymous namespace
+
 
 void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inKeySequence)
 {
@@ -324,7 +330,14 @@ void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inK
 
 QKeySequence ConfigManager::shortcut(const Action inShortCut) const
 {
-    return _settings->value(Shortcuts + Sol::enumToQStr(inShortCut), defaultShortcut.at(inShortCut)).value<QKeySequence>();
+    QKeySequence defaultKey{};
+    const auto findit = defaultShortcuts.find(inShortCut);
+    if (findit != defaultShortcuts.end())
+    {
+        defaultKey = findit->second;
+    }
+
+    return _settings->value(Shortcuts + Sol::enumToQStr(inShortCut), defaultKey).value<QKeySequence>();
 }
 
 void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData)

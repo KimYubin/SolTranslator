@@ -165,9 +165,10 @@ enum class Action
   , MainClose
   , MainNextTab
   , MainPrevTab
-  , TextToggle
-  , DocCopyButton
+  , SourceTargetToggle
+  , CopyDoc
   , ViewInPopup
+  , ReTranslate
   , DeleteTranslation
 
   , PopupAlwaysOn

@@ -14,32 +14,35 @@
 
 using Sol::i18n;
 
-namespace
-{
-SolButton* createButton(QWidget* inParent
-                      , const QIcon& inIcon
-                      , const Qt::FocusPolicy inPolicy
-                      , const QString& inToolTip
-                      , const Action inAction)
+SolButton* SolWidgetFactory::createButton(QWidget* inParent
+                                        , const QIcon& inIcon
+                                        , const Qt::FocusPolicy inPolicy
+                                        , const QString& inToolTip
+                                        , const Action inAction
+                                        , std::move_only_function<void()>&& inFunc)
 {
     SolButton* newButton = new SolButton(inParent);
     newButton->setIcon(inIcon);
     newButton->setFocusPolicy(inPolicy);
     newButton->setToolTipAction(inToolTip, inAction);
 
+    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inFunc)]() mutable
+    {
+        clickFunc();
+    });
+
     return newButton;
 }
-} // anonymous namespace
 
 SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
                                             , std::move_only_function<QString(void)>&& inCopyStringFunc)
 {
-    SolButton* copyButton = new SolButton(inParent);
-    copyButton->setIcon(QIcon(":/img/copy_img"));
-    copyButton->setFocusPolicy(Qt::TabFocus);
-    copyButton->setToolTipAction(i18n(Tr::Copy_Translation), Action::DocCopyButton);
-
-    connect(copyButton, &SolButton::clicked, inParent, [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
+    SolButton* copyButton = createButton(inParent
+                                       , QIcon(":/img/copy_img")
+                                       , Qt::TabFocus
+                                       , i18n(Tr::Copy_Translation)
+                                       , Action::CopyDoc
+                                       , [inParent, copyButton, func = std::move(inCopyStringFunc)]() mutable
     {
         QMetaObject::Connection connection = connect(QApplication::clipboard(), &QClipboard::dataChanged, copyButton, [copyButton]() mutable
         {
@@ -62,15 +65,12 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
 SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
                                               , std::move_only_function<void()>&& inToggleFunc)
 {
-    SolButton* toggleButton = new SolButton(inParent);
-    toggleButton->setIcon(QIcon(":/img/swap_text_img"));
-    toggleButton->setFocusPolicy(Qt::TabFocus);
-    toggleButton->setToolTipAction(i18n(Tr::Source_Target_Toggle), Action::TextToggle);
-
-    connect(toggleButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inToggleFunc)]() mutable
-    {
-        clickFunc();
-    });
+    SolButton* toggleButton = createButton(inParent
+                                         , QIcon(":/img/swap_text_img")
+                                         , Qt::TabFocus
+                                         , i18n(Tr::Source_Target_Toggle)
+                                         , Action::SourceTargetToggle
+                                         , std::move(inToggleFunc));
 
     return toggleButton;
 }
@@ -78,15 +78,12 @@ SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
 SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
                                                    , std::move_only_function<void(void)>&& inTranslateFunc)
 {
-    SolButton* newButton = new SolButton(inParent);
-    newButton->setIcon(QIcon(":/img/refresh_img"));
-    newButton->setFocusPolicy(Qt::TabFocus);
-    newButton->setToolTipAction(i18n(Tr::Re_Translate), Action::None);
-
-    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inTranslateFunc)]() mutable
-    {
-        clickFunc();
-    });
+    SolButton* newButton = createButton(inParent
+                                      , QIcon(":/img/refresh_img")
+                                      , Qt::TabFocus
+                                      , i18n(Tr::Re_Translate)
+                                      , Action::ReTranslate
+                                      , std::move(inTranslateFunc));
 
     return newButton;
 }
@@ -98,11 +95,8 @@ SolButton* SolWidgetFactory::createViewInPopup(QWidget* inParent
                                       , QIcon(":/img/open_new_img")
                                       , Qt::TabFocus
                                       , i18n(Tr::View_In_Popup)
-                                      , Action::ViewInPopup);
-    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inFunc)]() mutable
-    {
-        clickFunc();
-    });
+                                      , Action::ViewInPopup
+                                      , std::move(inFunc));
 
     return newButton;
 }
@@ -114,13 +108,8 @@ SolButton* SolWidgetFactory::createDeleteTranslation(QWidget* inParent
                                       , QIcon(":/img/delete_img")
                                       , Qt::TabFocus
                                       , i18n(Tr::Delete_Translation)
-                                      , Action::DeleteTranslation);
-    connect(newButton, &QPushButton::clicked, inParent, [clickFunc = std::move(inFunc)]() mutable
-    {
-        clickFunc();
-    });
+                                      , Action::DeleteTranslation
+                                      , std::move(inFunc));
 
     return newButton;
 }
-
-

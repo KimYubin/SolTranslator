@@ -17,8 +17,7 @@ public:
                                  , const QIcon& inIcon
                                  , const Qt::FocusPolicy inPolicy
                                  , const QString& inToolTip
-                                 , const Action inAction
-                                 , std::move_only_function<void()>&& inFunc);
+                                 , const Action inAction);
 
     /**
      * Create a common usable copy button.

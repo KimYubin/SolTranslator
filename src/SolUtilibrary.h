@@ -41,6 +41,20 @@ class QWidget;
 
 namespace Sol
 {
+
+/**
+ * Static cast the enum class member to a base type value.
+ * 
+ * @tparam E enum class Only
+ * @param e enum class value
+ * @return static_cast<uint8>(e). std::underlying_type_t<E>(e)
+ */
+template <typename E>
+constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToInt(E e) noexcept
+{
+    return static_cast<std::underlying_type_t<E>>(e);
+}
+
 /**
  * Other QObject와 그 부모가 this인지 재귀적으로 확인합니다.
  * @param inThis 비교 주체

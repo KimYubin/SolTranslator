@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include "SolTypes.h"
+#include "SolUtilibrary.h"
 
 
 /**
@@ -224,9 +225,10 @@ struct cache_ky_hasher
     {
         return std::hash<::QString>()(
             inKy.sourceText
-            + QChar(EnumToInt(inKy.engineType))
-            + QChar(EnumToInt(inKy.sourceLang))
-            + QChar(EnumToInt(inKy.targetLang)));
+            + QChar(Sol::EnumToInt(inKy.engineType))
+            + QChar(Sol::EnumToInt(inKy.sourceLang))
+            + QChar(Sol::EnumToInt(inKy.targetLang))
+        );
     }
 };
 

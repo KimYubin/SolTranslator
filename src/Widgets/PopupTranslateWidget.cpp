@@ -452,7 +452,7 @@ void PopupTranslateWidget::setupUI()
 
     ui->resultText->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    // 기본 수직 스크롤바를 외부 스크롤바로 대체
+    // Replace the default VScrollBar with an external scrollbar.
     ui->resultText->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
     ui->resultText->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -460,22 +460,25 @@ void PopupTranslateWidget::setupUI()
     scrollSizePolicy.setRetainSizeWhenHidden(true);
     ui->outerVScrollBar->setSizePolicy(scrollSizePolicy);
 
-    // 외부 스크롤바 -> 내부 스크롤바 제어
+    // Control outer ScrollBar -> inner ScrollBar
     connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [this](const int value)
     {
         ui->resultText->verticalScrollBar()->setValue(value);
     });
 
-    // 내부 스크롤바 값 -> 외부 스크롤바에 반영
+    // Reflect value inner ScrollBar -> outer ScrollBar
     connect(ui->resultText->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int, int)
     {
         syncInOutScrollbar();
     });
     connect(ui->resultText->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int)
     {
+        // SyncInOutScrollbar() calls outer::setValue(), so the outer->inner->outer logic is a loop.
+        // However, since setValue() does not emit valueChanged() when it receives the same value,
+        // an actual infinite loop does not occur.
         syncInOutScrollbar();
     });
-    // 문서 정보 반영
+    // Reflect Document information
     connect(ui->resultText->document(), &QTextDocument::contentsChanged, this, [this]()
     {
         syncInOutScrollbar();
@@ -483,7 +486,8 @@ void PopupTranslateWidget::setupUI()
 
 
     setTabOrder({_windowModeButton, _AlwaysOnButton, _minimizedButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
-    // 탭 포커스가 안보이는 상태로 시작할 수 있도록 하기 위함.
+
+    // To ensure that the TabFocus starts in a hidden state.
     _sizeGrip->setFocusPolicy(Qt::TabFocus);
     _sizeGrip->setFocus();
 }

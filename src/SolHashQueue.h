@@ -54,7 +54,7 @@ public:
         keyValQueue = inOther.keyValQueue;
 
         keyListHash.clear();
-        keyListHash.reserve(inOther.keyListHash.size());
+        keyListHash.reserve(keyValQueue.size());
         for (auto it = keyValQueue.begin(); it != keyValQueue.end(); ++it)
         {
             keyListHash[it->first] = it;

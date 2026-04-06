@@ -96,18 +96,56 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     // 링크와 코드블록을 마크다운 스타일에서 html 스타일로 변경
     QString md = inMarkdownStr;
 
-    // 이스케이프 되지 않은 <>가 태그로 인식되는 문제 해결
+    static const QRegularExpression codeQuotingPattern(R"(```(.*?)```)", QRegularExpression::DotMatchesEverythingOption);
+    static const QRegularExpression inlineCodePattern(R"(`(.*?)`)", QRegularExpression::DotMatchesEverythingOption);
+
+    // ~=======================
+    // <> 이스케이프.
+
+    // 코드영역 <>이스케이프 방지
+    const char* codePlaceMarker = "__CODE_%1__";
+    QStringList codeBlocks;
+    auto rePlaceCode = [&](const QRegularExpression& re)
+    {
+        QString replaceStr;
+        replaceStr.reserve(md.size());
+        QRegularExpressionMatchIterator it = re.globalMatch(md);
+        int lastPos = 0;
+        while (it.hasNext())
+        {
+            QRegularExpressionMatch match = it.next();
+
+            replaceStr += md.mid(lastPos, match.capturedStart() - lastPos);
+            replaceStr += QString(codePlaceMarker).arg(codeBlocks.size());
+            codeBlocks.append(match.captured(0));
+
+            lastPos = match.capturedEnd();
+        }
+        replaceStr += md.mid(lastPos);
+        md = std::move(replaceStr);
+    };
+    rePlaceCode(codeQuotingPattern);
+    rePlaceCode(inlineCodePattern);
+
+    // <> 이스케이프 처리.
     static const QRegularExpression unescapedLT(R"((?<!\\)<)");
     md.replace(unescapedLT, R"(\<)");
     static const QRegularExpression unescapedGT(R"((?<!\\)>)");
     md.replace(unescapedGT, R"(\>)");
 
-    QStringList monoFontList = doc->defaultFont().families();
-    if (monoFontList.size() >= 2)
+    // 코드 복원.
+    for (int i = 0; i < codeBlocks.size(); ++i)
     {
-        monoFontList.swapItemsAt(0, 1);
+        QString token = QString(codePlaceMarker).arg(i);
+        md.replace(token, codeBlocks[i]);
     }
 
+    // ~======================
+    // 코드 영역 백틱을 태그로 대체.(확대/축소)
+
+    // 고정폭 폰트
+    QStringList monoFontList = {"Cascadia Mono", "Consolas", "monospace"}; 
+    monoFontList += doc->defaultFont().families();
     QString codeFontFamilies = " font-family: ";
     for (QString& font : monoFontList)
     {
@@ -118,11 +156,10 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
     // 문단 코드
-    static const QRegularExpression codeQuotingPattern("```(.*?)```", QRegularExpression::DotMatchesEverythingOption);
-    QRegularExpressionMatchIterator it = codeQuotingPattern.globalMatch(md);
-    while (it.hasNext())
+    QRegularExpressionMatchIterator codeQuotIt = codeQuotingPattern.globalMatch(md);
+    while (codeQuotIt.hasNext())
     {
-        QRegularExpressionMatch match = it.next();
+        QRegularExpressionMatch match = codeQuotIt.next();
 
         QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
         QString codeBlock = match.captured(1); // 백틱 내부만
@@ -139,11 +176,10 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     }
 
     // 단어 코드 스니펫
-    static const QRegularExpression codePattern("`(.*?)`", QRegularExpression::DotMatchesEverythingOption);
-    it = codePattern.globalMatch(inMarkdownStr);
-    while (it.hasNext())
+    QRegularExpressionMatchIterator inlineIt = inlineCodePattern.globalMatch(md);
+    while (inlineIt.hasNext())
     {
-        QRegularExpressionMatch match = it.next();
+        QRegularExpressionMatch match = inlineIt.next();
 
         QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
         QString codeBlock = match.captured(1); // 백틱 내부만

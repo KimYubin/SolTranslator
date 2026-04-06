@@ -38,7 +38,7 @@ template <HasFontFunctions T>
 void noHintingFontInternal(T* inOutWidget)
 {
     QFont qfont = inOutWidget->font();
-    qfont.setHintingPreference(QFont::PreferNoHinting);
+    qfont.setHintingPreference(QFont::PreferDefaultHinting);
     qfont.setStyleStrategy(QFont::PreferAntialias);
     inOutWidget->setFont(qfont);
 

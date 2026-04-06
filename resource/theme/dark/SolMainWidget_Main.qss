@@ -11,8 +11,7 @@ color: rgb(220, 222, 223);
 {
   color:rgb(22, 22, 22);
   /* color: rgb(61, 68, 80); */
-  
-  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  /* font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;*/
   font-size: 11pt;
   /* font-weight: 400; */
 }

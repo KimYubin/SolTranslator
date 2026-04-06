@@ -402,6 +402,9 @@ QToolTip
   font-size: 14px;
   color: rgba(204, 204, 204, 1);
   padding: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+
   padding-bottom: 6px;
 }
 

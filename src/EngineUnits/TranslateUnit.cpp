@@ -27,6 +27,9 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
         _trReqData.trDisplayWidget->setTrUnit(this);
     }
 
+    // 앞뒤 공백 제거
+    _trReqData.sourceText = _trReqData.sourceText.trimmed();
+
     if (_trReqData.sourceText.isEmpty())
     {
         solDebug << "translate request text is empty";

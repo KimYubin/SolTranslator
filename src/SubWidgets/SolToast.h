@@ -3,16 +3,12 @@
 #ifndef SOLTOAST_H
 #define SOLTOAST_H
 
-#include <QObject>
 
+class QWidget;
+class QString;
 
-class SolToast : public QObject
+class SolToast
 {
-    Q_OBJECT
-
-    explicit SolToast(QObject* parent = nullptr);
-    ~SolToast() override;
-
 public:
     /**
      * 토스트 메시지를 띄웁니다.

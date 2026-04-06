@@ -7,7 +7,7 @@ ResultTextEdit
   
   color: rgb(225, 225, 225);
   font-size: 14pt;  /* px로 사용할 경우 휠 확대/축소가 작동하지 않습니다. */
-  font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;
+  /* font-family: 'Noto Sans KR', 'Cascadia Mono', Consolas, monospace;*/
   
 }
 

@@ -105,33 +105,35 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     // Escape <>
 
     // Prevent <> escape in code area.
-    static const QString codePlaceMarker = "__CODE_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
+    static const QString quotPlaceMarker   = "__CODE_QUOT_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
+    static const QString inlinePlaceMarker = "__CODE_INLINE_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
 
-    QStringList codeBlocks;
-    auto rePlaceCode = [&md, &codeBlocks](const QRegularExpression& re)
+    auto replaceCodeToMarker = [&md](const QRegularExpression& inRe, const QString& inKeyMarker)
     {
+        QStringList resList;
         QString replaceStr;
         replaceStr.reserve(md.size());
-        QRegularExpressionMatchIterator it = re.globalMatch(md);
+        QRegularExpressionMatchIterator it = inRe.globalMatch(md);
         int lastPos = 0;
         while (it.hasNext())
         {
             QRegularExpressionMatch match = it.next();
 
             replaceStr += md.mid(lastPos, match.capturedStart() - lastPos);
-            replaceStr += QString(codePlaceMarker).arg(codeBlocks.size());
+            replaceStr += QString(inKeyMarker).arg(resList.size());
 
             // 백틱 내부만 수집
-            codeBlocks.append(match.captured(1));
+            resList.append(match.captured(1));
 
             lastPos = match.capturedEnd();
         }
         replaceStr += md.mid(lastPos);
         md = std::move(replaceStr);
+        return resList;
     };
-    rePlaceCode(codeQuotingPattern);
-    const int inlineStartIdx = codeBlocks.size();
-    rePlaceCode(inlineCodePattern);
+    const QStringList quotList   = replaceCodeToMarker(codeQuotingPattern, quotPlaceMarker);
+    const QStringList inlineList = replaceCodeToMarker(inlineCodePattern, inlinePlaceMarker);
+
 
     // Escape <> in outside of code.
     static const QRegularExpression unescapedLT(R"((?<!\\)<)");
@@ -144,52 +146,45 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     // Replace the code backticks with HTML-tags (for zoom) and restore the code.
 
     // monospace font families
-    QStringList monoFontList = {"Cascadia Mono", "Consolas", "monospace"}; 
-    monoFontList += doc->defaultFont().families();
+    const QStringList monoFontList = QStringList{"Cascadia Mono", "Consolas", "monospace"} + doc->defaultFont().families();
     QString codeFontFamilies = " font-family: ";
-    for (QString& font : monoFontList)
+    for (const QString& font : monoFontList)
     {
         codeFontFamilies += "\'" + font + "\', ";
     }
     codeFontFamilies += ";";
 
+    // 코드 양식
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
+    const QString codeLinkHtml   = "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>";
+    const QString quotCodeFormat = "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n"
+            "%1" "</pre>";
+    const QString inlineCodeFormat = "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">"
+            "%1" "</code>";
 
-    // Change to HTML-style and restore the codes.
-    for (int idx = 0; idx < codeBlocks.size(); ++idx)
+    auto fuct = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker )
     {
-        QString placeMarker = QString(codePlaceMarker).arg(idx);
-
-        // Change the link in backticks to HTML-style.
-        QString modifiedCode = codeBlocks[idx].toHtmlEscaped();
-        modifiedCode.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
-
-        // Change backticks to HTML-style code quotes.
-        if (idx < inlineStartIdx)
+        int lastIdx = 0;
+        for (int idx = 0; idx < inList.size(); ++idx)
         {
-            // 문단 코드
-            modifiedCode =
-                    "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n"
-                    + modifiedCode
-                    + "</pre>";
-        }
-        else
-        {
-            // 단어 코드 스니펫
-            modifiedCode =
-                    "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">"
-                    + modifiedCode
-                    + "</code>";
-        }
+            // Change the link to HTML-style.
+            QString modifiedCode = inList[idx].toHtmlEscaped();
+            modifiedCode.replace(mdLinkPattern, codeLinkHtml);
+            modifiedCode = inCodeFormat.arg(modifiedCode);
 
-        const int pos = md.indexOf(placeMarker);
-        if (pos != -1) 
-        {
-            md.replace(pos, placeMarker.length(), modifiedCode);
-        }
+            QString placeMarker = QString(inPlaceMarker).arg(idx);
 
-        // md.replace(placeMarker, modifiedCode);
-    }
+            // searches only once from the previous point.
+            const int pos = md.indexOf(placeMarker, lastIdx);
+            if (pos != -1) 
+            {
+                md.replace(pos, placeMarker.length(), modifiedCode);
+                lastIdx = pos + modifiedCode.size();
+            }
+        }
+    };
+    fuct(quotList, quotCodeFormat, quotPlaceMarker);
+    fuct(inlineList, inlineCodeFormat, inlinePlaceMarker);
 
     doc->setMarkdown(md);
 }

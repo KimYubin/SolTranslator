@@ -129,6 +129,7 @@ std::expected<int, QString> HistoryManager::findModelIdxFromTimelineId(const qin
     {
         return std::unexpected{"not found TimeStamp. TimeStamp: " + inTimeStamp.toString()};
     }
+
     const auto upperIt = std::ranges::upper_bound(lowIt, _historyCaches.end(), inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
 
     const auto findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)

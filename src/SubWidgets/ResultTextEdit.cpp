@@ -3,9 +3,11 @@
 #include "ResultTextEdit.h"
 
 #include "SolTypes.h"
+#include "Utils/SolLog.h"
 
 #include <QRegularExpression>
 #include <QTextBlock>
+#include <quuid.h>
 
 namespace
 {
@@ -21,7 +23,7 @@ const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
 ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-    setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents);
+    setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     setReadOnly(true);
 
     QFont qfont = font();
@@ -93,19 +95,20 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 {
     QTextDocument* doc = document();
 
-    // 링크와 코드블록을 마크다운 스타일에서 html 스타일로 변경
+    // Change code blocks and links from markdown to html-style.
     QString md = inMarkdownStr;
 
     static const QRegularExpression codeQuotingPattern(R"(```(.*?)```)", QRegularExpression::DotMatchesEverythingOption);
     static const QRegularExpression inlineCodePattern(R"(`(.*?)`)", QRegularExpression::DotMatchesEverythingOption);
 
     // ~=======================
-    // <> 이스케이프.
+    // Escape <>
 
-    // 코드영역 <>이스케이프 방지
-    const char* codePlaceMarker = "__CODE_%1__";
+    // Prevent <> escape in code area.
+    static const QString codePlaceMarker = "__CODE_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
+
     QStringList codeBlocks;
-    auto rePlaceCode = [&](const QRegularExpression& re)
+    auto rePlaceCode = [&md, &codeBlocks](const QRegularExpression& re)
     {
         QString replaceStr;
         replaceStr.reserve(md.size());
@@ -117,7 +120,9 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
             replaceStr += md.mid(lastPos, match.capturedStart() - lastPos);
             replaceStr += QString(codePlaceMarker).arg(codeBlocks.size());
-            codeBlocks.append(match.captured(0));
+
+            // 백틱 내부만 수집
+            codeBlocks.append(match.captured(1));
 
             lastPos = match.capturedEnd();
         }
@@ -125,25 +130,20 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         md = std::move(replaceStr);
     };
     rePlaceCode(codeQuotingPattern);
+    const int inlineStartIdx = codeBlocks.size();
     rePlaceCode(inlineCodePattern);
 
-    // <> 이스케이프 처리.
+    // Escape <> in outside of code.
     static const QRegularExpression unescapedLT(R"((?<!\\)<)");
     md.replace(unescapedLT, R"(\<)");
     static const QRegularExpression unescapedGT(R"((?<!\\)>)");
     md.replace(unescapedGT, R"(\>)");
 
-    // 코드 복원.
-    for (int i = 0; i < codeBlocks.size(); ++i)
-    {
-        QString token = QString(codePlaceMarker).arg(i);
-        md.replace(token, codeBlocks[i]);
-    }
 
     // ~======================
-    // 코드 영역 백틱을 태그로 대체.(확대/축소)
+    // Replace the code backticks with HTML-tags (for zoom) and restore the code.
 
-    // 고정폭 폰트
+    // monospace font families
     QStringList monoFontList = {"Cascadia Mono", "Consolas", "monospace"}; 
     monoFontList += doc->defaultFont().families();
     QString codeFontFamilies = " font-family: ";
@@ -155,42 +155,40 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
 
-    // 문단 코드
-    QRegularExpressionMatchIterator codeQuotIt = codeQuotingPattern.globalMatch(md);
-    while (codeQuotIt.hasNext())
+    // Change to HTML-style and restore the codes.
+    for (int idx = 0; idx < codeBlocks.size(); ++idx)
     {
-        QRegularExpressionMatch match = codeQuotIt.next();
+        QString placeMarker = QString(codePlaceMarker).arg(idx);
 
-        QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
-        QString codeBlock = match.captured(1); // 백틱 내부만
+        // Change the link in backticks to HTML-style.
+        QString modifiedCode = codeBlocks[idx].toHtmlEscaped();
+        modifiedCode.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
 
-        // 코드 내부에 링크가 있다면, html 스타일 링크로 변경
-        QString modified = codeBlock.toHtmlEscaped();
-        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
+        // Change backticks to HTML-style code quotes.
+        if (idx < inlineStartIdx)
+        {
+            // 문단 코드
+            modifiedCode =
+                    "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n"
+                    + modifiedCode
+                    + "</pre>";
+        }
+        else
+        {
+            // 단어 코드 스니펫
+            modifiedCode =
+                    "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">"
+                    + modifiedCode
+                    + "</code>";
+        }
 
-        // 원래 코드 블록 전체를 수정된 내용으로 대체
-        // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original
-                 , "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n" + modified +
-                   "</pre>");
-    }
+        const int pos = md.indexOf(placeMarker);
+        if (pos != -1) 
+        {
+            md.replace(pos, placeMarker.length(), modifiedCode);
+        }
 
-    // 단어 코드 스니펫
-    QRegularExpressionMatchIterator inlineIt = inlineCodePattern.globalMatch(md);
-    while (inlineIt.hasNext())
-    {
-        QRegularExpressionMatch match = inlineIt.next();
-
-        QString original  = match.captured(0); // 백틱 포함 전체 패턴 일치
-        QString codeBlock = match.captured(1); // 백틱 내부만
-
-        // 코드 내부에 링크가 있다면, html 스타일 링크로 변경
-        QString modified = codeBlock.toHtmlEscaped();
-        modified.replace(mdLinkPattern, "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>");
-
-        // 원래 코드 블록 전체를 수정된 내용으로 대체
-        // 백틱을 html 스타일 코드 인용으로 변경
-        md.replace(original, "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">" + modified + "</code>");
+        // md.replace(placeMarker, modifiedCode);
     }
 
     doc->setMarkdown(md);

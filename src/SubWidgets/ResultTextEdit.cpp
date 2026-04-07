@@ -13,11 +13,13 @@ namespace
 {
 constexpr QColor codeBgColor(29, 29, 29, 255);
 
-const QString codeBgColorStr = QString::fromLatin1("rgba(%1,%2,%3,%4)")
-                               .arg(codeBgColor.red())
-                               .arg(codeBgColor.green())
-                               .arg(codeBgColor.blue())
-                               .arg(codeBgColor.alpha());
+const QString codeBgColorStr = "background-color: "
+        + QString::fromLatin1("rgba(%1,%2,%3,%4)")
+          .arg(codeBgColor.red())
+          .arg(codeBgColor.green())
+          .arg(codeBgColor.blue())
+          .arg(codeBgColor.alpha())
+        + "; ";
 } // anonymous namespace
 
 ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
@@ -156,13 +158,11 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     // 코드 양식
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
-    const QString codeLinkHtml   = "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>";
-    const QString quotCodeFormat = "\n<pre style=\"white-space: pre-wrap; background-color:" + codeBgColorStr + "; " + codeFontFamilies + " \">\n"
-            "%1" "</pre>";
-    const QString inlineCodeFormat = "<code style= \"" + codeFontFamilies + "background-color:" + codeBgColorStr + "; \">"
-            "%1" "</code>";
+    const QString codeLinkHtml     = "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>";
+    const QString quotCodeFormat   = "\n<pre style=\"white-space: pre-wrap; " + codeBgColorStr + codeFontFamilies + " \">\n"  "%1"  "</pre>";
+    const QString inlineCodeFormat = "<code style= \"" + codeFontFamilies + codeBgColorStr + " \">"  "%1"  "</code>";
 
-    auto fuct = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker )
+    auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
         int lastIdx = 0;
         for (int idx = 0; idx < inList.size(); ++idx)
@@ -176,15 +176,15 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
             // searches only once from the previous point.
             const int pos = md.indexOf(placeMarker, lastIdx);
-            if (pos != -1) 
+            if (pos != -1)
             {
                 md.replace(pos, placeMarker.length(), modifiedCode);
                 lastIdx = pos + modifiedCode.size();
             }
         }
     };
-    fuct(quotList, quotCodeFormat, quotPlaceMarker);
-    fuct(inlineList, inlineCodeFormat, inlinePlaceMarker);
+    replaceMarkerToCode(quotList, quotCodeFormat, quotPlaceMarker);
+    replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
 
     doc->setMarkdown(md);
 }

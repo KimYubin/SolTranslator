@@ -61,6 +61,9 @@ jobs:
           dir: '${{ github.workspace }}'
           cache: 'true'
 
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Configure
         run: |
           cmake -S . -B build -G Ninja `

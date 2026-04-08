@@ -277,12 +277,26 @@ cmake_path(
         OUTPUT_VARIABLE CMAKE_INSTALL_PREFIX
 )
 
-qt_generate_deploy_app_script(
-        TARGET SolTranslator
-        OUTPUT_SCRIPT deploy_script
-        NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
+if (WIN32)
+    qt_generate_deploy_app_script(
+            TARGET SolTranslator
+            OUTPUT_SCRIPT deploy_script
+            NO_COMPILER_RUNTIME
+            NO_UNSUPPORTED_PLATFORM_ERROR
+    )
+    install(SCRIPT ${deploy_script})
+
+    # Redistributable windows runtime DLLs.
+    # NO_COMPILER_RUNTIME prevents the inclusion of vc_redist.x64.exe.
+    include(InstallRequiredSystemLibraries)
+else ()
+    qt_generate_deploy_app_script(
+            TARGET SolTranslator
+            OUTPUT_SCRIPT deploy_script
+            NO_UNSUPPORTED_PLATFORM_ERROR
+    )
+    install(SCRIPT ${deploy_script})
+endif ()
 
 
 qt_finalize_executable(SolTranslator)

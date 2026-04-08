@@ -57,16 +57,13 @@ jobs:
           version: '6.10.1'
           host: 'windows'
           target: 'desktop'
-          arch: 'win64_mingw'
-          tools: 'tools_mingw1310'
+          arch: 'win64_msvc2022_64'
           dir: '${{ github.workspace }}'
           cache: 'true'
 
       - name: Configure
         run: |
-          cmake -S . -B build -G "MinGW Makefiles" `
-          -DCMAKE_C_COMPILER='${{ github.workspace }}/Qt/Tools/mingw1310_64/bin/gcc.exe' `
-          -DCMAKE_CXX_COMPILER='${{ github.workspace }}/Qt/Tools/mingw1310_64/bin/g++.exe' `
+          cmake -S . -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Release `
           -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/deploy
 
@@ -88,7 +85,7 @@ jobs:
         run: |
           gh release delete nightly --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
         continue-on-error: true
-      
+
       - name: Delete continuous tag
         if: github.event_name == 'push' && github.ref_type == 'branch'
         run: |

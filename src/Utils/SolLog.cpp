@@ -40,6 +40,12 @@ void solMessageHandler(const QtMsgType type, const QMessageLogContext& context, 
 
 void SolLogHandler::setupLog()
 {
+    // todo: Until the log file management is established, logging will be suspended in the release version .
+#ifndef QT_DEBUG
+    return;
+#endif
+
+
     const QString format =
             "[%{time yy-MM-dd hh:mm:ss.zzz tt}] "
             "%{if-debug}"    "Debug"    "%{endif}"
@@ -47,7 +53,11 @@ void SolLogHandler::setupLog()
             "%{if-warning}"  "Warning"  "%{endif}"
             "%{if-critical}" "Critical" "%{endif}"
             "%{if-fatal}"    "Fatal"    "%{endif} "
+#ifdef QT_DEBUG
             "%{file}:%{line} - %{message}";
+#else
+            "%{function}:%{line} - %{message}";
+#endif
 
     qSetMessagePattern(format);
 

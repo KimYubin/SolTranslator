@@ -18,9 +18,15 @@ class SolDatabase
 class SolSql
 {
 public:
+    explicit SolSql(const QSqlDatabase& inDB);
+
     static std::expected<QString, QString> readSqlFromFile(const QString& inFilePath);
-    static std::expected<void, QString> execSqlFile(const QString& inFilePath);
-    static std::expected<void, QString> execSqlQuery(const QString& inQueryName, const QString& inQuery);
+    std::expected<void, QString> execSqlFile(const QString& inFilePath);
+    std::expected<void, QString> execSqlQuery(const QString& inQueryName, const QString& inQuery);
+
+private:
+    QSqlDatabase _database;
+
 };
 
 class SolSqlTransactionGuard

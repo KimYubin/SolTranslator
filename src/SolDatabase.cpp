@@ -11,6 +11,9 @@
 #include <QSqlQuery>
 #include <QString>
 
+SolSql::SolSql(const QSqlDatabase& inDB) : _database(inDB)
+{}
+
 std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
@@ -35,7 +38,7 @@ std::expected<void, QString> SolSql::execSqlFile(const QString& inFilePath)
         return std::unexpected("Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error());
     }
 
-    QSqlQuery sqlQuery;
+    QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(sqlStr.value()) == false)
     {
         return std::unexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
@@ -46,7 +49,7 @@ std::expected<void, QString> SolSql::execSqlFile(const QString& inFilePath)
 
 std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, const QString& inQuery)
 {
-    QSqlQuery sqlQuery;
+    QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(inQuery) == false)
     {
         return std::unexpected("Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text());

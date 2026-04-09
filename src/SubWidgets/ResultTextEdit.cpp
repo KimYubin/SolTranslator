@@ -95,9 +95,10 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
 
 void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 {
-    QTextDocument* doc = document();
-
     // Change code blocks and links from markdown to html-style.
+    // By converting to HTML, the code can be resized along with other text.
+    // To prevent the '<>' inside the string from being recognized as tags, separate escape processing is done.
+
     QString md = inMarkdownStr;
 
     static const QRegularExpression codeQuotingPattern(R"(```(.*?)```)", QRegularExpression::DotMatchesEverythingOption);
@@ -147,8 +148,8 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     // ~======================
     // Replace the code backticks with HTML-tags (for zoom) and restore the code.
 
-    // monospace font families
-    const QStringList monoFontList = QStringList{"Cascadia Mono", "Consolas", "monospace"} + doc->defaultFont().families();
+    // Add monospace fonts
+    const QStringList monoFontList = QStringList{"Cascadia Mono", "Consolas", "monospace"} + document()->defaultFont().families();
     QString codeFontFamilies = " font-family: ";
     for (const QString& font : monoFontList)
     {
@@ -156,11 +157,11 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     }
     codeFontFamilies += ";";
 
-    // 코드 양식
+
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
-    const QString codeLinkHtml     = "<a href=\"\\2\"><code style= \"" + codeFontFamilies + " \"" " >\\1</code></a>";
-    const QString quotCodeFormat   = "\n<pre style=\"white-space: pre-wrap; " + codeBgColorStr + codeFontFamilies + " \">\n"  "%1"  "</pre>";
-    const QString inlineCodeFormat = "<code style= \"" + codeFontFamilies + codeBgColorStr + " \">"  "%1"  "</code>";
+    const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
+    const QString quotCodeFormat   = "\n<pre style=\" " + codeBgColorStr + codeFontFamilies + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
+    const QString inlineCodeFormat = "<code style= \" " + codeBgColorStr + codeFontFamilies + " \">"  "%1"  "</code>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -186,5 +187,5 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     replaceMarkerToCode(quotList, quotCodeFormat, quotPlaceMarker);
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
 
-    doc->setMarkdown(md);
+    document()->setMarkdown(md);
 }

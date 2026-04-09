@@ -7,10 +7,6 @@
 #include <QDir>
 #include <QStandardPaths>
 
-SolPath::SolPath(SolTranslatorCore* parent)
-    : AbstractManager(parent)
-{}
-
 namespace
 {
 QString solAppAbsolutePath(const QString& inSecondaryDir, const QString& inFileName)
@@ -43,6 +39,12 @@ const QString HISTORY = "history";
 } // namespace SecondaryDir
 } // anonymous namespace
 
+
+
+SolPath::SolPath(SolTranslatorCore* parent)
+    : AbstractManager(parent)
+{}
+
 QString SolPath::absolute(const SolFile inPath)
 {
     struct
@@ -63,7 +65,7 @@ QString SolPath::absolute(const SolFile inPath)
         filePath = {SecondaryDir::HISTORY, "Translate_History.json"};
         break;
     case SolFile::HistoryDB:
-        filePath = {SecondaryDir::HISTORY, "Sol_Translation_History.sqlite"};
+        filePath = {SecondaryDir::HISTORY, "Sol_Translator_History.sqlite"};
         break;
 
     case SolFile::Size:

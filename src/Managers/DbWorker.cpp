@@ -18,7 +18,6 @@
 namespace
 {
 const char* db_type = "QSQLITE";
-const char* db_connectionName = "sol_db";
 
 namespace Path
 {
@@ -32,8 +31,9 @@ const char* SelectTimeline      = ":/sql/select_translation_timeline.sql";
 
 } // anonymous namespace
 
-DbWorker::DbWorker(QObject* parent)
+DbWorker::DbWorker(const QString& inDbConnectionName, QObject* parent)
     : QObject(parent)
+    , _dbConnectionName(inDbConnectionName)
     , _dbUpdateTimer(nullptr)
 {}
 
@@ -43,7 +43,7 @@ DbWorker::~DbWorker()
 
     runCheckpoint(true);
 
-    QSqlDatabase::database().close();
+    database().close();
 }
 
 void DbWorker::initialize()
@@ -58,9 +58,14 @@ void DbWorker::initialize()
     markDbDirty();
 }
 
+QSqlDatabase DbWorker::database() const
+{
+    return QSqlDatabase::database(_dbConnectionName);
+}
+
 void DbWorker::initDB()
 {
-    QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type);
+    QSqlDatabase historyDB = QSqlDatabase::addDatabase(db_type, _dbConnectionName);
     historyDB.setDatabaseName(SolPath::absolute(SolFile::HistoryDB));
     if (historyDB.open() == false)
     {
@@ -68,21 +73,25 @@ void DbWorker::initDB()
         return;
     }
 
-    bool isValidInitDB = true;
+    SolSql solSql{historyDB};
 
     // To validate the remaining queries, do not stop even if an error occurs.
-    auto errorLogging = [&isValidInitDB](const QString& inError)
-    {
-        solDebug << inError;
-        isValidInitDB = false;
-        return inError;
-    };
+    bool isValidInitDB = true;
 
-    // Do not modify inside a transaction.
-    SolSql::execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON")
-            .transform_error(errorLogging);
-    SolSql::execSqlQuery("WAL on", "PRAGMA journal_mode = WAL")
-            .transform_error(errorLogging);
+    // Modify before the transaction.
+    std::expected<void, QString> foreignExp = solSql.execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
+    std::expected<void, QString> walExp     = solSql.execSqlQuery("WAL on", "PRAGMA journal_mode = WAL");
+    if (foreignExp.has_value() == false)
+    {
+        solDebug << foreignExp.error();
+        isValidInitDB = false;
+    }
+    if (walExp.has_value() == false)
+    {
+        solDebug << walExp.error();
+        isValidInitDB = false;
+    }
+
 
     SolSqlTransactionGuard transactionGuard(historyDB);
 
@@ -101,14 +110,22 @@ void DbWorker::initDB()
 
     for (QString& tableName : db_tables)
     {
-        SolSql::execSqlFile(":/sql/create_" + tableName + ".sql")
-                .transform_error(errorLogging);
+        std::expected<void, QString> sqlExp = solSql.execSqlFile(":/sql/create_" + tableName + ".sql");
+        if (sqlExp.has_value() == false)
+        {
+            solDebug << sqlExp.error();
+            isValidInitDB = false;
+        }
     }
 
     for (QString& indexName : db_indexes)
     {
-        SolSql::execSqlFile(":/sql/create_" + indexName + ".sql")
-                .transform_error(errorLogging);
+        std::expected<void, QString> sqlExp = solSql.execSqlFile(":/sql/create_" + indexName + ".sql");
+        if (sqlExp.has_value() == false)
+        {
+            solDebug << sqlExp.error();
+            isValidInitDB = false;
+        }
     }
 
     if (isValidInitDB == false)
@@ -119,9 +136,7 @@ void DbWorker::initDB()
     transactionGuard.commit();
 }
 
-namespace
-{
-std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
+std::expected<void, QString> DbWorker::updateTimeStamp(const QVariant& inHistoryDataId)
 {
     const std::expected<QString, QString> insertTimelineQuery = SolSql::readSqlFromFile(Path::InsertTimeline);
     if (insertTimelineQuery.has_value() == false)
@@ -129,7 +144,7 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
         return std::unexpected(insertTimelineQuery.error() + Path::InsertTimeline);
     }
 
-    QSqlQuery sqlQuery;
+    QSqlQuery sqlQuery{database()};
     sqlQuery.prepare(insertTimelineQuery.value());
 
     sqlQuery.bindValue(":accessed_time", QDateTime::currentMSecsSinceEpoch());
@@ -142,7 +157,6 @@ std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId)
 
     return {};
 }
-} // anonymous namespace
 
 void DbWorker::processAddHistory(const EngineType inEngineType
                                , const LangType inSourceLang
@@ -159,13 +173,13 @@ void DbWorker::processAddHistory(const EngineType inEngineType
         return;
     }
 
-    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(database());
 
     QVariant historyDataId;
 
     // insert history data
     {
-        QSqlQuery sqlQuery;
+        QSqlQuery sqlQuery{database()};
         sqlQuery.prepare(insertDataQuery.value());
 
         sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
@@ -205,11 +219,11 @@ void DbWorker::processDeleteHistory(const qint64 inDbId)
         return;
     }
 
-    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(database());
 
     // delete history data
     {
-        QSqlQuery sqlQuery;
+        QSqlQuery sqlQuery{database()};
         sqlQuery.prepare(deleteDataQuery.value());
 
         sqlQuery.bindValue(":history_id", inDbId);
@@ -248,14 +262,14 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineType inEngineT
         return res;
     }
 
-    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(database());
 
     QVariant historyDataId;
     QString targetText;
 
     // find history
     {
-        QSqlQuery sqlQuery;
+        QSqlQuery sqlQuery{database()};
         sqlQuery.prepare(selectHistoryQuery.value());
 
         sqlQuery.bindValue(":engine_type", Sol::enumToQStr(inEngineType));
@@ -302,7 +316,7 @@ void DbWorker::updateDbCache()
     }
     _isDirtyDB = false;
 
-    SolSqlTransactionGuard transactionGuard(QSqlDatabase::database());
+    SolSqlTransactionGuard transactionGuard(database());
 
     std::vector<HistoryCacheData> cacheDatas;
 
@@ -316,7 +330,7 @@ void DbWorker::updateDbCache()
             return;
         }
 
-        QSqlQuery sqlQuery;
+        QSqlQuery sqlQuery{database()};
         sqlQuery.prepare(timelineCountQuery.value());
         if (sqlQuery.exec() == false)
         {
@@ -338,7 +352,7 @@ void DbWorker::updateDbCache()
             return;
         }
 
-        QSqlQuery sqlQuery;
+        QSqlQuery sqlQuery{database()};
         sqlQuery.prepare(selectTimelineQuery.value());
         if (sqlQuery.exec() == false)
         {
@@ -384,7 +398,7 @@ void DbWorker::runCheckpoint(const bool inIsTRUNCATE)
         queryParam = "PASSIVE";
     }
 
-    QSqlQuery sqlQuery;
+    QSqlQuery sqlQuery{database()};
     if (sqlQuery.exec("PRAGMA wal_checkpoint(" + queryParam + ")"))
     {
         while (sqlQuery.next())

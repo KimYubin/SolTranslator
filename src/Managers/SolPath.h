@@ -16,4 +16,13 @@ public:
 };
 
 
+enum class SolFile
+{
+    Log
+  , Config
+  , TranslateHistory
+  , HistoryDB
+  , Size
+};
+
 #endif //SOLTRANSLATOR_SOLPATHS_H

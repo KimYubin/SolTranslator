@@ -20,15 +20,6 @@ public:
 };
 
 
-enum class SolFile
-{
-    Log
-  , Config
-  , TranslateHistory
-  , HistoryDB
-  , Size
-};
-
 namespace Sol
 {
 Q_NAMESPACE

@@ -4,25 +4,31 @@
 #define SOLTRANSLATOR_DBWORKER_H
 #include <QObject>
 
+#include <expected>
+
 
 enum class LangType;
 enum class TextStyle;
 enum class EngineType;
 class HistoryCacheData;
 class QTimer;
+class QSqlDatabase;
 
 class DbWorker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DbWorker(QObject* parent = nullptr);
+    explicit DbWorker(const QString& inDbConnectionName = "sol_db"
+                    , QObject* parent = nullptr);
     virtual ~DbWorker() override;
 
     void initialize();
 
 private:
+    QSqlDatabase database() const;
     void initDB();
+    std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId);
 
 public
 slots :
@@ -67,6 +73,7 @@ private:
      */
     void runCheckpoint(const bool inIsTRUNCATE = false);
 
+    QString _dbConnectionName;
     /**
      * 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
      * emit historyCacheUpdated

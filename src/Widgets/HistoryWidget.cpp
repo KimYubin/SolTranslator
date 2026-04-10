@@ -103,7 +103,12 @@ void HistoryWidget::setupUI()
     // 기록 삭제 버튼
     SolButton* deleteButton = SolWidgetFactory::createDeleteTranslation(this, [this]()
     {
+        _currentTimelineId = -1;
         const QModelIndex curIdx = _historyListView->currentIndex();
+        if (curIdx.row() < 0)
+        {
+            return;
+        }
         const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
         solCore->historyManager()->asyncDeleteHistory(dbId);
         _selectedTextEdit->setText("");

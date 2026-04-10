@@ -2,6 +2,7 @@
 
 #include "SolLog.h"
 
+#include "SolLogWorker.h"
 #include "SolTypes.h"
 #include "Managers/SolPath.h"
 
@@ -9,27 +10,21 @@
 #include <QDateTime>
 #include <QFile>
 #include <QMessageLogContext>
+#include <QThread>
 #include <QTimer>
 
 namespace
 {
-// 로그 파일 스트림
-QFile logFile;
-QTextStream logStream;
-
 QtMessageHandler originalHandler = nullptr;
 
 
-// todo: 비동기 flush 필요.
-// 메시지 핸들러 함수
 void solMessageHandler(const QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
+    // Asynchronous logging
     const QString logStr = qFormatLogMessage(type, context, msg);
-    logStream << logStr << Qt::endl;
+    QMetaObject::invokeMethod(SolLogProxy::instance(), &SolLogProxy::log, Qt::AutoConnection, logStr);
 
-    QTimer::singleShot(0, qApp, []() { logStream.flush(); });
-
-    // 디버그 메시지
+    // for debug message
     if (originalHandler)
     {
         originalHandler(type, context, msg);
@@ -44,7 +39,6 @@ void SolLogHandler::setupLog()
 #ifndef QT_DEBUG
     return;
 #endif
-
 
     const QString format =
             "[%{time yy-MM-dd hh:mm:ss.zzz tt}] "
@@ -61,14 +55,9 @@ void SolLogHandler::setupLog()
 
     qSetMessagePattern(format);
 
-    logFile.setFileName(SolPath::absolute(SolFile::Log));
-    if (logFile.open(QIODevice::Append | QIODevice::Text) == false)
-    {
-        qCritical() << "Cannot open the log file.";
-        return;
-    }
-    logStream.setDevice(&logFile);
+    // Induce initialization in startup
+    SolLogProxy::instance();
 
-    // 메시지 핸들러 등록
+    // Register custom message handler
     originalHandler = qInstallMessageHandler(solMessageHandler);
 }

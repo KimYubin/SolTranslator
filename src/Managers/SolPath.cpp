@@ -56,7 +56,7 @@ QString SolPath::absolute(const SolFile inPath)
     switch (inPath)
     {
     case SolFile::Log:
-        filePath = {"logs", "log.txt"};
+        filePath = {"logs", "SolLog.txt"};
         break;
     case SolFile::Config:
         filePath = {SecondaryDir::SAVE, "SolConfig.ini"};

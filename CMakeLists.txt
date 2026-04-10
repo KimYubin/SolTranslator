@@ -161,6 +161,8 @@ qt_add_executable(
         src/Managers/SolPath.h
         src/Utils/UniqueQObjectPtr.cpp
         src/Utils/UniqueQObjectPtr.h
+        src/Utils/SolLogWorker.cpp
+        src/Utils/SolLogWorker.h
 )
 
 # ============================

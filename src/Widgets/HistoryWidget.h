@@ -43,7 +43,7 @@ private:
     using ExpectedHistory = std::expected<const HistoryCacheData*, QString>;
     ExpectedHistory getHistoryData(const QModelIndex& inCurIdx) const;
 
-
+private:
     QGridLayout* _mainLayout;
     QSplitter* _splitter;
     HistoryListView* _historyListView;
@@ -52,12 +52,11 @@ private:
 
     qreal _listScrollBarRatio = 0.0;
 
-    TextType _currentTextType = TextType::TargetText;
-
     qint64 _currentTimelineId = -1;
     QDateTime _currentTimeStamp;
+
+    TextCategory _currentTextCategory = TextCategory::TargetText;
 };
 
 
 #endif //SOLTRANSLATOR_HISTORYWIDGET_H
-

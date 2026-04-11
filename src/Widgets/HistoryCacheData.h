@@ -34,7 +34,7 @@ public:
     QString getTargetLang() const;
     QString getSourceText() const;
     QString getTargetText() const;
-    QString getText(const TextType inTextType) const;
+    QString getText(const TextCategory inTextCategory) const;
     /** simplified Source text for preview. */
     QString getSourceSimplifiedText() const;
     /** 미리보기용 간략화된 번역문을 반환합니다. */

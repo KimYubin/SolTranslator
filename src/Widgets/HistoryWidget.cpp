@@ -34,7 +34,6 @@ HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
 {
     setupUI();
 
-    _currentTextType = TextType::TargetText;
 }
 
 HistoryWidget::~HistoryWidget()
@@ -90,7 +89,7 @@ void HistoryWidget::setupUI()
             return {};
         }
 
-        return historyData.value()->getText(_currentTextType);
+        return historyData.value()->getText(_currentTextCategory);
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
@@ -173,9 +172,9 @@ void HistoryWidget::setupUI()
         {
             return;
         }
-        _currentTimelineId = newCurrentTimelineId;
-        _currentTimeStamp  = historyData.value()->getTimeStamp();
-        _currentTextType   = TextType::TargetText;
+        _currentTimelineId   = newCurrentTimelineId;
+        _currentTimeStamp    = historyData.value()->getTimeStamp();
+        _currentTextCategory = TextCategory::TargetText;
 
         const QString curText     = historyData.value()->getTargetText();
         const TextStyle textStyle = historyData.value()->getTextStyle();
@@ -264,9 +263,9 @@ void HistoryWidget::toggleTranslationText()
     }
 
     // toggle
-    _currentTextType = (_currentTextType == TextType::SourceText) ? TextType::TargetText : TextType::SourceText;
+    _currentTextCategory = (_currentTextCategory == TextCategory::SourceText) ? TextCategory::TargetText : TextCategory::SourceText;
 
-    const QString nextText    = historyData.value()->getText(_currentTextType);
+    const QString nextText    = historyData.value()->getText(_currentTextCategory);
     const TextStyle textStyle = historyData.value()->getTextStyle();
 
     // fix scrollbar

@@ -81,9 +81,9 @@ QString HistoryCacheData::getTargetText() const
     return _targetText;
 }
 
-QString HistoryCacheData::getText(const TextType inTextType) const
+QString HistoryCacheData::getText(const TextCategory inTextCategory) const
 {
-    return (inTextType == TextType::SourceText)
+    return (inTextCategory == TextCategory::SourceText)
                ? getSourceText()
                : getTargetText();
 }

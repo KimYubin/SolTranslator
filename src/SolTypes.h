@@ -69,6 +69,9 @@ enum class EngineType
   , Size
 };
 
+/**
+ * This enum class distinguishes the rendering styles of text, such as plain text, HTML, and markdown.
+ */
 enum class TextStyle
 {
     None
@@ -78,7 +81,10 @@ enum class TextStyle
   , Size
 };
 
-enum class TextType
+/**
+ * This enum class distinguishes between Source text and Target text.
+ */
+enum class TextCategory
 {
     SourceText
   , TargetText

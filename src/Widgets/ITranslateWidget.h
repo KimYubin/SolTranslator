@@ -21,6 +21,15 @@ public:
 
     ~ITranslateWidget() override;
 
+protected:
+    virtual void executeTranslateImpl(const EngineType inEngine
+                                    , const QString& inSourceText
+                                    , const TextStyle inTextStyle
+                                    , const LangType inSourceLang
+                                    , const LangType inTargetLang
+                                    , const bool inIsIgnoreCache);
+
+public:
     virtual void streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
 
     virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle);
@@ -38,7 +47,7 @@ protected:
     void applyTranslationWithFixedScroll();
 
     /**
-     * 번역을 텍스트 에디터에 적용합니다. 
+     * 번역을 텍스트 에디터에 적용합니다.
      */
     virtual void applyTranslation() = 0;
 
@@ -55,15 +64,19 @@ protected:
     virtual QTextCursor getTextCursor() const = 0;
     virtual void setTextCursor(const QTextCursor& cursor) = 0;
 
-    const QString& getTranslatedText() const { return _translatedText; }
-    TextStyle getTranslatedTextStyle() const { return _translatedTextStyle; }
+    const QString& getSourceText() const { return _sourceText; }
+    const QString& getTargetText() const { return _targetText; }
+    TextStyle getTextStyle() const { return _textStyle; }
+
+    void setSourceAndStyle(const QString& inSourceText, const TextStyle inTextStyle);
 
 private:
     QPointer<TranslateUnit> _trUnit;
 
-    QString _translatedText;        // 번역문자열 보관
-    TextStyle _translatedTextStyle; // 번역문자열의 스타일
-    QTimer* _streamUpdateTimer;     // 연속으로 너무 빨리 업데이트 되는 것을 방지하기 위한 타이머.
+    QString _sourceText;
+    QString _targetText;
+    TextStyle _textStyle;
+    QTimer* _streamUpdateTimer; // To prevent updates from occurring too quickly in succession.
 };
 
 #endif //ITRANSLATEWIDGET_H

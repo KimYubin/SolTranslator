@@ -103,35 +103,6 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
-void PopupTranslateWidget::executeTranslateImpl(const QString& inSourceText
-                                              , const TextStyle inTextStyle
-                                              , const LangType inSourceLang
-                                              , const LangType inTargetLang
-                                              , const bool inIsIgnoreCache)
-{
-    _sourceText = inSourceText;
-    _textStyle  = inTextStyle;
-
-    std::expected<QPointer<TranslateUnit>, QString> trRes
-    = solCore->translateManager()->translateText(TranslateRequestInfo{
-        this
-      , inIsIgnoreCache
-      , solConfig.currentEngineType()
-      , inSourceText
-      , inTextStyle
-      , inSourceLang
-      , inTargetLang
-      , this
-      , [this, inTextStyle](const QString& inStr) { completeTransText(inStr, inTextStyle); }
-      , this
-      , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
-    });
-    if (trRes.has_value() == false)
-    {
-        solDebug << "Translation attempt failed" << trRes.error();
-    }
-}
-
 void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
@@ -141,7 +112,12 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
     if ((inTextStyle == TextStyle::PlainText) 
         || inIsIgnoreCache)
     {
-        executeTranslateImpl(inSourceText, inTextStyle, inSourceLang, inTargetLang, inIsIgnoreCache);
+        executeTranslateImpl(solConfig.currentEngineType()
+                           , inSourceText
+                           , inTextStyle
+                           , inSourceLang
+                           , inTargetLang
+                           , inIsIgnoreCache);
         return;
     }
 
@@ -157,7 +133,12 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         },
         [this, inSourceLang, inTargetLang](const QString& inMd)
         {
-            executeTranslateImpl(inMd, TextStyle::MarkDown, inSourceLang, inTargetLang, false);
+            executeTranslateImpl(solConfig.currentEngineType()
+                               , inMd
+                               , TextStyle::MarkDown
+                               , inSourceLang
+                               , inTargetLang
+                               , false);
         });
 }
 
@@ -176,9 +157,8 @@ void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
                                              , const QString& inTranslatedText
                                              , const TextStyle inTextStyle)
 {
-    _sourceText = inSourceText;
-    _textStyle  = inTextStyle;
-    completeTransText(inTranslatedText, _textStyle);
+    setSourceAndStyle(inSourceText, inTextStyle);
+    completeTransText(inTranslatedText, getTextStyle());
 }
 
 void PopupTranslateWidget::applyTranslation()
@@ -212,11 +192,11 @@ void PopupTranslateWidget::showTranslationPopup()
     if ((_prevSize.width() < _maxEditSize.width())
         || (_prevSize.height() < _maxEditSize.height()))
     {
-        const QSize newSize = calculateTextEditSize(getTranslatedText());
+        const QSize newSize = calculateTextEditSize(getTargetText());
         animateTextEditResize(newSize);
     }
 
-    ui->resultText->setFormattingText(getTranslatedText(), getTranslatedTextStyle());
+    ui->resultText->setFormattingText(getTargetText(), getTextStyle());
 }
 
 void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
@@ -398,14 +378,7 @@ void PopupTranslateWidget::setupUI()
     // 복사 버튼
     QPushButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]()
     {
-        if (_currentTextType == TextType::SourceText)
-        {
-            return _sourceText;
-        }
-        else
-        {
-            return getTranslatedText();
-        }
+        return (_currentTextCategory == TextCategory::SourceText) ? getSourceText() : getTargetText();
     });
     ui->statusLayout->addWidget(trCopy, 0, Qt::AlignBottom | Qt::AlignLeft);
 
@@ -419,7 +392,7 @@ void PopupTranslateWidget::setupUI()
     // 재번역 버튼
     _reTranslateButton = SolWidgetFactory::createReTranslateButton(this, [this]()
     {
-        solCore->translateManager()->translateAtPopup(_sourceText, _textStyle, true);
+        solCore->translateManager()->translateAtPopup(getSourceText(), getTextStyle(), true);
     });
     _reTranslateButton->hide();
 
@@ -731,18 +704,11 @@ void PopupTranslateWidget::toggleTranslationText()
     const int prevVerticalScrollVal = ui->resultText->verticalScrollBar()->value();
 
     // toggle
-    QString nextText;
-    if (_currentTextType == TextType::SourceText)
-    {
-        _currentTextType = TextType::TargetText;
-        nextText = getTranslatedText();
-    }
-    else
-    {
-        _currentTextType = TextType::SourceText;
-        nextText = _sourceText;
-    }
-    ui->resultText->setFormattingText(nextText, _textStyle);
+    _currentTextCategory = (_currentTextCategory == TextCategory::SourceText) ? TextCategory::TargetText : TextCategory::SourceText;
+
+    const QString nextText = (_currentTextCategory == TextCategory::SourceText) ? getTargetText() : getSourceText();
+
+    ui->resultText->setFormattingText(nextText, getTextStyle());
 
     // fix scrollbar
     ui->resultText->verticalScrollBar()->setValue(prevVerticalScrollVal);

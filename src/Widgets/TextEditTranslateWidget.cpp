@@ -92,7 +92,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     {
         // 전체 복사 버튼
-        SolButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTranslatedText(); });
+        SolButton* trCopy = SolWidgetFactory::createCopyButton(this, [this]() { return getTargetText(); });
         ui->trTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
     }
     {
@@ -126,7 +126,7 @@ TextEditTranslateWidget::~TextEditTranslateWidget()
 
 void TextEditTranslateWidget::applyTranslation()
 {
-    ui->trTextEdit->setPlainText(getTranslatedText());
+    ui->trTextEdit->setPlainText(getTargetText());
 }
 
 QScrollBar* TextEditTranslateWidget::getVerticalScrollBar() const
@@ -177,25 +177,12 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
     }
     ui->trTextEdit->setPlainText(i18n(Tr::Translating));
 
-    std::expected<QPointer<TranslateUnit>, QString> trRes
-    = solCore->translateManager()->translateText(TranslateRequestInfo{
-        this
-      , inIgnoreCache
-      , solConfig.currentEngineType()
-      , sourceText
-      , TextStyle::PlainText
-      , solConfig.textSrcLang()
-      , solConfig.textTargetLang()
-      , this
-      , [this](const QString& inStr) { completeTransText(inStr, TextStyle::PlainText); }
-      , this
-      , [this](const QString& inStr) { streamTransText(inStr, TextStyle::PlainText); }
-    });
-
-    if (trRes.has_value() == false)
-    {
-        solDebug << "Translation attempt failed:" << trRes.error();
-    }
+    executeTranslateImpl(solConfig.currentEngineType()
+                       , sourceText
+                       , TextStyle::PlainText
+                       , solConfig.textSrcLang()
+                       , solConfig.textTargetLang()
+                       , inIgnoreCache);
 }
 
 void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)

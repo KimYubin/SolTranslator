@@ -8,6 +8,8 @@
 
 #include <QDateTime>
 
+#include <expected>
+
 
 class LayoutTextEdit;
 class HistoryCacheData;
@@ -37,6 +39,10 @@ private:
     void toggleTranslationText();
     void reTranslate() const;
     void viewPopup() const;
+
+    using ExpectedHistory = std::expected<const HistoryCacheData*, QString>;
+    ExpectedHistory getHistoryData(const QModelIndex& inCurIdx) const;
+
 
     QGridLayout* _mainLayout;
     QSplitter* _splitter;

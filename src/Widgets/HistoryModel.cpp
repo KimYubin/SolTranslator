@@ -38,10 +38,6 @@ QVariant HistoryModel::data(const QModelIndex& index, const int role) const
 
     switch (role)
     {
-    case Sol::DbIdRole:
-    {
-        return trCache.value()->getDbId();
-    }
     case Sol::SourceLangRole:
     {
         return trCache.value()->getSourceLang();
@@ -57,18 +53,6 @@ QVariant HistoryModel::data(const QModelIndex& index, const int role) const
     case Sol::TargetSimplifiedTextRole:
     {
         return trCache.value()->getTargetSimplifiedText();
-    }
-    case Sol::SourceFullTextRole:
-    {
-        return trCache.value()->getSourceText();
-    }
-    case Sol::TargetFullTextRole:
-    {
-        return trCache.value()->getTargetText();
-    }
-    case Sol::TextStyleStringRole:
-    {
-        return Sol::enumToQStr(trCache.value()->getTextStyle());
     }
     case Sol::TimeStampRole:
     {
@@ -147,6 +131,11 @@ bool HistoryModel::removeRows(const int position, const int rows, const QModelIn
 std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const int inIdx) const
 {
     return solCore->historyManager()->getHistoryCacheData(inIdx);
+}
+
+std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const QModelIndex& index) const
+{
+    return getHistoryCacheData(index.row());
 }
 
 

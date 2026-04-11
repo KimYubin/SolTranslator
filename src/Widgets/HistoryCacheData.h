@@ -29,15 +29,12 @@ public:
 
 
     qint64 getDbId() const;
-    TextStyle getTextStyle() const;
-    Qt::CheckState getCheckState() const;
-    void setCheckState(const Qt::CheckState inState);
-
     QString getEngine() const;
     QString getSourceLang() const;
     QString getTargetLang() const;
     QString getSourceText() const;
     QString getTargetText() const;
+    QString getText(const TextType inTextType) const;
     /** simplified Source text for preview. */
     QString getSourceSimplifiedText() const;
     /** 미리보기용 간략화된 번역문을 반환합니다. */
@@ -46,6 +43,10 @@ public:
     qint64 getTimelineId() const;
     QDateTime getTimeStamp() const;
     QString getTimeStampString() const;
+
+    TextStyle getTextStyle() const;
+    Qt::CheckState getCheckState() const;
+    void setCheckState(const Qt::CheckState inState);
 
 private:
     qint64 _dbId;

@@ -81,6 +81,13 @@ QString HistoryCacheData::getTargetText() const
     return _targetText;
 }
 
+QString HistoryCacheData::getText(const TextType inTextType) const
+{
+    return (inTextType == TextType::SourceText)
+               ? getSourceText()
+               : getTargetText();
+}
+
 QString HistoryCacheData::getSourceSimplifiedText() const
 {
     return _sourceText.left(50).replace(QRegularExpression("[\\r\\n]"), QString(" "));

@@ -24,18 +24,16 @@ namespace Sol
 {
 Q_NAMESPACE
 
-enum HistoryItemRole
+enum HistoryRole
 {
     CheckRole = Qt::UserRole + 1
-  , DbIdRole
   , SourceLangRole
   , TagetLangRole
   , SourceSimplifiedTextRole
   , TargetSimplifiedTextRole
-  , SourceFullTextRole
-  , TargetFullTextRole
-  , TextStyleStringRole
+
   , TimeStampRole
+
   , Size
 };
 

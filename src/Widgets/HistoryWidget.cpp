@@ -75,12 +75,22 @@ void HistoryWidget::setupUI()
     // buttons
 
     // 복사 버튼
-    SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()
+    SolButton* trCopy = SolWidgetFactory::createCopyButton(_selectedTextEdit, [this]()->QString
     {
         const QModelIndex curIdx = _historyListView->currentIndex();
-        const Sol::HistoryItemRole curRole = (_currentTextType == TextType::SourceText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
+        if (curIdx.isValid() == false)
+        {
+            return {};
+        }
 
-        return _historyListModel->data(curIdx, curRole).toString();
+        ExpectedHistory historyData = getHistoryData(curIdx);
+        if (historyData.has_value() == false)
+        {
+            solDebug << historyData.error();
+            return {};
+        }
+
+        return historyData.value()->getText(_currentTextType);
     });
     _selectedTextEdit->addBottomWidget(trCopy, 0, Qt::AlignLeft);
 
@@ -105,11 +115,18 @@ void HistoryWidget::setupUI()
     {
         _currentTimelineId = -1;
         const QModelIndex curIdx = _historyListView->currentIndex();
-        if (curIdx.row() < 0)
+        if (curIdx.isValid() == false)
         {
             return;
         }
-        const qlonglong dbId     = _historyListModel->data(curIdx, Sol::DbIdRole).toLongLong();
+        ExpectedHistory historyData = getHistoryData(curIdx);
+        if (historyData.has_value() == false)
+        {
+            solDebug << historyData.error();
+            return;
+        }
+
+        const qlonglong dbId = historyData.value()->getDbId();
         solCore->historyManager()->asyncDeleteHistory(dbId);
         _selectedTextEdit->setText("");
     });
@@ -143,27 +160,26 @@ void HistoryWidget::setupUI()
         {
             return;
         }
-
-        const int lastestRowIndex  = current.row();
-        const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getHistoryCacheData(lastestRowIndex);
-
-        if (selectedTr.has_value() == false)
+        ExpectedHistory historyData = getHistoryData(current);
+        if (historyData.has_value() == false)
         {
-            solDebug << selectedTr.error();
+            solDebug << historyData.error();
             return;
         }
 
         // only db update
-        const qint64 newCurrentTimelineId = selectedTr.value()->getTimelineId();
+        const qint64 newCurrentTimelineId = historyData.value()->getTimelineId();
         if (newCurrentTimelineId == _currentTimelineId)
         {
             return;
         }
         _currentTimelineId = newCurrentTimelineId;
-        _currentTimeStamp  = selectedTr.value()->getTimeStamp();
+        _currentTimeStamp  = historyData.value()->getTimeStamp();
         _currentTextType   = TextType::TargetText;
 
-        _selectedTextEdit->setFormattingText(selectedTr.value()->getTargetText(), selectedTr.value()->getTextStyle());
+        const QString curText     = historyData.value()->getTargetText();
+        const TextStyle textStyle = historyData.value()->getTextStyle();
+        _selectedTextEdit->setFormattingText(curText, textStyle);
 
         QTextCursor textCursor = _selectedTextEdit->textCursor();
         textCursor.setPosition(0);
@@ -219,16 +235,18 @@ void HistoryWidget::setupUI()
 void HistoryWidget::exportSelectedHistoryData()
 {
     const QModelIndex curIdx  = _historyListView->currentIndex();
-    const int lastestRowIndex = curIdx.row();
-    const std::expected<const HistoryCacheData*, QString> selectedTr = _historyListModel->getHistoryCacheData(lastestRowIndex);
-
-    if (selectedTr.has_value() == false)
+    if (curIdx.isValid() == false)
     {
-        solDebug << selectedTr.error();
+        return;
+    }
+    ExpectedHistory historyData = getHistoryData(curIdx);
+    if (historyData.has_value() == false)
+    {
+        solDebug << historyData.error();
         return;
     }
 
-    emit exportHistoryData(selectedTr.value());
+    emit exportHistoryData(historyData.value());
 }
 
 void HistoryWidget::toggleTranslationText()
@@ -238,19 +256,22 @@ void HistoryWidget::toggleTranslationText()
     {
         return;
     }
-
-    // fix scrollbar
-    const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
+    ExpectedHistory historyData = getHistoryData(curIdx);
+    if (historyData.has_value() == false)
+    {
+        solDebug << historyData.error();
+        return;
+    }
 
     // toggle
     _currentTextType = (_currentTextType == TextType::SourceText) ? TextType::TargetText : TextType::SourceText;
-    const Sol::HistoryItemRole currentTextTypeRole = (_currentTextType == TextType::SourceText) ? Sol::SourceFullTextRole : Sol::TargetFullTextRole;
 
-    const QString nextText  = _historyListModel->data(curIdx, currentTextTypeRole).toString();
-    const QString textStyle = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
+    const QString nextText    = historyData.value()->getText(_currentTextType);
+    const TextStyle textStyle = historyData.value()->getTextStyle();
 
-    _selectedTextEdit->setFormattingText(nextText, Sol::qStrToEnum(textStyle, TextStyle::PlainText));
-
+    // fix scrollbar
+    const int prevVerticalScrollVal = _selectedTextEdit->verticalScrollBar()->value();
+    _selectedTextEdit->setFormattingText(nextText, textStyle);
     _selectedTextEdit->verticalScrollBar()->setValue(prevVerticalScrollVal);
 }
 
@@ -261,9 +282,15 @@ void HistoryWidget::reTranslate() const
     {
         return;
     }
-    const QString sourceText   = _historyListModel->data(curIdx, Sol::SourceFullTextRole).toString();
-    const QString textStyleStr = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
-    const TextStyle textStyle  = Sol::qStrToEnum(textStyleStr, TextStyle::PlainText);
+    ExpectedHistory historyData = getHistoryData(curIdx);
+    if (historyData.has_value() == false)
+    {
+        solDebug << historyData.error();
+        return;
+    }
+
+    const QString sourceText  = historyData.value()->getSourceText();
+    const TextStyle textStyle = historyData.value()->getTextStyle();
 
     solCore->translateManager()->translateAtPopup(sourceText, textStyle, true);
 }
@@ -275,11 +302,22 @@ void HistoryWidget::viewPopup() const
     {
         return;
     }
-    const QString sourceText   = _historyListModel->data(curIdx, Sol::SourceFullTextRole).toString();
-    const QString targetText   = _historyListModel->data(curIdx, Sol::TargetFullTextRole).toString();
-    const QString textStyleStr = _historyListModel->data(curIdx, Sol::TextStyleStringRole).toString();
-    const TextStyle textStyle  = Sol::qStrToEnum(textStyleStr, TextStyle::PlainText);
+    ExpectedHistory historyData = getHistoryData(curIdx);
+    if (historyData.has_value() == false)
+    {
+        solDebug << historyData.error();
+        return;
+    }
+
+    const QString sourceText  = historyData.value()->getSourceText();
+    const QString targetText  = historyData.value()->getTargetText();
+    const TextStyle textStyle = historyData.value()->getTextStyle();
 
     PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
     popupWidget->viewTranslationText(sourceText, targetText, textStyle);
+}
+
+HistoryWidget::ExpectedHistory HistoryWidget::getHistoryData(const QModelIndex& inCurIdx) const
+{
+    return _historyListModel->getHistoryCacheData(inCurIdx);
 }

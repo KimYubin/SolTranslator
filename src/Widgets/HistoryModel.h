@@ -26,6 +26,8 @@ public:
 
     std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const int inIdx) const;
 
+    std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const QModelIndex& index) const;
+
 private:
     void updateHistoryCache();
 

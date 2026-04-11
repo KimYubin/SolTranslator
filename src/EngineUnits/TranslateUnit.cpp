@@ -73,6 +73,7 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
                 requestTranslate();
             }
         });
+
     return {};
 }
 

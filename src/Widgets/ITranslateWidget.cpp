@@ -37,8 +37,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
                                           , const LangType inTargetLang
                                           , const bool inIsIgnoreCache)
 {
-    _sourceText = inSourceText;
-    _textStyle  = inTextStyle;
+    setSourceAndStyle(inSourceText, inTextStyle);
 
     std::expected<QPointer<TranslateUnit>, QString> trRes
     = solCore->translateManager()->translateText(TranslateRequestInfo{
@@ -50,27 +49,31 @@ void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
       , inSourceLang
       , inTargetLang
       , this
-      , [this, inTextStyle](const QString& inStr) { completeTransText(inStr, inTextStyle); }
+      , [this](const QString& inStr) { completeTranslateText(inStr); }
       , this
-      , [this, inTextStyle](const QString& inStr) { streamTransText(inStr, inTextStyle); }
+      , [this](const QString& inStr) { streamTranslateText(inStr); }
     });
+
     if (trRes.has_value() == false)
     {
         solDebug << "Translation attempt failed:" << trRes.error();
+        return;
     }
+
+    setTrUnit(trRes.value());
 }
 
-void ITranslateWidget::streamTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+void ITranslateWidget::streamTranslateText(const QString& inTranslatedText)
 {
     _targetText = inTranslatedText;
-    _textStyle  = inTextStyle;
+
     _streamUpdateTimer->start();
 }
 
-void ITranslateWidget::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+void ITranslateWidget::completeTranslateText(const QString& inTranslatedText)
 {
     _targetText = inTranslatedText;
-    _textStyle  = inTextStyle;
+
     _streamUpdateTimer->stop();
     applyTranslationWithFixedScroll();
 }

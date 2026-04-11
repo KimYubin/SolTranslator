@@ -143,9 +143,9 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
 }
 
 
-void PopupTranslateWidget::completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle)
+void PopupTranslateWidget::completeTranslateText(const QString& inTranslatedText)
 {
-    ITranslateWidget::completeTransText(inTranslatedText, inTextStyle);
+    ITranslateWidget::completeTranslateText(inTranslatedText);
 
     _loadingBar->stop();
     _isTranslateComplete = true;
@@ -158,7 +158,7 @@ void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
                                              , const TextStyle inTextStyle)
 {
     setSourceAndStyle(inSourceText, inTextStyle);
-    completeTransText(inTranslatedText, getTextStyle());
+    completeTranslateText(inTranslatedText);
 }
 
 void PopupTranslateWidget::applyTranslation()

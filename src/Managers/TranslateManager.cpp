@@ -71,8 +71,9 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
         static_cast<FinPointTrUnit*>(trUnit)->setDebugMode(true);
         break;
     }
-    case EngineType::Size:
-        break;
+
+    case EngineType::Size: Q_UNREACHABLE();
+    // default: Should not be used. There must be a 'case' for every enum class member.
     }
 
     if (trUnit == nullptr)
@@ -84,19 +85,15 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
 {
     // string 기반 enum과 class 매칭 유효성 검사
     bool isValidEngineName = false;
-    if (const char* className = trUnit ? trUnit->metaObject()->className() : "")
+    if (const char* className = trUnit->metaObject()->className())
     {
         if (magic_enum::enum_name(currentEngine).find(className))
         {
             isValidEngineName = true;
         }
     }
+
     Q_ASSERT_X(isValidEngineName, "TranslateManager::executeNewTranslateUnit", "Invalid engine type");
-    if (isValidEngineName == false)
-    {
-        trUnit->deleteLater();
-        return std::unexpected{"Invalid engine type"};
-    }
 }
 #endif
 

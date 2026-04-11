@@ -44,7 +44,7 @@ public:
                         , const bool inIsIgnoreCache);
 
 
-    virtual void completeTransText(const QString& inTranslatedText, const TextStyle inTextStyle) override;
+    virtual void completeTranslateText(const QString& inTranslatedText) override;
 
     void viewTranslationText(const QString& inSourceText
                            , const QString& inTranslatedText

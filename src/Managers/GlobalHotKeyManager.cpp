@@ -6,8 +6,8 @@
 #include "SolTranslatorCore.h"
 #include "TranslateManager.h"
 #include "Types/SolTypes.h"
+#include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
-#include "Utils/SolUtilibrary.h"
 
 #include <QHotkey>
 #include <QKeyEvent>

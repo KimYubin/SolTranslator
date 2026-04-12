@@ -12,8 +12,8 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
 #include "Types/SolTypes.h"
+#include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
-#include "Utils/SolUtilibrary.h"
 #include "Widgets/PopupTranslateWidget.h"
 
 #include <QApplication>
@@ -23,6 +23,8 @@
 #include <QNetworkReply>
 #include <QRegularExpression>
 #include <QTextDocument>
+
+#include <magic_enum.hpp>
 
 
 TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(parent)

@@ -3,8 +3,8 @@
 #include "DataManager.h"
 
 #include "SolPath.h"
+#include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
-#include "Utils/SolUtilibrary.h"
 
 #include <QFile>
 #include <QFuture>

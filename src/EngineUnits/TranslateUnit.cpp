@@ -6,8 +6,8 @@
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 #include "Types/SolTypes.h"
+#include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
-#include "Utils/SolUtilibrary.h"
 #include "Widgets/ITranslateWidget.h"
 
 #include <QNetworkReply>

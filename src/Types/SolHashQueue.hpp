@@ -8,7 +8,7 @@
 #include <unordered_map>
 
 #include "SolTypes.h"
-#include "Utils/SolUtilibrary.h"
+#include "Utils/EnumUtils.hpp"
 
 
 /**

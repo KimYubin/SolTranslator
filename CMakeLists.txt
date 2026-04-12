@@ -128,6 +128,7 @@ qt_add_executable(
         src/Types/SolTypes.cpp
         src/Types/SolTypes.h
 
+        src/Utils/EnumUtils.hpp
         src/Utils/ExJson.cpp
         src/Utils/ExJson.h
         src/Utils/SolLog.cpp

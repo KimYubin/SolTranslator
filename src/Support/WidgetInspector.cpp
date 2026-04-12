@@ -3,7 +3,7 @@
 
 #include "WidgetInspector.h"
 
-#include "Utils/SolUtilibrary.h"
+#include "Utils/EnumUtils.hpp"
 
 #include <QApplication>
 #include <QLabel>

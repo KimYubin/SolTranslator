@@ -5,8 +5,8 @@
 #include "SolPath.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
+#include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
-#include "Utils/SolUtilibrary.h"
 
 #include <QCoreApplication>
 #include <QDir>

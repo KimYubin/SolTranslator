@@ -3,7 +3,7 @@
 
 #include "WidgetInspector.h"
 
-#include "SolUtilibrary.h"
+#include "Utils/SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 

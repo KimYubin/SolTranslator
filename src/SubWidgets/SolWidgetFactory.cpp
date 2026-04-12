@@ -4,7 +4,7 @@
 
 #include "SolButton.h"
 #include "SolToast.h"
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 #include "Utils/Tr.h"
 
 #include <QApplication>

@@ -2,7 +2,7 @@
 
 #include "SolToolTipBallon.h"
 
-#include "SolUtilibrary.h"
+#include "Utils/SolUtilibrary.h"
 
 #include <QLabel>
 #include <QPainter>

@@ -3,7 +3,7 @@
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
 
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 #include <QObject>
 #include <QPointer>

@@ -4,10 +4,10 @@
 
 #include "ConfigManager.h"
 #include "SolTranslatorCore.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
 #include "TranslateManager.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 
 #include <QHotkey>
 #include <QKeyEvent>

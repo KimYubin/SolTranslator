@@ -4,7 +4,7 @@
 #define POPUPTRANSLATEWIDGET_H
 
 #include "ITranslateWidget.h"
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 class SolButton;
 class LoadingBar;

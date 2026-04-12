@@ -2,7 +2,7 @@
 
 #include "ResultTextEdit.h"
 
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
 
 #include <QRegularExpression>

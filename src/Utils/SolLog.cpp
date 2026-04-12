@@ -3,8 +3,8 @@
 #include "SolLog.h"
 
 #include "SolLogWorker.h"
-#include "SolTypes.h"
 #include "Managers/SolPath.h"
+#include "Types/SolTypes.h"
 
 #include <QApplication>
 #include <QDateTime>

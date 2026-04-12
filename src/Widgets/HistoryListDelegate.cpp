@@ -5,9 +5,9 @@
 #include "HistoryListView.h"
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
-#include "SolGuard.h"
-#include "SolUtilibrary.h"
+#include "Types/SolGuard.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 
 #include <QApplication>
 #include <QPainter>

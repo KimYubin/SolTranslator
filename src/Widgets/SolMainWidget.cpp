@@ -4,7 +4,6 @@
 
 #include "HistoryWidget.h"
 #include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
 #include "TextEditTranslateWidget.h"
 #include "Managers/ConfigManager.h"
 #include "Settings/SettingsWidget.h"
@@ -13,6 +12,7 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 #include "Utils/Tr.h"
 #include "Widgets/ui_SolMainWidget.h"
 

@@ -2,8 +2,8 @@
 
 #include "FinPointTrUnit.h"
 
-#include "SolConstants.h"
-#include "SolTypes.h"
+#include "Types/SolConstants.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>

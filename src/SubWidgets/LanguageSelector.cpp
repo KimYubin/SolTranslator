@@ -4,9 +4,9 @@
 
 #include "KeySelectionList.h"
 #include "SolToolTip.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 #include "Utils/Tr.h"
 
 #include <QApplication>

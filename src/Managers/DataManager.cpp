@@ -3,8 +3,8 @@
 #include "DataManager.h"
 
 #include "SolPath.h"
-#include "SolUtilibrary.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 
@@ -16,7 +16,7 @@
 #include <QString>
 #include <QtConcurrent>
 
-DataManager::DataManager(SolTranslatorCore* parent): AbstractManager(parent)
+DataManager::DataManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {}
 
 cache_queue DataManager::loadTranslateCache()
@@ -77,10 +77,10 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
     for (auto& [cacheKey, cacheText] : CacheTextQueue)
     {
         QJsonObject cacheObject;
-        cacheObject["SourceText"]    = cacheKey.sourceText;
-        cacheObject["EngineType"]    = Sol::enumToQStr(cacheKey.engineType);
-        cacheObject["sourceLang"]    = Sol::enumToQStr(cacheKey.sourceLang);
-        cacheObject["targetLang"]    = Sol::enumToQStr(cacheKey.targetLang);
+        cacheObject["SourceText"] = cacheKey.sourceText;
+        cacheObject["EngineType"] = Sol::enumToQStr(cacheKey.engineType);
+        cacheObject["sourceLang"] = Sol::enumToQStr(cacheKey.sourceLang);
+        cacheObject["targetLang"] = Sol::enumToQStr(cacheKey.targetLang);
         cacheObject["TargetText"] = cacheText;
 
         arr.append(cacheObject);

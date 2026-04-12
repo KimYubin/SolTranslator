@@ -6,7 +6,6 @@
 #include "HistoryListView.h"
 #include "HistoryModel.h"
 #include "PopupTranslateWidget.h"
-#include "SolHashQueue.h"
 #include "SolMainWidget.h"
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"

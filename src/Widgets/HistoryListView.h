@@ -3,8 +3,8 @@
 #ifndef SOLTRANSLATOR_HISTORYLISTVIEW_H
 #define SOLTRANSLATOR_HISTORYLISTVIEW_H
 
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
+#include "Types/SolTypes.h"
+#include "Utils/SolUtilibrary.h"
 
 #include <QListView>
 

@@ -2,7 +2,6 @@
 
 #include "SolTranslatorCore.h"
 
-#include "SolConstants.h"
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/GlobalHotKeyManager.h"
@@ -10,6 +9,7 @@
 #include "Managers/StyleManger.h"
 #include "Managers/TranslateManager.h"
 #include "Support/WidgetInspector.h"
+#include "Types/SolConstants.h"
 #include "Widgets/SolMainWidget.h"
 
 #include <QApplication>

@@ -6,8 +6,8 @@
 
 #include "IOptionWidget.h"
 #include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
 #include "Managers/ConfigManager.h"
+#include "Utils/SolUtilibrary.h"
 #include "Utils/Tr.h"
 #include "Widgets/SolMainWidget.h"
 

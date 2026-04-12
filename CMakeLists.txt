@@ -26,29 +26,17 @@ find_package(
 qt_add_executable(
         SolTranslator
         MANUAL_FINALIZATION
-
         src/main.cpp
 
-        src/SolConstants.cpp
-        src/SolConstants.h
-        src/SolDatabase.cpp
-        src/SolDatabase.h
-        src/SolGuard.cpp
-        src/SolGuard.h
-        src/SolHashQueue.cpp
-        src/SolHashQueue.h
         src/SolTranslatorCore.cpp
         src/SolTranslatorCore.h
-        src/SolTypes.cpp
-        src/SolTypes.h
-        src/SolUtilibrary.cpp
-        src/SolUtilibrary.h
+
         src/QuickTextEdit.qml
 
+        external/magic_enum.hpp
         resource/image/image.qrc
         resource/sql/sql.qrc
         resource/theme/theme.qrc
-        external/magic_enum.hpp
 
         src/EngineUnits/FinPoint/FinPointTrUnit.cpp
         src/EngineUnits/FinPoint/FinPointTrUnit.h
@@ -67,15 +55,19 @@ qt_add_executable(
         src/Managers/ConfigManager.h
         src/Managers/DataManager.cpp
         src/Managers/DataManager.h
+        src/Managers/DbWorker.cpp
+        src/Managers/DbWorker.h
         src/Managers/GlobalHotKeyManager.cpp
         src/Managers/GlobalHotKeyManager.h
         src/Managers/HistoryManager.cpp
         src/Managers/HistoryManager.h
-        src/Managers/InputSimulator.cpp
-        src/Managers/InputSimulator.h
         src/Managers/InputSimulator_Impl_Linux.cpp
         src/Managers/InputSimulator_Impl_Mac.cpp
         src/Managers/InputSimulator_Impl_Win.cpp
+        src/Managers/InputSimulator.cpp
+        src/Managers/InputSimulator.h
+        src/Managers/SolPath.cpp
+        src/Managers/SolPath.h
         src/Managers/StyleManger.cpp
         src/Managers/StyleManger.h
         src/Managers/TranslateManager.cpp
@@ -110,20 +102,51 @@ qt_add_executable(
         src/SubWidgets/ResultTextEdit.h
         src/SubWidgets/SettingCard.cpp
         src/SubWidgets/SettingCard.h
+        src/SubWidgets/SolButton.cpp
+        src/SubWidgets/SolButton.h
         src/SubWidgets/SolToast.cpp
         src/SubWidgets/SolToast.h
         src/SubWidgets/SolToolTip.cpp
         src/SubWidgets/SolToolTip.h
+        src/SubWidgets/SolToolTipBallon.cpp
+        src/SubWidgets/SolToolTipBallon.h
+        src/SubWidgets/SolWidgetFactory.cpp
+        src/SubWidgets/SolWidgetFactory.h
         src/SubWidgets/SwitchButton.cpp
         src/SubWidgets/SwitchButton.h
 
         src/Support/WidgetInspector.cpp
         src/Support/WidgetInspector.h
 
+        src/Types/SolConstants.cpp
+        src/Types/SolConstants.h
+        src/Types/SolDatabase.cpp
+        src/Types/SolDatabase.h
+        src/Types/SolGuard.cpp
+        src/Types/SolGuard.h
+        src/Types/SolHashQueue.hpp
+        src/Types/SolTypes.cpp
+        src/Types/SolTypes.h
+
+        src/Utils/ExJson.cpp
+        src/Utils/ExJson.h
+        src/Utils/SolLog.cpp
+        src/Utils/SolLog.h
+        src/Utils/SolLogWorker.cpp
+        src/Utils/SolLogWorker.h
+        src/Utils/SolUtilibrary.cpp
+        src/Utils/SolUtilibrary.h
+        src/Utils/Tr.cpp
+        src/Utils/Tr.h
+        src/Utils/UniqueQObjectPtr.cpp
+        src/Utils/UniqueQObjectPtr.h
+
         src/Widgets/HistoryCacheData.cpp
         src/Widgets/HistoryCacheData.h
         src/Widgets/HistoryListDelegate.cpp
         src/Widgets/HistoryListDelegate.h
+        src/Widgets/HistoryListView.cpp
+        src/Widgets/HistoryListView.h
         src/Widgets/HistoryModel.cpp
         src/Widgets/HistoryModel.h
         src/Widgets/HistoryWidget.cpp
@@ -141,28 +164,7 @@ qt_add_executable(
         src/Widgets/TextEditTranslateWidget.cpp
         src/Widgets/TextEditTranslateWidget.h
         src/Widgets/TextEditTranslateWidget.ui
-        src/SubWidgets/SolWidgetFactory.cpp
-        src/SubWidgets/SolWidgetFactory.h
-        src/SubWidgets/SolButton.cpp
-        src/SubWidgets/SolButton.h
-        src/Managers/DbWorker.cpp
-        src/Managers/DbWorker.h
-        src/Utils/ExJson.cpp
-        src/Utils/ExJson.h
-        src/Utils/Tr.cpp
-        src/Utils/Tr.h
-        src/Utils/SolLog.cpp
-        src/Utils/SolLog.h
-        src/SubWidgets/SolToolTipBallon.cpp
-        src/SubWidgets/SolToolTipBallon.h
-        src/Widgets/HistoryListView.cpp
-        src/Widgets/HistoryListView.h
-        src/Managers/SolPath.cpp
-        src/Managers/SolPath.h
-        src/Utils/UniqueQObjectPtr.cpp
-        src/Utils/UniqueQObjectPtr.h
-        src/Utils/SolLogWorker.cpp
-        src/Utils/SolLogWorker.h
+
 )
 
 # ============================

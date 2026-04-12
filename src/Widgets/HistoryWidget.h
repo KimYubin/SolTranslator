@@ -4,7 +4,7 @@
 #define SOLTRANSLATOR_HISTORYWIDGET_H
 
 #include "ISolWidget.h"
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 #include <QDateTime>
 

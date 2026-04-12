@@ -2,7 +2,7 @@
 
 #include "SolTypes.h"
 
-#include "SolUtilibrary.h"
+#include "Utils/SolUtilibrary.h"
 #include "Utils/Tr.h"
 #include "Widgets/ITranslateWidget.h"
 

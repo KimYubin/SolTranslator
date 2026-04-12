@@ -3,7 +3,7 @@
 #ifndef TRANSLATEUNIT_H
 #define TRANSLATEUNIT_H
 
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 #include <QObject>
 #include <QPointer>

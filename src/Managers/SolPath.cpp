@@ -2,7 +2,7 @@
 
 #include "SolPath.h"
 
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 #include <QDir>
 #include <QStandardPaths>

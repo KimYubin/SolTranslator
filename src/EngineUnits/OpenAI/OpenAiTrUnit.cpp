@@ -2,10 +2,10 @@
 
 #include "OpenAiTrUnit.h"
 
-#include "SolConstants.h"
 #include "SolTranslatorCore.h"
-#include "SolTypes.h"
 #include "Managers/ConfigManager.h"
+#include "Types/SolConstants.h"
+#include "Types/SolTypes.h"
 #include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 

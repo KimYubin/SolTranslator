@@ -2,8 +2,8 @@
 
 #include "StyleManger.h"
 
-#include "SolUtilibrary.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 #include "Widgets/ISolWidget.h"
 
 #include <QApplication>

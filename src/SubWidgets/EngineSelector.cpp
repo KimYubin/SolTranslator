@@ -3,8 +3,8 @@
 #include "EngineSelector.h"
 
 #include "SolTranslatorCore.h"
-#include "SolTypes.h"
 #include "Managers/ConfigManager.h"
+#include "Types/SolTypes.h"
 
 EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
 {

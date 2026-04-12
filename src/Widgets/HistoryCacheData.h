@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_HISTORYCACHEDATA_H
 #define SOLTRANSLATOR_HISTORYCACHEDATA_H
 
-#include "SolTypes.h"
+#include "Types/SolTypes.h"
 
 #include <QDateTime>
 #include <QString>

@@ -2,10 +2,10 @@
 
 #include "ConfigManager.h"
 
-#include "SolConstants.h"
 #include "SolPath.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
+#include "Types/SolConstants.h"
+#include "Types/SolTypes.h"
+#include "Utils/SolUtilibrary.h"
 
 #include "../../external/magic_enum.hpp"
 #include "Utils/SolLog.h"

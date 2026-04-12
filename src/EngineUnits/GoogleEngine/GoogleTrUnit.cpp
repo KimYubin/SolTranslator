@@ -2,7 +2,7 @@
 
 #include "GoogleTrUnit.h"
 
-#include "SolConstants.h"
+#include "Types/SolConstants.h"
 #include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 

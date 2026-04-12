@@ -4,8 +4,8 @@
 
 #include "SolToolTip.h"
 #include "SolTranslatorCore.h"
-#include "SolTypes.h"
 #include "Managers/ConfigManager.h"
+#include "Types/SolTypes.h"
 
 namespace
 {

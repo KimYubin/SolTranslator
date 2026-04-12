@@ -7,13 +7,13 @@
 #include "GlobalHotKeyManager.h"
 #include "InputSimulator.h"
 #include "SolTranslatorCore.h"
-#include "SolTypes.h"
-#include "SolUtilibrary.h"
 #include "EngineUnits/TranslateUnit.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 #include "Widgets/PopupTranslateWidget.h"
 
 #include <QApplication>

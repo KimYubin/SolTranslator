@@ -3,7 +3,6 @@
 #include "PopupTranslateWidget.h"
 
 #include "SolTranslatorCore.h"
-#include "SolUtilibrary.h"
 #include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
@@ -11,6 +10,7 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 #include "Utils/Tr.h"
 #include "Widgets/ui_PopupTranslateWidget.h"
 

@@ -6,8 +6,6 @@
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
 
-#include "../../external/magic_enum.hpp"
-
 #include <QFile>
 #include <QFuture>
 #include <QJsonArray>
@@ -15,6 +13,8 @@
 #include <QJsonObject>
 #include <QString>
 #include <QtConcurrent>
+
+#include <magic_enum.hpp>
 
 DataManager::DataManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {}

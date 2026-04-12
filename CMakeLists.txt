@@ -26,6 +26,7 @@ find_package(
 qt_add_executable(
         SolTranslator
         MANUAL_FINALIZATION
+
         src/main.cpp
 
         src/SolTranslatorCore.cpp
@@ -33,7 +34,6 @@ qt_add_executable(
 
         src/QuickTextEdit.qml
 
-        external/magic_enum.hpp
         resource/image/image.qrc
         resource/sql/sql.qrc
         resource/theme/theme.qrc
@@ -194,6 +194,14 @@ target_link_libraries(
         Qt6::Sql
         Qt6::Gui
 )
+
+# ============================
+# Magic Enum external/magic_enum.hpp
+add_library(magic_enum INTERFACE)
+add_library(magic_enum::magic_enum ALIAS magic_enum)
+
+target_include_directories(magic_enum INTERFACE external/magic_enum)
+target_link_libraries(SolTranslator PRIVATE magic_enum::magic_enum)
 
 # ============================
 # QHotkey

@@ -5,16 +5,16 @@
 #include "SolPath.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
-#include "Utils/SolUtilibrary.h"
-
-#include "../../external/magic_enum.hpp"
 #include "Utils/SolLog.h"
+#include "Utils/SolUtilibrary.h"
 
 #include <QCoreApplication>
 #include <QDir>
 #include <QRectF>
 #include <QSettings>
 #include <QWidget>
+
+#include <magic_enum.hpp>
 
 namespace
 {

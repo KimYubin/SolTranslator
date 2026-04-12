@@ -5,12 +5,12 @@
 
 #include "Utils/SolUtilibrary.h"
 
-#include "../../external/magic_enum.hpp"
-
 #include <QApplication>
 #include <QLabel>
 #include <QTimer>
 #include <QVBoxLayout>
+
+#include <magic_enum.hpp>
 
 
 WidgetInspector::WidgetInspector(QWidget* parent) : QWidget(parent)

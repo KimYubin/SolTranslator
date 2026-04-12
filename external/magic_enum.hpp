@@ -1,4 +1,4 @@
-﻿
+
 #ifndef MAGIC_ENUM_HPP
 #define MAGIC_ENUM_HPP
 

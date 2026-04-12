@@ -1,4 +1,4 @@
-﻿INSERT INTO history_data( engine_type
+INSERT INTO history_data( engine_type
                         , source_lang
                         , target_lang
                         , source_text

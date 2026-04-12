@@ -1,4 +1,4 @@
-﻿CREATE TABLE IF NOT EXISTS history_favorite
+CREATE TABLE IF NOT EXISTS history_favorite
 (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     added_time      INTEGER,

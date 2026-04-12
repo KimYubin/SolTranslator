@@ -1,4 +1,4 @@
-﻿CREATE TABLE IF NOT EXISTS history_data
+CREATE TABLE IF NOT EXISTS history_data
 (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     engine_type TEXT,

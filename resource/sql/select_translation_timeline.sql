@@ -1,4 +1,4 @@
-﻿SELECT history_data.id
+SELECT history_data.id
      , history_data.engine_type
      , history_data.source_lang
      , history_data.target_lang

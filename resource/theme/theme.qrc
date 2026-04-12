@@ -1,4 +1,4 @@
-﻿<RCC>
+<RCC>
     <qresource prefix="/theme">
         <file>dark/SolMainWidget_Main.qss</file>
         <file>dark/TextEditTranslate.qss</file>

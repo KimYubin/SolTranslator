@@ -1,4 +1,4 @@
-﻿<RCC>
+<RCC>
     <qresource prefix="/sql">
         <file>create_history_data.sql</file>
         <file>create_history_favorite.sql</file>

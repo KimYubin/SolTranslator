@@ -1,4 +1,4 @@
-﻿CREATE TABLE IF NOT EXISTS history_timeline
+CREATE TABLE IF NOT EXISTS history_timeline
 (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     accessed_time   INTEGER,

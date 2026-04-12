@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "Tr.h"
+#include "SolI18n.h"
 
 #include <QCoreApplication>
 #include <QString>

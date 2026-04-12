@@ -5,7 +5,7 @@
 #include "SolButton.h"
 #include "SolToast.h"
 #include "Types/SolTypes.h"
-#include "Utils/Tr.h"
+#include "Utils/SolI18n.h"
 
 #include <QApplication>
 #include <QClipboard>

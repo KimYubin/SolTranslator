@@ -7,8 +7,8 @@
 #include "IOptionWidget.h"
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolUtilibrary.h"
-#include "Utils/Tr.h"
 #include "Widgets/SolMainWidget.h"
 
 #include <QListWidget>

@@ -11,9 +11,9 @@
 #include "SubWidgets/EngineSelector.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
-#include "Utils/Tr.h"
 #include "Widgets/ui_SolMainWidget.h"
 
 #include <QButtonGroup>

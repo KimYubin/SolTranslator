@@ -9,9 +9,9 @@
 #include "SubWidgets/LoadingBar.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
-#include "Utils/Tr.h"
 #include "Widgets/ui_PopupTranslateWidget.h"
 
 #include <QAbstractTextDocumentLayout>

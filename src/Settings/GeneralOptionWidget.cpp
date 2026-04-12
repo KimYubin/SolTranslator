@@ -8,7 +8,7 @@
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SwitchButton.h"
-#include "Utils/Tr.h"
+#include "Utils/SolI18n.h"
 #include "Widgets/SolMainWidget.h"
 
 #include <QGroupBox>

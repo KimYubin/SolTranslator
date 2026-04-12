@@ -14,8 +14,8 @@
 #include "SubWidgets/LayoutTextEdit.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
-#include "Utils/Tr.h"
 
 #include <QGridLayout>
 #include <QListView>

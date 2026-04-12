@@ -7,7 +7,7 @@
 #include "Managers/ConfigManager.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
-#include "Utils/Tr.h"
+#include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>
 #include <QGroupBox>

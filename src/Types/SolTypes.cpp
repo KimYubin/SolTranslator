@@ -3,7 +3,7 @@
 #include "SolTypes.h"
 
 #include "Utils/EnumUtils.hpp"
-#include "Utils/Tr.h"
+#include "Utils/SolI18n.h"
 #include "Widgets/ITranslateWidget.h"
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =

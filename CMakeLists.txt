@@ -131,14 +131,14 @@ qt_add_executable(
         src/Utils/EnumUtils.hpp
         src/Utils/ExJson.cpp
         src/Utils/ExJson.h
+        src/Utils/SolI18n.cpp
+        src/Utils/SolI18n.h
         src/Utils/SolLog.cpp
         src/Utils/SolLog.h
         src/Utils/SolLogWorker.cpp
         src/Utils/SolLogWorker.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
-        src/Utils/Tr.cpp
-        src/Utils/Tr.h
         src/Utils/UniqueQObjectPtr.cpp
         src/Utils/UniqueQObjectPtr.h
 

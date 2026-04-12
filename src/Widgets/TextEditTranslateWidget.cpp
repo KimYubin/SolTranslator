@@ -12,9 +12,9 @@
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Types/SolTypes.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
-#include "Utils/Tr.h"
 #include "Widgets/ui_TextEditTranslateWidget.h"
 
 #include <QLineEdit>

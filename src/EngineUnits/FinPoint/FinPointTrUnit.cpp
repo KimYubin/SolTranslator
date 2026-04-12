@@ -71,7 +71,7 @@ void FinPointTrUnit::onReadyRead()
 
     if (cumulativeString.isEmpty() == false)
     {
-        addTranslatedText(cumulativeString);
+        appendTranslatedText(cumulativeString);
     }
 }
 
@@ -89,9 +89,9 @@ void FinPointTrUnit::replyTranslateFinished()
 
         if ((jsonStr.isEmpty() == false) && (jsonStr != "[DONE]"))
         {
-            _translatedText.append(jsonStr);
+            _targetText.append(jsonStr);
         }
     }
 
-    finishTranslateRequest(_translatedText);
+    finishTranslateRequest(_targetText);
 }

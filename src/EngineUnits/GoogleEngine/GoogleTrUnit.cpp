@@ -48,16 +48,16 @@ void GoogleTrUnit::replyTranslateFinished()
         return;
     }
 
-    QString replyTranslatedText;
+    QString replyTargetText;
     QJsonArray translateTextArray = jsonArr[0].toArray();
     for (QJsonValueRef trTextData : translateTextArray)
     {
-        replyTranslatedText += trTextData[0].toString();
+        replyTargetText += trTextData[0].toString();
     }
 
     // 출발 언어 코드
     //QString sourceLangStr = jsonArr[2].toString();
     //QLocale locale{sourceLangStr};
 
-    finishTranslateRequest(replyTranslatedText);
+    finishTranslateRequest(replyTargetText);
 }

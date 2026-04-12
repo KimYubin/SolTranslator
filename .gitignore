@@ -5,8 +5,8 @@
 **/noused/
 /resource/image/test/
 deploy/
+.local/
 
-.Sol_*.txt
 
 *.pdn
 

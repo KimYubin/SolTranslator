@@ -30,9 +30,9 @@ protected:
                                     , const bool inIsIgnoreCache);
 
 public:
-    virtual void streamTranslateText(const QString& inTranslatedText);
+    virtual void streamTranslateText(const QString& inTargetText);
 
-    virtual void completeTranslateText(const QString& inTranslatedText);
+    virtual void completeTranslateText(const QString& inTargetText);
 
     void detachTrUnit() const;
     void abortTrUnit() const;

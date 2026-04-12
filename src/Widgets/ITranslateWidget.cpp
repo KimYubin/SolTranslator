@@ -63,16 +63,16 @@ void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
     setTrUnit(trRes.value());
 }
 
-void ITranslateWidget::streamTranslateText(const QString& inTranslatedText)
+void ITranslateWidget::streamTranslateText(const QString& inTargetText)
 {
-    _targetText = inTranslatedText;
+    _targetText = inTargetText;
 
     _streamUpdateTimer->start();
 }
 
-void ITranslateWidget::completeTranslateText(const QString& inTranslatedText)
+void ITranslateWidget::completeTranslateText(const QString& inTargetText)
 {
-    _targetText = inTranslatedText;
+    _targetText = inTargetText;
 
     _streamUpdateTimer->stop();
     applyTranslationWithFixedScroll();

@@ -143,9 +143,9 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
 }
 
 
-void PopupTranslateWidget::completeTranslateText(const QString& inTranslatedText)
+void PopupTranslateWidget::completeTranslateText(const QString& inTargetText)
 {
-    ITranslateWidget::completeTranslateText(inTranslatedText);
+    ITranslateWidget::completeTranslateText(inTargetText);
 
     _loadingBar->stop();
     _isTranslateComplete = true;
@@ -154,11 +154,11 @@ void PopupTranslateWidget::completeTranslateText(const QString& inTranslatedText
 }
 
 void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
-                                             , const QString& inTranslatedText
+                                             , const QString& inTargetText
                                              , const TextStyle inTextStyle)
 {
     setSourceAndStyle(inSourceText, inTextStyle);
-    completeTranslateText(inTranslatedText);
+    completeTranslateText(inTargetText);
 }
 
 void PopupTranslateWidget::applyTranslation()
@@ -214,7 +214,7 @@ void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
         currentScreen = qApp->primaryScreen();
         break;
     case ScreenPopupPolicy::FixedScreen:
-        currentScreen = qApp->primaryScreen(); // 임시. 추후 저장된 스크린 위치 사용
+        currentScreen = qApp->primaryScreen(); // todo: 추후 저장된 스크린 위치 사용
         break;
     case ScreenPopupPolicy::CursorScreen:
         currentScreen = qApp->screenAt(QCursor::pos());

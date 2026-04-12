@@ -60,18 +60,18 @@ protected:
     virtual void replyFailed();
 
     /** 번역 스트리밍 중간 내용을 반영합니다. */
-    void addTranslatedText(const QString& inTranslatedText);
+    void appendTranslatedText(const QString& inDeltaTargetText);
 
     /**
      * 번역 기록을 업데이트합니다.
      * 영구 데이터로 기록합니다.
      * 
-     * @param inTranslatedText 
+     * @param inTargetText 
      */
-    void updateHistory(const QString& inTranslatedText);
+    void addHistory(const QString& inTargetText);
 
     /** 번역문을 등록된 펑터에 반영하고, 본 객체를 파괴합니다.(deleteLater) */
-    void completeTranslatedText(const QString& inTranslatedText);
+    void completeTranslatedText(const QString& inTargetText);
 
 
     /**
@@ -80,9 +80,9 @@ protected:
      *
      * @see replyTranslate
      * @see completeTranslatedText
-     * @param inTranslatedText
+     * @param inTargetText
      */
-    void finishTranslateRequest(const QString& inTranslatedText);
+    void finishTranslateRequest(const QString& inTargetText);
 
 protected:
     QPointer<QNetworkReply> _reply;
@@ -92,7 +92,7 @@ protected:
     // SSE buffer
     QByteArray _buffer;
 
-    QString _translatedText;
+    QString _targetText;
 
     QMetaObject::Connection _streamConnection;
     QMetaObject::Connection _completeConnection;

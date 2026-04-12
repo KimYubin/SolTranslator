@@ -167,19 +167,19 @@ void TranslateUnit::replyFailed()
     finishTranslateRequest(_reply->errorString());
 }
 
-void TranslateUnit::addTranslatedText(const QString& inTranslatedText)
+void TranslateUnit::appendTranslatedText(const QString& inDeltaTargetText)
 {
-    _translatedText.append(inTranslatedText);
+    _targetText.append(inDeltaTargetText);
 
     if (_trReqData.streamContext && _trReqData.callbackTranslateStreaming)
     {
-        (*_trReqData.callbackTranslateStreaming)(_translatedText);
+        _trReqData.callbackTranslateStreaming.value()(_targetText);
     }
 }
 
-void TranslateUnit::updateHistory(const QString& inTranslatedText)
+void TranslateUnit::addHistory(const QString& inTargetText)
 {
-    if (inTranslatedText.isEmpty())
+    if (inTargetText.isEmpty())
     {
         return;
     }
@@ -190,25 +190,25 @@ void TranslateUnit::updateHistory(const QString& inTranslatedText)
                                       , _trReqData.sourceLang
                                       , _trReqData.targetLang
                                       , _trReqData.sourceText
-                                      , inTranslatedText
+                                      , inTargetText
                                       , _trReqData.textFormat);
     }
 }
 
-void TranslateUnit::completeTranslatedText(const QString& inTranslatedText)
+void TranslateUnit::completeTranslatedText(const QString& inTargetText)
 {
     // 빈 문자열도 적용합니다.
     if (_trReqData.completeContext && _trReqData.callbackTranslateComplete)
     {
-        _trReqData.callbackTranslateComplete(inTranslatedText);
+        _trReqData.callbackTranslateComplete(inTargetText);
     }
 
     deleteLater();
 }
 
-void TranslateUnit::finishTranslateRequest(const QString& inTranslatedText)
+void TranslateUnit::finishTranslateRequest(const QString& inTargetText)
 {
-    _translatedText = inTranslatedText;
-    updateHistory(inTranslatedText);
-    completeTranslatedText(inTranslatedText);
+    _targetText = inTargetText;
+    addHistory(_targetText);
+    completeTranslatedText(_targetText);
 }

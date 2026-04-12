@@ -65,7 +65,7 @@ void OpenAiTrUnit::onReadyRead()
     const QString content = chunkToContent();
     if (content.isEmpty() == false)
     {
-        addTranslatedText(content);
+        appendTranslatedText(content);
     }
 }
 
@@ -76,7 +76,7 @@ void OpenAiTrUnit::replyTranslateFinished()
         const ExJson rootJson{_reply->readAll()};
         if (const ExJson resJson = rootJson.value("choices")[0].value("message").value("content"))
         {
-            _translatedText += resJson.toString();
+            _targetText += resJson.toString();
         }
         else
         {
@@ -84,7 +84,7 @@ void OpenAiTrUnit::replyTranslateFinished()
         }
     }
 
-    finishTranslateRequest(_translatedText);
+    finishTranslateRequest(_targetText);
 }
 
 QString OpenAiTrUnit::chunkToContent()

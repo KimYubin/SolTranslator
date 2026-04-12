@@ -44,10 +44,10 @@ public:
                         , const bool inIsIgnoreCache);
 
 
-    virtual void completeTranslateText(const QString& inTranslatedText) override;
+    virtual void completeTranslateText(const QString& inTargetText) override;
 
     void viewTranslationText(const QString& inSourceText
-                           , const QString& inTranslatedText
+                           , const QString& inTargetText
                            , const TextStyle inTextStyle);
 
 protected:

@@ -3,12 +3,12 @@
 #ifndef TRANSLATEMANAGER_H
 #define TRANSLATEMANAGER_H
 
-
 #include "AbstractManager.h"
 
 #include <expected>
 
 
+class GlobalHotKeyManager;
 enum class EngineType;
 class HistoryManager;
 class QNetworkRequest;
@@ -29,7 +29,8 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(SolTranslatorCore* parent);
 
-    void init(HistoryManager* inHistoryManager);
+    void init(HistoryManager* inHistoryManager
+            , GlobalHotKeyManager* inGlobalHotKeyManager);
 
 protected:
     virtual void postInitialize() override;
@@ -58,6 +59,7 @@ private:
     QNetworkAccessManager* _networkAccessManager;
 
     QPointer<HistoryManager> _historyManager;
+    QPointer<GlobalHotKeyManager> _globalHotKeyManager;
 };
 
 

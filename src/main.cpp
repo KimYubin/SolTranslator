@@ -28,7 +28,10 @@ int main(int argc, char* argv[])
     solTranslatorCore.emplaceManager<HistoryManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<GlobalHotKeyManager>(&solTranslatorCore);
 
-    solTranslatorCore.manager<TranslateManager>()->init(solTranslatorCore.manager<HistoryManager>());
+    solTranslatorCore.manager<TranslateManager>()->init(
+        solTranslatorCore.manager<HistoryManager>()
+      , solTranslatorCore.manager<GlobalHotKeyManager>()
+    );
 
 
     solTranslatorCore.postInitialize();

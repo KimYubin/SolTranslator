@@ -33,17 +33,23 @@ TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(p
     _networkAccessManager = new QNetworkAccessManager(this);
 }
 
-void TranslateManager::init(HistoryManager* inHistoryManager)
+void TranslateManager::init(HistoryManager* inHistoryManager
+    , GlobalHotKeyManager* inGlobalHotKeyManager)
 {
     Q_ASSERT_X(_historyManager.isNull(), "TranslateManager::init", "The _historyManager has been already initialized.");
+    Q_ASSERT_X(_globalHotKeyManager.isNull(), "TranslateManager::init", "The _globalHotKeyManager has been already initialized.");
 
     _historyManager = inHistoryManager;
+    _globalHotKeyManager = inGlobalHotKeyManager;
 }
 
 void TranslateManager::postInitialize()
 {
+    Q_ASSERT_X(_historyManager, "TranslateManager::postInitialize", "The _historyManager is not initialized.");
+    Q_ASSERT_X(_globalHotKeyManager, "TranslateManager::postInitialize", "The _globalHotKeyManager is not initialized.");
+
     // global popup translate
-    getSolCore()->manager<GlobalHotKeyManager>()->registerAction(
+    _globalHotKeyManager->registerAction(
         Action::PopupTranslate
       , this
       , [this]() { processPopupTranslate(); }

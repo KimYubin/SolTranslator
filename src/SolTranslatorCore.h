@@ -5,12 +5,12 @@
 
 #include <QObject>
 
-class ConfigManager;
-class HistoryManager;
-class SolAsync;
-class GlobalHotKeyManager;
-class TranslateManager;
-class DataManager;
+#include <typeindex>
+#include <typeinfo>
+#include <unordered_map>
+
+
+class AbstractManager;
 class SolMainWidget;
 
 #if defined(solCore)
@@ -26,6 +26,8 @@ class SolTranslatorCore : public QObject
 {
     Q_OBJECT
 
+    static SolTranslatorCore* _self;
+
 public:
     explicit SolTranslatorCore(QObject* parent = nullptr);
     ~SolTranslatorCore() override;
@@ -33,26 +35,43 @@ public:
     static SolTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    ConfigManager* configManager() const { return _configManager; }
-    TranslateManager* translateManager() const { return _translateManager; }
-    HistoryManager* historyManager() const { return _historyManager; }
-    GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
+    template <typename T, typename... Args>
+        requires std::is_base_of_v<AbstractManager, T>
+    void emplaceManager(Args&&... args)
+    {
+        Q_ASSERT_X(_managers.contains(typeid(T)) == false, "manager", "Manager already registered");
 
-    SolMainWidget* solMainWidget() const { return _solMainWidget; }
+        _managers.emplace(typeid(T), std::make_unique<T>(std::forward<Args>(args)...));
+    }
+
+    template <typename T>
+        requires std::is_base_of_v<AbstractManager, T>
+    void registerManager(std::unique_ptr<T>&& inManager)
+    {
+        Q_ASSERT_X(_managers.contains(typeid(T)) == false, "manager", "Manager already registered");
+
+        _managers[typeid(T)] = std::move(inManager);
+    };
+
+    template <typename T>
+        requires std::is_base_of_v<AbstractManager, T>
+    T* manager()
+    {
+        const auto it = _managers.find(typeid(T));
+
+        Q_ASSERT_X(it != _managers.end(), "manager", "Access an unregistered manager.");
+
+        return static_cast<T*>(it->second.get());
+    }
+
+    void postInitialize();
 
 private:
 signals:
     void postInitialized();
 
 private:
-    void postInitialize();
-
-    static SolTranslatorCore* _self;
-
-    ConfigManager* _configManager;
-    TranslateManager* _translateManager;
-    HistoryManager* _historyManager;
-    GlobalHotKeyManager* _globalHotKeyManager;
+    std::unordered_map<std::type_index, std::unique_ptr<AbstractManager>> _managers;
 
     SolMainWidget* _solMainWidget;
 };

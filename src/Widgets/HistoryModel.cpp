@@ -13,12 +13,12 @@
 HistoryModel::HistoryModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    connect(solCore->historyManager(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateHistoryCache);
+    connect(solCore->manager<HistoryManager>(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateHistoryCache);
 }
 
 int HistoryModel::rowCount(const QModelIndex& parent) const
 {
-    return parent.isValid() ? 0 : solCore->historyManager()->getHistoryCacheSize();
+    return parent.isValid() ? 0 : solCore->manager<HistoryManager>()->getHistoryCacheSize();
 }
 
 int HistoryModel::columnCount(const QModelIndex& parent) const
@@ -82,7 +82,7 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, cons
     {
     case Sol::CheckRole:
     {
-        solCore->historyManager()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
+        solCore->manager<HistoryManager>()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
         return true;
     }
     default:
@@ -130,7 +130,7 @@ bool HistoryModel::removeRows(const int position, const int rows, const QModelIn
 
 std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const int inIdx) const
 {
-    return solCore->historyManager()->getHistoryCacheData(inIdx);
+    return solCore->manager<HistoryManager>()->getHistoryCacheData(inIdx);
 }
 
 std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const QModelIndex& index) const

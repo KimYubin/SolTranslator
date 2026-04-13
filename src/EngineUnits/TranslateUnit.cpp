@@ -44,13 +44,7 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
         return{};
     }
 
-    HistoryManager* historyManager = solCore->historyManager();
-    if (historyManager == nullptr)
-    {
-        return std::unexpected{"historyManager does not exist"};
-    }
-
-    historyManager->asyncLookupHistory(
+    solCore->manager<HistoryManager>()->asyncLookupHistory(
         _trReqData.engineType
       , _trReqData.sourceText
       , _trReqData.sourceLang
@@ -79,7 +73,7 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
 
 void TranslateUnit::get(const QNetworkRequest& inRequest)
 {
-    _reply = solCore->translateManager()->get(inRequest);
+    _reply = solCore->manager<TranslateManager>()->get(inRequest);
     postProcess();
 }
 
@@ -87,7 +81,7 @@ void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inP
 {
     _isStream = inIsStreaming;
 
-    _reply = solCore->translateManager()->post(inRequest, inPayload);
+    _reply = solCore->manager<TranslateManager>()->post(inRequest, inPayload);
 
     if (_isStream)
     {
@@ -164,7 +158,7 @@ void TranslateUnit::replyFailed()
     solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
     // 사용자가 history에서 재번역 시도를 할 수 있습니다.
-    finishTranslateRequest(_reply->errorString());
+    finishTranslateRequest(_targetText + "\nrequest error: " + _reply->errorString());
 }
 
 void TranslateUnit::appendTranslatedText(const QString& inDeltaTargetText)
@@ -184,15 +178,13 @@ void TranslateUnit::addHistory(const QString& inTargetText)
         return;
     }
 
-    if (HistoryManager* historyManager = solCore->historyManager())
-    {
-        historyManager->asyncAddHistory(_trReqData.engineType
-                                      , _trReqData.sourceLang
-                                      , _trReqData.targetLang
-                                      , _trReqData.sourceText
-                                      , inTargetText
-                                      , _trReqData.textFormat);
-    }
+    solCore->manager<HistoryManager>()->asyncAddHistory(_trReqData.engineType
+                                                      , _trReqData.sourceLang
+                                                      , _trReqData.targetLang
+                                                      , _trReqData.sourceText
+                                                      , inTargetText
+                                                      , _trReqData.textFormat);
+
 }
 
 void TranslateUnit::completeTranslatedText(const QString& inTargetText)

@@ -125,7 +125,7 @@ void HistoryWidget::setupUI()
         }
 
         const qlonglong dbId = historyData.value()->getDbId();
-        solCore->historyManager()->asyncDeleteHistory(dbId);
+        solCore->manager<HistoryManager>()->asyncDeleteHistory(dbId);
         _selectedTextEdit->setText("");
     });
     _selectedTextEdit->addBottomWidget(deleteButton, 1, Qt::AlignRight);
@@ -199,7 +199,7 @@ void HistoryWidget::setupUI()
             return;
         }
 
-        const std::expected<int, QString> findIdx = solCore->historyManager()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
+        const std::expected<int, QString> findIdx = solCore->manager<HistoryManager>()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
         if (findIdx.has_value() == false)
         {
             solDebug << findIdx.error();
@@ -290,7 +290,7 @@ void HistoryWidget::reTranslate() const
     const QString sourceText  = historyData.value()->getSourceText();
     const TextStyle textStyle = historyData.value()->getTextStyle();
 
-    solCore->translateManager()->translateAtPopup(sourceText, textStyle, true);
+    solCore->manager<TranslateManager>()->translateAtPopup(sourceText, textStyle, true);
 }
 
 void HistoryWidget::viewPopup() const

@@ -40,7 +40,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
     setSourceAndStyle(inSourceText, inTextStyle);
 
     std::expected<QPointer<TranslateUnit>, QString> trRes
-    = solCore->translateManager()->translateText(TranslateRequestInfo{
+    = solCore->manager<TranslateManager>()->translateText(TranslateRequestInfo{
         this
       , inIsIgnoreCache
       , inEngine

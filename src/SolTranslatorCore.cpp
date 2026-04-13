@@ -21,23 +21,19 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent) : QObject(parent)
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
     _self = this;
 
-    // move to main.cpp
-    // QCoreApplication::setOrganizationDomain("Sol");
-    // QCoreApplication::setApplicationName("SolTranslator");
-
     QTranslator* qtTranslator = new QTranslator(this);
     if (qtTranslator->load(QLocale::system(), "sol", "_", QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
     {
         qApp->installTranslator(qtTranslator);
     }
+}
 
-    _configManager       = new ConfigManager(this);
-    _translateManager    = new TranslateManager(this);
-    _historyManager      = new HistoryManager(this);
-    _globalHotKeyManager = new GlobalHotKeyManager(this);
+SolTranslatorCore::~SolTranslatorCore()
+{}
 
-    postInitialize();
 
+void SolTranslatorCore::postInitialize()
+{
     // GUI setup
     StyleManger::applyTheme();
 
@@ -45,7 +41,7 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent) : QObject(parent)
 
     // parsing
     QCommandLineParser parser;
-    parser.addOption({Sol::CmdLineOptions::START_UP_RUN, "Started from Windows startup"});
+    parser.addOption({Sol::CmdLineOptions::START_UP_RUN, "Started from system startup"});
     parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행
@@ -62,13 +58,6 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent) : QObject(parent)
     // WidgetInspector* inspector = new WidgetInspector();
 #endif
 
-}
 
-SolTranslatorCore::~SolTranslatorCore()
-{}
-
-
-void SolTranslatorCore::postInitialize()
-{
     emit postInitialized();
 }

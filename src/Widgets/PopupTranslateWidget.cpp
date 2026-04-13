@@ -392,7 +392,7 @@ void PopupTranslateWidget::setupUI()
     // 재번역 버튼
     _reTranslateButton = SolWidgetFactory::createReTranslateButton(this, [this]()
     {
-        solCore->translateManager()->translateAtPopup(getSourceText(), getTextStyle(), true);
+        solCore->manager<TranslateManager>()->translateAtPopup(getSourceText(), getTextStyle(), true);
     });
     _reTranslateButton->hide();
 

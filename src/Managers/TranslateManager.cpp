@@ -35,9 +35,11 @@ TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(p
 void TranslateManager::postInitialize()
 {
     // global popup translate
-    solCore->globalHotKeyManager()->registerAction(Action::PopupTranslate
-                                                 , this
-                                                 , [this]() { processPopupTranslate(); });
+    solCore->manager<GlobalHotKeyManager>()->registerAction(
+        Action::PopupTranslate
+      , this
+      , [this]() { processPopupTranslate(); }
+    );
 
     AbstractManager::postInitialize();
 }

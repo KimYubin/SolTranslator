@@ -2,11 +2,11 @@
 
 #include "DbWorker.h"
 
-#include "SolPath.h"
 #include "Types/SolDatabase.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
+#include "Utils/SolPath.h"
 #include "Widgets/HistoryCacheData.h"
 
 #include <QSqlDatabase>

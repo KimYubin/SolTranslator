@@ -41,9 +41,6 @@ const QString HISTORY = "history";
 
 
 
-SolPath::SolPath(SolTranslatorCore* parent)
-    : AbstractManager(parent)
-{}
 
 QString SolPath::absolute(const SolFile inPath)
 {

@@ -49,8 +49,7 @@ qt_add_executable(
 
         src/Managers/AbstractManager.cpp
         src/Managers/AbstractManager.h
-        src/Managers/AsyncManager.cpp
-        src/Managers/AsyncManager.h
+
         src/Managers/ConfigManager.cpp
         src/Managers/ConfigManager.h
         src/Managers/DataManager.cpp
@@ -66,8 +65,6 @@ qt_add_executable(
         src/Managers/InputSimulator_Impl_Win.cpp
         src/Managers/InputSimulator.cpp
         src/Managers/InputSimulator.h
-        src/Managers/SolPath.cpp
-        src/Managers/SolPath.h
         src/Managers/StyleManger.cpp
         src/Managers/StyleManger.h
         src/Managers/TranslateManager.cpp
@@ -131,12 +128,15 @@ qt_add_executable(
         src/Utils/EnumUtils.hpp
         src/Utils/ExJson.cpp
         src/Utils/ExJson.h
+        src/Utils/SolAsync.hpp
         src/Utils/SolI18n.cpp
         src/Utils/SolI18n.h
         src/Utils/SolLog.cpp
         src/Utils/SolLog.h
         src/Utils/SolLogWorker.cpp
         src/Utils/SolLogWorker.h
+        src/Utils/SolPath.cpp
+        src/Utils/SolPath.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
         src/Utils/UniqueQObjectPtr.cpp

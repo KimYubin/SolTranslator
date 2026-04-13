@@ -1,23 +1,18 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef ASYNCMANAGER_H
-#define ASYNCMANAGER_H
-
-#include "AbstractManager.h"
+#ifndef SOLASYNC_H
+#define SOLASYNC_H
 
 #include <QFuture>
+#include <QObject>
 #include <QtConcurrent>
 
 
-class SolTranslatorCore;
-
-class AsyncManager : public AbstractManager
+class SolAsync : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit AsyncManager(SolTranslatorCore* parent);
-
     /**
      * Fire & Forget, QFuture와 QFutureWatcher을 이용한 비동기 계산 후, 동기화 로직의 간소화 버전입니다.
      * 
@@ -32,7 +27,7 @@ public:
                           , std::move_only_function<void(ret)>&& inMainThreadFunc)
     {
         QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)] () mutable
+        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable
         {
             mtFunc(watcher->future().result());
             watcher->deleteLater();
@@ -48,7 +43,7 @@ public:
                           , std::move_only_function<void(void)>&& inMainThreadFunc)
     {
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)] () mutable
+        connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable
         {
             mtFunc();
             watcher->deleteLater();
@@ -62,4 +57,4 @@ private:
 };
 
 
-#endif //ASYNCMANAGER_H
+#endif //SOLASYNC_H

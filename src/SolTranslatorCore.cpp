@@ -2,7 +2,6 @@
 
 #include "SolTranslatorCore.h"
 
-#include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/HistoryManager.h"
@@ -10,13 +9,14 @@
 #include "Managers/TranslateManager.h"
 #include "Support/WidgetInspector.h"
 #include "Types/SolConstants.h"
+#include "Utils/SolAsync.hpp"
 #include "Widgets/SolMainWidget.h"
 
 #include <QApplication>
 
 SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 
-SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
+SolTranslatorCore::SolTranslatorCore(QObject* parent) : QObject(parent)
 {
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
     _self = this;
@@ -35,7 +35,6 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent): QObject(parent)
     _translateManager    = new TranslateManager(this);
     _historyManager      = new HistoryManager(this);
     _globalHotKeyManager = new GlobalHotKeyManager(this);
-    _asyncManager        = new AsyncManager(this);
 
     postInitialize();
 

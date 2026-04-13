@@ -3,12 +3,12 @@
 #include "PopupTranslateWidget.h"
 
 #include "SolTranslatorCore.h"
-#include "Managers/AsyncManager.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/LoadingBar.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
+#include "Utils/SolAsync.hpp"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
@@ -121,7 +121,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         return;
     }
 
-    AsyncManager::asyncLaunch<QString>(
+    SolAsync::asyncLaunch<QString>(
         this,
         [htmlStr = inSourceText]() mutable
         {

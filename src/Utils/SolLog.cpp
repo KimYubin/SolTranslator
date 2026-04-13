@@ -3,7 +3,7 @@
 #include "SolLog.h"
 
 #include "SolLogWorker.h"
-#include "Managers/SolPath.h"
+#include "SolPath.h"
 #include "Types/SolTypes.h"
 
 #include <QApplication>

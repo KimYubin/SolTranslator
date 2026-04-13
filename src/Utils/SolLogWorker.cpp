@@ -2,7 +2,7 @@
 
 #include "SolLogWorker.h"
 
-#include "Managers/SolPath.h"
+#include "SolPath.h"
 
 #include <QDebug>
 #include <QMessageLogContext>

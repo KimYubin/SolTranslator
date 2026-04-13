@@ -7,7 +7,7 @@
 
 class ConfigManager;
 class HistoryManager;
-class AsyncManager;
+class SolAsync;
 class GlobalHotKeyManager;
 class TranslateManager;
 class DataManager;
@@ -37,7 +37,6 @@ public:
     TranslateManager* translateManager() const { return _translateManager; }
     HistoryManager* historyManager() const { return _historyManager; }
     GlobalHotKeyManager* globalHotKeyManager() const { return _globalHotKeyManager; }
-    AsyncManager* asyncManager() const { return _asyncManager; }
 
     SolMainWidget* solMainWidget() const { return _solMainWidget; }
 
@@ -54,7 +53,6 @@ private:
     TranslateManager* _translateManager;
     HistoryManager* _historyManager;
     GlobalHotKeyManager* _globalHotKeyManager;
-    AsyncManager* _asyncManager;
 
     SolMainWidget* _solMainWidget;
 };

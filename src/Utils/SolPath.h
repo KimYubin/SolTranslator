@@ -2,15 +2,13 @@
 
 #ifndef SOLTRANSLATOR_SOLPATHS_H
 #define SOLTRANSLATOR_SOLPATHS_H
-#include "AbstractManager.h"
 
-
+class QString;
 enum class SolFile;
 
-class SolPath : public AbstractManager
+class SolPath
 {
 public:
-    explicit SolPath(SolTranslatorCore* parent);
 
     static QString absolute(const SolFile inPath);
 };

@@ -2,7 +2,6 @@
 
 #include "TranslateManager.h"
 
-#include "AsyncManager.h"
 #include "ConfigManager.h"
 #include "GlobalHotKeyManager.h"
 #include "InputSimulator.h"
@@ -13,6 +12,7 @@
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
+#include "Utils/SolAsync.hpp"
 #include "Utils/SolLog.h"
 #include "Widgets/PopupTranslateWidget.h"
 

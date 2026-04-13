@@ -18,6 +18,11 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
 
+void OpenAiTrUnit::requestTranslate()
+{
+    chatTranslate(true);
+}
+
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     QNetworkRequest request(Sol::URLs::OPEN_AI);
@@ -53,11 +58,6 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
     const QByteArray data = doc.toJson();
 
     post(request, data, inIsStreaming);
-}
-
-void OpenAiTrUnit::requestTranslate()
-{
-    chatTranslate(true);
 }
 
 void OpenAiTrUnit::onReadyRead()

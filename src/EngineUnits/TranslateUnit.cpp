@@ -15,10 +15,13 @@
 
 TranslateUnit::TranslateUnit(TranslateManager* parent)
     : QObject(parent)
+    , _translateManager(parent)
     , _trReqData()
-{}
+{
+    Q_ASSERT_X(_translateManager, "TranslateUnit::TranslateUnit", "TranslateManager is invalid.");
+}
 
-std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo)
+void TranslateUnit::setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     _trReqData = std::move(inTranslateRequestInfo);
 
@@ -27,62 +30,28 @@ std::expected<void, QString> TranslateUnit::executeTextTranslation(TranslateRequ
         _trReqData.trDisplayWidget->setTrUnit(this);
     }
 
-    // 앞뒤 공백 제거
-    _trReqData.sourceText = _trReqData.sourceText.trimmed();
+}
 
-    if (_trReqData.sourceText.isEmpty())
-    {
-        solDebug << "translate request text is empty";
-
-        completeTranslatedText(_trReqData.sourceText);
-        return{};
-    }
-
-    if (_trReqData.isIgnoreCache)
-    {
-        requestTranslate();
-        return{};
-    }
-
-    solCore->manager<HistoryManager>()->asyncLookupHistory(
-        _trReqData.engineType
-      , _trReqData.sourceText
-      , _trReqData.sourceLang
-      , _trReqData.targetLang
-      , this
-      , [inThis = QPointer{this}, this](const std::tuple<bool, QString>& inRes)
-        {
-            if (inThis.isNull())
-            {
-                solDebug << "The trUnit was destroyed before the database lookup was completed.";
-                return;
-            }
-            auto& [isFind, findCache] = inRes;
-            if (isFind)
-            {
-                completeTranslatedText(findCache);
-            }
-            else
-            {
-                requestTranslate();
-            }
-        });
-
-    return {};
+void TranslateUnit::onTranslationFromCache(const QString& inTargetText)
+{
+    completeTranslatedText(inTargetText);
 }
 
 void TranslateUnit::get(const QNetworkRequest& inRequest)
 {
-    _reply = solCore->manager<TranslateManager>()->get(inRequest);
+    Q_ASSERT_X(_translateManager, "TranslateUnit::get", "TranslateManager is invalid.");
+
+    _reply = _translateManager->get(inRequest);
     postProcess();
 }
 
 void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming)
 {
+    Q_ASSERT_X(_translateManager, "TranslateUnit::get", "TranslateManager is invalid.");
+
+    _reply = _translateManager->post(inRequest, inPayload);
+
     _isStream = inIsStreaming;
-
-    _reply = solCore->manager<TranslateManager>()->post(inRequest, inPayload);
-
     if (_isStream)
     {
         connect(_reply, &QIODevice::readyRead, this, &TranslateUnit::onReadyRead);
@@ -173,18 +142,7 @@ void TranslateUnit::appendTranslatedText(const QString& inDeltaTargetText)
 
 void TranslateUnit::addHistory(const QString& inTargetText)
 {
-    if (inTargetText.isEmpty())
-    {
-        return;
-    }
-
-    solCore->manager<HistoryManager>()->asyncAddHistory(_trReqData.engineType
-                                                      , _trReqData.sourceLang
-                                                      , _trReqData.targetLang
-                                                      , _trReqData.sourceText
-                                                      , inTargetText
-                                                      , _trReqData.textFormat);
-
+    _translateManager->onAddHistoryRequested(_trReqData, inTargetText);
 }
 
 void TranslateUnit::completeTranslatedText(const QString& inTargetText)

@@ -4,6 +4,7 @@
 
 #include "ConfigManager.h"
 #include "GlobalHotKeyManager.h"
+#include "HistoryManager.h"
 #include "InputSimulator.h"
 #include "SolTranslatorCore.h"
 #include "EngineUnits/TranslateUnit.h"
@@ -32,10 +33,17 @@ TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(p
     _networkAccessManager = new QNetworkAccessManager(this);
 }
 
+void TranslateManager::init(HistoryManager* inHistoryManager)
+{
+    Q_ASSERT_X(_historyManager.isNull(), "TranslateManager::init", "The _historyManager has been already initialized.");
+
+    _historyManager = inHistoryManager;
+}
+
 void TranslateManager::postInitialize()
 {
     // global popup translate
-    solCore->manager<GlobalHotKeyManager>()->registerAction(
+    getSolCore()->manager<GlobalHotKeyManager>()->registerAction(
         Action::PopupTranslate
       , this
       , [this]() { processPopupTranslate(); }
@@ -54,11 +62,10 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
     return _networkAccessManager->post(inRequest, inPayload);
 }
 
-std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
+TranslateUnit* TranslateManager::newTranslateUnit(const EngineType inEngine)
 {
     TranslateUnit* trUnit = nullptr;
-    const EngineType currentEngine = inTranslateRequestInfo.engineType;
-    switch (currentEngine)
+    switch (inEngine)
     {
     case EngineType::Google:
         trUnit = new GoogleTrUnit(this);
@@ -77,36 +84,86 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     }
 
     case EngineType::Size: Q_UNREACHABLE();
-    // default: Should not be used. There must be a 'case' for every enum class member.
+        // default: Should not be used. There must be a 'case' for every enum class member.
     }
 
-    if (trUnit == nullptr)
-    {
-        return std::unexpected{"Failed to create trUnit. Current engine: " + Sol::enumToQStr(currentEngine)};
-    }
+    Q_ASSERT_X(trUnit, "TranslateManager::newTranslateUnit", "trUnit is nullptr");
 
 #ifdef QT_DEBUG
-{
-    // string 기반 enum과 class 매칭 유효성 검사
-    bool isValidEngineName = false;
-    if (const char* className = trUnit->metaObject()->className())
     {
-        if (magic_enum::enum_name(currentEngine).find(className))
+        // string 기반 enum과 class 매칭 유효성 검사
+        bool isValidEngineName = false;
+        if (const char* className = trUnit->metaObject()->className())
         {
-            isValidEngineName = true;
+            if (magic_enum::enum_name(inEngine).find(className))
+            {
+                isValidEngineName = true;
+            }
         }
-    }
 
-    Q_ASSERT_X(isValidEngineName, "TranslateManager::executeNewTranslateUnit", "Invalid engine type");
-}
+        Q_ASSERT_X(isValidEngineName, "TranslateManager::newTranslateUnit", "Invalid engine type");
+    }
 #endif
 
-    std::expected<void, QString> execRes = trUnit->executeTextTranslation(std::move(inTranslateRequestInfo));
-    if (execRes.has_value() == false)
+
+    return trUnit;
+}
+
+std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
+{
+    Q_ASSERT_X(_historyManager, "TranslateManager::executeNewTranslateUnit", "The _historyManager is not initialized.");
+
+    // 앞뒤 공백 제거
+    inTranslateRequestInfo.sourceText = inTranslateRequestInfo.sourceText.trimmed();
+
+    const EngineType engineType = inTranslateRequestInfo.engineType;
+    const QString sourceText    = inTranslateRequestInfo.sourceText;
+    const LangType sourceLang   = inTranslateRequestInfo.sourceLang;
+    const LangType targetLang   = inTranslateRequestInfo.targetLang;
+    const bool isIgnoreCache    = inTranslateRequestInfo.isIgnoreCache;
+
+    TranslateUnit* trUnit = newTranslateUnit(engineType);
+
+    trUnit->setTranslateRequestInfo(std::move(inTranslateRequestInfo));
+
+    if (sourceText.isEmpty())
     {
-        trUnit->deleteLater();
-        return std::unexpected{execRes.error()};
+        solDebug << "translate request text is empty";
+
+        trUnit->onTranslationFromCache("");
+        return trUnit;
     }
+
+    if (isIgnoreCache)
+    {
+        trUnit->requestTranslate();
+        return trUnit;
+    }
+
+    _historyManager->asyncLookupHistory(
+        engineType
+      , sourceText
+      , sourceLang
+      , targetLang
+      , trUnit
+      , [inTrUnit = QPointer{trUnit}](const std::tuple<bool, QString>& inRes)
+        {
+            if (inTrUnit.isNull())
+            {
+                solDebug << "The trUnit was destroyed before the database lookup was completed.";
+                return;
+            }
+
+            auto& [isFind, findCache] = inRes;
+            if (isFind)
+            {
+                inTrUnit->onTranslationFromCache(findCache);
+            }
+            else
+            {
+                inTrUnit->requestTranslate();
+            }
+        });
 
     return trUnit;
 }
@@ -127,6 +184,24 @@ void TranslateManager::translateAtPopup(const QString& inSourceText
 
     PopupTranslateWidget* popupWidget = new PopupTranslateWidget();
     popupWidget->executeTranslate(inSourceText, inTextStyle, LangType::AUTO, solConfig.popupTargetLang(), inIsIgnoreCache);
+}
+
+void TranslateManager::onAddHistoryRequested(const TranslateRequestInfo& inTranslateRequestInfo
+                                           , const QString& inTargetText)
+{
+    if (inTargetText.isEmpty())
+    {
+        return;
+    }
+
+    _historyManager->asyncAddHistory(
+        inTranslateRequestInfo.engineType
+      , inTranslateRequestInfo.sourceLang
+      , inTranslateRequestInfo.targetLang
+      , inTranslateRequestInfo.sourceText
+      , inTargetText
+      , inTranslateRequestInfo.textFormat
+    );
 }
 
 void TranslateManager::processPopupTranslate()

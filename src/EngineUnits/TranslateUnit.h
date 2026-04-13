@@ -11,6 +11,7 @@
 #include <expected>
 
 
+class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
 class TranslateManager;
@@ -27,7 +28,10 @@ class TranslateUnit : public QObject
 public:
     explicit TranslateUnit(TranslateManager* parent);
 
-    std::expected<void, QString> executeTextTranslation(TranslateRequestInfo&& inTranslateRequestInfo);
+    void setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo);
+    void onTranslationFromCache(const QString& inTargetText);
+
+    virtual void requestTranslate() = 0;
 
 protected:
     void get(const QNetworkRequest& inRequest);
@@ -37,13 +41,13 @@ private:
     void postProcess();
 
 protected:
-    virtual void requestTranslate() = 0;
     virtual void onReadyRead() = 0;
 
 private slots:
     void onReplyFinished();
 
     void disconnectTranslateDisplay();
+
 public:
     /**
      * 번역 결과를 출력하지 않게 변경합니다.
@@ -85,6 +89,8 @@ protected:
     void finishTranslateRequest(const QString& inTargetText);
 
 protected:
+    QPointer<TranslateManager> _translateManager;
+
     QPointer<QNetworkReply> _reply;
 
     TranslateRequestInfo _trReqData;

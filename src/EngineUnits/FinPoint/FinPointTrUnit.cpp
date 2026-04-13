@@ -15,6 +15,11 @@ FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
     : TranslateUnit(parent)
 {}
 
+void FinPointTrUnit::requestTranslate()
+{
+    chatTranslate(true);
+}
+
 void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
 {
     const QUrl url(_isDebugMode
@@ -33,11 +38,6 @@ void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
     const QByteArray data = doc.toJson();
 
     post(request, data, inIsStreaming);
-}
-
-void FinPointTrUnit::requestTranslate()
-{
-    chatTranslate(true);
 }
 
 void FinPointTrUnit::onReadyRead()

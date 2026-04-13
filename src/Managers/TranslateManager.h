@@ -9,6 +9,8 @@
 #include <expected>
 
 
+enum class EngineType;
+class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
 enum class TextStyle;
@@ -27,6 +29,8 @@ class TranslateManager : public AbstractManager
 public:
     explicit TranslateManager(SolTranslatorCore* parent);
 
+    void init(HistoryManager* inHistoryManager);
+
 protected:
     virtual void postInitialize() override;
 
@@ -35,6 +39,7 @@ public:
     QNetworkReply* post(const QNetworkRequest& inRequest, const QByteArray& inPayload);
 
 private:
+    TranslateUnit* newTranslateUnit(const EngineType inEngine);
     std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
 
 public:
@@ -44,10 +49,15 @@ public:
                         , const TextStyle inTextStyle
                         , const bool inIsIgnoreCache = false);
 
+    void onAddHistoryRequested(const TranslateRequestInfo& inTranslateRequestInfo
+                             , const QString& inTargetText);
+
 private:
     void processPopupTranslate();
 
     QNetworkAccessManager* _networkAccessManager;
+
+    QPointer<HistoryManager> _historyManager;
 };
 
 

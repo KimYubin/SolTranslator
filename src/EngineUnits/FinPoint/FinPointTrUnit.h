@@ -2,7 +2,9 @@
 
 #ifndef SOLPOINT_H
 #define SOLPOINT_H
+
 #include "EngineUnits/TranslateUnit.h"
+
 
 class FinPointTrUnit final : public TranslateUnit
 {
@@ -11,10 +13,11 @@ class FinPointTrUnit final : public TranslateUnit
 public:
     explicit FinPointTrUnit(TranslateManager* parent);
 
+    virtual void requestTranslate() override;
+
 protected:
     void chatTranslate(const bool inIsStreaming);
 
-    virtual void requestTranslate() override;
     virtual void onReadyRead() override;
     virtual void replyTranslateFinished() override;
 

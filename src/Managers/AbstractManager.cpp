@@ -4,11 +4,17 @@
 
 #include "SolTranslatorCore.h"
 
-AbstractManager::AbstractManager(SolTranslatorCore* parent) : QObject(parent)
+AbstractManager::AbstractManager(SolTranslatorCore* parent)
+    : QObject(nullptr) // Manage lifecycle with unique_ptr.
+    , _solCore(parent)
 {
-    connect(parent, &SolTranslatorCore::postInitialized, this, &AbstractManager::postInitialize);
+    Q_ASSERT_X(_solCore, "AbstractManager::AbstractManager", "SolTranslatorCore is invalid.");
+
+    connect(_solCore, &SolTranslatorCore::postInitialized, this, &AbstractManager::postInitialize);
 }
+
+AbstractManager::~AbstractManager()
+{}
 
 void AbstractManager::postInitialize()
 {}
-

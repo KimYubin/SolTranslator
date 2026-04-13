@@ -13,8 +13,9 @@ class GoogleTrUnit final : public TranslateUnit
 public:
     explicit GoogleTrUnit(TranslateManager* parent);
 
-protected:
     virtual void requestTranslate() override;
+
+protected:
     virtual void onReadyRead() override;
     virtual void replyTranslateFinished() override;
 };

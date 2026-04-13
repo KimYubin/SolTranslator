@@ -2,17 +2,15 @@
 
 #include "SolTranslatorCore.h"
 
-#include "Managers/ConfigManager.h"
-#include "Managers/GlobalHotKeyManager.h"
-#include "Managers/HistoryManager.h"
 #include "Managers/StyleManger.h"
 #include "Managers/TranslateManager.h"
 #include "Support/WidgetInspector.h"
 #include "Types/SolConstants.h"
-#include "Utils/SolAsync.hpp"
 #include "Widgets/SolMainWidget.h"
 
-#include <QApplication>
+#include <QCommandLineParser>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 

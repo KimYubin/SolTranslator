@@ -13,10 +13,11 @@ class OpenAiTrUnit final : public TranslateUnit
 public:
     explicit OpenAiTrUnit(TranslateManager* parent);
 
+    virtual void requestTranslate() override;
+
 protected:
     void chatTranslate(const bool inIsStreaming);
 
-    virtual void requestTranslate() override;
     virtual void onReadyRead() override;
     virtual void replyTranslateFinished() override;
 

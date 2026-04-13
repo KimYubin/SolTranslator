@@ -19,12 +19,17 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
 
+    // solCore
     SolTranslatorCore solTranslatorCore(&app);
 
+    // managers
     solTranslatorCore.emplaceManager<ConfigManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<TranslateManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<HistoryManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<GlobalHotKeyManager>(&solTranslatorCore);
+
+    solTranslatorCore.manager<TranslateManager>()->init(solTranslatorCore.manager<HistoryManager>());
+
 
     solTranslatorCore.postInitialize();
 

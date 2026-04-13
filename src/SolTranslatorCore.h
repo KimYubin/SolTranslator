@@ -37,27 +37,29 @@ public:
 public:
     template <typename T, typename... Args>
         requires std::is_base_of_v<AbstractManager, T>
-    void emplaceManager(Args&&... args)
+    T* emplaceManager(Args&&... args)
     {
-        Q_ASSERT_X(_managers.contains(typeid(T)) == false, "manager", "Manager already registered");
+        Q_ASSERT_X(_managers.contains(std::type_index(typeid(T))) == false, "manager", "Manager already registered");
 
-        _managers.emplace(typeid(T), std::make_unique<T>(std::forward<Args>(args)...));
+        auto emplaceRes = _managers.emplace(std::type_index(typeid(T)), std::make_unique<T>(std::forward<Args>(args)...));
+
+        return static_cast<T*>(emplaceRes.first->second.get());
     }
 
     template <typename T>
         requires std::is_base_of_v<AbstractManager, T>
     void registerManager(std::unique_ptr<T>&& inManager)
     {
-        Q_ASSERT_X(_managers.contains(typeid(T)) == false, "manager", "Manager already registered");
+        Q_ASSERT_X(_managers.contains(std::type_index(typeid(T))) == false, "manager", "Manager already registered");
 
-        _managers[typeid(T)] = std::move(inManager);
+        _managers[std::type_index(typeid(T))] = std::move(inManager);
     };
 
     template <typename T>
         requires std::is_base_of_v<AbstractManager, T>
     T* manager()
     {
-        const auto it = _managers.find(typeid(T));
+        const auto it = _managers.find(std::type_index(typeid(T)));
 
         Q_ASSERT_X(it != _managers.end(), "manager", "Access an unregistered manager.");
 

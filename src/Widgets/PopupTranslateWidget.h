@@ -6,6 +6,7 @@
 #include "ITranslateWidget.h"
 #include "Types/SolTypes.h"
 
+class ILoadingWidget;
 class SolButton;
 class LoadingBar;
 class QPushButton;
@@ -186,7 +187,7 @@ private:
     SolButton* _minimizedButton;
     SolButton* _closeButton;
 
-    LoadingBar* _loadingBar;
+    ILoadingWidget* _loadingWidget;
 
 
     SolButton* _reTranslateButton;

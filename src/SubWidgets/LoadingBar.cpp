@@ -5,7 +5,8 @@
 #include <QPropertyAnimation>
 #include <QSvgWidget>
 
-LoadingBar::LoadingBar(const QString& inFile, QWidget* parent): QWidget(parent)
+LoadingBar::LoadingBar(const QString& inFile, QWidget* parent)
+    : ILoadingWidget(inFile, parent)
 {
     svg = new QSvgWidget(inFile, this);
 

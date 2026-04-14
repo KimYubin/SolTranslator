@@ -57,7 +57,7 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <layout class="QGridLayout" name="titleLayout">
+        <layout class="QHBoxLayout" name="titleLayout">
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
          </property>

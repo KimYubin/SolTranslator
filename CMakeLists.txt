@@ -87,6 +87,8 @@ qt_add_executable(
         src/SubWidgets/DropdownMenu.h
         src/SubWidgets/EngineSelector.cpp
         src/SubWidgets/EngineSelector.h
+        src/SubWidgets/ILoadingWidget.cpp
+        src/SubWidgets/ILoadingWidget.h
         src/SubWidgets/KeySelectionList.cpp
         src/SubWidgets/KeySelectionList.h
         src/SubWidgets/LanguageSelector.cpp
@@ -95,6 +97,8 @@ qt_add_executable(
         src/SubWidgets/LayoutTextEdit.h
         src/SubWidgets/LoadingBar.cpp
         src/SubWidgets/LoadingBar.h
+        src/SubWidgets/LoadingSpinner.cpp
+        src/SubWidgets/LoadingSpinner.h
         src/SubWidgets/ResultTextEdit.cpp
         src/SubWidgets/ResultTextEdit.h
         src/SubWidgets/SettingCard.cpp

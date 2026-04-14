@@ -6,6 +6,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/LoadingBar.h"
+#include "SubWidgets/LoadingSpinner.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Utils/SolAsync.hpp"
@@ -147,7 +148,7 @@ void PopupTranslateWidget::completeTranslateText(const QString& inTargetText)
 {
     ITranslateWidget::completeTranslateText(inTargetText);
 
-    _loadingBar->stop();
+    _loadingWidget->stop();
     _isTranslateComplete = true;
     _textToggleButton->show();
     _reTranslateButton->show();
@@ -286,22 +287,21 @@ void PopupTranslateWidget::setupUI()
     // top title layout
 
     constexpr QSize topButtonsSize{24, 24};
-    auto getTitleLastColumn = [this]() { return ui->titleLayout->columnCount(); };
-    auto setupTitleButton   = [=, this](QPushButton* inButton, const Qt::Alignment inAlignment)
+    auto setupTitleWidget = [topButtonsSize, this](QWidget* inWidget, const Qt::Alignment inAlignment)
     {
-        QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(inButton->sizePolicy().hasHeightForWidth());
-        inButton->setSizePolicy(sizePolicy);
-        inButton->setMinimumSize(topButtonsSize);
-        inButton->setMaximumSize(topButtonsSize);
-        inButton->setFixedSize(topButtonsSize);
+        sizePolicy.setHeightForWidth(inWidget->sizePolicy().hasHeightForWidth());
 
-        inButton->setFocusPolicy(Qt::TabFocus);
-        inButton->setFlat(true);
+        inWidget->setSizePolicy(sizePolicy);
+        inWidget->setMinimumSize(topButtonsSize);
+        inWidget->setMaximumSize(topButtonsSize);
+        inWidget->setFixedSize(topButtonsSize);
 
-        ui->titleLayout->addWidget(inButton, 0, getTitleLastColumn(), inAlignment);
+        inWidget->setFocusPolicy(Qt::TabFocus);
+
+        ui->titleLayout->addWidget(inWidget, 0, inAlignment);
     };
 
     // ~===========
@@ -313,7 +313,7 @@ void PopupTranslateWidget::setupUI()
     _AlwaysOnButton->setCheckToolTipAction(i18n(Tr::Always_On_Top_Off), i18n(Tr::Always_On_Top_On), Action::PopupAlwaysOn);
     _AlwaysOnButton->hide();
 
-    setupTitleButton(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
+    setupTitleWidget(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_AlwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
 
@@ -325,13 +325,21 @@ void PopupTranslateWidget::setupUI()
     _windowModeButton->setIcon(QIcon(":/img/window_mode_img"));
     _windowModeButton->setCheckToolTipAction(i18n(Tr::Temp_Window_Mode), i18n(Tr::Normal_Window_Mode), Action::PopupWindowMode);
 
-    setupTitleButton(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
+    setupTitleWidget(_windowModeButton, Qt::AlignTop | Qt::AlignLeft);
 
     connect(_windowModeButton, &QPushButton::toggled, this, &PopupTranslateWidget::onWindowModeToggle);
 
+    // ~===========
+    // _loadingWidget
+    _loadingWidget = new LoadingSpinner(":/img/loading_spinner_img", this);
+    _loadingWidget->setBubbleToolTip(i18n(Tr::Translating));
+    _loadingWidget->run();
 
+    setupTitleWidget(_loadingWidget, Qt::AlignTop | Qt::AlignLeft);
+
+    // ~===========
     // 좌우 버튼 분리
-    ui->titleLayout->setColumnStretch(getTitleLastColumn() - 1, 1);
+    ui->titleLayout->addStretch(1);
 
     // ~===========
     // right side
@@ -343,7 +351,7 @@ void PopupTranslateWidget::setupUI()
     _minimizedButton->setIcon(QIcon(":/img/minimize_button_img"));
     _minimizedButton->setToolTipAction(i18n(Tr::Minimize), Action::PopupMinimize);
 
-    setupTitleButton(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
+    setupTitleWidget(_minimizedButton, Qt::AlignTop | Qt::AlignRight);
 
     connect(_minimizedButton, &QPushButton::clicked, this, &PopupTranslateWidget::onMinimized);
 
@@ -355,7 +363,7 @@ void PopupTranslateWidget::setupUI()
     _maxRestoreButton->setCheckIcon(":/img/restore_button_img", ":/img/maximize_button_img");
     _maxRestoreButton->setCheckToolTipAction(i18n(Tr::Restore_Previous_Size), i18n(Tr::Maximize), Action::PopupMaxRestore);
 
-    setupTitleButton(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
+    setupTitleWidget(_maxRestoreButton, Qt::AlignTop | Qt::AlignRight);
     connect(_maxRestoreButton, &QPushButton::toggled, this, &PopupTranslateWidget::onMaxNormalToggle);
 
 
@@ -366,7 +374,7 @@ void PopupTranslateWidget::setupUI()
     _closeButton->setIcon(QIcon(":/img/close_button_img"));
     _closeButton->setToolTipAction(i18n(Tr::Close), Action::PopupClose);
 
-    setupTitleButton(_closeButton, Qt::AlignTop | Qt::AlignRight);
+    setupTitleWidget(_closeButton, Qt::AlignTop | Qt::AlignRight);
 
     connect(_closeButton, &QPushButton::clicked, this, &QWidget::close);
 
@@ -412,12 +420,6 @@ void PopupTranslateWidget::setupUI()
 
     ui->statusLayout->addWidget(_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight);
 
-
-    // ~===========
-    // _loadingBar
-    _loadingBar = new LoadingBar(":/img/wait_anim_img", this);
-    ui->loadingLayout->addWidget(_loadingBar, 0, 0);
-    _loadingBar->run();
 
     // ~======================
     // resultText & scroll bar

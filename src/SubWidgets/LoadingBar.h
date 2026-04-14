@@ -3,13 +3,13 @@
 #ifndef LOADINGBAR_H
 #define LOADINGBAR_H
 
-#include <QWidget>
+#include "ILoadingWidget.h"
 
 
 class QPropertyAnimation;
 class QSvgWidget;
 
-class LoadingBar : public QWidget
+class LoadingBar : public ILoadingWidget
 {
     Q_OBJECT
 
@@ -18,8 +18,8 @@ class LoadingBar : public QWidget
 public:
     explicit LoadingBar(const QString& inFile, QWidget* parent = nullptr);
 
-    void run();
-    void stop();
+    virtual void run() override;
+    virtual void stop() override;
 
 private:
     QSvgWidget* svg;

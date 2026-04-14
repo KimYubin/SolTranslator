@@ -83,7 +83,7 @@ jobs:
           Compress-Archive -Path ${{ github.workspace }}/deploy/* -DestinationPath SolTranslator.zip
 
 
-      - name: Delete nightly release and tag if exists
+      - name: Delete nightly release and tag
         if: github.event_name == 'schedule'
         continue-on-error: true
         run: |
@@ -91,7 +91,7 @@ jobs:
           git push origin --delete nightly || echo "Tag does not exist"
 
 
-      - name: Delete continuous release and tag if exists
+      - name: Delete continuous release and tag
         if: github.event_name == 'push' && github.ref_type == 'branch'
         continue-on-error: true
         run: |

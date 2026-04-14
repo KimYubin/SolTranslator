@@ -1,0 +1,14 @@
+﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+
+#include "ILoadingWidget.h"
+
+#include "SolToolTip.h"
+
+ILoadingWidget::ILoadingWidget(const QString& inFile, QWidget* parent)
+    :QWidget(parent)
+{}
+
+void ILoadingWidget::setBubbleToolTip(const QString& inToolTip)
+{
+    SolTooltipFilter::setBubbleToolTip(this, inToolTip);
+}

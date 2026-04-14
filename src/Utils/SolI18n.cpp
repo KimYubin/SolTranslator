@@ -17,7 +17,7 @@ class TrImpl
 
 QString Sol::i18n(const Tr inTr)
 {
-    using enum class Tr;
+    using enum Tr;
 
     switch (inTr)
     {

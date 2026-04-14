@@ -8,8 +8,6 @@
 #include <QObject>
 #include <QPointer>
 
-#include <expected>
-
 
 class HistoryManager;
 class QNetworkRequest;
@@ -17,9 +15,7 @@ class QNetworkReply;
 class TranslateManager;
 
 /**
- * 각 번역 요청을 독립적으로 수행하는 번역 유닛입니다.
- * 번역 요청에 필요한 정보를 보관하고, 전처리, 후처리 과정을 전담합니다.
- * TranslateManager::executeNewTranslateUnit()함수로 사용합니다.
+ * The TranslateUnit class provides independent translation requests process.
  */
 class TranslateUnit : public QObject
 {
@@ -67,16 +63,14 @@ protected:
     void appendTranslatedText(const QString& inDeltaTargetText);
 
     /**
-     * 번역 기록을 업데이트합니다.
      * 영구 데이터로 기록합니다.
-     * 
+     *
      * @param inTargetText 
      */
     void addHistory(const QString& inTargetText);
 
     /** 번역문을 등록된 펑터에 반영하고, 본 객체를 파괴합니다.(deleteLater) */
     void completeTranslatedText(const QString& inTargetText);
-
 
     /**
      * DB 업데이트와 번역문 개시 처리를 합니다.

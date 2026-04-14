@@ -83,17 +83,21 @@ jobs:
           Compress-Archive -Path ${{ github.workspace }}/deploy/* -DestinationPath SolTranslator.zip
 
 
-      - name: Delete nightly tag
+      - name: Delete nightly release and tag if exists
         if: github.event_name == 'schedule'
-        run: |
-          gh release delete nightly --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
         continue-on-error: true
+        run: |
+          gh release delete nightly --yes --repo $env:GITHUB_REPOSITORY || echo "No release or draft found"
+          git push origin --delete nightly || echo "Tag does not exist"
 
-      - name: Delete continuous tag
+
+      - name: Delete continuous release and tag if exists
         if: github.event_name == 'push' && github.ref_type == 'branch'
-        run: |
-          gh release delete continuous --cleanup-tag --yes --repo $env:GITHUB_REPOSITORY
         continue-on-error: true
+        run: |
+          gh release delete continuous --yes --repo $env:GITHUB_REPOSITORY || echo "No release or draft found"
+          git push origin --delete continuous || echo "Tag does not exist"
+
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

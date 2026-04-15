@@ -69,7 +69,7 @@ void OpenAiTrUnit::onReadyRead()
     }
 }
 
-void OpenAiTrUnit::replyTranslateFinished()
+QString OpenAiTrUnit::replyTranslateFinished()
 {
     if (_isStream == false)
     {
@@ -84,7 +84,7 @@ void OpenAiTrUnit::replyTranslateFinished()
         }
     }
 
-    finishTranslateRequest(_targetText);
+    return _targetText;
 }
 
 QString OpenAiTrUnit::chunkToContent()

@@ -37,7 +37,7 @@ void GoogleTrUnit::requestTranslate()
 void GoogleTrUnit::onReadyRead()
 {}
 
-void GoogleTrUnit::replyTranslateFinished()
+QString GoogleTrUnit::replyTranslateFinished()
 {
     const QByteArray chunk      = _reply->readAll();
     const QJsonDocument jsonDoc = QJsonDocument::fromJson(chunk);
@@ -45,7 +45,7 @@ void GoogleTrUnit::replyTranslateFinished()
     if (jsonArr.isEmpty())
     {
         solDebug << "invalid reply";
-        return;
+        return {};
     }
 
     QString replyTargetText;
@@ -59,5 +59,5 @@ void GoogleTrUnit::replyTranslateFinished()
     //QString sourceLangStr = jsonArr[2].toString();
     //QLocale locale{sourceLangStr};
 
-    finishTranslateRequest(replyTargetText);
+    return replyTargetText;
 }

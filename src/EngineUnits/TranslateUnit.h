@@ -46,39 +46,34 @@ private slots:
 
 public:
     /**
-     * 번역 결과를 출력하지 않게 변경합니다.
-     * 번역 결과는 history에만 저장됩니다.
+     * Disconnect from the display.
+     * The translation result is only saved in history.
      */
     void detachDisplayWidget();
 
     void abortTranslateRequest();
 
 protected:
-    /** 받은 응답에서 번역문을 추출합니다. */
-    virtual void replyTranslateFinished() = 0;
+    /** Extract the translation from the received response. */
+    virtual QString replyTranslateFinished() = 0;
 
     virtual void replyFailed();
 
-    /** 번역 스트리밍 중간 내용을 반영합니다. */
+    /** Append the streaming results to the targetText. */
     void appendTranslatedText(const QString& inDeltaTargetText);
 
-    /**
-     * 영구 데이터로 기록합니다.
-     *
-     * @param inTargetText 
-     */
+    /** update DB */
     void addHistory(const QString& inTargetText);
 
-    /** 번역문을 등록된 펑터에 반영하고, 본 객체를 파괴합니다.(deleteLater) */
+    /** Send the \a inTargetText to the display, This object will be destroyed. (deleteLater) */
     void completeTranslatedText(const QString& inTargetText);
 
     /**
-     * DB 업데이트와 번역문 개시 처리를 합니다.
-     * 본 객체를 파괴합니다.(deleteLater)
-     *
-     * @see replyTranslate
+     * Call addHistory() and completeTranslatedText()
+     * 
+     * @see replyTranslateFinished
+     * @see addHistory
      * @see completeTranslatedText
-     * @param inTargetText
      */
     void finishTranslateRequest(const QString& inTargetText);
 

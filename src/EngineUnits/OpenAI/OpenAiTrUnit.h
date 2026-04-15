@@ -19,7 +19,7 @@ protected:
     void chatTranslate(const bool inIsStreaming);
 
     virtual void onReadyRead() override;
-    virtual void replyTranslateFinished() override;
+    virtual QString replyTranslateFinished() override;
 
     QString chunkToContent();
 };

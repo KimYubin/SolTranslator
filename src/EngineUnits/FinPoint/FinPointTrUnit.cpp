@@ -75,7 +75,7 @@ void FinPointTrUnit::onReadyRead()
     }
 }
 
-void FinPointTrUnit::replyTranslateFinished()
+QString FinPointTrUnit::replyTranslateFinished()
 {
     const QByteArray chunk  = _reply->readAll();
     const QString dataChunk = QString::fromUtf8(chunk);
@@ -93,5 +93,5 @@ void FinPointTrUnit::replyTranslateFinished()
         }
     }
 
-    finishTranslateRequest(_targetText);
+    return _targetText;
 }

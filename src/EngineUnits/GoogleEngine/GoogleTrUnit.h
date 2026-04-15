@@ -17,7 +17,7 @@ public:
 
 protected:
     virtual void onReadyRead() override;
-    virtual void replyTranslateFinished() override;
+    virtual QString replyTranslateFinished() override;
 };
 
 

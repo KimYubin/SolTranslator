@@ -62,7 +62,7 @@ void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inP
 void TranslateUnit::postProcess()
 {
     connect(_reply, &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
-    connect(_reply, &QObject::destroyed, this, &QObject::deleteLater); // reply 오류에 대비
+    connect(_reply, &QObject::destroyed, this, &QObject::deleteLater); // Prepare for reply errors.
 }
 
 void TranslateUnit::onReplyFinished()
@@ -71,8 +71,7 @@ void TranslateUnit::onReplyFinished()
     {
         if (_reply->error() == QNetworkReply::NoError)
         {
-            // to subclass
-            replyTranslateFinished();
+            finishTranslateRequest(replyTranslateFinished());
         }
         else
         {
@@ -126,7 +125,7 @@ void TranslateUnit::replyFailed()
     solDebug << "EngineType:" << Sol::enumToQStr(_trReqData.engineType);
     solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
-    // 사용자가 history에서 재번역 시도를 할 수 있습니다.
+    // User can attempt to re-translate from the history.
     finishTranslateRequest(_targetText + "\nrequest error: " + _reply->errorString());
 }
 
@@ -147,7 +146,7 @@ void TranslateUnit::addHistory(const QString& inTargetText)
 
 void TranslateUnit::completeTranslatedText(const QString& inTargetText)
 {
-    // 빈 문자열도 적용합니다.
+    // Also Apply to empty strings.
     if (_trReqData.completeContext && _trReqData.callbackTranslateComplete)
     {
         _trReqData.callbackTranslateComplete(inTargetText);

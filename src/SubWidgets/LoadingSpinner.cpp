@@ -31,7 +31,7 @@ LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* parent)
     _fadeOutDelay->callOnTimeout(_fadeOutAnim, [this]() { _fadeOutAnim->start(); });
 
 
-    SolTooltipFilter::setBubbleToolTip(this, "");
+    ILoadingWidget::setBubbleToolTip("");
 
     hideSvg();
 }

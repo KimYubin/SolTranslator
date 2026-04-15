@@ -110,6 +110,8 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const LangType inTargetLang
                                           , const bool inIsIgnoreCache)
 {
+    _loadingWidget->run();
+
     if ((inTextStyle == TextStyle::PlainText) 
         || inIsIgnoreCache)
     {
@@ -333,7 +335,6 @@ void PopupTranslateWidget::setupUI()
     // _loadingWidget
     _loadingWidget = new LoadingSpinner(":/img/loading_spinner_img", this);
     _loadingWidget->setBubbleToolTip(i18n(Tr::Translating));
-    _loadingWidget->run();
 
     setupTitleWidget(_loadingWidget, Qt::AlignTop | Qt::AlignLeft);
 

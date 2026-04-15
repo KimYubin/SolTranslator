@@ -22,8 +22,8 @@ public:
     virtual void stop() override;
 
 private:
-    QSvgWidget* svg;
-    QPropertyAnimation* animation;
+    QSvgWidget* _svg;
+    QPropertyAnimation* _animation;
 
     float getAnimRatio() const { return _animRatio; }
     void setAnimRatio(const float inAnimRatio);

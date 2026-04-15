@@ -5,12 +5,14 @@
 
 #include "ILoadingWidget.h"
 
-class QSvgWidget;
+class QSvgRenderer;
 class QTimer;
+class QPropertyAnimation;
 
 class LoadingSpinner : public ILoadingWidget
 {
     Q_OBJECT
+    Q_PROPERTY(float opacityRatio READ getOpacityRatio WRITE setOpacityRatio)
 
 public:
     explicit LoadingSpinner(const QString& inFile, QWidget* parent = nullptr);
@@ -19,11 +21,30 @@ public:
     virtual void run() override;
     virtual void stop() override;
 
+protected:
+    virtual void showEvent(QShowEvent* event) override;
+    virtual void hideEvent(QHideEvent* event) override;
+
+    virtual void paintEvent(QPaintEvent* event) override;
+
 private:
+    void setSvgVisibility(const bool inVisible);
     void showSvg();
     void hideSvg();
-    QSvgWidget* _svg;
-    QTimer* _stopTimer;
+
+private:
+    QSvgRenderer* _svgRenderer;
+    QPropertyAnimation* _fadeOutAnim;
+    QTimer* _fadeOutDelay;
+
+    QString _toolTip;
+
+    bool _isSvgVisible;
+
+    // Q_PROPERTY
+    float _opacityRatio;
+    float getOpacityRatio() const { return _opacityRatio; }
+    void setOpacityRatio(const float inOpacityRatio) { _opacityRatio = inOpacityRatio; };
 };
 
 

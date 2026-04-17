@@ -6,7 +6,7 @@
 #include <QSvgWidget>
 
 LoadingBar::LoadingBar(const QString& inFile, QWidget* parent)
-    : ILoadingWidget(inFile, parent)
+    : ILoadingWidget(parent)
 {
     _svg = new QSvgWidget(inFile, this);
 

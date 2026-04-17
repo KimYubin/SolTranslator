@@ -28,7 +28,7 @@
 #define SOL_QSS_TYPE(type, varName) \
 private: \
     Q_PROPERTY(type varName READ get##varName WRITE set##varName) \
-    void set##varName(const type& inColor) { _##varName = inColor; }; \
+    void set##varName(const type& inParam) { _##varName = inParam; }; \
     type get##varName() const { return _##varName; }; \
     type _##varName;
 

@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_LOADINGSPINNER_H
 #define SOLTRANSLATOR_LOADINGSPINNER_H
@@ -44,7 +44,7 @@ private:
     // Q_PROPERTY
     float _opacityRatio;
     float getOpacityRatio() const { return _opacityRatio; }
-    void setOpacityRatio(const float inOpacityRatio) { _opacityRatio = inOpacityRatio; };
+    void setOpacityRatio(const float inOpacityRatio);
 };
 
 

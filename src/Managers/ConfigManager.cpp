@@ -295,6 +295,7 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
 {
     {Action::None,                  QKeySequence{}}
 
+  , {Action::MainWidgetRaise,       QKeySequence{Qt::ALT | Qt::Key_V}}
   , {Action::PopupTranslate,        QKeySequence{Qt::ALT | Qt::Key_C}}
 
   , {Action::SettingsClose,         QKeySequence{Qt::CTRL | Qt::Key_W}}
@@ -302,12 +303,15 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
   , {Action::MainClose,             QKeySequence{Qt::CTRL | Qt::Key_W}}
   , {Action::MainNextTab,           QKeySequence{Qt::CTRL | Qt::Key_Tab}}
   , {Action::MainPrevTab,           QKeySequence{Qt::CTRL | Qt::SHIFT | Qt::Key_Tab}}
-
+  , {Action::TextTab,               QKeySequence{Qt::CTRL | Qt::Key_T}}
+  , {Action::DocumentTab,           QKeySequence{Qt::CTRL | Qt::Key_D}}
+  , {Action::HistoryTab,            QKeySequence{Qt::CTRL | Qt::Key_H}}
+ 
   , {Action::SourceTargetToggle,    QKeySequence{Qt::Key_T}}
   , {Action::CopyDoc,               QKeySequence{Qt::Key_C}}
   , {Action::ViewInPopup,           QKeySequence{Qt::Key_V}}
   , {Action::ReTranslate,           QKeySequence{Qt::CTRL | Qt::Key_R}}
-  , {Action::DeleteTranslation,     QKeySequence{/*Qt::CTRL | Qt::Key_D*/}}
+  , {Action::DeleteTranslation,     QKeySequence{/*Qt::CTRL | Qt::SHIFT | Qt::Key_D*/}}
 
   , {Action::PopupAlwaysOn,         QKeySequence{Qt::Key_A}}
   , {Action::PopupWindowMode,       QKeySequence{Qt::Key_N}}
@@ -317,7 +321,7 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
 
 };
 
-constexpr int ActionCheck = 17;
+constexpr int ActionCheck = 21;
 static_assert(static_cast<int>(Action::Size) == ActionCheck, "Action changed: update defaultShortcuts");
 
 } // anonymous namespace

@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_ENUMUTILS_H
 #define SOLTRANSLATOR_ENUMUTILS_H
@@ -41,6 +41,7 @@ QString enumToQStr(const EnumType inDefaultVal)
 
 /**
  * Convert QString to enum.
+ * 
  * @param inString Source string
  * @param inDefaultVal \a Default value to use if inString is invalid.
  */

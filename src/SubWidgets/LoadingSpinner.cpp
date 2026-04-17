@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #include "LoadingSpinner.h"
 
@@ -12,7 +12,7 @@
 
 
 LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* parent)
-    : ILoadingWidget(inFile, parent)
+    : ILoadingWidget(parent)
 {
     _svgRenderer = new QSvgRenderer(this);
     _svgRenderer->load(inFile);
@@ -103,5 +103,11 @@ void LoadingSpinner::showSvg()
 void LoadingSpinner::hideSvg()
 {
     setSvgVisibility(false);
+    update();
+}
+
+void LoadingSpinner::setOpacityRatio(const float inOpacityRatio)
+{
+    _opacityRatio = inOpacityRatio;
     update();
 }

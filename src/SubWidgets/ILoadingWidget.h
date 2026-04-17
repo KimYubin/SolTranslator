@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
+// SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
 #ifndef SOLTRANSLATOR_ILOADINGWIDGET_H
 #define SOLTRANSLATOR_ILOADINGWIDGET_H
@@ -10,7 +10,7 @@ class ILoadingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ILoadingWidget(const QString& inFile, QWidget* parent = nullptr);
+    explicit ILoadingWidget(QWidget* parent = nullptr);
     virtual void setBubbleToolTip(const QString& inToolTip);
 
     virtual void run() = 0;

@@ -6,6 +6,7 @@
 #include "SolTranslatorCore.h"
 #include "TextEditTranslateWidget.h"
 #include "Managers/ConfigManager.h"
+#include "Managers/GlobalHotKeyManager.h"
 #include "Settings/SettingsWidget.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/EngineSelector.h"
@@ -73,6 +74,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     textTabButton = new SolButton(this);
     textTabButton->setObjectName("textTabButton");
     textTabButton->setText(i18n(Tr::Text));
+    textTabButton->setAction(Action::TextTab);
     textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
     ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignLeft);
 
@@ -86,6 +88,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     docTabButton = new SolButton(this);
     docTabButton->setObjectName("docTabButton");
     docTabButton->setText(i18n(Tr::Document));
+    docTabButton->setAction(Action::DocumentTab);
     docTabButton->setIcon(QIcon(":/img/document_img"));
     ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignLeft);
 
@@ -98,6 +101,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     historyTabButton->setObjectName("historyTabButton");
     historyTabButton->setText(i18n(Tr::History));
     historyTabButton->setIcon(QIcon(":/img/history_img"));
+    historyTabButton->setAction(Action::HistoryTab);
     ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignLeft);
 
     bindButton(historyTabButton, historyWidget);
@@ -154,6 +158,18 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     {
         setTabOrder(tabOrderList[idx - 1], tabOrderList[idx]);
     }
+
+
+    solCore->manager<GlobalHotKeyManager>()->registerAction(
+        Action::MainWidgetRaise
+      , this
+      , [this]()
+        {
+            show();
+            raise();
+            activateWindow();
+        }
+    );
 }
 
 SolMainWidget::~SolMainWidget()

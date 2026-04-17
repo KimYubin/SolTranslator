@@ -20,30 +20,37 @@ QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
 }
 }
 
+void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFileName)
+{
+    QIcon checkIcon;
+    checkIcon.addFile(inOnFileName, QSize(), QIcon::Normal, QIcon::On);
+    checkIcon.addFile(inOffFileName, QSize(), QIcon::Normal, QIcon::Off);
+
+    setIcon(checkIcon);
+}
+
+
 void SolButton::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
 {
+    _toolTip = inToolTip;
     setShortcut(inKey);
 
     SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey));
 }
 
-void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction = Action::None)
+void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction)
 {
     setToolTipShortcut(inToolTip, solConfig.shortcut(inAction));
 }
 
-void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFileName)
-{
-    QIcon checkIcon;
-    checkIcon.addFile(inOffFileName, QSize(), QIcon::Normal, QIcon::Off);
-    checkIcon.addFile(inOnFileName, QSize(), QIcon::Normal, QIcon::On);
-    setIcon(checkIcon);
-}
 
 void SolButton::setCheckToolTipShortcut(const QString& inOnToolTip
                                       , const QString& inOffToolTip
                                       , const QKeySequence& inKey)
 {
+    _toolTip    = inOnToolTip;
+    _offToolTip = inOffToolTip;
+
     setShortcut(inKey);
 
     SolTooltipFilter::setCheckableButtonToolTip(this
@@ -60,7 +67,25 @@ void SolButton::setCheckToolTipAction(const QString& inOnToolTip
 
 void SolButton::changeShortcut(const QKeySequence& inKey)
 {
-    setShortcut(inKey);
+    if (_offToolTip.has_value())
+    {
+        setCheckToolTipShortcut(_toolTip, _offToolTip.value(), inKey);
+    }
+    else
+    {
+        setToolTipShortcut(_toolTip, inKey);
+    }
+}
 
-    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(toolTip(), inKey));
+void SolButton::setAction(const Action inAction)
+{
+    if (_offToolTip.has_value())
+    {
+        setCheckToolTipAction(_toolTip, _offToolTip.value(), inAction);
+    }
+    else
+    {
+        setToolTipAction(_toolTip, inAction);
+    }
+
 }

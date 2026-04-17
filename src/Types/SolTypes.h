@@ -139,13 +139,19 @@ enum class Action
 {
     None
 
+  , MainWidgetRaise
   , PopupTranslate
 
   , SettingsOpen
   , SettingsClose
+
   , MainClose
   , MainNextTab
   , MainPrevTab
+  , TextTab
+  , DocumentTab
+  , HistoryTab
+
   , SourceTargetToggle
   , CopyDoc
   , ViewInPopup

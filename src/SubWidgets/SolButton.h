@@ -25,22 +25,26 @@ public:
         : QPushButton(icon, text, parent)
     {}
 
-    void setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
-    void setToolTipAction(const QString& inToolTip, const Action inAction/* = Action::None*/);
-
     void setCheckIcon(const QString& inOnFileName, const QString& inOffFileName);
+
+    void setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
+    void setToolTipAction(const QString& inToolTip, const Action inAction);
+
 
     void setCheckToolTipShortcut(const QString& inOnToolTip
                                , const QString& inOffToolTip
                                , const QKeySequence& inKey = QKeySequence());
     void setCheckToolTipAction(const QString& inOnToolTip
                              , const QString& inOffToolTip
-                             , const Action inAction/* = Action::None*/);
+                             , const Action inAction);
 
-    /**
-     * 
-     */
     void changeShortcut(const QKeySequence& inKey);
+    void setAction(const Action inAction);
+
+private:
+    QString _toolTip;
+    std::optional<QString> _offToolTip;
+
 };
 
 

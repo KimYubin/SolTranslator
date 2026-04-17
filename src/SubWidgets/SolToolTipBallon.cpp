@@ -43,8 +43,8 @@ SolToolTipBallon::SolToolTipBallon(QWidget* parent)
     _expireTimer.setSingleShot(true);
     _hideTimer.setInterval(300);
     _hideTimer.setSingleShot(true);
-    connect(&_expireTimer, &QTimer::timeout, this, &SolToolTipBallon::hideTipImmediately);
-    connect(&_hideTimer, &QTimer::timeout, this, &SolToolTipBallon::hideTipImmediately);
+    connect(&_expireTimer, &QTimer::timeout, this, &SolToolTipBallon::hideToolTipImmediately);
+    connect(&_hideTimer, &QTimer::timeout, this, &SolToolTipBallon::hideToolTipImmediately);
 }
 
 void SolToolTipBallon::showToolTip(const QWidget* widget)
@@ -56,7 +56,24 @@ void SolToolTipBallon::showToolTip(const QWidget* widget)
     }
     else
     {
-        hideTipDelay();
+        hideToolTipDelay();
+    }
+}
+
+void SolToolTipBallon::hideToolTipImmediately()
+{
+    // Avoid access after calling deleteLater()
+    _ins = nullptr;
+
+    close();
+    deleteLater();
+}
+
+void SolToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
+{
+    if (_currentTargetWidget == inWidget)
+    {
+        showToolTipImpl(_currentTargetWidget);
     }
 }
 
@@ -149,30 +166,18 @@ void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
     adjustSize();
     show();
 
+    // To draw on the always-on-top widget.
+    QTimer::singleShot(0, this, &QWidget::raise);
+
     _expireTimer.start();
     _hideTimer.stop();
 }
 
-void SolToolTipBallon::hideTipImmediately()
-{
-    // Avoid access after calling deleteLater()
-    _ins = nullptr;
-
-    close();
-    deleteLater();
-}
-
-void SolToolTipBallon::hideTipDelay()
+void SolToolTipBallon::hideToolTipDelay()
 {
     if (_hideTimer.isActive() == false)
-        _hideTimer.start(300);
-}
-
-void SolToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
-{
-    if (_currentTargetWidget == inWidget)
     {
-        showToolTipImpl(_currentTargetWidget);
+        _hideTimer.start(300);
     }
 }
 

@@ -25,6 +25,7 @@ class SolToolTipBallon : public QWidget
     Q_PROPERTY(QColor borderColor READ getBorderColor WRITE setBorderColor)
 
     static QPointer<SolToolTipBallon> _ins;
+    explicit SolToolTipBallon(QWidget* parent = nullptr);
 
 public:
     static SolToolTipBallon* instance()
@@ -36,18 +37,18 @@ public:
         return _ins;
     }
 
-    explicit SolToolTipBallon(QWidget* parent = nullptr);
-
     void showToolTip(const QWidget* widget);
-    void showToolTipImpl(const QWidget* widget);
-    void hideTipImmediately();
-    void hideTipDelay();
+    void hideToolTipImmediately();
 
     /**
      * 툴팁 내용이 변경될 때 사용합니다.
      * 툴팁이 보여지고 있다면, 새로운 툴팁으로 업데이트 합니다.
      */
     void updateWidgetToolTip(const QWidget* inWidget);
+
+private:
+    void showToolTipImpl(const QWidget* widget);
+    void hideToolTipDelay();
 
 protected:
     virtual void paintEvent(QPaintEvent*) override;

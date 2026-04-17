@@ -72,7 +72,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
     ui->languageSwapButton->setFocusPolicy(Qt::TabFocus);
     ui->languageSwapButton->setAccessibleName(i18n(Tr::Swap_Language));
     ui->languageSwapButton->setAccessibleDescription(i18n(Tr::Swap_Language_Desc));
-    SolTooltipFilter::setBubbleToolTip(ui->languageSwapButton, i18n(Tr::Swap_Language));
+    SolToolTipFilter::setBubbleToolTip(ui->languageSwapButton, i18n(Tr::Swap_Language));
     connect(ui->languageSwapButton, &QPushButton::clicked, this, [this]()
     {
         const LangType srcLangType    = solConfig.textSrcLang();

@@ -9,16 +9,19 @@
 
 
 // ~==================================
-// SolTooltipFilter
+// SolToolTipFilter
 
-void SolTooltipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+SolToolTipFilter::SolToolTipFilter(QObject* parent) : QObject(parent)
+{}
+
+void SolToolTipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
 {
-    static SolTooltipFilter* ins = new SolTooltipFilter();
+    static SolToolTipFilter* ins = new SolToolTipFilter();
     inTargetWidget->setToolTip(inToolTip);
     inTargetWidget->installEventFilter(ins);
 }
 
-void SolTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
+void SolToolTipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
 {
     const bool isChecked = (inTargetWidget->isCheckable() && inTargetWidget->isChecked());
 
@@ -26,31 +29,19 @@ void SolTooltipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget
 
     connect(inTargetWidget, &QAbstractButton::toggled, inTargetWidget, [inTargetWidget, inOnCheckToolTip, inOffCheckToolTip](const bool checked)
     {
-        QString toolTip;
-        if (checked)
-        {
-            toolTip = inOnCheckToolTip;
-        }
-        else
-        {
-            toolTip = inOffCheckToolTip;
-        }
+        const QString& toolTip = checked ? inOnCheckToolTip : inOffCheckToolTip;
         inTargetWidget->setToolTip(toolTip);
 
         SolToolTipBallon::instance()->updateWidgetToolTip(inTargetWidget);
     });
 }
 
-SolTooltipFilter::SolTooltipFilter(QObject* parent) : QObject(parent)
-{}
-
-bool SolTooltipFilter::eventFilter(QObject* obj, QEvent* event)
+bool SolToolTipFilter::eventFilter(QObject* obj, QEvent* event)
 {
     switch (event->type())
     {
     case QEvent::ToolTip:
     {
-        // const QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
         const QWidget* widget = qobject_cast<QWidget*>(obj);
         if (widget == nullptr)
         {
@@ -74,7 +65,7 @@ bool SolTooltipFilter::eventFilter(QObject* obj, QEvent* event)
     case QEvent::MouseButtonDblClick:
     case QEvent::Wheel:
     {
-        SolToolTipBallon::instance()->hideTipImmediately();
+        SolToolTipBallon::instance()->hideToolTipImmediately();
         break;
     }
     default: break;

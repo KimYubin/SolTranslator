@@ -10,5 +10,5 @@ ILoadingWidget::ILoadingWidget(QWidget* parent)
 
 void ILoadingWidget::setBubbleToolTip(const QString& inToolTip)
 {
-    SolTooltipFilter::setBubbleToolTip(this, inToolTip);
+    SolToolTipFilter::setBubbleToolTip(this, inToolTip);
 }

@@ -10,19 +10,19 @@ class QAbstractButton;
 /**
  * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.
  *
- * @see SolTooltipFilter::setBubbleToolTip(widget, "tool tip");
+ * @see SolToolTipFilter::setBubbleToolTip
  */
-class SolTooltipFilter : public QObject
+class SolToolTipFilter : public QObject
 {
     Q_OBJECT
 
-    explicit SolTooltipFilter(QObject* parent = nullptr);
+    explicit SolToolTipFilter(QObject* parent = nullptr);
 
 public:
     /**
      * 버블 툴팁을 추가합니다.
-     * 
-     * @param inTargetWidget 툴팁을 추가할 위젯 
+     *
+     * @param inTargetWidget 툴팁을 추가할 위젯
      * @param inToolTip 툴팁 내용
      */
     static void setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip);

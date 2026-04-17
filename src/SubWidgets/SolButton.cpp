@@ -33,9 +33,11 @@ void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFi
 void SolButton::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
 {
     _toolTip = inToolTip;
+    _offToolTip.reset();
+
     setShortcut(inKey);
 
-    SolTooltipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey));
+    SolToolTipFilter::setBubbleToolTip(this, toolTipShortcut(inToolTip, inKey));
 }
 
 void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction)
@@ -53,7 +55,7 @@ void SolButton::setCheckToolTipShortcut(const QString& inOnToolTip
 
     setShortcut(inKey);
 
-    SolTooltipFilter::setCheckableButtonToolTip(this
+    SolToolTipFilter::setCheckableButtonToolTip(this
                                               , toolTipShortcut(inOnToolTip, inKey)
                                               , toolTipShortcut(inOffToolTip, inKey));
 }
@@ -79,13 +81,5 @@ void SolButton::changeShortcut(const QKeySequence& inKey)
 
 void SolButton::setAction(const Action inAction)
 {
-    if (_offToolTip.has_value())
-    {
-        setCheckToolTipAction(_toolTip, _offToolTip.value(), inAction);
-    }
-    else
-    {
-        setToolTipAction(_toolTip, inAction);
-    }
-
+    changeShortcut(solConfig.shortcut(inAction));
 }

@@ -127,7 +127,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
         solConfig.setCurrentEngineType(curEg);
     });
 
-    SolTooltipFilter::setBubbleToolTip(_engineSelector, i18n(Tr::Select_Translation_Engine));
+    SolToolTipFilter::setBubbleToolTip(_engineSelector, i18n(Tr::Select_Translation_Engine));
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignRight);
 

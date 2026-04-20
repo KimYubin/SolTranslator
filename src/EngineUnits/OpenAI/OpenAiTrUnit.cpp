@@ -4,9 +4,9 @@
 
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
+#include "Types/ExJson.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
-#include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>

@@ -32,8 +32,6 @@ qt_add_executable(
         src/SolTranslatorCore.cpp
         src/SolTranslatorCore.h
 
-        src/QuickTextEdit.qml
-
         resource/image/image.qrc
         resource/sql/sql.qrc
         resource/theme/theme.qrc
@@ -119,6 +117,8 @@ qt_add_executable(
         src/Support/WidgetInspector.cpp
         src/Support/WidgetInspector.h
 
+        src/Types/ExJson.cpp
+        src/Types/ExJson.h
         src/Types/SolConstants.cpp
         src/Types/SolConstants.h
         src/Types/SolDatabase.cpp
@@ -130,8 +130,6 @@ qt_add_executable(
         src/Types/SolTypes.h
 
         src/Utils/EnumUtils.hpp
-        src/Utils/ExJson.cpp
-        src/Utils/ExJson.h
         src/Utils/SolAsync.hpp
         src/Utils/SolI18n.cpp
         src/Utils/SolI18n.h
@@ -143,8 +141,7 @@ qt_add_executable(
         src/Utils/SolPath.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
-        src/Utils/UniqueQObjectPtr.cpp
-        src/Utils/UniqueQObjectPtr.h
+        src/Utils/UniqueQObjectPtr.hpp
 
         src/Widgets/HistoryCacheData.cpp
         src/Widgets/HistoryCacheData.h

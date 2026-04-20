@@ -41,7 +41,6 @@ public:
     void hideToolTipImmediately();
 
     /**
-     * 툴팁 내용이 변경될 때 사용합니다.
      * 툴팁이 보여지고 있다면, 새로운 툴팁으로 업데이트 합니다.
      */
     void updateWidgetToolTip(const QWidget* inWidget);

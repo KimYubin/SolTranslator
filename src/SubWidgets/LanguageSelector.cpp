@@ -73,6 +73,7 @@ LanguageSelector::LanguageSelector(QWidget* parent
                                  , QWidget* inReturnFocusWidget
                                  , const LangType inLangType)
     : QFrame(parent)
+    , _currentLangType(inLangType)
     , _sizeWidget(inSizeWidget)
     , _returnFocusWidget(inReturnFocusWidget)
 {
@@ -183,6 +184,10 @@ LanguageSelectorMenuPrivate::LanguageSelectorMenuPrivate(LanguageSelector* inLan
     for (const LangType langType : _allLangTypes)
     {
         addListItem(langType);
+        if (langType == _langSelector->getCurrentLangType())
+        {
+            _listWidget->setCurrentRow(_listWidget->count() - 1);
+        }
     }
 
     connect(_searchLine, &QLineEdit::textChanged, this, &LanguageSelectorMenuPrivate::filterItems);

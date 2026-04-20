@@ -30,6 +30,8 @@ public:
 
     void setBubbleToolTip(const QString& inStr);
 
+    LangType getCurrentLangType() { return _currentLangType; }
+
 public slots:
     void onSelectedLanguage(const LangType inlangType);
 
@@ -47,15 +49,12 @@ private:
 
     QGridLayout* _mainLayout;
     QPushButton* _button;
+    LangType _currentLangType;
 
     QPointer<QWidget> _sizeWidget;
     QPointer<QWidget> _returnFocusWidget;
     QPointer<LanguageSelectorMenuPrivate> _menu;
 };
-
-
-
-
 
 
 #endif //LANGUAGESELECTOR_H

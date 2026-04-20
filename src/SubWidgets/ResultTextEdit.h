@@ -10,6 +10,7 @@ enum class TextStyle;
 class ResultTextEdit : public MenuTextBrowser
 {
     Q_OBJECT
+
 public:
     explicit ResultTextEdit(QWidget* parent = nullptr);
 
@@ -30,7 +31,6 @@ protected:
 private:
     qreal _fontSize = 14.0;
 };
-
 
 
 #endif //SOLTRANSLATOR_RESULTTEXTEDIT_H

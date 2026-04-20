@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-
 #include "SolDatabase.h"
 
 #include "SolGuard.h"
@@ -11,7 +10,8 @@
 #include <QSqlQuery>
 #include <QString>
 
-SolSql::SolSql(const QSqlDatabase& inDB) : _database(inDB)
+SolSql::SolSql(const QSqlDatabase& inDB)
+    : _database(inDB)
 {}
 
 std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)

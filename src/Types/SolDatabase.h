@@ -10,11 +10,6 @@
 class QString;
 class QSqlError;
 
-
-class SolDatabase
-{
-};
-
 class SolSql
 {
 public:

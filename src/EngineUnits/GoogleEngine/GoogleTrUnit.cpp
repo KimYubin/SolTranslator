@@ -2,8 +2,8 @@
 
 #include "GoogleTrUnit.h"
 
+#include "Types/ExJson.h"
 #include "Types/SolConstants.h"
-#include "Utils/ExJson.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>

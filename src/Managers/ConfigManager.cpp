@@ -306,7 +306,7 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
   , {Action::TextTab,               QKeySequence{Qt::CTRL | Qt::Key_T}}
   , {Action::DocumentTab,           QKeySequence{Qt::CTRL | Qt::Key_D}}
   , {Action::HistoryTab,            QKeySequence{Qt::CTRL | Qt::Key_H}}
- 
+
   , {Action::SourceTargetToggle,    QKeySequence{Qt::Key_T}}
   , {Action::CopyDoc,               QKeySequence{Qt::Key_C}}
   , {Action::ViewInPopup,           QKeySequence{Qt::Key_V}}

@@ -21,6 +21,14 @@ TranslateUnit::TranslateUnit(TranslateManager* parent)
     Q_ASSERT_X(_translateManager, "TranslateUnit::TranslateUnit", "TranslateManager is invalid.");
 }
 
+TranslateUnit::~TranslateUnit()
+{
+    if (_reply)
+    {
+        _reply->deleteLater();
+    }
+}
+
 void TranslateUnit::setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo)
 {
     _trReqData = std::move(inTranslateRequestInfo);
@@ -121,12 +129,22 @@ void TranslateUnit::abortTranslateRequest()
 
 void TranslateUnit::replyFailed()
 {
-    solDebug << "Error: " << _reply->errorString();
+    QString errorMsg;
+    if (_reply)
+    {
+        errorMsg = _reply->errorString();
+        _reply->deleteLater();
+    }
+    else
+    {
+        errorMsg = "_reply is empty!";
+    }
+    solDebug << "Error: " << errorMsg;
     solDebug << "EngineType:" << Sol::enumToQStr(_trReqData.engineType);
     solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
     // User can attempt to re-translate from the history.
-    finishTranslateRequest(_targetText + "\nrequest error: " + _reply->errorString());
+    finishTranslateRequest(_targetText + "\nrequest error: " + errorMsg);
 }
 
 void TranslateUnit::appendTranslatedText(const QString& inDeltaTargetText)

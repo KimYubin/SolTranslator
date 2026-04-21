@@ -23,6 +23,7 @@ class TranslateUnit : public QObject
 
 public:
     explicit TranslateUnit(TranslateManager* parent);
+    virtual ~TranslateUnit() override;
 
     void setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo);
     void onTranslationFromCache(const QString& inTargetText);

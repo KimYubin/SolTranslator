@@ -5,6 +5,7 @@
 #include "SolTranslatorCore.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
+#include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
@@ -69,26 +70,77 @@ void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inP
 
 void TranslateUnit::postProcess()
 {
+    if (_reply.isNull())
+    {
+        replyFailed(replyErrorString());
+        return;
+    }
+
     connect(_reply, &QNetworkReply::finished, this, &TranslateUnit::onReplyFinished);
-    connect(_reply, &QObject::destroyed, this, &QObject::deleteLater); // Prepare for reply errors.
+    connect(_reply, &QNetworkReply::errorOccurred, this, &TranslateUnit::onReplyErrorOccurred);
+    connect(_reply, &QObject::destroyed, this, &TranslateUnit::onReplyDestroyed); // Prepare for reply errors.
 }
 
-void TranslateUnit::onReplyFinished()
+void TranslateUnit::cleanUpReply()
 {
-    if (_reply.isNull() == false)
+    if (_reply)
     {
-        if (_reply->error() == QNetworkReply::NoError)
-        {
-            finishTranslateRequest(replyTranslateFinished());
-        }
-        else
-        {
-            replyFailed();
-        }
         _reply->deleteLater();
     }
-    deleteLater();
+    _reply = nullptr;
 }
+
+QString TranslateUnit::replyErrorString() const
+{
+    if (_reply)
+    {
+        return _reply->errorString();
+    }
+    return "_reply is empty!";
+}
+
+// ~==========
+// slots
+void TranslateUnit::onReplyFinished()
+{
+    if (_isReplyFinished)
+    {
+        return;
+    }
+    _isReplyFinished = true;
+
+    if (_reply.isNull() || _reply->error() != QNetworkReply::NoError)
+    {
+        replyFailed(replyErrorString());
+        return;
+    }
+
+    finishTranslateRequest(replyTranslateFinished());
+}
+
+void TranslateUnit::onReplyErrorOccurred(/*const QNetworkReply::NetworkError inNetworkError*/)
+{
+    if (_isReplyFinished)
+    {
+        return;
+    }
+    _isReplyFinished = true;
+
+    replyFailed(replyErrorString());
+}
+
+void TranslateUnit::onReplyDestroyed()
+{
+    if (_isReplyFinished)
+    {
+        return;
+    }
+    _isReplyFinished = true;
+
+    replyFailed("network reply destroyed unexpectedly");
+}
+
+//~========
 
 void TranslateUnit::disconnectTranslateDisplay()
 {
@@ -127,24 +179,21 @@ void TranslateUnit::abortTranslateRequest()
     deleteLater();
 }
 
-void TranslateUnit::replyFailed()
+void TranslateUnit::replyFailed(const QString& inReason)
 {
-    QString errorMsg;
-    if (_reply)
-    {
-        errorMsg = _reply->errorString();
-        _reply->deleteLater();
-    }
-    else
-    {
-        errorMsg = "_reply is empty!";
-    }
-    solDebug << "Error: " << errorMsg;
+    solDebug << "Error: " << inReason;
     solDebug << "EngineType:" << Sol::enumToQStr(_trReqData.engineType);
     solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
+    cleanUpReply();
+
+    const QString msg = _targetText + "\nrequest error: " + inReason;
+
     // User can attempt to re-translate from the history.
-    finishTranslateRequest(_targetText + "\nrequest error: " + errorMsg);
+    finishTranslateRequest(msg);
+
+    // Called in finishTranslateRequest().
+    // deleteLater();
 }
 
 void TranslateUnit::appendTranslatedText(const QString& inDeltaTargetText)

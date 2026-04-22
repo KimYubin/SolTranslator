@@ -8,11 +8,11 @@
 #include <QObject>
 #include <QPointer>
 
-
 class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
 class TranslateManager;
+
 
 /**
  * The TranslateUnit class provides independent translation requests process.
@@ -37,11 +37,16 @@ protected:
 private:
     void postProcess();
 
+    void cleanUpReply();
+    QString replyErrorString() const;
+
 protected:
     virtual void onReadyRead() = 0;
 
 private slots:
     void onReplyFinished();
+    void onReplyErrorOccurred(/*const QNetworkReply::NetworkError inNetworkError*/);
+    void onReplyDestroyed();
 
     void disconnectTranslateDisplay();
 
@@ -58,7 +63,7 @@ protected:
     /** Extract the translation from the received response. */
     virtual QString replyTranslateFinished() = 0;
 
-    virtual void replyFailed();
+    virtual void replyFailed(const QString& inReason);
 
     /** Append the streaming results to the targetText. */
     void appendTranslatedText(const QString& inDeltaTargetText);
@@ -94,6 +99,7 @@ protected:
     QMetaObject::Connection _completeConnection;
 
     bool _isStream = false;
+    bool _isReplyFinished = false;
 };
 
 

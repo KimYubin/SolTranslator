@@ -90,15 +90,6 @@ void TranslateUnit::cleanUpReply()
     _reply = nullptr;
 }
 
-QString TranslateUnit::replyErrorString() const
-{
-    if (_reply)
-    {
-        return _reply->errorString();
-    }
-    return "_reply is empty!";
-}
-
 // ~==========
 // slots
 void TranslateUnit::onReplyFinished()
@@ -140,6 +131,7 @@ void TranslateUnit::onReplyDestroyed()
     replyFailed("network reply destroyed unexpectedly");
 }
 
+
 //~========
 
 void TranslateUnit::disconnectTranslateDisplay()
@@ -179,6 +171,15 @@ void TranslateUnit::abortTranslateRequest()
     deleteLater();
 }
 
+QString TranslateUnit::replyErrorString() const
+{
+    if (_reply)
+    {
+        return _reply->errorString();
+    }
+    return "_reply is empty!";
+}
+
 void TranslateUnit::replyFailed(const QString& inReason)
 {
     solDebug << "Error: " << inReason;
@@ -187,9 +188,8 @@ void TranslateUnit::replyFailed(const QString& inReason)
 
     cleanUpReply();
 
-    const QString msg = _targetText + "\nrequest error: " + inReason;
-
     // User can attempt to re-translate from the history.
+    const QString msg = _targetText + "\nrequest error: " + inReason;
     finishTranslateRequest(msg);
 
     // Called in finishTranslateRequest().

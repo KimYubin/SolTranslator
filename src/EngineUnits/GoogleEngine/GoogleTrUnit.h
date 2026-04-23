@@ -3,6 +3,7 @@
 #ifndef TRANSLATEUNITGOOGLE_H
 #define TRANSLATEUNITGOOGLE_H
 
+#include "EngineUnits/ITranslateEngine.h"
 #include "EngineUnits/TranslateUnit.h"
 
 
@@ -20,5 +21,15 @@ protected:
     virtual QString replyTranslateFinished() override;
 };
 
+class GoogleEngine : public ITranslateEngine
+{
+    Q_OBJECT
+    Q_DISABLE_COPY_MOVE(GoogleEngine)
+
+public:
+    explicit GoogleEngine();
+    ~GoogleEngine() override;
+
+};
 
 #endif //TRANSLATEUNITGOOGLE_H

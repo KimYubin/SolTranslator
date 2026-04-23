@@ -38,7 +38,6 @@ private:
     void postProcess();
 
     void cleanUpReply();
-    QString replyErrorString() const;
 
 protected:
     virtual void onReadyRead() = 0;
@@ -63,7 +62,8 @@ protected:
     /** Extract the translation from the received response. */
     virtual QString replyTranslateFinished() = 0;
 
-    virtual void replyFailed(const QString& inReason);
+    QString replyErrorString() const;
+    void replyFailed(const QString& inReason);
 
     /** Append the streaming results to the targetText. */
     void appendTranslatedText(const QString& inDeltaTargetText);

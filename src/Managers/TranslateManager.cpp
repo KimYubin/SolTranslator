@@ -70,47 +70,9 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
 
 TranslateUnit* TranslateManager::newTranslateUnit(const EngineType inEngine)
 {
-    TranslateUnit* trUnit = nullptr;
-    switch (inEngine)
-    {
-    case EngineType::Google:
-        trUnit = new GoogleTrUnit(this);
-        break;
-    case EngineType::OpenAI:
-        trUnit = new OpenAiTrUnit(this);
-        break;
-    case EngineType::FinPoint:
-        trUnit = new FinPointTrUnit(this);
-        break;
-    case EngineType::FinPointDebug:
-    {
-        trUnit = new FinPointTrUnit(this);
-        static_cast<FinPointTrUnit*>(trUnit)->setDebugMode(true);
-        break;
-    }
-
-    case EngineType::Size: Q_UNREACHABLE();
-        // default: Should not be used. There must be a 'case' for every enum class member.
-    }
+    TranslateUnit* trUnit = ITranslateEngine::newTrUnit(inEngine, this);
 
     Q_ASSERT_X(trUnit, "TranslateManager::newTranslateUnit", "trUnit is nullptr");
-
-#ifdef QT_DEBUG
-    {
-        // string 기반 enum과 class 매칭 유효성 검사
-        bool isValidEngineName = false;
-        if (const char* className = trUnit->metaObject()->className())
-        {
-            if (magic_enum::enum_name(inEngine).find(className))
-            {
-                isValidEngineName = true;
-            }
-        }
-
-        Q_ASSERT_X(isValidEngineName, "TranslateManager::newTranslateUnit", "Invalid engine type");
-    }
-#endif
-
 
     return trUnit;
 }

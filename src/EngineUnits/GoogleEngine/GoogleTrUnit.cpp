@@ -4,6 +4,7 @@
 
 #include "Types/ExJson.h"
 #include "Types/SolConstants.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>
@@ -61,3 +62,23 @@ QString GoogleTrUnit::replyTranslateFinished()
 
     return replyTargetText;
 }
+
+
+
+// ~======================
+// GoogleEngine
+GoogleEngine::GoogleEngine()
+    : ITranslateEngine(EngineType::Google)
+{
+    setDisplayName(Sol::i18n(Tr::GoogleTranslate));
+    setIconPath("");
+    setTrUnitCreator([](TranslateManager* inTrManager) { return new GoogleTrUnit{inTrManager}; });
+}
+
+GoogleEngine::~GoogleEngine()
+{}
+
+namespace
+{
+const GoogleEngine GoogleEngine;
+} // anonymous namespace

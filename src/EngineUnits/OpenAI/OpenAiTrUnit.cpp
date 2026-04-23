@@ -7,6 +7,7 @@
 #include "Types/ExJson.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>
@@ -42,12 +43,13 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
     QJsonArray messages;
 
     QJsonObject developerMessage;
-    developerMessage["role"] = "developer";
-    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::getEnglishName(_trReqData.sourceLang), Langs::getEnglishName(_trReqData.targetLang));
+    developerMessage["role"]    = "developer";
+    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::getEnglishName(_trReqData.sourceLang)
+                                                                  , Langs::getEnglishName(_trReqData.targetLang));
     messages.append(developerMessage);
 
     QJsonObject userMessage;
-    userMessage["role"] = "user";
+    userMessage["role"]    = "user";
     userMessage["content"] = _trReqData.sourceText;
     messages.append(userMessage);
 
@@ -154,3 +156,23 @@ QString OpenAiTrUnit::chunkToContent()
 
     return contentStr;
 }
+
+
+
+// ~======================
+// OpenAiEngine
+OpenAiEngine::OpenAiEngine()
+    : ITranslateEngine(EngineType::OpenAI)
+{
+    setDisplayName(Sol::i18n(Tr::OpenAI));
+    setIconPath("");
+    setTrUnitCreator([](TranslateManager* inTrManager) { return new OpenAiTrUnit{inTrManager}; });
+}
+
+OpenAiEngine::~OpenAiEngine()
+{}
+
+namespace
+{
+const OpenAiEngine openAiEngine;
+} // anonymous namespace

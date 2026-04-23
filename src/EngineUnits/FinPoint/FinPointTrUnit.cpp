@@ -4,6 +4,8 @@
 
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
+#include "Utils/EnumUtils.hpp"
+#include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 
 #include <QJsonArray>
@@ -95,3 +97,22 @@ QString FinPointTrUnit::replyTranslateFinished()
 
     return _targetText;
 }
+
+
+// ~======================
+// FinPointEngine
+FinPointEngine::FinPointEngine()
+    : ITranslateEngine(EngineType::FinPoint)
+{
+    setDisplayName(Sol::enumToQStr(EngineType::FinPoint));
+    setIconPath("");
+    setTrUnitCreator([](TranslateManager* inTrManager) { return new FinPointTrUnit{inTrManager}; });
+}
+
+FinPointEngine::~FinPointEngine()
+{}
+
+namespace
+{
+const FinPointEngine FinPointEngine;
+} // anonymous namespace

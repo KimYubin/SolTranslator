@@ -3,6 +3,7 @@
 #ifndef TRANSLATEUNITOPENAI_H
 #define TRANSLATEUNITOPENAI_H
 
+#include "EngineUnits/ITranslateEngine.h"
 #include "EngineUnits/TranslateUnit.h"
 
 
@@ -24,5 +25,15 @@ protected:
     QString chunkToContent();
 };
 
+class OpenAiEngine : public ITranslateEngine
+{
+    Q_OBJECT
+    Q_DISABLE_COPY_MOVE(OpenAiEngine)
+
+public:
+    explicit OpenAiEngine();
+    ~OpenAiEngine() override;
+
+};
 
 #endif //TRANSLATEUNITOPENAI_H

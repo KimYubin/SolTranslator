@@ -194,13 +194,15 @@ size_t qHash(const QPointer<T> &ptr, size_t seed = 0)
     return qHash(ptr ? ptr.data() : 0, seed);
 }
 
-static QSet<QPointer<IOptionPage>>& optionsPages()
+namespace
+{
+QSet<QPointer<IOptionPage>>& optionsPages()
 {
     static QSet<QPointer<IOptionPage>> staticOptionPages;
 
     return staticOptionPages;
 }
-
+} // anonymous namespace
 
 IOptionPage::IOptionPage()
 {

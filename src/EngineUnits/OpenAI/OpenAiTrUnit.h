@@ -25,6 +25,12 @@ protected:
     QString chunkToContent();
 };
 
+
+namespace EngineIds
+{
+inline const EngineId OpenAI{"OpenAI"};
+}
+
 class OpenAiEngine : public ITranslateEngine
 {
     Q_OBJECT

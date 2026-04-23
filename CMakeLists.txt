@@ -119,6 +119,8 @@ qt_add_executable(
         src/Support/WidgetInspector.cpp
         src/Support/WidgetInspector.h
 
+        src/Types/EngineId.cpp
+        src/Types/EngineId.h
         src/Types/ExJson.cpp
         src/Types/ExJson.h
         src/Types/SolConstants.cpp

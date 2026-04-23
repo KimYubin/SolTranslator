@@ -30,7 +30,7 @@ ITranslateWidget::~ITranslateWidget()
     detachTrUnit();
 }
 
-void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
+void ITranslateWidget::executeTranslateImpl(const EngineId& inEngineId
                                           , const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
@@ -43,7 +43,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineType inEngine
     = solCore->manager<TranslateManager>()->translateText(TranslateRequestInfo{
         this
       , inIsIgnoreCache
-      , inEngine
+      , inEngineId
       , inSourceText
       , inTextStyle
       , inSourceLang

@@ -15,33 +15,9 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
 
-QString EngineHelper::displayName(const EngineType inEngineType)
-{
-    switch (inEngineType)
-    {
-    case EngineType::Google:
-        return Sol::i18n(Tr::GoogleTranslate);
-        break;
-    case EngineType::OpenAI:
-        return Sol::i18n(Tr::OpenAI);
-        break;
-
-    case EngineType::Size:
-    default: ;
-    }
-
-    return Sol::enumToQStr(inEngineType);
-}
-
-EngineType EngineHelper::defaultEngineType()
-{
-    return EngineType::Google;
-}
-
-
 TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                                          , const bool inIsIgnoreCache
-                                         , const EngineType inEngineType
+                                         , const EngineId& inEngineId
                                          , const QString& inSourceText
                                          , const TextStyle inTextFormat
                                          , const LangType inSourceLang
@@ -52,7 +28,7 @@ TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                                          , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
     : trDisplayWidget(inTrDisplayWidget)
     , isIgnoreCache(inIsIgnoreCache)
-    , engineType(inEngineType)
+    , engineId(inEngineId)
     , sourceText(inSourceText)
     , textFormat(inTextFormat)
     , sourceLang(inSourceLang)

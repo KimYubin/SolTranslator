@@ -203,17 +203,17 @@ struct TextCacheKey
 {
     TextCacheKey() = default;
 
-    TextCacheKey(const EngineType inEngineType
+    TextCacheKey(const EngineId& inEngineId
                , const QString& inSourceText
                , const LangType inSourceLang
                , const LangType inTargetLang)
-        : engineType(inEngineType)
+        : engineId(inEngineId)
         , sourceText(inSourceText)
         , sourceLang(inSourceLang)
         , targetLang(inTargetLang)
     {}
 
-    EngineType engineType;
+    EngineId engineId;
     QString sourceText;
     LangType sourceLang;
     LangType targetLang;
@@ -225,7 +225,7 @@ struct cache_ky_hasher
     {
         return std::hash<::QString>()(
             inKy.sourceText
-            + QChar(Sol::EnumToInt(inKy.engineType))
+            + inKy.engineId.toString()
             + QChar(Sol::EnumToInt(inKy.sourceLang))
             + QChar(Sol::EnumToInt(inKy.targetLang))
         );
@@ -236,7 +236,7 @@ struct cache_ky_eq
 {
     bool operator()(const TextCacheKey& ACacheKy, const TextCacheKey& BCacheKy) const
     {
-        return (ACacheKy.engineType == BCacheKy.engineType)
+        return (ACacheKy.engineId == BCacheKy.engineId)
                 && (ACacheKy.sourceLang == BCacheKy.sourceLang)
                 && (ACacheKy.targetLang == BCacheKy.targetLang)
                 && (ACacheKy.sourceText == BCacheKy.sourceText);

@@ -102,10 +102,11 @@ QString FinPointTrUnit::replyTranslateFinished()
 // ~======================
 // FinPointEngine
 FinPointEngine::FinPointEngine()
-    : ITranslateEngine(EngineType::FinPoint)
+    : ITranslateEngine(EngineIds::FinPoint)
 {
-    setDisplayName(Sol::enumToQStr(EngineType::FinPoint));
+    setDisplayName(EngineIds::FinPoint.toString());
     setIconPath("");
+    setPriority(3);
     setTrUnitCreator([](TranslateManager* inTrManager) { return new FinPointTrUnit{inTrManager}; });
 }
 
@@ -114,5 +115,38 @@ FinPointEngine::~FinPointEngine()
 
 namespace
 {
-const FinPointEngine FinPointEngine;
+const FinPointEngine finPointEngine;
 } // anonymous namespace
+
+
+
+#ifdef QT_DEBUG
+
+namespace
+{
+class FinPointEngineDebug : public ITranslateEngine
+{
+    Q_DISABLE_COPY_MOVE(FinPointEngineDebug)
+
+public:
+    explicit FinPointEngineDebug() : ITranslateEngine(EngineIds::FinPointDebug)
+    {
+        setDisplayName(EngineIds::FinPointDebug.toString());
+        setIconPath("");
+        setPriority(4);
+        setTrUnitCreator([](TranslateManager* inTrManager)
+        {
+            FinPointTrUnit* newTrUnit = new FinPointTrUnit{inTrManager};;
+            newTrUnit->setDebugMode(true);
+            return newTrUnit;
+        });
+    }
+
+    ~FinPointEngineDebug() override
+    {};
+};
+
+const FinPointEngineDebug finPointEngineDebug;
+} // anonymous namespace
+
+#endif

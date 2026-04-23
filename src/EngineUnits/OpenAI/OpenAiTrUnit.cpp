@@ -28,7 +28,7 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     QNetworkRequest request(Sol::URLs::OPEN_AI);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(EngineType::OpenAI)).toUtf8());
+    request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(EngineIds::OpenAI)).toUtf8());
 
     QJsonObject chatBodyJson;
 
@@ -162,10 +162,11 @@ QString OpenAiTrUnit::chunkToContent()
 // ~======================
 // OpenAiEngine
 OpenAiEngine::OpenAiEngine()
-    : ITranslateEngine(EngineType::OpenAI)
+    : ITranslateEngine(EngineIds::OpenAI)
 {
     setDisplayName(Sol::i18n(Tr::OpenAI));
     setIconPath("");
+    setPriority(2);
     setTrUnitCreator([](TranslateManager* inTrManager) { return new OpenAiTrUnit{inTrManager}; });
 }
 

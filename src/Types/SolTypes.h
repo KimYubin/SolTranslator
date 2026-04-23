@@ -3,21 +3,14 @@
 #ifndef SOLTYPES_H
 #define SOLTYPES_H
 
+#include "EngineId.h"
+
 #include <QObject>
 #include <QPointer>
 
 class QString;
 class ITranslateWidget;
-enum class EngineType;
 enum class LangType;
-
-
-struct EngineHelper
-{
-public:
-    static QString displayName(const EngineType inEngineType);
-    static EngineType defaultEngineType();
-};
 
 
 namespace Sol
@@ -59,15 +52,6 @@ enum class ScreenPopupPolicy
 };
 
 
-enum class EngineType
-{
-    Google
-  , OpenAI
-  , FinPoint
-  , FinPointDebug
-
-  , Size
-};
 
 /**
  * This enum class distinguishes the rendering styles of text, such as plain text, HTML, and markdown.
@@ -99,7 +83,7 @@ struct TranslateRequestInfo
      * 
      * @param inTrDisplayWidget trUnit의 번역값을 표기하는 ITranslateWidget입니다.
      * @param inIsIgnoreCache true면 캐시에서 찾지 않고 번역을 요청합니다. 재번역시 사용됩니다.
-     * @param inEngineType 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
+     * @param inEngineId 번역엔진 종류. 엔진 종류가 다르면, 기록에서도 다른 번역으로 취급됩니다.
      * @param inSourceText 번역 원문
      * @param inTextFormat 원문 텍스트의 종류.
      * @param inSourceLang 출발 언어
@@ -111,7 +95,7 @@ struct TranslateRequestInfo
      */
     TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
                        , const bool inIsIgnoreCache
-                       , const EngineType inEngineType
+                       , const EngineId& inEngineId
                        , const QString& inSourceText
                        , const TextStyle inTextFormat
                        , const LangType inSourceLang
@@ -123,7 +107,7 @@ struct TranslateRequestInfo
 
     QPointer<ITranslateWidget> trDisplayWidget;
     bool isIgnoreCache;
-    EngineType engineType;
+    EngineId engineId;
     QString sourceText;
     TextStyle textFormat;
     LangType sourceLang;

@@ -183,7 +183,7 @@ QString TranslateUnit::replyErrorString() const
 void TranslateUnit::replyFailed(const QString& inReason)
 {
     solDebug << "Error: " << inReason;
-    solDebug << "EngineType:" << Sol::enumToQStr(_trReqData.engineType);
+    solDebug << "EngineId:" << _trReqData.engineId.toString();
     solDebug << "Source Text:" << _trReqData.sourceText.left(50);
 
     cleanUpReply();

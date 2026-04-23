@@ -8,8 +8,8 @@
 #include <expected>
 
 
+class EngineId;
 class GlobalHotKeyManager;
-enum class EngineType;
 class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
@@ -40,7 +40,7 @@ public:
     QNetworkReply* post(const QNetworkRequest& inRequest, const QByteArray& inPayload);
 
 private:
-    TranslateUnit* newTranslateUnit(const EngineType inEngine);
+    std::expected<TranslateUnit*, QString> newTranslateUnit(const EngineId& inEngineId);
     std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
 
 public:

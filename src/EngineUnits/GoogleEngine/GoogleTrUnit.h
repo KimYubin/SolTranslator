@@ -21,6 +21,12 @@ protected:
     virtual QString replyTranslateFinished() override;
 };
 
+
+namespace EngineIds
+{
+inline const EngineId Google{"Google"};
+inline const EngineId& defaultEngine = Google;
+}
 class GoogleEngine : public ITranslateEngine
 {
     Q_OBJECT

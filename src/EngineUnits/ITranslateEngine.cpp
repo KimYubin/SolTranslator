@@ -8,7 +8,7 @@
 
 namespace
 {
-TrEngineMap& trUnitCreators()
+TrEngineMap& translateEngineMap()
 {
     static TrEngineMap staticOptionPages;
 
@@ -16,42 +16,52 @@ TrEngineMap& trUnitCreators()
 }
 } // anonymous namespace
 
-
-ITranslateEngine::ITranslateEngine(const EngineType inEngine)
-    : _engineType(inEngine)
+ITranslateEngine::ITranslateEngine(const EngineId& inEngine)
+    :_engineId(inEngine)
 {
-    trUnitCreators()[_engineType] = this;
+    _priority = std::numeric_limits<int>::max();
+    translateEngineMap()[_engineId] = this;
 }
 
 ITranslateEngine::~ITranslateEngine()
 {
-    trUnitCreators().erase(_engineType);
+    translateEngineMap().erase(_engineId);
 }
 
 const TrEngineMap& ITranslateEngine::allTrUnitCreators()
 {
-    return trUnitCreators();
+    return translateEngineMap();
 }
 
-TranslateUnit* ITranslateEngine::newTrUnit(const EngineType inEngine, TranslateManager* inTrManager)
+std::vector<ITranslateEngine*> ITranslateEngine::sortedTranslateEngineList()
 {
-    const auto findIt = trUnitCreators().find(inEngine);
-    if (findIt == trUnitCreators().end())
+    std::vector<ITranslateEngine*> vecEngines;
+    const auto& translateEngines = translateEngineMap();
+    for (const auto& trEngine : translateEngines | std::views::values)
     {
-        Q_ASSERT_X(
-            findIt != trUnitCreators().end()
-          , "TranslateManager::newTranslateUnit"
-          , ("not found trUnitCreator. A inEngine is " + Sol::enumToQStr<EngineType>(inEngine)).toUtf8()
-        );
-        return nullptr;
+        if (trEngine)
+        {
+            vecEngines.push_back(trEngine);
+        }
+    }
+
+    std::ranges::sort(vecEngines, {}, [](ITranslateEngine* a)
+    {
+        return a->getPriority();
+    });
+
+    return vecEngines;
+}
+
+std::expected<TranslateUnit*, QString> ITranslateEngine::newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager)
+{
+    const auto findIt = translateEngineMap().find(inEngine);
+    if (findIt == translateEngineMap().end())
+    {
+        return std::unexpected{"TranslateManager::newTranslateUnit: not found trUnitCreator. A inEngine is " + inEngine.toString()};
     }
 
     TranslateUnit* trUnit = findIt->second->_trUnitCreator(inTrManager);
-
-    if (inEngine == EngineType::FinPointDebug)
-    {
-        static_cast<FinPointTrUnit*>(trUnit)->setDebugMode(true);
-    }
 
     return trUnit;
 }
@@ -64,6 +74,11 @@ void ITranslateEngine::setDisplayName(const QString& inDisplayName)
 void ITranslateEngine::setIconPath(const QString& inIconPath)
 {
     _iconPath = inIconPath;
+}
+
+void ITranslateEngine::setPriority(const int inPriority)
+{
+    _priority = inPriority;
 }
 
 void ITranslateEngine::setTrUnitCreator(TrUnitCreator&& inCreator)

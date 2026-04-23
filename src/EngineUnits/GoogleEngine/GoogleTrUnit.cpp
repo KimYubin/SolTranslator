@@ -68,10 +68,11 @@ QString GoogleTrUnit::replyTranslateFinished()
 // ~======================
 // GoogleEngine
 GoogleEngine::GoogleEngine()
-    : ITranslateEngine(EngineType::Google)
+    : ITranslateEngine(EngineIds::Google)
 {
     setDisplayName(Sol::i18n(Tr::GoogleTranslate));
     setIconPath("");
+    setPriority(1);
     setTrUnitCreator([](TranslateManager* inTrManager) { return new GoogleTrUnit{inTrManager}; });
 }
 
@@ -80,5 +81,5 @@ GoogleEngine::~GoogleEngine()
 
 namespace
 {
-const GoogleEngine GoogleEngine;
+const GoogleEngine googleEngine;
 } // anonymous namespace

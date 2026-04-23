@@ -33,10 +33,10 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     // 번역 엔진 변경.
     ui->enginSelectCombo->setCurrentIndexChanged([this](const int inIdx)
     {
-        const int payload    = ui->enginSelectCombo->itemData(inIdx).toInt();
-        const EngineType eg  = static_cast<EngineType>(payload);
-        const QString apiKey = solConfig.apiKey(eg);
-        const int apiSize    = apiKey.size();
+        const QString payload = ui->enginSelectCombo->itemData(inIdx).toString();
+        const EngineId curEg  = EngineId{payload};
+        const QString apiKey  = solConfig.apiKey(curEg);
+        const int apiSize     = apiKey.size();
 
         QString phStr;
         if (apiSize > 15)
@@ -63,10 +63,11 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
         {
             return;
         }
-        const int payload   = ui->enginSelectCombo->currentData().toInt();
-        const EngineType eg = static_cast<EngineType>(payload);
 
-        solConfig.setApiKey(eg, inputApiKey);
+        const QString payload = ui->enginSelectCombo->currentData().toString();
+        const EngineId curEg  = EngineId{payload};
+
+        solConfig.setApiKey(curEg, inputApiKey);
     });
 
 

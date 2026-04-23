@@ -31,14 +31,14 @@ HistoryManager::~HistoryManager()
     _workerThread.wait();
 }
 
-void HistoryManager::asyncAddHistory(const EngineType inEngineType
+void HistoryManager::asyncAddHistory(const EngineId& inEngineId
                                    , const LangType inSourceLang
                                    , const LangType inTargetLang
                                    , const QString& inSourceText
                                    , const QString& inTargetText
                                    , const TextStyle inTextStyle)
 {
-    emit requestAddHistory(inEngineType
+    emit requestAddHistory(inEngineId
                          , inSourceLang
                          , inTargetLang
                          , inSourceText
@@ -60,7 +60,7 @@ qint64 newRequestId()
     return requestID;
 }
 }
-void HistoryManager::asyncLookupHistory(const EngineType inEngineType
+void HistoryManager::asyncLookupHistory(const EngineId& inEngineId
                                       , const QString& inSourceText
                                       , const LangType inSourceLang
                                       , const LangType inTargetLang
@@ -72,7 +72,7 @@ void HistoryManager::asyncLookupHistory(const EngineType inEngineType
     _requestCallbacks[requestID] = {inContext, (std::move(inFinishedFunction))};
     connect(inContext, &QObject::destroyed, this, [this, requestID]() { _requestCallbacks.erase(requestID); });
 
-    emit requestHistoryLookup(inEngineType, inSourceText, inSourceLang, inTargetLang, requestID);
+    emit requestHistoryLookup(inEngineId, inSourceText, inSourceLang, inTargetLang, requestID);
 }
 
 void HistoryManager::onLookupFinished(const LookupResult& inLookup, const int inReqId)

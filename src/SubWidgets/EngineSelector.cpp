@@ -3,6 +3,7 @@
 #include "EngineSelector.h"
 
 #include "SolTranslatorCore.h"
+#include "EngineUnits/ITranslateEngine.h"
 #include "Managers/ConfigManager.h"
 #include "Types/SolTypes.h"
 
@@ -10,13 +11,20 @@ EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
 {
     setEditable(false);
 
-    // 엔진 선택 초기화
-    for (EngineType eg = EngineType::Google; eg != EngineType::Size; eg = static_cast<EngineType>(static_cast<int>(eg) + 1))
+    const EngineId curEngineId = solConfig.currentEngineId();
+    int curIdx = 0;
+
+    const std::vector<ITranslateEngine*>& trEngineList = ITranslateEngine::sortedTranslateEngineList();
+    for (const ITranslateEngine* trEngine : trEngineList)
     {
-        addItem(EngineHelper::displayName(eg), static_cast<int>(eg));
+        addItem(trEngine->getDisplayName(), trEngine->getEngineId().toString());
+        if (curEngineId == trEngine->getEngineId())
+        {
+            curIdx = (count() - 1);
+        }
     }
 
-    setCurrentIndex(static_cast<int>(solConfig.currentEngineType()));
+    setCurrentIndex(curIdx);
 }
 
 void EngineSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)

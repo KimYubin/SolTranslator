@@ -8,6 +8,7 @@
 #include <QPointer>
 #include <QWidget>
 
+class EngineId;
 class TranslateUnit;
 class QTextCursor;
 class QScrollBar;
@@ -22,7 +23,7 @@ public:
     ~ITranslateWidget() override;
 
 protected:
-    virtual void executeTranslateImpl(const EngineType inEngine
+    virtual void executeTranslateImpl(const EngineId& inEngineId
                                     , const QString& inSourceText
                                     , const TextStyle inTextStyle
                                     , const LangType inSourceLang

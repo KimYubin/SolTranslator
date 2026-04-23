@@ -122,9 +122,9 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     _engineSelector = new EngineSelector(this);
     _engineSelector->setCurrentIndexChanged([this](const int inIdx)
     {
-        const int payload      = _engineSelector->itemData(inIdx).toInt();
-        const EngineType curEg = static_cast<EngineType>(payload);
-        solConfig.setCurrentEngineType(curEg);
+        const QString payload = _engineSelector->itemData(inIdx).toString();
+        const EngineId curEg  = EngineId{payload};
+        solConfig.setCurrentEngineId(curEg);
     });
 
     SolToolTipFilter::setBubbleToolTip(_engineSelector, i18n(Tr::Select_Translation_Engine));

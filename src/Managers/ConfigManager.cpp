@@ -2,6 +2,8 @@
 
 #include "ConfigManager.h"
 
+#include "EngineUnits/FinPoint/FinPointTrUnit.h"
+#include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
@@ -18,7 +20,7 @@
 
 namespace
 {
-const QString Engine_Type = "Engine_Type";
+const QString CurrentEngine = "CurrentEngine";
 const QString API_Key     = "API_Key/";
 
 const QString OpenAI_Model = "openai_model";
@@ -93,25 +95,25 @@ ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent
 }
 
 
-void ConfigManager::setCurrentEngineType(const EngineType inEngineType)
+void ConfigManager::setCurrentEngineId(const EngineId& inEngineId)
 {
-    setEnumValue(_settings, Engine_Type, inEngineType);
+    _settings->setValue(CurrentEngine, inEngineId.toString());
 }
 
-EngineType ConfigManager::currentEngineType() const
+EngineId ConfigManager::currentEngineId() const
 {
-    return enumValue(_settings, Engine_Type, EngineHelper::defaultEngineType());
+    return EngineId{_settings->value(CurrentEngine, EngineIds::defaultEngine.toString()).toString()};
 }
 
 
-void ConfigManager::setApiKey(const EngineType inEngineType, const QString& inAPIKey)
+void ConfigManager::setApiKey(const EngineId& inEngineId, const QString& inAPIKey)
 {
-    _settings->setValue(API_Key + Sol::enumToQStr(inEngineType), inAPIKey);
+    _settings->setValue(API_Key + inEngineId.toString(), inAPIKey);
 }
 
-QString ConfigManager::apiKey(const EngineType inEngineType) const
+QString ConfigManager::apiKey(const EngineId& inEngineId) const
 {
-    return _settings->value(API_Key + Sol::enumToQStr(inEngineType)).toString();
+    return _settings->value(API_Key + inEngineId.toString()).toString();
 }
 
 

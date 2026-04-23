@@ -12,7 +12,6 @@
 
 enum class TextStyle;
 enum class LangType;
-enum class EngineType;
 class HistoryCacheData;
 class SolTranslatorCore;
 
@@ -26,7 +25,7 @@ public:
     explicit HistoryManager(SolTranslatorCore* parent);
     virtual ~HistoryManager() override;
 
-    void asyncAddHistory(const EngineType inEngineType
+    void asyncAddHistory(const EngineId& inEngineId
                        , const LangType inSourceLang
                        , const LangType inTargetLang
                        , const QString& inSourceText
@@ -38,7 +37,7 @@ public:
     /**
      * 번역 기록찾고, 찾았다면 최근 기록을 갱신합니다.
      */
-    void asyncLookupHistory(const EngineType inEngineType
+    void asyncLookupHistory(const EngineId& inEngineId
                           , const QString& inSourceText
                           , const LangType inSourceLang
                           , const LangType inTargetLang
@@ -46,12 +45,12 @@ public:
                           , std::move_only_function<void(const LookupResult&)> inFinishedFunction);
 
 signals:
-    void requestHistoryLookup(const EngineType inEngineType
+    void requestHistoryLookup(const EngineId& inEngineId
                             , const QString& inSourceText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
                             , const int inReqId);
-    void requestAddHistory(const EngineType inEngineType
+    void requestAddHistory(const EngineId& inEngineId
                          , const LangType inSourceLang
                          , const LangType inTargetLang
                          , const QString& inSourceText

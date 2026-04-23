@@ -28,6 +28,12 @@ private:
     bool _isDebugMode = false;
 };
 
+namespace EngineIds
+{
+inline const EngineId FinPoint{"FinPoint"};
+inline const EngineId FinPointDebug{"FinPointDebug"};
+}
+
 class FinPointEngine : public ITranslateEngine
 {
     Q_OBJECT

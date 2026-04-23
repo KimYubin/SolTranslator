@@ -5,11 +5,11 @@
 
 #include "AbstractManager.h"
 
+class EngineId;
 class QSettings;
 enum class Action;
 enum class ScreenPopupPolicy;
 enum class LangType;
-enum class EngineType;
 
 #if defined(solConfig)
 #undef solConfig
@@ -26,11 +26,11 @@ class ConfigManager: public AbstractManager
 public:
     explicit ConfigManager(SolTranslatorCore* parent);
 
-    void setCurrentEngineType(const EngineType inEngineType);
-    EngineType currentEngineType() const;
+    void setCurrentEngineId(const EngineId& inEngineId);
+    EngineId currentEngineId() const;
 
-    void setApiKey(const EngineType inEngineType, const QString& inAPIKey);
-    QString apiKey(const EngineType inEngineType) const;
+    void setApiKey(const EngineId& inEngineId, const QString& inAPIKey);
+    QString apiKey(const EngineId& inEngineId) const;
 
     void setOpenAIModel(const QString& inModelName);
     QString openAIModel() const;

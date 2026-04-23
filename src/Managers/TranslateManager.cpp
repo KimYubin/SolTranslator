@@ -68,13 +68,9 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
     return _networkAccessManager->post(inRequest, inPayload);
 }
 
-TranslateUnit* TranslateManager::newTranslateUnit(const EngineType inEngine)
+std::expected<TranslateUnit*, QString> TranslateManager::newTranslateUnit(const EngineId& inEngineId)
 {
-    TranslateUnit* trUnit = ITranslateEngine::newTrUnit(inEngine, this);
-
-    Q_ASSERT_X(trUnit, "TranslateManager::newTranslateUnit", "trUnit is nullptr");
-
-    return trUnit;
+    return ITranslateEngine::newTrUnit(inEngineId, this);;
 }
 
 std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
@@ -84,13 +80,19 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     // 앞뒤 공백 제거
     inTranslateRequestInfo.sourceText = inTranslateRequestInfo.sourceText.trimmed();
 
-    const EngineType engineType = inTranslateRequestInfo.engineType;
-    const QString sourceText    = inTranslateRequestInfo.sourceText;
-    const LangType sourceLang   = inTranslateRequestInfo.sourceLang;
-    const LangType targetLang   = inTranslateRequestInfo.targetLang;
-    const bool isIgnoreCache    = inTranslateRequestInfo.isIgnoreCache;
+    const EngineId engineId   = inTranslateRequestInfo.engineId;
+    const QString sourceText  = inTranslateRequestInfo.sourceText;
+    const LangType sourceLang = inTranslateRequestInfo.sourceLang;
+    const LangType targetLang = inTranslateRequestInfo.targetLang;
+    const bool isIgnoreCache  = inTranslateRequestInfo.isIgnoreCache;
 
-    TranslateUnit* trUnit = newTranslateUnit(engineType);
+    const std::expected<TranslateUnit*, QString> trUnitExp = newTranslateUnit(engineId);
+    if (trUnitExp.has_value() == false)
+    {
+        return std::unexpected{trUnitExp.error()};
+    }
+
+    TranslateUnit* trUnit = trUnitExp.value();
 
     trUnit->setTranslateRequestInfo(std::move(inTranslateRequestInfo));
 
@@ -109,7 +111,7 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     }
 
     _historyManager->asyncLookupHistory(
-        engineType
+        engineId
       , sourceText
       , sourceLang
       , targetLang
@@ -163,7 +165,7 @@ void TranslateManager::onAddHistoryRequested(const TranslateRequestInfo& inTrans
     }
 
     _historyManager->asyncAddHistory(
-        inTranslateRequestInfo.engineType
+        inTranslateRequestInfo.engineId
       , inTranslateRequestInfo.sourceLang
       , inTranslateRequestInfo.targetLang
       , inTranslateRequestInfo.sourceText

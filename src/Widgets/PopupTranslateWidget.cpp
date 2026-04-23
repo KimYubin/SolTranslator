@@ -115,7 +115,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
     if ((inTextStyle == TextStyle::PlainText) 
         || inIsIgnoreCache)
     {
-        executeTranslateImpl(solConfig.currentEngineType()
+        executeTranslateImpl(solConfig.currentEngineId()
                            , inSourceText
                            , inTextStyle
                            , inSourceLang
@@ -136,7 +136,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         },
         [this, inSourceLang, inTargetLang](const QString& inMd)
         {
-            executeTranslateImpl(solConfig.currentEngineType()
+            executeTranslateImpl(solConfig.currentEngineId()
                                , inMd
                                , TextStyle::MarkDown
                                , inSourceLang

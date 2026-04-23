@@ -177,7 +177,7 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
     }
     ui->trTextEdit->setPlainText(i18n(Tr::Translating));
 
-    executeTranslateImpl(solConfig.currentEngineType()
+    executeTranslateImpl(solConfig.currentEngineId()
                        , sourceText
                        , TextStyle::PlainText
                        , solConfig.textSrcLang()

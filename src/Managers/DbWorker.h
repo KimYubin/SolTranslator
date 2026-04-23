@@ -7,9 +7,9 @@
 #include <expected>
 
 
+class EngineId;
 enum class LangType;
 enum class TextStyle;
-enum class EngineType;
 class HistoryCacheData;
 class QTimer;
 class QSqlDatabase;
@@ -32,7 +32,7 @@ private:
 
 public
 slots :
-    void processAddHistory(const EngineType inEngineType
+    void processAddHistory(const EngineId& inEngineId
                          , const LangType inSourceLang
                          , const LangType inTargetLang
                          , const QString& inSourceText
@@ -44,14 +44,14 @@ slots :
     /**
      * Lookup translation history, and if found, update the most recent history.
      */
-    void processLookupHistory(const EngineType inEngineType
+    void processLookupHistory(const EngineId& inEngineId
                             , const QString& inSourceText
                             , const LangType inSourceLang
                             , const LangType inTargetLang
                             , const int inReqId);
 
 private:
-    std::tuple<bool, QString> lookupHistoryImpl(const EngineType inEngineType
+    std::tuple<bool, QString> lookupHistoryImpl(const EngineId& inEngineId
                                               , const QString& inSourceText
                                               , const LangType inSourceLang
                                               , const LangType inTargetLang);

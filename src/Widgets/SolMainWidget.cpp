@@ -12,6 +12,7 @@
 #include "SubWidgets/EngineSelector.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
+#include "Types/EngineId.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"

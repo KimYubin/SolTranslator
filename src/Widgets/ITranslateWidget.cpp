@@ -6,6 +6,7 @@
 #include "EngineUnits/TranslateUnit.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/CustomMenuTextEdit.h"
+#include "Types/TranslateRequestInfo.h"
 #include "Utils/SolLog.h"
 
 #include <QScrollBar>

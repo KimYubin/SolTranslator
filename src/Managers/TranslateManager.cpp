@@ -12,6 +12,7 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
 #include "Types/SolTypes.h"
+#include "Types/TranslateRequestInfo.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolAsync.hpp"
 #include "Utils/SolLog.h"

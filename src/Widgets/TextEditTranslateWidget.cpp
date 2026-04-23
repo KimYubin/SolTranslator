@@ -11,6 +11,7 @@
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolWidgetFactory.h"
+#include "Types/EngineId.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"

@@ -2,13 +2,14 @@
 
 #ifndef SOLHASHQUEUE_H
 #define SOLHASHQUEUE_H
+#include "EngineId.h"
+#include "SolTypes.h"
+#include "Utils/EnumUtils.hpp"
+
 #include <QHashFunctions>
 #include <QString>
 
 #include <unordered_map>
-
-#include "SolTypes.h"
-#include "Utils/EnumUtils.hpp"
 
 
 /**

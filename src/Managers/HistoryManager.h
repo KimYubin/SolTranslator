@@ -10,6 +10,7 @@
 
 #include <expected>
 
+class EngineId;
 enum class TextStyle;
 enum class LangType;
 class HistoryCacheData;

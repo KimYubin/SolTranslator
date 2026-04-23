@@ -127,7 +127,7 @@ GeneralOption::GeneralOption()
     setDisplayName(i18n(Tr::General));
     setIconPath("");
     setOptionWidgetCtor([]() { return new GeneralOptionWidget(); });
-    setPriority(OptionPriority::GeneralOption);
+    setPriority(0);
 }
 
 GeneralOption::~GeneralOption()

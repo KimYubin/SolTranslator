@@ -3,8 +3,6 @@
 #include "SolTypes.h"
 
 #include "Utils/EnumUtils.hpp"
-#include "Utils/SolI18n.h"
-#include "Widgets/ITranslateWidget.h"
 
 const std::unordered_map<LangType, LangInfo> Langs::langs =
 {
@@ -14,30 +12,6 @@ const std::unordered_map<LangType, LangInfo> Langs::langs =
   , {LangType::ko, {LangType::ko, u8"ko", u8"Korean", u8"한국어"}}
   , {LangType::ja, {LangType::ja, u8"ja", u8"Japanese", u8"日本語"}}
 };
-
-TranslateRequestInfo::TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
-                                         , const bool inIsIgnoreCache
-                                         , const EngineId& inEngineId
-                                         , const QString& inSourceText
-                                         , const TextStyle inTextFormat
-                                         , const LangType inSourceLang
-                                         , const LangType inTargetLang
-                                         , QObject* inCompleteContext
-                                         , std::move_only_function<void(const QString&)>&& inFuncComplete
-                                         , QObject* inStreamContext
-                                         , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
-    : trDisplayWidget(inTrDisplayWidget)
-    , isIgnoreCache(inIsIgnoreCache)
-    , engineId(inEngineId)
-    , sourceText(inSourceText)
-    , textFormat(inTextFormat)
-    , sourceLang(inSourceLang)
-    , targetLang(inTargetLang)
-    , completeContext(inCompleteContext)
-    , callbackTranslateComplete(std::move(inFuncComplete))
-    , streamContext(inStreamContext)
-    , callbackTranslateStreaming(std::move(inFuncStreaming))
-{}
 
 LangInfo Langs::getLangInfo(const LangType inLangType)
 {

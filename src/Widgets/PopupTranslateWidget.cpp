@@ -9,6 +9,7 @@
 #include "SubWidgets/LoadingSpinner.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
+#include "Types/EngineId.h"
 #include "Utils/SolAsync.hpp"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"

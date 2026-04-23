@@ -7,6 +7,7 @@
 #include "Managers/ConfigManager.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
+#include "Types/EngineId.h"
 #include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>
@@ -116,7 +117,7 @@ EngineOption::EngineOption()
     setDisplayName(i18n(Tr::Translation_Engine));
     setIconPath("");
     setOptionWidgetCtor([]() { return new EngineOptionWidget(); });
-    setPriority(OptionPriority::EngineOption);
+    setPriority(1);
 }
 
 EngineOption::~EngineOption()

@@ -206,6 +206,8 @@ QSet<QPointer<IOptionPage>>& optionsPages()
 
 IOptionPage::IOptionPage()
 {
+    _priority = std::numeric_limits<int>::max();
+
     optionsPages().insert(this);
 }
 
@@ -306,7 +308,7 @@ void IOptionPage::setOptionWidgetCtor(std::move_only_function<IOptionWidget*(voi
     _optionWidgetCtor = std::move(inOptionWidgetCtor);
 }
 
-void IOptionPage::setPriority(const OptionPriority inPriority)
+void IOptionPage::setPriority(const int inPriority)
 {
     _priority = inPriority;
 }

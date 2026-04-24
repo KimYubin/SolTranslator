@@ -43,8 +43,8 @@ SettingsWidget::SettingsWidget(QWidget* parent)
     ui->listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     ui->listWidget->setFocusPolicy(Qt::TabFocus);
 
-    const std::vector<IOptionPage*> options = IOptionPage::sortedOptionsPages();
-    for (IOptionPage* option : options)
+    const std::vector<QPointer<IOptionPage>> options = IOptionPage::sortedOptionsPages();
+    for (const QPointer<IOptionPage>& option : options)
     {
         const int stkIdx = ui->optionStackedWidget->addWidget(option->getOptionWidget());
 
@@ -80,14 +80,7 @@ SettingsWidget::SettingsWidget(QWidget* parent)
 
 SettingsWidget::~SettingsWidget()
 {
-    const QSet<QPointer<IOptionPage>>& options = IOptionPage::allOptionsPages();
-    for (const QPointer<IOptionPage>& option : options)
-    {
-        if (option)
-        {
-            option->finish();
-        }
-    }
+    IOptionPage::allOptionsFinish();
 
     delete ui;
 }

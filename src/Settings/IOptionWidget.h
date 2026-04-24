@@ -107,9 +107,8 @@ public:
     IOptionPage();
     ~IOptionPage() override;
 
-    static const QSet<QPointer<IOptionPage>>& allOptionsPages();
-    static std::vector<IOptionPage*> sortedOptionsPages();
-    static bool compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2);
+    static void allOptionsFinish();
+    static std::vector<QPointer<IOptionPage>> sortedOptionsPages();
 
     QString getDisplayName() const;
     QString getIconPath() const;

@@ -15,7 +15,6 @@ class TranslateManager;
 class TranslateUnit;
 
 using TrUnitCreator = std::move_only_function<TranslateUnit*(TranslateManager*)>;
-using TrEngineMap   = std::unordered_map<EngineId, QPointer<ITranslateEngine>, EngineId_hasher>;
 
 class ITranslateEngine : public QObject
 {
@@ -25,8 +24,7 @@ public:
     explicit ITranslateEngine(const EngineId& inEngine);
     virtual ~ITranslateEngine() override;
 
-    static const TrEngineMap& allTrUnitCreators();
-    static std::vector<ITranslateEngine*> sortedTranslateEngineList();
+    static std::vector<QPointer<ITranslateEngine>> sortedTranslateEngineList();
 
     static std::expected<TranslateUnit*, QString> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
 

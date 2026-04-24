@@ -8,11 +8,13 @@
 
 namespace
 {
+using TrEngineMap = std::unordered_map<EngineId, QPointer<ITranslateEngine>, EngineId_hasher>;
+
 TrEngineMap& translateEngineMap()
 {
-    static TrEngineMap staticOptionPages;
+    static TrEngineMap staticTrEngines;
 
-    return staticOptionPages;
+    return staticTrEngines;
 }
 } // anonymous namespace
 
@@ -28,29 +30,26 @@ ITranslateEngine::~ITranslateEngine()
     translateEngineMap().erase(_engineId);
 }
 
-const TrEngineMap& ITranslateEngine::allTrUnitCreators()
+std::vector<QPointer<ITranslateEngine>> ITranslateEngine::sortedTranslateEngineList()
 {
-    return translateEngineMap();
-}
+    TrEngineMap& trEngines = translateEngineMap();
 
-std::vector<ITranslateEngine*> ITranslateEngine::sortedTranslateEngineList()
-{
-    std::vector<ITranslateEngine*> vecEngines;
-    const auto& translateEngines = translateEngineMap();
-    for (const auto& trEngine : translateEngines | std::views::values)
+    // cleanup nullptr
+    std::erase_if(trEngines, [](const auto& inVal)
     {
-        if (trEngine)
-        {
-            vecEngines.push_back(trEngine);
-        }
-    }
-
-    std::ranges::sort(vecEngines, {}, [](ITranslateEngine* a)
-    {
-        return a->getPriority();
+        return inVal.second.isNull();
     });
 
-    return vecEngines;
+    std::vector<QPointer<ITranslateEngine>> resVec;
+    resVec.reserve(trEngines.size());
+
+    std::ranges::copy(trEngines | std::views::values, std::back_inserter(resVec));
+    std::ranges::sort(resVec, {}, [](const QPointer<ITranslateEngine>& inVal)
+    {
+        return std::tie(inVal->_priority, inVal->_displayName);
+    });
+
+    return resVec;
 }
 
 std::expected<TranslateUnit*, QString> ITranslateEngine::newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager)

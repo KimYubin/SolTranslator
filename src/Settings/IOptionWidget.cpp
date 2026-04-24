@@ -196,9 +196,21 @@ size_t qHash(const QPointer<T> &ptr, size_t seed = 0)
 
 namespace
 {
-QSet<QPointer<IOptionPage>>& optionsPages()
+template <class T>
+struct QPointer_hasher
 {
-    static QSet<QPointer<IOptionPage>> staticOptionPages;
+    size_t operator()(const QPointer<T>& ptr, size_t seed = 0) const
+    {
+        return qHash(ptr ? ptr.data() : 0, seed);
+    }
+};
+
+template <class T>
+using unorder_set_qpointer = std::unordered_set<QPointer<T>, QPointer_hasher<T>>;
+
+unorder_set_qpointer<IOptionPage>& optionsPages()
+{
+    static unorder_set_qpointer<IOptionPage> staticOptionPages;
 
     return staticOptionPages;
 }
@@ -208,42 +220,48 @@ IOptionPage::IOptionPage()
 {
     _priority = std::numeric_limits<int>::max();
 
-    optionsPages().insert(this);
+    optionsPages().insert(QPointer{this});
 }
 
 IOptionPage::~IOptionPage()
 {
-    optionsPages().remove(this);
+    optionsPages().erase(QPointer{this});
 }
 
-const QSet<QPointer<IOptionPage>>& IOptionPage::allOptionsPages()
+void IOptionPage::allOptionsFinish()
 {
-    return optionsPages();
-}
-
-std::vector<IOptionPage*> IOptionPage::sortedOptionsPages()
-{
-    std::vector<IOptionPage*> sortedOptionPages;
-    const QSet<QPointer<IOptionPage>>& optionPageSet = optionsPages();
-    for (const auto& option : optionPageSet)
+    unorder_set_qpointer<IOptionPage>& options = optionsPages();
+    for (const QPointer<IOptionPage>& option : options)
     {
         if (option)
         {
-            sortedOptionPages.push_back(option);
+            option->finish();
         }
     }
-
-    std::ranges::sort(sortedOptionPages, IOptionPage::compareOptionsPages);
-
-    return sortedOptionPages;
 }
 
-bool IOptionPage::compareOptionsPages(const IOptionPage* inPage1, const IOptionPage* inPage2)
+std::vector<QPointer<IOptionPage>> IOptionPage::sortedOptionsPages()
 {
-    return (inPage1->_priority == inPage2->_priority)
-               ? (inPage1->getDisplayName() < inPage2->getDisplayName())
-               : (inPage1->_priority < inPage2->_priority);
+    unorder_set_qpointer<IOptionPage>& optionSet = optionsPages();
+
+    // cleanup nullptr
+    std::erase_if(optionSet, [](const QPointer<IOptionPage>& inVal)
+    {
+        return inVal.isNull();
+    });
+
+    std::vector<QPointer<IOptionPage>> resVec;
+    resVec.reserve(optionSet.size());
+
+    std::ranges::copy(optionSet, std::back_inserter(resVec));
+    std::ranges::sort(resVec, {}, [](const QPointer<IOptionPage>& inVal)
+    {
+        return std::tie(inVal->_priority, inVal->_displayName);
+    });
+
+    return resVec;
 }
+
 
 QString IOptionPage::getDisplayName() const
 {

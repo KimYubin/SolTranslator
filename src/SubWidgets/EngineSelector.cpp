@@ -14,8 +14,8 @@ EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
     const EngineId curEngineId = solConfig.currentEngineId();
     int curIdx = 0;
 
-    const std::vector<ITranslateEngine*>& trEngineList = ITranslateEngine::sortedTranslateEngineList();
-    for (const ITranslateEngine* trEngine : trEngineList)
+    const std::vector<QPointer<ITranslateEngine>> trEngineList = ITranslateEngine::sortedTranslateEngineList();
+    for (const QPointer<ITranslateEngine>& trEngine : trEngineList)
     {
         addItem(trEngine->getDisplayName(), trEngine->getEngineId().toString());
         if (curEngineId == trEngine->getEngineId())

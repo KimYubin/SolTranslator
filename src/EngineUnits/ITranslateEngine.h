@@ -28,9 +28,9 @@ public:
 
     static std::expected<TranslateUnit*, QString> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
 
-    EngineId getEngineId() const { return _engineId; }
-    QString getDisplayName() const { return _displayName; }
-    QString getIconPath() const { return _iconPath; }
+    const EngineId& getEngineId() const { return _engineId; }
+    const QString& getDisplayName() const { return _displayName; }
+    const QString& getIconPath() const { return _iconPath; }
     int getPriority() const { return _priority; }
 
 protected:

@@ -10,7 +10,7 @@ namespace
 {
 using TrEngineMap = std::unordered_map<EngineId, QPointer<ITranslateEngine>, EngineId_hasher>;
 
-TrEngineMap& translateEngineMap()
+TrEngineMap& translateEngines()
 {
     static TrEngineMap staticTrEngines;
 
@@ -19,31 +19,34 @@ TrEngineMap& translateEngineMap()
 } // anonymous namespace
 
 ITranslateEngine::ITranslateEngine(const EngineId& inEngine)
-    :_engineId(inEngine)
+    : _engineId(inEngine)
+    , _priority(std::numeric_limits<int>::max())
 {
-    _priority = std::numeric_limits<int>::max();
-    translateEngineMap()[_engineId] = this;
+    Q_ASSERT_X(translateEngines().contains(_engineId) == false, "addTranslateEngine"
+             , "Attempted to assign a duplicate EngineId. The EngineId must be unique.");
+
+    translateEngines()[_engineId] = QPointer{this};
 }
 
 ITranslateEngine::~ITranslateEngine()
 {
-    translateEngineMap().erase(_engineId);
+    translateEngines().erase(_engineId);
 }
 
 std::vector<QPointer<ITranslateEngine>> ITranslateEngine::sortedTranslateEngineList()
 {
-    TrEngineMap& trEngines = translateEngineMap();
+    TrEngineMap& trEngineMap = translateEngines();
 
     // cleanup nullptr
-    std::erase_if(trEngines, [](const auto& inVal)
+    std::erase_if(trEngineMap, [](const auto& inVal)
     {
         return inVal.second.isNull();
     });
 
     std::vector<QPointer<ITranslateEngine>> resVec;
-    resVec.reserve(trEngines.size());
+    resVec.reserve(trEngineMap.size());
 
-    std::ranges::copy(trEngines | std::views::values, std::back_inserter(resVec));
+    std::ranges::copy(trEngineMap | std::views::values, std::back_inserter(resVec));
     std::ranges::sort(resVec, {}, [](const QPointer<ITranslateEngine>& inVal)
     {
         return std::tie(inVal->_priority, inVal->_displayName);
@@ -54,8 +57,10 @@ std::vector<QPointer<ITranslateEngine>> ITranslateEngine::sortedTranslateEngineL
 
 std::expected<TranslateUnit*, QString> ITranslateEngine::newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager)
 {
-    const auto findIt = translateEngineMap().find(inEngine);
-    if (findIt == translateEngineMap().end())
+    TrEngineMap& trEngineMap = translateEngines();
+
+    const auto findIt = trEngineMap.find(inEngine);
+    if (findIt == trEngineMap.end())
     {
         return std::unexpected{"TranslateManager::newTranslateUnit: not found trUnitCreator. A inEngine is " + inEngine.toString()};
     }

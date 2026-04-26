@@ -7,6 +7,8 @@
 
 #include <QDateTime>
 
+#include <algorithm>
+
 HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
     DbWorker* dbWorker = new DbWorker();
@@ -124,18 +126,17 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
 std::expected<int, QString> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
                                                                      , const QDateTime& inTimeStamp) const
 {
-    const auto lowIt = std::ranges::lower_bound(_historyCaches, inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
+    // The array is sorted by TimeStamp; binary search is used.
+    // Entries with the same TimeStamp are distinguished by TimelineId.
+    const auto lowIt = std::ranges::lower_bound(_historyCaches, inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
+
     if (lowIt == _historyCaches.end() || lowIt->getTimeStamp() != inTimeStamp)
     {
         return std::unexpected{"not found TimeStamp. TimeStamp: " + inTimeStamp.toString()};
     }
 
-    const auto upperIt = std::ranges::upper_bound(lowIt, _historyCaches.end(), inTimeStamp, std::greater<QDateTime>(), &HistoryCacheData::getTimeStamp);
-
-    const auto findIt = std::find_if(lowIt, upperIt, [inTimelineId](const HistoryCacheData& inCache)
-    {
-        return inCache.getTimelineId() == inTimelineId;
-    });
+    const auto upperIt = std::ranges::upper_bound(lowIt, _historyCaches.end(), inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
+    const auto findIt  = std::ranges::find(lowIt, upperIt, inTimelineId, &HistoryCacheData::getTimelineId);
 
     if (findIt == _historyCaches.end())
     {

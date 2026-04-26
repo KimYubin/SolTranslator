@@ -211,9 +211,8 @@ unorder_set_qpointer<IOptionPage>& optionsPages()
 } // anonymous namespace
 
 IOptionPage::IOptionPage()
+    : _priority(std::numeric_limits<int>::max())
 {
-    _priority = std::numeric_limits<int>::max();
-
     optionsPages().insert(QPointer{this});
 }
 

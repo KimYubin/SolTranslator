@@ -188,12 +188,6 @@ void IOptionWidget::setOptionPage(IOptionPage* inOptionPage)
 // ~======================
 // IOptionPage
 
-template <class T>
-size_t qHash(const QPointer<T> &ptr, size_t seed = 0)
-{
-    return qHash(ptr ? ptr.data() : 0, seed);
-}
-
 namespace
 {
 template <class T>

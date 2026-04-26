@@ -50,7 +50,7 @@ struct EngineId_hasher
 {
     size_t operator()(const EngineId& inKy) const
     {
-        return std::hash<::QString>()(inKy.toString());
+        return std::hash<QString>()(inKy.toString());
     }
 };
 

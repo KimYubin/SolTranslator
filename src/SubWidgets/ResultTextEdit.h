@@ -11,6 +11,9 @@ class ResultTextEdit : public MenuTextBrowser
 {
     Q_OBJECT
 
+private:
+    Q_PROPERTY(QColor codeBackgroundColor READ getCodeBackgroundColor WRITE setCodeBackgroundColor)
+
 public:
     explicit ResultTextEdit(QWidget* parent = nullptr);
 
@@ -29,6 +32,13 @@ protected:
     void setAdjustMarkdown(const QString& inMarkdownStr);
 
 private:
+    void setCodeBackgroundColor(const QColor& inParam);
+    QColor getCodeBackgroundColor() const { return _codeBackgroundColor; }
+    QString getCodeBackgroundColorString();
+
+    QColor _codeBackgroundColor;
+    QString _codeBackgroundColorString;
+
     qreal _fontSize = 14.0;
 };
 

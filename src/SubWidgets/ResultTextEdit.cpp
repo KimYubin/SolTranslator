@@ -9,18 +9,6 @@
 #include <QTextBlock>
 #include <quuid.h>
 
-namespace
-{
-constexpr QColor codeBgColor(29, 29, 29, 255);
-
-const QString codeBgColorStr = "background-color: "
-        + QString::fromLatin1("rgba(%1,%2,%3,%4)")
-          .arg(codeBgColor.red())
-          .arg(codeBgColor.green())
-          .arg(codeBgColor.blue())
-          .arg(codeBgColor.alpha())
-        + "; ";
-} // anonymous namespace
 
 ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
 {
@@ -80,8 +68,8 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
         QTextBlockFormat blockFormat = blockCursor.blockFormat();
 
         // 코드 블록은 간격 조정 안함.
-        if (blockFormat.background().color() == codeBgColor
-            && block.next().blockFormat().background().color() == codeBgColor)
+        if (blockFormat.background().color() == getCodeBackgroundColor()
+            && block.next().blockFormat().background().color() == getCodeBackgroundColor())
         {
             break;
         }
@@ -160,8 +148,8 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
     const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
-    const QString quotCodeFormat   = "\n<pre style=\" " + codeBgColorStr + codeFontFamilies + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
-    const QString inlineCodeFormat = "<code style= \" " + codeBgColorStr + codeFontFamilies + " \">"  "%1"  "</code>";
+    const QString quotCodeFormat   = "\n<pre style=\" " + getCodeBackgroundColorString() + codeFontFamilies + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
+    const QString inlineCodeFormat = "<code style= \" " + getCodeBackgroundColorString() + codeFontFamilies + " \">"  "%1"  "</code>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -188,4 +176,28 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
 
     document()->setMarkdown(md);
+}
+
+void ResultTextEdit::setCodeBackgroundColor(const QColor& inParam)
+{
+    _codeBackgroundColor = inParam;
+
+    _codeBackgroundColorString
+            = "background-color: "
+            + QString{"rgba(%1, %2, %3, %4)"}
+              .arg(_codeBackgroundColor.red())
+              .arg(_codeBackgroundColor.green())
+              .arg(_codeBackgroundColor.blue())
+              .arg(_codeBackgroundColor.alpha())
+            + "; ";
+}
+
+QString ResultTextEdit::getCodeBackgroundColorString()
+{
+    if (_codeBackgroundColorString.isEmpty())
+    {
+        setCodeBackgroundColor(QColor(29, 29, 29, 255));
+    }
+
+    return _codeBackgroundColorString;
 }

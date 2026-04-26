@@ -212,6 +212,14 @@ target_include_directories(magic_enum INTERFACE external/magic_enum)
 target_link_libraries(SolTranslator PRIVATE magic_enum::magic_enum)
 
 # ============================
+# MurmurHash external/MurmurHash/MurmurHash3.h
+add_library(MurmurHash STATIC external/MurmurHash/MurmurHash3.cpp)
+add_library(MurmurHash::MurmurHash ALIAS MurmurHash)
+
+target_include_directories(MurmurHash PUBLIC external/MurmurHash)
+target_link_libraries(SolTranslator PRIVATE MurmurHash::MurmurHash)
+
+# ============================
 # QHotkey
 add_library(qhotkey external/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)

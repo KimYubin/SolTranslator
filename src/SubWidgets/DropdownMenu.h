@@ -20,7 +20,7 @@ public:
     virtual void hidePopup() override;
 
 protected:
-    virtual void wheelEvent(QWheelEvent *event) override;
+    virtual void wheelEvent(QWheelEvent* event) override;
 
 private:
     /** Reset the view mouse hover selection state when reopening the menu. */

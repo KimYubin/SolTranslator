@@ -35,9 +35,12 @@ class PopupTranslateWidget : public ITranslateWidget
 
 public:
     explicit PopupTranslateWidget(QWidget* parent = nullptr);
-
     ~PopupTranslateWidget() override;
 
+private:
+    void setupUI();
+
+public:
     void executeTranslate(const QString& inSourceText
                         , const TextStyle inTextStyle
                         , const LangType inSourceLang
@@ -69,10 +72,6 @@ protected:
     void setTextEditSize(const QSize& inTextEditSize);
 
 private:
-    void manualSizeMode();
-
-    void setupUI();
-
     /** 입력된 inNewText에 적합한 에디터의 크기를 계산합니다. */
     QSize calculateTextEditSize(const QString& inNewText) const;
 
@@ -90,6 +89,8 @@ private:
      * Range, PageStep, Value 등을 동기화에 필요한 데이터를 적용합니다.
      */
     void syncInOutScrollbar();
+
+    void manualSizeMode();
 
 protected:
     void onAlwaysOnToggle(const bool inChecked);
@@ -175,6 +176,7 @@ protected:
 
 
     bool _isTranslateComplete = false;
+
     TextCategory _currentTextCategory = TextCategory::TargetText;
 
 private:

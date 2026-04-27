@@ -105,174 +105,6 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
-void PopupTranslateWidget::executeTranslate(const QString& inSourceText
-                                          , const TextStyle inTextStyle
-                                          , const LangType inSourceLang
-                                          , const LangType inTargetLang
-                                          , const bool inIsIgnoreCache)
-{
-    _loadingWidget->run();
-
-    if ((inTextStyle == TextStyle::PlainText) 
-        || inIsIgnoreCache)
-    {
-        executeTranslateImpl(solConfig.currentEngineId()
-                           , inSourceText
-                           , inTextStyle
-                           , inSourceLang
-                           , inTargetLang
-                           , inIsIgnoreCache);
-        return;
-    }
-
-    SolAsync::asyncLaunch<QString>(
-        this,
-        [htmlStr = inSourceText]() mutable
-        {
-            // list 무시하는 문법 제거.
-            QTextDocument txtDoc;
-            txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
-
-            return txtDoc.toMarkdown();
-        },
-        [this, inSourceLang, inTargetLang](const QString& inMd)
-        {
-            executeTranslateImpl(solConfig.currentEngineId()
-                               , inMd
-                               , TextStyle::MarkDown
-                               , inSourceLang
-                               , inTargetLang
-                               , false);
-        });
-}
-
-
-void PopupTranslateWidget::completeTranslateText(const QString& inTargetText)
-{
-    ITranslateWidget::completeTranslateText(inTargetText);
-
-    _loadingWidget->stop();
-    _isTranslateComplete = true;
-    _textToggleButton->show();
-    _reTranslateButton->show();
-}
-
-void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
-                                             , const QString& inTargetText
-                                             , const TextStyle inTextStyle)
-{
-    setSourceAndStyle(inSourceText, inTextStyle);
-    completeTranslateText(inTargetText);
-}
-
-void PopupTranslateWidget::applyTranslation()
-{
-    showTranslationPopup();
-}
-
-QScrollBar* PopupTranslateWidget::getVerticalScrollBar() const
-{
-    return ui->resultText->verticalScrollBar();
-}
-
-QScrollBar* PopupTranslateWidget::getHorizontalScrollBar() const
-{
-    return ui->resultText->horizontalScrollBar();
-}
-
-QTextCursor PopupTranslateWidget::getTextCursor() const
-{
-    return ui->resultText->textCursor();
-}
-
-void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
-{
-    ui->resultText->setTextCursor(cursor);
-}
-
-
-void PopupTranslateWidget::showTranslationPopup()
-{
-    if ((_prevSize.width() < _maxEditSize.width())
-        || (_prevSize.height() < _maxEditSize.height()))
-    {
-        const QSize newSize = calculateTextEditSize(getTargetText());
-        animateTextEditResize(newSize);
-    }
-
-    ui->resultText->setFormattingText(getTargetText(), getTextStyle());
-}
-
-void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
-{
-    // text edit 폭 줄어드는 현상 방지.
-    ui->resultText->setFixedSize(inTextEditSize);
-    adjustSize();
-
-    // 생성될 스크린 위치 추적
-    QScreen* currentScreen = nullptr;
-    switch (solConfig.popupScreenPolicy())
-    {
-    case ScreenPopupPolicy::Default:
-    case ScreenPopupPolicy::PrimaryScreen:
-        currentScreen = qApp->primaryScreen();
-        break;
-    case ScreenPopupPolicy::FixedScreen:
-        currentScreen = qApp->primaryScreen(); // todo: 추후 저장된 스크린 위치 사용
-        break;
-    case ScreenPopupPolicy::CursorScreen:
-        currentScreen = qApp->screenAt(QCursor::pos());
-        break;
-    case ScreenPopupPolicy::Size:
-        break;
-    }
-
-    const QPointF screenTopLeft = currentScreen ? currentScreen->geometry().topLeft() : QPointF();
-
-    // position
-    const QSizeF screenSize   = currentScreen ? currentScreen->size().toSizeF() : QSizeF(1920, 1080);
-    const QPoint targetCenter = screenTopLeft.toPoint()
-            + QPointF(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y()).toPoint();
-    const QPoint recCenter = rect().center();
-
-    QPoint targetPos = targetCenter - recCenter;
-    targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - size().width()));
-    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height() * _yPosMaxRatio));
-
-    move(targetPos);
-
-    update();
-}
-
-void PopupTranslateWidget::manualSizeMode()
-{
-    if (_isManualSizeMode)
-    {
-        return;
-    }
-    _isManualSizeMode = true;
-
-    // 매뉴얼 사이즈 모드를 위해 등록된 사이즈 그립 이벤트 필터 해제
-    _sizeGrip->removeEventFilter(this);
-
-    // ~==================
-    // 위젯 사이즈 변경 애니메이션 정지 및 해제
-    _animation->stop();
-    _animation->setPropertyName("");
-
-    // ~==================
-    // 위젯 사이즈 정책 변경
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    const QSize minSize = _minEditSize + _innerMarginSize + _outerMarginSize;
-    setMinimumSize(minSize);
-    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-    ui->resultText->setMinimumSize(10, 10);
-    ui->resultText->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-}
-
 void PopupTranslateWidget::setupUI()
 {
     ui->setupUi(this);
@@ -469,6 +301,145 @@ void PopupTranslateWidget::setupUI()
     _sizeGrip->setFocus();
 }
 
+void PopupTranslateWidget::executeTranslate(const QString& inSourceText
+                                          , const TextStyle inTextStyle
+                                          , const LangType inSourceLang
+                                          , const LangType inTargetLang
+                                          , const bool inIsIgnoreCache)
+{
+    _loadingWidget->run();
+
+    if ((inTextStyle == TextStyle::PlainText) 
+        || inIsIgnoreCache)
+    {
+        executeTranslateImpl(solConfig.currentEngineId()
+                           , inSourceText
+                           , inTextStyle
+                           , inSourceLang
+                           , inTargetLang
+                           , inIsIgnoreCache);
+        return;
+    }
+
+    SolAsync::asyncLaunch<QString>(
+        this,
+        [htmlStr = inSourceText]() mutable
+        {
+            // list 무시하는 문법 제거.
+            QTextDocument txtDoc;
+            txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
+
+            return txtDoc.toMarkdown();
+        },
+        [this, inSourceLang, inTargetLang](const QString& inMd)
+        {
+            executeTranslateImpl(solConfig.currentEngineId()
+                               , inMd
+                               , TextStyle::MarkDown
+                               , inSourceLang
+                               , inTargetLang
+                               , false);
+        });
+}
+
+
+void PopupTranslateWidget::completeTranslateText(const QString& inTargetText)
+{
+    ITranslateWidget::completeTranslateText(inTargetText);
+
+    _loadingWidget->stop();
+    _isTranslateComplete = true;
+    _textToggleButton->show();
+    _reTranslateButton->show();
+}
+
+void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
+                                             , const QString& inTargetText
+                                             , const TextStyle inTextStyle)
+{
+    setSourceAndStyle(inSourceText, inTextStyle);
+    completeTranslateText(inTargetText);
+}
+
+void PopupTranslateWidget::applyTranslation()
+{
+    showTranslationPopup();
+}
+
+QScrollBar* PopupTranslateWidget::getVerticalScrollBar() const
+{
+    return ui->resultText->verticalScrollBar();
+}
+
+QScrollBar* PopupTranslateWidget::getHorizontalScrollBar() const
+{
+    return ui->resultText->horizontalScrollBar();
+}
+
+QTextCursor PopupTranslateWidget::getTextCursor() const
+{
+    return ui->resultText->textCursor();
+}
+
+void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
+{
+    ui->resultText->setTextCursor(cursor);
+}
+
+
+void PopupTranslateWidget::showTranslationPopup()
+{
+    if ((_prevSize.width() < _maxEditSize.width())
+        || (_prevSize.height() < _maxEditSize.height()))
+    {
+        const QSize newSize = calculateTextEditSize(getTargetText());
+        animateTextEditResize(newSize);
+    }
+
+    ui->resultText->setFormattingText(getTargetText(), getTextStyle());
+}
+
+void PopupTranslateWidget::setTextEditSize(const QSize& inTextEditSize)
+{
+    // text edit 폭 줄어드는 현상 방지.
+    ui->resultText->setFixedSize(inTextEditSize);
+    adjustSize();
+
+    // 생성될 스크린 위치 추적
+    QScreen* currentScreen = nullptr;
+    switch (solConfig.popupScreenPolicy())
+    {
+    case ScreenPopupPolicy::Default:
+    case ScreenPopupPolicy::PrimaryScreen:
+        currentScreen = qApp->primaryScreen();
+        break;
+    case ScreenPopupPolicy::FixedScreen:
+        currentScreen = qApp->primaryScreen(); // todo: 추후 저장된 스크린 위치 사용
+        break;
+    case ScreenPopupPolicy::CursorScreen:
+        currentScreen = qApp->screenAt(QCursor::pos());
+        break;
+    case ScreenPopupPolicy::Size:
+        break;
+    }
+
+    const QPointF screenTopLeft = currentScreen ? currentScreen->geometry().topLeft() : QPointF();
+
+    // position
+    const QSizeF screenSize   = currentScreen ? currentScreen->size().toSizeF() : QSizeF(1920, 1080);
+    const QPoint targetCenter = screenTopLeft.toPoint()
+            + QPointF(screenSize.width() * _centerPosRatio.x(), screenSize.height() * _centerPosRatio.y()).toPoint();
+    const QPoint recCenter = rect().center();
+
+    QPoint targetPos = targetCenter - recCenter;
+    targetPos.rx() = qMin(targetPos.x(), static_cast<int>(screenSize.width() - size().width()));
+    targetPos.ry() = qMax(targetPos.y(), static_cast<int>(screenSize.height() * _yPosMaxRatio));
+
+    move(targetPos);
+
+    update();
+}
+
 QSize PopupTranslateWidget::calculateTextEditSize(const QString& inNewText) const
 {
     const auto* textEdit = ui->resultText;
@@ -578,6 +549,35 @@ void PopupTranslateWidget::syncInOutScrollbar()
         ui->outerVScrollBar->setValue(textScroll->value());
         ui->outerVScrollBar->show();
     }
+}
+
+void PopupTranslateWidget::manualSizeMode()
+{
+    if (_isManualSizeMode)
+    {
+        return;
+    }
+    _isManualSizeMode = true;
+
+    // 매뉴얼 사이즈 모드를 위해 등록된 사이즈 그립 이벤트 필터 해제
+    _sizeGrip->removeEventFilter(this);
+
+    // ~==================
+    // 위젯 사이즈 변경 애니메이션 정지 및 해제
+    _animation->stop();
+    _animation->setPropertyName("");
+
+    // ~==================
+    // 위젯 사이즈 정책 변경
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->bgFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->resultText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    const QSize minSize = _minEditSize + _innerMarginSize + _outerMarginSize;
+    setMinimumSize(minSize);
+    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    ui->resultText->setMinimumSize(10, 10);
+    ui->resultText->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 void PopupTranslateWidget::onAlwaysOnToggle(const bool inChecked)

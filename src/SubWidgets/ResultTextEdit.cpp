@@ -172,9 +172,10 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
             }
         }
     };
-    replaceMarkerToCode(quotList, quotCodeFormat, quotPlaceMarker);
-    replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
 
+    // Restore 'Marker To Code' in reverse order of 'Code To Marker'.
+    replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
+    replaceMarkerToCode(quotList, quotCodeFormat, quotPlaceMarker);
     document()->setMarkdown(md);
 }
 

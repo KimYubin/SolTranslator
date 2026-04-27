@@ -124,6 +124,12 @@ const FinPointEngine finPointEngine;
 
 namespace
 {
+
+namespace EngineIds
+{
+inline const EngineId FinPointDebug{"FinPointDebug"};
+} // namespace EngineIds 
+
 class FinPointEngineDebug : public ITranslateEngine
 {
     Q_DISABLE_COPY_MOVE(FinPointEngineDebug)
@@ -141,9 +147,6 @@ public:
             return newTrUnit;
         });
     }
-
-    ~FinPointEngineDebug() override
-    {};
 };
 
 const FinPointEngineDebug finPointEngineDebug;

@@ -58,7 +58,7 @@ const QString Shortcuts = "Shortcuts/";
  */
 template <typename EnumType>
     requires std::is_enum_v<EnumType>
-void setEnumValue(QSettings* inSettings, const QAnyStringView& inKey, const EnumType inVal)
+void setEnumValue(QSettings* inSettings, const QString& inKey, const EnumType inVal)
 {
     inSettings->setValue(inKey, Sol::enumToQStr(inVal));
 }
@@ -75,7 +75,7 @@ void setEnumValue(QSettings* inSettings, const QAnyStringView& inKey, const Enum
  */
 template <typename EnumType>
     requires std::is_enum_v<EnumType>
-EnumType enumValue(const QSettings* inSettings, const QAnyStringView& inKey, const EnumType inDefault)
+EnumType enumValue(const QSettings* inSettings, const QString& inKey, const EnumType inDefault)
 {
     const QString defaultQStr = Sol::enumToQStr(inDefault);
 
@@ -346,12 +346,12 @@ QKeySequence ConfigManager::shortcut(const Action inShortCut) const
     return _settings->value(Shortcuts + Sol::enumToQStr(inShortCut), defaultKey).value<QKeySequence>();
 }
 
-void ConfigManager::setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData)
+void ConfigManager::setSaveGeometry(const QString& inKey, const QByteArray& inGeoData)
 {
     _settings->setValue(inKey, inGeoData);
 }
 
-std::tuple<bool, QByteArray> ConfigManager::saveGeometry(const QAnyStringView& inKey) const
+std::tuple<bool, QByteArray> ConfigManager::saveGeometry(const QString& inKey) const
 {
     const QVariant valVariant = _settings->value(inKey);
 

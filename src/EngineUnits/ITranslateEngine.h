@@ -16,6 +16,7 @@ class TranslateUnit;
 
 using TrUnitCreator = std::move_only_function<TranslateUnit*(TranslateManager*)>;
 
+/** The ITranslateEngine class registers and manages metadata for the translation engine. */
 class ITranslateEngine : public QObject
 {
     Q_OBJECT

@@ -31,7 +31,6 @@ private:
 namespace EngineIds
 {
 inline const EngineId FinPoint{"FinPoint"};
-inline const EngineId FinPointDebug{"FinPointDebug"};
 }
 
 class FinPointEngine : public ITranslateEngine

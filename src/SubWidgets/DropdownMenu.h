@@ -5,7 +5,9 @@
 #include <QComboBox>
 
 /**
- * 포커스가 없을때 휠 이벤트를 무시하는 콤보박스입니다.
+ * The DropdownMenu class is a custom QComboBox.
+ * Ignore wheel events when it does not have tab focus.
+ * Reset the view mouse hover selection state when reopening the menu.
  */
 class DropdownMenu : public QComboBox
 {
@@ -14,14 +16,15 @@ class DropdownMenu : public QComboBox
 public:
     explicit DropdownMenu(QWidget* parent = nullptr);
 
+    virtual void showPopup() override;
+    virtual void hidePopup() override;
 
 protected:
     virtual void wheelEvent(QWheelEvent *event) override;
 
-private slots:
-
-
 private:
+    /** Reset the view mouse hover selection state when reopening the menu. */
+    void resetViewCurrentIndex();
 };
 
 

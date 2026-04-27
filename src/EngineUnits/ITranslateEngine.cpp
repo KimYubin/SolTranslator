@@ -22,8 +22,7 @@ ITranslateEngine::ITranslateEngine(const EngineId& inEngine)
     : _engineId(inEngine)
     , _priority(std::numeric_limits<int>::max())
 {
-    Q_ASSERT_X(translateEngines().contains(_engineId) == false, "addTranslateEngine"
-             , "Attempted to assign a duplicate EngineId. The EngineId must be unique.");
+    Q_ASSERT_X(translateEngines().contains(_engineId) == false, "ITranslateEngine", "Attempted to assign a duplicate EngineId. The EngineId must be unique.");
 
     translateEngines()[_engineId] = QPointer{this};
 }

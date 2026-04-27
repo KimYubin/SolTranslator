@@ -90,8 +90,8 @@ public:
     QKeySequence shortcut(const Action inShortCut) const;
 
 private:
-    void setSaveGeometry(const QAnyStringView& inKey, const QByteArray& inGeoData);
-    std::tuple<bool, QByteArray> saveGeometry(const QAnyStringView& inKey) const;
+    void setSaveGeometry(const QString& inKey, const QByteArray& inGeoData);
+    std::tuple<bool, QByteArray> saveGeometry(const QString& inKey) const;
 
 private:
     QSettings* _settings;

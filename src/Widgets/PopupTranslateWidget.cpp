@@ -359,6 +359,7 @@ void PopupTranslateWidget::viewTranslationText(const QString& inSourceText
 {
     setSourceAndStyle(inSourceText, inTextStyle);
     completeTranslateText(inTargetText);
+    getVerticalScrollBar()->setValue(0);
 }
 
 void PopupTranslateWidget::applyTranslation()

@@ -2,6 +2,7 @@
 
 #include "FinPointTrUnit.h"
 
+#include "Types/ExJson.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
@@ -44,58 +45,82 @@ void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
 
 void FinPointTrUnit::onReadyRead()
 {
-    const QByteArray chunk  = _reply->readAll();
-    const QString dataChunk = QString::fromUtf8(chunk);
-    const QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
-
-    QString cumulativeString;
-    for (const QString& line : lines)
+    const QString content = chunkToContent();
+    if (content.isEmpty() == false)
     {
-        if (line.startsWith("{\"data\""))
-        {
-            QJsonParseError parseError;
-            QJsonDocument jsonDoc = QJsonDocument::fromJson(line.toUtf8(), &parseError);
-            if (parseError.error == QJsonParseError::NoError)
-            {
-                const QJsonObject jsonObj = jsonDoc.object();
-                const QString jsonStr     = jsonObj["data"].toString();
-                if (jsonStr != "[DONE]")
-                {
-                    cumulativeString += jsonStr;
-                }
-            }
-            else
-            {
-                solDebug << parseError.errorString();
-            }
-        }
-    }
-
-    if (cumulativeString.isEmpty() == false)
-    {
-        appendTranslatedText(cumulativeString);
+        appendTranslatedText(content);
     }
 }
 
 QString FinPointTrUnit::replyTranslateFinished()
 {
-    const QByteArray chunk  = _reply->readAll();
-    const QString dataChunk = QString::fromUtf8(chunk);
-    const QStringList lines = dataChunk.split("\n", Qt::SkipEmptyParts);
-
-    if (lines.isEmpty() == false)
+    if (_isStream == false)
     {
-        const QJsonDocument jsonDoc = QJsonDocument::fromJson(lines[0].toUtf8());
-        const QJsonObject jsonObj   = jsonDoc.object();
-        const QString jsonStr       = jsonObj["data"].toString();
-
-        if ((jsonStr.isEmpty() == false) && (jsonStr != "[DONE]"))
+        const ExJson rootJson{_reply->readAll()};
+        if (const ExJson resJson = rootJson.value("data"))
         {
-            _targetText.append(jsonStr);
+            const QString jsonStr = resJson.toString();
+            if ((jsonStr.isEmpty() == false) && (jsonStr != "[DONE]"))
+            {
+                _targetText += resJson.toString();
+            }
+        }
+        else
+        {
+            solDebug << resJson.error();
         }
     }
 
     return _targetText;
+}
+
+QString FinPointTrUnit::chunkToContent()
+{
+    _buffer += _reply->readAll();
+    QString contentStr;
+
+    while (_buffer.isEmpty() == false)
+    {
+        const int pos = _buffer.indexOf("\n\n");
+        if (pos < 0)
+        {
+            break;
+        }
+
+        QByteArray eventJson = _buffer.left(pos);
+        _buffer.remove(0, pos + 2);
+
+        if (eventJson.startsWith("{\"data\"") == false)
+        {
+            solDebug << "not detected \'data\':" << eventJson;
+            continue;
+        }
+
+        const ExJson rootJson{eventJson};
+
+        // content
+        const ExJson resJson = rootJson.value("data");
+        if (resJson.isError())
+        {
+            solDebug << resJson.error();
+            continue;
+        }
+
+        const QString resStr = resJson.toString();
+        if (resStr == "[ERROR]")
+        {
+            solDebug << "last event:'" << eventJson;
+            continue;
+        }
+        if (resStr == "[DONE]")
+        {
+            break;
+        }
+
+        contentStr += resStr;
+    }
+
+    return contentStr;
 }
 
 

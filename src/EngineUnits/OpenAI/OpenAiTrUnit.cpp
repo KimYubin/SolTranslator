@@ -102,16 +102,16 @@ QString OpenAiTrUnit::chunkToContent()
             break;
         }
 
-        QByteArray event = _buffer.left(pos);
+        QByteArray eventJson = _buffer.left(pos);
         _buffer.remove(0, pos + 2);
 
-        if (event.startsWith("data: ") == false)
+        if (eventJson.startsWith("data: ") == false)
         {
-            solDebug << "not detected \'data\':" << event;
+            solDebug << "not detected \'data\':" << eventJson;
             continue;
         }
 
-        QByteArray json = event.sliced(6);
+        QByteArray json = eventJson.sliced(6);
         if (json == "[DONE]")
         {
             break;
@@ -151,7 +151,7 @@ QString OpenAiTrUnit::chunkToContent()
         solDebug << resJson.error();
         solDebug << finishJson.error();
         solDebug << errorJson.error();
-        solDebug << "last event:'" << event;
+        solDebug << "last event:'" << eventJson;
     }
 
     return contentStr;

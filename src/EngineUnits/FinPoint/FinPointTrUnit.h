@@ -21,6 +21,8 @@ protected:
     virtual void onReadyRead() override;
     virtual QString replyTranslateFinished() override;
 
+    QString chunkToContent();
+
 public:
     void setDebugMode(const bool inIsDebugMode) { _isDebugMode = inIsDebugMode; }
 

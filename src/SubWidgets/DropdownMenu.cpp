@@ -20,8 +20,6 @@ void DropdownMenu::showPopup()
 
 void DropdownMenu::hidePopup()
 {
-    resetViewCurrentIndex();
-
     QComboBox::hidePopup();
 }
 

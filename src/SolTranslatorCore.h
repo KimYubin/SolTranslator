@@ -35,8 +35,7 @@ public:
     static SolTranslatorCore* instance() noexcept { return _self; }
 
 public:
-    template <typename T, typename... Args>
-        requires std::is_base_of_v<AbstractManager, T>
+    template <std::derived_from<AbstractManager> T, typename... Args>
     T* emplaceManager(Args&&... args)
     {
         Q_ASSERT_X(_managers.contains(std::type_index(typeid(T))) == false, "manager", "Manager already registered");
@@ -46,8 +45,7 @@ public:
         return static_cast<T*>(emplaceRes.first->second.get());
     }
 
-    template <typename T>
-        requires std::is_base_of_v<AbstractManager, T>
+    template <std::derived_from<AbstractManager> T>
     void registerManager(std::unique_ptr<T>&& inManager)
     {
         Q_ASSERT_X(_managers.contains(std::type_index(typeid(T))) == false, "manager", "Manager already registered");
@@ -55,8 +53,7 @@ public:
         _managers[std::type_index(typeid(T))] = std::move(inManager);
     };
 
-    template <typename T>
-        requires std::is_base_of_v<AbstractManager, T>
+    template <std::derived_from<AbstractManager> T>
     T* manager()
     {
         const auto it = _managers.find(std::type_index(typeid(T)));

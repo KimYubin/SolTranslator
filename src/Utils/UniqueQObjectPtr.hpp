@@ -19,8 +19,7 @@ struct QObjectDeleter
     }
 };
 
-template <typename T>
-    requires std::is_base_of_v<QObject, T>
+template <std::derived_from<QObject> T>
 using unique_qobject = std::unique_ptr<T, QObjectDeleter>;
 
 template <typename T, typename... Args>

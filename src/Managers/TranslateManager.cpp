@@ -12,7 +12,7 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "EngineUnits/OpenAI/OpenAiTrUnit.h"
 #include "Types/SolTypes.h"
-#include "Types/TranslateRequestInfo.h"
+#include "Types/TranslateRequest.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolAsync.hpp"
 #include "Utils/SolLog.h"
@@ -74,18 +74,18 @@ std::expected<TranslateUnit*, QString> TranslateManager::newTranslateUnit(const 
     return ITranslateEngine::newTrUnit(inEngineId, this);;
 }
 
-std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo)
+std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)
 {
     Q_ASSERT_X(_historyManager, "TranslateManager::executeNewTranslateUnit", "The _historyManager is not initialized.");
 
     // 앞뒤 공백 제거
-    inTranslateRequestInfo.sourceText = inTranslateRequestInfo.sourceText.trimmed();
+    inTrRequest.sourceText = inTrRequest.sourceText.trimmed();
 
-    const EngineId engineId   = inTranslateRequestInfo.engineId;
-    const QString sourceText  = inTranslateRequestInfo.sourceText;
-    const LangType sourceLang = inTranslateRequestInfo.sourceLang;
-    const LangType targetLang = inTranslateRequestInfo.targetLang;
-    const bool isIgnoreCache  = inTranslateRequestInfo.isIgnoreCache;
+    const EngineId engineId   = inTrRequest.engineId;
+    const QString sourceText  = inTrRequest.sourceText;
+    const LangType sourceLang = inTrRequest.sourceLang;
+    const LangType targetLang = inTrRequest.targetLang;
+    const bool isIgnoreCache  = inTrRequest.isIgnoreCache;
 
     const std::expected<TranslateUnit*, QString> trUnitExp = newTranslateUnit(engineId);
     if (trUnitExp.has_value() == false)
@@ -95,7 +95,7 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
 
     TranslateUnit* trUnit = trUnitExp.value();
 
-    trUnit->setTranslateRequestInfo(std::move(inTranslateRequestInfo));
+    trUnit->setTranslateRequest(std::move(inTrRequest));
 
     if (sourceText.isEmpty())
     {
@@ -139,9 +139,9 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     return trUnit;
 }
 
-std::expected<QPointer<TranslateUnit>, QString> TranslateManager::translateText(TranslateRequestInfo&& inTranslateRequestInfo)
+std::expected<QPointer<TranslateUnit>, QString> TranslateManager::translateText(TranslateRequest&& inTrRequest)
 {
-    return executeNewTranslateUnit(std::move(inTranslateRequestInfo));
+    return executeNewTranslateUnit(std::move(inTrRequest));
 }
 
 void TranslateManager::translateAtPopup(const QString& inSourceText
@@ -157,7 +157,7 @@ void TranslateManager::translateAtPopup(const QString& inSourceText
     popupWidget->executeTranslate(inSourceText, inTextStyle, LangType::AUTO, solConfig.popupTargetLang(), inIsIgnoreCache);
 }
 
-void TranslateManager::onAddHistoryRequested(const TranslateRequestInfo& inTranslateRequestInfo
+void TranslateManager::onAddHistoryRequested(const TranslateRequest& inTrRequest
                                            , const QString& inTargetText)
 {
     if (inTargetText.isEmpty())
@@ -166,12 +166,12 @@ void TranslateManager::onAddHistoryRequested(const TranslateRequestInfo& inTrans
     }
 
     _historyManager->asyncAddHistory(
-        inTranslateRequestInfo.engineId
-      , inTranslateRequestInfo.sourceLang
-      , inTranslateRequestInfo.targetLang
-      , inTranslateRequestInfo.sourceText
+        inTrRequest.engineId
+      , inTrRequest.sourceLang
+      , inTrRequest.targetLang
+      , inTrRequest.sourceText
       , inTargetText
-      , inTranslateRequestInfo.textFormat
+      , inTrRequest.textFormat
     );
 }
 

@@ -14,7 +14,7 @@ class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
 enum class TextStyle;
-struct TranslateRequestInfo;
+struct TranslateRequest;
 class QNetworkAccessManager;
 class QTextEdit;
 class TranslateUnit;
@@ -41,16 +41,16 @@ public:
 
 private:
     std::expected<TranslateUnit*, QString> newTranslateUnit(const EngineId& inEngineId);
-    std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequestInfo&& inTranslateRequestInfo);
+    std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequest&& inTrRequest);
 
 public:
-    std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequestInfo&& inTranslateRequestInfo);
+    std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequest&& inTrRequest);
 
     void translateAtPopup(const QString& inSourceText
                         , const TextStyle inTextStyle
                         , const bool inIsIgnoreCache = false);
 
-    void onAddHistoryRequested(const TranslateRequestInfo& inTranslateRequestInfo
+    void onAddHistoryRequested(const TranslateRequest& inTrRequest
                              , const QString& inTargetText);
 
 private:

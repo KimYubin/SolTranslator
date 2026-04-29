@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef SOLTRANSLATOR_TRANSLATEREQUESTINFO_H
-#define SOLTRANSLATOR_TRANSLATEREQUESTINFO_H
+#ifndef SOLTRANSLATOR_TranslateRequest_H
+#define SOLTRANSLATOR_TranslateRequest_H
 
 #include "EngineId.h"
 #include "SolTypes.h"
@@ -13,9 +13,9 @@ class ITranslateWidget;
 
 using ReceiveMoveFunction = std::move_only_function<void(const QString&)>;
 
-struct TranslateRequestInfo
+struct TranslateRequest
 {
-    TranslateRequestInfo() = default;
+    TranslateRequest() = default;
 
     /**
      * 번역 요청에 필요한 정보를 모아놓은 구조체입니다.
@@ -32,17 +32,17 @@ struct TranslateRequestInfo
      * @param inStreamContext callbackTranslateStreaming 수명을 관리하는 객체입니다.
      * @param inFuncStreaming 번역 스트리밍 중간 값들을 받는 콜백입니다. 여러번 호출됩니다.
      */
-    TranslateRequestInfo(ITranslateWidget* inTrDisplayWidget
-                       , const bool inIsIgnoreCache
-                       , const EngineId& inEngineId
-                       , const QString& inSourceText
-                       , const TextStyle inTextFormat
-                       , const LangType inSourceLang
-                       , const LangType inTargetLang
-                       , QObject* inCompleteContext
-                       , ReceiveMoveFunction&& inFuncComplete
-                       , QObject* inStreamContext = nullptr
-                       , std::optional<ReceiveMoveFunction>&& inFuncStreaming = std::nullopt);
+    TranslateRequest(ITranslateWidget* inTrDisplayWidget
+                   , const bool inIsIgnoreCache
+                   , const EngineId& inEngineId
+                   , const QString& inSourceText
+                   , const TextStyle inTextFormat
+                   , const LangType inSourceLang
+                   , const LangType inTargetLang
+                   , QObject* inCompleteContext
+                   , ReceiveMoveFunction&& inFuncComplete
+                   , QObject* inStreamContext = nullptr
+                   , std::optional<ReceiveMoveFunction>&& inFuncStreaming = std::nullopt);
 
     QPointer<ITranslateWidget> trDisplayWidget;
     bool isIgnoreCache;
@@ -58,4 +58,4 @@ struct TranslateRequestInfo
 };
 
 
-#endif //SOLTRANSLATOR_TRANSLATEREQUESTINFO_H
+#endif //SOLTRANSLATOR_TranslateRequest_H

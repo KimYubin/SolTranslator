@@ -132,8 +132,8 @@ qt_add_executable(
         src/Types/SolHashQueue.hpp
         src/Types/SolTypes.cpp
         src/Types/SolTypes.h
-        src/Types/TranslateRequestInfo.cpp
-        src/Types/TranslateRequestInfo.h
+        src/Types/TranslateRequest.cpp
+        src/Types/TranslateRequest.h
 
         src/Utils/EnumUtils.hpp
         src/Utils/SolAsync.hpp

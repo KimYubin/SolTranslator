@@ -33,9 +33,9 @@ TranslateUnit::~TranslateUnit()
     }
 }
 
-void TranslateUnit::setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo)
+void TranslateUnit::setTranslateRequest(TranslateRequest&& inTrRequest)
 {
-    _trReqData = std::move(inTranslateRequestInfo);
+    _trReqData = std::move(inTrRequest);
 
     if (_trReqData.trDisplayWidget)
     {
@@ -109,7 +109,7 @@ void TranslateUnit::onReplyFinished()
         return;
     }
 
-    finishTranslateRequest(replyTranslateFinished());
+    finishRequest(replyTranslateFinished());
 }
 
 void TranslateUnit::onReplyErrorOccurred(/*const QNetworkReply::NetworkError inNetworkError*/)
@@ -161,7 +161,7 @@ void TranslateUnit::detachDisplayWidget()
     }
 }
 
-void TranslateUnit::abortTranslateRequest()
+void TranslateUnit::abortRequest()
 {
     if (_reply)
     {
@@ -193,9 +193,9 @@ void TranslateUnit::replyFailed(const QString& inReason)
 
     // User can attempt to re-translate from the history.
     const QString msg = _targetText + "\nrequest error: " + inReason;
-    finishTranslateRequest(msg);
+    finishRequest(msg);
 
-    // Called in finishTranslateRequest().
+    // Called in finishRequest().
     // deleteLater();
 }
 
@@ -225,7 +225,7 @@ void TranslateUnit::completeTranslatedText(const QString& inTargetText)
     deleteLater();
 }
 
-void TranslateUnit::finishTranslateRequest(const QString& inTargetText)
+void TranslateUnit::finishRequest(const QString& inTargetText)
 {
     _targetText = inTargetText;
     addHistory(_targetText);

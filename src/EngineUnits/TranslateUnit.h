@@ -3,7 +3,7 @@
 #ifndef TRANSLATEUNIT_H
 #define TRANSLATEUNIT_H
 
-#include "Types/TranslateRequestInfo.h"
+#include "Types/TranslateRequest.h"
 
 #include <QObject>
 #include <QPointer>
@@ -26,7 +26,7 @@ public:
     explicit TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine);
     virtual ~TranslateUnit() override;
 
-    void setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo);
+    void setTranslateRequest(TranslateRequest&& inTrRequest);
     void onTranslationFromCache(const QString& inTargetText);
 
     virtual void requestTranslate() = 0;
@@ -57,7 +57,7 @@ public:
      */
     void detachDisplayWidget();
 
-    void abortTranslateRequest();
+    void abortRequest();
 
 protected:
     /** Extract the translation from the received response. */
@@ -82,7 +82,7 @@ protected:
      * @see addHistory
      * @see completeTranslatedText
      */
-    void finishTranslateRequest(const QString& inTargetText);
+    void finishRequest(const QString& inTargetText);
 
 protected:
     QPointer<TranslateManager> _translateManager;
@@ -90,7 +90,7 @@ protected:
 
     QPointer<QNetworkReply> _reply;
 
-    TranslateRequestInfo _trReqData;
+    TranslateRequest _trReqData;
 
     // SSE buffer
     QByteArray _buffer;

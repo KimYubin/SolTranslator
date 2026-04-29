@@ -6,7 +6,7 @@
 #include "EngineUnits/TranslateUnit.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/CustomMenuTextEdit.h"
-#include "Types/TranslateRequestInfo.h"
+#include "Types/TranslateRequest.h"
 #include "Utils/SolLog.h"
 
 #include <QScrollBar>
@@ -41,7 +41,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineId& inEngineId
     setSourceAndStyle(inSourceText, inTextStyle);
 
     std::expected<QPointer<TranslateUnit>, QString> trRes
-    = solCore->manager<TranslateManager>()->translateText(TranslateRequestInfo{
+    = solCore->manager<TranslateManager>()->translateText(TranslateRequest{
         this
       , inIsIgnoreCache
       , inEngineId
@@ -91,7 +91,7 @@ void ITranslateWidget::abortTrUnit() const
 {
     if (_trUnit)
     {
-        _trUnit->abortTranslateRequest();
+        _trUnit->abortRequest();
     }
 }
 

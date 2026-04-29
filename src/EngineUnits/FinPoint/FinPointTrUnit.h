@@ -6,12 +6,13 @@
 #include "EngineUnits/ITranslateEngine.h"
 #include "EngineUnits/TranslateUnit.h"
 
+
 class FinPointTrUnit final : public TranslateUnit
 {
     Q_OBJECT
 
 public:
-    explicit FinPointTrUnit(TranslateManager* parent);
+    explicit FinPointTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
     virtual void requestTranslate() override;
 
@@ -22,13 +23,8 @@ protected:
     virtual QString replyTranslateFinished() override;
 
     QString chunkToContent();
-
-public:
-    void setDebugMode(const bool inIsDebugMode) { _isDebugMode = inIsDebugMode; }
-
-private:
-    bool _isDebugMode = false;
 };
+
 
 namespace EngineIds
 {
@@ -43,7 +39,6 @@ class FinPointEngine : public ITranslateEngine
 public:
     explicit FinPointEngine();
     ~FinPointEngine() override;
-
 };
 
 #endif //SOLPOINT_H

@@ -3,7 +3,6 @@
 #include "FinPointTrUnit.h"
 
 #include "Types/ExJson.h"
-#include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolI18n.h"
@@ -14,8 +13,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-FinPointTrUnit::FinPointTrUnit(TranslateManager* parent)
-    : TranslateUnit(parent)
+FinPointTrUnit::FinPointTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
+    : TranslateUnit(parent, inEngine)
 {}
 
 void FinPointTrUnit::requestTranslate()
@@ -25,9 +24,7 @@ void FinPointTrUnit::requestTranslate()
 
 void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    const QUrl url(_isDebugMode
-                       ? Sol::URLs::FIN_POINT_DEBUG
-                       : Sol::URLs::FIN_POINT);
+    const QUrl url(_translateEngine->getDefaultUrl());
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -130,9 +127,10 @@ FinPointEngine::FinPointEngine()
     : ITranslateEngine(EngineIds::FinPoint)
 {
     setDisplayName(EngineIds::FinPoint.toString());
+    setDefaultUrl("https://asia-northeast3-fintrans-33fftt.cloudfunctions.net/finpoint/text");
     setIconPath("");
     setPriority(3);
-    setTrUnitCreator([](TranslateManager* inTrManager) { return new FinPointTrUnit{inTrManager}; });
+    setTrUnitCreatorHelper<FinPointTrUnit>();
 }
 
 FinPointEngine::~FinPointEngine()
@@ -163,14 +161,10 @@ public:
     explicit FinPointEngineDebug() : ITranslateEngine(EngineIds::FinPointDebug)
     {
         setDisplayName(EngineIds::FinPointDebug.toString());
+        setDefaultUrl("http://127.0.0.1:5001/fintrans-33fftt/asia-northeast3/finpoint/text");
         setIconPath("");
         setPriority(4);
-        setTrUnitCreator([](TranslateManager* inTrManager)
-        {
-            FinPointTrUnit* newTrUnit = new FinPointTrUnit{inTrManager};;
-            newTrUnit->setDebugMode(true);
-            return newTrUnit;
-        });
+        setTrUnitCreatorHelper<FinPointTrUnit>();
     }
 };
 

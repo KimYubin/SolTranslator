@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QPointer>
 
+class ITranslateEngine;
 class HistoryManager;
 class QNetworkRequest;
 class QNetworkReply;
@@ -22,7 +23,7 @@ class TranslateUnit : public QObject
     Q_OBJECT
 
 public:
-    explicit TranslateUnit(TranslateManager* parent);
+    explicit TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine);
     virtual ~TranslateUnit() override;
 
     void setTranslateRequestInfo(TranslateRequestInfo&& inTranslateRequestInfo);
@@ -85,6 +86,7 @@ protected:
 
 protected:
     QPointer<TranslateManager> _translateManager;
+    QPointer<ITranslateEngine> _translateEngine;
 
     QPointer<QNetworkReply> _reply;
 

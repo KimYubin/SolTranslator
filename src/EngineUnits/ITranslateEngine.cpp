@@ -74,6 +74,16 @@ void ITranslateEngine::setDisplayName(const QString& inDisplayName)
     _displayName = inDisplayName;
 }
 
+void ITranslateEngine::setDefaultUrl(const QString& inDefaultUrl)
+{
+    _defaultUrl = inDefaultUrl;
+}
+
+void ITranslateEngine::setDefaultPrompt(const QString& inDefaultPrompt)
+{
+    _defaultPrompt = inDefaultPrompt;
+}
+
 void ITranslateEngine::setIconPath(const QString& inIconPath)
 {
     _iconPath = inIconPath;

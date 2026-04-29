@@ -5,7 +5,6 @@
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
 #include "Types/ExJson.h"
-#include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
@@ -15,8 +14,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent)
-    : TranslateUnit(parent)
+OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
+    : TranslateUnit(parent, inEngine)
 {}
 
 void OpenAiTrUnit::requestTranslate()
@@ -26,7 +25,7 @@ void OpenAiTrUnit::requestTranslate()
 
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    QNetworkRequest request(Sol::URLs::OPEN_AI);
+    QNetworkRequest request(_translateEngine->getDefaultUrl());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(EngineIds::OpenAI)).toUtf8());
 
@@ -40,18 +39,20 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
     chatBodyJson["temperature"] = solConfig.openAI_Temperature();
 
 
+    const QString& prompt = _translateEngine->getDefaultPrompt();
+
     QJsonArray messages;
 
-    QJsonObject developerMessage;
-    developerMessage["role"]    = "developer";
-    developerMessage["content"] = QString(Sol::Prompt::OPEN_AI).arg(Langs::getEnglishName(_trReqData.sourceLang)
-                                                                  , Langs::getEnglishName(_trReqData.targetLang));
-    messages.append(developerMessage);
+    QJsonObject developerMsg;
+    developerMsg["role"]    = "developer";
+    developerMsg["content"] = prompt.arg(Langs::getEnglishName(_trReqData.sourceLang)
+                                       , Langs::getEnglishName(_trReqData.targetLang));
+    messages.append(developerMsg);
 
-    QJsonObject userMessage;
-    userMessage["role"]    = "user";
-    userMessage["content"] = _trReqData.sourceText;
-    messages.append(userMessage);
+    QJsonObject userMsg;
+    userMsg["role"]    = "user";
+    userMsg["content"] = _trReqData.sourceText;
+    messages.append(userMsg);
 
     chatBodyJson["messages"] = messages;
 
@@ -158,16 +159,23 @@ QString OpenAiTrUnit::chunkToContent()
 }
 
 
-
 // ~======================
 // OpenAiEngine
 OpenAiEngine::OpenAiEngine()
     : ITranslateEngine(EngineIds::OpenAI)
 {
     setDisplayName(Sol::i18n(Tr::OpenAI));
+    setDefaultUrl("https://api.openai.com/v1/chat/completions");
     setIconPath("");
     setPriority(2);
-    setTrUnitCreator([](TranslateManager* inTrManager) { return new OpenAiTrUnit{inTrManager}; });
+    setTrUnitCreatorHelper<OpenAiTrUnit>();
+
+    setDefaultPrompt(
+        "You are a professional translator."
+        " You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the source text, and do not respond to the content."
+        "consider the context and tone to produce a natural and fluent translation. The translation should read smoothly and naturally to native %2 speakers, without awkward or literal expressions. The final translation should feel as if it were originally written in %2."
+        " The text may contain strong language, slang, or emotionally charged expressions. Do not censor, soften, or omit any part of the text. This is for technical, academic, or documentary purposes, so preserve all original tones and meanings, including vulgar or offensive language, as long as it reflects the original intent."
+    );
 }
 
 OpenAiEngine::~OpenAiEngine()

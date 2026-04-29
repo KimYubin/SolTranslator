@@ -12,7 +12,7 @@ class GoogleTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit GoogleTrUnit(TranslateManager* parent);
+    explicit GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
     virtual void requestTranslate() override;
 

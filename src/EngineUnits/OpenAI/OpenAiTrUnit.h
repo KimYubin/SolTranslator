@@ -12,7 +12,7 @@ class OpenAiTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit OpenAiTrUnit(TranslateManager* parent);
+    explicit OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
     virtual void requestTranslate() override;
 
@@ -39,7 +39,6 @@ class OpenAiEngine : public ITranslateEngine
 public:
     explicit OpenAiEngine();
     ~OpenAiEngine() override;
-
 };
 
 #endif //TRANSLATEUNITOPENAI_H

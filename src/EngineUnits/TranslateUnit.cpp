@@ -2,6 +2,7 @@
 
 #include "TranslateUnit.h"
 
+#include "ITranslateEngine.h"
 #include "SolTranslatorCore.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
@@ -14,12 +15,14 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-TranslateUnit::TranslateUnit(TranslateManager* parent)
+TranslateUnit::TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine)
     : QObject(parent)
     , _translateManager(parent)
+    , _translateEngine(inEngine)
     , _trReqData()
 {
-    Q_ASSERT_X(_translateManager, "TranslateUnit::TranslateUnit", "TranslateManager is invalid.");
+    Q_ASSERT_X(_translateManager, "TranslateUnit::TranslateUnit", "_translateManager is invalid.");
+    Q_ASSERT_X(_translateEngine, "TranslateUnit::TranslateUnit", "_translateEngine is invalid.");
 }
 
 TranslateUnit::~TranslateUnit()

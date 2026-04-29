@@ -3,7 +3,6 @@
 #include "GoogleTrUnit.h"
 
 #include "Types/ExJson.h"
-#include "Types/SolConstants.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 
@@ -12,8 +11,8 @@
 #include <QNetworkReply>
 #include <QTextDocument>
 
-GoogleTrUnit::GoogleTrUnit(TranslateManager* parent)
-    : TranslateUnit(parent)
+GoogleTrUnit::GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
+    : TranslateUnit(parent, inEngine)
 {}
 
 void GoogleTrUnit::requestTranslate()
@@ -25,10 +24,11 @@ void GoogleTrUnit::requestTranslate()
         _trReqData.sourceText = txtDoc.toPlainText();
     }
 
-    const QUrl url = QString(Sol::URLs::GOOGLE).arg(
+    const QUrl url = _translateEngine->getDefaultUrl().arg(
         Langs::getCodeName(_trReqData.sourceLang)
       , Langs::getCodeName(_trReqData.targetLang)
-      , QUrl::toPercentEncoding(_trReqData.sourceText, "()")); // '()'괄호는 인코딩 대상 제외.
+      , QUrl::toPercentEncoding(_trReqData.sourceText, "()")
+    ); // '()'괄호는 인코딩 대상 제외.
 
     const QNetworkRequest request(url);
 
@@ -71,9 +71,10 @@ GoogleEngine::GoogleEngine()
     : ITranslateEngine(EngineIds::Google)
 {
     setDisplayName(Sol::i18n(Tr::GoogleTranslate));
+    setDefaultUrl("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3");
     setIconPath("");
     setPriority(1);
-    setTrUnitCreator([](TranslateManager* inTrManager) { return new GoogleTrUnit{inTrManager}; });
+    setTrUnitCreatorHelper<GoogleTrUnit>();
 }
 
 GoogleEngine::~GoogleEngine()

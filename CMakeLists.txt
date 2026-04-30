@@ -42,6 +42,11 @@ qt_add_executable(
         src/EngineUnits/GoogleEngine/GoogleTrUnit.h
         src/EngineUnits/OpenAI/OpenAiTrUnit.cpp
         src/EngineUnits/OpenAI/OpenAiTrUnit.h
+
+        src/EngineUnits/AiTranslateUnit.cpp
+        src/EngineUnits/AiTranslateUnit.h
+        src/EngineUnits/IAiEngine.cpp
+        src/EngineUnits/IAiEngine.h
         src/EngineUnits/ITranslateEngine.cpp
         src/EngineUnits/ITranslateEngine.h
         src/EngineUnits/TranslateUnit.cpp
@@ -56,6 +61,8 @@ qt_add_executable(
         src/Managers/DataManager.h
         src/Managers/DbWorker.cpp
         src/Managers/DbWorker.h
+        src/Managers/EngineManager.cpp
+        src/Managers/EngineManager.h
         src/Managers/GlobalHotKeyManager.cpp
         src/Managers/GlobalHotKeyManager.h
         src/Managers/HistoryManager.cpp

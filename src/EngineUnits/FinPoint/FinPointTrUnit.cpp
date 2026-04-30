@@ -24,7 +24,7 @@ void FinPointTrUnit::requestTranslate()
 
 void FinPointTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    const QUrl url(_translateEngine->getDefaultUrl());
+    const QUrl url(_trEngine->getDefaultUrl());
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 

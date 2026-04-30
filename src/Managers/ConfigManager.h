@@ -32,12 +32,12 @@ public:
     void setApiKey(const EngineId& inEngineId, const QString& inAPIKey);
     QString apiKey(const EngineId& inEngineId) const;
 
-    void setOpenAIModel(const QString& inModelName);
-    QString openAIModel() const;
+    // AI setup
+    void setAiModel(const EngineId& inEngineId, const QString& inModelName);
+    QString AiModel(const EngineId& inEngineId) const;
 
-    double defaultAI_Temperature() const;
-    void setOpenAI_Temperature(const double inTemperature);
-    double openAI_Temperature() const;
+    void setAi_Temperature(const EngineId& inEngineId, const double inTemperature);
+    double Ai_Temperature(const EngineId& inEngineId) const;
 
     void setStartRun(const bool inStartRun);
     bool startRun() const;

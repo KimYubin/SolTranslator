@@ -3,6 +3,7 @@
 #include "TranslateManager.h"
 
 #include "ConfigManager.h"
+#include "EngineManager.h"
 #include "GlobalHotKeyManager.h"
 #include "HistoryManager.h"
 #include "InputSimulator.h"
@@ -71,7 +72,7 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
 
 std::expected<TranslateUnit*, QString> TranslateManager::newTranslateUnit(const EngineId& inEngineId)
 {
-    return ITranslateEngine::newTrUnit(inEngineId, this);;
+    return EngineManager::newTrUnit(inEngineId, this);;
 }
 
 std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)

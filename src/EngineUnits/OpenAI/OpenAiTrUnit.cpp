@@ -14,8 +14,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
-    : TranslateUnit(parent, inEngine)
+OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, IAiEngine* inEngine)
+    : AiTranslateUnit(parent, inEngine)
 {}
 
 void OpenAiTrUnit::requestTranslate()
@@ -25,21 +25,23 @@ void OpenAiTrUnit::requestTranslate()
 
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
-    QNetworkRequest request(_translateEngine->getDefaultUrl());
+    const EngineId& engineId = _trEngine->getEngineId();
+
+    QNetworkRequest request(_trEngine->getDefaultUrl());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(EngineIds::OpenAI)).toUtf8());
+    request.setRawHeader("Authorization", ("Bearer " + solConfig.apiKey(engineId)).toUtf8());
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = solConfig.openAIModel();
+    chatBodyJson["model"] = solConfig.AiModel(engineId);
     if (inIsStreaming)
     {
         chatBodyJson["stream"] = inIsStreaming;
     }
-    chatBodyJson["temperature"] = solConfig.openAI_Temperature();
+    chatBodyJson["temperature"] = solConfig.Ai_Temperature(engineId);
 
 
-    const QString& prompt = _translateEngine->getDefaultPrompt();
+    const QString& prompt = aiEngine()->getDefaultPrompt();
 
     QJsonArray messages;
 
@@ -162,7 +164,7 @@ QString OpenAiTrUnit::chunkToContent()
 // ~======================
 // OpenAiEngine
 OpenAiEngine::OpenAiEngine()
-    : ITranslateEngine(EngineIds::OpenAI)
+    : IAiEngine(EngineIds::OpenAI)
 {
     setDisplayName(Sol::i18n(Tr::OpenAI));
     setDefaultUrl("https://api.openai.com/v1/chat/completions");
@@ -170,6 +172,8 @@ OpenAiEngine::OpenAiEngine()
     setPriority(2);
     setTrUnitCreatorHelper<OpenAiTrUnit>();
 
+    setDefaultModel("gpt-4o-mini");
+    setDefaultTemperature(0.5);
     setDefaultPrompt(
         "You are a professional translator."
         " You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the source text, and do not respond to the content."

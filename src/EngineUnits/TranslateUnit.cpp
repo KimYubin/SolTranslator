@@ -18,11 +18,11 @@
 TranslateUnit::TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine)
     : QObject(parent)
     , _translateManager(parent)
-    , _translateEngine(inEngine)
+    , _trEngine(inEngine)
     , _trReqData()
 {
     Q_ASSERT_X(_translateManager, "TranslateUnit::TranslateUnit", "_translateManager is invalid.");
-    Q_ASSERT_X(_translateEngine, "TranslateUnit::TranslateUnit", "_translateEngine is invalid.");
+    Q_ASSERT_X(_trEngine, "TranslateUnit::TranslateUnit", "_translateEngine is invalid.");
 }
 
 TranslateUnit::~TranslateUnit()

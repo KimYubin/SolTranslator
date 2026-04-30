@@ -24,7 +24,7 @@ void GoogleTrUnit::requestTranslate()
         _trReqData.sourceText = txtDoc.toPlainText();
     }
 
-    const QUrl url = _translateEngine->getDefaultUrl().arg(
+    const QUrl url = _trEngine->getDefaultUrl().arg(
         Langs::getCodeName(_trReqData.sourceLang)
       , Langs::getCodeName(_trReqData.targetLang)
       , QUrl::toPercentEncoding(_trReqData.sourceText, "()")

@@ -2,6 +2,8 @@
 
 #include "ConfigManager.h"
 
+#include "EngineManager.h"
+#include "EngineUnits/IAiEngine.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "Types/SolConstants.h"
@@ -22,6 +24,10 @@ namespace
 {
 const QString CurrentEngine = "CurrentEngine";
 const QString API_Key     = "API_Key/";
+
+const QString Ai_Config = "Ai_config/";
+const QString Model = "Model/";
+const QString Temperature = "Temperature/";
 
 const QString OpenAI_Model = "openai_model";
 const QString OpenAI_Temperature = "openai_temperature";
@@ -116,32 +122,35 @@ QString ConfigManager::apiKey(const EngineId& inEngineId) const
     return _settings->value(API_Key + inEngineId.toString()).toString();
 }
 
-
-void ConfigManager::setOpenAIModel(const QString& inModelName)
+void ConfigManager::setAiModel(const EngineId& inEngineId, const QString& inModelName)
 {
-    _settings->setValue(OpenAI_Model, inModelName);
+    _settings->setValue(Ai_Config + Model + inEngineId.toString(), inModelName);
 }
 
-QString ConfigManager::openAIModel() const
+QString ConfigManager::AiModel(const EngineId& inEngineId) const
 {
-    // gpt-4o-mini / gpt-4.1-mini
-    return _settings->value(OpenAI_Model, "gpt-4o-mini").toString();
+    const IAiEngine* aiEngine  = qobject_cast<IAiEngine*>(EngineManager::getEngine(inEngineId));
+    const QString defaultModel = aiEngine ? aiEngine->getDefaultModel() : "";
+
+    return _settings->value(Ai_Config + Model + inEngineId.toString()
+                          , defaultModel).toString();
 }
 
-double ConfigManager::defaultAI_Temperature() const
+void ConfigManager::setAi_Temperature(const EngineId& inEngineId, const double inTemperature)
 {
-    return 0.5;
+    _settings->setValue(Ai_Config + Temperature + inEngineId.toString()
+                      , inTemperature);
 }
 
-void ConfigManager::setOpenAI_Temperature(const double inTemperature)
+double ConfigManager::Ai_Temperature(const EngineId& inEngineId) const
 {
-    _settings->setValue(OpenAI_Temperature, inTemperature);
+    const IAiEngine* aiEngine = qobject_cast<IAiEngine*>(EngineManager::getEngine(inEngineId));
+    const double defaultTemperature = aiEngine ? aiEngine->getDefaultTemperature() : 0.5;
+
+    return _settings->value(Ai_Config + Temperature + inEngineId.toString()
+                          , defaultTemperature).toDouble();
 }
 
-double ConfigManager::openAI_Temperature() const
-{
-    return _settings->value(OpenAI_Temperature, defaultAI_Temperature()).toDouble();
-}
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {

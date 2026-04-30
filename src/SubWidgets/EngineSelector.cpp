@@ -5,6 +5,7 @@
 #include "SolTranslatorCore.h"
 #include "EngineUnits/ITranslateEngine.h"
 #include "Managers/ConfigManager.h"
+#include "Managers/EngineManager.h"
 #include "Types/SolTypes.h"
 
 EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
@@ -14,7 +15,7 @@ EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
     const EngineId curEngineId = solConfig.currentEngineId();
     int curIdx = 0;
 
-    const std::vector<QPointer<ITranslateEngine>> trEngineList = ITranslateEngine::sortedTranslateEngineList();
+    const std::vector<QPointer<ITranslateEngine>> trEngineList = EngineManager::sortedTranslateEngineList();
     for (const QPointer<ITranslateEngine>& trEngine : trEngineList)
     {
         addItem(trEngine->getDisplayName(), trEngine->getEngineId().toString());

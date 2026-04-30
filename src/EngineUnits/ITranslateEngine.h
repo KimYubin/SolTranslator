@@ -25,21 +25,17 @@ public:
     explicit ITranslateEngine(const EngineId& inEngine);
     virtual ~ITranslateEngine() override;
 
-    static std::vector<QPointer<ITranslateEngine>> sortedTranslateEngineList();
-
-    static std::expected<TranslateUnit*, QString> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
-
     const EngineId& getEngineId() const { return _engineId; }
     const QString& getDisplayName() const { return _displayName; }
     const QString& getDefaultUrl() const { return _defaultUrl; }
-    const QString& getDefaultPrompt() const { return _defaultPrompt; }
     const QString& getIconPath() const { return _iconPath; }
     int getPriority() const { return _priority; }
+
+    TranslateUnit* newTrUnit(TranslateManager* inTrManager);
 
 protected:
     void setDisplayName(const QString& inDisplayName);
     void setDefaultUrl(const QString& inDefaultUrl);
-    void setDefaultPrompt(const QString& inDefaultPrompt);
     void setIconPath(const QString& inIconPath);
     void setPriority(const int inPriority);
     void setTrUnitCreator(TrUnitCreator&& inCreator);
@@ -51,7 +47,6 @@ private:
     EngineId _engineId;
     QString _displayName;
     QString _defaultUrl;
-    QString _defaultPrompt;
     QString _iconPath;
     int _priority;
     TrUnitCreator _trUnitCreator;

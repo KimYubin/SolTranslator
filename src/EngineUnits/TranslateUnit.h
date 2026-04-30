@@ -86,7 +86,7 @@ protected:
 
 protected:
     QPointer<TranslateManager> _translateManager;
-    QPointer<ITranslateEngine> _translateEngine;
+    QPointer<ITranslateEngine> _trEngine;
 
     QPointer<QNetworkReply> _reply;
 

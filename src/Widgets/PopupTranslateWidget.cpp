@@ -711,7 +711,7 @@ void PopupTranslateWidget::toggleTranslationText()
     // toggle
     _currentTextCategory = (_currentTextCategory == TextCategory::SourceText) ? TextCategory::TargetText : TextCategory::SourceText;
 
-    const QString nextText = (_currentTextCategory == TextCategory::SourceText) ? getTargetText() : getSourceText();
+    const QString nextText = (_currentTextCategory == TextCategory::SourceText) ? getSourceText() : getTargetText();
 
     ui->resultText->setFormattingText(nextText, getTextStyle());
 

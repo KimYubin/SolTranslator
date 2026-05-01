@@ -27,8 +27,35 @@ public:
 
     static std::vector<QPointer<ITranslateEngine>> sortedTranslateEngineList();
 
+    /**
+     * Return all TranslateEngine that can be cast to type T.
+     * The list is sorted.
+     */
+    template <std::derived_from<ITranslateEngine> T>
+    static std::vector<QPointer<T>> findEngines();
+
     static std::expected<TranslateUnit*, QString> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
 };
+
+
+
+template <std::derived_from<ITranslateEngine> T>
+std::vector<QPointer<T>> EngineManager::findEngines()
+{
+    std::vector<QPointer<ITranslateEngine>> allList = sortedTranslateEngineList();
+    std::vector<QPointer<T>> resVec;
+    resVec.reserve(allList.size());
+
+    for (QPointer<ITranslateEngine>& trEngine : allList)
+    {
+        if (T* castObj = qobject_cast<T*>(trEngine))
+        {
+            resVec.emplace_back(castObj);
+        }
+    }
+
+    return resVec;
+}
 
 
 #endif //SOLTRANSLATOR_ENGINEMANAGER_H

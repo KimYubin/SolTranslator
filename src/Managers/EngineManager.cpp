@@ -2,8 +2,10 @@
 
 #include "EngineManager.h"
 
+#include "EngineUnits/IAiEngine.h"
 #include "EngineUnits/ITranslateEngine.h"
 #include "Types/EngineId.h"
+#include "Utils/SolLog.h"
 
 
 namespace

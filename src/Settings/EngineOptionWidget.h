@@ -4,12 +4,15 @@
 #define ENGINEOPTIONWIDGET_H
 #include "IOptionWidget.h"
 
+class IAiEngine;
+class EngineId;
 class SolTranslatorCore;
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
 class EngineOptionWidget;
 }
+
 QT_END_NAMESPACE
 
 class EngineOptionWidget : public IOptionWidget
@@ -21,13 +24,13 @@ public:
     ~EngineOptionWidget() override;
 
 protected:
-    void setEngineGroupUI();
+    void setAiEngineUI(const IAiEngine* inEngine);
 
 private:
     friend class EngineOption;
     Ui::EngineOptionWidget* ui;
-};
 
+};
 
 
 class EngineOption : public IOptionPage
@@ -38,7 +41,6 @@ class EngineOption : public IOptionPage
 public:
     EngineOption();
     ~EngineOption() override;
-
 };
 
 

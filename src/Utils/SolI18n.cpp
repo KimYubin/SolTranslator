@@ -24,8 +24,8 @@ QString Sol::i18n(const Tr inTr)
     case Translation_Engine:             return TrImpl::tr("번역 엔진");
     case Save:                           return TrImpl::tr("저장");
     case Translation_Engine_Settings:    return TrImpl::tr("번역 엔진 설정");
-    case Ai_Options:                     return TrImpl::tr("AI 옵션");
-    case Temperature_Option:             return TrImpl::tr("%1 온도 설정", "AI 온도 설정. 자리표시자에는 AI 서비스의 이름이 들어갑니다.");
+    case Options:                        return TrImpl::tr("옵션");
+    case Temperature_Option:             return TrImpl::tr("온도 설정", "AI 온도 설정.");
     case Default_Value_Hint:             return TrImpl::tr("(기본값: %1)");
     case General:                        return TrImpl::tr("일반");
     case Appearance_Behavior:            return TrImpl::tr("모양 및 동작");

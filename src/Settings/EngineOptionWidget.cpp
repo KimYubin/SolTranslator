@@ -4,7 +4,7 @@
 
 #include "SolTranslatorCore.h"
 #include "ui_EngineOptionWidget.h"
-#include "EngineUnits/OpenAI/OpenAiTrUnit.h"
+#include "EngineUnits/IAiEngine.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/EngineManager.h"
 #include "SubWidgets/DropdownMenu.h"
@@ -74,33 +74,11 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     });
 
 
-
     // AI 옵션
-    auto [aiOptionGroup, aiOptionVLay] = addNewOptionGroupBox(i18n(Tr::Ai_Options));
-
-    // 온도 설정
+    const std::vector<QPointer<IAiEngine>> aiEngines = EngineManager::findEngines<IAiEngine>();
+    for (const QPointer<IAiEngine>& engine : aiEngines)
     {
-        const EngineId& engineId = EngineIds::OpenAI;
-        const double defaultTemper = qobject_cast<IAiEngine>(EngineManager::getEngine(engineId)).getDefaultTemperature();
-        
-        SettingCard* openAiTemper = new SettingCard(new QDoubleSpinBox(this), aiOptionGroup);
-        openAiTemper->setHeader(i18n(Tr::Temperature_Option).arg(i18n(Tr::OpenAI)));
-        openAiTemper->setDescription(i18n(Tr::Default_Value_Hint).arg(defaultTemper));
-        
-
-        // openAiTemper->setDescription(i18n("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
-        QDoubleSpinBox* spinBox = openAiTemper->getContent<QDoubleSpinBox>();
-        spinBox->setRange(0.0, 1.5);
-        spinBox->setDecimals(2);
-        spinBox->setSingleStep(0.1);
-        spinBox->setValue(solConfig.Ai_Temperature(engineId));
-        connect(spinBox, &QDoubleSpinBox::valueChanged, this, [engineId](const double inTemper)
-        {
-            solConfig.setAi_Temperature(engineId, inTemper);
-        });
-
-
-        aiOptionVLay->addWidget(openAiTemper, 0, Qt::AlignmentFlag::AlignTop);
+        setAiEngineUI(engine.data());
     }
 
     initializeAfterCtor();
@@ -111,9 +89,31 @@ EngineOptionWidget::~EngineOptionWidget()
     delete ui;
 }
 
-void EngineOptionWidget::setEngineGroupUI()
-{}
+void EngineOptionWidget::setAiEngineUI(const IAiEngine* inEngine)
+{
+    const EngineId& engineId   = inEngine->getEngineId();
+    const double defaultTemper = inEngine->getDefaultTemperature();
 
+    auto [optGroup, optVLay] = addNewOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options));
+
+    SettingCard* AiTemperCard = new SettingCard(new QDoubleSpinBox(this), optGroup);
+    AiTemperCard->setHeader(i18n(Tr::Temperature_Option));
+    AiTemperCard->setDescription(i18n(Tr::Default_Value_Hint).arg(defaultTemper));
+
+
+    // AiTemperCard->setDescription(i18n("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
+    QDoubleSpinBox* spinBox = AiTemperCard->getContent<QDoubleSpinBox>();
+    spinBox->setRange(0.0, 1.5);
+    spinBox->setDecimals(2);
+    spinBox->setSingleStep(0.1);
+    spinBox->setValue(solConfig.Ai_Temperature(engineId));
+    connect(spinBox, &QDoubleSpinBox::valueChanged, this, [engineId](const double inTemper)
+    {
+        solConfig.setAi_Temperature(engineId, inTemper);
+    });
+
+    optVLay->addWidget(AiTemperCard, 0, Qt::AlignmentFlag::AlignTop);
+}
 
 
 // ~======================

@@ -89,8 +89,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="27"/>
-        <source>AI 옵션</source>
+        <location filename="../src/Utils/SolI18n.cpp" line="28"/>
+        <source>온도 설정</source>
+        <comment>AI 온도 설정.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -276,9 +277,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="28"/>
-        <source>%1 온도 설정</source>
-        <comment>AI 온도 설정. 자리표시자에는 AI 서비스의 이름이 들어갑니다.</comment>
+        <location filename="../src/Utils/SolI18n.cpp" line="27"/>
+        <source>옵션</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

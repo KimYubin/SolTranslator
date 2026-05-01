@@ -17,7 +17,7 @@ enum class Tr
     Translation_Engine
   , Save
   , Translation_Engine_Settings
-  , Ai_Options
+  , Options
   , Temperature_Option
   , Default_Value_Hint
   , General

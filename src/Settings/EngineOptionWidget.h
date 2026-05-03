@@ -4,6 +4,8 @@
 #define ENGINEOPTIONWIDGET_H
 #include "IOptionWidget.h"
 
+struct EngineOptionData;
+class SettingCard;
 class IAiEngine;
 class EngineId;
 class SolTranslatorCore;
@@ -27,20 +29,23 @@ protected:
     void setAiEngineUI(const IAiEngine* inEngine);
 
 private:
-    friend class EngineOption;
+    SettingCard* baseSettingCard(const EngineOptionData& inOptData, QWidget* inParent);
+    SettingCard* doubleSpinCard(const EngineOptionData& inOptData, QWidget* inParent, const EngineId& inEngineId);
+
+    friend class EngineOptionPage;
     Ui::EngineOptionWidget* ui;
 
 };
 
 
-class EngineOption : public IOptionPage
+class EngineOptionPage : public IOptionPage
 {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(EngineOption)
+    Q_DISABLE_COPY_MOVE(EngineOptionPage)
 
 public:
-    EngineOption();
-    ~EngineOption() override;
+    EngineOptionPage();
+    ~EngineOptionPage() override;
 };
 
 

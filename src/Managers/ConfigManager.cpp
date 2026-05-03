@@ -6,6 +6,7 @@
 #include "EngineUnits/IAiEngine.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
+#include "Types/OptionKey.h"
 #include "Types/SolConstants.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
@@ -25,12 +26,7 @@ namespace
 const QString CurrentEngine = "CurrentEngine";
 const QString API_Key     = "API_Key/";
 
-const QString Ai_Config = "Ai_config/";
-const QString Model = "Model/";
-const QString Temperature = "Temperature/";
-
-const QString OpenAI_Model = "openai_model";
-const QString OpenAI_Temperature = "openai_temperature";
+const QString EngineAttribute = "EngineAttribute/";
 
 const QString PopupTargetLanguage = "PopupTargetLanguage";
 
@@ -122,33 +118,31 @@ QString ConfigManager::apiKey(const EngineId& inEngineId) const
     return _settings->value(API_Key + inEngineId.toString()).toString();
 }
 
-void ConfigManager::setAiModel(const EngineId& inEngineId, const QString& inModelName)
+namespace
 {
-    _settings->setValue(Ai_Config + Model + inEngineId.toString(), inModelName);
+QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
+{
+    return EngineAttribute + inEngineId.toString() + "/" + inKey.toString();
+}
+} // anonymous namespace
+
+void ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
+{
+    _settings->setValue(engineAttributeKey(inEngineId, inKey), inValue);
 }
 
-QString ConfigManager::AiModel(const EngineId& inEngineId) const
+QVariant ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
 {
-    const IAiEngine* aiEngine  = qobject_cast<IAiEngine*>(EngineManager::getEngine(inEngineId));
-    const QString defaultModel = aiEngine ? aiEngine->getDefaultModel() : "";
+    const QPointer<ITranslateEngine> trEngine = EngineManager::getEngine(inEngineId);
+    const std::expected<const EngineOptionData*, QString> optExp = trEngine->getOptionData(inKey);
+    if (optExp.has_value() == false)
+    {
+        // todo: 적절한 오류 처리 필요.
+        return {};
+    }
+    const EngineOptionData& optData = *optExp.value();
 
-    return _settings->value(Ai_Config + Model + inEngineId.toString()
-                          , defaultModel).toString();
-}
-
-void ConfigManager::setAi_Temperature(const EngineId& inEngineId, const double inTemperature)
-{
-    _settings->setValue(Ai_Config + Temperature + inEngineId.toString()
-                      , inTemperature);
-}
-
-double ConfigManager::Ai_Temperature(const EngineId& inEngineId) const
-{
-    const IAiEngine* aiEngine = qobject_cast<IAiEngine*>(EngineManager::getEngine(inEngineId));
-    const double defaultTemperature = aiEngine ? aiEngine->getDefaultTemperature() : 0.5;
-
-    return _settings->value(Ai_Config + Temperature + inEngineId.toString()
-                          , defaultTemperature).toDouble();
+    return _settings->value(engineAttributeKey(inEngineId, optData.key), optData.getDefaultValue());
 }
 
 

@@ -17,19 +17,19 @@ public:
 protected:
 
 private:
-    friend class GeneralOption;
+    friend class GeneralOptionPage;
 
 };
 
 
-class GeneralOption : public IOptionPage
+class GeneralOptionPage : public IOptionPage
 {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(GeneralOption)
+    Q_DISABLE_COPY_MOVE(GeneralOptionPage)
 
 public:
-    GeneralOption();
-    ~GeneralOption() override;
+    GeneralOptionPage();
+    ~GeneralOptionPage() override;
 
 };
 

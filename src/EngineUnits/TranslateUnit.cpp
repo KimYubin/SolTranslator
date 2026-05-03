@@ -4,6 +4,7 @@
 
 #include "ITranslateEngine.h"
 #include "SolTranslatorCore.h"
+#include "Managers/ConfigManager.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 #include "Types/SolGuard.h"
@@ -230,4 +231,9 @@ void TranslateUnit::finishRequest(const QString& inTargetText)
     _targetText = inTargetText;
     addHistory(_targetText);
     completeTranslatedText(_targetText);
+}
+
+QVariant TranslateUnit::engineAttribute(const OptionKey& inKey) const
+{
+    return solConfig.engineAttribute(_trEngine->getEngineId(), inKey);
 }

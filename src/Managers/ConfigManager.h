@@ -5,6 +5,8 @@
 
 #include "AbstractManager.h"
 
+struct EngineOptionData;
+class OptionKey;
 class EngineId;
 class QSettings;
 enum class Action;
@@ -32,12 +34,9 @@ public:
     void setApiKey(const EngineId& inEngineId, const QString& inAPIKey);
     QString apiKey(const EngineId& inEngineId) const;
 
-    // AI setup
-    void setAiModel(const EngineId& inEngineId, const QString& inModelName);
-    QString AiModel(const EngineId& inEngineId) const;
+    void setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
+    QVariant engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const;
 
-    void setAi_Temperature(const EngineId& inEngineId, const double inTemperature);
-    double Ai_Temperature(const EngineId& inEngineId) const;
 
     void setStartRun(const bool inStartRun);
     bool startRun() const;

@@ -91,34 +91,90 @@ EngineOptionWidget::~EngineOptionWidget()
 
 void EngineOptionWidget::setAiEngineUI(const IAiEngine* inEngine)
 {
-    const EngineId& engineId   = inEngine->getEngineId();
-    const double defaultTemper = inEngine->getDefaultTemperature();
+    const EngineId& engineId = inEngine->getEngineId();
 
     auto [optGroup, optVLay] = addNewOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options));
 
-    SettingCard* AiTemperCard = new SettingCard(new QDoubleSpinBox(this), optGroup);
-    AiTemperCard->setHeader(i18n(Tr::Temperature_Option));
-    AiTemperCard->setDescription(i18n(Tr::Default_Value_Hint).arg(defaultTemper));
-
-
-    // AiTemperCard->setDescription(i18n("값이 0에 가까울수록 고정된 답을 냅니다. 클수록 창의적이지만 부정확한 번역을 제공합니다."));
-    QDoubleSpinBox* spinBox = AiTemperCard->getContent<QDoubleSpinBox>();
-    spinBox->setRange(0.0, 1.5);
-    spinBox->setDecimals(2);
-    spinBox->setSingleStep(0.1);
-    spinBox->setValue(solConfig.Ai_Temperature(engineId));
-    connect(spinBox, &QDoubleSpinBox::valueChanged, this, [engineId](const double inTemper)
+    const OptionMap& optionList = inEngine->getOptionDataList();
+    for (const EngineOptionData& optData : optionList | std::views::values)
     {
-        solConfig.setAi_Temperature(engineId, inTemper);
+        SettingCard* settingCard = nullptr;
+        switch (optData.getOptionType())
+        {
+        case EngineOptionData::Type::None:
+            break;
+        case EngineOptionData::Type::Int:
+            break;
+        case EngineOptionData::Type::Double:
+            break;
+        case EngineOptionData::Type::Bool:
+            break;
+        case EngineOptionData::Type::SpinDataInt:
+            break;
+        case EngineOptionData::Type::SpinDataDouble:
+        {
+            settingCard = doubleSpinCard(optData, optGroup, engineId);
+            break;
+        }
+        case EngineOptionData::Type::String:
+            break;
+        case EngineOptionData::Type::Combo:
+            break;
+        default: ;
+        }
+
+        if (settingCard)
+        {
+            optVLay->addWidget(settingCard, 0, Qt::AlignmentFlag::AlignTop);
+        }
+    }
+}
+
+SettingCard* EngineOptionWidget::baseSettingCard(const EngineOptionData& inOptData
+                                               , QWidget* inParent)
+{
+    SettingCard* resCard = new SettingCard(new QDoubleSpinBox(this), inParent);
+    resCard->setHeader(inOptData.headerName);
+    if (inOptData.description.has_value())
+    {
+        resCard->setDescription(inOptData.description.value());
+    }
+
+    return resCard;
+}
+
+SettingCard* EngineOptionWidget::doubleSpinCard(const EngineOptionData& inOptData
+                                              , QWidget* inParent
+                                              , const EngineId& inEngineId)
+{
+    const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptData.defaultValue);
+    if (spinDataPtr == nullptr)
+    {
+        //
+        return nullptr;
+    }
+    const SpinData<double>& spinData = *spinDataPtr;
+
+    SettingCard* resCard = baseSettingCard(inOptData, inParent);
+
+    QDoubleSpinBox* spinBox = resCard->getContent<QDoubleSpinBox>();
+    spinBox->setRange(spinData.min, spinData.max);
+    spinBox->setDecimals(spinData.decimals);
+    spinBox->setSingleStep(spinData.singleStep);
+    spinBox->setValue(solConfig.engineAttribute(inEngineId, inOptData.key).toDouble());
+
+    connect(spinBox, &QDoubleSpinBox::valueChanged, this, [inEngineId, inKey = inOptData.key](const double inTemper)
+    {
+        solConfig.setEngineAttribute(inEngineId, inKey, inTemper);
     });
 
-    optVLay->addWidget(AiTemperCard, 0, Qt::AlignmentFlag::AlignTop);
+    return resCard;
 }
 
 
 // ~======================
 // EngineOption
-EngineOption::EngineOption()
+EngineOptionPage::EngineOptionPage()
 {
     setDisplayName(i18n(Tr::Translation_Engine));
     setIconPath("");
@@ -126,11 +182,11 @@ EngineOption::EngineOption()
     setPriority(1);
 }
 
-EngineOption::~EngineOption()
+EngineOptionPage::~EngineOptionPage()
 {
 }
 
 namespace
 {
-const EngineOption engineOption;
+const EngineOptionPage engineOptionPage;
 } // anonymous namespace

@@ -2,6 +2,7 @@
 
 #ifndef SOLTRANSLATOR_ITRANSLATEENGINE_H
 #define SOLTRANSLATOR_ITRANSLATEENGINE_H
+#include "EngineOptionData.h"
 #include "Types/EngineId.h"
 
 #include <QObject>
@@ -14,12 +15,15 @@ class ITranslateEngine;
 class TranslateManager;
 class TranslateUnit;
 
+using OptionMap     = std::unordered_map<OptionKey, EngineOptionData, OptionKey_hasher>;
 using TrUnitCreator = std::move_only_function<TranslateUnit*(TranslateManager*)>;
 
 /** The ITranslateEngine class manages metadata for the translation engine. */
 class ITranslateEngine : public QObject
 {
     Q_OBJECT
+
+    Q_DISABLE_COPY_MOVE(ITranslateEngine)
 
 public:
     explicit ITranslateEngine(const EngineId& inEngine);
@@ -30,6 +34,9 @@ public:
     const QString& getDefaultUrl() const { return _defaultUrl; }
     const QString& getIconPath() const { return _iconPath; }
     int getPriority() const { return _priority; }
+
+    std::expected<const EngineOptionData*, QString> getOptionData(const OptionKey& inKey);
+    const OptionMap& getOptionDataList() const { return _optionDatas; }
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);
 
@@ -43,6 +50,9 @@ protected:
     template <std::derived_from<TranslateUnit> T>
     void setTrUnitCreatorHelper();
 
+    void appendOptionDataList(const std::vector<EngineOptionData>& inOptionDatas);
+    void setOptionData(const EngineOptionData& inOptionData);
+
 private:
     EngineId _engineId;
     QString _displayName;
@@ -51,8 +61,7 @@ private:
     int _priority;
     TrUnitCreator _trUnitCreator;
 
-
-    Q_DISABLE_COPY_MOVE(ITranslateEngine)
+    OptionMap _optionDatas;
 };
 
 template <std::derived_from<TranslateUnit> T>

@@ -122,7 +122,7 @@ GeneralOptionWidget::~GeneralOptionWidget()
 
 // ~======================
 // GeneralOption
-GeneralOption::GeneralOption()
+GeneralOptionPage::GeneralOptionPage()
 {
     setDisplayName(i18n(Tr::General));
     setIconPath("");
@@ -130,10 +130,10 @@ GeneralOption::GeneralOption()
     setPriority(0);
 }
 
-GeneralOption::~GeneralOption()
+GeneralOptionPage::~GeneralOptionPage()
 {}
 
 namespace
 {
-const GeneralOption generalOption;
+const GeneralOptionPage generalOptionPage;
 } // anonymous namespace

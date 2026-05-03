@@ -3,6 +3,7 @@
 #ifndef SOLTRANSLATOR_IAIENGINE_H
 #define SOLTRANSLATOR_IAIENGINE_H
 #include "ITranslateEngine.h"
+#include "Types/OptionKey.h"
 
 
 class AiTranslateUnit;
@@ -15,15 +16,7 @@ public:
     explicit IAiEngine(const EngineId& inEngine);
     virtual ~IAiEngine() override;
 
-    const QString& getDefaultModel() const { return _defaultModel; }
-    const QString& getDefaultPrompt() const { return _defaultPrompt; }
-    double getDefaultTemperature() const { return _defaultTemperature; }
-
 protected:
-    void setDefaultModel(const QString& inDefaultModel);
-    void setDefaultPrompt(const QString& inDefaultPrompt);
-    void setDefaultTemperature(const double inDefaultTemperature);
-
     template <std::derived_from<AiTranslateUnit> T>
     void setTrUnitCreatorHelper()
     {
@@ -32,12 +25,14 @@ protected:
             return new T{inTrManager, this};
         });
     }
-
-private:
-    QString _defaultModel;
-    QString _defaultPrompt;
-    double _defaultTemperature;
 };
+
+namespace AiOptionKey
+{
+inline const OptionKey model{"model"};
+inline const OptionKey prompt{"prompt"};
+inline const OptionKey temperature{"temperature"};
+}
 
 
 #endif //SOLTRANSLATOR_IAIENGINE_H

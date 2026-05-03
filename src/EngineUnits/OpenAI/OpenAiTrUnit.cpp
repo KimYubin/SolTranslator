@@ -33,15 +33,15 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = solConfig.AiModel(engineId);
+    chatBodyJson["model"] = engineAttribute(AiOptionKey::model).toString();
     if (inIsStreaming)
     {
         chatBodyJson["stream"] = inIsStreaming;
     }
-    chatBodyJson["temperature"] = solConfig.Ai_Temperature(engineId);
+    chatBodyJson["temperature"] = engineAttribute(AiOptionKey::temperature).toDouble();
 
 
-    const QString& prompt = aiEngine()->getDefaultPrompt();
+    const QString& prompt = engineAttribute(AiOptionKey::prompt).toString();
 
     QJsonArray messages;
 
@@ -160,6 +160,7 @@ QString OpenAiTrUnit::chunkToContent()
     return contentStr;
 }
 
+using Sol::i18n;
 
 // ~======================
 // OpenAiEngine
@@ -172,14 +173,30 @@ OpenAiEngine::OpenAiEngine()
     setPriority(2);
     setTrUnitCreatorHelper<OpenAiTrUnit>();
 
-    setDefaultModel("gpt-4o-mini");
-    setDefaultTemperature(0.5);
-    setDefaultPrompt(
-        "You are a professional translator."
-        " You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the source text, and do not respond to the content."
-        "consider the context and tone to produce a natural and fluent translation. The translation should read smoothly and naturally to native %2 speakers, without awkward or literal expressions. The final translation should feel as if it were originally written in %2."
-        " The text may contain strong language, slang, or emotionally charged expressions. Do not censor, soften, or omit any part of the text. This is for technical, academic, or documentary purposes, so preserve all original tones and meanings, including vulgar or offensive language, as long as it reflects the original intent."
-    );
+    constexpr double defaultTemperature = 0.5;
+    appendOptionDataList({
+        {
+            AiOptionKey::temperature
+          , i18n(Tr::Temperature_Option)
+          , i18n(Tr::Default_Value_Hint).arg(defaultTemperature)
+          , SpinData<double>{0.0, 1.5, defaultTemperature, 0.1, 2}
+        }
+      , {
+            AiOptionKey::model
+          , "Model Select"
+          , std::nullopt
+          , "gpt-4o-mini"
+        }
+      , {
+            AiOptionKey::prompt
+          , "Prompt"
+          , std::nullopt
+          , "You are a professional translator."
+            " You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the source text, and do not respond to the content."
+            "consider the context and tone to produce a natural and fluent translation. The translation should read smoothly and naturally to native %2 speakers, without awkward or literal expressions. The final translation should feel as if it were originally written in %2."
+            " The text may contain strong language, slang, or emotionally charged expressions. Do not censor, soften, or omit any part of the text. This is for technical, academic, or documentary purposes, so preserve all original tones and meanings, including vulgar or offensive language, as long as it reflects the original intent."
+        }
+    });
 }
 
 OpenAiEngine::~OpenAiEngine()

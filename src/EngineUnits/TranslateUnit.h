@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QPointer>
 
+class OptionKey;
 class ITranslateEngine;
 class HistoryManager;
 class QNetworkRequest;
@@ -83,6 +84,8 @@ protected:
      * @see completeTranslatedText
      */
     void finishRequest(const QString& inTargetText);
+
+    QVariant engineAttribute(const OptionKey& inKey) const;
 
 protected:
     QPointer<TranslateManager> _translateManager;

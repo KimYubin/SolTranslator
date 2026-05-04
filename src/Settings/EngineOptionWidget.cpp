@@ -2,6 +2,7 @@
 
 #include "EngineOptionWidget.h"
 
+#include "CardFactory.h"
 #include "SolTranslatorCore.h"
 #include "ui_EngineOptionWidget.h"
 #include "EngineUnits/IAiEngine.h"
@@ -96,29 +97,29 @@ void EngineOptionWidget::setAiEngineUI(const IAiEngine* inEngine)
     auto [optGroup, optVLay] = addNewOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options));
 
     const OptionMap& optionList = inEngine->getOptionDataList();
-    for (const EngineOptionData& optData : optionList | std::views::values)
+    for (const OptionData& optData : optionList | std::views::values)
     {
         SettingCard* settingCard = nullptr;
         switch (optData.getOptionType())
         {
-        case EngineOptionData::Type::None:
+        case OptionData::Type::None:
             break;
-        case EngineOptionData::Type::Int:
+        case OptionData::Type::Int:
             break;
-        case EngineOptionData::Type::Double:
+        case OptionData::Type::Double:
             break;
-        case EngineOptionData::Type::Bool:
+        case OptionData::Type::Bool:
             break;
-        case EngineOptionData::Type::SpinDataInt:
+        case OptionData::Type::SpinDataInt:
             break;
-        case EngineOptionData::Type::SpinDataDouble:
+        case OptionData::Type::SpinDataDouble:
         {
-            settingCard = doubleSpinCard(optData, optGroup, engineId);
+            settingCard = doubleSpinCard(optGroup, engineId, optData);
             break;
         }
-        case EngineOptionData::Type::String:
+        case OptionData::Type::String:
             break;
-        case EngineOptionData::Type::Combo:
+        case OptionData::Type::Combo:
             break;
         default: ;
         }
@@ -130,39 +131,20 @@ void EngineOptionWidget::setAiEngineUI(const IAiEngine* inEngine)
     }
 }
 
-SettingCard* EngineOptionWidget::baseSettingCard(const EngineOptionData& inOptData
-                                               , QWidget* inParent)
+SettingCard* EngineOptionWidget::doubleSpinCard(QWidget* inParent
+                                              , const EngineId& inEngineId
+                                              , const OptionData& inOptData)
 {
-    SettingCard* resCard = new SettingCard(new QDoubleSpinBox(this), inParent);
-    resCard->setHeader(inOptData.headerName);
-    if (inOptData.description.has_value())
+    const double curValue = solConfig.engineAttribute(inEngineId, inOptData.key).toDouble();
+    const std::expected<SettingCard*, QString> resCardExp = CardFactory::createDoubleSpin(inParent, inOptData, curValue);
+    if (resCardExp.has_value() == false)
     {
-        resCard->setDescription(inOptData.description.value());
-    }
-
-    return resCard;
-}
-
-SettingCard* EngineOptionWidget::doubleSpinCard(const EngineOptionData& inOptData
-                                              , QWidget* inParent
-                                              , const EngineId& inEngineId)
-{
-    const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptData.defaultValue);
-    if (spinDataPtr == nullptr)
-    {
-        //
+        // todo: 적절한 오류처리
         return nullptr;
     }
-    const SpinData<double>& spinData = *spinDataPtr;
+    SettingCard* resCard = resCardExp.value();
 
-    SettingCard* resCard = baseSettingCard(inOptData, inParent);
-
-    QDoubleSpinBox* spinBox = resCard->getContent<QDoubleSpinBox>();
-    spinBox->setRange(spinData.min, spinData.max);
-    spinBox->setDecimals(spinData.decimals);
-    spinBox->setSingleStep(spinData.singleStep);
-    spinBox->setValue(solConfig.engineAttribute(inEngineId, inOptData.key).toDouble());
-
+    const QDoubleSpinBox* spinBox = resCard->getContent<QDoubleSpinBox>();
     connect(spinBox, &QDoubleSpinBox::valueChanged, this, [inEngineId, inKey = inOptData.key](const double inTemper)
     {
         solConfig.setEngineAttribute(inEngineId, inKey, inTemper);

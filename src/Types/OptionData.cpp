@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "EngineOptionData.h"
+#include "OptionData.h"
 
 #include <QVariant>
 
-QVariant EngineOptionData::getDefaultValue() const
+QVariant OptionData::getDefaultValue() const
 {
     switch (getOptionType())
     {

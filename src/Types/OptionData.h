@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef SOLTRANSLATOR_ENGINEOPTIONDATA_H
-#define SOLTRANSLATOR_ENGINEOPTIONDATA_H
+#ifndef SOLTRANSLATOR_OPTIONDATA_H
+#define SOLTRANSLATOR_OPTIONDATA_H
 
 #include "Types/OptionKey.h"
 #include "Utils/EnumUtils.hpp"
@@ -62,7 +62,7 @@ struct ComboList
 using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<int>, SpinData<double>, QString, ComboList>;
 
 
-struct EngineOptionData
+struct OptionData
 {
     OptionKey key;
 
@@ -85,4 +85,4 @@ struct EngineOptionData
 };
 
 
-#endif //SOLTRANSLATOR_ENGINEOPTIONDATA_H
+#endif //SOLTRANSLATOR_OPTIONDATA_H

@@ -18,7 +18,7 @@ ITranslateEngine::~ITranslateEngine()
     EngineManager::unregisterEngine(this);
 }
 
-std::expected<const EngineOptionData*, QString>ITranslateEngine::getOptionData(const OptionKey& inKey)
+std::expected<const OptionData*, QString>ITranslateEngine::getOptionData(const OptionKey& inKey)
 {
     auto findIt = _optionDatas.find(inKey);
     if (findIt != _optionDatas.end())
@@ -59,15 +59,15 @@ void ITranslateEngine::setTrUnitCreator(TrUnitCreator&& inCreator)
     _trUnitCreator = std::move(inCreator);
 }
 
-void ITranslateEngine::appendOptionDataList(const std::vector<EngineOptionData>& inOptionDatas)
+void ITranslateEngine::appendOptionDataList(const std::vector<OptionData>& inOptionDatas)
 {
-    _optionDatas.insert_range(inOptionDatas | std::views::transform([](const EngineOptionData& inOpt)
+    _optionDatas.insert_range(inOptionDatas | std::views::transform([](const OptionData& inOpt)
     {
         return std::pair{inOpt.key, inOpt};
     }));
 }
 
-void ITranslateEngine::setOptionData(const EngineOptionData& inOptionData)
+void ITranslateEngine::setOptionData(const OptionData& inOptionData)
 {
     _optionDatas[inOptionData.key] = inOptionData;
 }

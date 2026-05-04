@@ -45,8 +45,6 @@ qt_add_executable(
 
         src/EngineUnits/AiTranslateUnit.cpp
         src/EngineUnits/AiTranslateUnit.h
-        src/EngineUnits/EngineOptionData.cpp
-        src/EngineUnits/EngineOptionData.h
         src/EngineUnits/IAiEngine.cpp
         src/EngineUnits/IAiEngine.h
         src/EngineUnits/ITranslateEngine.cpp
@@ -79,6 +77,8 @@ qt_add_executable(
         src/Managers/TranslateManager.cpp
         src/Managers/TranslateManager.h
 
+        src/Settings/CardFactory.cpp
+        src/Settings/CardFactory.h
         src/Settings/EngineOptionWidget.cpp
         src/Settings/EngineOptionWidget.h
         src/Settings/EngineOptionWidget.ui
@@ -86,8 +86,6 @@ qt_add_executable(
         src/Settings/GeneralOptionWidget.h
         src/Settings/IOptionWidget.cpp
         src/Settings/IOptionWidget.h
-        src/Settings/SettingCardFactory.cpp
-        src/Settings/SettingCardFactory.h
         src/Settings/SettingsWidget.cpp
         src/Settings/SettingsWidget.h
         src/Settings/SettingsWidget.ui
@@ -134,6 +132,8 @@ qt_add_executable(
         src/Types/EngineId.h
         src/Types/ExJson.cpp
         src/Types/ExJson.h
+        src/Types/OptionData.cpp
+        src/Types/OptionData.h
         src/Types/OptionKey.cpp
         src/Types/OptionKey.h
         src/Types/SolConstants.cpp

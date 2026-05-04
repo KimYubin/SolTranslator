@@ -4,7 +4,7 @@
 #define ENGINEOPTIONWIDGET_H
 #include "IOptionWidget.h"
 
-struct EngineOptionData;
+struct OptionData;
 class SettingCard;
 class IAiEngine;
 class EngineId;
@@ -29,12 +29,12 @@ protected:
     void setAiEngineUI(const IAiEngine* inEngine);
 
 private:
-    SettingCard* baseSettingCard(const EngineOptionData& inOptData, QWidget* inParent);
-    SettingCard* doubleSpinCard(const EngineOptionData& inOptData, QWidget* inParent, const EngineId& inEngineId);
+    SettingCard* doubleSpinCard(QWidget* inParent
+                              , const EngineId& inEngineId
+                              , const OptionData& inOptData);
 
     friend class EngineOptionPage;
     Ui::EngineOptionWidget* ui;
-
 };
 
 

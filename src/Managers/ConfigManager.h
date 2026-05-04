@@ -5,7 +5,7 @@
 
 #include "AbstractManager.h"
 
-struct EngineOptionData;
+struct OptionData;
 class OptionKey;
 class EngineId;
 class QSettings;

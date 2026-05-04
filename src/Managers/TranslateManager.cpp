@@ -70,12 +70,12 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
     return _networkAccessManager->post(inRequest, inPayload);
 }
 
-std::expected<TranslateUnit*, QString> TranslateManager::newTranslateUnit(const EngineId& inEngineId)
+Expected<TranslateUnit*> TranslateManager::newTranslateUnit(const EngineId& inEngineId)
 {
     return EngineManager::newTrUnit(inEngineId, this);;
 }
 
-std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)
+Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)
 {
     Q_ASSERT_X(_historyManager, "TranslateManager::executeNewTranslateUnit", "The _historyManager is not initialized.");
 
@@ -88,7 +88,7 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     const LangType targetLang = inTrRequest.targetLang;
     const bool isIgnoreCache  = inTrRequest.isIgnoreCache;
 
-    const std::expected<TranslateUnit*, QString> trUnitExp = newTranslateUnit(engineId);
+    const Expected<TranslateUnit*> trUnitExp = newTranslateUnit(engineId);
     if (trUnitExp.has_value() == false)
     {
         return std::unexpected{trUnitExp.error()};
@@ -140,7 +140,7 @@ std::expected<QPointer<TranslateUnit>, QString> TranslateManager::executeNewTran
     return trUnit;
 }
 
-std::expected<QPointer<TranslateUnit>, QString> TranslateManager::translateText(TranslateRequest&& inTrRequest)
+Expected<QPointer<TranslateUnit>> TranslateManager::translateText(TranslateRequest&& inTrRequest)
 {
     return executeNewTranslateUnit(std::move(inTrRequest));
 }

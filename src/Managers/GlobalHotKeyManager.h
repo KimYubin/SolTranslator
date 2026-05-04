@@ -4,10 +4,9 @@
 #define GLOBALHOTKEYMANAGER_H
 
 #include "AbstractManager.h"
+#include "Types/SolExpected.h"
 
 #include <QHotkey>
-
-#include <expected>
 
 
 enum class Action;
@@ -42,10 +41,10 @@ public:
                       , std::move_only_function<void(void)>&& inFunction);
 
 
-    std::expected<void, QString> changeHotkey(const Action inActionType
-                                            , const QKeySequence& inKeySeq);
+    Expected<void> changeHotkey(const Action inActionType
+                              , const QKeySequence& inKeySeq);
 
-    std::expected<void, QString> removeHotkey(const Action inActionType);
+    Expected<void> removeHotkey(const Action inActionType);
 
 private:
     ActionKeyHash _hotKeys;

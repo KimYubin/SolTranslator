@@ -100,13 +100,13 @@ void HistoryManager::onDbCacheUpdated(const std::vector<HistoryCacheData>& inCac
     emit translateHistoryUpdated();
 }
 
-std::expected<const HistoryCacheData*, QString> HistoryManager::getHistoryCacheData(const int inIdx) const
+Expected<const HistoryCacheData*> HistoryManager::getHistoryCacheData(const int inIdx) const
 {
     if (inIdx < 0 || inIdx >= _historyCaches.size())
     {
-        return std::unexpected("_historyCaches out of range :"
+        return std::unexpected{"_historyCaches out of range :"
             "\n - size: " + QString::number(_historyCaches.size())
-            + "\n - inIdx: " + QString::number(inIdx));
+            + "\n - inIdx: " + QString::number(inIdx)};
     }
 
     return &_historyCaches[inIdx];
@@ -123,7 +123,7 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
     return true;
 }
 
-std::expected<int, QString> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
+Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
                                                                      , const QDateTime& inTimeStamp) const
 {
     // The array is sorted by TimeStamp; binary search is used.

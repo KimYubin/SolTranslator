@@ -38,13 +38,13 @@ ExJson ExJson::value(const QString& inKey) const
 
     if (_expected->isObject() == false)
     {
-        return ExJson{std::unexpected("not an object: " + inKey)};
+        return ExJson{std::unexpected{"not an object: " + inKey}};
     }
 
     const QJsonValue val = _expected->toObject().value(inKey);
     if (val.isUndefined())
     {
-        return ExJson{std::unexpected("not detected key: " + inKey)};
+        return ExJson{std::unexpected{"not detected key: " + inKey}};
     }
 
     return ExJson{val};
@@ -59,14 +59,14 @@ ExJson ExJson::operator[](const qsizetype inIdx) const
 
     if (_expected->isArray() == false)
     {
-        return ExJson{std::unexpected("not an array")};
+        return ExJson{std::unexpected{"not an array"}};
     }
 
     auto arr = _expected->toArray();
 
     if (inIdx < 0 || arr.size() <= inIdx)
     {
-        return ExJson{std::unexpected("out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + ".")};
+        return ExJson{std::unexpected{"out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + "."}};
     }
 
     return ExJson{arr[inIdx]};

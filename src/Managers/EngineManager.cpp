@@ -72,7 +72,7 @@ std::vector<QPointer<ITranslateEngine>> EngineManager::sortedTranslateEngineList
     return resVec;
 }
 
-std::expected<TranslateUnit*, QString> EngineManager::newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager)
+Expected<TranslateUnit*> EngineManager::newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager)
 {
     TrEngineMap& trEngineMap = translateEngines();
 

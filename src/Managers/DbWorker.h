@@ -2,9 +2,10 @@
 
 #ifndef SOLTRANSLATOR_DBWORKER_H
 #define SOLTRANSLATOR_DBWORKER_H
-#include <QObject>
 
-#include <expected>
+#include "Types/SolExpected.h"
+
+#include <QObject>
 
 
 class EngineId;
@@ -28,7 +29,7 @@ public:
 private:
     QSqlDatabase database() const;
     void initDB();
-    std::expected<void, QString> updateTimeStamp(const QVariant& inHistoryDataId);
+    Expected<void> updateTimeStamp(const QVariant& inHistoryDataId);
 
 public
 slots :

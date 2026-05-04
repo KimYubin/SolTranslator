@@ -14,14 +14,14 @@ SolSql::SolSql(const QSqlDatabase& inDB)
     : _database(inDB)
 {}
 
-std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePath)
+Expected<QString> SolSql::readSqlFromFile(const QString& inFilePath)
 {
     QFile sqlFile(inFilePath);
     SolGeneralGuard fileGuard{[&sqlFile]() mutable { sqlFile.close(); }};
 
     if (sqlFile.open(QFile::ReadOnly) == false)
     {
-        return std::unexpected("file open failed: " + sqlFile.errorString());
+        return std::unexpected{"file open failed: " + sqlFile.errorString()};
     }
 
     QString sqlStr = sqlFile.readAll();
@@ -29,30 +29,30 @@ std::expected<QString, QString> SolSql::readSqlFromFile(const QString& inFilePat
     return sqlStr;
 }
 
-std::expected<void, QString> SolSql::execSqlFile(const QString& inFilePath)
+Expected<void> SolSql::execSqlFile(const QString& inFilePath)
 {
-    const std::expected<QString, QString> sqlStr = readSqlFromFile(inFilePath);
+    const Expected<QString> sqlStr = readSqlFromFile(inFilePath);
 
     if (sqlStr.has_value() == false)
     {
-        return std::unexpected("Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error());
+        return std::unexpected{"Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error()};
     }
 
     QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(sqlStr.value()) == false)
     {
-        return std::unexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
+        return std::unexpected{"Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text()};
     }
 
     return {};
 }
 
-std::expected<void, QString> SolSql::execSqlQuery(const QString& inQueryName, const QString& inQuery)
+Expected<void> SolSql::execSqlQuery(const QString& inQueryName, const QString& inQuery)
 {
     QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(inQuery) == false)
     {
-        return std::unexpected("Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text());
+        return std::unexpected{"Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text()};
     }
 
     return {};

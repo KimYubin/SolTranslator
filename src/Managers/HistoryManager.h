@@ -4,11 +4,10 @@
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
 #include "AbstractManager.h"
+#include "Types/SolExpected.h"
 #include "Widgets/HistoryCacheData.h"
 
 #include <QThread>
-
-#include <expected>
 
 class EngineId;
 enum class TextStyle;
@@ -64,12 +63,12 @@ public slots :
     void onLookupFinished(const LookupResult& inLookup, const int inReqId);
     void onDbCacheUpdated(const std::vector<HistoryCacheData>& inCacheDatas);
 
-    std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const int inIdx) const;
+    Expected<const HistoryCacheData*> getHistoryCacheData(const int inIdx) const;
     int getHistoryCacheSize() const { return _historyCaches.size(); }
 
     bool setCheckState(const int inIdx, const Qt::CheckState inState);
 
-    std::expected<int, QString> findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp) const;
+    Expected<int> findModelIdxFromTimelineId(const qint64 inTimelineId, const QDateTime& inTimeStamp) const;
 
 private:
     std::vector<HistoryCacheData> _historyCaches;

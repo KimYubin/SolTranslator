@@ -25,7 +25,6 @@
 #include <QSplitter>
 #include <QTimer>
 
-#include <expected>
 
 using Sol::i18n;
 
@@ -199,7 +198,7 @@ void HistoryWidget::setupUI()
             return;
         }
 
-        const std::expected<int, QString> findIdx = solCore->manager<HistoryManager>()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
+        const Expected<int> findIdx = solCore->manager<HistoryManager>()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
         if (findIdx.has_value() == false)
         {
             solDebug << findIdx.error();

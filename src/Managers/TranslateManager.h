@@ -4,8 +4,7 @@
 #define TRANSLATEMANAGER_H
 
 #include "AbstractManager.h"
-
-#include <expected>
+#include "Types/SolExpected.h"
 
 
 class EngineId;
@@ -40,11 +39,11 @@ public:
     QNetworkReply* post(const QNetworkRequest& inRequest, const QByteArray& inPayload);
 
 private:
-    std::expected<TranslateUnit*, QString> newTranslateUnit(const EngineId& inEngineId);
-    std::expected<QPointer<TranslateUnit>, QString> executeNewTranslateUnit(TranslateRequest&& inTrRequest);
+    Expected<TranslateUnit*> newTranslateUnit(const EngineId& inEngineId);
+    Expected<QPointer<TranslateUnit>> executeNewTranslateUnit(TranslateRequest&& inTrRequest);
 
 public:
-    std::expected<QPointer<TranslateUnit>, QString> translateText(TranslateRequest&& inTrRequest);
+    Expected<QPointer<TranslateUnit>> translateText(TranslateRequest&& inTrRequest);
 
     void translateAtPopup(const QString& inSourceText
                         , const TextStyle inTextStyle

@@ -140,6 +140,7 @@ qt_add_executable(
         src/Types/SolConstants.h
         src/Types/SolDatabase.cpp
         src/Types/SolDatabase.h
+        src/Types/SolExpected.h
         src/Types/SolGuard.cpp
         src/Types/SolGuard.h
         src/Types/SolHashQueue.hpp

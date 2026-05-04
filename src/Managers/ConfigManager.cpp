@@ -8,6 +8,7 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "Types/OptionKey.h"
 #include "Types/SolConstants.h"
+#include "Types/SolExpected.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
@@ -134,12 +135,14 @@ void ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionK
 QVariant ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
 {
     const QPointer<ITranslateEngine> trEngine = EngineManager::getEngine(inEngineId);
-    const std::expected<const OptionData*, QString> optExp = trEngine->getOptionData(inKey);
+
+    const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
     if (optExp.has_value() == false)
     {
         // todo: 적절한 오류 처리 필요.
         return {};
     }
+
     const OptionData& optData = *optExp.value();
 
     return _settings->value(engineAttributeKey(inEngineId, optData.key), optData.getDefaultValue());

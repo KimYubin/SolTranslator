@@ -3,8 +3,9 @@
 #ifndef SOLTRANSLATOR_HISTORYMODEL_H
 #define SOLTRANSLATOR_HISTORYMODEL_H
 
+#include "Types/SolExpected.h"
+
 #include <QAbstractListModel>
-#include <expected>
 
 class HistoryCacheData;
 
@@ -24,9 +25,9 @@ public:
     virtual bool insertRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
     virtual bool removeRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
 
-    std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const int inIdx) const;
+    Expected<const HistoryCacheData*> getHistoryCacheData(const int inIdx) const;
 
-    std::expected<const HistoryCacheData*, QString> getHistoryCacheData(const QModelIndex& index) const;
+    Expected<const HistoryCacheData*> getHistoryCacheData(const QModelIndex& index) const;
 
 private:
     void updateHistoryCache();

@@ -4,10 +4,9 @@
 #define SOLTRANSLATOR_CARDFACTORY_H
 
 #include "Types/OptionData.h"
+#include "Types/SolExpected.h"
 
 #include <QObject>
-
-#include <expected>
 
 class SettingCard;
 
@@ -21,9 +20,9 @@ public:
                                      , const QString& inHeader
                                      , const std::optional<QString>& inDescription);
 
-    static std::expected<SettingCard*, QString> createDoubleSpin(QWidget* inParent
-                                                               , const OptionData& inOptData
-                                                               , const double inCurrentVal);
+    static Expected<SettingCard*> createDoubleSpin(QWidget* inParent
+                                                          , const OptionData& inOptData
+                                                          , const double inCurrentVal);
 };
 
 

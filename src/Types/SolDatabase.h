@@ -3,9 +3,9 @@
 #ifndef SOLTRANSLATOR_SOLDATABASE_H
 #define SOLTRANSLATOR_SOLDATABASE_H
 
-#include <QSqlDatabase>
+#include "Types/SolExpected.h"
 
-#include <expected>
+#include <QSqlDatabase>
 
 class QString;
 class QSqlError;
@@ -15,9 +15,9 @@ class SolSql
 public:
     explicit SolSql(const QSqlDatabase& inDB);
 
-    static std::expected<QString, QString> readSqlFromFile(const QString& inFilePath);
-    std::expected<void, QString> execSqlFile(const QString& inFilePath);
-    std::expected<void, QString> execSqlQuery(const QString& inQueryName, const QString& inQuery);
+    static Expected<QString> readSqlFromFile(const QString& inFilePath);
+    Expected<void> execSqlFile(const QString& inFilePath);
+    Expected<void> execSqlQuery(const QString& inQueryName, const QString& inQuery);
 
 private:
     QSqlDatabase _database;

@@ -2,9 +2,9 @@
 
 #ifndef SOLTRANSLATOR_ENGINEMANAGER_H
 #define SOLTRANSLATOR_ENGINEMANAGER_H
-#include "AbstractManager.h"
 
-#include <expected>
+#include "AbstractManager.h"
+#include "Types/SolExpected.h"
 
 
 class TranslateManager;
@@ -34,7 +34,7 @@ public:
     template <std::derived_from<ITranslateEngine> T>
     static std::vector<QPointer<T>> findEngines();
 
-    static std::expected<TranslateUnit*, QString> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
+    static Expected<TranslateUnit*> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
 };
 
 

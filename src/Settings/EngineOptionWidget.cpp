@@ -11,6 +11,7 @@
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
 #include "Types/EngineId.h"
+#include "Types/SolExpected.h"
 #include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>
@@ -136,7 +137,7 @@ SettingCard* EngineOptionWidget::doubleSpinCard(QWidget* inParent
                                               , const OptionData& inOptData)
 {
     const double curValue = solConfig.engineAttribute(inEngineId, inOptData.key).toDouble();
-    const std::expected<SettingCard*, QString> resCardExp = CardFactory::createDoubleSpin(inParent, inOptData, curValue);
+    const Expected<SettingCard*> resCardExp = CardFactory::createDoubleSpin(inParent, inOptData, curValue);
     if (resCardExp.has_value() == false)
     {
         // todo: 적절한 오류처리

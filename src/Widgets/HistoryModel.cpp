@@ -28,7 +28,7 @@ int HistoryModel::columnCount(const QModelIndex& parent) const
 
 QVariant HistoryModel::data(const QModelIndex& index, const int role) const
 {
-    const std::expected<const HistoryCacheData*, QString> trCache = getHistoryCacheData(index.row());
+    const Expected<const HistoryCacheData*> trCache = getHistoryCacheData(index.row());
 
     if (trCache.has_value() == false)
     {
@@ -128,12 +128,12 @@ bool HistoryModel::removeRows(const int position, const int rows, const QModelIn
     return true;
 }
 
-std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const int inIdx) const
+Expected<const HistoryCacheData*> HistoryModel::getHistoryCacheData(const int inIdx) const
 {
     return solCore->manager<HistoryManager>()->getHistoryCacheData(inIdx);
 }
 
-std::expected<const HistoryCacheData*, QString> HistoryModel::getHistoryCacheData(const QModelIndex& index) const
+Expected<const HistoryCacheData*> HistoryModel::getHistoryCacheData(const QModelIndex& index) const
 {
     return getHistoryCacheData(index.row());
 }

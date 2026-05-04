@@ -8,8 +8,6 @@
 #include <QTextStream>
 #include <QThread>
 
-#include <expected>
-
 class QTimer;
 
 class SolLogWorker : public QObject

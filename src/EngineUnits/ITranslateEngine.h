@@ -5,10 +5,10 @@
 
 #include "Types/EngineId.h"
 #include "Types/OptionData.h"
+#include "Types/SolExpected.h"
 
 #include <QObject>
 
-#include <expected>
 #include <functional>
 
 
@@ -36,7 +36,7 @@ public:
     const QString& getIconPath() const { return _iconPath; }
     int getPriority() const { return _priority; }
 
-    std::expected<const OptionData*, QString> getOptionData(const OptionKey& inKey);
+    Expected<const OptionData*> getOptionData(const OptionKey& inKey);
     const OptionMap& getOptionDataList() const { return _optionDatas; }
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);

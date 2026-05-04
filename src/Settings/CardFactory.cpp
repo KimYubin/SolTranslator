@@ -21,7 +21,7 @@ SettingCard* CardFactory::createBaseCard(QWidget* inContent
     return resCard;
 }
 
-std::expected<SettingCard*, QString> CardFactory::createDoubleSpin(QWidget* inParent
+Expected<SettingCard*> CardFactory::createDoubleSpin(QWidget* inParent
                                                                  , const OptionData& inOptData
                                                                  , const double inCurrentVal)
 {

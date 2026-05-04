@@ -5,7 +5,7 @@
 
 #include <QJsonValue>
 
-#include <expected>
+#include "Types/SolExpected.h"
 
 
 /**
@@ -16,11 +16,11 @@
 class ExJson
 {
 public:
-    using Expected = std::expected<QJsonValue, QString>;
+    using ExpectedJson = Expected<QJsonValue>;
 
     ExJson() = default;
 
-    explicit ExJson(const Expected& r)
+    explicit ExJson(const ExpectedJson& r)
         : _expected(r)
     {}
 
@@ -43,7 +43,7 @@ public:
 
     QString error() const { return _expected.has_value() ? "No error. exist value" : _expected.error(); }
 
-    const Expected& expected() const { return _expected; }
+    const ExpectedJson& expected() const { return _expected; }
 
     // ~============================================
     /** QJsonValue interface */
@@ -60,7 +60,7 @@ public:
     QJsonObject toObject(const QJsonObject& inDefaultValue) const;
 
 private:
-    Expected _expected;
+    ExpectedJson _expected;
 };
 
 #endif //SOLTRANSLATOR_SOLJSONOBJECT_H

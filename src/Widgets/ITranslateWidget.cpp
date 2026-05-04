@@ -6,6 +6,7 @@
 #include "EngineUnits/TranslateUnit.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/CustomMenuTextEdit.h"
+#include "Types/SolExpected.h"
 #include "Types/TranslateRequest.h"
 #include "Utils/SolLog.h"
 
@@ -40,7 +41,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineId& inEngineId
 {
     setSourceAndStyle(inSourceText, inTextStyle);
 
-    std::expected<QPointer<TranslateUnit>, QString> trRes
+    Expected<QPointer<TranslateUnit>> trResExp
     = solCore->manager<TranslateManager>()->translateText(TranslateRequest{
         this
       , inIsIgnoreCache
@@ -55,13 +56,13 @@ void ITranslateWidget::executeTranslateImpl(const EngineId& inEngineId
       , [this](const QString& inStr) { streamTranslateText(inStr); }
     });
 
-    if (trRes.has_value() == false)
+    if (trResExp.has_value() == false)
     {
-        solDebug << "Translation attempt failed:" << trRes.error();
+        solDebug << "Translation attempt failed:" << trResExp.error();
         return;
     }
 
-    setTrUnit(trRes.value());
+    setTrUnit(trResExp.value());
 }
 
 void ITranslateWidget::streamTranslateText(const QString& inTargetText)

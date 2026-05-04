@@ -18,7 +18,7 @@ ITranslateEngine::~ITranslateEngine()
     EngineManager::unregisterEngine(this);
 }
 
-std::expected<const OptionData*, QString>ITranslateEngine::getOptionData(const OptionKey& inKey)
+Expected<const OptionData*>ITranslateEngine::getOptionData(const OptionKey& inKey)
 {
     auto findIt = _optionDatas.find(inKey);
     if (findIt != _optionDatas.end())

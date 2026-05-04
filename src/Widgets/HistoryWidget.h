@@ -4,11 +4,10 @@
 #define SOLTRANSLATOR_HISTORYWIDGET_H
 
 #include "ISolWidget.h"
+#include "Types/SolExpected.h"
 #include "Types/SolTypes.h"
 
 #include <QDateTime>
-
-#include <expected>
 
 
 class LayoutTextEdit;
@@ -40,7 +39,7 @@ private:
     void reTranslate() const;
     void viewPopup() const;
 
-    using ExpectedHistory = std::expected<const HistoryCacheData*, QString>;
+    using ExpectedHistory = Expected<const HistoryCacheData*>;
     ExpectedHistory getHistoryData(const QModelIndex& inCurIdx) const;
 
 private:

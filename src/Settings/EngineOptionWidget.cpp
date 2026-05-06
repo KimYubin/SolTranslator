@@ -2,7 +2,7 @@
 
 #include "EngineOptionWidget.h"
 
-#include "CardFactory.h"
+#include "SettingWidgetFactory.h"
 #include "SolTranslatorCore.h"
 #include "ui_EngineOptionWidget.h"
 #include "EngineUnits/IAiEngine.h"

@@ -75,8 +75,6 @@ qt_add_executable(
         src/Managers/TranslateManager.cpp
         src/Managers/TranslateManager.h
 
-        src/Settings/CardFactory.cpp
-        src/Settings/CardFactory.h
         src/Settings/EngineOptionWidget.cpp
         src/Settings/EngineOptionWidget.h
         src/Settings/EngineOptionWidget.ui
@@ -87,6 +85,8 @@ qt_add_executable(
         src/Settings/SettingsWidget.cpp
         src/Settings/SettingsWidget.h
         src/Settings/SettingsWidget.ui
+        src/Settings/SettingWidgetFactory.cpp
+        src/Settings/SettingWidgetFactory.h
 
         src/SubWidgets/CustomMenuTextEdit.cpp
         src/SubWidgets/CustomMenuTextEdit.h

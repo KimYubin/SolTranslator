@@ -2,6 +2,7 @@
 
 #include "IOptionWidget.h"
 
+#include "SettingWidgetFactory.h"
 #include "Utils/SolLog.h"
 
 #include <QGroupBox>
@@ -117,56 +118,10 @@ void IOptionWidget::cancel()
 void IOptionWidget::finish()
 {}
 
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle
-                                                                    , QGridLayout* inParentLayout
-                                                                    , const int inRow
-                                                                    , const int inColumn
-                                                                    , const Qt::Alignment inAlignment)
-{
-    auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
-
-    inParentLayout->addWidget(groupBox, inRow, inColumn, inAlignment | Qt::AlignTop);
-
-    return {groupBox, vLayout};
-}
-
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::newOptionGroupBox(const QString& inGroupTitle
-                                                                    , QGridLayout* inParentLayout
-                                                                    , const int inRow
-                                                                    , const int inColumn
-                                                                    , const int inRowSpan
-                                                                    , const int inColumnSpan
-                                                                    , const Qt::Alignment inAlignment)
-{
-    auto [groupBox, vLayout] = generateGroupBox(inGroupTitle);
-
-    inParentLayout->addWidget(groupBox, inRow, inColumn, inRowSpan, inColumnSpan, inAlignment | Qt::AlignTop);
-
-    return {groupBox, vLayout};
-}
 
 std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::addNewOptionGroupBox(const QString& inGroupTitle)
 {
-    return newOptionGroupBox(inGroupTitle, _mainLayout, _mainLayout->rowCount(), 0);
-}
-
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::generateGroupBox(const QString& inGroupTitle)
-{
-    QString objStr = inGroupTitle;
-    objStr.remove(QRegularExpression("\\s"));
-    objStr.remove(QRegularExpression("[^a-zA-Z0-9_-]"));
-
-    QGroupBox* groupBox = new QGroupBox(this);
-    groupBox->setObjectName(objStr + "GroupBox");
-    groupBox->setAlignment(Qt::AlignmentFlag::AlignLeading | Qt::AlignmentFlag::AlignLeft | Qt::AlignmentFlag::AlignTop);
-    groupBox->setFlat(true);
-    groupBox->setTitle(inGroupTitle);
-
-    QVBoxLayout* vLayout = new QVBoxLayout(groupBox);
-    vLayout->setObjectName(objStr + "VLayout");
-    vLayout->setContentsMargins(0, 0, 0, 0);
-
-    return {groupBox, vLayout};
+    return OptionWidgetFactory::createOptionGroupBox(inGroupTitle, _mainLayout, _mainLayout->rowCount(), 0);
 }
 
 IOptionPage* IOptionWidget::getOptionPage() const

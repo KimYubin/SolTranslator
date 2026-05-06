@@ -43,8 +43,6 @@ qt_add_executable(
         src/EngineUnits/OpenAI/OpenAiTrUnit.cpp
         src/EngineUnits/OpenAI/OpenAiTrUnit.h
 
-        src/EngineUnits/AiTranslateUnit.cpp
-        src/EngineUnits/AiTranslateUnit.h
         src/EngineUnits/IAiEngine.cpp
         src/EngineUnits/IAiEngine.h
         src/EngineUnits/ITranslateEngine.cpp

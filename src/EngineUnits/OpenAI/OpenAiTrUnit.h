@@ -3,16 +3,16 @@
 #ifndef TRANSLATEUNITOPENAI_H
 #define TRANSLATEUNITOPENAI_H
 
-#include "EngineUnits/AiTranslateUnit.h"
 #include "EngineUnits/IAiEngine.h"
+#include "EngineUnits/TranslateUnit.h"
 
 
-class OpenAiTrUnit final : public AiTranslateUnit
+class OpenAiTrUnit : public TranslateUnit
 {
     Q_OBJECT
 
 public:
-    explicit OpenAiTrUnit(TranslateManager* parent, IAiEngine* inEngine);
+    explicit OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
     virtual void requestTranslate() override;
 

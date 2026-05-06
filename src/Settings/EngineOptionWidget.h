@@ -4,9 +4,9 @@
 #define ENGINEOPTIONWIDGET_H
 #include "IOptionWidget.h"
 
+class ITranslateEngine;
 struct OptionData;
 class SettingCard;
-class IAiEngine;
 class EngineId;
 class SolTranslatorCore;
 QT_BEGIN_NAMESPACE
@@ -26,7 +26,7 @@ public:
     ~EngineOptionWidget() override;
 
 protected:
-    void setAiEngineUI(const IAiEngine* inEngine);
+    void addEngineSettings(const ITranslateEngine* inEngine);
 
 private:
     SettingCard* doubleSpinCard(QWidget* inParent

@@ -29,7 +29,6 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     setObjectName("EngineOptionWidget");
 
     auto [engineGroup, engineVLay] = addNewOptionGroupBox(i18n(Tr::Translation_Engine_Settings));
-
     {
         ui->setupUi(engineGroup);
         engineVLay->addWidget(ui->gridLayoutWidget, 0, Qt::AlignmentFlag::AlignTop);
@@ -76,11 +75,11 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     });
 
 
-    // AI 옵션
-    const std::vector<QPointer<IAiEngine>> aiEngines = EngineManager::findEngines<IAiEngine>();
-    for (const QPointer<IAiEngine>& engine : aiEngines)
+    // 엔진별 옵션 위젯 생성
+    std::vector<QPointer<ITranslateEngine>> engines = EngineManager::sortedTranslateEngineList();
+    for (const QPointer<ITranslateEngine>& engine : engines)
     {
-        setAiEngineUI(engine.data());
+        addEngineSettings(engine.data());
     }
 
     initializeAfterCtor();
@@ -91,7 +90,7 @@ EngineOptionWidget::~EngineOptionWidget()
     delete ui;
 }
 
-void EngineOptionWidget::setAiEngineUI(const IAiEngine* inEngine)
+void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
 {
     const EngineId& engineId = inEngine->getEngineId();
 

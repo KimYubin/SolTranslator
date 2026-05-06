@@ -6,8 +6,6 @@
 #include "Types/OptionKey.h"
 
 
-class AiTranslateUnit;
-
 class IAiEngine : public ITranslateEngine
 {
     Q_OBJECT
@@ -15,16 +13,6 @@ class IAiEngine : public ITranslateEngine
 public:
     explicit IAiEngine(const EngineId& inEngine);
     virtual ~IAiEngine() override;
-
-protected:
-    template <std::derived_from<AiTranslateUnit> T>
-    void setTrUnitCreatorHelper()
-    {
-        setTrUnitCreator([this](TranslateManager* inTrManager)
-        {
-            return new T{inTrManager, this};
-        });
-    }
 };
 
 namespace AiOptionKey

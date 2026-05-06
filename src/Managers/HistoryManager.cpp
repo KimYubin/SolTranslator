@@ -55,6 +55,7 @@ void HistoryManager::asyncDeleteHistory(const qint64 inDbId)
 
 namespace
 {
+// Only use in main thread.
 qint64 newRequestId()
 {
     static qint64 requestID{0};
@@ -62,6 +63,7 @@ qint64 newRequestId()
     return requestID;
 }
 }
+
 void HistoryManager::asyncLookupHistory(const EngineId& inEngineId
                                       , const QString& inSourceText
                                       , const LangType inSourceLang
@@ -104,9 +106,11 @@ Expected<const HistoryCacheData*> HistoryManager::getHistoryCacheData(const int 
 {
     if (inIdx < 0 || inIdx >= _historyCaches.size())
     {
-        return std::unexpected{"_historyCaches out of range :"
+        return makeUnexpected(
+            "_historyCaches out of range :"
             "\n - size: " + QString::number(_historyCaches.size())
-            + "\n - inIdx: " + QString::number(inIdx)};
+            + "\n - inIdx: " + QString::number(inIdx)
+        );
     }
 
     return &_historyCaches[inIdx];
@@ -124,7 +128,7 @@ bool HistoryManager::setCheckState(const int inIdx, const Qt::CheckState inState
 }
 
 Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimelineId
-                                                                     , const QDateTime& inTimeStamp) const
+                                                       , const QDateTime& inTimeStamp) const
 {
     // The array is sorted by TimeStamp; binary search is used.
     // Entries with the same TimeStamp are distinguished by TimelineId.
@@ -132,7 +136,7 @@ Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimeline
 
     if (lowIt == _historyCaches.end() || lowIt->getTimeStamp() != inTimeStamp)
     {
-        return std::unexpected{"not found TimeStamp. TimeStamp: " + inTimeStamp.toString()};
+        return makeUnexpected("not found TimeStamp. TimeStamp: " + inTimeStamp.toString());
     }
 
     const auto upperIt = std::ranges::upper_bound(lowIt, _historyCaches.end(), inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
@@ -140,7 +144,7 @@ Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimeline
 
     if (findIt == _historyCaches.end())
     {
-        return std::unexpected{QString{"not found Timeline ID. TimeStamp: %1, ID: %2"}.arg(inTimeStamp.toString(), inTimelineId)};
+        return makeUnexpected(QString{"not found Timeline ID. TimeStamp: %1, ID: %2"}.arg(inTimeStamp.toString(), inTimelineId));
     }
 
     return findIt - _historyCaches.begin();

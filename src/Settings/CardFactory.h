@@ -21,8 +21,8 @@ public:
                                      , const std::optional<QString>& inDescription);
 
     static Expected<SettingCard*> createDoubleSpin(QWidget* inParent
-                                                          , const OptionData& inOptData
-                                                          , const double inCurrentVal);
+                                                 , const OptionData& inOptData
+                                                 , const double inCurrentVal);
 };
 
 

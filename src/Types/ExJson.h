@@ -41,7 +41,7 @@ public:
     bool hasValue() const { return _expected.has_value(); }
     bool isError() const { return (_expected.has_value() == false); }
 
-    QString error() const { return _expected.has_value() ? "No error. exist value" : _expected.error(); }
+    Error error() const;
 
     const ExpectedJson& expected() const { return _expected; }
 

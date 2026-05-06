@@ -3,6 +3,9 @@
 #ifndef SOLTRANSLATOR_SOLEXPECTED_H
 #define SOLTRANSLATOR_SOLEXPECTED_H
 
+#include "Utils/EnumUtils.hpp"
+
+#include <QDebug>
 #include <QString>
 
 #include <expected>
@@ -15,27 +18,71 @@ enum class ErrorCode
 
 struct Error
 {
+    Error() = default;
+
     Error(const QString& inMessage)
-        : errorCode(ErrorCode::None)
-        , message(inMessage)
-    {}
+        : code(ErrorCode::None), message(inMessage) {}
 
-    Error(const ErrorCode inErrorCode, const QString& inMessage)
-        : errorCode(inErrorCode)
-        , message(inMessage)
-    {}
+    Error(QString&& inMessage)
+        : code(ErrorCode::None), message(std::move(inMessage)) {}
 
-    ErrorCode errorCode;
+    Error(const ErrorCode inCode, const QString& inMessage)
+        : code(inCode), message(inMessage) {}
+
+    Error(const ErrorCode inCode, QString&& inMessage)
+        : code(inCode), message(std::move(inMessage)) {}
+
+    Error(const Error& inOther)     = default;
+    Error(Error&& inOther) noexcept = default;
+
+    Error& operator=(const Error& inOther)     = default;
+    Error& operator=(Error&& inOther) noexcept = default;
+
+    friend bool operator==(const Error& inLhs, const Error& inRhs);
+    friend bool operator!=(const Error& inLhs, const Error& inRhs);
+
+    friend QDebug operator<<(QDebug debug, const Error& inError);
+
+    ErrorCode code;
     QString message;
 };
 
-inline std::unexpected<Error> makeUnexpected(QString&& inMessage)
+// ~====================
+// friend functions
+inline bool operator==(const Error& inLhs, const Error& inRhs)
 {
-    return std::unexpected{Error{std::move(inMessage)}};
+    return std::tie(inLhs.code, inLhs.message) == std::tie(inRhs.code, inRhs.message);
+}
+
+inline bool operator!=(const Error& inLhs, const Error& inRhs)
+{
+    return !(inLhs == inRhs);
+}
+
+inline QDebug operator<<(QDebug debug, const Error& inError)
+{
+    static constexpr QAnyStringView debugMsg{"Unexpected Error: Code %1, Message %2"};
+
+    QDebugStateSaver saver(debug);
+    debug.nospace() << debugMsg.arg(Sol::enumToQStr(inError.code), inError.message);
+    return debug;
+}
+
+// ~====================
+// Make unexpected
+template <typename E = Error, typename... Args>
+    requires std::is_constructible_v<E, Args...>
+[[nodiscard]] std::unexpected<E> makeUnexpected(Args&&... inVals)
+    noexcept(std::is_nothrow_constructible_v<E, Args...>)
+{
+    return std::unexpected<E>{E{std::forward<Args>(inVals)...}};
 }
 
 
-template <typename T, typename E = QString>
+/**
+ * A std::expected alias that defaults to the project's standard error type.
+ */
+template <typename T, typename E = Error>
 using Expected = std::expected<T, E>;
 
 

@@ -26,7 +26,7 @@ Expected<const OptionData*>ITranslateEngine::getOptionData(const OptionKey& inKe
         return &findIt->second;
     }
 
-    return std::unexpected{"not found OptionKey: " + inKey.toString()};
+    return makeUnexpected("not found OptionKey: " + inKey.toString());
 }
 
 TranslateUnit* ITranslateEngine::newTrUnit(TranslateManager* inTrManager)

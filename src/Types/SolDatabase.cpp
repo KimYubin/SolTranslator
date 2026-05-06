@@ -21,7 +21,7 @@ Expected<QString> SolSql::readSqlFromFile(const QString& inFilePath)
 
     if (sqlFile.open(QFile::ReadOnly) == false)
     {
-        return std::unexpected{"file open failed: " + sqlFile.errorString()};
+        return makeUnexpected("File open failed: " + sqlFile.errorString() + " File Path: " + inFilePath);
     }
 
     QString sqlStr = sqlFile.readAll();
@@ -35,13 +35,13 @@ Expected<void> SolSql::execSqlFile(const QString& inFilePath)
 
     if (sqlStr.has_value() == false)
     {
-        return std::unexpected{"Error: Could not find SQL file- " + inFilePath + " " + sqlStr.error()};
+        return makeUnexpected(sqlStr.error());
     }
 
     QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(sqlStr.value()) == false)
     {
-        return std::unexpected{"Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text()};
+        return makeUnexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
     }
 
     return {};
@@ -52,7 +52,7 @@ Expected<void> SolSql::execSqlQuery(const QString& inQueryName, const QString& i
     QSqlQuery sqlQuery(_database);
     if (sqlQuery.exec(inQuery) == false)
     {
-        return std::unexpected{"Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text()};
+        return makeUnexpected("Error: Could not execute sql query: " + inQueryName + " " + sqlQuery.lastError().text());
     }
 
     return {};

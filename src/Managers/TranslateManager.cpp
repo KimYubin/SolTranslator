@@ -91,7 +91,7 @@ Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(Tran
     const Expected<TranslateUnit*> trUnitExp = newTranslateUnit(engineId);
     if (trUnitExp.has_value() == false)
     {
-        return std::unexpected{trUnitExp.error()};
+        return makeUnexpected(trUnitExp.error());
     }
 
     TranslateUnit* trUnit = trUnitExp.value();

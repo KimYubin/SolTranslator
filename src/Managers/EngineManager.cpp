@@ -79,7 +79,7 @@ Expected<TranslateUnit*> EngineManager::newTrUnit(const EngineId& inEngine, Tran
     const auto findIt = trEngineMap.find(inEngine);
     if (findIt == trEngineMap.end())
     {
-        return std::unexpected{"TranslateManager::newTranslateUnit: not found trUnitCreator. A inEngine is " + inEngine.toString()};
+        return makeUnexpected("TranslateManager::newTranslateUnit: not found trUnitCreator. A inEngine is " + inEngine.toString());
     }
 
     TranslateUnit* trUnit = findIt->second->newTrUnit(inTrManager);

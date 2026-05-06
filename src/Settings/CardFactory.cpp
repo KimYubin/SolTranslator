@@ -22,13 +22,13 @@ SettingCard* CardFactory::createBaseCard(QWidget* inContent
 }
 
 Expected<SettingCard*> CardFactory::createDoubleSpin(QWidget* inParent
-                                                                 , const OptionData& inOptData
-                                                                 , const double inCurrentVal)
+                                                   , const OptionData& inOptData
+                                                   , const double inCurrentVal)
 {
     const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptData.defaultValue);
     if (spinDataPtr == nullptr)
     {
-        return std::unexpected{"OptionData.defaultValue is not SpinData<double>."};
+        return makeUnexpected("OptionData.defaultValue is not SpinData<double>.");
     }
 
     const SpinData<double>& spinData = *spinDataPtr;

@@ -80,8 +80,8 @@ void DbWorker::initDB()
     bool isValidInitDB = true;
 
     // Modify before the transaction.
-    Expected<void> foreignExp = solSql.execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
-    Expected<void> walExp     = solSql.execSqlQuery("WAL on", "PRAGMA journal_mode = WAL");
+    const Expected<void> foreignExp = solSql.execSqlQuery("foreign_keys on", "PRAGMA foreign_keys = ON");
+    const Expected<void> walExp     = solSql.execSqlQuery("WAL on", "PRAGMA journal_mode = WAL");
     if (foreignExp.has_value() == false)
     {
         solDebug << foreignExp.error();
@@ -111,7 +111,7 @@ void DbWorker::initDB()
 
     for (QString& tableName : db_tables)
     {
-        Expected<void> sqlExp = solSql.execSqlFile(":/sql/create_" + tableName + ".sql");
+        const Expected<void> sqlExp = solSql.execSqlFile(":/sql/create_" + tableName + ".sql");
         if (sqlExp.has_value() == false)
         {
             solDebug << sqlExp.error();
@@ -121,7 +121,7 @@ void DbWorker::initDB()
 
     for (QString& indexName : db_indexes)
     {
-        Expected<void> sqlExp = solSql.execSqlFile(":/sql/create_" + indexName + ".sql");
+        const Expected<void> sqlExp = solSql.execSqlFile(":/sql/create_" + indexName + ".sql");
         if (sqlExp.has_value() == false)
         {
             solDebug << sqlExp.error();
@@ -142,7 +142,7 @@ Expected<void> DbWorker::updateTimeStamp(const QVariant& inHistoryDataId)
     const Expected<QString> insertTimelineQuery = SolSql::readSqlFromFile(Path::InsertTimeline);
     if (insertTimelineQuery.has_value() == false)
     {
-        return std::unexpected{insertTimelineQuery.error() + Path::InsertTimeline};
+        return makeUnexpected(insertTimelineQuery.error());
     }
 
     QSqlQuery sqlQuery{database()};
@@ -153,7 +153,7 @@ Expected<void> DbWorker::updateTimeStamp(const QVariant& inHistoryDataId)
 
     if (sqlQuery.exec() == false)
     {
-        return std::unexpected{"Error executing SQL: updateTimeStamp" + sqlQuery.lastError().text()};
+        return makeUnexpected("Error executing SQL: updateTimeStamp" + sqlQuery.lastError().text());
     }
 
     return {};
@@ -170,7 +170,7 @@ void DbWorker::processAddHistory(const EngineId& inEngineId
 
     if (insertDataQuery.has_value() == false)
     {
-        solDebug << insertDataQuery.error() << Path::InsertHistoryData;
+        solDebug << insertDataQuery.error();
         return;
     }
 
@@ -216,7 +216,7 @@ void DbWorker::processDeleteHistory(const qint64 inDbId)
 
     if (deleteDataQuery.has_value() == false)
     {
-        solDebug << deleteDataQuery.error() << Path::DeleteHistoryData;
+        solDebug << deleteDataQuery.error();
         return;
     }
 
@@ -259,7 +259,7 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineId& inEngineId
     const Expected<QString> selectHistoryQuery = SolSql::readSqlFromFile(Path::SelectHistoryData);
     if (selectHistoryQuery.has_value() == false)
     {
-        solDebug << "not found sql files";
+        solDebug << selectHistoryQuery.error();
         return res;
     }
 
@@ -327,7 +327,7 @@ void DbWorker::updateDbCache()
 
         if (timelineCountQuery.has_value() == false)
         {
-            solDebug << timelineCountQuery.error() << "select_timeline_count";
+            solDebug << timelineCountQuery.error();
             return;
         }
 
@@ -349,7 +349,7 @@ void DbWorker::updateDbCache()
 
         if (selectTimelineQuery.has_value() == false)
         {
-            solDebug << selectTimelineQuery.error() << Path::SelectTimeline;
+            solDebug << selectTimelineQuery.error();
             return;
         }
 

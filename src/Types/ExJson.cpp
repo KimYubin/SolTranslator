@@ -12,7 +12,7 @@ ExJson ExJson::fromJson(const QByteArray& inJson)
     const QJsonDocument rootDoc = QJsonDocument::fromJson(inJson, &parseError);
     if (parseError.error != QJsonParseError::NoError)
     {
-        return ExJson{std::unexpected{"Json parse error: " + parseError.errorString() + "\nJson: " + inJson}};
+        return ExJson{makeUnexpected("Json parse error: " + parseError.errorString() + "\nJson: " + inJson)};
     }
 
     if (rootDoc.isArray())
@@ -25,7 +25,7 @@ ExJson ExJson::fromJson(const QByteArray& inJson)
         return ExJson{rootDoc.object()};
     }
 
-    return ExJson{std::unexpected{"JsonDocument is empty."}};
+    return ExJson{makeUnexpected("JsonDocument is empty.")};
 }
 
 
@@ -38,13 +38,13 @@ ExJson ExJson::value(const QString& inKey) const
 
     if (_expected->isObject() == false)
     {
-        return ExJson{std::unexpected{"not an object: " + inKey}};
+        return ExJson{makeUnexpected("not an object: " + inKey)};
     }
 
     const QJsonValue val = _expected->toObject().value(inKey);
     if (val.isUndefined())
     {
-        return ExJson{std::unexpected{"not detected key: " + inKey}};
+        return ExJson{makeUnexpected("not detected key: " + inKey)};
     }
 
     return ExJson{val};
@@ -59,14 +59,14 @@ ExJson ExJson::operator[](const qsizetype inIdx) const
 
     if (_expected->isArray() == false)
     {
-        return ExJson{std::unexpected{"not an array"}};
+        return ExJson{makeUnexpected("not an array")};
     }
 
     auto arr = _expected->toArray();
 
     if (inIdx < 0 || arr.size() <= inIdx)
     {
-        return ExJson{std::unexpected{"out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + "."}};
+        return ExJson{makeUnexpected("out of range. arr size: " + QString::number(arr.size()) + ". index: " + QString::number(inIdx) + ".")};
     }
 
     return ExJson{arr[inIdx]};
@@ -75,6 +75,11 @@ ExJson ExJson::operator[](const qsizetype inIdx) const
 
 // ~============================================
 /** QJsonValue interface */
+
+Error ExJson::error() const
+{
+    return isError() ? _expected.error() : Error{ErrorCode::None, "No error. exist value"};
+}
 
 bool ExJson::toBool(const bool inDefaultValue) const
 {

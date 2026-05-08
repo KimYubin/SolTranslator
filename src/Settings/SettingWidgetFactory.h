@@ -8,6 +8,8 @@
 
 #include <QObject>
 
+class SolButton;
+class QLineEdit;
 class QGridLayout;
 class QVBoxLayout;
 class QGroupBox;
@@ -18,14 +20,15 @@ class CardFactory : public QObject
     Q_OBJECT
 
 public:
-    static SettingCard* createBaseCard(QWidget* inContent
-                                     , QWidget* inParent
-                                     , const QString& inHeader
-                                     , const std::optional<QString>& inDescription);
+    static Expected<SettingCard*> createStringSaver(QWidget* inParent
+                                                  , const OptionData& inOptData
+                                                  , const QString& inCurrentVal
+                                                  , std::move_only_function<void(const QString&)>&& inSetFunction);
 
     static Expected<SettingCard*> createDoubleSpin(QWidget* inParent
                                                  , const OptionData& inOptData
-                                                 , const double inCurrentVal);
+                                                 , const double inCurrentVal
+                                                 , std::move_only_function<void(const double)>&& inSetFunction);
 };
 
 

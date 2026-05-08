@@ -108,15 +108,14 @@ EngineId ConfigManager::currentEngineId() const
     return EngineId{_settings->value(CurrentEngine, EngineIds::defaultEngine.toString()).toString()};
 }
 
-
-void ConfigManager::setApiKey(const EngineId& inEngineId, const QString& inAPIKey)
+void ConfigManager::setSecretKey(const QString& inKey, const QVariant& inValue)
 {
-    _settings->setValue(API_Key + inEngineId.toString(), inAPIKey);
+    _settings->setValue(inKey, inValue);
 }
 
-QString ConfigManager::apiKey(const EngineId& inEngineId) const
+QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
 {
-    return _settings->value(API_Key + inEngineId.toString()).toString();
+    return _settings->value(inKey, inDefault);
 }
 
 namespace
@@ -129,13 +128,26 @@ QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
 
 void ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
 {
+    const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
+    const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
+    if (optExp.has_value() == false)
+    {
+        // todo: 적절한 오류 처리 필요.
+        return;
+    }
+
+    if (optExp.value()->isSecretMode)
+    {
+        setSecretKey(engineAttributeKey(inEngineId, inKey), inValue);
+        return;
+    }
+
     _settings->setValue(engineAttributeKey(inEngineId, inKey), inValue);
 }
 
 QVariant ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
 {
-    const QPointer<ITranslateEngine> trEngine = EngineManager::getEngine(inEngineId);
-
+    const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
     const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
     if (optExp.has_value() == false)
     {
@@ -144,8 +156,15 @@ QVariant ConfigManager::engineAttribute(const EngineId& inEngineId, const Option
     }
 
     const OptionData& optData = *optExp.value();
+    const QString attKey      = engineAttributeKey(inEngineId, optData.key);
+    const QVariant defaultVal = optData.getDefaultValue();
 
-    return _settings->value(engineAttributeKey(inEngineId, optData.key), optData.getDefaultValue());
+    if (optExp.value()->isSecretMode)
+    {
+        return secretKey(attKey, defaultVal);
+    }
+
+    return _settings->value(attKey, defaultVal);
 }
 
 

@@ -2,20 +2,16 @@
 
 #ifndef ENGINEOPTIONWIDGET_H
 #define ENGINEOPTIONWIDGET_H
-#include "IOptionWidget.h"
 
+#include "IOptionWidget.h"
+#include "Types/SolExpected.h"
+
+class QTabWidget;
 class ITranslateEngine;
 struct OptionData;
 class SettingCard;
 class EngineId;
 class SolTranslatorCore;
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-class EngineOptionWidget;
-}
-
-QT_END_NAMESPACE
 
 class EngineOptionWidget : public IOptionWidget
 {
@@ -29,12 +25,18 @@ protected:
     void addEngineSettings(const ITranslateEngine* inEngine);
 
 private:
-    SettingCard* doubleSpinCard(QWidget* inParent
-                              , const EngineId& inEngineId
-                              , const OptionData& inOptData);
-
     friend class EngineOptionPage;
-    Ui::EngineOptionWidget* ui;
+
+    Expected<SettingCard*> stringSaverCard(QWidget* inParent
+                                         , const EngineId& inEngineId
+                                         , const OptionData& inOptData);
+
+    Expected<SettingCard*> doubleSpinCard(QWidget* inParent
+                                        , const EngineId& inEngineId
+                                        , const OptionData& inOptData);
+
+private:
+    QTabWidget* _tabWidget;
 };
 
 

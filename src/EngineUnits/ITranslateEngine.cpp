@@ -18,15 +18,25 @@ ITranslateEngine::~ITranslateEngine()
     EngineManager::unregisterEngine(this);
 }
 
-Expected<const OptionData*>ITranslateEngine::getOptionData(const OptionKey& inKey)
+Expected<const OptionData*> ITranslateEngine::getOptionData(const OptionKey& inKey) const
 {
-    auto findIt = _optionDatas.find(inKey);
+    const auto findIt = _optionDatas.find(inKey);
     if (findIt != _optionDatas.end())
     {
         return &findIt->second;
     }
 
-    return makeUnexpected("not found OptionKey: " + inKey.toString());
+    return makeUnexpected(QString{"Not found Engine Option. Engine: %1, Key: %2"}.arg(_engineId.toString(), inKey.toString()));
+}
+
+std::vector<const OptionData*> ITranslateEngine::sortedOptionDataList() const
+{
+    // todo: 임시 단순 복사. 순서 유지 필요
+    std::vector<const OptionData*> resVec;
+    resVec.reserve(_optionDatas.size());
+    std::ranges::copy(_optionDatas | std::views::transform([](const auto& inData){return &inData.second;}), std::back_inserter(resVec));
+
+    return resVec;
 }
 
 TranslateUnit* ITranslateEngine::newTrUnit(TranslateManager* inTrManager)

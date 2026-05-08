@@ -20,8 +20,8 @@ QVariant OptionData::getDefaultValue() const
         return std::get<SpinData<int>>(defaultValue).value;
     case Type::SpinDataDouble:
         return std::get<SpinData<double>>(defaultValue).value;
-    case Type::String:
-        return std::get<QString>(defaultValue);
+    case Type::StringSaver:
+        return std::get<StringSaver>(defaultValue).defaultString;
     case Type::Combo:
         // return std::get<int>(defaultValue);
     default: ;

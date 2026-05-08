@@ -58,8 +58,26 @@ struct ComboList
     QStringList list;
 };
 
+struct StringSaver
+{
+    StringSaver(const QString& inString
+              , const bool inIsUsedSaveButton = false)
+        : defaultString(inString)
+        , isUsedSaveButton(inIsUsedSaveButton)
+    {}
 
-using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<int>, SpinData<double>, QString, ComboList>;
+    StringSaver()                                          = default;
+    ~StringSaver()                                         = default;
+    StringSaver(const StringSaver& inOther)                = default;
+    StringSaver(StringSaver&& inOther) noexcept            = default;
+    StringSaver& operator=(const StringSaver& inOther)     = default;
+    StringSaver& operator=(StringSaver&& inOther) noexcept = default;
+
+    QString defaultString;
+    bool isUsedSaveButton = false;
+};
+
+using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<int>, SpinData<double>, StringSaver, ComboList>;
 
 
 struct OptionData
@@ -70,10 +88,11 @@ struct OptionData
     QString headerName;
     std::optional<QString> description;
     OptionVariant defaultValue;
+    bool isSecretMode = false;
 
     enum class Type
     {
-        None, Int, Double, Bool, SpinDataInt, SpinDataDouble, String, Combo
+        None, Int, Double, Bool, SpinDataInt, SpinDataDouble, StringSaver, Combo
     };
 
     Type getOptionType() const

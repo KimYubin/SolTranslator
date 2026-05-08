@@ -36,8 +36,8 @@ public:
     const QString& getIconPath() const { return _iconPath; }
     int getPriority() const { return _priority; }
 
-    Expected<const OptionData*> getOptionData(const OptionKey& inKey);
-    const OptionMap& getOptionDataList() const { return _optionDatas; }
+    Expected<const OptionData*> getOptionData(const OptionKey& inKey) const;
+    std::vector<const OptionData*> sortedOptionDataList() const;
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);
 
@@ -73,5 +73,12 @@ void ITranslateEngine::setTrUnitCreatorHelper()
         return new T{inTrManager, this};
     });
 }
+
+
+namespace TrEngineOptionKey
+{
+inline const OptionKey ApiKey{"ApiKey"};
+}
+
 
 #endif //SOLTRANSLATOR_ITRANSLATEENGINE_H

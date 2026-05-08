@@ -20,6 +20,7 @@ enum class Tr
   , Options
   , Temperature_Option
   , Default_Value_Hint
+  , Api_Key
   , General
   , Appearance_Behavior
   , Run_On_Start

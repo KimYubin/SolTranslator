@@ -31,8 +31,12 @@ public:
     void setCurrentEngineId(const EngineId& inEngineId);
     EngineId currentEngineId() const;
 
-    void setApiKey(const EngineId& inEngineId, const QString& inAPIKey);
-    QString apiKey(const EngineId& inEngineId) const;
+    /**
+     * Caution! The secret storage feature has not been implemented yet. 
+     * This is an interface left for future implementation.
+     */
+    void setSecretKey(const QString& inKey, const QVariant& inValue);
+    QVariant secretKey(const QString& inKey, const QVariant& inDefault) const;
 
     void setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
     QVariant engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const;

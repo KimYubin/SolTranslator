@@ -27,6 +27,7 @@ QString Sol::i18n(const Tr inTr)
     case Options:                        return TrImpl::tr("옵션");
     case Temperature_Option:             return TrImpl::tr("온도 설정", "AI 온도 설정.");
     case Default_Value_Hint:             return TrImpl::tr("(기본값: %1)");
+    case Api_Key:                        return TrImpl::tr("API 키");
     case General:                        return TrImpl::tr("일반");
     case Appearance_Behavior:            return TrImpl::tr("모양 및 동작");
     case Run_On_Start:                   return TrImpl::tr("시작 시 실행");
@@ -97,6 +98,6 @@ QString Sol::i18n(const Tr inTr)
 
 namespace
 {
-constexpr int TrKeyCheck = 66;
+constexpr int TrKeyCheck = 67;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

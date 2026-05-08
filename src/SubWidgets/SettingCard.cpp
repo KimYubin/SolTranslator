@@ -2,6 +2,8 @@
 
 #include "SettingCard.h"
 
+#include "SolButton.h"
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QPainter>
@@ -32,13 +34,21 @@ SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos c
         headerCol  = 1;
         contentCol = 0;
     }
+    int contentRow = 0;
+    int contentRowSpan = 1;
+    if (_contentPos == ContentPos::Down)
+    {
+        contentCol = 0;
+        contentRow = 2;
+        contentRowSpan = 2;
+    }
     _header = new QLabel(_gridLayoutWidget);
     _header->setObjectName("SettingHeaderText");
     _layout->addWidget(_header, 0, headerCol, 1, 1);
 
     _content->setParent(_gridLayoutWidget);
     _content->setObjectName("SettingContent");
-    _layout->addWidget(_content, 0, contentCol, 1, 1);
+    _layout->addWidget(_content, contentRow, contentCol, 1, contentRowSpan);
 
     _layout->setColumnStretch(headerCol, 1);
 }

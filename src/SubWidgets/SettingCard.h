@@ -5,6 +5,7 @@
 
 #include <QFrame>
 
+class SolButton;
 class QGridLayout;
 class QLabel;
 class SwitchButton;
@@ -18,6 +19,7 @@ public:
     {
         Left
       , Right
+      , Down
     };
 
     /** SettingCard는 inContent의 소유권을 갖습니다. */

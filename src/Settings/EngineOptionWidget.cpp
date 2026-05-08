@@ -4,7 +4,6 @@
 
 #include "SettingWidgetFactory.h"
 #include "SolTranslatorCore.h"
-#include "ui_EngineOptionWidget.h"
 #include "EngineUnits/IAiEngine.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/EngineManager.h"
@@ -15,6 +14,7 @@
 #include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QString>
 #include <qsortfilterproxymodel.h>
@@ -24,56 +24,11 @@ using Sol::i18n;
 
 EngineOptionWidget::EngineOptionWidget(QWidget* parent)
     : IOptionWidget(parent)
-    , ui(new Ui::EngineOptionWidget)
 {
     setObjectName("EngineOptionWidget");
 
-    auto [engineGroup, engineVLay] = addNewOptionGroupBox(i18n(Tr::Translation_Engine_Settings));
-    {
-        ui->setupUi(engineGroup);
-        engineVLay->addWidget(ui->gridLayoutWidget, 0, Qt::AlignmentFlag::AlignTop);
-    }
-
-    // 번역 엔진 변경.
-    ui->enginSelectCombo->setCurrentIndexChanged([this](const int inIdx)
-    {
-        const QString payload = ui->enginSelectCombo->itemData(inIdx).toString();
-        const EngineId curEg  = EngineId{payload};
-        const QString apiKey  = solConfig.apiKey(curEg);
-        const int apiSize     = apiKey.size();
-
-        QString phStr;
-        if (apiSize > 15)
-        {
-            phStr = apiKey.sliced(0, 3).trimmed() + "..." + apiKey.last(4).trimmed();
-        }
-        else if (apiSize > 3)
-        {
-            phStr = QString(apiSize - 2, '*') + apiKey.last(2).trimmed();
-        }
-        else if (apiSize > 0)
-        {
-            phStr = QString(apiSize, '*');
-        }
-
-        ui->apiInputLine->setPlaceholderText(phStr);
-    });
-
-    // api 키 저장 및 적용
-    connect(ui->apiKeySaveButton, &QPushButton::clicked, this, [this]()
-    {
-        const QString inputApiKey = ui->apiInputLine->text();
-        if (inputApiKey.isEmpty())
-        {
-            return;
-        }
-
-        const QString payload = ui->enginSelectCombo->currentData().toString();
-        const EngineId curEg  = EngineId{payload};
-
-        solConfig.setApiKey(curEg, inputApiKey);
-    });
-
+    _tabWidget = new QTabWidget(this);
+    _mainLayout->addWidget(_tabWidget);
 
     // 엔진별 옵션 위젯 생성
     std::vector<QPointer<ITranslateEngine>> engines = EngineManager::sortedTranslateEngineList();
@@ -86,21 +41,31 @@ EngineOptionWidget::EngineOptionWidget(QWidget* parent)
 }
 
 EngineOptionWidget::~EngineOptionWidget()
-{
-    delete ui;
-}
+{}
 
 void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
 {
-    const EngineId& engineId = inEngine->getEngineId();
-
-    auto [optGroup, optVLay] = addNewOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options));
-
-    const OptionMap& optionList = inEngine->getOptionDataList();
-    for (const OptionData& optData : optionList | std::views::values)
+    std::vector<const OptionData*> optionList = inEngine->sortedOptionDataList();
+    if (optionList.empty())
     {
-        SettingCard* settingCard = nullptr;
-        switch (optData.getOptionType())
+        return;
+    }
+
+    QWidget* layoutWidget   = new QWidget(_tabWidget);
+    QGridLayout* gridLayout = new QGridLayout(layoutWidget);
+
+    _tabWidget->addTab(layoutWidget, inEngine->getDisplayName());
+
+    const EngineId& engineId = inEngine->getEngineId();
+    auto [optGroup, optVLay] = OptionWidgetFactory::createOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options)
+                                                                       , gridLayout
+                                                                       , gridLayout->rowCount()
+                                                                       , 0);
+
+    for (const OptionData* optData : optionList)
+    {
+        Expected<SettingCard*> settingCard;
+        switch (optData->getOptionType())
         {
         case OptionData::Type::None:
             break;
@@ -114,11 +79,14 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
             break;
         case OptionData::Type::SpinDataDouble:
         {
-            settingCard = doubleSpinCard(optGroup, engineId, optData);
+            settingCard = doubleSpinCard(optGroup, engineId, *optData);
             break;
         }
-        case OptionData::Type::String:
-            break;
+        case OptionData::Type::StringSaver:
+        {
+            settingCard = stringSaverCard(optGroup, engineId, *optData);
+        }
+        break;
         case OptionData::Type::Combo:
             break;
         default: ;
@@ -126,31 +94,43 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
 
         if (settingCard)
         {
-            optVLay->addWidget(settingCard, 0, Qt::AlignmentFlag::AlignTop);
+            optVLay->addWidget(settingCard.value(), 0, Qt::AlignmentFlag::AlignTop);
         }
     }
 }
 
-SettingCard* EngineOptionWidget::doubleSpinCard(QWidget* inParent
-                                              , const EngineId& inEngineId
-                                              , const OptionData& inOptData)
+namespace
 {
-    const double curValue = solConfig.engineAttribute(inEngineId, inOptData.key).toDouble();
-    const Expected<SettingCard*> resCardExp = CardFactory::createDoubleSpin(inParent, inOptData, curValue);
-    if (resCardExp.has_value() == false)
+template <typename T>
+std::tuple<T, std::move_only_function<void(const T&)>> makeSetAttribute(const EngineId& inEngineId
+                                                                      , const OptionKey& inKey)
+{
+    const T curValue  = solConfig.engineAttribute(inEngineId, inKey).value<T>();
+    auto saveFunction = [inEngineId, inKey](const T& inVal)
     {
-        // todo: 적절한 오류처리
-        return nullptr;
-    }
-    SettingCard* resCard = resCardExp.value();
+        solConfig.setEngineAttribute(inEngineId, inKey, inVal);
+    };
 
-    const QDoubleSpinBox* spinBox = resCard->getContent<QDoubleSpinBox>();
-    connect(spinBox, &QDoubleSpinBox::valueChanged, this, [inEngineId, inKey = inOptData.key](const double inTemper)
-    {
-        solConfig.setEngineAttribute(inEngineId, inKey, inTemper);
-    });
+    return {curValue, saveFunction};
+}
+} // anonymous namespace
 
-    return resCard;
+Expected<SettingCard*> EngineOptionWidget::stringSaverCard(QWidget* inParent
+                                                         , const EngineId& inEngineId
+                                                         , const OptionData& inOptData)
+{
+    auto [curValue, saveFunction] = makeSetAttribute<QString>(inEngineId, inOptData.key);
+
+    return CardFactory::createStringSaver(inParent, inOptData, curValue, std::move(saveFunction));
+}
+
+Expected<SettingCard*> EngineOptionWidget::doubleSpinCard(QWidget* inParent
+                                                        , const EngineId& inEngineId
+                                                        , const OptionData& inOptData)
+{
+    auto [curValue, saveFunction] = makeSetAttribute<double>(inEngineId, inOptData.key);
+
+    return CardFactory::createDoubleSpin(inParent, inOptData, curValue, std::move(saveFunction));
 }
 
 

@@ -77,7 +77,6 @@ qt_add_executable(
 
         src/Settings/EngineOptionWidget.cpp
         src/Settings/EngineOptionWidget.h
-        src/Settings/EngineOptionWidget.ui
         src/Settings/GeneralOptionWidget.cpp
         src/Settings/GeneralOptionWidget.h
         src/Settings/IOptionWidget.cpp

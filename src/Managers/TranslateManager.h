@@ -4,7 +4,7 @@
 #define TRANSLATEMANAGER_H
 
 #include "AbstractManager.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 
 class EngineId;

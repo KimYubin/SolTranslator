@@ -137,12 +137,13 @@ qt_add_executable(
         src/Types/SolConstants.h
         src/Types/SolDatabase.cpp
         src/Types/SolDatabase.h
-        src/Types/SolExpected.h
+        src/Types/SolExpected.hpp
         src/Types/SolGuard.cpp
         src/Types/SolGuard.h
         src/Types/SolHashQueue.hpp
         src/Types/SolTypes.cpp
         src/Types/SolTypes.h
+        src/Types/TextCacheKey.hpp
         src/Types/TranslateRequest.cpp
         src/Types/TranslateRequest.h
 

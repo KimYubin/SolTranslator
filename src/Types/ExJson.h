@@ -5,7 +5,7 @@
 
 #include <QJsonValue>
 
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 
 /**

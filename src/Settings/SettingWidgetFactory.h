@@ -4,7 +4,7 @@
 #define SOLTRANSLATOR_SETTINGWIDGETFACTORY_H
 
 #include "Types/OptionData.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 #include <QObject>
 

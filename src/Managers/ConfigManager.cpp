@@ -8,7 +8,7 @@
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "Types/OptionKey.h"
 #include "Types/SolConstants.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"

@@ -10,7 +10,7 @@
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/SettingCard.h"
 #include "Types/EngineId.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 #include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>

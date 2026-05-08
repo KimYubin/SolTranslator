@@ -6,7 +6,7 @@
 #include "EngineUnits/TranslateUnit.h"
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/CustomMenuTextEdit.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 #include "Types/TranslateRequest.h"
 #include "Utils/SolLog.h"
 

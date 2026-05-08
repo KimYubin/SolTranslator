@@ -5,7 +5,7 @@
 
 #include "Types/EngineId.h"
 #include "Types/OptionData.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 #include <QObject>
 

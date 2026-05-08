@@ -4,7 +4,7 @@
 #define SAVEMANAGER_H
 
 #include "AbstractManager.h"
-#include "Types/SolHashQueue.hpp"
+#include "Types/TextCacheKey.hpp"
 
 class SolTranslatorCore;
 

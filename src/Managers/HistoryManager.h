@@ -4,7 +4,7 @@
 #define SOLTRANSLATOR_HISTORYMANAGER_H
 
 #include "AbstractManager.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 #include "Widgets/HistoryCacheData.h"
 
 #include <QThread>

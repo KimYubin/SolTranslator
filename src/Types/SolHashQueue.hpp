@@ -2,15 +2,8 @@
 
 #ifndef SOLHASHQUEUE_H
 #define SOLHASHQUEUE_H
-#include "EngineId.h"
-#include "SolTypes.h"
-#include "Utils/EnumUtils.hpp"
-
-#include <QHashFunctions>
-#include <QString>
 
 #include <unordered_map>
-
 
 /**
  * 원소가 추가된 순서를 유지하는 해시 맵입니다. 
@@ -199,57 +192,6 @@ public:
     }
 };
 
-
-struct TextCacheKey
-{
-    TextCacheKey() = default;
-
-    TextCacheKey(const EngineId& inEngineId
-               , const QString& inSourceText
-               , const LangType inSourceLang
-               , const LangType inTargetLang)
-        : engineId(inEngineId)
-        , sourceText(inSourceText)
-        , sourceLang(inSourceLang)
-        , targetLang(inTargetLang)
-    {}
-
-    EngineId engineId;
-    QString sourceText;
-    LangType sourceLang;
-    LangType targetLang;
-};
-
-struct cache_ky_hasher
-{
-    size_t operator()(const TextCacheKey& inKy) const
-    {
-        return std::hash<::QString>()(
-            inKy.sourceText
-            + inKy.engineId.toString()
-            + QChar(Sol::EnumToInt(inKy.sourceLang))
-            + QChar(Sol::EnumToInt(inKy.targetLang))
-        );
-    }
-};
-
-struct cache_ky_eq
-{
-    bool operator()(const TextCacheKey& ACacheKy, const TextCacheKey& BCacheKy) const
-    {
-        return (ACacheKy.engineId == BCacheKy.engineId)
-                && (ACacheKy.sourceLang == BCacheKy.sourceLang)
-                && (ACacheKy.targetLang == BCacheKy.targetLang)
-                && (ACacheKy.sourceText == BCacheKy.sourceText);
-    }
-};
-
-/**
- * 캐시된 번역문을 관리합니다.
- * 원문, 엔진, 목표언어를 key로 사용합니다.
- * 최대치를 갱신하면, 캐시된 번역문은 선입선출로 삭제됩니다.  
- */
-using cache_queue = hash_queue<TextCacheKey, QString, cache_ky_hasher, cache_ky_eq>;
 
 
 #endif //SOLHASHQUEUE_H

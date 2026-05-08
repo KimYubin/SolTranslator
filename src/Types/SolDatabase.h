@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_SOLDATABASE_H
 #define SOLTRANSLATOR_SOLDATABASE_H
 
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 #include <QSqlDatabase>
 

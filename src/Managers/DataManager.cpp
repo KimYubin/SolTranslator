@@ -2,6 +2,7 @@
 
 #include "DataManager.h"
 
+#include "Types/TextCacheKey.hpp"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolLog.h"
 #include "Utils/SolPath.h"

@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_HISTORYMODEL_H
 #define SOLTRANSLATOR_HISTORYMODEL_H
 
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 #include <QAbstractListModel>
 

@@ -4,7 +4,7 @@
 #define ENGINEOPTIONWIDGET_H
 
 #include "IOptionWidget.h"
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 class QTabWidget;
 class ITranslateEngine;

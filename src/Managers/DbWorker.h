@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_DBWORKER_H
 #define SOLTRANSLATOR_DBWORKER_H
 
-#include "Types/SolExpected.h"
+#include "Types/SolExpected.hpp"
 
 #include <QObject>
 

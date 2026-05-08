@@ -21,20 +21,25 @@ ITranslateEngine::~ITranslateEngine()
 Expected<const OptionData*> ITranslateEngine::getOptionData(const OptionKey& inKey) const
 {
     const auto findIt = _optionDatas.find(inKey);
-    if (findIt != _optionDatas.end())
+    if (findIt == _optionDatas.end())
     {
-        return &findIt->second;
+        return makeUnexpected(QString{"Not found Engine Option. Engine: %1, Key: %2"}.arg(_engineId.toString(), inKey.toString()));
     }
 
-    return makeUnexpected(QString{"Not found Engine Option. Engine: %1, Key: %2"}.arg(_engineId.toString(), inKey.toString()));
+    return &(findIt->second);
 }
 
 std::vector<const OptionData*> ITranslateEngine::sortedOptionDataList() const
 {
-    // todo: 임시 단순 복사. 순서 유지 필요
     std::vector<const OptionData*> resVec;
     resVec.reserve(_optionDatas.size());
-    std::ranges::copy(_optionDatas | std::views::transform([](const auto& inData){return &inData.second;}), std::back_inserter(resVec));
+
+    std::ranges::copy(_optionDatas | std::views::transform([](const auto& inData) { return &inData.second; }), std::back_inserter(resVec));
+
+    std::ranges::sort(resVec, {}, [](const OptionData* inData)
+    {
+        return inData->insertionOrder;
+    });
 
     return resVec;
 }
@@ -71,13 +76,32 @@ void ITranslateEngine::setTrUnitCreator(TrUnitCreator&& inCreator)
 
 void ITranslateEngine::appendOptionDataList(const std::vector<OptionData>& inOptionDatas)
 {
-    _optionDatas.insert_range(inOptionDatas | std::views::transform([](const OptionData& inOpt)
+    _optionDatas.insert_range(inOptionDatas | std::views::transform([this](const OptionData& inOpt)
     {
+        inOpt.insertionOrder = optionOrder();
         return std::pair{inOpt.key, inOpt};
+    }));
+}
+
+void ITranslateEngine::appendOptionDataList(std::vector<OptionData>&& inOptionDatas)
+{
+    _optionDatas.insert_range(inOptionDatas | std::views::transform([this](OptionData& inOpt) mutable
+    {
+        inOpt.insertionOrder = optionOrder();
+        return std::pair{inOpt.key, std::move(inOpt)};
     }));
 }
 
 void ITranslateEngine::setOptionData(const OptionData& inOptionData)
 {
+    inOptionData.insertionOrder = optionOrder();
+
     _optionDatas[inOptionData.key] = inOptionData;
+}
+
+void ITranslateEngine::setOptionData(OptionData&& inOptionData)
+{
+    inOptionData.insertionOrder = optionOrder();
+
+    _optionDatas[inOptionData.key] = std::move(inOptionData);
 }

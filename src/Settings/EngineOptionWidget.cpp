@@ -65,7 +65,7 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
     for (const OptionData* optData : optionList)
     {
         Expected<SettingCard*> settingCard;
-        switch (optData->getOptionType())
+        switch (optData->getOptionDataType())
         {
         case OptionData::Type::None:
             break;

@@ -82,25 +82,49 @@ using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<i
 
 struct OptionData
 {
-    OptionKey key;
+    OptionData(const OptionKey& inKey
+             , const QString& inHeaderName
+             , const std::optional<QString>& inDescription
+             , const OptionVariant& inDefaultValue
+             , const bool inIsSecretMode = false)
+        : key(inKey)
+        , headerName(inHeaderName)
+        , description(inDescription)
+        , defaultValue(inDefaultValue)
+        , isSecretMode(inIsSecretMode)
+    {}
 
-    // UI
-    QString headerName;
-    std::optional<QString> description;
-    OptionVariant defaultValue;
-    bool isSecretMode = false;
+    OptionData()                                         = default;
+    ~OptionData()                                        = default;
+    OptionData(const OptionData& inOther)                = default;
+    OptionData(OptionData&& inOther) noexcept            = default;
+    OptionData& operator=(const OptionData& inOther)     = default;
+    OptionData& operator=(OptionData&& inOther) noexcept = default;
 
     enum class Type
     {
         None, Int, Double, Bool, SpinDataInt, SpinDataDouble, StringSaver, Combo
     };
 
-    Type getOptionType() const
+    Type getOptionDataType() const
     {
         return static_cast<Type>(defaultValue.index());
     };
 
-    QVariant getDefaultValue() const;;
+    QVariant getDefaultValue() const;
+
+
+    // ~===============
+    // Variables
+
+    OptionKey key;
+
+    QString headerName;
+    std::optional<QString> description;
+    OptionVariant defaultValue;
+    bool isSecretMode = false;
+
+    mutable int insertionOrder = std::numeric_limits<int>::max();
 };
 
 

@@ -6,7 +6,7 @@
 
 QVariant OptionData::getDefaultValue() const
 {
-    switch (getOptionType())
+    switch (getOptionDataType())
     {
     case Type::None:
         return {};

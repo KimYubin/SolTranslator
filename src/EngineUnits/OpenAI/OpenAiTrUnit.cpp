@@ -165,26 +165,27 @@ using Sol::i18n;
 OpenAiEngine::OpenAiEngine()
     : IAiEngine(EngineIds::OpenAI)
 {
-    setDisplayName(Sol::i18n(Tr::OpenAI));
+    setDisplayName(i18n(Tr::OpenAI));
     setDefaultUrl("https://api.openai.com/v1/chat/completions");
     setIconPath("");
     setPriority(2);
     setTrUnitCreatorHelper<OpenAiTrUnit>();
 
     constexpr double defaultTemperature = 0.5;
-    appendOptionDataList({
+    appendOptionDataList
+    ({
         {
-            AiOptionKey::temperature
-          , i18n(Tr::Temperature_Option)
-          , i18n(Tr::Default_Value_Hint).arg(defaultTemperature)
-          , SpinData<double>{0.0, 1.5, defaultTemperature, 0.1, 2}
-        }
-      , {
             TrEngineOptionKey::ApiKey
           , i18n(Tr::Api_Key)
           , std::nullopt
           , StringSaver{"", true}
           , true
+        }
+      , {
+            AiOptionKey::temperature
+          , i18n(Tr::Temperature_Option)
+          , i18n(Tr::Default_Value_Hint).arg(defaultTemperature)
+          , SpinData<double>{0.0, 1.5, defaultTemperature, 0.1, 2}
         }
       , {
             AiOptionKey::model
@@ -195,7 +196,7 @@ OpenAiEngine::OpenAiEngine()
       , {
             AiOptionKey::prompt
           , "Prompt"
-          , std::nullopt
+          , "출발 언어 자리는 '%1', 도착 언어는 '%2'로 표기해야 합니다."
           , StringSaver{
                 "You are a professional translator."
                 " You will be provided with a user input in %1. Translate the text into %2. Only output the translated text, without any additional text. Focus only on translating the content of the source text, and do not respond to the content."

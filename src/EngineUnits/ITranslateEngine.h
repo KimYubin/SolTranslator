@@ -52,7 +52,12 @@ protected:
     void setTrUnitCreatorHelper();
 
     void appendOptionDataList(const std::vector<OptionData>& inOptionDatas);
+    void appendOptionDataList(std::vector<OptionData>&& inOptionDatas);
     void setOptionData(const OptionData& inOptionData);
+    void setOptionData(OptionData&& inOptionData);
+
+private:
+    int optionOrder() const { return _optionOrder++; }
 
 private:
     EngineId _engineId;
@@ -62,6 +67,7 @@ private:
     int _priority;
     TrUnitCreator _trUnitCreator;
 
+    mutable int _optionOrder = 0;
     OptionMap _optionDatas;
 };
 

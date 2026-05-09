@@ -51,10 +51,8 @@ protected:
     template <std::derived_from<TranslateUnit> T>
     void setTrUnitCreatorHelper();
 
-    void appendOptionDataList(const std::vector<OptionData>& inOptionDatas);
-    void appendOptionDataList(std::vector<OptionData>&& inOptionDatas);
-    void setOptionData(const OptionData& inOptionData);
-    void setOptionData(OptionData&& inOptionData);
+    void appendOptionDataList(std::vector<OptionData> inOptionDatas);
+    void setOptionData(OptionData inOptionData);
 
 private:
     int optionOrder() const { return _optionOrder++; }

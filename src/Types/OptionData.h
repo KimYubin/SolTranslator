@@ -60,9 +60,9 @@ struct ComboList
 
 struct StringSaver
 {
-    StringSaver(const QString& inString
+    StringSaver(QString inString
               , const bool inIsUsedSaveButton = false)
-        : defaultString(inString)
+        : defaultString(std::move(inString))
         , isUsedSaveButton(inIsUsedSaveButton)
     {}
 
@@ -82,15 +82,15 @@ using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<i
 
 struct OptionData
 {
-    OptionData(const OptionKey& inKey
-             , const QString& inHeaderName
-             , const std::optional<QString>& inDescription
-             , const OptionVariant& inDefaultValue
+    OptionData(OptionKey inKey
+             , QString inHeaderName
+             , std::optional<QString> inDescription
+             , OptionVariant inDefaultValue
              , const bool inIsSecretMode = false)
-        : key(inKey)
-        , headerName(inHeaderName)
-        , description(inDescription)
-        , defaultValue(inDefaultValue)
+        : key(std::move(inKey))
+        , headerName(std::move(inHeaderName))
+        , description(std::move(inDescription))
+        , defaultValue(std::move(inDefaultValue))
         , isSecretMode(inIsSecretMode)
     {}
 

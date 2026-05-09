@@ -17,9 +17,9 @@ public:
 
 namespace AiOptionKey
 {
-inline const OptionKey model{"model"};
-inline const OptionKey prompt{"prompt"};
-inline const OptionKey temperature{"temperature"};
+inline const OptionKey Model{"model"};
+inline const OptionKey Prompt{"prompt"};
+inline const OptionKey Temperature{"temperature"};
 }
 
 

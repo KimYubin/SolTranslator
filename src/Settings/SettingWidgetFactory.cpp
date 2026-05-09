@@ -3,6 +3,7 @@
 #include "SettingWidgetFactory.h"
 
 #include "Managers/ConfigManager.h"
+#include "SubWidgets/CustomMenuTextEdit.h"
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SolButton.h"
 #include "Utils/SolI18n.h"
@@ -11,7 +12,6 @@
 #include <QDoubleSpinBox>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QLineEdit>
 #include <QTimer>
 
 using Sol::i18n;
@@ -48,13 +48,16 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
 
     const StringSaver& optData = *optDataPtr;
 
-    QWidget* layoutWidget = new QWidget;
-    QLineEdit* lineEdit   = new QLineEdit(layoutWidget);
-    QHBoxLayout* hLayout  = new QHBoxLayout(layoutWidget);
+    QWidget* layoutWidget  = new QWidget;
+    MenuLineEdit* lineEdit = new MenuLineEdit(layoutWidget);
+    QHBoxLayout* hLayout   = new QHBoxLayout(layoutWidget);
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(lineEdit);
 
-    QString phText = inCurrentVal;
+    const QString optDefaultStr = inOptData.getDefaultValue().toString();
+
+    // placeholder
+    QString phText = optDefaultStr;
     if (inOptData.isSecretMode)
     {
         lineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
@@ -67,14 +70,24 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
             phText = QString{"*******"};
         }
     }
+    else
+    {
+        // The placeholder is a default value, When it is not a secret key
+        if (optDefaultStr != inCurrentVal)
+        {
+            lineEdit->setText(inCurrentVal);
+        }
+    }
     lineEdit->setPlaceholderText(phText);
 
-    auto setupFunctor = [lineEdit, setFunc = std::move(inSetFunction)]() mutable
+
+    // Bind option setup functor.
+    auto setupFunctor = [lineEdit, setFunc = std::move(inSetFunction), optDefaultStr]() mutable
     {
-        const QString inputText = lineEdit->text();
+        QString inputText = lineEdit->text();
         if (inputText.isEmpty())
         {
-            return;
+            inputText = optDefaultStr;
         }
 
         setFunc(inputText);
@@ -82,8 +95,7 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
 
     if (optData.isUsedSaveButton)
     {
-        SolButton* saveButton = new SolButton(layoutWidget);
-        saveButton->setText(i18n(Tr::Save));
+        SolButton* saveButton = new SolButton(i18n(Tr::Save), layoutWidget);
         hLayout->addWidget(saveButton);
         connect(saveButton, &SolButton::clicked, lineEdit, std::move(setupFunctor));
     }

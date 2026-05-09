@@ -17,7 +17,7 @@ public:
         : QPushButton(parent)
     {}
 
-    SolButton(const QString& text, QWidget* parent)
+    explicit SolButton(const QString& text, QWidget* parent = nullptr)
         : QPushButton(text, parent)
     {}
 

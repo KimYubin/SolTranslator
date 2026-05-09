@@ -234,8 +234,9 @@ QMenu#trayIconMenu::separator
 
 /* -------------------------------- */
 /* TextEdit QMenu */
+QLineEdit QMenu,
 QTextEdit QMenu,
-QPlainTextEdit QMenu 
+QPlainTextEdit QMenu
 {
   background-color: rgba(35, 36, 37, 1);
   border: 1px solid rgba(120, 120, 120, 1);
@@ -243,6 +244,7 @@ QPlainTextEdit QMenu
   padding: 4px;
 }
 
+QLineEdit QMenu::item,
 QTextEdit QMenu::item,
 QPlainTextEdit QMenu::item
 {
@@ -253,12 +255,15 @@ QPlainTextEdit QMenu::item
   color: rgba(225, 225, 225, 1);
   padding: 8px 8px 8px 18px;
 }
+
+QLineEdit QMenu::icon,
 QTextEdit QMenu::icon,
 QPlainTextEdit QMenu::icon
 {
   margin: 8px;
 }
 
+QLineEdit QMenu::separator,
 QTextEdit QMenu::separator,
 QPlainTextEdit QMenu::separator
 {

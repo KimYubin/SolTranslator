@@ -31,15 +31,15 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = engineAttribute(AiOptionKey::model).toString();
+    chatBodyJson["model"] = engineAttribute(AiOptionKey::Model).toString();
     if (inIsStreaming)
     {
         chatBodyJson["stream"] = inIsStreaming;
     }
-    chatBodyJson["temperature"] = engineAttribute(AiOptionKey::temperature).toDouble();
+    chatBodyJson["temperature"] = engineAttribute(AiOptionKey::Temperature).toDouble();
 
 
-    const QString& prompt = engineAttribute(AiOptionKey::prompt).toString();
+    const QString& prompt = engineAttribute(AiOptionKey::Prompt).toString();
 
     QJsonArray messages;
 
@@ -182,19 +182,19 @@ OpenAiEngine::OpenAiEngine()
           , true
         }
       , {
-            AiOptionKey::temperature
+            AiOptionKey::Temperature
           , i18n(Tr::Temperature_Option)
           , i18n(Tr::Default_Value_Hint).arg(defaultTemperature)
           , SpinData<double>{0.0, 1.5, defaultTemperature, 0.1, 2}
         }
       , {
-            AiOptionKey::model
+            AiOptionKey::Model
           , "Model Select"
           , std::nullopt
           , StringSaver{"gpt-4o-mini"}
         }
       , {
-            AiOptionKey::prompt
+            AiOptionKey::Prompt
           , "Prompt"
           , "출발 언어 자리는 '%1', 도착 언어는 '%2'로 표기해야 합니다."
           , StringSaver{

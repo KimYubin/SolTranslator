@@ -3,47 +3,39 @@
 #ifndef CUSTOMMENUTEXTEDIT_H
 #define CUSTOMMENUTEXTEDIT_H
 
+#include <QLineEdit>
+#include <QMenu>
 #include <QPlainTextEdit>
 #include <QTextBrowser>
 
-
 /**
- * contextMenu의 창테두리와 배경을 투명하게 처리하기 위한 클래스입니다. 
+ * The CustomMenuTextEdit class is a general text editor class
+ * that provides a rounded corner context menu.
+ *
+ * @tparam BaseTextEdit requires virtual contextMenuEvent().
  */
-class MenuPlainTextEdit : public QPlainTextEdit
+template <typename BaseTextEdit>
+class CustomMenuTextEdit : public BaseTextEdit
 {
-    Q_OBJECT
-
 public:
-    explicit MenuPlainTextEdit(QWidget* parent = nullptr);
-    ~MenuPlainTextEdit() override;
+    using BaseTextEdit::BaseTextEdit;
 
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
+protected:
+    virtual void contextMenuEvent(QContextMenuEvent* event) override
+    {
+        QMenu* menu = this->createStandardContextMenu();
+        menu->setAttribute(Qt::WA_TranslucentBackground);
+        menu->setWindowFlag(Qt::FramelessWindowHint);
+        menu->setWindowFlag(Qt::NoDropShadowWindowHint);
+        menu->popup(event->globalPos());
+
+        event->accept();
+    }
 };
 
-
-class MenuTextEdit : public QTextEdit
-{
-    Q_OBJECT
-
-public:
-    explicit MenuTextEdit(QWidget* parent = nullptr);
-    ~MenuTextEdit() override;
-
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
-};
-
-
-class MenuTextBrowser : public QTextBrowser
-{
-    Q_OBJECT
-
-public:
-    explicit MenuTextBrowser(QWidget* parent = nullptr);
-    ~MenuTextBrowser() override;
-
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
-};
-
+using MenuPlainTextEdit = CustomMenuTextEdit<QPlainTextEdit>;
+using MenuTextEdit      = CustomMenuTextEdit<QTextEdit>;
+using MenuTextBrowser   = CustomMenuTextEdit<QTextBrowser>;
+using MenuLineEdit      = CustomMenuTextEdit<QLineEdit>;
 
 #endif //CUSTOMMENUTEXTEDIT_H

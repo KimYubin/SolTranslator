@@ -301,6 +301,55 @@ void PopupTranslateWidget::setupUI()
     _sizeGrip->setFocus();
 }
 
+namespace
+{
+void fixTailSpaceInBold(QTextDocument& inDoc)
+{
+    QTextCursor textCursor(&inDoc);
+
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
+    {
+        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
+        {
+            QTextFragment fragment = blockIt.fragment();
+            if (!fragment.isValid())
+            {
+                continue;
+            }
+
+            QTextCharFormat charFmt = fragment.charFormat();
+            if (charFmt.fontWeight() < QFont::DemiBold)
+            {
+                continue;
+            }
+
+            // Check if the last character is a space.
+            const QString fragText = fragment.text();
+            if (fragText.isEmpty() || (!fragText.back().isSpace()))
+            {
+                continue;
+            }
+
+            // Find the last index that is not a space.
+            auto findIt = std::ranges::find_last_if_not(fragText, [](const QChar& inCh) { return inCh.isSpace(); });
+
+            const int noSpaceLastIdx = std::ranges::distance(fragText.begin(), findIt.begin());
+
+            const int tailSpaceStart = fragment.position() + (noSpaceLastIdx + 1);
+            const int tailSpaceEnd   = fragment.position() + fragText.size();
+
+            textCursor.setPosition(tailSpaceStart);
+            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
+
+            QTextCharFormat normalFmt = charFmt;
+            normalFmt.setFontWeight(QFont::Normal);
+
+            textCursor.mergeCharFormat(normalFmt);
+        }
+    }
+}
+} // anonymous namespace
+
 void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
@@ -322,16 +371,19 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
     }
 
     SolAsync::asyncLaunch<QString>(
-        this,
-        [htmlStr = inSourceText]() mutable
+        this
+      , [htmlStr = inSourceText]() mutable
         {
             // list 무시하는 문법 제거.
             QTextDocument txtDoc;
             txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
 
+            // ** ** 강조 표시 내부 마지막 공백 수정
+            fixTailSpaceInBold(txtDoc);
+
             return txtDoc.toMarkdown();
-        },
-        [this, inSourceLang, inTargetLang](const QString& inMd)
+        }
+      , [this, inSourceLang, inTargetLang](const QString& inMd)
         {
             executeTranslateImpl(solConfig.currentEngineId()
                                , inMd
@@ -339,7 +391,8 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                , inSourceLang
                                , inTargetLang
                                , false);
-        });
+        }
+    );
 }
 
 

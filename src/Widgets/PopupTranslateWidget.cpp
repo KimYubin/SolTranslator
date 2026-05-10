@@ -331,11 +331,22 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
             }
 
             // Find the last index that is not a space.
-            auto findIt = std::ranges::find_last_if_not(fragText, [](const QChar& inCh) { return inCh.isSpace(); });
+            int tailSpaceStartIdx = 0;
+            for (int idx = fragText.size() - 1; idx >= 0; --idx)
+            {
+                if (fragText[idx].isSpace() == false)
+                {
+                    tailSpaceStartIdx = idx + 1;
+                    break;
+                }
+            }
 
-            const int noSpaceLastIdx = std::ranges::distance(fragText.begin(), findIt.begin());
+            if (tailSpaceStartIdx == fragText.size())
+            {
+                continue;
+            }
 
-            const int tailSpaceStart = fragment.position() + (noSpaceLastIdx + 1);
+            const int tailSpaceStart = fragment.position() + tailSpaceStartIdx;
             const int tailSpaceEnd   = fragment.position() + fragText.size();
 
             textCursor.setPosition(tailSpaceStart);

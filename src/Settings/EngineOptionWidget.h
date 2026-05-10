@@ -6,12 +6,17 @@
 #include "IOptionWidget.h"
 #include "Types/SolExpected.hpp"
 
+class OptionGroupBox;
+class OptionKey;
 class QTabWidget;
 class ITranslateEngine;
 struct OptionData;
 class SettingCard;
 class EngineId;
 class SolTranslatorCore;
+
+template <typename T>
+using MoveFunc = std::move_only_function<T>;
 
 class EngineOptionWidget : public IOptionWidget
 {
@@ -25,17 +30,30 @@ protected:
     void addEngineSettings(const ITranslateEngine* inEngine);
 
 private:
-    friend class EngineOptionPage;
+    void showErrorMessage(const Error& inError);
 
-    Expected<SettingCard*> stringSaverCard(QWidget* inParent
-                                         , const EngineId& inEngineId
-                                         , const OptionData& inOptData);
+    /**
+     * Get the stored engine attribute value
+     * and create the setAttribute functor.
+     *
+     * @tparam T load/store type
+     * @return stored value, setAttribute functor.
+     */
+    template <typename T>
+    Expected<std::tuple<T, MoveFunc<void(const T&)>>> makeSetAttribute(const EngineId& inEngineId
+                                                                     , const OptionKey& inKey);
 
-    Expected<SettingCard*> doubleSpinCard(QWidget* inParent
-                                        , const EngineId& inEngineId
-                                        , const OptionData& inOptData);
+    void stringSaverCard(OptionGroupBox* inOptGroup
+                       , const EngineId& inEngineId
+                       , const OptionData& inOptData);
+
+    void doubleSpinCard(OptionGroupBox* inOptGroup
+                      , const EngineId& inEngineId
+                      , const OptionData& inOptData);
 
 private:
+    friend class EngineOptionPage;
+
     QTabWidget* _tabWidget;
 };
 

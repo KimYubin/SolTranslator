@@ -85,7 +85,7 @@ protected:
      */
     void finishRequest(const QString& inTargetText);
 
-    QVariant engineAttribute(const OptionKey& inKey) const;
+    QVariant getOption(const OptionKey& inKey) const;
 
 protected:
     QPointer<TranslateManager> _translateManager;

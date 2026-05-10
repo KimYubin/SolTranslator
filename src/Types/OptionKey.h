@@ -17,7 +17,7 @@ public:
 
     explicit OptionKey(const QString& inStr) : _value(inStr) {}
     explicit OptionKey(QString&& inStr) noexcept : _value(std::move(inStr)) {}
-    OptionKey(const OptionKey& inOther) : _value(inOther._value) {}
+    OptionKey(const OptionKey& inOther) = default;
     OptionKey(OptionKey&& inOther) noexcept : _value(std::move(inOther._value)) {}
 
     OptionKey& operator=(const OptionKey& inOther)

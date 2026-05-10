@@ -105,6 +105,8 @@ qt_add_executable(
         src/SubWidgets/LoadingBar.h
         src/SubWidgets/LoadingSpinner.cpp
         src/SubWidgets/LoadingSpinner.h
+        src/SubWidgets/OptionGroupBox.cpp
+        src/SubWidgets/OptionGroupBox.h
         src/SubWidgets/ResultTextEdit.cpp
         src/SubWidgets/ResultTextEdit.h
         src/SubWidgets/SettingCard.cpp

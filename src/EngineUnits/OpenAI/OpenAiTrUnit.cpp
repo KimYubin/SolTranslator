@@ -27,19 +27,19 @@ void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)
 {
     QNetworkRequest request(_trEngine->getDefaultUrl());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", ("Bearer " + engineAttribute(TrEngineOptionKey::ApiKey).toString()).toUtf8());
+    request.setRawHeader("Authorization", ("Bearer " + getOption(TrEngineOptionKey::ApiKey).toString()).toUtf8());
 
     QJsonObject chatBodyJson;
 
-    chatBodyJson["model"] = engineAttribute(AiOptionKey::Model).toString();
+    chatBodyJson["model"] = getOption(AiOptionKey::Model).toString();
     if (inIsStreaming)
     {
         chatBodyJson["stream"] = inIsStreaming;
     }
-    chatBodyJson["temperature"] = engineAttribute(AiOptionKey::Temperature).toDouble();
+    chatBodyJson["temperature"] = getOption(AiOptionKey::Temperature).toDouble();
 
 
-    const QString& prompt = engineAttribute(AiOptionKey::Prompt).toString();
+    const QString& prompt = getOption(AiOptionKey::Prompt).toString();
 
     QJsonArray messages;
 

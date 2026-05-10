@@ -4,6 +4,7 @@
 #define CONFIGMANAGER_H
 
 #include "AbstractManager.h"
+#include "Types/SolExpected.hpp"
 
 struct OptionData;
 class OptionKey;
@@ -38,8 +39,8 @@ public:
     void setSecretKey(const QString& inKey, const QVariant& inValue);
     QVariant secretKey(const QString& inKey, const QVariant& inDefault) const;
 
-    void setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
-    QVariant engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const;
+    Expected<void> setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
+    Expected<QVariant> engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const;
 
 
     void setStartRun(const bool inStartRun);

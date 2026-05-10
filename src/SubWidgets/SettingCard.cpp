@@ -10,7 +10,9 @@
 #include <QStyleOption>
 
 
-SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos)
+SettingCard::SettingCard(QWidget* inContent
+                       , QWidget* parent
+                       , const ContentPos contentPos)
     : QFrame(parent)
     , _content(inContent)
     , _contentPos(contentPos)
@@ -34,12 +36,12 @@ SettingCard::SettingCard(QWidget* inContent, QWidget* parent, const ContentPos c
         headerCol  = 1;
         contentCol = 0;
     }
-    int contentRow = 0;
+    int contentRow     = 0;
     int contentRowSpan = 1;
     if (_contentPos == ContentPos::Down)
     {
-        contentCol = 0;
-        contentRow = 2;
+        contentCol     = 0;
+        contentRow     = 2;
         contentRowSpan = 2;
     }
     _header = new QLabel(_gridLayoutWidget);

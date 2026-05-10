@@ -4,6 +4,7 @@
 
 #include "Managers/ConfigManager.h"
 #include "SubWidgets/CustomMenuTextEdit.h"
+#include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SolButton.h"
 #include "Utils/SolI18n.h"
@@ -138,49 +139,31 @@ Expected<SettingCard*> CardFactory::createDoubleSpin(QWidget* inParent
 
 // ~===================
 // OptionWidgetFactory
-GroupLayout OptionWidgetFactory::generateGroupBoxLayout(const QString& inGroupTitle)
+
+OptionGroupBox* OptionWidgetFactory::createOptionGroupBox(const QString& inGroupTitle
+                                                        , QGridLayout* inParentLayout
+                                                        , const int inRow
+                                                        , const int inColumn
+                                                        , const Qt::Alignment inAlignment)
 {
-    QString objStr = inGroupTitle;
-    objStr.remove(QRegularExpression("\\s"));
-    objStr.remove(QRegularExpression("[^a-zA-Z0-9_-]"));
-
-    QGroupBox* groupBox = new QGroupBox();
-    groupBox->setObjectName(objStr + "GroupBox");
-    groupBox->setAlignment(Qt::AlignmentFlag::AlignLeading | Qt::AlignmentFlag::AlignLeft | Qt::AlignmentFlag::AlignTop);
-    groupBox->setFlat(true);
-    groupBox->setTitle(inGroupTitle);
-
-    QVBoxLayout* vLayout = new QVBoxLayout(groupBox);
-    vLayout->setObjectName(objStr + "VLayout");
-    vLayout->setContentsMargins(0, 0, 0, 0);
-
-    return {groupBox, vLayout};
-}
-
-GroupLayout OptionWidgetFactory::createOptionGroupBox(const QString& inGroupTitle
-                                                    , QGridLayout* inParentLayout
-                                                    , const int inRow
-                                                    , const int inColumn
-                                                    , const Qt::Alignment inAlignment)
-{
-    auto [groupBox, vLayout] = generateGroupBoxLayout(inGroupTitle);
+    OptionGroupBox* groupBox = new OptionGroupBox(inGroupTitle);
 
     inParentLayout->addWidget(groupBox, inRow, inColumn, inAlignment | Qt::AlignTop);
 
-    return {groupBox, vLayout};
+    return groupBox;
 }
 
-GroupLayout OptionWidgetFactory::createOptionGroupBox(const QString& inGroupTitle
-                                                    , QGridLayout* inParentLayout
-                                                    , const int inRow
-                                                    , const int inColumn
-                                                    , const int inRowSpan
-                                                    , const int inColumnSpan
-                                                    , const Qt::Alignment inAlignment)
+OptionGroupBox* OptionWidgetFactory::createOptionGroupBox(const QString& inGroupTitle
+                                                        , QGridLayout* inParentLayout
+                                                        , const int inRow
+                                                        , const int inColumn
+                                                        , const int inRowSpan
+                                                        , const int inColumnSpan
+                                                        , const Qt::Alignment inAlignment)
 {
-    auto [groupBox, vLayout] = generateGroupBoxLayout(inGroupTitle);
+    OptionGroupBox* groupBox = new OptionGroupBox(inGroupTitle);
 
     inParentLayout->addWidget(groupBox, inRow, inColumn, inRowSpan, inColumnSpan, inAlignment | Qt::AlignTop);
 
-    return {groupBox, vLayout};
+    return groupBox;
 }

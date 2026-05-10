@@ -233,7 +233,14 @@ void TranslateUnit::finishRequest(const QString& inTargetText)
     completeTranslatedText(_targetText);
 }
 
-QVariant TranslateUnit::engineAttribute(const OptionKey& inKey) const
+QVariant TranslateUnit::getOption(const OptionKey& inKey) const
 {
-    return solConfig.engineAttribute(_trEngine->getEngineId(), inKey);
+    Expected<QVariant> attrExp = solConfig.engineAttribute(_trEngine->getEngineId(), inKey);
+    if (!attrExp)
+    {
+        solDebug << "getOption failed" << attrExp.error();
+        return {};
+    }
+
+    return attrExp.value();
 }

@@ -23,7 +23,9 @@ public:
     };
 
     /** SettingCard는 inContent의 소유권을 갖습니다. */
-    explicit SettingCard(QWidget* inContent, QWidget* parent, const ContentPos contentPos = ContentPos::Right);
+    explicit SettingCard(QWidget* inContent
+                       , QWidget* parent = nullptr
+                       , const ContentPos contentPos = ContentPos::Right);
     ~SettingCard() override;
 
     /***/

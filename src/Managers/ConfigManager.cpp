@@ -3,7 +3,6 @@
 #include "ConfigManager.h"
 
 #include "EngineManager.h"
-#include "EngineUnits/IAiEngine.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "Types/OptionKey.h"
@@ -25,7 +24,6 @@
 namespace
 {
 const QString CurrentEngine = "CurrentEngine";
-const QString API_Key     = "API_Key/";
 
 const QString EngineAttribute = "EngineAttribute/";
 
@@ -126,33 +124,36 @@ QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
 }
 } // anonymous namespace
 
-void ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
+Expected<void> ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
     const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
     if (optExp.has_value() == false)
     {
-        // todo: 적절한 오류 처리 필요.
-        return;
+        return makeUnexpected("Not found Engine OptionData. Check the registration of the engine OptionData. key: " + inKey.toString());
     }
 
     if (optExp.value()->isSecretMode)
     {
         setSecretKey(engineAttributeKey(inEngineId, inKey), inValue);
-        return;
+        return {};
     }
 
     _settings->setValue(engineAttributeKey(inEngineId, inKey), inValue);
+    return {};
 }
 
-QVariant ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
+Expected<QVariant> ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
     const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
     if (optExp.has_value() == false)
     {
-        // todo: 적절한 오류 처리 필요.
-        return {};
+        return makeUnexpected(QString{
+            "Not found Engine OptionData. "
+            "Check the registration of the engine OptionData. "
+            "Engine: %1, key: %2"
+        }.arg(inKey.toString()));
     }
 
     const OptionData& optData = *optExp.value();

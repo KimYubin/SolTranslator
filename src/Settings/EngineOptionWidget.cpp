@@ -8,10 +8,12 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/EngineManager.h"
 #include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/SettingCard.h"
 #include "Types/EngineId.h"
 #include "Types/SolExpected.hpp"
 #include "Utils/SolI18n.h"
+#include "Utils/SolLog.h"
 
 #include <QDoubleSpinBox>
 #include <QGridLayout>
@@ -57,14 +59,13 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
     _tabWidget->addTab(layoutWidget, inEngine->getDisplayName());
 
     const EngineId& engineId = inEngine->getEngineId();
-    auto [optGroup, optVLay] = OptionWidgetFactory::createOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options)
+    OptionGroupBox* optGroup = OptionWidgetFactory::createOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options)
                                                                        , gridLayout
                                                                        , gridLayout->rowCount()
                                                                        , 0);
 
     for (const OptionData* optData : optionList)
     {
-        Expected<SettingCard*> settingCard;
         switch (optData->getOptionDataType())
         {
         case OptionData::Type::None:
@@ -79,58 +80,87 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
             break;
         case OptionData::Type::SpinDataDouble:
         {
-            settingCard = doubleSpinCard(optGroup, engineId, *optData);
+            doubleSpinCard(optGroup, engineId, *optData);
             break;
         }
         case OptionData::Type::StringSaver:
         {
-            settingCard = stringSaverCard(optGroup, engineId, *optData);
+            stringSaverCard(optGroup, engineId, *optData);
         }
         break;
         case OptionData::Type::Combo:
             break;
         default: ;
         }
-
-        if (settingCard)
-        {
-            optVLay->addWidget(settingCard.value(), 0, Qt::AlignmentFlag::AlignTop);
-        }
     }
 }
 
-namespace
+void EngineOptionWidget::showErrorMessage(const Error& inError)
 {
+    solDebug << inError;
+}
+
 template <typename T>
-std::tuple<T, std::move_only_function<void(const T&)>> makeSetAttribute(const EngineId& inEngineId
-                                                                      , const OptionKey& inKey)
+Expected<std::tuple<T, MoveFunc<void(const T&)>>>
+    EngineOptionWidget::makeSetAttribute(const EngineId& inEngineId
+                                       , const OptionKey& inKey)
 {
-    const T curValue  = solConfig.engineAttribute(inEngineId, inKey).value<T>();
-    auto saveFunction = [inEngineId, inKey](const T& inVal)
+    Expected<QVariant> attrExp = solConfig.engineAttribute(inEngineId, inKey);
+    if (!attrExp)
     {
-        solConfig.setEngineAttribute(inEngineId, inKey, inVal);
+        return makeUnexpected(attrExp.error());
+    }
+
+    const T curValue  = attrExp.value().value<T>();
+    auto saveFunction = [inEngineId, inKey, this](const T& inVal)
+    {
+        const Expected<void> setExp = solConfig.setEngineAttribute(inEngineId, inKey, inVal);
+        if (!setExp)
+        {
+            showErrorMessage(setExp.error());
+        }
     };
 
-    return {curValue, saveFunction};
-}
-} // anonymous namespace
-
-Expected<SettingCard*> EngineOptionWidget::stringSaverCard(QWidget* inParent
-                                                         , const EngineId& inEngineId
-                                                         , const OptionData& inOptData)
-{
-    auto [curValue, saveFunction] = makeSetAttribute<QString>(inEngineId, inOptData.key);
-
-    return CardFactory::createStringSaver(inParent, inOptData, curValue, std::move(saveFunction));
+    return std::tuple{curValue, saveFunction};
 }
 
-Expected<SettingCard*> EngineOptionWidget::doubleSpinCard(QWidget* inParent
-                                                        , const EngineId& inEngineId
-                                                        , const OptionData& inOptData)
+void EngineOptionWidget::stringSaverCard(OptionGroupBox* inOptGroup
+                                       , const EngineId& inEngineId
+                                       , const OptionData& inOptData)
 {
-    auto [curValue, saveFunction] = makeSetAttribute<double>(inEngineId, inOptData.key);
+    auto makeSetAttrExp = makeSetAttribute<QString>(inEngineId, inOptData.key);
+    if (!makeSetAttrExp)
+    {
+        showErrorMessage(makeSetAttrExp.error());
+        return;
+    }
 
-    return CardFactory::createDoubleSpin(inParent, inOptData, curValue, std::move(saveFunction));
+    auto& [curValue, saveFunction] = makeSetAttrExp.value();
+
+    Expected<SettingCard*> card = CardFactory::createStringSaver(inOptGroup, inOptData, curValue, std::move(saveFunction));
+    if (card)
+    {
+        inOptGroup->addChild(card.value());
+    }
+}
+
+void EngineOptionWidget::doubleSpinCard(OptionGroupBox* inOptGroup
+                                      , const EngineId& inEngineId
+                                      , const OptionData& inOptData)
+{
+    auto makeSetAttrExp = makeSetAttribute<double>(inEngineId, inOptData.key);
+    if (!makeSetAttrExp)
+    {
+        showErrorMessage(makeSetAttrExp.error());
+        return;
+    }
+    auto& [curValue, saveFunction] = makeSetAttrExp.value();
+
+    Expected<SettingCard*> card = CardFactory::createDoubleSpin(inOptGroup, inOptData, curValue, std::move(saveFunction));
+    if (card)
+    {
+        inOptGroup->addChild(card.value());
+    }
 }
 
 

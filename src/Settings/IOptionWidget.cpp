@@ -119,7 +119,7 @@ void IOptionWidget::finish()
 {}
 
 
-std::tuple<QGroupBox*, QVBoxLayout*> IOptionWidget::addNewOptionGroupBox(const QString& inGroupTitle)
+OptionGroupBox* IOptionWidget::addNewOptionGroupBox(const QString& inGroupTitle)
 {
     return OptionWidgetFactory::createOptionGroupBox(inGroupTitle, _mainLayout, _mainLayout->rowCount(), 0);
 }

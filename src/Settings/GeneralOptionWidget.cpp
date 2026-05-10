@@ -6,6 +6,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/StyleManger.h"
 #include "SubWidgets/DropdownMenu.h"
+#include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SwitchButton.h"
 #include "Utils/SolI18n.h"
@@ -22,7 +23,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
 {
     setObjectName("GeneralOptionWidget");
 
-    auto [shapeBehaviorGroup, shapeBehaviorVLay] = addNewOptionGroupBox(i18n(Tr::Appearance_Behavior));
+    OptionGroupBox* shapeBehaviorGroup = addNewOptionGroupBox(i18n(Tr::Appearance_Behavior));
 
     // 시작시 실행
     {
@@ -35,7 +36,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         {
             solConfig.setStartRun(inState == Qt::CheckState::Checked);
         });
-        shapeBehaviorVLay->addWidget(startRunCard, 0, Qt::AlignmentFlag::AlignTop);
+
+        shapeBehaviorGroup->addChild(startRunCard);
     }
 
     // 창 위치 크기 기억
@@ -48,7 +50,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         {
             solConfig.setIsRememberWindowGeometry(inState == Qt::CheckState::Checked);
         });
-        shapeBehaviorVLay->addWidget(rememberWindow, 0, Qt::AlignmentFlag::AlignTop);
+
+        shapeBehaviorGroup->addChild(rememberWindow);
     }
 
 
@@ -62,12 +65,14 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         themeButton->setCheckable(false);
         connect(themeButton, &QPushButton::clicked, this, []()
         {
-            StyleManger::applyTheme();
+            StyleManger::applyTheme(/*dark*/);
         });
-        shapeBehaviorVLay->addWidget(themeCard, 0, Qt::AlignmentFlag::AlignTop);
+
+        shapeBehaviorGroup->addChild(themeCard);
     }
 
-    auto [popupTrGroup, popupTrVLay] = addNewOptionGroupBox(i18n(Tr::Popup_Translation));
+
+    OptionGroupBox* popupTrGroup = addNewOptionGroupBox(i18n(Tr::Popup_Translation));
 
     // 팝업번역 도착언어 선택
     {
@@ -94,7 +99,7 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         const int curLangIdx         = selectCombo->findData(static_cast<int>(curTargetLang));
         selectCombo->setCurrentIndex(curLangIdx);
 
-        popupTrVLay->addWidget(selectTargetLang, 0, Qt::AlignmentFlag::AlignTop);
+        popupTrGroup->addChild(selectTargetLang);
     }
 
     // 팝업 임시창 선택
@@ -108,7 +113,8 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         {
             solConfig.setIsPopupTrWindowTemp(inState == Qt::CheckState::Checked);
         });
-        popupTrVLay->addWidget(popupTempCard, 0, Qt::AlignmentFlag::AlignTop);
+
+        popupTrGroup->addChild(popupTempCard);
     }
 
 

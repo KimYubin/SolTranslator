@@ -9,6 +9,7 @@
 #include <QPointer>
 #include <QWidget>
 
+class OptionGroupBox;
 class QScrollBar;
 class QScrollArea;
 class QHBoxLayout;
@@ -38,13 +39,11 @@ protected:
 
 
     /**
-     * 새로운 GroupBox와 GroupBox 내부에서 사용되는 VBoxLayout을 만들어 제공합니다.
-     * mainLayout에 마지막에 추가됩니다.
-     * 
-     * @param inGroupTitle GroupBox 타이틀에 사용할 이름 
-     * @return 그룹박스와 그룹박스 내부에 배치된 VBoxLayout을 반환합니다.
+     * Add a new OptionGroupBox at the end of _mainLayout.
+     *
+     * @param inGroupTitle GroupBox 타이틀에 사용할 이름
      */
-    std::tuple<QGroupBox*, QVBoxLayout*> addNewOptionGroupBox(const QString& inGroupTitle);
+    OptionGroupBox* addNewOptionGroupBox(const QString& inGroupTitle);
 
 public:
     IOptionPage* getOptionPage() const;

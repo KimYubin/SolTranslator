@@ -7,17 +7,42 @@
 namespace Sol
 {
 
-// html 문법 정리를 위한 normalize.
+/**
+ * Normalize the HTML in the QTextDocument to Qt HTML style. 
+ */
 void normalizeHtml(QTextDocument& inDoc);
 
-// 강조 표시(**) 내부 마지막 공백 수정
+/**
+ * Fix the last space of in Bold(**).
+ * Prevent broken bold.
+ */
 void fixTailSpaceInBold(QTextDocument& inDoc);
 
-// 테이블 내부 블록 나뉨 수정. 나눠진 블록은 옆 cell로 해석될 수 있음.
+/**
+ * Integrate the divided blocks in the cell.
+ * Prevent the divided blocks from being interpreted as adjacent cells.
+ */
 void fixTableCell(QTextDocument& inDoc);
 
-// 테이블 내부 줄바꿈을 마크다운에서 깨지지 안도록 조정
+/**
+ * Fix the table cell in Markdown to prevent line breaks from being broken.
+ *
+ * @note If apply the return value back to QTextDocument, it may need to be fixed again.
+ * @return Markdown string.
+ */
 QString fixNewLineInTable(QTextDocument& inDoc);
+
+/**
+ * Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ */
+QString htmlToMarkdown(QString inHtml);
+
+/**
+ * Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ */
+QString htmlToMarkdown(QTextDocument& inDoc);
 
 } // namespace Sol 
 

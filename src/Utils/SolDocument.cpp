@@ -2,6 +2,8 @@
 
 #include "SolDocument.h"
 
+#include "SolLog.h"
+
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -107,54 +109,70 @@ void fixTableCell(QTextDocument& inDoc)
     }
 }
 
-namespace
+QString fixNewLineInTable(QTextDocument& inDoc)
 {
-const QString newLineMarker = "__CODE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
+    // html-> replace <br/> to marker -> convert markdown -> replace marker to <br/>.
 
-QString replaceNewLineInTable(const QString& inHtml)
-{
-    QString resStr;
-    resStr.reserve(inHtml.size());
+    const QString originHtml = inDoc.toHtml();
 
-    // <table>
+    QString replacedHtml;
+    replacedHtml.reserve(originHtml.size());
+
+    // Only in <table>
     static const QRegularExpression tablePattern(R"(<table\b[^>]*>[\s\S]*?</table>)"
                                                , QRegularExpression::CaseInsensitiveOption);
     static const QRegularExpression brPattern(R"(<br\s*/?>)"
                                             , QRegularExpression::CaseInsensitiveOption);
 
-    QRegularExpressionMatchIterator reIt = tablePattern.globalMatch(inHtml);
+    static const QString newLineMarker = "__CODE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
+
+    // Replace <br/> to marker
+    QRegularExpressionMatchIterator reIt = tablePattern.globalMatch(originHtml);
 
     int lastPos = 0;
     while (reIt.hasNext())
     {
         QRegularExpressionMatch match = reIt.next();
 
-        // 표 이전의 텍스트 추가
-        resStr += inHtml.mid(lastPos, match.capturedStart() - lastPos);
+        // Append text before table. 표 이전의 텍스트 추가
+        replacedHtml += originHtml.mid(lastPos, match.capturedStart() - lastPos);
 
-        // 표 내부의 줄바꿈 치환
+        // Replace line break in table
         QString tableHtml = match.captured();
         tableHtml.replace(brPattern, newLineMarker);
-        resStr += tableHtml;
+        replacedHtml += tableHtml;
 
         lastPos = match.capturedEnd();
     }
 
-    resStr += inHtml.mid(lastPos);
-
-    return resStr;
-}
-} // anonymous namespace
+    replacedHtml += originHtml.mid(lastPos);
 
 
-QString fixNewLineInTable(QTextDocument& inDoc)
-{
-    inDoc.setHtml(replaceNewLineInTable(inDoc.toHtml()));
-
+    // Convert to markdown. And, replace marker to <br/>.
+    inDoc.setHtml(replacedHtml);
     QString docMarkdown = inDoc.toMarkdown();
 
     docMarkdown.replace(newLineMarker, R"(<br/>)");
 
     return docMarkdown;
+}
+
+QString htmlToMarkdown(QString inHtml)
+{
+    // Remove the syntax that ignores the list.
+    QTextDocument txtDoc;
+    txtDoc.setHtml(inHtml.replace(QRegularExpression(R"(list-style: none)"), ""));
+
+    return htmlToMarkdown(txtDoc);
+}
+
+QString htmlToMarkdown(QTextDocument& inDoc)
+{
+    Sol::normalizeHtml(inDoc);
+    Sol::fixTailSpaceInBold(inDoc);
+    Sol::fixTableCell(inDoc);
+
+
+    return Sol::fixNewLineInTable(inDoc);
 }
 } // namespace Sol 

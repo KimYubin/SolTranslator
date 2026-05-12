@@ -324,15 +324,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         this,
         [htmlStr = inSourceText]() mutable
         {
-            // list 무시하는 문법 제거.
-            QTextDocument txtDoc;
-            txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
-
-            Sol::normalizeHtml(txtDoc);
-            Sol::fixTailSpaceInBold(txtDoc);
-            Sol::fixTableCell(txtDoc);
-
-            return Sol::fixNewLineInTable(txtDoc);
+            return Sol::htmlToMarkdown(htmlStr);
         },
         [this, inSourceLang, inTargetLang](const QString& inMd)
         {

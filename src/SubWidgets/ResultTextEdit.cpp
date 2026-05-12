@@ -126,10 +126,10 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     const QStringList inlineList = replaceCodeToMarker(inlineCodePattern, inlinePlaceMarker);
 
 
-    // Escape <> in outside of code.
-    static const QRegularExpression unescapedLT(R"((?<!\\)<)");
+    // Escape <> in outside of code. Except for <br/>.
+    static const QRegularExpression unescapedLT(R"((?<!\\)<(?!br/>))");
     md.replace(unescapedLT, R"(\<)");
-    static const QRegularExpression unescapedGT(R"((?<!\\)>)");
+    static const QRegularExpression unescapedGT(R"((?<!\\|br/)>)");
     md.replace(unescapedGT, R"(\>)");
 
 

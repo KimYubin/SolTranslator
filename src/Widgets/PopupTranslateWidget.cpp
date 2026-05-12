@@ -5,18 +5,17 @@
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"
-#include "SubWidgets/LoadingBar.h"
 #include "SubWidgets/LoadingSpinner.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Types/EngineId.h"
 #include "Utils/SolAsync.hpp"
+#include "Utils/SolDocument.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ui_PopupTranslateWidget.h"
 
-#include <QAbstractTextDocumentLayout>
 #include <QBoxLayout>
 #include <QEvent>
 #include <QGraphicsDropShadowEffect>
@@ -25,7 +24,7 @@
 #include <QRegularExpression>
 #include <QScreen>
 #include <QSizeGrip>
-#include <QTextBlock>
+#include <QTextDocument>
 #include <QWindow>
 
 #ifdef _WIN32
@@ -301,66 +300,6 @@ void PopupTranslateWidget::setupUI()
     _sizeGrip->setFocus();
 }
 
-namespace
-{
-void fixTailSpaceInBold(QTextDocument& inDoc)
-{
-    QTextCursor textCursor(&inDoc);
-
-    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
-    {
-        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
-        {
-            QTextFragment fragment = blockIt.fragment();
-            if (!fragment.isValid())
-            {
-                continue;
-            }
-
-            QTextCharFormat charFmt = fragment.charFormat();
-            if (charFmt.fontWeight() < QFont::DemiBold)
-            {
-                continue;
-            }
-
-            // Check if the last character is a space.
-            const QString fragText = fragment.text();
-            if (fragText.isEmpty() || (!fragText.back().isSpace()))
-            {
-                continue;
-            }
-
-            // Find the last index that is not a space.
-            int tailSpaceStartIdx = 0;
-            for (int idx = fragText.size() - 1; idx >= 0; --idx)
-            {
-                if (fragText[idx].isSpace() == false)
-                {
-                    tailSpaceStartIdx = idx + 1;
-                    break;
-                }
-            }
-
-            if (tailSpaceStartIdx == fragText.size())
-            {
-                continue;
-            }
-
-            const int tailSpaceStart = fragment.position() + tailSpaceStartIdx;
-            const int tailSpaceEnd   = fragment.position() + fragText.size();
-
-            textCursor.setPosition(tailSpaceStart);
-            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
-
-            QTextCharFormat normalFmt = charFmt;
-            normalFmt.setFontWeight(QFont::Normal);
-
-            textCursor.mergeCharFormat(normalFmt);
-        }
-    }
-}
-} // anonymous namespace
-
 void PopupTranslateWidget::executeTranslate(const QString& inSourceText
                                           , const TextStyle inTextStyle
                                           , const LangType inSourceLang
@@ -369,7 +308,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
 {
     _loadingWidget->run();
 
-    if ((inTextStyle == TextStyle::PlainText) 
+    if ((inTextStyle == TextStyle::PlainText)
         || inIsIgnoreCache)
     {
         executeTranslateImpl(solConfig.currentEngineId()
@@ -382,19 +321,20 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
     }
 
     SolAsync::asyncLaunch<QString>(
-        this
-      , [htmlStr = inSourceText]() mutable
+        this,
+        [htmlStr = inSourceText]() mutable
         {
             // list 무시하는 문법 제거.
             QTextDocument txtDoc;
             txtDoc.setHtml(htmlStr.replace(QRegularExpression(R"(list-style: none)"), ""));
 
-            // ** ** 강조 표시 내부 마지막 공백 수정
-            fixTailSpaceInBold(txtDoc);
+            Sol::normalizeHtml(txtDoc);
+            Sol::fixTailSpaceInBold(txtDoc);
+            Sol::fixTableCell(txtDoc);
 
-            return txtDoc.toMarkdown();
-        }
-      , [this, inSourceLang, inTargetLang](const QString& inMd)
+            return Sol::fixNewLineInTable(txtDoc);
+        },
+        [this, inSourceLang, inTargetLang](const QString& inMd)
         {
             executeTranslateImpl(solConfig.currentEngineId()
                                , inMd

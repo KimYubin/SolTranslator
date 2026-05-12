@@ -567,7 +567,7 @@ void PopupTranslateWidget::calculateTextEditLayoutInfo()
     {
         qWarning() << "not detected screen";
     }
-    const QSizeF screenSize  = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
+    const QSizeF screenSize = screen() ? screen()->size().toSizeF() : QSizeF(1920, 1080);
 
     const int minWidth  = screenSize.width() * _minSizeRatio.width();
     const int minHeight = screenSize.height() * _minSizeRatio.height();
@@ -576,11 +576,11 @@ void PopupTranslateWidget::calculateTextEditLayoutInfo()
 
     ui->textLayout->activate();
     const QMargins inMargins = ui->textLayout->contentsMargins()
-            + ui->mainLayout->contentsMargins()                        // 메인 컨텐츠 레이아웃 마진
-            + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)  // 상단 타이틀바 레이아웃 높이
-            + QMargins(0, ui->loadingLayout->sizeHint().height(), 0, 0)// 상단 로딩바 레이아웃 높이
-            + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height()) // 하단 상태표시 레이아웃 높이
-            + QMargins(0, 0, ui->outerVScrollBar->width(), 0);         // 우측 외부 스크롤바 ->sizeHint().width();로 대체 고려해야함
+            + ui->mainLayout->contentsMargins()                         // 메인 컨텐츠 레이아웃 마진
+            + QMargins(0, ui->titleLayout->sizeHint().height(), 0, 0)   // 상단 타이틀바 레이아웃 높이
+            + QMargins(0, ui->loadingLayout->sizeHint().height(), 0, 0) // 상단 로딩바 레이아웃 높이
+            + QMargins(0, 0, 0, ui->statusLayout->sizeHint().height())  // 하단 상태표시 레이아웃 높이
+            + QMargins(0, 0, ui->outerVScrollBar->width(), 0);          // 우측 외부 스크롤바 ->sizeHint().width();로 대체 고려해야함
 
     _outMargins = ui->outerLayout->contentsMargins();
 
@@ -915,7 +915,7 @@ void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
 
 void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)
 {
-    const QRect geo = frameGeometry();
+    const QRect geo    = frameGeometry();
     const QRect innGeo = getInnerGeometry();
 
     const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());

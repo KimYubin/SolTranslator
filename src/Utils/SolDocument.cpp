@@ -2,12 +2,14 @@
 
 #include "SolDocument.h"
 
+#include "SolAsync.hpp"
 #include "SolLog.h"
 
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextList>
 #include <QTextTableCell>
 #include <QUuid>
 
@@ -16,6 +18,133 @@ namespace Sol
 void normalizeHtml(QTextDocument& inDoc)
 {
     inDoc.setHtml(inDoc.toHtml());
+}
+
+void fixListItem(QTextDocument& inDoc)
+{
+    QTextCursor fragCursor(&inDoc);
+
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
+    {
+        QTextCursor cursor(textBlock);
+        QTextList* txtList = cursor.currentList();
+        if (!txtList)
+        {
+            continue;
+        }
+
+        // fix hyper link error.
+        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        {
+            QTextFragment fragment = itemIt.fragment();
+            if (!fragment.isValid())
+            {
+                continue;
+            }
+
+            QTextCharFormat fragFmt = fragment.charFormat();
+            if (fragFmt.isAnchor() && fragFmt.anchorHref().isEmpty())
+            {
+                fragFmt.setAnchor(false);
+            }
+            else if (!fragFmt.isAnchor() && !fragFmt.anchorHref().isEmpty())
+            {
+                fragFmt.setAnchor(true);
+            }
+            else
+            {
+                continue;
+            }
+
+            const int fragStart = fragment.position();
+            const int frageEnd  = fragment.position() + fragment.length();
+
+            fragCursor.setPosition(fragStart);
+            fragCursor.setPosition(frageEnd, QTextCursor::KeepAnchor);
+
+            fragCursor.mergeCharFormat(fragFmt);
+        }
+
+        // 같은 링크 연결
+        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        {
+            QTextFragment fragment = itemIt.fragment();
+            if (!fragment.isValid())
+            {
+                continue;
+            }
+
+            QTextCharFormat firstFragFmt = fragment.charFormat();
+            if (!firstFragFmt.isAnchor() && firstFragFmt.anchorHref().isEmpty())
+            {
+                continue;
+            }
+
+            const int frgStart    = fragment.position();
+            bool isNeedMerge      = false;
+            QString mergeLinkText = fragment.text();
+
+            const QString firstHref = firstFragFmt.anchorHref();
+
+            // 같은 링크를 가진 fragment 추적
+            QTextBlock::iterator nextIt = itemIt;
+            ++nextIt;
+            QTextBlock::iterator lastIt = nextIt;
+            while (!nextIt.atEnd())
+            {
+                QTextFragment nextFrag = nextIt.fragment();
+                if (!nextFrag.isValid())
+                    break;
+
+                QTextCharFormat nextFmt = nextFrag.charFormat();
+                if (!nextFmt.isAnchor() || nextFmt.anchorHref() != firstHref)
+                {
+                    break;
+                }
+
+                isNeedMerge   = true;
+                mergeLinkText += nextFrag.text();
+                lastIt        = nextIt;
+
+                ++nextIt;
+            }
+
+            if (isNeedMerge == false)
+            {
+                continue;
+            }
+
+
+            // Remove new line in list item.
+            mergeLinkText.removeIf([](const QChar& inChar)
+            {
+                return (inChar == '\n')
+                        || (inChar == QChar::LineSeparator)
+                        || (inChar == QChar::ParagraphSeparator)
+                        || (inChar == QChar::CarriageReturn);
+            });
+
+            QTextFragment lastFrag = lastIt.fragment();
+
+            // 분리된 링크 결합
+            fragCursor.setPosition(frgStart);
+            fragCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
+            fragCursor.insertText(mergeLinkText, lastFrag.charFormat());
+
+            // 수정 후 iterator 재생성
+            itemIt = textBlock.begin();
+            while (!itemIt.atEnd())
+            {
+                QTextFragment frg = itemIt.fragment();
+                if (frg.isValid() && frg.position() >= frgStart)
+                {
+                    break;
+                }
+
+                ++itemIt;
+            }
+        }
+    }
 }
 
 void fixTailSpaceInBold(QTextDocument& inDoc)
@@ -109,7 +238,7 @@ void fixTableCell(QTextDocument& inDoc)
     }
 }
 
-QString fixNewLineInTable(QTextDocument& inDoc)
+QString fixNewLine(QTextDocument& inDoc)
 {
     // html-> replace <br/> to marker -> convert markdown -> replace marker to <br/>.
 
@@ -134,7 +263,7 @@ QString fixNewLineInTable(QTextDocument& inDoc)
     {
         QRegularExpressionMatch match = reIt.next();
 
-        // Append text before table. 표 이전의 텍스트 추가
+        // Append text before table.
         replacedHtml += originHtml.mid(lastPos, match.capturedStart() - lastPos);
 
         // Replace line break in table
@@ -148,10 +277,22 @@ QString fixNewLineInTable(QTextDocument& inDoc)
     replacedHtml += originHtml.mid(lastPos);
 
 
-    // Convert to markdown. And, replace marker to <br/>.
+    // Convert to Markdown.
     inDoc.setHtml(replacedHtml);
     QString docMarkdown = inDoc.toMarkdown();
 
+    docMarkdown.replace(QChar::Nbsp, " ");
+
+    // Convert single line break to a space.
+    // Convert consecutive spaces before and after a single line break to a space.
+    // Do not modify consecutive line breaks.
+    // If a list item follows a single line break, do not modify it.
+    docMarkdown.replace(
+        QRegularExpression(
+            R"([^\S\n]*(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"
+        ), " ");
+
+    // Replace marker to <br/>.
     docMarkdown.replace(newLineMarker, R"(<br/>)");
 
     return docMarkdown;
@@ -161,18 +302,35 @@ QString htmlToMarkdown(QString inHtml)
 {
     // Remove the syntax that ignores the list.
     QTextDocument txtDoc;
-    txtDoc.setHtml(inHtml.replace(QRegularExpression(R"(list-style: none)"), ""));
+    inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
+    inHtml.replace(QRegularExpression(R"(white-space: pre-wrap;)"), "");
+    txtDoc.setHtml(inHtml);
 
     return htmlToMarkdown(txtDoc);
 }
 
 QString htmlToMarkdown(QTextDocument& inDoc)
 {
+    fixListItem(inDoc);
+
     Sol::normalizeHtml(inDoc);
     Sol::fixTailSpaceInBold(inDoc);
     Sol::fixTableCell(inDoc);
 
+    return Sol::fixNewLine(inDoc);
+}
 
-    return Sol::fixNewLineInTable(inDoc);
+void asyncHtmlToMarkdown(QString inHtml
+                       , QObject* inContext
+                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc)
+{
+    SolAsync::asyncLaunch<QString>(
+        inContext,
+        [htmlStr = std::move(inHtml)]() mutable
+        {
+            return Sol::htmlToMarkdown(htmlStr);
+        },
+        std::move(inMainThreadFunc)
+    );
 }
 } // namespace Sol 

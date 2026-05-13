@@ -6,11 +6,15 @@
 
 namespace Sol
 {
-
 /**
  * Normalize the HTML in the QTextDocument to Qt HTML style. 
  */
 void normalizeHtml(QTextDocument& inDoc);
+
+/**
+ * 
+ */
+void fixListItem(QTextDocument& inDoc);
 
 /**
  * Fix the last space of in Bold(**).
@@ -26,11 +30,12 @@ void fixTableCell(QTextDocument& inDoc);
 
 /**
  * Fix the table cell in Markdown to prevent line breaks from being broken.
+ * Remove forced line breaks caused by word-wrap.
  *
  * @note If apply the return value back to QTextDocument, it may need to be fixed again.
  * @return Markdown string.
  */
-QString fixNewLineInTable(QTextDocument& inDoc);
+QString fixNewLine(QTextDocument& inDoc);
 
 /**
  * Convert HTML string to Markdown.
@@ -44,6 +49,9 @@ QString htmlToMarkdown(QString inHtml);
  */
 QString htmlToMarkdown(QTextDocument& inDoc);
 
+void asyncHtmlToMarkdown(QString inHtml
+                       , QObject* inContext
+                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc);
 } // namespace Sol 
 
 

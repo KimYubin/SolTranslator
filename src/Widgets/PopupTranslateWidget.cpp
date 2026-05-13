@@ -320,22 +320,15 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         return;
     }
 
-    SolAsync::asyncLaunch<QString>(
-        this,
-        [htmlStr = inSourceText]() mutable
-        {
-            return Sol::htmlToMarkdown(htmlStr);
-        },
-        [this, inSourceLang, inTargetLang](const QString& inMd)
-        {
-            executeTranslateImpl(solConfig.currentEngineId()
-                               , inMd
-                               , TextStyle::MarkDown
-                               , inSourceLang
-                               , inTargetLang
-                               , false);
-        }
-    );
+    Sol::asyncHtmlToMarkdown(inSourceText, this, [this, inSourceLang, inTargetLang](const QString& inMd)
+    {
+        executeTranslateImpl(solConfig.currentEngineId()
+                           , inMd
+                           , TextStyle::MarkDown
+                           , inSourceLang
+                           , inTargetLang
+                           , false);
+    });
 }
 
 

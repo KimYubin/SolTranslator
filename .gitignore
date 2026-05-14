@@ -217,8 +217,8 @@ fabric.properties
 
 .idea/*
 
-!.idea/codeStyles
-!.idea/runConfigurations
+#!.idea/codeStyles
+#!.idea/runConfigurations
 
 # cmake depoly example
 !.idea/cmake.xml

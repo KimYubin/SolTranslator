@@ -15,6 +15,42 @@
 
 namespace Sol
 {
+QString htmlToMarkdown(QString inHtml)
+{
+    // Remove the syntax that ignores the list.
+    QTextDocument txtDoc;
+    inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
+    inHtml.replace(QRegularExpression(R"(white-space: pre-wrap;)"), "");
+    txtDoc.setHtml(inHtml);
+
+    return htmlToMarkdown(txtDoc);
+}
+
+QString htmlToMarkdown(QTextDocument& inDoc)
+{
+    fixListItem(inDoc);
+
+    Sol::normalizeHtml(inDoc);
+    Sol::fixTailSpaceInBold(inDoc);
+    Sol::fixTableCell(inDoc);
+
+    return Sol::fixNewLine(inDoc);
+}
+
+void asyncHtmlToMarkdown(QString inHtml
+                       , QObject* inContext
+                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc)
+{
+    SolAsync::asyncLaunch<QString>(
+        inContext,
+        [htmlStr = std::move(inHtml)]() mutable
+        {
+            return Sol::htmlToMarkdown(htmlStr);
+        },
+        std::move(inMainThreadFunc)
+    );
+}
+
 void normalizeHtml(QTextDocument& inDoc)
 {
     inDoc.setHtml(inDoc.toHtml());
@@ -65,7 +101,7 @@ void fixListItem(QTextDocument& inDoc)
             fragCursor.mergeCharFormat(fragFmt);
         }
 
-        // 같은 링크 연결
+        // Connect the links that have the same Href.
         for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
         {
             QTextFragment fragment = itemIt.fragment();
@@ -86,7 +122,7 @@ void fixListItem(QTextDocument& inDoc)
 
             const QString firstHref = firstFragFmt.anchorHref();
 
-            // 같은 링크를 가진 fragment 추적
+            // Track fragments with the same Href.
             QTextBlock::iterator nextIt = itemIt;
             ++nextIt;
             QTextBlock::iterator lastIt = nextIt;
@@ -126,12 +162,12 @@ void fixListItem(QTextDocument& inDoc)
 
             QTextFragment lastFrag = lastIt.fragment();
 
-            // 분리된 링크 결합
+            // Connect the separated links.
             fragCursor.setPosition(frgStart);
             fragCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
             fragCursor.insertText(mergeLinkText, lastFrag.charFormat());
 
-            // 수정 후 iterator 재생성
+            // Recreate the modified iterator after the update.
             itemIt = textBlock.begin();
             while (!itemIt.atEnd())
             {
@@ -240,6 +276,8 @@ void fixTableCell(QTextDocument& inDoc)
 
 QString fixNewLine(QTextDocument& inDoc)
 {
+    // ~====================
+    // fix line breaks in table cell.
     // html-> replace <br/> to marker -> convert markdown -> replace marker to <br/>.
 
     const QString originHtml = inDoc.toHtml();
@@ -283,6 +321,7 @@ QString fixNewLine(QTextDocument& inDoc)
 
     docMarkdown.replace(QChar::Nbsp, " ");
 
+    // ~====================
     // Convert single line break to a space.
     // Convert consecutive spaces before and after a single line break to a space.
     // Do not modify consecutive line breaks.
@@ -292,45 +331,10 @@ QString fixNewLine(QTextDocument& inDoc)
             R"([^\S\n]*(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"
         ), " ");
 
+    // ~====================
     // Replace marker to <br/>.
     docMarkdown.replace(newLineMarker, R"(<br/>)");
 
     return docMarkdown;
-}
-
-QString htmlToMarkdown(QString inHtml)
-{
-    // Remove the syntax that ignores the list.
-    QTextDocument txtDoc;
-    inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
-    inHtml.replace(QRegularExpression(R"(white-space: pre-wrap;)"), "");
-    txtDoc.setHtml(inHtml);
-
-    return htmlToMarkdown(txtDoc);
-}
-
-QString htmlToMarkdown(QTextDocument& inDoc)
-{
-    fixListItem(inDoc);
-
-    Sol::normalizeHtml(inDoc);
-    Sol::fixTailSpaceInBold(inDoc);
-    Sol::fixTableCell(inDoc);
-
-    return Sol::fixNewLine(inDoc);
-}
-
-void asyncHtmlToMarkdown(QString inHtml
-                       , QObject* inContext
-                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc)
-{
-    SolAsync::asyncLaunch<QString>(
-        inContext,
-        [htmlStr = std::move(inHtml)]() mutable
-        {
-            return Sol::htmlToMarkdown(htmlStr);
-        },
-        std::move(inMainThreadFunc)
-    );
 }
 } // namespace Sol 

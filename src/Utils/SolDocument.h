@@ -2,17 +2,47 @@
 
 #ifndef SOLTRANSLATOR_SOLDOCUMENT_H
 #define SOLTRANSLATOR_SOLDOCUMENT_H
-#include <QTextDocument>
+
+#include <functional>
+
+class QObject;
+class QTextDocument;
+class QString;
 
 namespace Sol
 {
 /**
- * Normalize the HTML in the QTextDocument to Qt HTML style. 
+ * Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ */
+QString htmlToMarkdown(QString inHtml);
+
+/**
+ * Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ */
+QString htmlToMarkdown(QTextDocument& inDoc);
+
+/**
+ * Asynchronously, Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ *
+ * @param inHtml Source HTML string.
+ * @param inContext QObject that manages the lifetime of the callback
+ * @param inMainThreadFunc Callback to be applied after completing the Markdown change.
+ */
+void asyncHtmlToMarkdown(QString inHtml
+                       , QObject* inContext
+                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc);
+
+
+/**
+ * Normalize the HTML in the QTextDocument to Qt HTML style.
  */
 void normalizeHtml(QTextDocument& inDoc);
 
 /**
- * 
+ * Fix the internal error of the list items.
  */
 void fixListItem(QTextDocument& inDoc);
 
@@ -36,22 +66,6 @@ void fixTableCell(QTextDocument& inDoc);
  * @return Markdown string.
  */
 QString fixNewLine(QTextDocument& inDoc);
-
-/**
- * Convert HTML string to Markdown.
- * Correct any distortion that occurs during the conversion.
- */
-QString htmlToMarkdown(QString inHtml);
-
-/**
- * Convert HTML string to Markdown.
- * Correct any distortion that occurs during the conversion.
- */
-QString htmlToMarkdown(QTextDocument& inDoc);
-
-void asyncHtmlToMarkdown(QString inHtml
-                       , QObject* inContext
-                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc);
 } // namespace Sol 
 
 

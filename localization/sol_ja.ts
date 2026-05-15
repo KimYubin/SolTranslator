@@ -4,12 +4,12 @@
 <context>
     <name>QHotkey</name>
     <message>
-        <location filename="../external/QHotkey/qhotkey.cpp" line="294"/>
+        <location filename="../thirdparty/QHotkey/qhotkey.cpp" line="294"/>
         <source>Failed to register %1. Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../external/QHotkey/qhotkey.cpp" line="314"/>
+        <location filename="../thirdparty/QHotkey/qhotkey.cpp" line="314"/>
         <source>Failed to unregister %1. Error: %2</source>
         <translation type="unfinished"></translation>
     </message>

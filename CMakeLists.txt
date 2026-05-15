@@ -222,43 +222,43 @@ target_link_libraries(
 )
 
 # ============================
-# Magic Enum external/magic_enum.hpp
+# Magic Enum thirdparty/magic_enum.hpp
 add_library(magic_enum INTERFACE)
 add_library(magic_enum::magic_enum ALIAS magic_enum)
 
-target_include_directories(magic_enum INTERFACE external/magic_enum)
+target_include_directories(magic_enum INTERFACE thirdparty/magic_enum)
 target_link_libraries(SolTranslator PRIVATE magic_enum::magic_enum)
 
 # ============================
-# MurmurHash external/MurmurHash/MurmurHash3.h
-add_library(MurmurHash STATIC external/MurmurHash/MurmurHash3.cpp)
+# MurmurHash thirdparty/MurmurHash/MurmurHash3.h
+add_library(MurmurHash STATIC thirdparty/MurmurHash/MurmurHash3.cpp)
 add_library(MurmurHash::MurmurHash ALIAS MurmurHash)
 
-target_include_directories(MurmurHash PUBLIC external/MurmurHash)
+target_include_directories(MurmurHash PUBLIC thirdparty/MurmurHash)
 target_link_libraries(SolTranslator PRIVATE MurmurHash::MurmurHash)
 
 # ============================
 # QHotkey
-add_library(qhotkey external/QHotkey/qhotkey.cpp)
+add_library(qhotkey thirdparty/QHotkey/qhotkey.cpp)
 add_library(QHotkey::QHotkey ALIAS qhotkey)
 
-target_include_directories(qhotkey PUBLIC external/QHotkey)
+target_include_directories(qhotkey PUBLIC thirdparty/QHotkey)
 target_link_libraries(qhotkey PUBLIC Qt6::Core Qt6::Gui)
 
 if (APPLE)
     find_library(CARBON_LIBRARY Carbon)
     mark_as_advanced(CARBON_LIBRARY)
 
-    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_mac.cpp)
+    target_sources(qhotkey PRIVATE thirdparty/QHotkey/qhotkey_mac.cpp)
     target_link_libraries(qhotkey PRIVATE ${CARBON_LIBRARY})
 elseif (WIN32)
-    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_win.cpp)
+    target_sources(qhotkey PRIVATE thirdparty/QHotkey/qhotkey_win.cpp)
 else ()
     find_package(X11 REQUIRED)
     target_link_libraries(qhotkey PRIVATE ${X11_LIBRARIES})
 
     include_directories(${X11_INCLUDE_DIR})
-    target_sources(qhotkey PRIVATE external/QHotkey/qhotkey_x11.cpp)
+    target_sources(qhotkey PRIVATE thirdparty/QHotkey/qhotkey_x11.cpp)
 endif ()
 
 target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)

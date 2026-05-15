@@ -15,6 +15,98 @@
     </message>
 </context>
 <context>
+    <name>QKeychain::DeletePasswordJobPrivate</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="223"/>
+        <source>Password entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="227"/>
+        <source>Could not decrypt data</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::Job</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain.cpp" line="83"/>
+        <source>Both service name and key are empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::PlainTextStore</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="73"/>
+        <source>Could not store data in settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="75"/>
+        <source>Could not store data in settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="93"/>
+        <source>Could not delete data from settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="95"/>
+        <source>Could not delete data from settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="112"/>
+        <source>Entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::ReadPasswordJobPrivate</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="100"/>
+        <source>Password entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="104"/>
+        <source>Could not decrypt data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="126"/>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="248"/>
+        <source>Could not decrypt data: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::WritePasswordJobPrivate</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="159"/>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="259"/>
+        <source>Encryption failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="164"/>
+        <source>Credential size exceeds maximum size of %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="206"/>
+        <source>Credential key exceeds maximum size of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="212"/>
+        <source>Writing credentials failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingsWidget</name>
     <message>
         <location filename="../src/Settings/SettingsWidget.ui" line="44"/>

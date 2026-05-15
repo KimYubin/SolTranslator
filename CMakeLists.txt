@@ -33,6 +33,7 @@ qt_add_executable(
         src/SolTranslatorCore.h
 
         resource/image/image.qrc
+        resource/image/providers/providers.qrc
         resource/sql/sql.qrc
         resource/theme/theme.qrc
 

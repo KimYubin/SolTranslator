@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/providers">
+        <file alias="MSFT_Ci_Dark">MSFT_Ci_Dark.svg</file>
+        <file alias="MSFT_Ci_Light">MSFT_Ci_Light.svg</file>
+        <file alias="MSFT_Logo">MSFT_Logo.svg</file>
+
+        <file alias="OpenAI_Logo_Dark">OpenAI_Logo_Dark.svg</file>
+        <file alias="OpenAI_Logo_Light">OpenAI_Logo_Light.svg</file>
+
+        <file alias="Papago_Ci_Dark">Papago_Ci_Dark.svg</file>
+        <file alias="Papago_Ci_Light">Papago_Ci_Light.svg</file>
+    </qresource>
+</RCC>

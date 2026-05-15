@@ -2,6 +2,7 @@
 
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
+#include "Managers/EngineManager.h"
 #include "Managers/GlobalHotKeyManager.h"
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
@@ -27,6 +28,7 @@ int main(int argc, char* argv[])
     solTranslatorCore.emplaceManager<TranslateManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<HistoryManager>(&solTranslatorCore);
     solTranslatorCore.emplaceManager<GlobalHotKeyManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<EngineManager>(&solTranslatorCore);
 
     solTranslatorCore.manager<TranslateManager>()->init(
         solTranslatorCore.manager<HistoryManager>()

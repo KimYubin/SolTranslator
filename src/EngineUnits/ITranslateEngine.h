@@ -8,6 +8,7 @@
 #include "Types/SolExpected.hpp"
 
 #include <QObject>
+#include <qicon.h>
 
 #include <functional>
 
@@ -27,13 +28,16 @@ class ITranslateEngine : public QObject
     Q_DISABLE_COPY_MOVE(ITranslateEngine)
 
 public:
-    explicit ITranslateEngine(const EngineId& inEngine);
+    explicit ITranslateEngine(EngineId inEngine);
     virtual ~ITranslateEngine() override;
+
+    virtual void postInitialize();
 
     const EngineId& getEngineId() const { return _engineId; }
     const QString& getDisplayName() const { return _displayName; }
     const QString& getDefaultUrl() const { return _defaultUrl; }
     const QString& getIconPath() const { return _iconPath; }
+    const QIcon& getIcon() const { return _icon; }
     int getPriority() const { return _priority; }
 
     Expected<const OptionData*> getOptionData(const OptionKey& inKey) const;
@@ -45,6 +49,7 @@ protected:
     void setDisplayName(const QString& inDisplayName);
     void setDefaultUrl(const QString& inDefaultUrl);
     void setIconPath(const QString& inIconPath);
+    void setIcon(const QIcon& inIcon);
     void setPriority(const int inPriority);
     void setTrUnitCreator(TrUnitCreator&& inCreator);
 
@@ -62,6 +67,7 @@ private:
     QString _displayName;
     QString _defaultUrl;
     QString _iconPath;
+    QIcon _icon;
     int _priority;
     TrUnitCreator _trUnitCreator;
 

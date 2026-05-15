@@ -20,6 +20,10 @@ public:
     explicit EngineManager(SolTranslatorCore* parent);
     virtual ~EngineManager() override;
 
+protected:
+    virtual void postInitialize() override;
+
+public:
     static void registerEngine(ITranslateEngine* inEngine);
     static void unregisterEngine(ITranslateEngine* inEngine);
 
@@ -36,7 +40,6 @@ public:
 
     static Expected<TranslateUnit*> newTrUnit(const EngineId& inEngine, TranslateManager* inTrManager);
 };
-
 
 
 template <std::derived_from<ITranslateEngine> T>

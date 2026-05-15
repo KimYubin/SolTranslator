@@ -7,6 +7,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/EngineManager.h"
 #include "Types/SolTypes.h"
+#include "Utils/SolLog.h"
 
 EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
 {
@@ -18,7 +19,7 @@ EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
     const std::vector<QPointer<ITranslateEngine>> trEngineList = EngineManager::sortedTranslateEngineList();
     for (const QPointer<ITranslateEngine>& trEngine : trEngineList)
     {
-        addItem(trEngine->getDisplayName(), trEngine->getEngineId().toString());
+        addItem(trEngine->getIcon(), trEngine->getDisplayName(), trEngine->getEngineId().toString());
         if (curEngineId == trEngine->getEngineId())
         {
             curIdx = (count() - 1);

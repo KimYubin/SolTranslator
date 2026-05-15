@@ -20,10 +20,10 @@ ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
     qfont.setPointSizeF(_fontSize);
     setFont(qfont);
     Qt::TextInteractionFlags interactionFlags = textInteractionFlags();
-    interactionFlags.setFlag(Qt::TextInteractionFlag::TextSelectableByMouse);
-    interactionFlags.setFlag(Qt::TextInteractionFlag::TextSelectableByKeyboard);
-    interactionFlags.setFlag(Qt::TextInteractionFlag::LinksAccessibleByMouse);
-    interactionFlags.setFlag(Qt::TextInteractionFlag::LinksAccessibleByKeyboard);
+    interactionFlags.setFlag(Qt::TextSelectableByMouse);
+    interactionFlags.setFlag(Qt::TextSelectableByKeyboard);
+    interactionFlags.setFlag(Qt::LinksAccessibleByMouse);
+    interactionFlags.setFlag(Qt::LinksAccessibleByKeyboard);
     setTextInteractionFlags(interactionFlags);
     ensureCursorVisible();
     setOpenExternalLinks(true);
@@ -40,16 +40,14 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     case TextStyle::None:
         break;
     case TextStyle::PlainText:
-        setText(inText);
+        setPlainText(inText);
         break;
     case TextStyle::Html:
         setHtml(inText);
         break;
     case TextStyle::MarkDown:
-    {
         setAdjustMarkdown(inText);
         break;
-    }
     case TextStyle::Size:
         break;
     default: ;

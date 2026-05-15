@@ -26,10 +26,23 @@ TrEngineMap& translateEngines()
 EngineManager::EngineManager(SolTranslatorCore* parent)
     : AbstractManager(parent)
 {
+    TrEngineMap& trEngineMap = translateEngines();
+    for (QPointer<ITranslateEngine>& trEngine : trEngineMap | std::views::values)
+    {
+        if (trEngine)
+        {
+            trEngine->postInitialize();
+        }
+    }
 }
 
 EngineManager::~EngineManager()
 {}
+
+void EngineManager::postInitialize()
+{
+    AbstractManager::postInitialize();
+}
 
 void EngineManager::registerEngine(ITranslateEngine* inEngine)
 {

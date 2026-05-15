@@ -53,16 +53,19 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
         return;
     }
 
+    const QString& displayName = inEngine->getDisplayName();
+    const EngineId& engineId   = inEngine->getEngineId();
+
     QWidget* layoutWidget   = new QWidget(_tabWidget);
     QGridLayout* gridLayout = new QGridLayout(layoutWidget);
 
-    _tabWidget->addTab(layoutWidget, inEngine->getDisplayName());
+    _tabWidget->addTab(layoutWidget, inEngine->getIcon(), displayName);
 
-    const EngineId& engineId = inEngine->getEngineId();
-    OptionGroupBox* optGroup = OptionWidgetFactory::createOptionGroupBox(inEngine->getDisplayName() + " " + i18n(Tr::Options)
-                                                                       , gridLayout
-                                                                       , gridLayout->rowCount()
-                                                                       , 0);
+    OptionGroupBox* optGroup
+        = OptionWidgetFactory::createOptionGroupBox(displayName + " " + i18n(Tr::Options)
+                                                  , gridLayout
+                                                  , gridLayout->rowCount()
+                                                  , 0);
 
     for (const OptionData* optData : optionList)
     {
@@ -86,8 +89,8 @@ void EngineOptionWidget::addEngineSettings(const ITranslateEngine* inEngine)
         case OptionData::Type::StringSaver:
         {
             stringSaverCard(optGroup, engineId, *optData);
+            break;
         }
-        break;
         case OptionData::Type::Combo:
             break;
         default: ;

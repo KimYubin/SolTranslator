@@ -72,7 +72,7 @@ GoogleEngine::GoogleEngine()
 {
     setDisplayName(Sol::i18n(Tr::GoogleTranslate));
     setDefaultUrl("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3");
-    setIconPath("");
+    setIconPath(":/engines/Google_Logo");
     setPriority(1);
     setTrUnitCreatorHelper<GoogleTrUnit>();
 }

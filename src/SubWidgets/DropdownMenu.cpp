@@ -11,6 +11,18 @@ DropdownMenu::DropdownMenu(QWidget* parent) : QComboBox(parent)
     setFocusPolicy(Qt::TabFocus);
 }
 
+QSize DropdownMenu::sizeHint() const
+{
+    // Padding for icon
+    return QComboBox::sizeHint() + QSize(15, 0);
+}
+
+QSize DropdownMenu::minimumSizeHint() const
+{
+    // Padding for icon
+    return QComboBox::minimumSizeHint() + QSize(15, 0);
+}
+
 void DropdownMenu::showPopup()
 {
     QComboBox::showPopup();
@@ -25,7 +37,7 @@ void DropdownMenu::hidePopup()
 
 void DropdownMenu::wheelEvent(QWheelEvent* event)
 {
-    if (this->hasFocus())
+    if (hasFocus())
     {
         QComboBox::wheelEvent(event);
     }

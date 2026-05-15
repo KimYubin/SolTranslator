@@ -5,9 +5,11 @@
 #include "Managers/EngineManager.h"
 #include "Utils/EnumUtils.hpp"
 
+#include <utility>
 
-ITranslateEngine::ITranslateEngine(const EngineId& inEngine)
-    : _engineId(inEngine)
+
+ITranslateEngine::ITranslateEngine(EngineId inEngine)
+    : _engineId(std::move(inEngine))
     , _priority(std::numeric_limits<int>::max())
 {
     EngineManager::registerEngine(this);
@@ -16,6 +18,11 @@ ITranslateEngine::ITranslateEngine(const EngineId& inEngine)
 ITranslateEngine::~ITranslateEngine()
 {
     EngineManager::unregisterEngine(this);
+}
+
+void ITranslateEngine::postInitialize()
+{
+    setIcon(QIcon{_iconPath});
 }
 
 Expected<const OptionData*> ITranslateEngine::getOptionData(const OptionKey& inKey) const
@@ -58,6 +65,12 @@ void ITranslateEngine::setDefaultUrl(const QString& inDefaultUrl)
 void ITranslateEngine::setIconPath(const QString& inIconPath)
 {
     _iconPath = inIconPath;
+    setIcon(QIcon{_iconPath});
+}
+
+void ITranslateEngine::setIcon(const QIcon& inIcon)
+{
+    _icon = inIcon;
 }
 
 void ITranslateEngine::setPriority(const int inPriority)

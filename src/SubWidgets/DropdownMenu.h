@@ -16,6 +16,9 @@ class DropdownMenu : public QComboBox
 public:
     explicit DropdownMenu(QWidget* parent = nullptr);
 
+    virtual QSize sizeHint() const override;
+    virtual QSize minimumSizeHint() const override;
+
     virtual void showPopup() override;
     virtual void hidePopup() override;
 

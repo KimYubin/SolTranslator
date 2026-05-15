@@ -167,7 +167,7 @@ OpenAiEngine::OpenAiEngine()
 {
     setDisplayName(i18n(Tr::OpenAI));
     setDefaultUrl("https://api.openai.com/v1/chat/completions");
-    setIconPath("");
+    setIconPath(":/engines/OpenAI_Logo_Dark");
     setPriority(2);
     setTrUnitCreatorHelper<OpenAiTrUnit>();
 

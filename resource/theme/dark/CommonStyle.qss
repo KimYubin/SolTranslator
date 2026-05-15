@@ -282,7 +282,7 @@ QComboBox
   border-top: 0px solid rgba(0, 0, 0, 0);
   border-bottom: 2px solid rgba(170, 170, 170, 1);
 
-  padding: 0px 7px 0px 7px;
+  padding: 2px 2px 2px 7px;
 
   background-color: rgba(35, 38, 41, 1);
 }

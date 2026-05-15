@@ -126,9 +126,9 @@ QString FinPointTrUnit::chunkToContent()
 FinPointEngine::FinPointEngine()
     : ITranslateEngine(EngineIds::FinPoint)
 {
-    setDisplayName(EngineIds::FinPoint.toString());
+    setDisplayName(getEngineId().toString());
     setDefaultUrl("https://asia-northeast3-fintrans-33fftt.cloudfunctions.net/finpoint/text");
-    setIconPath("");
+    setIconPath(":/img/icon_img");
     setPriority(3);
     setTrUnitCreatorHelper<FinPointTrUnit>();
 }
@@ -160,7 +160,7 @@ class FinPointEngineDebug : public ITranslateEngine
 public:
     explicit FinPointEngineDebug() : ITranslateEngine(EngineIds::FinPointDebug)
     {
-        setDisplayName(EngineIds::FinPointDebug.toString());
+        setDisplayName(getEngineId().toString());
         setDefaultUrl("http://127.0.0.1:5001/fintrans-33fftt/asia-northeast3/finpoint/text");
         setIconPath("");
         setPriority(4);

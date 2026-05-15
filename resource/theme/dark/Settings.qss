@@ -90,8 +90,68 @@
   color:rgb(240, 240, 232)
 }
 
+/* -------------------------------- */
+/* tab */
+#SettingsWidget QTabWidget QTabBar::tab
+{
+  background-color: transparent;
+}
+
+#SettingsWidget QTabWidget::pane
+{
+  /* The tab widget frame */
+  /* border-top: 2px solid #C2C7CB; */
+}
+
+#SettingsWidget QTabWidget::tab-bar
+{
+  left: 5px; /* move to the right by 5px */
+}
 
 
+#SettingsWidget QTabWidget QTabBar::tab
+{
+  color: rgba(255, 255, 255, 0.9);
+  selection-color: rgb(220, 222, 223);
+
+  /* border: 2px solid #C4C4C3; */
+  background-color: rgba(35, 38, 41, 1);
+  border-radius: 4px;
+  padding: 6px;
+
+  /* for fixing content area */
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px;
+}
+
+#SettingsWidget QTabWidget QTabBar::tab:focus
+{
+  border-color: rgb(217, 220, 224);
+  border-radius: 2px;
+}
+#SettingsWidget QTabWidget QTabBar::tab:hover
+{
+  color: rgba(0, 0, 0, 0.8);
+
+  background-color:rgba(255, 255, 255, 0.80);
+  selection-background-color:rgba(255, 255, 255, 0.80);
+}
+
+#SettingsWidget QTabWidget QTabBar::tab:selected
+{
+  color: rgba(255, 255, 255, 1);
+  selection-color: rgba(255, 255, 255, 1); /* For Windows */
+
+  /* background-color:rgba(63, 65, 70, 1);
+  selection-background-color:rgba(63, 65, 70, 1); */
+
+  background-color:rgba(189, 189, 189, 0.37);
+  selection-background-color:rgba(189, 189, 189, 0.37);
+}
+
+
+/* -------------------------------- */
 /* IOptionWidget */
 #SettingsWidget IOptionWidget > QWidget > QWidget> QWidget,
 #SettingsWidget IOptionWidget > QWidget > QWidget,

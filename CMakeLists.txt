@@ -267,17 +267,8 @@ target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
 # ============================
 # qtkeychain thirdparty/qtkeychain
-include(GenerateExportHeader)
-
-set(QTCORE_LIBRARIES Qt6::Core)
-set(QTKEYCHAIN_VERSION 0.16.0)
-set(QTKEYCHAIN_SOVERSION 1)
-set(QTKEYCHAIN_VERSION_INFIX 6)
-set(QTKEYCHAIN_TARGET_NAME qt${QTKEYCHAIN_VERSION_INFIX}keychain)
-
 add_subdirectory(thirdparty/qtkeychain)
-target_link_libraries(SolTranslator PRIVATE ${QTKEYCHAIN_TARGET_NAME})
-
+target_link_libraries(SolTranslator PRIVATE qtkeychain)
 
 # ============================
 # Internationalization

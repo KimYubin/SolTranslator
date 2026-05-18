@@ -6,13 +6,18 @@
 
 #include <QObject>
 
+class ConfigManager;
+
 class SecretStore : public QObject
 {
     Q_OBJECT
 
 public:
+    explicit SecretStore(ConfigManager* inParent);
+
     void requestLoadSecret(const QString& inKey
                          , Callback<void()>&& inFunction);
+
     void requestSaveSecret(const QString& inKey
                          , const QVariant& inValue
                          , Callback<void()>&& inFunction);

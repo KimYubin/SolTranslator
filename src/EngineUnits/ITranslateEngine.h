@@ -40,6 +40,7 @@ public:
     int getPriority() const { return _priority; }
 
     Expected<const OptionData*> getOptionData(const OptionKey& inKey) const;
+    const OptionMap& getOptions() const { return _optionDatas; }
     std::vector<const OptionData*> sortedOptionDataList() const;
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);

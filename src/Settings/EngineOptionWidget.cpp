@@ -140,11 +140,17 @@ void EngineOptionWidget::stringSaverCard(OptionGroupBox* inOptGroup
 
     auto& [curValue, saveFunction] = makeSetAttrExp.value();
 
-    Expected<SettingCard*> card = CardFactory::createStringSaver(inOptGroup, inOptData, curValue, std::move(saveFunction));
-    if (card)
+    const Expected<SettingCard*> cardExp = CardFactory::createStringSaver(inOptGroup, inOptData, curValue, std::move(saveFunction));
+
+    if (!cardExp)
     {
-        inOptGroup->addChild(card.value());
+        showErrorMessage(cardExp.error());
+        return;
     }
+
+    SettingCard* card = cardExp.value();
+    inOptGroup->addChild(card);
+
 }
 
 void EngineOptionWidget::doubleSpinCard(OptionGroupBox* inOptGroup
@@ -159,11 +165,15 @@ void EngineOptionWidget::doubleSpinCard(OptionGroupBox* inOptGroup
     }
     auto& [curValue, saveFunction] = makeSetAttrExp.value();
 
-    Expected<SettingCard*> card = CardFactory::createDoubleSpin(inOptGroup, inOptData, curValue, std::move(saveFunction));
-    if (card)
+    Expected<SettingCard*> cardExp = CardFactory::createDoubleSpin(inOptGroup, inOptData, curValue, std::move(saveFunction));
+    if (!cardExp)
     {
-        inOptGroup->addChild(card.value());
+        showErrorMessage(cardExp.error());
+        return;
     }
+
+    SettingCard* card = cardExp.value();
+    inOptGroup->addChild(card);
 }
 
 

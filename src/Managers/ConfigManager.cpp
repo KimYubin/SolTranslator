@@ -3,6 +3,7 @@
 #include "ConfigManager.h"
 
 #include "EngineManager.h"
+#include "SecretStore.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
 #include "qtkeychain/keychain.h"
@@ -94,6 +95,7 @@ EnumType enumValue(const QSettings* inSettings, const QString& inKey, const Enum
 ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
     _settings = new QSettings(SolPath::absolute(SolFile::Config), QSettings::IniFormat, this);
+    _secretStore = new SecretStore(this);
 }
 
 
@@ -107,6 +109,15 @@ EngineId ConfigManager::currentEngineId() const
     return EngineId{_settings->value(CurrentEngine, EngineIds::defaultEngine.toString()).toString()};
 }
 
+namespace
+{
+QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
+{
+    return EngineAttribute + inEngineId.toString() + "/" + inKey.toString();
+}
+} // anonymous namespace
+
+
 void ConfigManager::setSecretKey(const QString& inKey, const QVariant& inValue)
 {
     _settings->setValue(inKey, inValue);
@@ -119,18 +130,20 @@ void ConfigManager::setSecretKey(const QString& inKey
     
 }
 
-QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
+void ConfigManager::loadSecretKey(const QString& inKey, Callback<void()>&& inFunction)
 {
-    return _settings->value(inKey, inDefault);
+    _secretStore->requestLoadSecret(inKey, std::move(inFunction));
 }
 
-namespace
+void ConfigManager::loadSecretKey(const EngineId& inEngineId, const OptionKey& inKey, Callback<void()>&& inFunction)
 {
-QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
-{
-    return EngineAttribute + inEngineId.toString() + "/" + inKey.toString();
+    loadSecretKey(engineAttributeKey(inEngineId, inKey), std::move(inFunction));
 }
-} // anonymous namespace
+
+QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
+{
+    return _secretStore->getSecret(inKey, inDefault.toString());;
+}
 
 Expected<void> ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
 {
@@ -141,13 +154,16 @@ Expected<void> ConfigManager::setEngineAttribute(const EngineId& inEngineId, con
         return makeUnexpected("Not found Engine OptionData. Check the registration of the engine OptionData. key: " + inKey.toString());
     }
 
-    if (optExp.value()->isSecretMode)
+    const OptionData& optData = *optExp.value();
+    const QString attKey      = engineAttributeKey(inEngineId, inKey);
+
+    if (optData.isSecretMode)
     {
-        setSecretKey(engineAttributeKey(inEngineId, inKey), inValue);
+        setSecretKey(attKey, inValue);
         return {};
     }
 
-    _settings->setValue(engineAttributeKey(inEngineId, inKey), inValue);
+    _settings->setValue(attKey, inValue);
     return {};
 }
 
@@ -165,10 +181,10 @@ Expected<QVariant> ConfigManager::engineAttribute(const EngineId& inEngineId, co
     }
 
     const OptionData& optData = *optExp.value();
-    const QString attKey      = engineAttributeKey(inEngineId, optData.key);
+    const QString attKey      = engineAttributeKey(inEngineId, inKey);
     const QVariant defaultVal = optData.getDefaultValue();
 
-    if (optExp.value()->isSecretMode)
+    if (optData.isSecretMode)
     {
         return secretKey(attKey, defaultVal);
     }

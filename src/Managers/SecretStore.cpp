@@ -2,6 +2,7 @@
 
 #include "SecretStore.h"
 
+#include "ConfigManager.h"
 #include "qtkeychain/keychain.h"
 
 #include <QVariant>
@@ -11,6 +12,10 @@ namespace
 const QString service = "sol.translator.app";
 } // anonymous namespace
 
+
+SecretStore::SecretStore(ConfigManager* inParent)
+    : QObject(inParent)
+{}
 
 void SecretStore::requestLoadSecret(const QString& inKey
                                   , Callback<void()>&& inFunction)

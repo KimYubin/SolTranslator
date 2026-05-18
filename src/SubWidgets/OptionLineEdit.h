@@ -26,7 +26,7 @@ public:
 
     void setIsSecret(const bool inIsSecret);
 
-    void setSaveFunctor(Callback<void(const QString&)>&& inSetFunction);
+    void setSaveFunctor(Callback<void(const QString&)>&& inSaveFunction);
 
 public slots:
     void saveText();

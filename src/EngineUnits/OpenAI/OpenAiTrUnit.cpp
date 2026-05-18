@@ -20,7 +20,10 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
 
 void OpenAiTrUnit::requestTranslateImpl()
 {
-    chatTranslate(true);
+    solConfig.loadSecretKey(_trEngine->getEngineId(), TrEngineOptionKey::ApiKey, [this]()
+    {
+        chatTranslate(true);
+    });
 }
 
 void OpenAiTrUnit::chatTranslate(const bool inIsStreaming)

@@ -7,6 +7,7 @@
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
+class SecretStore;
 struct OptionData;
 class OptionKey;
 class EngineId;
@@ -41,6 +42,10 @@ public:
     void setSecretKey(const QString& inKey
                     , const QVariant& inValue
                     , Callback<void(const QVariant&)>&& inFunction);
+
+    void loadSecretKey(const QString& inKey, Callback<void()>&& inFunction);
+    void loadSecretKey(const EngineId& inEngineId, const OptionKey& inKey, Callback<void()>&& inFunction);
+
     QVariant secretKey(const QString& inKey, const QVariant& inDefault) const;
 
     Expected<void> setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
@@ -103,6 +108,7 @@ private:
 
 private:
     QSettings* _settings;
+    SecretStore* _secretStore;
 };
 
 #endif //CONFIGMANAGER_H

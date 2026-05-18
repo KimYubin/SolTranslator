@@ -14,9 +14,9 @@ class GoogleTrUnit final : public TranslateUnit
 public:
     explicit GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
-    virtual void requestTranslate() override;
-
 protected:
+    virtual void requestTranslateImpl() override;
+
     virtual void onReadyRead() override;
     virtual QString replyTranslateFinished() override;
 };
@@ -27,6 +27,7 @@ namespace EngineIds
 inline const EngineId Google{"Google"};
 inline const EngineId& defaultEngine = Google;
 }
+
 class GoogleEngine : public ITranslateEngine
 {
     Q_OBJECT
@@ -35,7 +36,6 @@ class GoogleEngine : public ITranslateEngine
 public:
     explicit GoogleEngine();
     ~GoogleEngine() override;
-
 };
 
 #endif //TRANSLATEUNITGOOGLE_H

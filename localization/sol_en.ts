@@ -36,6 +36,34 @@
     </message>
 </context>
 <context>
+    <name>QKeychain::PlainTextStore</name>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="73"/>
+        <source>Could not store data in settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="75"/>
+        <source>Could not store data in settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="93"/>
+        <source>Could not delete data from settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="95"/>
+        <source>Could not delete data from settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../thirdparty/qtkeychain/plaintextstore.cpp" line="112"/>
+        <source>Entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QKeychain::ReadPasswordJobPrivate</name>
     <message>
         <location filename="../thirdparty/qtkeychain/keychain_win.cpp" line="100"/>

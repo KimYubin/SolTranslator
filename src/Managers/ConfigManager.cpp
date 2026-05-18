@@ -5,6 +5,7 @@
 #include "EngineManager.h"
 #include "EngineUnits/FinPoint/FinPointTrUnit.h"
 #include "EngineUnits/GoogleEngine/GoogleTrUnit.h"
+#include "qtkeychain/keychain.h"
 #include "Types/OptionKey.h"
 #include "Types/SolConstants.h"
 #include "Types/SolExpected.hpp"
@@ -109,6 +110,13 @@ EngineId ConfigManager::currentEngineId() const
 void ConfigManager::setSecretKey(const QString& inKey, const QVariant& inValue)
 {
     _settings->setValue(inKey, inValue);
+}
+
+void ConfigManager::setSecretKey(const QString& inKey
+                               , const QVariant& inValue
+                               , Callback<void(const QVariant&)>&& inFunction)
+{
+    
 }
 
 QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const

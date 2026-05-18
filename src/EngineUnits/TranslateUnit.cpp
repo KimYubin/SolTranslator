@@ -50,6 +50,11 @@ void TranslateUnit::onTranslationFromCache(const QString& inTargetText)
     completeTranslatedText(inTargetText);
 }
 
+void TranslateUnit::requestTranslate()
+{
+    requestTranslateImpl();
+}
+
 void TranslateUnit::get(const QNetworkRequest& inRequest)
 {
     Q_ASSERT_X(_translateManager, "TranslateUnit::get", "TranslateManager is invalid.");

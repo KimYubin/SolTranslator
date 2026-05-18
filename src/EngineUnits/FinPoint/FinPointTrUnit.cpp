@@ -17,7 +17,7 @@ FinPointTrUnit::FinPointTrUnit(TranslateManager* parent, ITranslateEngine* inEng
     : TranslateUnit(parent, inEngine)
 {}
 
-void FinPointTrUnit::requestTranslate()
+void FinPointTrUnit::requestTranslateImpl()
 {
     chatTranslate(true);
 }

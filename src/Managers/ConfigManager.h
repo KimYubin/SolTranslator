@@ -38,6 +38,9 @@ public:
      * This is an interface left for future implementation.
      */
     void setSecretKey(const QString& inKey, const QVariant& inValue);
+    void setSecretKey(const QString& inKey
+                    , const QVariant& inValue
+                    , Callback<void(const QVariant&)>&& inFunction);
     QVariant secretKey(const QString& inKey, const QVariant& inDefault) const;
 
     Expected<void> setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);

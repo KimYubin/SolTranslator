@@ -30,9 +30,11 @@ public:
     void setTranslateRequest(TranslateRequest&& inTrRequest);
     void onTranslationFromCache(const QString& inTargetText);
 
-    virtual void requestTranslate() = 0;
+    void requestTranslate();
 
 protected:
+    virtual void requestTranslateImpl() = 0;
+
     void get(const QNetworkRequest& inRequest);
     void post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming);
 
@@ -103,7 +105,7 @@ protected:
     QMetaObject::Connection _streamConnection;
     QMetaObject::Connection _completeConnection;
 
-    bool _isStream = false;
+    bool _isStream        = false;
     bool _isReplyFinished = false;
 };
 

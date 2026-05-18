@@ -18,7 +18,7 @@ OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
     : TranslateUnit(parent, inEngine)
 {}
 
-void OpenAiTrUnit::requestTranslate()
+void OpenAiTrUnit::requestTranslateImpl()
 {
     chatTranslate(true);
 }

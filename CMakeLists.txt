@@ -71,6 +71,8 @@ qt_add_executable(
         src/Managers/InputSimulator_Impl_Win.cpp
         src/Managers/InputSimulator.cpp
         src/Managers/InputSimulator.h
+        src/Managers/SecretStore.cpp
+        src/Managers/SecretStore.h
         src/Managers/StyleManger.cpp
         src/Managers/StyleManger.h
         src/Managers/TranslateManager.cpp

@@ -15,7 +15,7 @@ GoogleTrUnit::GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
     : TranslateUnit(parent, inEngine)
 {}
 
-void GoogleTrUnit::requestTranslate()
+void GoogleTrUnit::requestTranslateImpl()
 {
     if (_trReqData.textFormat != TextStyle::PlainText)
     {

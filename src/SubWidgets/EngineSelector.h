@@ -4,6 +4,7 @@
 #define SOLTRANSLATOR_ENGINSELECTER_H
 
 #include "DropdownMenu.h"
+#include "Types/SolTypes.h"
 
 /**
  * Engine selection combo box
@@ -15,7 +16,7 @@ class EngineSelector : public DropdownMenu
 public:
     explicit EngineSelector(QWidget* parent = nullptr);
 
-    void setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor);
+    void setCurrentIndexChanged(Callback<void(const int)>&& inFunctor);
 
 };
 

@@ -42,7 +42,7 @@ public:
                           , const LangType inSourceLang
                           , const LangType inTargetLang
                           , QObject* inContext
-                          , std::move_only_function<void(const LookupResult&)> inFinishedFunction);
+                          , Callback<void(const LookupResult&)> inFinishedFunction);
 
 signals:
     void requestHistoryLookup(const EngineId& inEngineId
@@ -78,7 +78,7 @@ private:
     struct reqCallback
     {
         QPointer<QObject> context;
-        std::move_only_function<void(const LookupResult&)> callback;
+        Callback<void(const LookupResult&)> callback;
     };
     std::unordered_map<int, reqCallback> _requestCallbacks;
 };

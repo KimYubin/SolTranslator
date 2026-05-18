@@ -5,6 +5,7 @@
 
 #include "IOptionWidget.h"
 #include "Types/SolExpected.hpp"
+#include "Types/SolTypes.h"
 
 class OptionGroupBox;
 class OptionKey;
@@ -14,9 +15,6 @@ struct OptionData;
 class SettingCard;
 class EngineId;
 class SolTranslatorCore;
-
-template <typename T>
-using MoveFunc = std::move_only_function<T>;
 
 class EngineOptionWidget : public IOptionWidget
 {
@@ -40,7 +38,7 @@ private:
      * @return stored value, setAttribute functor.
      */
     template <typename T>
-    Expected<std::tuple<T, MoveFunc<void(const T&)>>> makeSetAttribute(const EngineId& inEngineId
+    Expected<std::tuple<T, Callback<void(const T&)>>> makeSetAttribute(const EngineId& inEngineId
                                                                      , const OptionKey& inKey);
 
     void stringSaverCard(OptionGroupBox* inOptGroup

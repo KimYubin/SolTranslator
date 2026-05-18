@@ -95,7 +95,7 @@ void OptionLineEdit::setIsSecret(const bool inIsSecret)
     }
 }
 
-void OptionLineEdit::setSaveFunctor(std::move_only_function<void(const QString&)>&& inSetFunction)
+void OptionLineEdit::setSaveFunctor(Callback<void(const QString&)>&& inSetFunction)
 {
     _saveFunctor = std::move(inSetFunction);
 }

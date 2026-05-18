@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_SOLDOCUMENT_H
 #define SOLTRANSLATOR_SOLDOCUMENT_H
 
-#include <functional>
+#include "Types/SolTypes.h"
 
 class QObject;
 class QTextDocument;
@@ -33,7 +33,7 @@ QString htmlToMarkdown(QTextDocument& inDoc);
  */
 void asyncHtmlToMarkdown(QString inHtml
                        , QObject* inContext
-                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc);
+                       , Callback<void(const QString&)>&& inMainThreadFunc);
 
 
 /**

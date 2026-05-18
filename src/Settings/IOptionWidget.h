@@ -88,7 +88,7 @@ public:
 protected:
     void setDisplayName(const QString& inDisplayName);
     void setIconPath(const QString& inIconPath);
-    void setOptionWidgetCtor(std::move_only_function<IOptionWidget*(void)>&& inOptionWidgetCtor);
+    void setOptionWidgetCtor(Callback<IOptionWidget*(void)>&& inOptionWidgetCtor);
     void setPriority(const int inPriority);
 
 private:
@@ -96,7 +96,7 @@ private:
 
     QString _displayName;
     QString _iconPath;
-    std::move_only_function<IOptionWidget*(void)> _optionWidgetCtor;
+    Callback<IOptionWidget*(void)> _optionWidgetCtor;
     int _priority;
 
     int _optionStkId;

@@ -5,6 +5,7 @@
 
 #include "Types/OptionData.h"
 #include "Types/SolExpected.hpp"
+#include "Types/SolTypes.h"
 
 #include <QObject>
 
@@ -24,12 +25,12 @@ public:
     static Expected<SettingCard*> createStringSaver(QWidget* inParent
                                                   , const OptionData& inOptData
                                                   , const QString& inCurrentVal
-                                                  , std::move_only_function<void(const QString&)>&& inSetFunction);
+                                                  , Callback<void(const QString&)>&& inSetFunction);
 
     static Expected<SettingCard*> createDoubleSpin(QWidget* inParent
                                                  , const OptionData& inOptData
                                                  , const double inCurrentVal
-                                                 , std::move_only_function<void(const double)>&& inSetFunction);
+                                                 , Callback<void(const double)>&& inSetFunction);
 };
 
 

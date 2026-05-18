@@ -40,7 +40,7 @@ SettingCard* createBaseCard(QWidget* inContent
 Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
                                                     , const OptionData& inOptData
                                                     , const QString& inCurrentVal
-                                                    , std::move_only_function<void(const QString&)>&& inSetFunction)
+                                                    , Callback<void(const QString&)>&& inSetFunction)
 {
     const StringSaver* optDataPtr = std::get_if<StringSaver>(&inOptData.defaultValue);
     if (optDataPtr == nullptr)
@@ -81,7 +81,7 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
 Expected<SettingCard*> CardFactory::createDoubleSpin(QWidget* inParent
                                                    , const OptionData& inOptData
                                                    , const double inCurrentVal
-                                                   , std::move_only_function<void(const double)>&& inSetFunction)
+                                                   , Callback<void(const double)>&& inSetFunction)
 {
     const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptData.defaultValue);
     if (spinDataPtr == nullptr)

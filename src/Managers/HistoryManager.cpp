@@ -69,7 +69,7 @@ void HistoryManager::asyncLookupHistory(const EngineId& inEngineId
                                       , const LangType inSourceLang
                                       , const LangType inTargetLang
                                       , QObject* inContext
-                                      , std::move_only_function<void(const LookupResult&)> inFinishedFunction)
+                                      , Callback<void(const LookupResult&)> inFinishedFunction)
 {
     const int requestID = newRequestId();
 

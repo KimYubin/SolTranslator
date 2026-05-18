@@ -9,6 +9,7 @@
 #include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SwitchButton.h"
+#include "Types/SolTypes.h"
 #include "Utils/SolI18n.h"
 #include "Widgets/SolMainWidget.h"
 

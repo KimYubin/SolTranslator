@@ -3,9 +3,7 @@
 #ifndef SOLTRANSLATOR_SOLGUARD_H
 #define SOLTRANSLATOR_SOLGUARD_H
 
-#include <QtClassHelperMacros>
-
-#include <functional>
+#include "SolTypes.h"
 
 class QPainter;
 
@@ -18,8 +16,8 @@ class SolGeneralGuard
 {
 public:
     [[nodiscard]]
-    explicit SolGeneralGuard(std::move_only_function<void(void)>&& inStartFunctor
-                           , std::move_only_function<void(void)>&& inEndFunctor)
+    explicit SolGeneralGuard(Callback<void(void)>&& inStartFunctor
+                           , Callback<void(void)>&& inEndFunctor)
         : _startFunctor(std::move(inStartFunctor))
         , _endFunctor(std::move(inEndFunctor))
     {
@@ -27,7 +25,7 @@ public:
     }
 
     [[nodiscard]]
-    explicit SolGeneralGuard(std::move_only_function<void(void)>&& inEndFunctor)
+    explicit SolGeneralGuard(Callback<void(void)>&& inEndFunctor)
         : _endFunctor(std::move(inEndFunctor))
     {}
 
@@ -37,8 +35,8 @@ public:
     }
 
 private:
-    std::move_only_function<void(void)> _startFunctor;
-    std::move_only_function<void(void)> _endFunctor;
+    Callback<void(void)> _startFunctor;
+    Callback<void(void)> _endFunctor;
 
     Q_DISABLE_COPY_MOVE(SolGeneralGuard)
 };

@@ -2,13 +2,18 @@
 
 #ifndef SOLTYPES_H
 #define SOLTYPES_H
+#include <functional>
 
-#include <QObject>
-#include <QPointer>
+#include <QString>
+#include <qnamespace.h>
 
 class QString;
 class ITranslateWidget;
 enum class LangType;
+
+
+template <typename Signature>
+using Callback = std::move_only_function<Signature>;
 
 
 namespace Sol

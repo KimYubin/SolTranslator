@@ -5,6 +5,7 @@
 
 #include "AbstractManager.h"
 #include "Types/SolExpected.hpp"
+#include "Types/SolTypes.h"
 
 #include <QHotkey>
 
@@ -30,7 +31,7 @@ public:
      */
     void registerAction(const Action inActionType
                       , const QObject* inContext
-                      , std::move_only_function<void(void)>&& inFunction);
+                      , Callback<void(void)>&& inFunction);
 
     /**
      * Register global shortcut.
@@ -38,7 +39,7 @@ public:
     void registerHotKey(const Action inActionType
                       , const QKeySequence& inKeySeq
                       , const QObject* inContext
-                      , std::move_only_function<void(void)>&& inFunction);
+                      , Callback<void(void)>&& inFunction);
 
 
     Expected<void> changeHotkey(const Action inActionType

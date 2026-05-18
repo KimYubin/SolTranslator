@@ -13,9 +13,9 @@ TranslateRequest::TranslateRequest(ITranslateWidget* inTrDisplayWidget
                                  , const LangType inSourceLang
                                  , const LangType inTargetLang
                                  , QObject* inCompleteContext
-                                 , std::move_only_function<void(const QString&)>&& inFuncComplete
+                                 , ReceiveMoveFunc&& inFuncComplete
                                  , QObject* inStreamContext
-                                 , std::optional<std::move_only_function<void(const QString&)>>&& inFuncStreaming)
+                                 , std::optional<ReceiveMoveFunc>&& inFuncStreaming)
     : trDisplayWidget(inTrDisplayWidget)
     , isIgnoreCache(inIsIgnoreCache)
     , engineId(inEngineId)

@@ -104,7 +104,7 @@ void EngineOptionWidget::showErrorMessage(const Error& inError)
 }
 
 template <typename T>
-Expected<std::tuple<T, MoveFunc<void(const T&)>>>
+Expected<std::tuple<T, Callback<void(const T&)>>>
     EngineOptionWidget::makeSetAttribute(const EngineId& inEngineId
                                        , const OptionKey& inKey)
 {

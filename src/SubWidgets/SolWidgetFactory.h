@@ -3,6 +3,8 @@
 #ifndef SOLTRANSLATOR_SOLWIDGETFACTORY_H
 #define SOLTRANSLATOR_SOLWIDGETFACTORY_H
 
+#include "Types/SolTypes.h"
+
 #include <QObject>
 
 enum class Action;
@@ -27,17 +29,17 @@ public:
      * @return 
      */
     static SolButton* createCopyButton(QWidget* inParent
-                                     , std::move_only_function<QString(void)>&& inCopyStringFunc);
+                                     , Callback<QString()>&& inCopyStringFunc);
 
     static SolButton* createToggleButton(QWidget* inParent
-                                       , std::move_only_function<void(void)>&& inToggleFunc);
+                                       , Callback<void()>&& inToggleFunc);
 
     static SolButton* createReTranslateButton(QWidget* inParent
-                                            , std::move_only_function<void(void)>&& inTranslateFunc);
+                                            , Callback<void()>&& inTranslateFunc);
     static SolButton* createViewInPopup(QWidget* inParent
-                                      , std::move_only_function<void(void)>&& inFunc);
+                                      , Callback<void()>&& inFunc);
     static SolButton* createDeleteTranslation(QWidget* inParent
-                                            , std::move_only_function<void(void)>&& inFunc);
+                                            , Callback<void()>&& inFunc);
 };
 
 

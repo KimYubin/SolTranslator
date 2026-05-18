@@ -269,7 +269,7 @@ void IOptionPage::setIconPath(const QString& inIconPath)
     _iconPath = inIconPath;
 }
 
-void IOptionPage::setOptionWidgetCtor(std::move_only_function<IOptionWidget*(void)>&& inOptionWidgetCtor)
+void IOptionPage::setOptionWidgetCtor(Callback<IOptionWidget*(void)>&& inOptionWidgetCtor)
 {
     _optionWidgetCtor = std::move(inOptionWidgetCtor);
 }

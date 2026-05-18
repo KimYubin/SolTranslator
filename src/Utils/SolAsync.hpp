@@ -3,6 +3,8 @@
 #ifndef SOLASYNC_H
 #define SOLASYNC_H
 
+#include "Types/SolTypes.h"
+
 #include <QFuture>
 #include <QObject>
 #include <QtConcurrent>
@@ -23,8 +25,8 @@ public:
      */
     template <typename ret>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::move_only_function<ret(void)>&& inAsyncFunc
-                          , std::move_only_function<void(ret)>&& inMainThreadFunc)
+                          , Callback<ret(void)>&& inAsyncFunc
+                          , Callback<void(ret)>&& inMainThreadFunc)
     {
         QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
         connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable
@@ -39,8 +41,8 @@ public:
 
     template <typename>
     static void asyncLaunch(QObject* inWatcherContext
-                          , std::move_only_function<void(void)>&& inAsyncFunc
-                          , std::move_only_function<void(void)>&& inMainThreadFunc)
+                          , Callback<void(void)>&& inAsyncFunc
+                          , Callback<void(void)>&& inMainThreadFunc)
     {
         QFutureWatcher<void>* watcher = new QFutureWatcher<void>(inWatcherContext);
         connect(watcher, &QFutureWatcher<void>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable

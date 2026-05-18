@@ -29,7 +29,7 @@ SolButton* SolWidgetFactory::createButton(QWidget* inParent
 }
 
 SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
-                                            , std::move_only_function<QString(void)>&& inCopyStringFunc)
+                                            , Callback<QString()>&& inCopyStringFunc)
 {
     SolButton* copyButton = createButton(inParent
                                        , QIcon(":/img/copy_img")
@@ -58,7 +58,7 @@ SolButton* SolWidgetFactory::createCopyButton(QWidget* inParent
 }
 
 SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
-                                              , std::move_only_function<void()>&& inToggleFunc)
+                                              , Callback<void()>&& inToggleFunc)
 {
     SolButton* toggleButton = createButton(inParent
                                          , QIcon(":/img/swap_text_img")
@@ -75,7 +75,7 @@ SolButton* SolWidgetFactory::createToggleButton(QWidget* inParent
 }
 
 SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
-                                                   , std::move_only_function<void(void)>&& inTranslateFunc)
+                                                   , Callback<void()>&& inTranslateFunc)
 {
     SolButton* newButton = createButton(inParent
                                       , QIcon(":/img/refresh_img")
@@ -92,7 +92,7 @@ SolButton* SolWidgetFactory::createReTranslateButton(QWidget* inParent
 }
 
 SolButton* SolWidgetFactory::createViewInPopup(QWidget* inParent
-                                             , std::move_only_function<void()>&& inFunc)
+                                             , Callback<void()>&& inFunc)
 {
     SolButton* newButton = createButton(inParent
                                       , QIcon(":/img/open_new_img")
@@ -109,7 +109,7 @@ SolButton* SolWidgetFactory::createViewInPopup(QWidget* inParent
 }
 
 SolButton* SolWidgetFactory::createDeleteTranslation(QWidget* inParent
-                                                   , std::move_only_function<void()>&& inFunc)
+                                                   , Callback<void()>&& inFunc)
 {
     SolButton* newButton = createButton(inParent
                                       , QIcon(":/img/delete_img")

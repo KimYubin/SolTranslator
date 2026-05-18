@@ -5,6 +5,7 @@
 
 #include "AbstractManager.h"
 #include "Types/SolExpected.hpp"
+#include "Types/SolTypes.h"
 
 struct OptionData;
 class OptionKey;
@@ -22,7 +23,7 @@ enum class LangType;
 /**
  * The ConfigManager class stores and manages configuration/settings.
  */
-class ConfigManager: public AbstractManager
+class ConfigManager : public AbstractManager
 {
     Q_OBJECT
 
@@ -33,7 +34,7 @@ public:
     EngineId currentEngineId() const;
 
     /**
-     * Caution! The secret storage feature has not been implemented yet. 
+     * Caution! The secret storage feature has not been implemented yet.
      * This is an interface left for future implementation.
      */
     void setSecretKey(const QString& inKey, const QVariant& inValue);

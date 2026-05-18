@@ -29,7 +29,7 @@ EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
     setCurrentIndex(curIdx);
 }
 
-void EngineSelector::setCurrentIndexChanged(std::move_only_function<void(const int)>&& inFunctor)
+void EngineSelector::setCurrentIndexChanged(Callback<void(const int)>&& inFunctor)
 {
     connect(this, &QComboBox::currentIndexChanged, this, std::move(inFunctor));
 }

@@ -3,6 +3,7 @@
 #ifndef SOLTRANSLATOR_OPTIONLINEEDIT_H
 #define SOLTRANSLATOR_OPTIONLINEEDIT_H
 #include "CustomMenuTextEdit.h"
+#include "Types/SolTypes.h"
 
 class OptionLineEdit : public MenuLineEdit
 {
@@ -25,14 +26,14 @@ public:
 
     void setIsSecret(const bool inIsSecret);
 
-    void setSaveFunctor(std::move_only_function<void(const QString&)>&& inSetFunction);
+    void setSaveFunctor(Callback<void(const QString&)>&& inSetFunction);
 
 public slots:
     void saveText();
 
 private:
     QString _defaultText;
-    std::move_only_function<void(const QString&)> _saveFunctor;
+    Callback<void(const QString&)> _saveFunctor;
 
     bool _isSecret = false;
 };

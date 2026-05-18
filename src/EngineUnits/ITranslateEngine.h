@@ -6,11 +6,10 @@
 #include "Types/EngineId.h"
 #include "Types/OptionData.h"
 #include "Types/SolExpected.hpp"
+#include "Types/SolTypes.h"
 
 #include <QObject>
 #include <qicon.h>
-
-#include <functional>
 
 
 class ITranslateEngine;
@@ -18,7 +17,7 @@ class TranslateManager;
 class TranslateUnit;
 
 using OptionMap     = std::unordered_map<OptionKey, OptionData, OptionKey_hasher>;
-using TrUnitCreator = std::move_only_function<TranslateUnit*(TranslateManager*)>;
+using TrUnitCreator = Callback<TranslateUnit*(TranslateManager*)>;
 
 /** The ITranslateEngine class manages metadata for the translation engine. */
 class ITranslateEngine : public QObject

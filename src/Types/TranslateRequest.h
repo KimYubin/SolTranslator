@@ -11,7 +11,7 @@
 
 class ITranslateWidget;
 
-using ReceiveMoveFunction = std::move_only_function<void(const QString&)>;
+using ReceiveMoveFunc = Callback<void(const QString&)>;
 
 struct TranslateRequest
 {
@@ -40,9 +40,9 @@ struct TranslateRequest
                    , const LangType inSourceLang
                    , const LangType inTargetLang
                    , QObject* inCompleteContext
-                   , ReceiveMoveFunction&& inFuncComplete
+                   , ReceiveMoveFunc&& inFuncComplete
                    , QObject* inStreamContext = nullptr
-                   , std::optional<ReceiveMoveFunction>&& inFuncStreaming = std::nullopt);
+                   , std::optional<ReceiveMoveFunc>&& inFuncStreaming = std::nullopt);
 
     QPointer<ITranslateWidget> trDisplayWidget;
     bool isIgnoreCache;
@@ -52,9 +52,9 @@ struct TranslateRequest
     LangType sourceLang;
     LangType targetLang;
     QPointer<QObject> completeContext;
-    ReceiveMoveFunction callbackTranslateComplete;
+    ReceiveMoveFunc callbackTranslateComplete;
     QPointer<QObject> streamContext;
-    std::optional<ReceiveMoveFunction> callbackTranslateStreaming;
+    std::optional<ReceiveMoveFunc> callbackTranslateStreaming;
 };
 
 

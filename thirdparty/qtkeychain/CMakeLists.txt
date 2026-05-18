@@ -56,8 +56,8 @@ endif ()
 
 target_link_libraries(${QTKEYCHAIN_TARGET_NAME} PUBLIC ${qtkeychain_LIBRARIES} PRIVATE ${qtkeychain_LIBRARIES_PRIVATE})
 
-# 최신화:
-# compile option/definition들을 target 단위로 이동.
+
+
 if (MSVC)
     target_compile_options(${QTKEYCHAIN_TARGET_NAME} PRIVATE /W4 /utf-8)
 else ()
@@ -71,6 +71,8 @@ endif ()
 if (UNIX AND NOT APPLE AND NOT ANDROID AND NOT HAIKU AND NOT EMSCRIPTEN)
     target_compile_definitions(${QTKEYCHAIN_TARGET_NAME} PRIVATE KEYCHAIN_DBUS=1)
 endif ()
+
+
 
 if (NOT INTERFACE_INCLUDE_SUFFIX)
     set(INTERFACE_INCLUDE_SUFFIX include)

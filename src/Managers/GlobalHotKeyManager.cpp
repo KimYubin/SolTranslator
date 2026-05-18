@@ -20,7 +20,7 @@ GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
 
 void GlobalHotKeyManager::registerAction(const Action inActionType
                                        , const QObject* inContext
-                                       , std::move_only_function<void(void)>&& inFunction)
+                                       , Callback<void(void)>&& inFunction)
 {
     registerHotKey(inActionType
                  , solConfig.shortcut(inActionType)
@@ -31,7 +31,7 @@ void GlobalHotKeyManager::registerAction(const Action inActionType
 void GlobalHotKeyManager::registerHotKey(const Action inActionType
                                        , const QKeySequence& inKeySeq
                                        , const QObject* inContext
-                                       , std::move_only_function<void(void)>&& inFunction)
+                                       , Callback<void(void)>&& inFunction)
 {
     if (_hotKeys.contains(inActionType))
     {

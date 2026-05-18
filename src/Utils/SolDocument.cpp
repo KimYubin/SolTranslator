@@ -39,7 +39,7 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 
 void asyncHtmlToMarkdown(QString inHtml
                        , QObject* inContext
-                       , std::move_only_function<void(const QString&)>&& inMainThreadFunc)
+                       , Callback<void(const QString&)>&& inMainThreadFunc)
 {
     SolAsync::asyncLaunch<QString>(
         inContext,

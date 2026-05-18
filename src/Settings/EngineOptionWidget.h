@@ -11,7 +11,7 @@ class OptionGroupBox;
 class OptionKey;
 class QTabWidget;
 class ITranslateEngine;
-struct OptionData;
+struct OptionSpec;
 class SettingCard;
 class EngineId;
 class SolTranslatorCore;
@@ -31,23 +31,23 @@ private:
     void showErrorMessage(const Error& inError);
 
     /**
-     * Get the stored engine attribute value
-     * and create the setAttribute functor.
+     * Get the stored engine option value
+     * and create the setOption functor.
      *
      * @tparam T load/store type
-     * @return stored value, setAttribute functor.
+     * @return stored value, setOption functor.
      */
     template <typename T>
-    Expected<std::tuple<T, Callback<void(const T&)>>> makeSetAttribute(const EngineId& inEngineId
-                                                                     , const OptionKey& inKey);
+    Expected<std::tuple<T, Callback<void(const T&)>>> makeSetOption(const EngineId& inEngineId
+                                                                  , const OptionKey& inKey);
 
     void stringSaverCard(OptionGroupBox* inOptGroup
                        , const EngineId& inEngineId
-                       , const OptionData& inOptData);
+                       , const OptionSpec& inOptSpec);
 
     void doubleSpinCard(OptionGroupBox* inOptGroup
                       , const EngineId& inEngineId
-                      , const OptionData& inOptData);
+                      , const OptionSpec& inOptSpec);
 
 private:
     friend class EngineOptionPage;

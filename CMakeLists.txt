@@ -136,10 +136,10 @@ qt_add_executable(
         src/Types/EngineId.h
         src/Types/ExJson.cpp
         src/Types/ExJson.h
-        src/Types/OptionData.cpp
-        src/Types/OptionData.h
         src/Types/OptionKey.cpp
         src/Types/OptionKey.h
+        src/Types/OptionSpec.cpp
+        src/Types/OptionSpec.h
         src/Types/SolConstants.cpp
         src/Types/SolConstants.h
         src/Types/SolDatabase.cpp

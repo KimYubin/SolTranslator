@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef SOLTRANSLATOR_OPTIONDATA_H
-#define SOLTRANSLATOR_OPTIONDATA_H
+#ifndef SOLTRANSLATOR_OPTIONSPEC_H
+#define SOLTRANSLATOR_OPTIONSPEC_H
 
 #include "Types/OptionKey.h"
 #include "Utils/EnumUtils.hpp"
@@ -80,9 +80,9 @@ struct StringSaver
 using OptionVariant = std::variant<std::monostate, int, double, bool, SpinData<int>, SpinData<double>, StringSaver, ComboList>;
 
 
-struct OptionData
+struct OptionSpec
 {
-    OptionData(OptionKey inKey
+    OptionSpec(OptionKey inKey
              , QString inHeaderName
              , std::optional<QString> inDescription
              , OptionVariant inDefaultValue
@@ -94,19 +94,19 @@ struct OptionData
         , isSecretMode(inIsSecretMode)
     {}
 
-    OptionData()                                         = default;
-    ~OptionData()                                        = default;
-    OptionData(const OptionData& inOther)                = default;
-    OptionData(OptionData&& inOther) noexcept            = default;
-    OptionData& operator=(const OptionData& inOther)     = default;
-    OptionData& operator=(OptionData&& inOther) noexcept = default;
+    OptionSpec()                                         = default;
+    ~OptionSpec()                                        = default;
+    OptionSpec(const OptionSpec& inOther)                = default;
+    OptionSpec(OptionSpec&& inOther) noexcept            = default;
+    OptionSpec& operator=(const OptionSpec& inOther)     = default;
+    OptionSpec& operator=(OptionSpec&& inOther) noexcept = default;
 
     enum class Type
     {
         None, Int, Double, Bool, SpinDataInt, SpinDataDouble, StringSaver, Combo
     };
 
-    Type getOptionDataType() const
+    Type getOptionSpecType() const
     {
         return static_cast<Type>(defaultValue.index());
     };
@@ -128,4 +128,4 @@ struct OptionData
 };
 
 
-#endif //SOLTRANSLATOR_OPTIONDATA_H
+#endif //SOLTRANSLATOR_OPTIONSPEC_H

@@ -4,7 +4,7 @@
 #define SOLTRANSLATOR_ITRANSLATEENGINE_H
 
 #include "Types/EngineId.h"
-#include "Types/OptionData.h"
+#include "Types/OptionSpec.h"
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
@@ -16,7 +16,7 @@ class ITranslateEngine;
 class TranslateManager;
 class TranslateUnit;
 
-using OptionMap     = std::unordered_map<OptionKey, OptionData, OptionKey_hasher>;
+using OptionMap     = std::unordered_map<OptionKey, OptionSpec, OptionKey_hasher>;
 using TrUnitCreator = Callback<TranslateUnit*(TranslateManager*)>;
 
 /** The ITranslateEngine class manages metadata for the translation engine. */
@@ -39,9 +39,9 @@ public:
     const QIcon& getIcon() const { return _icon; }
     int getPriority() const { return _priority; }
 
-    Expected<const OptionData*> getOptionData(const OptionKey& inKey) const;
-    const OptionMap& getOptions() const { return _optionDatas; }
-    std::vector<const OptionData*> sortedOptionDataList() const;
+    Expected<const OptionSpec*> getOptionSpec(const OptionKey& inKey) const;
+    const OptionMap& getOptions() const { return _optionSpecs; }
+    std::vector<const OptionSpec*> sortedOptionSpecList() const;
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);
 
@@ -56,8 +56,8 @@ protected:
     template <std::derived_from<TranslateUnit> T>
     void setTrUnitCreatorHelper();
 
-    void appendOptionDataList(std::vector<OptionData> inOptionDatas);
-    void setOptionData(OptionData inOptionData);
+    void appendOptionSpecList(std::vector<OptionSpec> inOptionSpecs);
+    void setOptionSpec(OptionSpec inOptionSpec);
 
 private:
     int optionOrder() const { return _optionOrder++; }
@@ -72,7 +72,7 @@ private:
     TrUnitCreator _trUnitCreator;
 
     mutable int _optionOrder = 0;
-    OptionMap _optionDatas;
+    OptionMap _optionSpecs;
 };
 
 template <std::derived_from<TranslateUnit> T>

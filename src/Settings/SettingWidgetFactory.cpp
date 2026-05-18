@@ -38,31 +38,31 @@ SettingCard* createBaseCard(QWidget* inContent
 } // anonymous namespace
 
 Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
-                                                    , const OptionData& inOptData
+                                                    , const OptionSpec& inOptSpec
                                                     , const QString& inCurrentVal
                                                     , Callback<void(const QString&)>&& inSetFunction)
 {
-    const StringSaver* optDataPtr = std::get_if<StringSaver>(&inOptData.defaultValue);
-    if (optDataPtr == nullptr)
+    const StringSaver* optSpecPtr = std::get_if<StringSaver>(&inOptSpec.defaultValue);
+    if (optSpecPtr == nullptr)
     {
-        return makeUnexpected("OptionData.defaultValue is not StringSaver.");
+        return makeUnexpected("OptionSpec.defaultValue is not StringSaver.");
     }
 
-    const StringSaver& optData = *optDataPtr;
+    const StringSaver& optSpec = *optSpecPtr;
 
     QWidget* layoutWidget    = new QWidget;
-    OptionLineEdit* lineEdit = new OptionLineEdit(layoutWidget, inOptData.isSecretMode);
+    OptionLineEdit* lineEdit = new OptionLineEdit(layoutWidget, inOptSpec.isSecretMode);
     QHBoxLayout* hLayout     = new QHBoxLayout(layoutWidget);
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(lineEdit);
 
-    const QString optDefaultStr = inOptData.getDefaultValue().toString();
+    const QString optDefaultStr = inOptSpec.getDefaultValue().toString();
 
     // The placeholder is a default value.
     lineEdit->setDefaultTextAndText(optDefaultStr, inCurrentVal);
     lineEdit->setSaveFunctor(std::move(inSetFunction));
 
-    if (optData.isUsedSaveButton)
+    if (optSpec.isUsedSaveButton)
     {
         SolButton* saveButton = new SolButton(i18n(Tr::Save), layoutWidget);
         hLayout->addWidget(saveButton);
@@ -73,25 +73,25 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
         connect(lineEdit, &QLineEdit::textEdited, lineEdit, &OptionLineEdit::saveText);
     }
 
-    SettingCard* resCard = createBaseCard(layoutWidget, inParent, inOptData.headerName, inOptData.description, SettingCard::Down);
+    SettingCard* resCard = createBaseCard(layoutWidget, inParent, inOptSpec.headerName, inOptSpec.description, SettingCard::Down);
 
     return resCard;
 }
 
 Expected<SettingCard*> CardFactory::createDoubleSpin(QWidget* inParent
-                                                   , const OptionData& inOptData
+                                                   , const OptionSpec& inOptSpec
                                                    , const double inCurrentVal
                                                    , Callback<void(const double)>&& inSetFunction)
 {
-    const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptData.defaultValue);
+    const SpinData<double>* spinDataPtr = std::get_if<SpinData<double>>(&inOptSpec.defaultValue);
     if (spinDataPtr == nullptr)
     {
-        return makeUnexpected("OptionData.defaultValue is not SpinData<double>.");
+        return makeUnexpected("OptionSpec.defaultValue is not SpinData<double>.");
     }
 
     const SpinData<double>& spinData = *spinDataPtr;
 
-    SettingCard* resCard = createBaseCard(new QDoubleSpinBox, inParent, inOptData.headerName, inOptData.description);
+    SettingCard* resCard = createBaseCard(new QDoubleSpinBox, inParent, inOptSpec.headerName, inOptSpec.description);
 
     QDoubleSpinBox* spinBox = resCard->getContent<QDoubleSpinBox>();
     spinBox->setRange(spinData.min, spinData.max);

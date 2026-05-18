@@ -175,7 +175,7 @@ OpenAiEngine::OpenAiEngine()
     setTrUnitCreatorHelper<OpenAiTrUnit>();
 
     constexpr double defaultTemperature = 0.5;
-    appendOptionDataList
+    appendOptionSpecList
     ({
         {
             TrEngineOptionKey::ApiKey

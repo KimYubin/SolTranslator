@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#include "OptionData.h"
+#include "OptionSpec.h"
 
 #include <QVariant>
 
-QVariant OptionData::getDefaultValue() const
+QVariant OptionSpec::getDefaultValue() const
 {
-    switch (getOptionDataType())
+    switch (getOptionSpecType())
     {
     case Type::None:
         return {};

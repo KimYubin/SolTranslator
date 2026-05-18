@@ -25,10 +25,10 @@ void ITranslateEngine::postInitialize()
     setIcon(QIcon{_iconPath});
 }
 
-Expected<const OptionData*> ITranslateEngine::getOptionData(const OptionKey& inKey) const
+Expected<const OptionSpec*> ITranslateEngine::getOptionSpec(const OptionKey& inKey) const
 {
-    const auto findIt = _optionDatas.find(inKey);
-    if (findIt == _optionDatas.end())
+    const auto findIt = _optionSpecs.find(inKey);
+    if (findIt == _optionSpecs.end())
     {
         return makeUnexpected(QString{"Not found Engine Option. Engine: %1, Key: %2"}.arg(_engineId.toString(), inKey.toString()));
     }
@@ -36,13 +36,13 @@ Expected<const OptionData*> ITranslateEngine::getOptionData(const OptionKey& inK
     return &(findIt->second);
 }
 
-std::vector<const OptionData*> ITranslateEngine::sortedOptionDataList() const
+std::vector<const OptionSpec*> ITranslateEngine::sortedOptionSpecList() const
 {
-    std::vector<const OptionData*> resVec;
-    resVec.reserve(_optionDatas.size());
+    std::vector<const OptionSpec*> resVec;
+    resVec.reserve(_optionSpecs.size());
 
-    std::ranges::copy(_optionDatas | std::views::transform([](const auto& inData) { return &inData.second; }), std::back_inserter(resVec));
-    std::ranges::sort(resVec, {}, &OptionData::insertionOrder);
+    std::ranges::copy(_optionSpecs | std::views::transform([](const auto& inOpt) { return &inOpt.second; }), std::back_inserter(resVec));
+    std::ranges::sort(resVec, {}, &OptionSpec::insertionOrder);
 
     return resVec;
 }
@@ -83,18 +83,18 @@ void ITranslateEngine::setTrUnitCreator(TrUnitCreator&& inCreator)
     _trUnitCreator = std::move(inCreator);
 }
 
-void ITranslateEngine::appendOptionDataList(std::vector<OptionData> inOptionDatas)
+void ITranslateEngine::appendOptionSpecList(std::vector<OptionSpec> inOptionSpecs)
 {
-    _optionDatas.insert_range(inOptionDatas | std::views::transform([this](OptionData& inOpt) mutable
+    _optionSpecs.insert_range(inOptionSpecs | std::views::transform([this](OptionSpec& inOpt) mutable
     {
         inOpt.insertionOrder = optionOrder();
         return std::pair{inOpt.key, std::move(inOpt)};
     }));
 }
 
-void ITranslateEngine::setOptionData(OptionData inOptionData)
+void ITranslateEngine::setOptionSpec(OptionSpec inOptionSpec)
 {
-    inOptionData.insertionOrder = optionOrder();
+    inOptionSpec.insertionOrder = optionOrder();
 
-    _optionDatas[inOptionData.key] = std::move(inOptionData);
+    _optionSpecs[inOptionSpec.key] = std::move(inOptionSpec);
 }

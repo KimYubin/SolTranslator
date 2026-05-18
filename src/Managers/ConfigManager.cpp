@@ -27,7 +27,7 @@ namespace
 {
 const QString CurrentEngine = "CurrentEngine";
 
-const QString EngineAttribute = "EngineAttribute/";
+const QString Engine = "Engine/";
 
 const QString PopupTargetLanguage = "PopupTargetLanguage";
 
@@ -111,9 +111,9 @@ EngineId ConfigManager::currentEngineId() const
 
 namespace
 {
-QString engineAttributeKey(const EngineId& inEngineId, const OptionKey& inKey)
+QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
 {
-    return EngineAttribute + inEngineId.toString() + "/" + inKey.toString();
+    return Engine + inEngineId.toString() + "/" + inKey.toString();
 }
 } // anonymous namespace
 
@@ -137,7 +137,7 @@ void ConfigManager::loadSecretKey(const QString& inKey, Callback<void()>&& inFun
 
 void ConfigManager::loadSecretKey(const EngineId& inEngineId, const OptionKey& inKey, Callback<void()>&& inFunction)
 {
-    loadSecretKey(engineAttributeKey(inEngineId, inKey), std::move(inFunction));
+    loadSecretKey(engineOptionKey(inEngineId, inKey), std::move(inFunction));
 }
 
 QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
@@ -145,51 +145,54 @@ QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefaul
     return _secretStore->getSecret(inKey, inDefault.toString());;
 }
 
-Expected<void> ConfigManager::setEngineAttribute(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue)
+Expected<void> ConfigManager::setEngineOption(const EngineId& inEngineId
+                                            , const OptionKey& inKey
+                                            , const QVariant& inValue)
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
-    const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
+    const Expected<const OptionSpec*> optExp = trEngine->getOptionSpec(inKey);
     if (optExp.has_value() == false)
     {
-        return makeUnexpected("Not found Engine OptionData. Check the registration of the engine OptionData. key: " + inKey.toString());
+        return makeUnexpected("Not found Engine OptionSpec. Check the registration of the engine OptionSpec. key: " + inKey.toString());
     }
 
-    const OptionData& optData = *optExp.value();
-    const QString attKey      = engineAttributeKey(inEngineId, inKey);
+    const OptionSpec& optSpec = *optExp.value();
+    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
 
-    if (optData.isSecretMode)
+    if (optSpec.isSecretMode)
     {
-        setSecretKey(attKey, inValue);
+        setSecretKey(egOptKey, inValue);
         return {};
     }
 
-    _settings->setValue(attKey, inValue);
+    _settings->setValue(egOptKey, inValue);
     return {};
 }
 
-Expected<QVariant> ConfigManager::engineAttribute(const EngineId& inEngineId, const OptionKey& inKey) const
+Expected<QVariant> ConfigManager::engineOption(const EngineId& inEngineId
+                                             , const OptionKey& inKey) const
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
-    const Expected<const OptionData*> optExp = trEngine->getOptionData(inKey);
+    const Expected<const OptionSpec*> optExp = trEngine->getOptionSpec(inKey);
     if (optExp.has_value() == false)
     {
         return makeUnexpected(QString{
-            "Not found Engine OptionData. "
-            "Check the registration of the engine OptionData. "
+            "Not found Engine OptionSpec. "
+            "Check the registration of the engine OptionSpec. "
             "Engine: %1, key: %2"
         }.arg(inKey.toString()));
     }
 
-    const OptionData& optData = *optExp.value();
-    const QString attKey      = engineAttributeKey(inEngineId, inKey);
-    const QVariant defaultVal = optData.getDefaultValue();
+    const OptionSpec& optSpec = *optExp.value();
+    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
+    const QVariant defaultVal = optSpec.getDefaultValue();
 
-    if (optData.isSecretMode)
+    if (optSpec.isSecretMode)
     {
-        return secretKey(attKey, defaultVal);
+        return secretKey(egOptKey, defaultVal);
     }
 
-    return _settings->value(attKey, defaultVal);
+    return _settings->value(egOptKey, defaultVal);
 }
 
 

@@ -3,7 +3,7 @@
 #ifndef SOLTRANSLATOR_SETTINGWIDGETFACTORY_H
 #define SOLTRANSLATOR_SETTINGWIDGETFACTORY_H
 
-#include "Types/OptionData.h"
+#include "Types/OptionSpec.h"
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
@@ -23,12 +23,12 @@ class CardFactory : public QObject
 
 public:
     static Expected<SettingCard*> createStringSaver(QWidget* inParent
-                                                  , const OptionData& inOptData
+                                                  , const OptionSpec& inOptSpec
                                                   , const QString& inCurrentVal
                                                   , Callback<void(const QString&)>&& inSetFunction);
 
     static Expected<SettingCard*> createDoubleSpin(QWidget* inParent
-                                                 , const OptionData& inOptData
+                                                 , const OptionSpec& inOptSpec
                                                  , const double inCurrentVal
                                                  , Callback<void(const double)>&& inSetFunction);
 };

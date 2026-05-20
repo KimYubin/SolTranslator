@@ -89,7 +89,7 @@ Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(Tran
     const bool isIgnoreCache  = inTrRequest.isIgnoreCache;
 
     const Expected<TranslateUnit*> trUnitExp = newTranslateUnit(engineId);
-    if (trUnitExp.has_value() == false)
+    if (!trUnitExp)
     {
         return makeUnexpected(trUnitExp.error());
     }

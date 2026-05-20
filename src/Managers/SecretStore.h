@@ -18,11 +18,11 @@ public:
     explicit SecretStore(ConfigManager* inParent);
 
     void requestLoadSecret(const QString& inKey
-                         , LoadCallback&& inFunction);
+                         , LoadCallback&& inCallback);
 
     void requestSaveSecret(const QString& inKey
                          , const QVariant& inValue
-                         , Callback<void()>&& inFunction);
+                         , Callback<void()>&& inCallback);
 
     QString getSecret(const QString& inKey
                     , const QString& inDefault);

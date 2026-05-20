@@ -39,7 +39,7 @@ public:
 
     constexpr explicit operator bool() const noexcept { return _expected.has_value(); }
     bool hasValue() const { return _expected.has_value(); }
-    bool isError() const { return (_expected.has_value() == false); }
+    bool isError() const { return (hasValue() == false); }
 
     Error error() const;
 

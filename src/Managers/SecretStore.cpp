@@ -9,11 +9,11 @@
 
 namespace
 {
-const QString service = "SolTranslator/";
+const QString service = "SolTranslator";
 
 QString serviceKey(const QString& inKey)
 {
-    return service + inKey;
+    return service + "/" + inKey;
 }
 } // anonymous namespace
 
@@ -23,16 +23,16 @@ SecretStore::SecretStore(ConfigManager* inParent)
 {}
 
 void SecretStore::requestLoadSecret(const QString& inKey
-                                  , LoadCallback&& inFunction)
+                                  , LoadCallback&& inCallback)
 {
     KeyCache& curCash = _cacheList[inKey];
     if (curCash.hasKey)
     {
-        inFunction(curCash.secret);
+        inCallback(curCash.secret);
         return;
     }
 
-    curCash.callbacks.emplace_back(std::move(inFunction));
+    curCash.callbacks.emplace_back(std::move(inCallback));
 
     if (curCash.isLoading)
     {
@@ -61,9 +61,9 @@ void SecretStore::requestLoadSecret(const QString& inKey
         // If there is no value, it broadcasts the completion of the task
         // by inserting an empty value.
         // The get function returns a default value if there is no value.
-        for (LoadCallback& func : jobCash.callbacks)
+        for (LoadCallback& callback : jobCash.callbacks)
         {
-            func(jobCash.secret);
+            callback(jobCash.secret);
         }
         jobCash.callbacks.clear();
 
@@ -75,12 +75,11 @@ void SecretStore::requestLoadSecret(const QString& inKey
     });
 
     readJob->start();
-
 }
 
 void SecretStore::requestSaveSecret(const QString& inKey
                                   , const QVariant& inValue
-                                  , Callback<void()>&& inFunction)
+                                  , Callback<void()>&& inCallback)
 {
     _cacheList[inKey].setCache(inValue);
 
@@ -89,12 +88,12 @@ void SecretStore::requestSaveSecret(const QString& inKey
     writeJob->setKey(serviceKey(inKey));
     writeJob->setTextData(inValue.toString());
 
-    connect(writeJob, &QKeychain::WritePasswordJob::finished, this, [this, jobFunc = std::move(inFunction)](QKeychain::Job* inJob) mutable
+    connect(writeJob, &QKeychain::WritePasswordJob::finished, this, [this, jobCallback = std::move(inCallback)](QKeychain::Job* inJob) mutable
     {
         QKeychain::WritePasswordJob* inWriteJob = static_cast<QKeychain::WritePasswordJob*>(inJob);
-        if (inWriteJob->error() != QKeychain::NoError)
+        if (inWriteJob->error() == QKeychain::NoError)
         {
-            jobFunc();
+            jobCallback();
             return;
         }
 

@@ -30,7 +30,7 @@ QVariant HistoryModel::data(const QModelIndex& index, const int role) const
 {
     const Expected<const HistoryCacheData*> trCache = getHistoryCacheData(index.row());
 
-    if (trCache.has_value() == false)
+    if (!trCache)
     {
         solDebug << trCache.error() << "- role :" << role;
         return QVariant();

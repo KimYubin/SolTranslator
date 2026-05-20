@@ -31,15 +31,15 @@ Expected<QString> SolSql::readSqlFromFile(const QString& inFilePath)
 
 Expected<void> SolSql::execSqlFile(const QString& inFilePath)
 {
-    const Expected<QString> sqlStr = readSqlFromFile(inFilePath);
+    const Expected<QString> sqlStrExp = readSqlFromFile(inFilePath);
 
-    if (sqlStr.has_value() == false)
+    if (!sqlStrExp)
     {
-        return makeUnexpected(sqlStr.error());
+        return makeUnexpected(sqlStrExp.error());
     }
 
     QSqlQuery sqlQuery(_database);
-    if (sqlQuery.exec(sqlStr.value()) == false)
+    if (sqlQuery.exec(sqlStrExp.value()) == false)
     {
         return makeUnexpected("Error: Could not execute sql file: " + inFilePath + " " + sqlQuery.lastError().text());
     }

@@ -81,7 +81,7 @@ void HistoryWidget::setupUI()
         }
 
         ExpectedHistory historyData = getHistoryData(curIdx);
-        if (historyData.has_value() == false)
+        if (!historyData)
         {
             solDebug << historyData.error();
             return {};
@@ -117,7 +117,7 @@ void HistoryWidget::setupUI()
             return;
         }
         ExpectedHistory historyData = getHistoryData(curIdx);
-        if (historyData.has_value() == false)
+        if (!historyData)
         {
             solDebug << historyData.error();
             return;
@@ -158,7 +158,7 @@ void HistoryWidget::setupUI()
             return;
         }
         ExpectedHistory historyData = getHistoryData(current);
-        if (historyData.has_value() == false)
+        if (!historyData)
         {
             solDebug << historyData.error();
             return;
@@ -199,7 +199,7 @@ void HistoryWidget::setupUI()
         }
 
         const Expected<int> findIdx = solCore->manager<HistoryManager>()->findModelIdxFromTimelineId(_currentTimelineId, _currentTimeStamp);
-        if (findIdx.has_value() == false)
+        if (!findIdx)
         {
             solDebug << findIdx.error();
             _currentTimelineId = -1;
@@ -237,7 +237,7 @@ void HistoryWidget::exportSelectedHistoryData()
         return;
     }
     ExpectedHistory historyData = getHistoryData(curIdx);
-    if (historyData.has_value() == false)
+    if (!historyData)
     {
         solDebug << historyData.error();
         return;
@@ -254,7 +254,7 @@ void HistoryWidget::toggleTranslationText()
         return;
     }
     ExpectedHistory historyData = getHistoryData(curIdx);
-    if (historyData.has_value() == false)
+    if (!historyData)
     {
         solDebug << historyData.error();
         return;
@@ -280,7 +280,7 @@ void HistoryWidget::reTranslate() const
         return;
     }
     ExpectedHistory historyData = getHistoryData(curIdx);
-    if (historyData.has_value() == false)
+    if (!historyData)
     {
         solDebug << historyData.error();
         return;
@@ -300,7 +300,7 @@ void HistoryWidget::viewPopup() const
         return;
     }
     ExpectedHistory historyData = getHistoryData(curIdx);
-    if (historyData.has_value() == false)
+    if (!historyData)
     {
         solDebug << historyData.error();
         return;

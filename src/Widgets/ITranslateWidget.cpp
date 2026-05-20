@@ -56,7 +56,7 @@ void ITranslateWidget::executeTranslateImpl(const EngineId& inEngineId
       , [this](const QString& inStr) { streamTranslateText(inStr); }
     });
 
-    if (trResExp.has_value() == false)
+    if (!trResExp)
     {
         solDebug << "Translation attempt failed:" << trResExp.error();
         return;

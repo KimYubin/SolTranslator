@@ -2,18 +2,45 @@
 
 #include "OptionLineEdit.h"
 
+#include "SolButton.h"
+#include "Utils/SolI18n.h"
+
+#include <QHBoxLayout>
+
 OptionLineEdit::OptionLineEdit(QWidget* parent
+                             , const bool inIsUsedSaveButton
                              , const bool inIsSecret)
-    : OptionLineEdit(QString(), parent, inIsSecret)
+    : OptionLineEdit(QString()
+                   , parent
+                   , inIsUsedSaveButton
+                   , inIsSecret)
 {}
 
 OptionLineEdit::OptionLineEdit(const QString& inContent
                              , QWidget* parent
+                             , const bool inIsUsedSaveButton
                              , const bool inIsSecret)
-    : MenuLineEdit(inContent, parent)
+    : QWidget(parent)
+    , _isUsedSaveButton(inIsUsedSaveButton)
 {
+    _lineEdit = new MenuLineEdit(inContent, this);
+    _hLayout  = new QHBoxLayout(this);
+    _hLayout->setContentsMargins(0, 0, 0, 0);
+    _hLayout->addWidget(_lineEdit);
     setIsSecret(inIsSecret);
+
+    if (_isUsedSaveButton)
+    {
+        SolButton* saveButton = new SolButton(Sol::i18n(Tr::Save), this);
+        _hLayout->addWidget(saveButton);
+        connect(saveButton, &SolButton::clicked, this, &OptionLineEdit::saveText);
+    }
+    else
+    {
+        connect(_lineEdit, &QLineEdit::textEdited, this, &OptionLineEdit::saveText);
+    }
 }
+
 
 void OptionLineEdit::updatePlaceholderText(const QString& inText)
 {
@@ -54,7 +81,7 @@ void OptionLineEdit::setDefaultTextAndText(const QString& inDefault, const QStri
     {
         if (_defaultText != inText)
         {
-            setText(inText);
+            _lineEdit->setText(inText);
         }
     }
     setOptionPlaceholder(phText);
@@ -79,7 +106,7 @@ void OptionLineEdit::setOptionPlaceholder(const QString& inText)
         }
     }
 
-    setPlaceholderText(phText);
+    _lineEdit->setPlaceholderText(phText);
 }
 
 void OptionLineEdit::setIsSecret(const bool inIsSecret)
@@ -87,11 +114,11 @@ void OptionLineEdit::setIsSecret(const bool inIsSecret)
     _isSecret = inIsSecret;
     if (_isSecret)
     {
-        setEchoMode(QLineEdit::Password);
+        _lineEdit->setEchoMode(QLineEdit::Password);
     }
     else
     {
-        setEchoMode(QLineEdit::Normal);
+        _lineEdit->setEchoMode(QLineEdit::Normal);
     }
 }
 
@@ -102,7 +129,7 @@ void OptionLineEdit::setSaveFunctor(Callback<void(const QString&)>&& inSaveFunct
 
 void OptionLineEdit::saveText()
 {
-    QString inputText = text();
+    QString inputText = _lineEdit->text();
     updatePlaceholderText(inputText);
 
     // Update a secret key placeholder.
@@ -126,6 +153,6 @@ void OptionLineEdit::saveText()
 
     if (_isSecret)
     {
-        setText("");
+        _lineEdit->setText("");
     }
 }

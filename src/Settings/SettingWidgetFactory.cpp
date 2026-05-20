@@ -42,38 +42,25 @@ Expected<SettingCard*> CardFactory::createStringSaver(QWidget* inParent
                                                     , const QString& inCurrentVal
                                                     , Callback<void(const QString&)>&& inSetFunction)
 {
-    const StringSaver* optSpecPtr = std::get_if<StringSaver>(&inOptSpec.defaultValue);
-    if (optSpecPtr == nullptr)
+    const StringSaver* stringSaverPtr = std::get_if<StringSaver>(&inOptSpec.defaultValue);
+    if (stringSaverPtr == nullptr)
     {
         return makeUnexpected("OptionSpec.defaultValue is not StringSaver.");
     }
 
-    const StringSaver& optSpec = *optSpecPtr;
+    const StringSaver& stringSaver = *stringSaverPtr;
 
-    QWidget* layoutWidget    = new QWidget;
-    OptionLineEdit* lineEdit = new OptionLineEdit(layoutWidget, inOptSpec.isSecretMode);
-    QHBoxLayout* hLayout     = new QHBoxLayout(layoutWidget);
-    hLayout->setContentsMargins(0, 0, 0, 0);
-    hLayout->addWidget(lineEdit);
+    OptionLineEdit* optLineEdit = new OptionLineEdit(nullptr
+                                                   , stringSaver.isUsedSaveButton
+                                                   , inOptSpec.isSecretMode);
 
     const QString optDefaultStr = inOptSpec.getDefaultValue().toString();
 
     // The placeholder is a default value.
-    lineEdit->setDefaultTextAndText(optDefaultStr, inCurrentVal);
-    lineEdit->setSaveFunctor(std::move(inSetFunction));
+    optLineEdit->setDefaultTextAndText(optDefaultStr, inCurrentVal);
+    optLineEdit->setSaveFunctor(std::move(inSetFunction));
 
-    if (optSpec.isUsedSaveButton)
-    {
-        SolButton* saveButton = new SolButton(i18n(Tr::Save), layoutWidget);
-        hLayout->addWidget(saveButton);
-        connect(saveButton, &SolButton::clicked, lineEdit, &OptionLineEdit::saveText);
-    }
-    else
-    {
-        connect(lineEdit, &QLineEdit::textEdited, lineEdit, &OptionLineEdit::saveText);
-    }
-
-    SettingCard* resCard = createBaseCard(layoutWidget, inParent, inOptSpec.headerName, inOptSpec.description, SettingCard::Down);
+    SettingCard* resCard = createBaseCard(optLineEdit, inParent, inOptSpec.headerName, inOptSpec.description, SettingCard::Down);
 
     return resCard;
 }

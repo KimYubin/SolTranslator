@@ -13,7 +13,7 @@
 
 int main(int argc, char* argv[])
 {
-    QCoreApplication::setOrganizationDomain("Sol");
+    QCoreApplication::setOrganizationName("Sol");
     QCoreApplication::setApplicationName("SolTranslator");
 
     SolLogHandler::setupLog();

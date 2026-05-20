@@ -8,6 +8,8 @@
 
 class ConfigManager;
 
+using LoadCallback = Callback<void(const QString&)>;
+
 class SecretStore : public QObject
 {
     Q_OBJECT
@@ -16,7 +18,7 @@ public:
     explicit SecretStore(ConfigManager* inParent);
 
     void requestLoadSecret(const QString& inKey
-                         , Callback<void()>&& inFunction);
+                         , LoadCallback&& inFunction);
 
     void requestSaveSecret(const QString& inKey
                          , const QVariant& inValue
@@ -31,7 +33,7 @@ private:
         void setCache(const QVariant& inValue);
 
         QString secret;
-        std::vector<Callback<void()>> callbacks;
+        std::vector<LoadCallback> callbacks;
 
         bool hasKey    = false;
         bool isLoading = false;

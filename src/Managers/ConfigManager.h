@@ -4,6 +4,7 @@
 #define CONFIGMANAGER_H
 
 #include "AbstractManager.h"
+#include "SecretStore.h"
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
@@ -31,25 +32,50 @@ class ConfigManager : public AbstractManager
 public:
     explicit ConfigManager(SolTranslatorCore* parent);
 
-    void setCurrentEngineId(const EngineId& inEngineId);
-    EngineId currentEngineId() const;
+    /**
+     * Load The secret key, asynchronously.
+     * The secretKey() should be called after the callback.
+     *
+     * @param inKey The key of the secret key.
+     * @param inCallback Callback to be called after the load is complete.
+     */
+    void loadSecretKey(const QString& inKey
+                     , LoadCallback&& inCallback);
 
     /**
-     * Caution! The secret storage feature has not been implemented yet.
-     * This is an interface left for future implementation.
+     * Load The secret key of the engine, asynchronously.
+     * The secretKey() should be called after the callback.
+     *
+     * @param inEngineId Target engine.
+     * @param inOptionKey The key of the secret key.
+     * @param inCallback Callback to be called after the load is complete.
      */
-    void setSecretKey(const QString& inKey, const QVariant& inValue);
+    void loadSecretKey(const EngineId& inEngineId
+                     , const OptionKey& inOptionKey
+                     , LoadCallback&& inCallback);
+
     void setSecretKey(const QString& inKey
                     , const QVariant& inValue
-                    , Callback<void(const QVariant&)>&& inFunction);
+                    , Callback<void()>&& inCallback = []() {});
 
-    void loadSecretKey(const QString& inKey, Callback<void()>&& inFunction);
-    void loadSecretKey(const EngineId& inEngineId, const OptionKey& inKey, Callback<void()>&& inFunction);
-
+    /**
+     * Get the cached secret key.
+     * It must be called after loadSecretKey() has been invoked;
+     * otherwise, it will return the default or an empty value.
+     *
+     * @param inKey 
+     * @param inDefault 
+     * @return Cached secret key. If it is not cached, the default or an empty value.
+     * @see loadSecretKey()
+     */
     QVariant secretKey(const QString& inKey, const QVariant& inDefault) const;
+
 
     Expected<void> setEngineOption(const EngineId& inEngineId, const OptionKey& inKey, const QVariant& inValue);
     Expected<QVariant> engineOption(const EngineId& inEngineId, const OptionKey& inKey) const;
+
+    void setCurrentEngineId(const EngineId& inEngineId);
+    EngineId currentEngineId() const;
 
 
     void setStartRun(const bool inStartRun);

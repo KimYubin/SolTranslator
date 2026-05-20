@@ -5,17 +5,22 @@
 #include "CustomMenuTextEdit.h"
 #include "Types/SolTypes.h"
 
-class OptionLineEdit : public MenuLineEdit
+class QHBoxLayout;
+
+class OptionLineEdit : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit OptionLineEdit(QWidget* parent       = nullptr
-                          , const bool inIsSecret = false);
+    explicit OptionLineEdit(QWidget* parent            = nullptr
+                          , const bool inIsUsedSaveButton = false
+                          , const bool inIsSecret      = false);
 
     explicit OptionLineEdit(const QString& inContent
-                          , QWidget* parent       = nullptr
-                          , const bool inIsSecret = false);
+                          , QWidget* parent            = nullptr
+                          , const bool inIsUsedSaveButton = false
+                          , const bool inIsSecret      = false);
+
     ~OptionLineEdit() override = default;
 
     void updatePlaceholderText(const QString& inText);
@@ -32,10 +37,14 @@ public slots:
     void saveText();
 
 private:
+    MenuLineEdit* _lineEdit;
+    QHBoxLayout* _hLayout;
+
     QString _defaultText;
     Callback<void(const QString&)> _saveFunctor;
 
     bool _isSecret = false;
+    bool _isUsedSaveButton;
 };
 
 

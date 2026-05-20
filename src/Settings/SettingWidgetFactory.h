@@ -22,6 +22,11 @@ class CardFactory : public QObject
     Q_OBJECT
 
 public:
+    static Expected<SettingCard*> createSecretSaver(QWidget* inParent
+                                                  , const OptionSpec& inOptSpec
+                                                  , const QString& inCurrentVal
+                                                  , Callback<void(const QString&)>&& inSetFunction);
+
     static Expected<SettingCard*> createStringSaver(QWidget* inParent
                                                   , const OptionSpec& inOptSpec
                                                   , const QString& inCurrentVal

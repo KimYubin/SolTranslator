@@ -9,7 +9,12 @@
 
 namespace
 {
-const QString service = "sol.translator.app";
+const QString service = "SolTranslator/";
+
+QString serviceKey(const QString& inKey)
+{
+    return service + inKey;
+}
 } // anonymous namespace
 
 
@@ -18,12 +23,12 @@ SecretStore::SecretStore(ConfigManager* inParent)
 {}
 
 void SecretStore::requestLoadSecret(const QString& inKey
-                                  , Callback<void()>&& inFunction)
+                                  , LoadCallback&& inFunction)
 {
     KeyCache& curCash = _cacheList[inKey];
     if (curCash.hasKey)
     {
-        inFunction();
+        inFunction(curCash.secret);
         return;
     }
 
@@ -38,29 +43,39 @@ void SecretStore::requestLoadSecret(const QString& inKey
 
     QKeychain::ReadPasswordJob* readJob = new QKeychain::ReadPasswordJob(service);
     readJob->setAutoDelete(true);
-    readJob->setKey(inKey);
+    readJob->setKey(serviceKey(inKey));
 
     connect(readJob, &QKeychain::ReadPasswordJob::finished, this, [this, inKey](QKeychain::Job* inJob)
     {
         QKeychain::ReadPasswordJob* inReadJob = static_cast<QKeychain::ReadPasswordJob*>(inJob);
-        if (inReadJob->error() != QKeychain::NoError
-            || inReadJob->error() != QKeychain::EntryNotFound)
+
+        QString secretStr{};
+        if (inReadJob->error() == QKeychain::NoError)
         {
-            // emit error(tr("Read key failed: %1").arg(qPrintable(inReadJob->errorString())));
-            return;
+            secretStr = inReadJob->textData();
         }
 
         KeyCache& jobCash = _cacheList[inKey];
-        jobCash.setCache(inReadJob->error() == QKeychain::EntryNotFound ? "" : inReadJob->textData());
+        jobCash.setCache(secretStr);
 
-        for (Callback<void()>& func : jobCash.callbacks)
+        // If there is no value, it broadcasts the completion of the task
+        // by inserting an empty value.
+        // The get function returns a default value if there is no value.
+        for (LoadCallback& func : jobCash.callbacks)
         {
-            func();
+            func(jobCash.secret);
         }
         jobCash.callbacks.clear();
+
+        if (inReadJob->error() != QKeychain::NoError
+            && inReadJob->error() != QKeychain::EntryNotFound)
+        {
+            // todo: error process
+        }
     });
 
     readJob->start();
+
 }
 
 void SecretStore::requestSaveSecret(const QString& inKey
@@ -71,7 +86,7 @@ void SecretStore::requestSaveSecret(const QString& inKey
 
     auto writeJob = new QKeychain::WritePasswordJob(service);
     writeJob->setAutoDelete(true);
-    writeJob->setKey(inKey);
+    writeJob->setKey(serviceKey(inKey));
     writeJob->setTextData(inValue.toString());
 
     connect(writeJob, &QKeychain::WritePasswordJob::finished, this, [this, jobFunc = std::move(inFunction)](QKeychain::Job* inJob) mutable
@@ -82,7 +97,8 @@ void SecretStore::requestSaveSecret(const QString& inKey
             jobFunc();
             return;
         }
-        // emit error(tr("Write key failed: %1").arg(qPrintable(j->errorString())));
+
+        // todo: error process
     });
 
     writeJob->start();

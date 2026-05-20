@@ -89,55 +89,39 @@ EnumType enumValue(const QSettings* inSettings, const QString& inKey, const Enum
     return policy;
 }
 
+QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
+{
+    return Engine + inEngineId.toString() + "/" + inKey.toString();
+}
 
 } // anonymous namespace
 
 ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
 {
-    _settings = new QSettings(SolPath::absolute(SolFile::Config), QSettings::IniFormat, this);
+    _settings    = new QSettings(SolPath::absolute(SolFile::Config), QSettings::IniFormat, this);
     _secretStore = new SecretStore(this);
 }
 
 
-void ConfigManager::setCurrentEngineId(const EngineId& inEngineId)
+void ConfigManager::loadSecretKey(const QString& inKey
+                                , LoadCallback&& inCallback)
 {
-    _settings->setValue(CurrentEngine, inEngineId.toString());
+    _secretStore->requestLoadSecret(inKey, std::move(inCallback));
 }
 
-EngineId ConfigManager::currentEngineId() const
+void ConfigManager::loadSecretKey(const EngineId& inEngineId
+                                , const OptionKey& inOptionKey
+                                , LoadCallback&& inCallback)
 {
-    return EngineId{_settings->value(CurrentEngine, EngineIds::defaultEngine.toString()).toString()};
+    loadSecretKey(engineOptionKey(inEngineId, inOptionKey), std::move(inCallback));
 }
 
-namespace
-{
-QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
-{
-    return Engine + inEngineId.toString() + "/" + inKey.toString();
-}
-} // anonymous namespace
-
-
-void ConfigManager::setSecretKey(const QString& inKey, const QVariant& inValue)
-{
-    _settings->setValue(inKey, inValue);
-}
 
 void ConfigManager::setSecretKey(const QString& inKey
                                , const QVariant& inValue
-                               , Callback<void(const QVariant&)>&& inFunction)
+                               , Callback<void()>&& inCallback)
 {
-    
-}
-
-void ConfigManager::loadSecretKey(const QString& inKey, Callback<void()>&& inFunction)
-{
-    _secretStore->requestLoadSecret(inKey, std::move(inFunction));
-}
-
-void ConfigManager::loadSecretKey(const EngineId& inEngineId, const OptionKey& inKey, Callback<void()>&& inFunction)
-{
-    loadSecretKey(engineOptionKey(inEngineId, inKey), std::move(inFunction));
+    _secretStore->requestSaveSecret(inKey, inValue, std::move(inCallback));
 }
 
 QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
@@ -151,9 +135,13 @@ Expected<void> ConfigManager::setEngineOption(const EngineId& inEngineId
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
     const Expected<const OptionSpec*> optExp = trEngine->getOptionSpec(inKey);
-    if (optExp.has_value() == false)
+    if (!optExp)
     {
-        return makeUnexpected("Not found Engine OptionSpec. Check the registration of the engine OptionSpec. key: " + inKey.toString());
+        return makeUnexpected(QString{
+            "Not found Engine OptionSpec. "
+            "Check the registration of the engine OptionSpec. "
+            "Engine: %1, key: %2"
+        }.arg(inEngineId.toString(), inKey.toString()));
     }
 
     const OptionSpec& optSpec = *optExp.value();
@@ -174,13 +162,13 @@ Expected<QVariant> ConfigManager::engineOption(const EngineId& inEngineId
 {
     const ITranslateEngine* trEngine = EngineManager::getEngine(inEngineId).get();
     const Expected<const OptionSpec*> optExp = trEngine->getOptionSpec(inKey);
-    if (optExp.has_value() == false)
+    if (!optExp)
     {
         return makeUnexpected(QString{
             "Not found Engine OptionSpec. "
             "Check the registration of the engine OptionSpec. "
             "Engine: %1, key: %2"
-        }.arg(inKey.toString()));
+        }.arg(inEngineId.toString(), inKey.toString()));
     }
 
     const OptionSpec& optSpec = *optExp.value();
@@ -193,6 +181,16 @@ Expected<QVariant> ConfigManager::engineOption(const EngineId& inEngineId
     }
 
     return _settings->value(egOptKey, defaultVal);
+}
+
+void ConfigManager::setCurrentEngineId(const EngineId& inEngineId)
+{
+    _settings->setValue(CurrentEngine, inEngineId.toString());
+}
+
+EngineId ConfigManager::currentEngineId() const
+{
+    return EngineId{_settings->value(CurrentEngine, EngineIds::defaultEngine.toString()).toString()};
 }
 
 

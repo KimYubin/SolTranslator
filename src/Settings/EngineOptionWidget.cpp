@@ -9,6 +9,7 @@
 #include "Managers/EngineManager.h"
 #include "SubWidgets/DropdownMenu.h"
 #include "SubWidgets/OptionGroupBox.h"
+#include "SubWidgets/OptionLineEdit.h"
 #include "SubWidgets/SettingCard.h"
 #include "Types/EngineId.h"
 #include "Types/SolExpected.hpp"
@@ -151,6 +152,23 @@ void EngineOptionWidget::stringSaverCard(OptionGroupBox* inOptGroup
     SettingCard* card = cardExp.value();
     inOptGroup->addChild(card);
 
+
+    // Asynchronous processing for Secret key.
+    if (!inOptSpec.isSecretMode)
+    {
+        return;
+    }
+
+    OptionLineEdit* optLineEdit = card->getContent<OptionLineEdit>();
+    const QString optDefaultStr = inOptSpec.getDefaultValue().toString();
+
+    solConfig.loadSecretKey(inEngineId, TrEngineOptionKey::ApiKey, [this, optLinePtr = QPointer{optLineEdit}, optDefaultStr](const QString& inSecret)
+    {
+        if (optLinePtr)
+        {
+            optLinePtr->setDefaultTextAndText(optDefaultStr, inSecret);
+        }
+    });
 }
 
 void EngineOptionWidget::doubleSpinCard(OptionGroupBox* inOptGroup

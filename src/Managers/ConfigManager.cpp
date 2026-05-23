@@ -27,8 +27,6 @@ namespace
 {
 const QString CurrentEngine = "CurrentEngine";
 
-const QString Engine = "Engine/";
-
 const QString PopupTargetLanguage = "PopupTargetLanguage";
 
 const QString TextSrcLangType    = "TextEditSourceLanguageType";
@@ -89,11 +87,6 @@ EnumType enumValue(const QSettings* inSettings, const QString& inKey, const Enum
     return policy;
 }
 
-QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
-{
-    return Engine + inEngineId.toString() + "/" + inKey.toString();
-}
-
 } // anonymous namespace
 
 ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
@@ -113,7 +106,13 @@ void ConfigManager::loadSecretKey(const EngineId& inEngineId
                                 , const OptionKey& inOptionKey
                                 , LoadCallback&& inCallback)
 {
-    loadSecretKey(engineOptionKey(inEngineId, inOptionKey), std::move(inCallback));
+    loadSecretKey(Sol::engineOptionKey(inEngineId, inOptionKey), std::move(inCallback));
+}
+
+void ConfigManager::loadSecretKeys(const std::vector<QString>& inKeyList
+                                 , Callback<void()>&& inCallback)
+{
+    _secretStore->requestLoadSecretList(inKeyList, std::move(inCallback));
 }
 
 
@@ -145,7 +144,7 @@ Expected<void> ConfigManager::setEngineOption(const EngineId& inEngineId
     }
 
     const OptionSpec& optSpec = *optExp.value();
-    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
+    const QString egOptKey    = Sol::engineOptionKey(inEngineId, inKey);
 
     if (optSpec.isSecretMode)
     {
@@ -172,7 +171,7 @@ Expected<QVariant> ConfigManager::engineOption(const EngineId& inEngineId
     }
 
     const OptionSpec& optSpec = *optExp.value();
-    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
+    const QString egOptKey    = Sol::engineOptionKey(inEngineId, inKey);
     const QVariant defaultVal = optSpec.getDefaultValue();
 
     if (optSpec.isSecretMode)

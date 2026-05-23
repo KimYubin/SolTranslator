@@ -52,7 +52,10 @@ void TranslateUnit::onTranslationFromCache(const QString& inTargetText)
 
 void TranslateUnit::requestTranslate()
 {
-    requestTranslateImpl();
+    solConfig.loadSecretKeys(_trEngine->secretEngineOptionKeys(), [this]()
+    {
+        requestTranslateImpl();
+    });
 }
 
 void TranslateUnit::get(const QNetworkRequest& inRequest)

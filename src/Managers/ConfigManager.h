@@ -54,6 +54,9 @@ public:
                      , const OptionKey& inOptionKey
                      , LoadCallback&& inCallback);
 
+    void loadSecretKeys(const std::vector<QString>& inKeyList
+                      , Callback<void()>&& inCallback);
+
     void setSecretKey(const QString& inKey
                     , const QVariant& inValue
                     , Callback<void()>&& inCallback = []() {});

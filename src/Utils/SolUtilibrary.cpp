@@ -2,6 +2,9 @@
 
 #include "SolUtilibrary.h"
 
+#include "Types/EngineId.h"
+#include "Types/OptionKey.h"
+
 #include <QApplication>
 #include <QFont>
 #include <QScreen>
@@ -98,4 +101,9 @@ QString Sol::qStrFromStdView(const std::string_view& inStrView)
 {
     // string_view -> std::str -> QString
     return QString::fromStdString(std::string{inStrView});
+}
+
+QString Sol::engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
+{
+    return "Engine/" + inEngineId.toString() + "/" + inKey.toString();
 }

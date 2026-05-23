@@ -42,6 +42,7 @@ public:
     Expected<const OptionSpec*> getOptionSpec(const OptionKey& inKey) const;
     const OptionMap& getOptions() const { return _optionSpecs; }
     std::vector<const OptionSpec*> sortedOptionSpecList() const;
+    std::vector<QString> secretEngineOptionKeys() const;
 
     TranslateUnit* newTrUnit(TranslateManager* inTrManager);
 

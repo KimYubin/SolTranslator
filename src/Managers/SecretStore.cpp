@@ -4,6 +4,8 @@
 
 #include "ConfigManager.h"
 #include "qtkeychain/keychain.h"
+#include "Types/SolGuard.h"
+#include "Utils/SolLog.h"
 
 #include <QVariant>
 
@@ -22,24 +24,47 @@ SecretStore::SecretStore(ConfigManager* inParent)
     : QObject(inParent)
 {}
 
+void SecretStore::finishedRead(const QString& inKey, QKeychain::ReadPasswordJob* inReadJob)
+{
+    QString secretStr{};
+    if (inReadJob->error() == QKeychain::NoError)
+    {
+        secretStr = inReadJob->textData();
+    }
+
+    KeyCache& jobCache = _cacheList[inKey];
+    jobCache.setCache(secretStr);
+    jobCache.broadcastCallbacks();
+
+    // If there is no value, it broadcasts the completion of the task
+    // by inserting an empty value.
+    // The get function returns a default value if there is no value.
+
+    if (inReadJob->error() != QKeychain::NoError
+        && inReadJob->error() != QKeychain::EntryNotFound)
+    {
+        // todo: error handle
+    }
+}
+
 void SecretStore::requestLoadSecret(const QString& inKey
                                   , LoadCallback&& inCallback)
 {
-    KeyCache& curCash = _cacheList[inKey];
-    if (curCash.hasKey)
+    KeyCache& curCache = _cacheList[inKey];
+    curCache.emplaceCallback(std::move(inCallback));
+
+    if (curCache.hasKey)
     {
-        inCallback(curCash.secret);
+        curCache.broadcastCallbacks();
         return;
     }
 
-    curCash.callbacks.emplace_back(std::move(inCallback));
-
-    if (curCash.isLoading)
+    if (curCache.isLoading)
     {
         return;
     }
 
-    curCash.isLoading = true;
+    curCache.isLoading = true;
 
     QKeychain::ReadPasswordJob* readJob = new QKeychain::ReadPasswordJob(service);
     readJob->setAutoDelete(true);
@@ -47,34 +72,28 @@ void SecretStore::requestLoadSecret(const QString& inKey
 
     connect(readJob, &QKeychain::ReadPasswordJob::finished, this, [this, inKey](QKeychain::Job* inJob)
     {
-        QKeychain::ReadPasswordJob* inReadJob = static_cast<QKeychain::ReadPasswordJob*>(inJob);
+        Q_ASSERT_X(qobject_cast<QKeychain::ReadPasswordJob*>(inJob), "QKeychain::ReadPasswordJob::finished", "inJob is not a ReadPasswordJob");
 
-        QString secretStr{};
-        if (inReadJob->error() == QKeychain::NoError)
-        {
-            secretStr = inReadJob->textData();
-        }
-
-        KeyCache& jobCash = _cacheList[inKey];
-        jobCash.setCache(secretStr);
-
-        // If there is no value, it broadcasts the completion of the task
-        // by inserting an empty value.
-        // The get function returns a default value if there is no value.
-        for (LoadCallback& callback : jobCash.callbacks)
-        {
-            callback(jobCash.secret);
-        }
-        jobCash.callbacks.clear();
-
-        if (inReadJob->error() != QKeychain::NoError
-            && inReadJob->error() != QKeychain::EntryNotFound)
-        {
-            // todo: error process
-        }
+        finishedRead(inKey, static_cast<QKeychain::ReadPasswordJob*>(inJob));
     });
 
     readJob->start();
+}
+
+void SecretStore::requestLoadSecretList(const std::vector<QString>& inKeyList
+                                      , Callback<void()>&& inCallback)
+{
+    // A shared RAII guard to trigger the callback, when all secret keys are loaded.
+    std::shared_ptr<SolGeneralGuard> sharedSgg = std::make_shared<SolGeneralGuard>([sggCallback = std::move(inCallback)]() mutable
+    {
+        sggCallback();
+    });
+
+    // Copy capture to connect the 'sharedSgg' lifetime to each 'loading'.
+    for (const QString& inKey : inKeyList)
+    {
+        requestLoadSecret(inKey, [sharedSgg](const QString&){});
+    }
 }
 
 void SecretStore::requestSaveSecret(const QString& inKey
@@ -97,7 +116,7 @@ void SecretStore::requestSaveSecret(const QString& inKey
             return;
         }
 
-        // todo: error process
+        // todo: error handle
     });
 
     writeJob->start();
@@ -116,4 +135,18 @@ void SecretStore::KeyCache::setCache(const QVariant& inValue)
     hasKey    = true;
     isLoading = false;
     secret    = inValue.toString();
+}
+
+void SecretStore::KeyCache::emplaceCallback(LoadCallback&& inCallback)
+{
+    callbacks.emplace_back(std::move(inCallback));
+}
+
+void SecretStore::KeyCache::broadcastCallbacks()
+{
+    std::vector<LoadCallback> localVec = std::move(callbacks);
+    for (LoadCallback& callback : localVec)
+    {
+        callback(secret);
+    }
 }

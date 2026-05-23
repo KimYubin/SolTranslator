@@ -47,6 +47,21 @@ std::vector<const OptionSpec*> ITranslateEngine::sortedOptionSpecList() const
     return resVec;
 }
 
+std::vector<QString> ITranslateEngine::secretEngineOptionKeys() const
+{
+    std::vector<QString> resVec;
+    resVec.reserve(_optionSpecs.size());
+
+    std::ranges::copy(
+        _optionSpecs
+        | std::views::filter([](const auto& inOpt) { return inOpt.second.isSecretMode; })
+        | std::views::transform([this](const auto& inOpt) { return Sol::engineOptionKey(_engineId, inOpt.second.key); })
+      , std::back_inserter(resVec)
+    );
+
+    return resVec;
+}
+
 TranslateUnit* ITranslateEngine::newTrUnit(TranslateManager* inTrManager)
 {
     return _trUnitCreator(inTrManager);

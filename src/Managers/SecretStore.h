@@ -6,6 +6,11 @@
 
 #include <QObject>
 
+namespace QKeychain
+{
+class ReadPasswordJob;
+}
+
 class ConfigManager;
 
 using LoadCallback = Callback<void(const QString&)>;
@@ -17,8 +22,15 @@ class SecretStore : public QObject
 public:
     explicit SecretStore(ConfigManager* inParent);
 
+private:
+    void finishedRead(const QString& inKey, QKeychain::ReadPasswordJob* inReadJob);
+
+public:
     void requestLoadSecret(const QString& inKey
                          , LoadCallback&& inCallback);
+
+    void requestLoadSecretList(const std::vector<QString>& inKeyList
+                             , Callback<void()>&& inCallback);
 
     void requestSaveSecret(const QString& inKey
                          , const QVariant& inValue
@@ -31,6 +43,8 @@ private:
     struct KeyCache
     {
         void setCache(const QVariant& inValue);
+        void emplaceCallback(LoadCallback&& inCallback);
+        void broadcastCallbacks();
 
         QString secret;
         std::vector<LoadCallback> callbacks;

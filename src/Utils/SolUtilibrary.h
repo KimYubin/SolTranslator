@@ -36,6 +36,8 @@ private: \
 #define SOL_QSS_COLOR(colorName) SOL_QSS_TYPE(QColor, colorName)
 
 
+class OptionKey;
+class EngineId;
 class QObject;
 class QWidget;
 
@@ -83,6 +85,8 @@ QRect availableGeometryAt(const QPoint& inPoint);
  */
 QString qStrFromStdView(const std::string_view& inStrView);
 
+
+QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey);
 } // namespace Sol
 
 

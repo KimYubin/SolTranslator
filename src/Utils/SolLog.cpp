@@ -41,7 +41,7 @@ void SolLogHandler::setupLog()
 #endif
 
     const QString format =
-            "[%{time yy-MM-dd hh:mm:ss.zzz tt}] "
+            // "[%{time yy-MM-dd hh:mm:ss.zzz tt}] "
             "%{if-debug}"    "Debug"    "%{endif}"
             "%{if-info}"     "Info"     "%{endif}"
             "%{if-warning}"  "Warning"  "%{endif}"

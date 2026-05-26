@@ -35,6 +35,21 @@ void asyncHtmlToMarkdown(QString inHtml
                        , QObject* inContext
                        , Callback<void(const QString&)>&& inMainThreadFunc);
 
+/**
+ * Replace the beginning, end, and line breaks of the code block, to Marker.
+ * Fix the error of code blocks being changed to inline code during the HTML
+ * modification process.
+ *
+ * @see markerToCodeBlock()
+ */
+void codeBlockToMarker(QTextDocument& inDoc);
+
+/**
+ * Replace the marker to origin code block.
+ *
+ * @see codeBlockToMarker()
+ */
+QString& markerToCodeBlock(QString& inString);
 
 /**
  * Normalize the HTML in the QTextDocument to Qt HTML style.

@@ -87,14 +87,14 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     QString md = inMarkdownStr;
 
-    static const QRegularExpression codeQuotingPattern(R"(```(.*?)```)", QRegularExpression::DotMatchesEverythingOption);
+    static const QRegularExpression codeBlockPattern(R"(```(.*?)```)", QRegularExpression::DotMatchesEverythingOption);
     static const QRegularExpression inlineCodePattern(R"(`(.*?)`)", QRegularExpression::DotMatchesEverythingOption);
 
     // ~=======================
     // Escape <>
 
     // Prevent <> escape in code area.
-    static const QString quotPlaceMarker   = "__CODE_QUOT_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
+    static const QString blockPlaceMarker  = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
     static const QString inlinePlaceMarker = "__CODE_INLINE_" + QUuid::createUuid().toString(QUuid::Id128) + "_%1__";
 
     auto replaceCodeToMarker = [&md](const QRegularExpression& inRe, const QString& inKeyMarker)
@@ -120,8 +120,8 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         md = std::move(replaceStr);
         return resList;
     };
-    const QStringList quotList   = replaceCodeToMarker(codeQuotingPattern, quotPlaceMarker);
-    const QStringList inlineList = replaceCodeToMarker(inlineCodePattern, inlinePlaceMarker);
+    const QStringList codeBlockList = replaceCodeToMarker(codeBlockPattern, blockPlaceMarker);
+    const QStringList inlineList    = replaceCodeToMarker(inlineCodePattern, inlinePlaceMarker);
 
 
     // Escape <> in outside of code. Except for <br/>.
@@ -143,11 +143,12 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     }
     codeFontFamilies += ";";
 
+    const QString codeStyle = getCodeBackgroundColorString() + codeFontFamilies ;
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
     const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
-    const QString quotCodeFormat   = "\n<pre style=\" " + getCodeBackgroundColorString() + codeFontFamilies + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
-    const QString inlineCodeFormat = "<code style= \" " + getCodeBackgroundColorString() + codeFontFamilies + " \">"  "%1"  "</code>";
+    const QString blockCodeFormat  = "\n<pre style=\" " + codeStyle + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
+    const QString inlineCodeFormat = "<code style= \" " + codeStyle + " \">"  "%1"  "</code>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -173,7 +174,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     // Restore 'Marker To Code' in reverse order of 'Code To Marker'.
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
-    replaceMarkerToCode(quotList, quotCodeFormat, quotPlaceMarker);
+    replaceMarkerToCode(codeBlockList, blockCodeFormat, blockPlaceMarker);
     document()->setMarkdown(md);
 }
 

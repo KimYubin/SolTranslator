@@ -13,6 +13,12 @@
 #include <QTextTableCell>
 #include <QUuid>
 
+namespace
+{
+const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128) + "__";
+const QString codeBlockNewLineMarker = "__CODE_NEWLINE_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+} // anonymous namespace
+
 namespace Sol
 {
 QString htmlToMarkdown(QString inHtml)
@@ -20,9 +26,7 @@ QString htmlToMarkdown(QString inHtml)
     // Remove the syntax that ignores the list.
     QTextDocument txtDoc;
     inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
-    inHtml.replace(QRegularExpression(R"(white-space: pre-wrap;)"), "");
     txtDoc.setHtml(inHtml);
-
     return htmlToMarkdown(txtDoc);
 }
 
@@ -30,11 +34,15 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 {
     fixListItem(inDoc);
 
-    Sol::normalizeHtml(inDoc);
-    Sol::fixTailSpaceInBold(inDoc);
-    Sol::fixTableCell(inDoc);
+    codeBlockToMarker(inDoc);
 
-    return Sol::fixNewLine(inDoc);
+    normalizeHtml(inDoc);
+    fixTailSpaceInBold(inDoc);
+    fixTableCell(inDoc);
+
+    QString markdownStr = fixNewLine(inDoc);
+
+    return markerToCodeBlock(markdownStr);;
 }
 
 void asyncHtmlToMarkdown(QString inHtml
@@ -45,10 +53,80 @@ void asyncHtmlToMarkdown(QString inHtml
         inContext,
         [htmlStr = std::move(inHtml)]() mutable
         {
-            return Sol::htmlToMarkdown(htmlStr);
+            return htmlToMarkdown(std::move(htmlStr));
         },
         std::move(inMainThreadFunc)
     );
+}
+
+void codeBlockToMarker(QTextDocument& inDoc)
+{
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
+    {
+        QTextBlock next = textBlock.next();
+
+        QMap<int, QVariant> properties = textBlock.blockFormat().properties();
+        if (properties.contains(QTextFormat::BlockNonBreakableLines))
+        {
+            QTextCursor cursor(textBlock);
+
+            // Marking the start of the code block.
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.insertText(codeBlockMarker);
+
+            // Marking line break in code block.
+            for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+            {
+                QTextFragment frag = itemIt.fragment();
+
+                if (!frag.isValid())
+                {
+                    continue;
+                }
+
+                const int frgStart = frag.position();
+
+                QString text = frag.text();
+                text.replace(QChar::LineSeparator, codeBlockNewLineMarker);
+
+                QTextCursor fragCursor(&inDoc);
+                fragCursor.setPosition(frgStart);
+                fragCursor.setPosition(frgStart + frag.length(), QTextCursor::KeepAnchor);
+                fragCursor.insertText(text, frag.charFormat());
+
+                // Recreate the modified iterator after the update.
+                itemIt = textBlock.begin();
+                while (!itemIt.atEnd())
+                {
+                    QTextFragment curFrg = itemIt.fragment();
+                    if (curFrg.isValid() && curFrg.position() >= frgStart)
+                    {
+                        break;
+                    }
+
+                    ++itemIt;
+                }
+            }
+
+            // Marking the end of the code block.
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.insertText(codeBlockMarker);
+        }
+
+        textBlock = next;
+    }
+}
+
+QString& markerToCodeBlock(QString& inString)
+{
+    inString.replace("```\n" + codeBlockMarker, "```\n");
+    inString.replace(codeBlockMarker + "\n```", "\n```");
+
+    inString.replace("`" + codeBlockMarker, "```\n");
+    inString.replace(codeBlockMarker + "`", "\n```");
+
+    inString.replace(codeBlockNewLineMarker, "\n");
+    return inString;
 }
 
 void normalizeHtml(QTextDocument& inDoc)

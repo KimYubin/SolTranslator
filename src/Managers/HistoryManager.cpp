@@ -132,17 +132,16 @@ Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimeline
 {
     // The array is sorted by TimeStamp; binary search is used.
     // Entries with the same TimeStamp are distinguished by TimelineId.
-    const auto lowIt = std::ranges::lower_bound(_historyCaches, inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
+    auto eqRange = std::ranges::equal_range(_historyCaches, inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
 
-    if (lowIt == _historyCaches.end() || lowIt->getTimeStamp() != inTimeStamp)
+    if (eqRange.empty())
     {
         return makeUnexpected("not found TimeStamp. TimeStamp: " + inTimeStamp.toString());
     }
 
-    const auto upperIt = std::ranges::upper_bound(lowIt, _historyCaches.end(), inTimeStamp, std::greater{}, &HistoryCacheData::getTimeStamp);
-    const auto findIt  = std::ranges::find(lowIt, upperIt, inTimelineId, &HistoryCacheData::getTimelineId);
+    const auto findIt = std::ranges::find(eqRange, inTimelineId, &HistoryCacheData::getTimelineId);
 
-    if (findIt == _historyCaches.end())
+    if (findIt == eqRange.end())
     {
         return makeUnexpected(QString{"not found Timeline ID. TimeStamp: %1, ID: %2"}.arg(inTimeStamp.toString(), inTimelineId));
     }

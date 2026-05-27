@@ -35,6 +35,12 @@ void asyncHtmlToMarkdown(QString inHtml
                        , QObject* inContext
                        , Callback<void(const QString&)>&& inMainThreadFunc);
 
+
+/**
+ * Fix the internal error of the list items.
+ */
+void fixListItem(QTextDocument& inDoc);
+
 /**
  * Replace the beginning, end, and line breaks of the code block, to Marker.
  * Fix the error of code blocks being changed to inline code during the HTML
@@ -51,15 +57,11 @@ void codeBlockToMarker(QTextDocument& inDoc);
  */
 QString& markerToCodeBlock(QString& inString);
 
+
 /**
  * Normalize the HTML in the QTextDocument to Qt HTML style.
  */
 void normalizeHtml(QTextDocument& inDoc);
-
-/**
- * Fix the internal error of the list items.
- */
-void fixListItem(QTextDocument& inDoc);
 
 /**
  * Fix the last space of in Bold(**).

@@ -16,7 +16,7 @@
 namespace
 {
 const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128) + "__";
-const QString codeBlockNewLineMarker = "__CODE_NEWLINE_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+const QString codeBlockNewLineMarker = "__CODE_LF_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
 } // anonymous namespace
 
 namespace Sol
@@ -42,7 +42,7 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 
     QString markdownStr = fixNewLine(inDoc);
 
-    return markerToCodeBlock(markdownStr);;
+    return markerToCodeBlock(markdownStr);
 }
 
 void asyncHtmlToMarkdown(QString inHtml
@@ -57,81 +57,6 @@ void asyncHtmlToMarkdown(QString inHtml
         },
         std::move(inMainThreadFunc)
     );
-}
-
-void codeBlockToMarker(QTextDocument& inDoc)
-{
-    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
-    {
-        QTextBlock next = textBlock.next();
-
-        QMap<int, QVariant> properties = textBlock.blockFormat().properties();
-        if (properties.contains(QTextFormat::BlockNonBreakableLines))
-        {
-            QTextCursor cursor(textBlock);
-
-            // Marking the start of the code block.
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.insertText(codeBlockMarker);
-
-            // Marking line break in code block.
-            for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
-            {
-                QTextFragment frag = itemIt.fragment();
-
-                if (!frag.isValid())
-                {
-                    continue;
-                }
-
-                const int frgStart = frag.position();
-
-                QString text = frag.text();
-                text.replace(QChar::LineSeparator, codeBlockNewLineMarker);
-
-                QTextCursor fragCursor(&inDoc);
-                fragCursor.setPosition(frgStart);
-                fragCursor.setPosition(frgStart + frag.length(), QTextCursor::KeepAnchor);
-                fragCursor.insertText(text, frag.charFormat());
-
-                // Recreate the modified iterator after the update.
-                itemIt = textBlock.begin();
-                while (!itemIt.atEnd())
-                {
-                    QTextFragment curFrg = itemIt.fragment();
-                    if (curFrg.isValid() && curFrg.position() >= frgStart)
-                    {
-                        break;
-                    }
-
-                    ++itemIt;
-                }
-            }
-
-            // Marking the end of the code block.
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.insertText(codeBlockMarker);
-        }
-
-        textBlock = next;
-    }
-}
-
-QString& markerToCodeBlock(QString& inString)
-{
-    inString.replace("```\n" + codeBlockMarker, "```\n");
-    inString.replace(codeBlockMarker + "\n```", "\n```");
-
-    inString.replace("`" + codeBlockMarker, "```\n");
-    inString.replace(codeBlockMarker + "`", "\n```");
-
-    inString.replace(codeBlockNewLineMarker, "\n");
-    return inString;
-}
-
-void normalizeHtml(QTextDocument& inDoc)
-{
-    inDoc.setHtml(inDoc.toHtml());
 }
 
 void fixListItem(QTextDocument& inDoc)
@@ -229,7 +154,7 @@ void fixListItem(QTextDocument& inDoc)
             }
 
 
-            // Remove new line in list item.
+            // Remove newline in list item.
             mergeLinkText.removeIf([](const QChar& inChar)
             {
                 return (inChar == '\n')
@@ -259,6 +184,84 @@ void fixListItem(QTextDocument& inDoc)
             }
         }
     }
+}
+
+void codeBlockToMarker(QTextDocument& inDoc)
+{
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
+    {
+        QTextBlock next = textBlock.next();
+
+        QMap<int, QVariant> properties = textBlock.blockFormat().properties();
+        if (properties.contains(QTextFormat::BlockNonBreakableLines))
+        {
+            QTextCursor cursor(textBlock);
+
+            // Marking the start of the code block.
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.insertText(codeBlockMarker);
+
+            // Marking newline in code block.
+            for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+            {
+                QTextFragment frag = itemIt.fragment();
+
+                if (!frag.isValid())
+                {
+                    continue;
+                }
+
+                const int frgStart = frag.position();
+
+                QString text = frag.text();
+                text.replace(QChar::LineSeparator, codeBlockNewLineMarker);
+
+                QTextCursor fragCursor(&inDoc);
+                fragCursor.setPosition(frgStart);
+                fragCursor.setPosition(frgStart + frag.length(), QTextCursor::KeepAnchor);
+                fragCursor.insertText(text, frag.charFormat());
+
+                // Recreate the modified iterator after the update.
+                itemIt = textBlock.begin();
+                while (!itemIt.atEnd())
+                {
+                    QTextFragment curFrg = itemIt.fragment();
+                    if (curFrg.isValid() && curFrg.position() >= frgStart)
+                    {
+                        break;
+                    }
+
+                    ++itemIt;
+                }
+            }
+
+            // Marking the end of the code block.
+            cursor.movePosition(QTextCursor::EndOfBlock);
+            cursor.insertText(codeBlockMarker);
+        }
+
+        textBlock = next;
+    }
+}
+
+QString& markerToCodeBlock(QString& inString)
+{
+    const static QString frontBacktick = "```\n";
+    const static QString backBacktick = "\n```";
+
+    inString.replace(frontBacktick + codeBlockMarker, frontBacktick);
+    inString.replace(codeBlockMarker + backBacktick, backBacktick);
+
+    inString.replace("`" + codeBlockMarker, frontBacktick);
+    inString.replace(codeBlockMarker + "`", backBacktick);
+
+    inString.replace(codeBlockNewLineMarker, "\n");
+    return inString;
+}
+
+void normalizeHtml(QTextDocument& inDoc)
+{
+    inDoc.setHtml(inDoc.toHtml());
 }
 
 void fixTailSpaceInBold(QTextDocument& inDoc)
@@ -355,7 +358,7 @@ void fixTableCell(QTextDocument& inDoc)
 QString fixNewLine(QTextDocument& inDoc)
 {
     // ~====================
-    // fix line breaks in table cell.
+    // fix newlines in table cell.
     // html-> replace <br/> to marker -> convert markdown -> replace marker to <br/>.
 
     const QString originHtml = inDoc.toHtml();
@@ -382,7 +385,7 @@ QString fixNewLine(QTextDocument& inDoc)
         // Append text before table.
         replacedHtml += originHtml.mid(lastPos, match.capturedStart() - lastPos);
 
-        // Replace line break in table
+        // Replace newline in table
         QString tableHtml = match.captured();
         tableHtml.replace(brPattern, newLineMarker);
         replacedHtml += tableHtml;
@@ -400,10 +403,10 @@ QString fixNewLine(QTextDocument& inDoc)
     docMarkdown.replace(QChar::Nbsp, " ");
 
     // ~====================
-    // Convert single line break to a space.
-    // Convert consecutive spaces before and after a single line break to a space.
-    // Do not modify consecutive line breaks.
-    // If a list item follows a single line break, do not modify it.
+    // Convert single newline to a space.
+    // Convert consecutive spaces before and after a single newline to a space.
+    // Do not modify consecutive newlines.
+    // If a list item follows a single newline, do not modify it.
     docMarkdown.replace(
         QRegularExpression(
             R"([^\S\n]*(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"

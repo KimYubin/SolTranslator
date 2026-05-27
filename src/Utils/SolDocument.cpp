@@ -15,20 +15,25 @@
 
 namespace
 {
-const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128) + "__";
-const QString codeBlockNewLineMarker = "__CODE_LF_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+void fixListItem(QTextDocument& inDoc);
+
+void codeBlockToMarker(QTextDocument& inDoc);
+
+QString& markerToCodeBlock(QString& inString);
+
+
+void normalizeHtml(QTextDocument& inDoc);
+
+void fixTailSpaceInBold(QTextDocument& inDoc);
+
+void fixTableCell(QTextDocument& inDoc);
+
+QString fixNewLine(QTextDocument& inDoc);
 } // anonymous namespace
+
 
 namespace Sol
 {
-QString htmlToMarkdown(QString inHtml)
-{
-    // Remove the syntax that ignores the list.
-    QTextDocument txtDoc;
-    inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
-    txtDoc.setHtml(inHtml);
-    return htmlToMarkdown(txtDoc);
-}
 
 QString htmlToMarkdown(QTextDocument& inDoc)
 {
@@ -42,7 +47,16 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 
     QString markdownStr = fixNewLine(inDoc);
 
-    return markerToCodeBlock(markdownStr);
+    return markerToCodeBlock(markdownStr); 
+}
+
+QString htmlToMarkdown(QString inHtml)
+{
+    // Remove the syntax that ignores the list.
+    QTextDocument txtDoc;
+    inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
+    txtDoc.setHtml(inHtml);
+    return htmlToMarkdown(txtDoc);
 }
 
 void asyncHtmlToMarkdown(QString inHtml
@@ -58,7 +72,18 @@ void asyncHtmlToMarkdown(QString inHtml
         std::move(inMainThreadFunc)
     );
 }
+} // namespace Sol
 
+
+namespace
+{
+const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+const QString codeBlockNewLineMarker = "__CODE_LF_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+
+
+/**
+ * Fix the internal error of the list items.
+ */
 void fixListItem(QTextDocument& inDoc)
 {
     QTextCursor fragCursor(&inDoc);
@@ -186,6 +211,13 @@ void fixListItem(QTextDocument& inDoc)
     }
 }
 
+/**
+ * Replace the beginning, end, and line breaks of the code block, to Marker.
+ * Fix the error of code blocks being changed to inline code during the HTML
+ * modification process.
+ *
+ * @see markerToCodeBlock()
+ */
 void codeBlockToMarker(QTextDocument& inDoc)
 {
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
@@ -244,10 +276,15 @@ void codeBlockToMarker(QTextDocument& inDoc)
     }
 }
 
+/**
+ * Replace the marker to origin code block.
+ *
+ * @see codeBlockToMarker()
+ */
 QString& markerToCodeBlock(QString& inString)
 {
     const static QString frontBacktick = "```\n";
-    const static QString backBacktick = "\n```";
+    const static QString backBacktick  = "\n```";
 
     inString.replace(frontBacktick + codeBlockMarker, frontBacktick);
     inString.replace(codeBlockMarker + backBacktick, backBacktick);
@@ -259,11 +296,18 @@ QString& markerToCodeBlock(QString& inString)
     return inString;
 }
 
+/**
+ * Normalize the HTML in the QTextDocument to Qt HTML style.
+ */
 void normalizeHtml(QTextDocument& inDoc)
 {
     inDoc.setHtml(inDoc.toHtml());
 }
 
+/**
+ * Fix the last space of in Bold(**).
+ * Prevent broken bold.
+ */
 void fixTailSpaceInBold(QTextDocument& inDoc)
 {
     QTextCursor textCursor(&inDoc);
@@ -321,6 +365,10 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
     }
 }
 
+/**
+ * Integrate the divided blocks in the cell.
+ * Prevent the divided blocks from being interpreted as adjacent cells.
+ */
 void fixTableCell(QTextDocument& inDoc)
 {
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
@@ -355,6 +403,13 @@ void fixTableCell(QTextDocument& inDoc)
     }
 }
 
+/**
+ * Fix the table cell in Markdown to prevent line breaks from being broken.
+ * Remove forced line breaks caused by word-wrap.
+ *
+ * @note If apply the return value back to QTextDocument, it may need to be fixed again.
+ * @return Markdown string.
+ */
 QString fixNewLine(QTextDocument& inDoc)
 {
     // ~====================
@@ -418,4 +473,4 @@ QString fixNewLine(QTextDocument& inDoc)
 
     return docMarkdown;
 }
-} // namespace Sol 
+} // anonymous namespace

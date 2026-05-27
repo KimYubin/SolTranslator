@@ -11,17 +11,19 @@ class QString;
 
 namespace Sol
 {
-/**
- * Convert HTML string to Markdown.
- * Correct any distortion that occurs during the conversion.
- */
-QString htmlToMarkdown(QString inHtml);
 
 /**
  * Convert HTML string to Markdown.
  * Correct any distortion that occurs during the conversion.
  */
 QString htmlToMarkdown(QTextDocument& inDoc);
+
+/**
+ * Convert HTML string to Markdown.
+ * Correct any distortion that occurs during the conversion.
+ */
+QString htmlToMarkdown(QString inHtml);
+
 
 /**
  * Asynchronously, Convert HTML string to Markdown.
@@ -36,54 +38,7 @@ void asyncHtmlToMarkdown(QString inHtml
                        , Callback<void(const QString&)>&& inMainThreadFunc);
 
 
-/**
- * Fix the internal error of the list items.
- */
-void fixListItem(QTextDocument& inDoc);
-
-/**
- * Replace the beginning, end, and line breaks of the code block, to Marker.
- * Fix the error of code blocks being changed to inline code during the HTML
- * modification process.
- *
- * @see markerToCodeBlock()
- */
-void codeBlockToMarker(QTextDocument& inDoc);
-
-/**
- * Replace the marker to origin code block.
- *
- * @see codeBlockToMarker()
- */
-QString& markerToCodeBlock(QString& inString);
-
-
-/**
- * Normalize the HTML in the QTextDocument to Qt HTML style.
- */
-void normalizeHtml(QTextDocument& inDoc);
-
-/**
- * Fix the last space of in Bold(**).
- * Prevent broken bold.
- */
-void fixTailSpaceInBold(QTextDocument& inDoc);
-
-/**
- * Integrate the divided blocks in the cell.
- * Prevent the divided blocks from being interpreted as adjacent cells.
- */
-void fixTableCell(QTextDocument& inDoc);
-
-/**
- * Fix the table cell in Markdown to prevent line breaks from being broken.
- * Remove forced line breaks caused by word-wrap.
- *
- * @note If apply the return value back to QTextDocument, it may need to be fixed again.
- * @return Markdown string.
- */
-QString fixNewLine(QTextDocument& inDoc);
-} // namespace Sol 
+} // namespace Sol
 
 
 #endif //SOLTRANSLATOR_SOLDOCUMENT_H

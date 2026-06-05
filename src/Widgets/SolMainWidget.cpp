@@ -164,12 +164,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     solCore->manager<GlobalHotKeyManager>()->registerAction(
         Action::MainWidgetRaise
       , this
-      , [this]()
-        {
-            show();
-            raise();
-            activateWindow();
-        }
+      , [this]() { showRaiseUp(); }
     );
 }
 
@@ -199,17 +194,7 @@ void SolMainWidget::showSettingsWidget()
     }
     else
     {
-        if (_settingsWidget->isMinimized())
-        {
-            _settingsWidget->showNormal();
-        }
-        if (_settingsWidget->isHidden())
-        {
-            _settingsWidget->show();
-        }
-
-        _settingsWidget->raise();
-        _settingsWidget->activateWindow();
+        _settingsWidget->showRaiseUp();
     }
 }
 

@@ -7,6 +7,7 @@
 #include "Managers/HistoryManager.h"
 #include "Managers/TranslateManager.h"
 #include "Utils/SolLog.h"
+#include "Utils/SolSingleApplication.h"
 
 #include <QApplication>
 
@@ -19,6 +20,12 @@ int main(int argc, char* argv[])
     SolLogHandler::setupLog();
 
     QApplication app(argc, argv);
+
+    SolSingleApplication solSingleApp("SolTranslator.Single.App");
+    if (solSingleApp.isAlreadyRunning())
+    {
+        return 0;
+    }
 
     // solCore
     SolTranslatorCore solTranslatorCore(&app);
@@ -37,6 +44,11 @@ int main(int argc, char* argv[])
 
 
     solTranslatorCore.postInitialize();
+
+    QObject::connect(&solSingleApp
+                   , &SolSingleApplication::raiseRequested
+                   , &solTranslatorCore
+                   , &SolTranslatorCore::raiseMainWidget);
 
     return app.exec();
 }

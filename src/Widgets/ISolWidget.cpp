@@ -8,3 +8,18 @@ ISolWidget::ISolWidget(QWidget* parent, const Qt::WindowFlags flags)
 
 ISolWidget::~ISolWidget()
 {}
+
+void ISolWidget::showRaiseUp()
+{
+    if (isMinimized())
+    {
+        showNormal();
+    }
+    if (isHidden())
+    {
+        show();
+    }
+
+    raise();
+    activateWindow();
+}

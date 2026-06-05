@@ -4,6 +4,7 @@
 #define SOLTRANSLATORCORE_H
 
 #include <QObject>
+#include <QPointer>
 
 #include <typeindex>
 #include <typeinfo>
@@ -65,6 +66,8 @@ public:
 
     void postInitialize();
 
+    void raiseMainWidget();
+
 private:
 signals:
     void postInitialized();
@@ -72,7 +75,7 @@ signals:
 private:
     std::unordered_map<std::type_index, std::unique_ptr<AbstractManager>> _managers;
 
-    SolMainWidget* _solMainWidget;
+    QPointer<SolMainWidget> _solMainWidget;
 };
 
 

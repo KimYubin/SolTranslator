@@ -14,7 +14,9 @@
 
 SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 
-SolTranslatorCore::SolTranslatorCore(QObject* parent) : QObject(parent)
+SolTranslatorCore::SolTranslatorCore(QObject* parent)
+    : QObject(parent)
+    , _solMainWidget(nullptr)
 {
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
     _self = this;
@@ -32,6 +34,8 @@ SolTranslatorCore::~SolTranslatorCore()
 
 void SolTranslatorCore::postInitialize()
 {
+    emit postInitialized();
+
     // GUI setup
     StyleManger::applyTheme();
 
@@ -56,6 +60,12 @@ void SolTranslatorCore::postInitialize()
     // WidgetInspector* inspector = new WidgetInspector();
 #endif
 
+}
 
-    emit postInitialized();
+void SolTranslatorCore::raiseMainWidget()
+{
+    if (_solMainWidget)
+    {
+        _solMainWidget->showRaiseUp();
+    }
 }

@@ -166,6 +166,8 @@ qt_add_executable(
         src/Utils/SolLogWorker.h
         src/Utils/SolPath.cpp
         src/Utils/SolPath.h
+        src/Utils/SolSingleApplication.cpp
+        src/Utils/SolSingleApplication.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
         src/Utils/UniqueQObjectPtr.hpp

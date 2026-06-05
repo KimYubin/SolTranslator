@@ -14,6 +14,7 @@ public:
 
     ~ISolWidget() override;
 
+    virtual void showRaiseUp();
 };
 
 

@@ -290,7 +290,10 @@ bool ConfigManager::isRememberWindowGeometry() const
 
 void ConfigManager::saveWidgetGeometry(const QWidget* inWidget)
 {
-    setSaveGeometry(inWidget->objectName() + WidgetGeometry, inWidget->saveGeometry());
+    if (isRememberWindowGeometry())
+    {
+        setSaveGeometry(inWidget->objectName() + WidgetGeometry, inWidget->saveGeometry());
+    }
 }
 
 bool ConfigManager::restoreWidgetGeometry(QWidget* inWidget) const

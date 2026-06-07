@@ -94,6 +94,7 @@ enum class Action
   , TextTab
   , DocumentTab
   , HistoryTab
+  , EngineSelector
 
   , SourceTargetToggle
   , CopyDoc

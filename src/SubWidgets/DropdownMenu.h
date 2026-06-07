@@ -3,7 +3,9 @@
 #ifndef DROPDOWNMENU_H
 #define DROPDOWNMENU_H
 #include <QComboBox>
+#include <QPointer>
 
+enum class Action;
 /**
  * The DropdownMenu class is a custom QComboBox.
  * Ignore wheel events when it does not have tab focus.
@@ -22,12 +24,23 @@ public:
     virtual void showPopup() override;
     virtual void hidePopup() override;
 
+    void setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
+    void setToolTipAction(const QString& inToolTip, const Action inAction);
+
+    void changeShortcut(const QKeySequence& inKey);
+    void setAction(const Action inAction);
+
+    void setBubbleToolTip(const QString& inToolTip);
+
 protected:
     virtual void wheelEvent(QWheelEvent* event) override;
 
 private:
     /** Reset the view mouse hover selection state when reopening the menu. */
     void resetViewCurrentIndex();
+
+    QString _toolTip;
+    QPointer<QShortcut> _shortcut;
 };
 
 

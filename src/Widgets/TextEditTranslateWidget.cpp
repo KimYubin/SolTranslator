@@ -3,7 +3,6 @@
 #include "TextEditTranslateWidget.h"
 
 #include "HistoryCacheData.h"
-#include "SolMainWidget.h"
 #include "SolTranslatorCore.h"
 #include "Managers/ConfigManager.h"
 #include "Managers/TranslateManager.h"

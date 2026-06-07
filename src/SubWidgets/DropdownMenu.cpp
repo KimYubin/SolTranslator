@@ -2,7 +2,11 @@
 
 #include "DropdownMenu.h"
 
+#include "SolToolTip.h"
+#include "Managers/ConfigManager.h"
+
 #include <QAbstractItemView>
+#include <QShortcut>
 #include <qevent.h>
 
 DropdownMenu::DropdownMenu(QWidget* parent) : QComboBox(parent)
@@ -33,6 +37,41 @@ void DropdownMenu::showPopup()
 void DropdownMenu::hidePopup()
 {
     QComboBox::hidePopup();
+}
+
+void DropdownMenu::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
+{
+    _toolTip = inToolTip;
+
+    if (_shortcut.isNull())
+    {
+        _shortcut = new QShortcut(this);
+    }
+    _shortcut->setKey(inKey);
+
+    connect(_shortcut, &QShortcut::activated, this, &DropdownMenu::showPopup);
+
+    SolToolTipFilter::setBubbleToolTip(this, Sol::toolTipShortcut(_toolTip, inKey));
+}
+
+void DropdownMenu::setToolTipAction(const QString& inToolTip, const Action inAction)
+{
+    setToolTipShortcut(inToolTip, solConfig.shortcut(inAction));
+}
+
+void DropdownMenu::changeShortcut(const QKeySequence& inKey)
+{
+    setToolTipShortcut(_toolTip, inKey);
+}
+
+void DropdownMenu::setAction(const Action inAction)
+{
+    changeShortcut(solConfig.shortcut(inAction));
+}
+
+void DropdownMenu::setBubbleToolTip(const QString& inToolTip)
+{
+    setToolTipShortcut(inToolTip, _shortcut.isNull() ? QKeySequence() : _shortcut->key());
 }
 
 void DropdownMenu::wheelEvent(QWheelEvent* event)

@@ -36,6 +36,7 @@ private: \
 #define SOL_QSS_COLOR(colorName) SOL_QSS_TYPE(QColor, colorName)
 
 
+class QKeySequence;
 class OptionKey;
 class EngineId;
 class QObject;
@@ -87,6 +88,9 @@ QString qStrFromStdView(const std::string_view& inStrView);
 
 
 QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey);
+
+QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
+
 } // namespace Sol
 
 

@@ -121,14 +121,13 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     // ~=========================
     // 번역 엔진 선택
     _engineSelector = new EngineSelector(this);
+    _engineSelector->setToolTipAction(i18n(Tr::Select_Translation_Engine), Action::EngineSelector);
     _engineSelector->setCurrentIndexChanged([this](const int inIdx)
     {
         const QString payload = _engineSelector->itemData(inIdx).toString();
         const EngineId curEg  = EngineId{payload};
         solConfig.setCurrentEngineId(curEg);
     });
-
-    SolToolTipFilter::setBubbleToolTip(_engineSelector, i18n(Tr::Select_Translation_Engine));
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignRight);
 
@@ -401,6 +400,7 @@ void SolMainWidget::popupTrayMenu()
 
 void SolMainWidget::moveTab(const TabMovement inMovement)
 {
+    const int widgetCount = ui->mainStackedWidget->count();
     int moveIdx = ui->mainStackedWidget->currentIndex();
 
     if (inMovement == TabMovement::Next)
@@ -409,9 +409,10 @@ void SolMainWidget::moveTab(const TabMovement inMovement)
     }
     else
     {
-        moveIdx += -1 + ui->mainStackedWidget->count();
+        moveIdx += -1 + widgetCount;
     }
-    moveIdx %= ui->mainStackedWidget->count();
+
+    moveIdx %= widgetCount;
 
     if (QAbstractButton* nextButton = _buttonGroup->button(moveIdx))
     {

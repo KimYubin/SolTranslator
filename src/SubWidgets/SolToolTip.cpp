@@ -8,20 +8,58 @@
 #include <QEvent>
 
 
-// ~==================================
-// SolToolTipFilter
-
-SolToolTipFilter::SolToolTipFilter(QObject* parent) : QObject(parent)
-{}
-
-void SolToolTipFilter::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+namespace
 {
-    static SolToolTipFilter* ins = new SolToolTipFilter();
-    inTargetWidget->setToolTip(inToolTip);
-    inTargetWidget->installEventFilter(ins);
+std::unordered_map<QWidget*, QString>& shortcutStrings()
+{
+    static std::unordered_map<QWidget*, QString> shortcutMap;
+    return shortcutMap;
 }
 
-void SolToolTipFilter::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
+void addShortcut(QWidget* inWidget, const QString& inShotrcut)
+{
+    shortcutStrings()[inWidget] = inShotrcut;
+    QObject::connect(inWidget, &QObject::destroyed, [inWidget]() { shortcutStrings().erase(inWidget); });
+}
+
+void removeShortcut(QWidget* inWidget)
+{
+    shortcutStrings().erase(inWidget);
+}
+
+QString shortcutString(QWidget* inWidget)
+{
+    return shortcutStrings()[inWidget];
+}
+
+
+// ~==================================
+// SolToolTipFilter
+class SolToolTipFilter : public QObject
+{
+    Q_OBJECT
+
+public:
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+};
+
+#include "SolToolTip.moc"
+} // anonymous namespace
+
+// ~==================================
+// SolToolTip
+
+SolToolTip::SolToolTip(QObject* parent) : QObject(parent)
+{}
+
+void SolToolTip::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+{
+    static SolToolTipFilter* toolTipEventFilter = new SolToolTipFilter();
+    inTargetWidget->setToolTip(inToolTip);
+    inTargetWidget->installEventFilter(toolTipEventFilter);
+}
+
+void SolToolTip::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
 {
     const bool isChecked = (inTargetWidget->isCheckable() && inTargetWidget->isChecked());
 
@@ -54,7 +92,7 @@ bool SolToolTipFilter::eventFilter(QObject* obj, QEvent* event)
             SolToolTipBallon::instance()->showToolTip(widget);
         }
 
-        return true; // 기본 툴팁을 차단
+        return true; // 기본 툴팁 차단
     }
     case QEvent::Leave:
     case QEvent::Hide:

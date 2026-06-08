@@ -10,13 +10,13 @@ class QAbstractButton;
 /**
  * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.
  *
- * @see SolToolTipFilter::setBubbleToolTip
+ * @see SolToolTip::setBubbleToolTip
  */
-class SolToolTipFilter : public QObject
+class SolToolTip : public QObject
 {
     Q_OBJECT
 
-    explicit SolToolTipFilter(QObject* parent = nullptr);
+    explicit SolToolTip(QObject* parent = nullptr);
 
 public:
     /**
@@ -28,10 +28,6 @@ public:
     static void setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip);
 
     static void setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip);
-
-
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
 };
-
 
 #endif //SOLTOOLTIP_H

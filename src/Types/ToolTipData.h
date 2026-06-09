@@ -4,20 +4,23 @@
 #define SOLTRANSLATOR_TOOLTIPDATA_HPP
 
 #include <QKeySequence>
+#include <QMetaType>
 #include <QString>
 
 struct ToolTipData
 {
-    inline static const char* Name = "SolToolTipData";
+    static const char* Name;
 
     ToolTipData() = default;
 
     ToolTipData(QString inToolTip
               , std::optional<QString> inOffToolTip
-              , QString inShortcutString)
+              , QKeySequence inShortcut
+              , const bool inIsOn = true)
         : toolTip(std::move(inToolTip))
         , OffToolTip(std::move(inOffToolTip))
-        , shortcut(std::move(inShortcutString))
+        , shortcut(std::move(inShortcut))
+        , isOn(inIsOn)
     {}
 
     ToolTipData(QString inToolTip
@@ -39,17 +42,23 @@ struct ToolTipData
         , shortcut(std::move(inShortcut.toString()))
     {}
 
-    ~ToolTipData()                             = default;
-    ToolTipData(const ToolTipData&)            = default;
-    ToolTipData& operator=(const ToolTipData&) = default;
+    ToolTipData(const ToolTipData&)             = default;
+    ToolTipData(ToolTipData&& inOther) noexcept = default;
 
-    QString getToolTip();
+    ToolTipData& operator=(const ToolTipData&)             = default;
+    ToolTipData& operator=(ToolTipData&& inOther) noexcept = default;
+
+    ~ToolTipData() = default;
+
+    QString toolTipString() const;
+    QString toolTipShortcutString() const;
 
     QString toolTip;
     std::optional<QString> OffToolTip;
     QKeySequence shortcut;
-    bool isOn;
+    bool isOn = true;
 };
+
 
 Q_DECLARE_METATYPE(ToolTipData);
 

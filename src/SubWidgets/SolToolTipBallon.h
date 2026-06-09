@@ -38,7 +38,7 @@ public:
         return _ins;
     }
 
-    void showToolTip(const QWidget* widget, ToolTipData* inToolTipData);
+    void showToolTip(const QWidget* widget);
     void hideToolTipImmediately();
 
     /**
@@ -73,7 +73,6 @@ private:
     void updateMargins() const;
 
     QPointer<const QWidget> _currentTargetWidget;
-    
 
     QLabel* _label;
     QVBoxLayout* _layout;

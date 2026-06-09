@@ -343,6 +343,16 @@ QString ConfigManager::historyTimeFormat() const
     return _settings->value(TimeFormat + HistoryFormat, "yyyy/MM/dd (ddd) hh:mm").toString();
 }
 
+void ConfigManager::setIsShowToolTipShortcut(const bool inIsShow)
+{
+    _settings->setValue("IsShowToolTipShortcut", inIsShow);
+}
+
+bool ConfigManager::isShowToolTipShortcut() const
+{
+    return _settings->value("IsShowToolTipShortcut", true).toBool();
+}
+
 
 namespace
 {

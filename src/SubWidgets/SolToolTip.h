@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+struct ToolTipData;
 enum class Action;
 class QAbstractButton;
 
@@ -20,6 +21,8 @@ class SolToolTip : public QObject
     explicit SolToolTip(QObject* parent = nullptr);
 
 public:
+    static void setToolTipProperty(QWidget* inWidget, ToolTipData inToolTipData);
+
     /**
      * 버블 툴팁을 추가합니다.
      *
@@ -30,21 +33,24 @@ public:
 
 
     static void setToolTipShortcut(QWidget* inWidget
-                          , const QString& inToolTip
-                          , const QKeySequence& inKey);
+                                 , const QString& inToolTip
+                                 , const QKeySequence& inKey);
+
     static void setToolTipAction(QWidget* inWidget
-                        , const QString& inToolTip
-                        , const Action inAction);
+                               , const QString& inToolTip
+                               , const Action inAction);
 
     static void changeShortcut(QWidget* inWidget
-                      , const QKeySequence& inKey);
+                             , const QKeySequence& inKey);
+
     static void setAction(QWidget* inWidget
-                 , const Action inAction);
+                        , const Action inAction);
 
 
     static void setCheckButtonToolTip(QAbstractButton* inButton
                                     , const QString& inOnToolTip
-                                    , const QString& inOffToolTip);
+                                    , const QString& inOffToolTip
+                                    , const QKeySequence& inKey);
 };
 
 #endif //SOLTOOLTIP_H

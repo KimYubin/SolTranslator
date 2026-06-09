@@ -2,7 +2,7 @@
 
 #include "SolToolTipBallon.h"
 
-#include "Types/ToolTipData.hpp"
+#include "Types/ToolTipData.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
 
@@ -49,9 +49,9 @@ SolToolTipBallon::SolToolTipBallon(QWidget* parent)
     connect(&_hideTimer, &QTimer::timeout, this, &SolToolTipBallon::hideToolTipImmediately);
 }
 
-void SolToolTipBallon::showToolTip(const QWidget* widget, ToolTipData* inToolTipData)
+void SolToolTipBallon::showToolTip(const QWidget* widget)
 {
-    if (widget && widget->isVisible() && widget->toolTip().isEmpty() == false)
+    if (widget && widget->isVisible() && widget->property(ToolTipData::Name).isValid())
     {
         _currentTargetWidget = QPointer(widget);
         showToolTipImpl(widget);
@@ -82,9 +82,13 @@ void SolToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
 void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
 {
     const ToolTipData toolTipData = widget->property(ToolTipData::Name).value<ToolTipData>();
-    solDebug<< toolTipData.toolTip;
+    const QString tooltipString   = toolTipData.toolTipShortcutString();
+    if (tooltipString.isEmpty())
+    {
+        return;
+    }
 
-    _label->setText(widget->toolTip());
+    _label->setText(tooltipString);
     _label->adjustSize();
     _label->repaint();
     adjustSize();

@@ -107,13 +107,3 @@ QString Sol::engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey)
 {
     return "Engine/" + inEngineId.toString() + "/" + inKey.toString();
 }
-
-QString Sol::toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
-{
-    if (inKey.isEmpty())
-    {
-        return inToolTip;
-    }
-
-    return inToolTip + "(" + inKey.toString() + ")";
-}

@@ -126,6 +126,9 @@ public:
     void setHistoryTimeFormat(const QString& inFormat);
     QString historyTimeFormat() const;
 
+    void setIsShowToolTipShortcut(const bool inIsShow);
+    bool isShowToolTipShortcut() const;
+
     // ~======================
     // shortcut
     void setShortCut(const Action inShortCut, const QKeySequence& inKeySequence);

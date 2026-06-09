@@ -42,8 +42,6 @@ public:
     void setAction(const Action inAction);
 
 private:
-    QString _toolTip;
-    std::optional<QString> _offToolTip;
 
 };
 

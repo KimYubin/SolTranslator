@@ -20,12 +20,9 @@ void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFi
 
 void SolButton::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
 {
-    _toolTip = inToolTip;
-    _offToolTip.reset();
-
     setShortcut(inKey);
 
-    SolToolTip::setToolTip(this, Sol::toolTipShortcut(inToolTip, inKey));
+    SolToolTip::setToolTipShortcut(this, inToolTip, inKey);
 }
 
 void SolButton::setToolTipAction(const QString& inToolTip, const Action inAction)
@@ -38,14 +35,9 @@ void SolButton::setCheckToolTipShortcut(const QString& inOnToolTip
                                       , const QString& inOffToolTip
                                       , const QKeySequence& inKey)
 {
-    _toolTip    = inOnToolTip;
-    _offToolTip = inOffToolTip;
-
     setShortcut(inKey);
 
-    SolToolTip::setCheckButtonToolTip(this
-                                    , Sol::toolTipShortcut(inOnToolTip, inKey)
-                                    , Sol::toolTipShortcut(inOffToolTip, inKey));
+    SolToolTip::setCheckButtonToolTip(this, inOnToolTip, inOffToolTip, inKey);
 }
 
 void SolButton::setCheckToolTipAction(const QString& inOnToolTip
@@ -57,14 +49,9 @@ void SolButton::setCheckToolTipAction(const QString& inOnToolTip
 
 void SolButton::changeShortcut(const QKeySequence& inKey)
 {
-    if (_offToolTip.has_value())
-    {
-        setCheckToolTipShortcut(_toolTip, _offToolTip.value(), inKey);
-    }
-    else
-    {
-        setToolTipShortcut(_toolTip, inKey);
-    }
+    setShortcut(inKey);
+
+    SolToolTip::changeShortcut(this, inKey);
 }
 
 void SolButton::setAction(const Action inAction)

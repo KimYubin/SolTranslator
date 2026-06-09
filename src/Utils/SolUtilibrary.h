@@ -89,8 +89,6 @@ QString qStrFromStdView(const std::string_view& inStrView);
 
 QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey);
 
-QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey);
-
 } // namespace Sol
 
 

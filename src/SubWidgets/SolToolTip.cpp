@@ -4,7 +4,7 @@
 
 #include "SolToolTipBallon.h"
 #include "Managers/ConfigManager.h"
-#include "Types/ToolTipData.hpp"
+#include "Types/ToolTipData.h"
 #include "Utils/SolLog.h"
 
 #include <QAbstractButton>
@@ -13,49 +13,6 @@
 
 namespace
 {
-
-std::unordered_map<QWidget*, ToolTipData>& toolTipDatas()
-{
-    static std::unordered_map<QWidget*, ToolTipData> shortcutMap;
-    return shortcutMap;
-}
-
-void removeToolTipData(QWidget* inWidget)
-{
-    toolTipDatas().erase(inWidget);
-}
-
-void removeToolTipDataByObj(QObject* inObj)
-{
-    if (QWidget* inWidget = qobject_cast<QWidget*>(inObj))
-    {
-        toolTipDatas().erase(inWidget);
-    }
-}
-
-void setToolTipData(QWidget* inWidget, const ToolTipData& inToolTipData)
-{
-    if (toolTipDatas().contains(inWidget) == false)
-    {
-        QObject::connect(inWidget, &QObject::destroyed, &removeToolTipDataByObj);
-    }
-
-    toolTipDatas()[inWidget] = inToolTipData;
-}
-
-
-std::tuple<bool, ToolTipData*> findToolTipData(QWidget* inWidget)
-{
-    const auto findIt = toolTipDatas().find(inWidget);
-    if (findIt == toolTipDatas().end())
-    {
-        return {false, nullptr};
-    }
-
-    return {true, &findIt->second};
-}
-
-
 // ~==================================
 // SolToolTipFilter
 class SolToolTipFilter : public QObject
@@ -75,23 +32,24 @@ public:
 SolToolTip::SolToolTip(QObject* parent) : QObject(parent)
 {}
 
-void SolToolTip::setToolTip(QWidget* inWidget, const QString& inToolTip)
+void SolToolTip::setToolTipProperty(QWidget* inWidget, ToolTipData inToolTipData)
 {
     static SolToolTipFilter* toolTipEventFilter = new SolToolTipFilter();
-    inWidget->setToolTip(inToolTip);
+    inWidget->setToolTip(inToolTipData.toolTipString());
+    inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(std::move(inToolTipData)));
     inWidget->installEventFilter(toolTipEventFilter);
+}
 
-    inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(ToolTipData{inToolTip}));
-    solDebug << inWidget->dynamicPropertyNames();
+void SolToolTip::setToolTip(QWidget* inWidget, const QString& inToolTip)
+{
+    setToolTipProperty(inWidget, ToolTipData{inToolTip});
 }
 
 void SolToolTip::setToolTipShortcut(QWidget* inWidget
                                   , const QString& inToolTip
                                   , const QKeySequence& inKey)
 {
-    inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(ToolTipData{inToolTip, inKey}));
-
-    setToolTipData(inWidget, {inToolTip, inKey});
+    setToolTipProperty(inWidget, ToolTipData{inToolTip, inKey});
 }
 
 void SolToolTip::setToolTipAction(QWidget* inWidget
@@ -104,8 +62,9 @@ void SolToolTip::setToolTipAction(QWidget* inWidget
 void SolToolTip::changeShortcut(QWidget* inWidget
                               , const QKeySequence& inKey)
 {
-    ToolTipData& toolTipData = toolTipDatas()[inWidget];
-    toolTipData.shortcut = inKey;
+    ToolTipData toolTipData = inWidget->property(ToolTipData::Name).value<ToolTipData>();
+    toolTipData.shortcut    = inKey;
+    setToolTipProperty(inWidget, std::move(toolTipData));
 }
 
 void SolToolTip::setAction(QWidget* inWidget
@@ -117,16 +76,18 @@ void SolToolTip::setAction(QWidget* inWidget
 
 void SolToolTip::setCheckButtonToolTip(QAbstractButton* inButton
                                      , const QString& inOnToolTip
-                                     , const QString& inOffToolTip)
+                                     , const QString& inOffToolTip
+                                     , const QKeySequence& inKey)
 {
     const bool isChecked = (inButton->isCheckable() && inButton->isChecked());
 
-    setToolTip(inButton, isChecked ? inOnToolTip : inOffToolTip);
+    setToolTipProperty(inButton, {inOnToolTip, inOffToolTip, inKey, isChecked});
 
-    connect(inButton, &QAbstractButton::toggled, inButton, [inButton, inOnToolTip, inOffToolTip](const bool checked)
+    connect(inButton, &QAbstractButton::toggled, inButton, [inButton](const bool checked)
     {
-        const QString& toolTip = checked ? inOnToolTip : inOffToolTip;
-        inButton->setToolTip(toolTip);
+        ToolTipData toolTipData = inButton->property(ToolTipData::Name).value<ToolTipData>();
+        toolTipData.isOn        = checked;
+        setToolTipProperty(inButton, std::move(toolTipData));
 
         SolToolTipBallon::instance()->updateWidgetToolTip(inButton);
     });
@@ -143,15 +104,10 @@ bool SolToolTipFilter::eventFilter(QObject* obj, QEvent* event)
         {
             return false;
         }
-        auto [isFind, tooltipDataPtr] = findToolTipData(widget);
-        // if (isFind)
-        {
-            SolToolTipBallon::instance()->showToolTip(widget, tooltipDataPtr);
-        }
 
-        if (widget->toolTip().isEmpty() == false)
+        if (widget->property(ToolTipData::Name).isValid())
         {
-            // SolToolTipBallon::instance()->showToolTip(widget);
+            SolToolTipBallon::instance()->showToolTip(widget);
         }
 
         return true; // 기본 툴팁 차단

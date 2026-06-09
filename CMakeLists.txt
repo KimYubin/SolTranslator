@@ -151,6 +151,7 @@ qt_add_executable(
         src/Types/SolTypes.cpp
         src/Types/SolTypes.h
         src/Types/TextCacheKey.hpp
+        src/Types/ToolTipData.hpp
         src/Types/TranslateRequest.cpp
         src/Types/TranslateRequest.h
 

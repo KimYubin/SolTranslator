@@ -123,7 +123,7 @@ void LanguageSelector::setButtonText(const LangType inlangType)
 
 void LanguageSelector::setBubbleToolTip(const QString& inStr)
 {
-    SolToolTip::setBubbleToolTip(_button, inStr);
+    SolToolTip::setToolTip(_button, inStr);
 }
 
 void LanguageSelector::onSelectedLanguage(const LangType inlangType)

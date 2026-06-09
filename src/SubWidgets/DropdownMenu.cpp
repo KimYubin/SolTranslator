@@ -51,7 +51,7 @@ void DropdownMenu::setToolTipShortcut(const QString& inToolTip, const QKeySequen
 
     connect(_shortcut, &QShortcut::activated, this, &DropdownMenu::showPopup);
 
-    SolToolTip::setBubbleToolTip(this, Sol::toolTipShortcut(_toolTip, inKey));
+    SolToolTip::setToolTip(this, Sol::toolTipShortcut(_toolTip, inKey));
 }
 
 void DropdownMenu::setToolTipAction(const QString& inToolTip, const Action inAction)

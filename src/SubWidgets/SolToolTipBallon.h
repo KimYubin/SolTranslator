@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QWidget>
 
+struct ToolTipData;
 class QVBoxLayout;
 class QLabel;
 
@@ -37,7 +38,7 @@ public:
         return _ins;
     }
 
-    void showToolTip(const QWidget* widget);
+    void showToolTip(const QWidget* widget, ToolTipData* inToolTipData);
     void hideToolTipImmediately();
 
     /**
@@ -72,6 +73,7 @@ private:
     void updateMargins() const;
 
     QPointer<const QWidget> _currentTargetWidget;
+    
 
     QLabel* _label;
     QVBoxLayout* _layout;

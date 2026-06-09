@@ -3,6 +3,9 @@
 #include "SolToolTip.h"
 
 #include "SolToolTipBallon.h"
+#include "Managers/ConfigManager.h"
+#include "Types/ToolTipData.hpp"
+#include "Utils/SolLog.h"
 
 #include <QAbstractButton>
 #include <QEvent>
@@ -10,26 +13,46 @@
 
 namespace
 {
-std::unordered_map<QWidget*, QString>& shortcutStrings()
+
+std::unordered_map<QWidget*, ToolTipData>& toolTipDatas()
 {
-    static std::unordered_map<QWidget*, QString> shortcutMap;
+    static std::unordered_map<QWidget*, ToolTipData> shortcutMap;
     return shortcutMap;
 }
 
-void addShortcut(QWidget* inWidget, const QString& inShotrcut)
+void removeToolTipData(QWidget* inWidget)
 {
-    shortcutStrings()[inWidget] = inShotrcut;
-    QObject::connect(inWidget, &QObject::destroyed, [inWidget]() { shortcutStrings().erase(inWidget); });
+    toolTipDatas().erase(inWidget);
 }
 
-void removeShortcut(QWidget* inWidget)
+void removeToolTipDataByObj(QObject* inObj)
 {
-    shortcutStrings().erase(inWidget);
+    if (QWidget* inWidget = qobject_cast<QWidget*>(inObj))
+    {
+        toolTipDatas().erase(inWidget);
+    }
 }
 
-QString shortcutString(QWidget* inWidget)
+void setToolTipData(QWidget* inWidget, const ToolTipData& inToolTipData)
 {
-    return shortcutStrings()[inWidget];
+    if (toolTipDatas().contains(inWidget) == false)
+    {
+        QObject::connect(inWidget, &QObject::destroyed, &removeToolTipDataByObj);
+    }
+
+    toolTipDatas()[inWidget] = inToolTipData;
+}
+
+
+std::tuple<bool, ToolTipData*> findToolTipData(QWidget* inWidget)
+{
+    const auto findIt = toolTipDatas().find(inWidget);
+    if (findIt == toolTipDatas().end())
+    {
+        return {false, nullptr};
+    }
+
+    return {true, &findIt->second};
 }
 
 
@@ -52,25 +75,60 @@ public:
 SolToolTip::SolToolTip(QObject* parent) : QObject(parent)
 {}
 
-void SolToolTip::setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip)
+void SolToolTip::setToolTip(QWidget* inWidget, const QString& inToolTip)
 {
     static SolToolTipFilter* toolTipEventFilter = new SolToolTipFilter();
-    inTargetWidget->setToolTip(inToolTip);
-    inTargetWidget->installEventFilter(toolTipEventFilter);
+    inWidget->setToolTip(inToolTip);
+    inWidget->installEventFilter(toolTipEventFilter);
+
+    inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(ToolTipData{inToolTip}));
+    solDebug << inWidget->dynamicPropertyNames();
 }
 
-void SolToolTip::setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip)
+void SolToolTip::setToolTipShortcut(QWidget* inWidget
+                                  , const QString& inToolTip
+                                  , const QKeySequence& inKey)
 {
-    const bool isChecked = (inTargetWidget->isCheckable() && inTargetWidget->isChecked());
+    inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(ToolTipData{inToolTip, inKey}));
 
-    setBubbleToolTip(inTargetWidget, isChecked ? inOnCheckToolTip : inOffCheckToolTip);
+    setToolTipData(inWidget, {inToolTip, inKey});
+}
 
-    connect(inTargetWidget, &QAbstractButton::toggled, inTargetWidget, [inTargetWidget, inOnCheckToolTip, inOffCheckToolTip](const bool checked)
+void SolToolTip::setToolTipAction(QWidget* inWidget
+                                , const QString& inToolTip
+                                , const Action inAction)
+{
+    setToolTipShortcut(inWidget, inToolTip, solConfig.shortcut(inAction));
+}
+
+void SolToolTip::changeShortcut(QWidget* inWidget
+                              , const QKeySequence& inKey)
+{
+    ToolTipData& toolTipData = toolTipDatas()[inWidget];
+    toolTipData.shortcut = inKey;
+}
+
+void SolToolTip::setAction(QWidget* inWidget
+                         , const Action inAction)
+{
+    changeShortcut(inWidget, solConfig.shortcut(inAction));
+}
+
+
+void SolToolTip::setCheckButtonToolTip(QAbstractButton* inButton
+                                     , const QString& inOnToolTip
+                                     , const QString& inOffToolTip)
+{
+    const bool isChecked = (inButton->isCheckable() && inButton->isChecked());
+
+    setToolTip(inButton, isChecked ? inOnToolTip : inOffToolTip);
+
+    connect(inButton, &QAbstractButton::toggled, inButton, [inButton, inOnToolTip, inOffToolTip](const bool checked)
     {
-        const QString& toolTip = checked ? inOnCheckToolTip : inOffCheckToolTip;
-        inTargetWidget->setToolTip(toolTip);
+        const QString& toolTip = checked ? inOnToolTip : inOffToolTip;
+        inButton->setToolTip(toolTip);
 
-        SolToolTipBallon::instance()->updateWidgetToolTip(inTargetWidget);
+        SolToolTipBallon::instance()->updateWidgetToolTip(inButton);
     });
 }
 
@@ -80,16 +138,20 @@ bool SolToolTipFilter::eventFilter(QObject* obj, QEvent* event)
     {
     case QEvent::ToolTip:
     {
-        const QWidget* widget = qobject_cast<QWidget*>(obj);
+        QWidget* widget = qobject_cast<QWidget*>(obj);
         if (widget == nullptr)
         {
             return false;
         }
-
-        const QString tooltipText = widget->toolTip();
-        if (tooltipText.isEmpty() == false)
+        auto [isFind, tooltipDataPtr] = findToolTipData(widget);
+        // if (isFind)
         {
-            SolToolTipBallon::instance()->showToolTip(widget);
+            SolToolTipBallon::instance()->showToolTip(widget, tooltipDataPtr);
+        }
+
+        if (widget->toolTip().isEmpty() == false)
+        {
+            // SolToolTipBallon::instance()->showToolTip(widget);
         }
 
         return true; // 기본 툴팁 차단

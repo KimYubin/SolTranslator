@@ -5,6 +5,7 @@
 
 #include <QObject>
 
+enum class Action;
 class QAbstractButton;
 
 /**
@@ -22,12 +23,28 @@ public:
     /**
      * 버블 툴팁을 추가합니다.
      *
-     * @param inTargetWidget 툴팁을 추가할 위젯
+     * @param inWidget 툴팁을 추가할 위젯
      * @param inToolTip 툴팁 내용
      */
-    static void setBubbleToolTip(QWidget* inTargetWidget, const QString& inToolTip);
+    static void setToolTip(QWidget* inWidget, const QString& inToolTip);
 
-    static void setCheckableButtonToolTip(QAbstractButton* inTargetWidget, const QString& inOnCheckToolTip, const QString& inOffCheckToolTip);
+
+    static void setToolTipShortcut(QWidget* inWidget
+                          , const QString& inToolTip
+                          , const QKeySequence& inKey);
+    static void setToolTipAction(QWidget* inWidget
+                        , const QString& inToolTip
+                        , const Action inAction);
+
+    static void changeShortcut(QWidget* inWidget
+                      , const QKeySequence& inKey);
+    static void setAction(QWidget* inWidget
+                 , const Action inAction);
+
+
+    static void setCheckButtonToolTip(QAbstractButton* inButton
+                                    , const QString& inOnToolTip
+                                    , const QString& inOffToolTip);
 };
 
 #endif //SOLTOOLTIP_H

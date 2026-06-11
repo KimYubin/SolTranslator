@@ -9,7 +9,7 @@ const char* ToolTipData::Name = "SolToolTipData";
 
 namespace
 {
-QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
+QString toolTipShortcutToString(const QString& inToolTip, const QKeySequence& inKey)
 {
     if (inKey.isEmpty())
     {
@@ -20,18 +20,29 @@ QString toolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
 }
 } // anonymous namespace
 
+
 QString ToolTipData::toolTipString() const
 {
-    return isOn ? toolTip : OffToolTip.has_value() ? OffToolTip.value() : "";
+    if (isVisible == false)
+    {
+        return "";
+    }
+
+    return isOnToolTip ? toolTip : OffToolTip.has_value() ? OffToolTip.value() : "";
 }
 
 QString ToolTipData::toolTipShortcutString() const
 {
+    if (isVisible == false)
+    {
+        return "";
+    }
+
     QString res = toolTipString();
 
     if (solConfig.isShowToolTipShortcut())
     {
-        return toolTipShortcut(res, shortcut);
+        return toolTipShortcutToString(res, shortcut);
     }
 
     return res;

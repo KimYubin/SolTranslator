@@ -52,7 +52,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 출발언어 선택기
     _srcLangSelector = new LanguageSelector(this, ui->srcTextEdit, ui->srcTextEdit, solConfig.textSrcLang());
-    _srcLangSelector->setBubbleToolTip(i18n(Tr::Source_Language));
+    _srcLangSelector->setButtonToolTip(i18n(Tr::Source_Language));
     connect(_srcLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onSourceLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(0, _srcLangSelector, 1);
@@ -60,7 +60,7 @@ TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
 
     // 도착언어 선택기
     _targetLangSelector = new LanguageSelector(this, ui->trTextEdit, ui->srcTextEdit, solConfig.textTargetLang());
-    _targetLangSelector->setBubbleToolTip(i18n(Tr::Target_Language));
+    _targetLangSelector->setButtonToolTip(i18n(Tr::Target_Language));
     connect(_targetLangSelector, &LanguageSelector::languageSelected, this, &TextEditTranslateWidget::onTargetLanguageChanged);
 
     ui->LangSelectLayout->insertWidget(2, _targetLangSelector, 1);

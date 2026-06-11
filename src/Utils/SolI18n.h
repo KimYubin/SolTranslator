@@ -27,6 +27,8 @@ enum class Tr
   , Run_On_Start_Desc
   , Remember_Geometry
   , Remember_Geometry_Desc
+  , Show_Shortcut_ToolTip
+  , Show_Shortcut_ToolTip_Desc
   , Apply
   , Apply_Theme
   , Apply_Theme_Desc

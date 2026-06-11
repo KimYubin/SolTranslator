@@ -2,6 +2,7 @@
 
 #include "SolToolTipBallon.h"
 
+#include "SolToolTip.h"
 #include "Types/ToolTipData.h"
 #include "Utils/SolLog.h"
 #include "Utils/SolUtilibrary.h"
@@ -49,12 +50,12 @@ SolToolTipBallon::SolToolTipBallon(QWidget* parent)
     connect(&_hideTimer, &QTimer::timeout, this, &SolToolTipBallon::hideToolTipImmediately);
 }
 
-void SolToolTipBallon::showToolTip(const QWidget* widget)
+void SolToolTipBallon::showToolTip(const QWidget* inWidget)
 {
-    if (widget && widget->isVisible() && widget->property(ToolTipData::Name).isValid())
+    if (inWidget && inWidget->isVisible() && SolToolTip::isValidToolTip(inWidget))
     {
-        _currentTargetWidget = QPointer(widget);
-        showToolTipImpl(widget);
+        _currentTargetWidget = QPointer{inWidget};
+        showToolTipImpl();
     }
     else
     {
@@ -73,15 +74,22 @@ void SolToolTipBallon::hideToolTipImmediately()
 
 void SolToolTipBallon::updateWidgetToolTip(const QWidget* inWidget)
 {
-    if (_currentTargetWidget == inWidget)
+    if (inWidget && _currentTargetWidget == inWidget)
     {
-        showToolTipImpl(_currentTargetWidget);
+        showToolTipImpl();
     }
 }
 
-void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
+void SolToolTipBallon::showToolTipImpl()
 {
-    const ToolTipData toolTipData = widget->property(ToolTipData::Name).value<ToolTipData>();
+    if (_currentTargetWidget.isNull())
+    {
+        return;
+    }
+
+    const QWidget* curWidget = _currentTargetWidget.get();
+
+    const ToolTipData toolTipData = SolToolTip::getToolTipData(curWidget);
     const QString tooltipString   = toolTipData.toolTipShortcutString();
     if (tooltipString.isEmpty())
     {
@@ -98,8 +106,8 @@ void SolToolTipBallon::showToolTipImpl(const QWidget* widget)
     const QRect labelRect = geometry().marginsRemoved(_layout->contentsMargins());
 
     // 위치 계산
-    const QRect wRect       = widget->rect();
-    const QPoint wGlobalPos = widget->mapToGlobal(wRect.topLeft());
+    const QRect wRect       = curWidget->rect();
+    const QPoint wGlobalPos = curWidget->mapToGlobal(wRect.topLeft());
     const QPoint wCenterPos = {wGlobalPos.x() + (wRect.width() / 2), wGlobalPos.y() + (wRect.height() / 2)};
 
     // 상하, 좌우 각각 공유하는 중앙 위치

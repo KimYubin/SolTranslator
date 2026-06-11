@@ -7,6 +7,7 @@
 #include "Managers/TranslateManager.h"
 #include "SubWidgets/LoadingSpinner.h"
 #include "SubWidgets/SolButton.h"
+#include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Types/EngineId.h"
 #include "Utils/SolAsync.hpp"
@@ -166,7 +167,7 @@ void PopupTranslateWidget::setupUI()
     // ~===========
     // _loadingWidget
     _loadingWidget = new LoadingSpinner(":/img/loading_spinner_img", this);
-    _loadingWidget->setBubbleToolTip(i18n(Tr::Translating));
+    SolToolTip::setToolTip(_loadingWidget, i18n(Tr::Translating));
 
     setupTitleWidget(_loadingWidget, Qt::AlignTop | Qt::AlignLeft);
 

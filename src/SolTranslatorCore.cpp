@@ -19,12 +19,13 @@ SolTranslatorCore::SolTranslatorCore(QObject* parent)
     , _solMainWidget(nullptr)
 {
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");
+
     _self = this;
 
     QTranslator* qtTranslator = new QTranslator(this);
     if (qtTranslator->load(QLocale::system(), "sol", "_", QLibraryInfo::path(QLibraryInfo::TranslationsPath)))
     {
-        qApp->installTranslator(qtTranslator);
+        QCoreApplication::installTranslator(qtTranslator);
     }
 }
 

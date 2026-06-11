@@ -10,9 +10,7 @@ enum class Action;
 class QAbstractButton;
 
 /**
- * 커스텀 툴팁을 표시하기 위한 이벤트 필터 객체입니다.
- *
- * @see SolToolTip::setBubbleToolTip
+ * The SolToolTip class is a helper class for displaying custom tooltips.
  */
 class SolToolTip : public QObject
 {
@@ -21,6 +19,9 @@ class SolToolTip : public QObject
     explicit SolToolTip(QObject* parent = nullptr);
 
 public:
+    static bool isValidToolTip(const QWidget* inWidget);
+    static ToolTipData getToolTipData(const QWidget* inWidget);
+
     static void setToolTipProperty(QWidget* inWidget, ToolTipData inToolTipData);
 
     /**

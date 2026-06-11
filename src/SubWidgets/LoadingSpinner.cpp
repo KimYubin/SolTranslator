@@ -3,6 +3,7 @@
 #include "LoadingSpinner.h"
 
 #include "SolToolTip.h"
+#include "Types/ToolTipData.h"
 
 #include <QPainter>
 #include <QPropertyAnimation>
@@ -30,17 +31,7 @@ LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* parent)
     _fadeOutDelay->setSingleShot(true);
     _fadeOutDelay->callOnTimeout(_fadeOutAnim, [this]() { _fadeOutAnim->start(); });
 
-
-    ILoadingWidget::setBubbleToolTip("");
-
     hideSvg();
-}
-
-void LoadingSpinner::setBubbleToolTip(const QString& inToolTip)
-{
-    _toolTip = inToolTip;
-
-    setToolTip(_isSvgVisible ? _toolTip : "");
 }
 
 void LoadingSpinner::run()
@@ -91,7 +82,12 @@ void LoadingSpinner::setSvgVisibility(const bool inVisible)
     _fadeOutDelay->stop();
     _fadeOutAnim->stop();
 
-    setToolTip(_isSvgVisible ? _toolTip : "");
+    ToolTipData toolTipData = SolToolTip::getToolTipData(this);
+    if (toolTipData.toolTip.isEmpty() == false)
+    {
+        toolTipData.isVisible = _isSvgVisible;
+        SolToolTip::setToolTipProperty(this, std::move(toolTipData));
+    }
 }
 
 void LoadingSpinner::showSvg()

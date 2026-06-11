@@ -26,18 +26,31 @@ public:
 #include "SolToolTip.moc"
 } // anonymous namespace
 
+
 // ~==================================
 // SolToolTip
 
 SolToolTip::SolToolTip(QObject* parent) : QObject(parent)
 {}
 
+bool SolToolTip::isValidToolTip(const QWidget* inWidget)
+{
+    return inWidget->property(ToolTipData::Name).isValid();
+}
+
+ToolTipData SolToolTip::getToolTipData(const QWidget* inWidget)
+{
+    return inWidget->property(ToolTipData::Name).value<ToolTipData>();
+}
+
 void SolToolTip::setToolTipProperty(QWidget* inWidget, ToolTipData inToolTipData)
 {
-    static SolToolTipFilter* toolTipEventFilter = new SolToolTipFilter();
+    static SolToolTipFilter toolTipEventFilter;
+
+    // For accessible Description.
     inWidget->setToolTip(inToolTipData.toolTipString());
     inWidget->setProperty(ToolTipData::Name, QVariant::fromValue(std::move(inToolTipData)));
-    inWidget->installEventFilter(toolTipEventFilter);
+    inWidget->installEventFilter(&toolTipEventFilter);
 }
 
 void SolToolTip::setToolTip(QWidget* inWidget, const QString& inToolTip)
@@ -62,7 +75,7 @@ void SolToolTip::setToolTipAction(QWidget* inWidget
 void SolToolTip::changeShortcut(QWidget* inWidget
                               , const QKeySequence& inKey)
 {
-    ToolTipData toolTipData = inWidget->property(ToolTipData::Name).value<ToolTipData>();
+    ToolTipData toolTipData = getToolTipData(inWidget);
     toolTipData.shortcut    = inKey;
     setToolTipProperty(inWidget, std::move(toolTipData));
 }
@@ -86,7 +99,7 @@ void SolToolTip::setCheckButtonToolTip(QAbstractButton* inButton
     connect(inButton, &QAbstractButton::toggled, inButton, [inButton](const bool checked)
     {
         ToolTipData toolTipData = inButton->property(ToolTipData::Name).value<ToolTipData>();
-        toolTipData.isOn        = checked;
+        toolTipData.isOnToolTip = checked;
         setToolTipProperty(inButton, std::move(toolTipData));
 
         SolToolTipBallon::instance()->updateWidgetToolTip(inButton);
@@ -104,8 +117,8 @@ bool SolToolTipFilter::eventFilter(QObject* obj, QEvent* event)
         {
             return false;
         }
-
-        if (widget->property(ToolTipData::Name).isValid())
+        
+        if (SolToolTip::isValidToolTip(widget))
         {
             SolToolTipBallon::instance()->showToolTip(widget);
         }

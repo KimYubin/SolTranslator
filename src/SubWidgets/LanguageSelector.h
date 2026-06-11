@@ -28,7 +28,7 @@ public:
 
     void setButtonText(const LangType inlangType);
 
-    void setBubbleToolTip(const QString& inStr);
+    void setButtonToolTip(const QString& inStr);
 
     LangType getCurrentLangType() { return _currentLangType; }
 

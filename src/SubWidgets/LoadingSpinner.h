@@ -16,7 +16,6 @@ class LoadingSpinner : public ILoadingWidget
 
 public:
     explicit LoadingSpinner(const QString& inFile, QWidget* parent = nullptr);
-    virtual void setBubbleToolTip(const QString& inToolTip) override;
 
     virtual void run() override;
     virtual void stop() override;
@@ -36,8 +35,6 @@ private:
     QSvgRenderer* _svgRenderer;
     QPropertyAnimation* _fadeOutAnim;
     QTimer* _fadeOutDelay;
-
-    QString _toolTip;
 
     bool _isSvgVisible;
 

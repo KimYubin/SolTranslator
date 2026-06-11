@@ -39,19 +39,21 @@ void DropdownMenu::hidePopup()
     QComboBox::hidePopup();
 }
 
-void DropdownMenu::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
+void DropdownMenu::setShortcut(const QKeySequence& inKey)
 {
-    _toolTip = inToolTip;
-
     if (_shortcut.isNull())
     {
         _shortcut = new QShortcut(this);
+        connect(_shortcut, &QShortcut::activated, this, &DropdownMenu::showPopup);
     }
     _shortcut->setKey(inKey);
+}
 
-    connect(_shortcut, &QShortcut::activated, this, &DropdownMenu::showPopup);
+void DropdownMenu::setToolTipShortcut(const QString& inToolTip, const QKeySequence& inKey)
+{
+    setShortcut(inKey);
 
-    SolToolTip::setToolTipShortcut(this, _toolTip, inKey);
+    SolToolTip::setToolTipShortcut(this, inToolTip, inKey);
 }
 
 void DropdownMenu::setToolTipAction(const QString& inToolTip, const Action inAction)
@@ -61,7 +63,9 @@ void DropdownMenu::setToolTipAction(const QString& inToolTip, const Action inAct
 
 void DropdownMenu::changeShortcut(const QKeySequence& inKey)
 {
-    setToolTipShortcut(_toolTip, inKey);
+    setShortcut(inKey);
+
+    SolToolTip::changeShortcut(this, inKey);
 }
 
 void DropdownMenu::setAction(const Action inAction)
@@ -69,10 +73,6 @@ void DropdownMenu::setAction(const Action inAction)
     changeShortcut(solConfig.shortcut(inAction));
 }
 
-void DropdownMenu::setBubbleToolTip(const QString& inToolTip)
-{
-    setToolTipShortcut(inToolTip, _shortcut.isNull() ? QKeySequence() : _shortcut->key());
-}
 
 void DropdownMenu::wheelEvent(QWheelEvent* event)
 {

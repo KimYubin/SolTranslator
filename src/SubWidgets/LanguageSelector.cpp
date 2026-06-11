@@ -121,7 +121,7 @@ void LanguageSelector::setButtonText(const LangType inlangType)
     _button->setText(Langs::getLocaleName(inlangType));
 }
 
-void LanguageSelector::setBubbleToolTip(const QString& inStr)
+void LanguageSelector::setButtonToolTip(const QString& inStr)
 {
     SolToolTip::setToolTip(_button, inStr);
 }

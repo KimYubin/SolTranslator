@@ -34,6 +34,8 @@ QString Sol::i18n(const Tr inTr)
     case Run_On_Start_Desc:              return TrImpl::tr("시스템 시작 시 Sol번역기가 자동으로 실행됩니다.");
     case Remember_Geometry:              return TrImpl::tr("창 위치, 크기 기억");
     case Remember_Geometry_Desc:         return TrImpl::tr("다시 시작할 때, 이전 창의 위치와 크기로 복원합니다.");
+    case Show_Shortcut_ToolTip:          return TrImpl::tr("툴팁에 단축키 표시");
+    case Show_Shortcut_ToolTip_Desc:     return TrImpl::tr("툴팁에 단축키가 함께 표시됩니다.");
     case Apply:                          return TrImpl::tr("적용");
     case Apply_Theme:                    return TrImpl::tr("테마 적용");
     case Apply_Theme_Desc:               return TrImpl::tr("테마를 적용합니다.");
@@ -98,6 +100,6 @@ QString Sol::i18n(const Tr inTr)
 
 namespace
 {
-constexpr int TrKeyCheck = 67;
+constexpr int TrKeyCheck = 69;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

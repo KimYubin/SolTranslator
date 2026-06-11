@@ -16,11 +16,11 @@ struct ToolTipData
     ToolTipData(QString inToolTip
               , std::optional<QString> inOffToolTip
               , QKeySequence inShortcut
-              , const bool inIsOn = true)
+              , const bool inIsOnToolTip = true)
         : toolTip(std::move(inToolTip))
         , OffToolTip(std::move(inOffToolTip))
         , shortcut(std::move(inShortcut))
-        , isOn(inIsOn)
+        , isOnToolTip(inIsOnToolTip)
     {}
 
     ToolTipData(QString inToolTip
@@ -56,7 +56,8 @@ struct ToolTipData
     QString toolTip;
     std::optional<QString> OffToolTip;
     QKeySequence shortcut;
-    bool isOn = true;
+    bool isOnToolTip = true;
+    bool isVisible   = true;
 };
 
 

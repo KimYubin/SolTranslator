@@ -38,7 +38,7 @@ public:
         return _ins;
     }
 
-    void showToolTip(const QWidget* widget);
+    void showToolTip(const QWidget* inWidget);
     void hideToolTipImmediately();
 
     /**
@@ -47,7 +47,7 @@ public:
     void updateWidgetToolTip(const QWidget* inWidget);
 
 private:
-    void showToolTipImpl(const QWidget* widget);
+    void showToolTipImpl();
     void hideToolTipDelay();
 
 protected:

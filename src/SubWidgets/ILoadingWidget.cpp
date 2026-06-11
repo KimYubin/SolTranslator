@@ -7,8 +7,3 @@
 ILoadingWidget::ILoadingWidget(QWidget* parent)
     :QWidget(parent)
 {}
-
-void ILoadingWidget::setBubbleToolTip(const QString& inToolTip)
-{
-    SolToolTip::setToolTip(this, inToolTip);
-}

@@ -55,6 +55,19 @@ GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
         shapeBehaviorGroup->addChild(rememberWindow);
     }
 
+    // 툴팁에서 단축키 보이기
+    {
+        SettingCard* showToolTip = new SettingCard(new SwitchButton(solConfig.isShowToolTipShortcut()), shapeBehaviorGroup);
+        showToolTip->setHeader(i18n(Tr::Show_Shortcut_ToolTip));
+        showToolTip->setDescription(i18n(Tr::Show_Shortcut_ToolTip_Desc));
+        const SwitchButton* remWindowSwitch = showToolTip->getContent<SwitchButton>();
+        connect(remWindowSwitch, &QCheckBox::checkStateChanged, this, [](const Qt::CheckState inState)
+        {
+            solConfig.setIsShowToolTipShortcut(inState == Qt::CheckState::Checked);
+        });
+
+        shapeBehaviorGroup->addChild(showToolTip);
+    }
 
     // 테마 적용 버튼
     {

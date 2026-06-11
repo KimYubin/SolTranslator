@@ -11,7 +11,6 @@ class ILoadingWidget : public QWidget
 
 public:
     explicit ILoadingWidget(QWidget* parent = nullptr);
-    virtual void setBubbleToolTip(const QString& inToolTip);
 
     virtual void run() = 0;
     virtual void stop() = 0;

@@ -4,7 +4,8 @@
 
 #include "ConfigManager.h"
 #include "qtkeychain/keychain.h"
-#include "Types/SolGuard.h"
+
+#include "Types/SolSharedGuard.h"
 #include "Utils/SolLog.h"
 
 #include <QVariant>
@@ -84,15 +85,12 @@ void SecretStore::requestLoadSecretList(const std::vector<QString>& inKeyList
                                       , Callback<void()>&& inCallback)
 {
     // A shared RAII guard to trigger the callback, when all secret keys are loaded.
-    std::shared_ptr<SolGeneralGuard> sharedSgg = std::make_shared<SolGeneralGuard>([sggCallback = std::move(inCallback)]() mutable
-    {
-        sggCallback();
-    });
+    SolSharedGuard solSharedGuard{std::move(inCallback)};
 
     // Copy capture to connect the 'sharedSgg' lifetime to each 'loading'.
     for (const QString& inKey : inKeyList)
     {
-        requestLoadSecret(inKey, [sharedSgg](const QString&){});
+        requestLoadSecret(inKey, [solSharedGuard](const QString&) {});
     }
 }
 

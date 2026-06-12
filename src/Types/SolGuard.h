@@ -5,25 +5,13 @@
 
 #include "SolTypes.h"
 
-class QPainter;
-
 /**
- * RAII 스타일 가드 클래스입니다.
- * 함수 2개를 모두 등록하면, 균형 잡힌 함수 호출(new / delete)을 할 수 있습니다.
- * endFunctor만 등록하면, 범위를 벗어날 때 함수를 호출할 수 있습니다.
+ * The SolGeneralGuard class is a RAII-style guard class.
+ * It executes registered callback when resource is destroyed.
  */
 class SolGeneralGuard
 {
 public:
-    [[nodiscard]]
-    explicit SolGeneralGuard(Callback<void(void)>&& inStartFunctor
-                           , Callback<void(void)>&& inEndFunctor)
-        : _startFunctor(std::move(inStartFunctor))
-        , _endFunctor(std::move(inEndFunctor))
-    {
-        _startFunctor();
-    }
-
     [[nodiscard]]
     explicit SolGeneralGuard(Callback<void(void)>&& inEndFunctor)
         : _endFunctor(std::move(inEndFunctor))
@@ -31,36 +19,16 @@ public:
 
     ~SolGeneralGuard()
     {
-        _endFunctor();
+        if (_endFunctor)
+        {
+            _endFunctor();
+        }
     }
 
 private:
-    Callback<void(void)> _startFunctor;
     Callback<void(void)> _endFunctor;
 
     Q_DISABLE_COPY_MOVE(SolGeneralGuard)
-};
-
-
-/**
- * Painter의 pen을 rollback하기 위한 RAII 스타일 가드 클래스입니다.
- */
-class PainterPenStateGuard : public SolGeneralGuard
-{
-public:
-    [[nodiscard]]
-    explicit PainterPenStateGuard(QPainter* inPainter);
-};
-
-
-/**
- * Painter의 font를 rollback하기 위한 RAII 스타일 가드 클래스입니다.
- */
-class PainterFontStateGuard : public SolGeneralGuard
-{
-public:
-    [[nodiscard]]
-    explicit PainterFontStateGuard(QPainter* inPainter);
 };
 
 

@@ -148,6 +148,8 @@ qt_add_executable(
         src/Types/SolGuard.cpp
         src/Types/SolGuard.h
         src/Types/SolHashQueue.hpp
+        src/Types/SolSharedGuard.cpp
+        src/Types/SolSharedGuard.h
         src/Types/SolTypes.cpp
         src/Types/SolTypes.h
         src/Types/TextCacheKey.hpp

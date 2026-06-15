@@ -168,6 +168,8 @@ qt_add_executable(
         src/Utils/SolLog.h
         src/Utils/SolLogWorker.cpp
         src/Utils/SolLogWorker.h
+        src/Utils/SolMarkdownWriter.cpp
+        src/Utils/SolMarkdownWriter.h
         src/Utils/SolPath.cpp
         src/Utils/SolPath.h
         src/Utils/SolSingleApplication.cpp

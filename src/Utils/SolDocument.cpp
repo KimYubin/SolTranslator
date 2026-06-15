@@ -9,6 +9,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextDocumentFragment>
 #include <QTextList>
 #include <QTextTableCell>
 #include <QUuid>
@@ -37,6 +38,26 @@ namespace Sol
 
 QString htmlToMarkdown(QTextDocument& inDoc)
 {
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
+    {
+        QTextBlock next = textBlock.next();
+
+        QMap<int, QVariant> properties = textBlock.blockFormat().properties();
+        solDebug << "block:" << textBlock.text();
+        solDebug << "block - properties:" << properties;
+
+        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        {
+            QTextFragment fragment = itemIt.fragment();
+            if (!fragment.isValid())
+            {
+                continue;
+            }
+            solDebug << "frag:" << fragment.text();
+            solDebug << "frag - properties:" << fragment.charFormat().properties();
+        }
+    }
+
     fixListItem(inDoc);
 
     codeBlockToMarker(inDoc);
@@ -45,9 +66,39 @@ QString htmlToMarkdown(QTextDocument& inDoc)
     fixTailSpaceInBold(inDoc);
     fixTableCell(inDoc);
 
-    QString markdownStr = fixNewLine(inDoc);
+    int blockIdx = 0;
+    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
+    {
+        QTextCursor cursor(textBlock);
+        blockIdx++;
 
-    return markerToCodeBlock(markdownStr); 
+        // 현재 block이 table 내부인지
+        QTextTable* table = cursor.currentTable();
+        if (!table)
+        {
+            continue;
+        }
+
+        int blockInCellIdx = 0;
+        // cell 내부 block 순회
+        QTextTableCell cell = table->cellAt(cursor);
+        for (QTextFrame::iterator it = cell.begin(); !it.atEnd(); ++it)
+        {
+            blockInCellIdx++;
+            QTextBlock cellBlock = it.currentBlock();
+
+            solDebug << blockIdx << blockInCellIdx << cellBlock.text() << cellBlock.position() << cellBlock.length();
+            if (cellBlock.length() < 2)
+            {
+                
+            }
+        }
+    }
+
+    QString markdownStr = fixNewLine(inDoc);
+    markerToCodeBlock(markdownStr);
+
+    return markdownStr;
 }
 
 QString htmlToMarkdown(QString inHtml)
@@ -77,7 +128,8 @@ void asyncHtmlToMarkdown(QString inHtml
 
 namespace
 {
-const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+const QString codeFrontBlockMarker   = "__CODE_F_BLK_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+const QString codeBackBlockMarker    = "__CODE_B_BLK_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
 const QString codeBlockNewLineMarker = "__CODE_LF_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
 
 
@@ -220,6 +272,8 @@ void fixListItem(QTextDocument& inDoc)
  */
 void codeBlockToMarker(QTextDocument& inDoc)
 {
+    QTextCharFormat blockFmt;
+
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
     {
         QTextBlock next = textBlock.next();
@@ -231,7 +285,9 @@ void codeBlockToMarker(QTextDocument& inDoc)
 
             // Marking the start of the code block.
             cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.insertText(codeBlockMarker);
+            QTextDocumentFragment frontFrg = QTextDocumentFragment::fromPlainText(codeFrontBlockMarker);
+            cursor.setCharFormat(QTextCharFormat());
+            cursor.insertFragment(frontFrg);
 
             // Marking newline in code block.
             for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
@@ -269,7 +325,9 @@ void codeBlockToMarker(QTextDocument& inDoc)
 
             // Marking the end of the code block.
             cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.insertText(codeBlockMarker);
+            QTextDocumentFragment backFrg = QTextDocumentFragment::fromPlainText(codeBackBlockMarker);
+            cursor.setCharFormat(QTextCharFormat());
+            cursor.insertFragment(backFrg);
         }
 
         textBlock = next;
@@ -286,11 +344,18 @@ QString& markerToCodeBlock(QString& inString)
     const static QString frontBacktick = "```\n";
     const static QString backBacktick  = "\n```";
 
-    inString.replace(frontBacktick + codeBlockMarker, frontBacktick);
-    inString.replace(codeBlockMarker + backBacktick, backBacktick);
+    inString.replace(frontBacktick + codeFrontBlockMarker, frontBacktick);
+    inString.replace(codeBackBlockMarker + backBacktick, backBacktick);
 
-    inString.replace("`" + codeBlockMarker, frontBacktick);
-    inString.replace(codeBlockMarker + "`", backBacktick);
+    static const QString reStr{"`*%1`*"};
+    const QRegularExpression frontRe(reStr.arg(QRegularExpression::escape(codeFrontBlockMarker)));
+    const QRegularExpression backRe(reStr.arg(QRegularExpression::escape(codeBackBlockMarker)));
+
+    inString.replace(frontRe, frontBacktick);
+    inString.replace(backRe, backBacktick);
+
+    inString.replace("`" + codeFrontBlockMarker, frontBacktick);
+    inString.replace(codeBackBlockMarker + "`", backBacktick);
 
     inString.replace(codeBlockNewLineMarker, "\n");
     return inString;
@@ -301,7 +366,8 @@ QString& markerToCodeBlock(QString& inString)
  */
 void normalizeHtml(QTextDocument& inDoc)
 {
-    inDoc.setHtml(inDoc.toHtml());
+    const QString html = inDoc.toHtml();
+    inDoc.setHtml(html);
 }
 
 /**
@@ -384,21 +450,46 @@ void fixTableCell(QTextDocument& inDoc)
 
         // cell 내부 block 순회
         QTextTableCell cell = table->cellAt(cursor);
-        for (QTextFrame::iterator it = cell.begin(); !it.atEnd(); ++it)
-        {
-            // 가장 앞쪽 block으로 통합
-            it = cell.begin();
+        
+        
 
-            QTextBlock cellBlock = it.currentBlock();
-            if (!cellBlock.isValid())
+        QTextCursor beginCursor(cell.begin().currentBlock());
+        beginCursor.movePosition(QTextCursor::EndOfBlock);
+
+        for (QTextFrame::iterator it = (++cell.begin()); !it.atEnd(); ++it)
+        {
+            QTextBlock nextBlock = it.currentBlock();
+            if (!nextBlock.isValid())
             {
-                continue;
+                // break;
             }
 
-            QTextCursor cellCursor(cellBlock);
 
-            cellCursor.movePosition(QTextCursor::EndOfBlock);
-            cellCursor.deleteChar();
+            for (QTextBlock::iterator itemIt = nextBlock.begin(); !itemIt.atEnd(); ++itemIt)
+            {
+                QTextFragment nextFrag = itemIt.fragment();
+                solDebug << nextFrag.text();
+                beginCursor.insertText(nextFrag.text().removeIf([](const QChar& inChar)
+                {
+                    return (inChar == '\n')
+                            || (inChar == QChar::LineSeparator)
+                            || (inChar == QChar::ParagraphSeparator)
+                            || (inChar == QChar::CarriageReturn);
+                }), nextFrag.charFormat());
+            }
+            QTextCursor curCursor(it.currentBlock());
+        }
+        for (QTextFrame::iterator it = (--cell.end()); it != cell.begin(); --it)
+        {
+            QTextBlock nextBlock = it.currentBlock();
+            if (!nextBlock.isValid())
+            {
+                // break;
+            }
+            QTextCursor nextCursor(nextBlock);
+            nextCursor.movePosition(QTextCursor::StartOfBlock);
+            nextCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            nextCursor.removeSelectedText();
         }
     }
 }
@@ -464,7 +555,7 @@ QString fixNewLine(QTextDocument& inDoc)
     // If a list item follows a single newline, do not modify it.
     docMarkdown.replace(
         QRegularExpression(
-            R"([^\S\n]*(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"
+            R"([^\S\n]*(?<!\|)(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"
         ), " ");
 
     // ~====================

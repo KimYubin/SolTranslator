@@ -57,7 +57,7 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 
     normalizeHtml(inDoc);
     fixTailSpaceInBold(inDoc);
-    // fixTableCell(inDoc);
+    fixTableCell(inDoc);
 
     QString markdownStr = fixNewLine(inDoc);
     markerToCodeBlock(markdownStr);

@@ -29,6 +29,8 @@ void normalizeHtml(QTextDocument& inDoc);
 
 void fixTailSpaceInBold(QTextDocument& inDoc);
 
+void fixTable(QTextDocument& inDoc);
+
 void fixTableCell(QTextDocument& inDoc);
 
 QString fixNewLine(QTextDocument& inDoc);
@@ -44,6 +46,8 @@ QString toMarkdown(QTextDocument& inDoc)
     }
     return QString();
 }
+QTextTable* flattenToSingleTable(QTextTable* source, QTextCursor cursor);
+
 } // anonymous namespace
 
 
@@ -56,6 +60,12 @@ QString htmlToMarkdown(QTextDocument& inDoc)
     codeBlockToMarker(inDoc);
 
     normalizeHtml(inDoc);
+
+    for (QTextBlock block = inDoc.firstBlock(); block != inDoc.lastBlock(); block = block.next())
+    {
+        solDebug << block.text() << block.charFormat();
+    }
+
     fixTailSpaceInBold(inDoc);
     fixTableCell(inDoc);
 
@@ -398,12 +408,78 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
     }
 }
 
+void tableFrame(QTextFrame* inFrame)
+{
+    QTextTable* table       = qobject_cast<QTextTable*>(inFrame);
+    QTextFrame::iterator iterator = inFrame->begin();
+    std::vector<std::vector<int>> tableCellCounts{};
+
+    if (table)
+    {
+        const size_t tableRow    = table->rows();
+        const size_t tableColumn = table->columns();
+
+        // tableCellCounts = std::vector<std::vector<int>>{tableRow, std::vector<int>{tableColumn, 1}};
+        for (int col = 0; col < table->columns(); ++col)
+        {
+            for (int row = 0; row < table->rows(); ++row)
+            {
+                QTextTableCell cell = table->cellAt(tableRow, tableColumn);
+                auto cellIt         = cell.begin();
+                while (cellIt != cell.end())
+                {
+                    QTextTable* cellTable = qobject_cast<QTextTable*>(cellIt.currentFrame());
+                    if (cellTable)
+                    {
+                        
+                        table->insertColumns(col + 1, cellTable->columns());
+                        table->insertRows(row + 1, cellTable->rows());
+                    }
+                }
+                
+            }
+        }
+    }
+    
+}
+
+void fixTable(QTextDocument& inDoc)
+{
+    QTextFrame* rootTF = inDoc.rootFrame();
+    
+
+    tableFrame(inDoc.rootFrame());
+    
+    
+    
+    
+}
+
 /**
  * Integrate the divided blocks in the cell.
  * Prevent the divided blocks from being interpreted as adjacent cells.
  */
 void fixTableCell(QTextDocument& inDoc)
 {
+    QTextFrame* rootF = inDoc.rootFrame();
+    QTextFrame::iterator iterator = rootF->begin();
+    QTextFrame* child             = nullptr;
+
+    while (!iterator.atEnd())
+    {
+        if (iterator.currentFrame() && child != iterator.currentFrame())
+        {
+            QTextTable* table = qobject_cast<QTextTable*>(iterator.currentFrame());
+            if (table)
+            {
+                QTextCursor cursor(table);
+                flattenToSingleTable(table, cursor);
+            }
+        }
+        child = iterator.currentFrame();
+        ++iterator;
+    }
+    
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
         QTextCursor cursor(textBlock);
@@ -531,4 +607,416 @@ QString fixNewLine(QTextDocument& inDoc)
     return docMarkdown;
 }
 
+
+struct CellData
+{
+    CellData() = default;
+
+    explicit CellData(const bool inIsEmpty)
+        :isEmpty(inIsEmpty)
+    {}
+
+    explicit CellData(QTextTable* inTable)
+        : isEmpty(false)
+        , table(inTable)
+    {}
+
+    explicit CellData(QString inText)
+        : isEmpty(false)
+        , text(std::move(inText))
+    {}
+
+    explicit CellData(std::vector<QTextFragment> inFragments)
+        : isEmpty(false)
+        , fragments(std::move(inFragments))
+    {}
+
+    bool isEmpty = true;
+    QString text;
+    QTextTable* table = nullptr;
+    int row = -1;
+    int col = -1;
+    std::vector<QTextFragment> fragments;
+};
+
+using Grid = std::vector<std::vector<CellData>>;
+
+QTextTable* findNestedTable(const QTextTableCell& cell)
+{
+    for (QTextFrame::iterator it = cell.begin(); !it.atEnd(); ++it)
+    {
+        if (QTextFrame* frame = it.currentFrame())
+        {
+            if (QTextTable* table = qobject_cast<QTextTable*>(frame))
+            {
+                return table;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+std::vector<QTextFragment> extractCellText(const QTextTableCell& cell)
+{
+    std::vector<QTextFragment> res;
+    for (QTextFrame::iterator cellIt = cell.begin(); !cellIt.atEnd(); ++cellIt)
+    {
+        QTextBlock block = cellIt.currentBlock();
+        if (block.isValid() == false)
+        {
+            continue;
+        }
+
+        if (QTextTable* nextTable = qobject_cast<QTextTable*>(cellIt.currentFrame()))
+        {
+            break;
+        }
+
+        for (QTextBlock::iterator blockIt = block.begin(); !blockIt.atEnd(); ++blockIt)
+        {
+            res.push_back(blockIt.fragment());
+        }
+    }
+
+    return res;
+}
+
+void expendCol(Grid& inTable, const int posRow, const int posCol, const int insertRow, const int insertCol)
+{
+    const int originColSize = inTable.front().size();
+
+    if ((originColSize/* - 1*/) <= posCol)
+    {
+        int emptyColSize = (posCol + insertCol) - originColSize;
+        std::vector<CellData> emptyCol(emptyColSize, CellData());
+        for (std::vector<CellData>& row : inTable)
+        {
+            row.append_range(emptyCol);
+        }
+        return;
+    }
+
+    int minEmptyCol = insertCol;
+    for (int rIdx = 0/*posRow*/; rIdx < inTable.size()/*posRow + insertRow*/; ++rIdx)
+    {
+        std::vector<CellData>& row = inTable[rIdx];
+
+        const int colMax = std::min<int>(row.size(), posCol + minEmptyCol);
+        for (int cIdx = posCol/* + 1*/; cIdx < colMax; ++cIdx)
+        {
+            if (!row[cIdx].isEmpty)
+            {
+                minEmptyCol = std::min(minEmptyCol, cIdx - (posCol/* + 1*/));
+                break;
+            }
+        }
+    }
+
+    std::vector<CellData> emptyCol(insertCol - minEmptyCol, CellData());
+    for (std::vector<CellData>& row : inTable)
+    {
+        row.insert_range(row.begin() + posCol + minEmptyCol, emptyCol);
+    }
+}
+
+void expendRow(Grid& inTable, const int posRow, const int posCol, const int insertRow, const int insertCol)
+{
+    const int originRowSize = inTable.size();
+    const int originColSize = inTable.front().size();
+
+    const std::vector<CellData> emptyRow(originColSize, CellData());
+
+    if ((originRowSize/* - 1*/) <= posRow)
+    {
+        const int emptyRowSize = (posRow + insertRow) - originRowSize;
+        inTable.append_range(Grid(emptyRowSize, emptyRow));
+        return;
+    }
+    
+    int minEmptyRow = insertRow;
+    for (int rIdx = posRow + 1; rIdx < posRow + insertRow; ++rIdx)
+    {
+        std::vector<CellData>& row = inTable[rIdx];
+        const int colMax = std::min<int>(row.size(), posCol + insertCol);
+        for (int cIdx = 0/*posCol*/; cIdx < row.size(); ++cIdx)
+        {
+            if (!row[cIdx].isEmpty)
+            {
+                minEmptyRow = std::min(minEmptyRow, rIdx - (posRow + 1));
+                break;
+            }
+        }
+        if (minEmptyRow != insertRow)
+        {
+            break;
+        }
+    }
+
+    inTable.insert_range(inTable.begin() + posRow, Grid(insertRow - minEmptyRow, emptyRow));
+}
+
+void expandGrid(Grid& inTable, const int posRow, const int posCol, const int insertRow, const int insertCol)
+{
+    // X 가로 먼저 확인 후 오른쪽으로 밀기
+    // O 세로 먼저 확인 후 아래로 밀기
+    if (insertRow > 1)
+    {
+        expendRow(inTable, posRow, posCol, insertRow, insertCol);
+    }
+
+    if (insertCol > 1)
+    {
+        expendCol(inTable, posRow, posCol, insertRow, insertCol);
+    }
+}
+
+std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int oRowIdx, const int oColIdx)
+{
+    const int nestedRowCount = inNested.size();
+    const int nestedColCount = inNested.front().size();
+    const int targetRow = oRowIdx + 1;
+    const int targetCol = oColIdx + 1;
+    Grid prv = inOrigin;
+
+    expandGrid(inOrigin, targetRow, targetCol, nestedRowCount, nestedColCount);
+
+    for (int rowIdx = 0; rowIdx < nestedRowCount; ++rowIdx)
+    {
+        for (int colIdx = 0; colIdx < nestedColCount; ++colIdx)
+        {
+            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx] = inNested[rowIdx][colIdx];
+            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx].isEmpty = true;
+        }
+    }
+
+    return {nestedRowCount, nestedColCount};
+}
+
+Grid convertTable(QTextTable* table)
+{
+    if (table == nullptr)
+    {
+        return {};
+    }
+    Grid resTable(table->rows(), std::vector<CellData>(table->columns(), CellData(table)));
+
+    for (int rIdx = 0; rIdx < table->rows(); ++rIdx)
+    {
+        for (int cIdx = 0; cIdx < table->columns(); ++cIdx)
+        {
+            resTable[rIdx][cIdx].row = rIdx;
+            resTable[rIdx][cIdx].col = cIdx;
+        }
+    }
+
+    for (int rIdx = 0; rIdx < resTable.size(); ++rIdx)
+    {
+        for (int cIdx = 0; cIdx < resTable.front().size(); ++cIdx)
+        {
+            int newRowIdx = rIdx;
+            int newColIdx = cIdx;
+
+            const CellData curCellRef = resTable[rIdx][cIdx];
+            if (curCellRef.isEmpty)
+            {
+                continue;
+            }
+
+            QTextTableCell cell = curCellRef.table->cellAt(curCellRef.row, curCellRef.col);
+            bool isPrvTableBlock = false;
+
+            for (QTextFrame::iterator cellIt = cell.begin(); !cellIt.atEnd(); ++cellIt)
+            {
+                if (QTextTable* nextTable = qobject_cast<QTextTable*>(cellIt.currentFrame()))
+                {
+                    if (isPrvTableBlock || cellIt != cell.begin())
+                    {
+                        Grid curGrid(2, std::vector<CellData>(1, CellData()));
+                        curGrid.front().front() = resTable[newRowIdx][newColIdx];
+                        auto [exRow, exCol] = appendGrid(resTable, curGrid, newRowIdx, newColIdx);
+
+                        rIdx += (exRow - 1);
+                        cIdx += (exCol - 1);
+                        newRowIdx += (exRow - 1);
+                    }
+                    Grid curGrid = convertTable(nextTable);
+                    auto [exRow, exCol] = appendGrid(resTable, curGrid, newRowIdx, newColIdx);
+                    rIdx += (exRow - 1);
+                    cIdx += (exCol - 1);
+                    newRowIdx += (exRow - 1);
+
+                    isPrvTableBlock = true;
+                    continue;
+                }
+
+                if (isPrvTableBlock)
+                {
+                    CellData newCellData = curCellRef;
+                    newCellData.fragments.clear();
+
+                    Grid curGrid(2, std::vector<CellData>(1, newCellData));
+                    curGrid.front().front() = resTable[newRowIdx][newColIdx];
+
+                    auto [exRow, exCol] = appendGrid(resTable, curGrid, newRowIdx, newColIdx);
+                    rIdx += (exRow - 1);
+                    cIdx += (exCol - 1);
+                    newRowIdx += (exRow - 1);
+                }
+                isPrvTableBlock = false;
+
+                QTextBlock block = cellIt.currentBlock();
+                if (block.isValid() == false)
+                {
+                    continue;
+                }
+
+                for (QTextBlock::iterator blockIt = block.begin(); !blockIt.atEnd(); ++blockIt)
+                {
+                    resTable[newRowIdx][newColIdx].fragments.push_back(blockIt.fragment());
+                }
+
+
+            }
+        }
+    }
+
+    return resTable;
+}
+Grid flattenTable(QTextTable* table)
+{
+    Grid result;
+    
+
+    const int rows = table->rows();
+    const int cols = table->columns();
+
+    result.resize(rows);
+
+    for (int rIdx = 0; rIdx < rows; ++rIdx)
+    {
+        std::vector<Grid> cellGrids(cols);
+
+        int maxHeight = 1;
+
+        // 재귀적으로 변환
+        for (int c = 0; c < cols; ++c)
+        {
+            QTextTableCell cell = table->cellAt(rIdx, c);
+
+            if (QTextTable* nested = findNestedTable(cell))
+            {
+                cellGrids[c] = flattenTable(nested);
+            }
+            else
+            {
+                cellGrids[c] =
+                {
+                    {
+                        CellData{
+                            extractCellText(cell)
+                        }
+                    }
+                };
+            }
+
+            maxHeight = std::max(maxHeight, static_cast<int>(cellGrids[c].size()));
+        }
+
+        // 현재 행을 maxHeight 만큼 확장
+        for (int localRow = 0; localRow < maxHeight; ++localRow)
+        {
+            std::vector<CellData> outRow;
+
+            for (int c = 0; c < cols; ++c)
+            {
+                Grid& grid = cellGrids[c];
+
+                if (localRow < static_cast<int>(grid.size()))
+                {
+                    outRow.insert_range(outRow.end(), grid[localRow]);
+                }
+                else
+                {
+                    // 중첩 테이블 높이 부족분. 동일 폭의 빈 셀 추가
+                    outRow.append_range(std::vector<CellData>(grid[0].size()));
+                }
+            }
+
+            result.push_back(std::move(outRow));
+        }
+    }
+
+    return result;
+}
+
+void normalizeTable(Grid& grid)
+{
+    size_t maxCols = 0;
+
+    for (std::vector<CellData>& row : grid)
+    {
+        maxCols = std::max(maxCols, row.size());
+    }
+
+    for (std::vector<CellData>& row : grid)
+    {
+        row.resize(maxCols);
+    }
+}
+
+QTextTable* createFlatTable(QTextCursor cursor, const Grid& grid)
+{
+    if (grid.empty())
+    {
+        return nullptr;
+    }
+
+    const int rows = static_cast<int>(grid.size());
+    const int cols = static_cast<int>(grid[0].size());
+
+    QTextTable* table = cursor.insertTable(rows, cols);
+
+    for (int rIdx = 0; rIdx < rows; ++rIdx)
+    {
+        for (int cIdx = 0; cIdx < cols; ++cIdx)
+        {
+            QTextTableCell cell = table->cellAt(rIdx, cIdx);
+
+            QTextCursor cellCursor = cell.firstCursorPosition();
+            cellCursor.insertText(grid[rIdx][cIdx].text);
+        }
+    }
+
+    return table;
+}
+
+QTextTable* flattenToSingleTable(QTextTable* source, QTextCursor cursor)
+{
+    // Grid grid = flattenTable(source);
+    // normalizeTable(grid);
+    Grid grid = convertTable(source);
+
+    QString res;
+    for (int rIdx = 0; rIdx < grid.size(); ++rIdx)
+    {
+        for (CellData& cur : grid[rIdx])
+        {
+            QString curStr;
+            for (auto& frag : cur.fragments)
+            {
+                curStr += frag.text();
+            }
+            res += "|" + curStr;
+        }
+        res += "|\n";
+        if (rIdx == 0)
+        {
+            res += QString{"|---"}.repeated(grid[rIdx].size()) + "|\n";
+        }
+    }
+    solDebug << res;
+
+    return createFlatTable(cursor, grid);
+}
 } // anonymous namespace

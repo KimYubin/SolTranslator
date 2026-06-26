@@ -608,6 +608,7 @@ QString fixNewLine(QTextDocument& inDoc)
 }
 
 
+// tables
 struct CellData
 {
     CellData() = default;
@@ -640,47 +641,6 @@ struct CellData
 };
 
 using Grid = std::vector<std::vector<CellData>>;
-
-QTextTable* findNestedTable(const QTextTableCell& cell)
-{
-    for (QTextFrame::iterator it = cell.begin(); !it.atEnd(); ++it)
-    {
-        if (QTextFrame* frame = it.currentFrame())
-        {
-            if (QTextTable* table = qobject_cast<QTextTable*>(frame))
-            {
-                return table;
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-std::vector<QTextFragment> extractCellText(const QTextTableCell& cell)
-{
-    std::vector<QTextFragment> res;
-    for (QTextFrame::iterator cellIt = cell.begin(); !cellIt.atEnd(); ++cellIt)
-    {
-        QTextBlock block = cellIt.currentBlock();
-        if (block.isValid() == false)
-        {
-            continue;
-        }
-
-        if (QTextTable* nextTable = qobject_cast<QTextTable*>(cellIt.currentFrame()))
-        {
-            break;
-        }
-
-        for (QTextBlock::iterator blockIt = block.begin(); !blockIt.atEnd(); ++blockIt)
-        {
-            res.push_back(blockIt.fragment());
-        }
-    }
-
-    return res;
-}
 
 void expendCol(Grid& inTable, const int posRow, const int posCol, const int insertRow, const int insertCol)
 {
@@ -883,87 +843,6 @@ Grid convertTable(QTextTable* table)
 
     return resTable;
 }
-Grid flattenTable(QTextTable* table)
-{
-    Grid result;
-    
-
-    const int rows = table->rows();
-    const int cols = table->columns();
-
-    result.resize(rows);
-
-    for (int rIdx = 0; rIdx < rows; ++rIdx)
-    {
-        std::vector<Grid> cellGrids(cols);
-
-        int maxHeight = 1;
-
-        // 재귀적으로 변환
-        for (int c = 0; c < cols; ++c)
-        {
-            QTextTableCell cell = table->cellAt(rIdx, c);
-
-            if (QTextTable* nested = findNestedTable(cell))
-            {
-                cellGrids[c] = flattenTable(nested);
-            }
-            else
-            {
-                cellGrids[c] =
-                {
-                    {
-                        CellData{
-                            extractCellText(cell)
-                        }
-                    }
-                };
-            }
-
-            maxHeight = std::max(maxHeight, static_cast<int>(cellGrids[c].size()));
-        }
-
-        // 현재 행을 maxHeight 만큼 확장
-        for (int localRow = 0; localRow < maxHeight; ++localRow)
-        {
-            std::vector<CellData> outRow;
-
-            for (int c = 0; c < cols; ++c)
-            {
-                Grid& grid = cellGrids[c];
-
-                if (localRow < static_cast<int>(grid.size()))
-                {
-                    outRow.insert_range(outRow.end(), grid[localRow]);
-                }
-                else
-                {
-                    // 중첩 테이블 높이 부족분. 동일 폭의 빈 셀 추가
-                    outRow.append_range(std::vector<CellData>(grid[0].size()));
-                }
-            }
-
-            result.push_back(std::move(outRow));
-        }
-    }
-
-    return result;
-}
-
-void normalizeTable(Grid& grid)
-{
-    size_t maxCols = 0;
-
-    for (std::vector<CellData>& row : grid)
-    {
-        maxCols = std::max(maxCols, row.size());
-    }
-
-    for (std::vector<CellData>& row : grid)
-    {
-        row.resize(maxCols);
-    }
-}
 
 QTextTable* createFlatTable(QTextCursor cursor, const Grid& grid)
 {
@@ -993,8 +872,6 @@ QTextTable* createFlatTable(QTextCursor cursor, const Grid& grid)
 
 QTextTable* flattenToSingleTable(QTextTable* source, QTextCursor cursor)
 {
-    // Grid grid = flattenTable(source);
-    // normalizeTable(grid);
     Grid grid = convertTable(source);
 
     QString res;

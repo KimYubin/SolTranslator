@@ -14,6 +14,8 @@
 #include "qloggingcategory.h"
 #include <QtCore/QRegularExpression>
 #include "qabstractitemmodel.h"
+#include "SolLog.h"
+
 #include <QAbstractItemModel>
 
 using namespace Qt::StringLiterals;
@@ -114,9 +116,15 @@ void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
     QList<int> tableColumnWidths;
     if (table)
     {
-        tableColumnWidths.resize(table->columns());
+        solDebug << table->columns() << table->rows();
+
+        tableColumnWidths.resize(table->columns(), 0);
         for (int col = 0; col < table->columns(); ++col)
         {
+            if (isUseTableCellWidth() == false)
+            {
+                continue;
+            }
             for (int row = 0; row < table->rows(); ++row)
             {
                 QTextTableCell cell = table->cellAt(row, col);
@@ -148,7 +156,7 @@ void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
         {
             // no frame, it's a block
             QTextBlock curBlock = iterator.currentBlock();
-            if (curBlock.isValid() == false)
+            if (curBlock.isValid() == false || (table && (curBlock.length() == 0)))
             {
                 continue;
             }
@@ -190,7 +198,7 @@ void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
                         m_stream << qtmw_Newline;
                         for (int col = 0; col < tableColumnWidths.size(); ++col)
                         {
-                            m_stream << '|' << QString(tableColumnWidths[col], u'-');
+                            m_stream << '|' << QString(qMax(tableColumnWidths[col], 3), u'-');
                         }
                         m_stream << '|';
                     }
@@ -324,6 +332,11 @@ void MarkdownWriter::setLinePrefixForBlockQuote(int level)
             m_linePrefix += u"> ";
         }
     }
+}
+
+bool MarkdownWriter::isUseTableCellWidth() const
+{
+    return false;
 }
 
 namespace

@@ -21,7 +21,7 @@ public:
     bool writeAll(const QTextDocument* inDoc);
     void writeTable(const QAbstractItemModel* inTableModel);
 
-    int writeBlock(const QTextBlock& inBlock, bool inIsTable, bool inIgnoreFormat, bool inIgnoreEmpty);
+    int writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIgnoreFormat, bool inIgnoreEmpty);
     void writeFrame(const QTextFrame* inFrame);
     void writeFrontMatter(const QString& inFrontMatter);
 
@@ -33,6 +33,7 @@ private:
 
     ListInfo listInfo(QTextList* list);
     void setLinePrefixForBlockQuote(int level);
+    bool isUseTableCellWidth() const;
 
 private:
     QTextStream& m_stream;

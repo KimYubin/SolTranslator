@@ -116,8 +116,6 @@ void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
     QList<int> tableColumnWidths;
     if (table)
     {
-        solDebug << table->columns() << table->rows();
-
         tableColumnWidths.resize(table->columns(), 0);
         for (int col = 0; col < table->columns(); ++col)
         {

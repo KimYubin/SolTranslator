@@ -17,7 +17,6 @@
 
 namespace
 {
-
 void fixListItem(QTextDocument& inDoc);
 
 void codeBlockToMarker(QTextDocument& inDoc);
@@ -29,7 +28,7 @@ void normalizeHtml(QTextDocument& inDoc);
 
 void fixTailSpaceInBold(QTextDocument& inDoc);
 
-void fixTableCell(QTextDocument& inDoc);
+void fixTable(QTextDocument& inDoc);
 
 QString fixNewLine(QTextDocument& inDoc);
 
@@ -46,7 +45,6 @@ QString toMarkdown(QTextDocument& inDoc)
 }
 
 void flattenToSingleTable(QTextTable* inTable);
-
 } // anonymous namespace
 
 
@@ -61,7 +59,7 @@ QString htmlToMarkdown(QTextDocument& inDoc)
     normalizeHtml(inDoc);
 
     fixTailSpaceInBold(inDoc);
-    fixTableCell(inDoc);
+    fixTable(inDoc);
 
     QString markdownStr = fixNewLine(inDoc);
     markerToCodeBlock(markdownStr);
@@ -406,16 +404,15 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
  * Integrate the divided blocks in the cell.
  * Prevent the divided blocks from being interpreted as adjacent cells.
  */
-void fixTableCell(QTextDocument& inDoc)
+void fixTable(QTextDocument& inDoc)
 {
-    QTextFrame* rootF = inDoc.rootFrame();
-    QTextFrame::iterator iterator = rootF->begin();
-    QTextFrame* child             = nullptr;
+    QTextFrame* rootFrame  = inDoc.rootFrame();
+    QTextFrame* childFrame = nullptr;
 
-    while (!iterator.atEnd())
+    for (QTextFrame::iterator rootIt = rootFrame->begin(); !rootIt.atEnd(); ++rootIt)
     {
-        QTextFrame* curFrame = iterator.currentFrame();
-        if (curFrame && child != curFrame)
+        QTextFrame* curFrame = rootIt.currentFrame();
+        if (curFrame && childFrame != curFrame)
         {
             if (QTextTable* table = qobject_cast<QTextTable*>(curFrame))
             {
@@ -423,8 +420,7 @@ void fixTableCell(QTextDocument& inDoc)
             }
         }
 
-        child = curFrame;
-        ++iterator;
+        childFrame = curFrame;
     }
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
@@ -567,7 +563,7 @@ struct CellData
     CellData() = default;
 
     explicit CellData(const bool inIsEmpty)
-        :isEmpty(inIsEmpty)
+        : isEmpty(inIsEmpty)
     {}
 
     explicit CellData(QTextTable* inTable)
@@ -590,7 +586,7 @@ struct CellData
 
 
 using GridRow = std::vector<CellData>;
-using Grid = std::vector<GridRow>;
+using Grid    = std::vector<GridRow>;
 
 
 Grid makeGrid(const int inRow, const int inCol, CellData inCellData)
@@ -724,7 +720,7 @@ std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int 
     {
         for (int colIdx = 0; colIdx < nestedCols; ++colIdx)
         {
-            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx] = inNested[rowIdx][colIdx];
+            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx]         = inNested[rowIdx][colIdx];
             inOrigin[oRowIdx + rowIdx][oColIdx + colIdx].isEmpty = true;
         }
     }
@@ -746,7 +742,6 @@ Grid convertTableToGrid(QTextTable* inTable)
     }
 
     Grid resTable = makeGrid(inTable->rows(), inTable->columns(), CellData(inTable));
-
     for (int rIdx = 0; rIdx < inTable->rows(); ++rIdx)
     {
         for (int cIdx = 0; cIdx < inTable->columns(); ++cIdx)
@@ -760,16 +755,15 @@ Grid convertTableToGrid(QTextTable* inTable)
     {
         for (int cIdx = 0; cIdx < resTable.front().size(); ++cIdx)
         {
-            const CellData curCell = resTable[rIdx][cIdx];
-            if (curCell.isEmpty)
+            const CellData curCellData = resTable[rIdx][cIdx];
+            if (curCellData.isEmpty)
             {
                 continue;
             }
 
-            QTextTableCell cell = curCell.table->cellAt(curCell.row, curCell.col);
-
             std::vector<Grid> cellGridList;
 
+            QTextTableCell cell = curCellData.table->cellAt(curCellData.row, curCellData.col);
             for (QTextFrame::iterator cellIt = cell.begin(); !cellIt.atEnd(); ++cellIt)
             {
                 if (QTextTable* innerTable = qobject_cast<QTextTable*>(cellIt.currentFrame()))
@@ -786,24 +780,24 @@ Grid convertTableToGrid(QTextTable* inTable)
                     continue;
                 }
 
-                CellData newCellData = curCell;
-                newCellData.fragments.clear();
-
+                std::vector<TextFragmentData> newFragments;
                 for (QTextBlock::iterator blockIt = block.begin(); !blockIt.atEnd(); ++blockIt)
                 {
                     QTextFragment frags = blockIt.fragment();
-                    newCellData.fragments.emplace_back(frags.text(), frags.charFormat());
+                    newFragments.emplace_back(frags.text(), frags.charFormat());
                 }
 
-                if (newCellData.fragments.empty())
+                if (newFragments.empty())
                 {
                     continue;
                 }
 
+                CellData newCellData  = curCellData;
+                newCellData.fragments = std::move(newFragments);
                 cellGridList.push_back(makeGrid(1, 1, std::move(newCellData)));
             }
 
-            int maxWidth = 0;
+            int maxWidth    = 0;
             int totalHeight = 0;
             for (const Grid& cellGrid : cellGridList)
             {
@@ -812,11 +806,12 @@ Grid convertTableToGrid(QTextTable* inTable)
                     continue;
                 }
 
-                maxWidth = std::max<int>(maxWidth, cellGrid.front().size());
+                maxWidth    = std::max<int>(maxWidth, cellGrid.front().size());
                 totalHeight += cellGrid.size();
             }
 
             Grid NewCellGrid;
+            NewCellGrid.reserve(totalHeight);
             for (Grid& cellGrid : cellGridList)
             {
                 for (GridRow& cellCol : cellGrid)
@@ -866,8 +861,8 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
     {
         for (int cIdx = 0; cIdx < gridCols; ++cIdx)
         {
-            QTextTableCell cell    = inTable->cellAt(tableRowCount + rIdx, cIdx);
-            QTextCursor cellCursor = cell.firstCursorPosition();
+            QTextTableCell curCell = inTable->cellAt(tableRowCount + rIdx, cIdx);
+            QTextCursor cellCursor = curCell.firstCursorPosition();
             if (inGrid[rIdx][cIdx].fragments.empty())
             {
                 // Qt markdown에서 빈 셀은 렌더링 되지 않을 수 있기 때문에, 공백을 추가합니다.
@@ -891,6 +886,10 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
 
 void flattenToSingleTable(QTextTable* inTable)
 {
+    if (inTable == nullptr)
+    {
+        return;
+    }
     const Grid grid = convertTableToGrid(inTable);
     // printGrid(grid);
     gridToTable(grid, inTable);

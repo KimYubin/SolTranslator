@@ -530,6 +530,12 @@ QString createLinkTitle(const QString& inTitle)
     return result;
 }
 
+int columnLimit()
+{
+    constexpr static int ColumnLimit = std::numeric_limits<int>::max();
+    return ColumnLimit;
+}
+
 } // anonymous namespace
 
 int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIgnoreFormat, bool inIgnoreEmpty)
@@ -538,7 +544,7 @@ int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIg
     {
         return 0;
     }
-    constexpr int ColumnLimit     = 1'000'000;
+
     QTextBlockFormat blockFmt     = inBlock.blockFormat();
     bool missedBlankCodeBlockLine = false;
     const bool codeBlock          = blockFmt.hasProperty(QTextFormat::BlockCodeFence) ||
@@ -748,7 +754,7 @@ int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIg
                 s += (QString(qtmw_Space) + qtmw_DoubleQuote) + title + qtmw_DoubleQuote;
             }
             s += u')';
-            if (inWrap && col + s.size() > ColumnLimit)
+            if (inWrap && col + s.size() > columnLimit())
             {
                 m_stream << qtmw_Newline << wrapIndentString;
                 col = m_wrappedLineIndent;
@@ -775,7 +781,7 @@ int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIg
                 }
                 s += u')';
             }
-            if (inWrap && col + s.size() > ColumnLimit)
+            if (inWrap && col + s.size() > columnLimit())
             {
                 m_stream << qtmw_Newline << wrapIndentString;
                 col = m_wrappedLineIndent;
@@ -851,14 +857,14 @@ int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIg
                     }
                 }
             }
-            if (inWrap && col + markers.size() * 2 + fragmentText.size() > ColumnLimit)
+            if (inWrap && col + markers.size() * 2 + fragmentText.size() > columnLimit())
             {
                 int i             = 0;
                 const int fragLen = fragmentText.size();
                 bool breakingLine = false;
                 while (i < fragLen)
                 {
-                    if (col >= ColumnLimit)
+                    if (col >= columnLimit())
                     {
                         m_stream << markers << qtmw_Newline << wrapIndentString;
                         markers.clear();
@@ -868,7 +874,7 @@ int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIg
                             ++i;
                         }
                     }
-                    int j = i + ColumnLimit - col;
+                    int j = i + columnLimit() - col;
                     if (j < fragLen)
                     {
                         int wi = nearestWordWrapIndex(fragmentText, j);

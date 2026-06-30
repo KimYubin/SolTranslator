@@ -17,25 +17,34 @@
 
 namespace
 {
+struct TextFragmentData
+{
+    QString text;
+    QTextCharFormat charFormat;
+};
+
+const QString newLineMarker = "__NEWLINE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
+
 void fixListItem(QTextDocument& inDoc);
 
 void fixTailSpaceInBold(QTextDocument& inDoc);
 
 void fixTable(QTextDocument& inDoc);
 
-QString toMarkdown(QTextDocument& inDoc)
+QString docToMarkdown(QTextDocument& inDoc)
 {
-    QString ret;
-    QTextStream s(&ret);
-    MarkdownWriter w(s, QTextDocument::MarkdownDialectGitHub);
-    if (w.writeAll(&inDoc))
+    QString res;
+    QTextStream testStream(&res);
+    SolMarkdownWriter mdWriter(testStream, QTextDocument::MarkdownDialectGitHub);
+    if (mdWriter.writeAll(&inDoc))
     {
-        return ret;
+        res.replace(QChar::Nbsp, " ");
+        res.replace(newLineMarker, R"(<br/>)");
+
+        return res;
     }
     return QString();
 }
-
-const QString tableNewLineMarker = "__CODE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
 
 } // anonymous namespace
 
@@ -49,9 +58,7 @@ QString htmlToMarkdown(QTextDocument& inDoc)
     fixTailSpaceInBold(inDoc);
     fixTable(inDoc);
 
-    QString markdownStr = toMarkdown(inDoc);
-    markdownStr.replace(QChar::Nbsp, " ");
-    markdownStr.replace(tableNewLineMarker, R"(<br/>)");
+    QString markdownStr = docToMarkdown(inDoc);
 
     return markdownStr;
 }
@@ -99,7 +106,7 @@ void fixListItem(QTextDocument& inDoc)
             continue;
         }
 
-        // fix hyper link error.
+        // Fix hypertext link error.
         for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
         {
             QTextFragment fragment = itemIt.fragment();
@@ -109,18 +116,13 @@ void fixListItem(QTextDocument& inDoc)
             }
 
             QTextCharFormat fragFmt = fragment.charFormat();
-            if (fragFmt.isAnchor() && fragFmt.anchorHref().isEmpty())
-            {
-                fragFmt.setAnchor(false);
-            }
-            else if (!fragFmt.isAnchor() && !fragFmt.anchorHref().isEmpty())
-            {
-                fragFmt.setAnchor(true);
-            }
-            else
+            const bool hasLinkText  = (!fragFmt.anchorHref().isEmpty());
+            if (fragFmt.isAnchor() == hasLinkText)
             {
                 continue;
             }
+
+            fragFmt.setAnchor(hasLinkText);
 
             const int fragStart = fragment.position();
             const int frageEnd  = fragment.position() + fragment.length();
@@ -131,7 +133,7 @@ void fixListItem(QTextDocument& inDoc)
             fragCursor.mergeCharFormat(fragFmt);
         }
 
-        // Connect the links that have the same Href.
+        // Merge the fragments that have the same Href.
         for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
         {
             QTextFragment fragment = itemIt.fragment();
@@ -155,7 +157,7 @@ void fixListItem(QTextDocument& inDoc)
             // Track fragments with the same Href.
             QTextBlock::iterator nextIt = itemIt;
             ++nextIt;
-            QTextBlock::iterator lastIt = nextIt;
+            QTextFragment lastFrag = nextIt.fragment();
             while (!nextIt.atEnd())
             {
                 QTextFragment nextFrag = nextIt.fragment();
@@ -172,7 +174,7 @@ void fixListItem(QTextDocument& inDoc)
 
                 isNeedMerge   = true;
                 mergeLinkText += nextFrag.text();
-                lastIt        = nextIt;
+                lastFrag      = nextIt.fragment();
 
                 ++nextIt;
             }
@@ -192,9 +194,8 @@ void fixListItem(QTextDocument& inDoc)
                         || (inChar == QChar::CarriageReturn);
             });
 
-            QTextFragment lastFrag = lastIt.fragment();
-
             // Connect the separated links.
+            // The front link format is broken, so Apply the last fragment format.
             fragCursor.setPosition(frgStart);
             fragCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
             fragCursor.insertText(mergeLinkText, lastFrag.charFormat());
@@ -282,6 +283,7 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
                     break;
                 }
             }
+            // for renew textBlock
             break;
         }
     }
@@ -316,13 +318,6 @@ void fixTable(QTextDocument& inDoc)
         childFrame = curFrame;
     }
 }
-
-
-struct TextFragmentData
-{
-    QString text;
-    QTextCharFormat charFormat;
-};
 
 struct CellData
 {
@@ -360,13 +355,13 @@ Grid makeGrid(const int inRow, const int inCol, CellData inCellData)
     return Grid(inRow, GridRow(inCol, std::move(inCellData)));
 }
 
-void expendCol(Grid& inTable, const int posCol, const int insertCol)
+void expendCol(Grid& inTable, const int inColPos, const int inSize)
 {
     const int originColSize = inTable.front().size();
 
-    if (originColSize <= posCol)
+    if (originColSize <= inColPos)
     {
-        const int emptyColSize = (posCol + insertCol) - originColSize;
+        const int emptyColSize = (inColPos + inSize) - originColSize;
         GridRow emptyCol(emptyColSize, CellData());
         for (GridRow& curRow : inTable)
         {
@@ -375,78 +370,78 @@ void expendCol(Grid& inTable, const int posCol, const int insertCol)
         return;
     }
 
-    int minEmptyCol = insertCol;
+    int minEmptyCol = inSize;
     for (GridRow& curRow : inTable)
     {
-        const int colMax = std::min<int>(curRow.size(), posCol + minEmptyCol);
-        for (int cIdx = posCol; cIdx < colMax; ++cIdx)
+        const int colMax = std::min<int>(curRow.size(), inColPos + minEmptyCol);
+        for (int cIdx = inColPos; cIdx < colMax; ++cIdx)
         {
             if (!curRow[cIdx].isEmpty)
             {
-                minEmptyCol = std::min(minEmptyCol, cIdx - posCol);
+                minEmptyCol = std::min(minEmptyCol, cIdx - inColPos);
                 break;
             }
         }
     }
 
-    GridRow emptyCol(insertCol - minEmptyCol, CellData());
+    GridRow emptyCol(inSize - minEmptyCol, CellData());
     for (GridRow& row : inTable)
     {
-        row.insert_range(row.begin() + posCol + minEmptyCol, emptyCol);
+        row.insert_range(row.begin() + inColPos + minEmptyCol, emptyCol);
     }
 }
 
-void expendRow(Grid& inTable, const int posRow, const int insertRow)
+void expendRow(Grid& inTable, const int inRowPos, const int inSize)
 {
     const int originRowSize = inTable.size();
     const int originColSize = inTable.front().size();
 
     const GridRow emptyRow(originColSize, CellData());
 
-    if (originRowSize <= posRow)
+    if (originRowSize <= inRowPos)
     {
-        const int emptyRowSize = (posRow + insertRow) - originRowSize;
+        const int emptyRowSize = (inRowPos + inSize) - originRowSize;
         inTable.append_range(Grid(emptyRowSize, emptyRow));
         return;
     }
 
-    int minEmptyRow   = insertRow;
-    const int maxRows = std::min(originRowSize, posRow + insertRow);
-    for (int rIdx = posRow; rIdx < maxRows; ++rIdx)
+    int minEmptyRow   = inSize;
+    const int maxRows = std::min(originRowSize, inRowPos + inSize);
+    for (int rIdx = inRowPos; rIdx < maxRows; ++rIdx)
     {
         const GridRow& row = inTable[rIdx];
         for (int cIdx = 0; cIdx < row.size(); ++cIdx)
         {
             if (!row[cIdx].isEmpty)
             {
-                minEmptyRow = std::min(minEmptyRow, rIdx - (posRow + 1));
+                minEmptyRow = std::min(minEmptyRow, rIdx - (inRowPos + 1));
                 break;
             }
         }
-        if (minEmptyRow != insertRow)
+        if (minEmptyRow != inSize)
         {
             break;
         }
     }
 
-    inTable.insert_range(inTable.begin() + posRow, Grid(insertRow - minEmptyRow, emptyRow));
+    inTable.insert_range(inTable.begin() + inRowPos, Grid(inSize - minEmptyRow, emptyRow));
 }
 
-void expandGrid(Grid& inTable, const int posRow, const int posCol, const int insertRow, const int insertCol)
+void expandGrid(Grid& inTable, const int inRowPos, const int inColPos, const int inRowSize, const int inColSize)
 {
     // 아래 먼저 밀기
-    if (insertRow > 1)
+    if (inRowSize > 1)
     {
-        expendRow(inTable, posRow, insertRow);
+        expendRow(inTable, inRowPos, inRowSize);
     }
 
-    if (insertCol > 1)
+    if (inColSize > 1)
     {
-        expendCol(inTable, posCol, insertCol);
+        expendCol(inTable, inColPos, inColSize);
     }
 }
 
-std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int oRowIdx, const int oColIdx)
+std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int inRowPos, const int inColPos)
 {
     if (inNested.empty() || inNested.front().empty())
     {
@@ -455,8 +450,8 @@ std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int 
 
     const int nestedRows = inNested.size();
     const int nestedCols = inNested.front().size();
-    const int targetRows = oRowIdx + 1;
-    const int targetCols = oColIdx + 1;
+    const int targetRows = inRowPos + 1;
+    const int targetCols = inColPos + 1;
 
     expandGrid(inOrigin, targetRows, targetCols, nestedRows, nestedCols);
 
@@ -464,8 +459,8 @@ std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int 
     {
         for (int colIdx = 0; colIdx < nestedCols; ++colIdx)
         {
-            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx]         = inNested[rowIdx][colIdx];
-            inOrigin[oRowIdx + rowIdx][oColIdx + colIdx].isEmpty = true;
+            inOrigin[inRowPos + rowIdx][inColPos + colIdx]         = inNested[rowIdx][colIdx];
+            inOrigin[inRowPos + rowIdx][inColPos + colIdx].isEmpty = true;
         }
     }
 
@@ -531,11 +526,11 @@ Grid convertTableToGrid(QTextTable* inTable)
 
                     QString fragStr = frags.text();
 
-                    fragStr.replace("\r\n", tableNewLineMarker);
-                    fragStr.replace(QChar::CarriageReturn, tableNewLineMarker);
-                    fragStr.replace(QChar::LineFeed, tableNewLineMarker);
-                    fragStr.replace(QChar::LineSeparator, tableNewLineMarker);
-                    fragStr.replace(QChar::ParagraphSeparator, tableNewLineMarker);
+                    fragStr.replace("\r\n", newLineMarker);
+                    fragStr.replace(QChar::CarriageReturn, newLineMarker);
+                    fragStr.replace(QChar::LineFeed, newLineMarker);
+                    fragStr.replace(QChar::LineSeparator, newLineMarker);
+                    fragStr.replace(QChar::ParagraphSeparator, newLineMarker);
 
                     newFragments.emplace_back(std::move(fragStr), frags.charFormat());
                 }
@@ -632,7 +627,7 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
             QTextCursor cellCursor = curCell.firstCursorPosition();
             if (inGrid[rIdx][cIdx].fragments.empty())
             {
-                // Qt markdown에서 빈 셀은 렌더링 되지 않을 수 있기 때문에, 공백을 추가합니다.
+                // In Qt markdown, empty cells may not render, so add whitespace.
                 cellCursor.insertText(" ");
                 continue;
             }
@@ -649,19 +644,6 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
     {
         inTable->removeColumns(gridCols, tableColCount - gridCols);
     }
-}
-
-void printGrid(const Grid& inGrid);
-
-void flattenToSingleTable(QTextTable* inTable)
-{
-    if (inTable == nullptr)
-    {
-        return;
-    }
-    const Grid grid = convertTableToGrid(inTable);
-    // printGrid(grid);
-    gridToTable(grid, inTable);
 }
 
 void printGrid(const Grid& inGrid)
@@ -686,5 +668,17 @@ void printGrid(const Grid& inGrid)
     }
     solDebug << res;
 }
+
+void flattenToSingleTable(QTextTable* inTable)
+{
+    if (inTable == nullptr)
+    {
+        return;
+    }
+    const Grid grid = convertTableToGrid(inTable);
+    // printGrid(grid);
+    gridToTable(grid, inTable);
+}
+
 
 } // anonymous namespace

@@ -37,19 +37,19 @@ constexpr QChar qtmw_Period         = u'.';
 } // anonymous namespace
 
 
-MarkdownWriter::MarkdownWriter(QTextStream& inStream, QTextDocument::MarkdownFeatures inFeatures)
+SolMarkdownWriter::SolMarkdownWriter(QTextStream& inStream, QTextDocument::MarkdownFeatures inFeatures)
     : m_stream(inStream), m_features(inFeatures)
 {
 }
 
-bool MarkdownWriter::writeAll(const QTextDocument* inDoc)
+bool SolMarkdownWriter::writeAll(const QTextDocument* inDoc)
 {
     writeFrontMatter(inDoc->metaInformation(QTextDocument::FrontMatter));
     writeFrame(inDoc->rootFrame());
     return true;
 }
 
-void MarkdownWriter::writeTable(const QAbstractItemModel* inTableModel)
+void SolMarkdownWriter::writeTable(const QAbstractItemModel* inTableModel)
 {
     QList<int> tableColumnWidths(inTableModel->columnCount());
     for (int col = 0; col < inTableModel->columnCount(); ++col)
@@ -89,7 +89,7 @@ void MarkdownWriter::writeTable(const QAbstractItemModel* inTableModel)
 }
 
 
-void MarkdownWriter::writeFrontMatter(const QString& inFrontMatter)
+void SolMarkdownWriter::writeFrontMatter(const QString& inFrontMatter)
 {
     const bool featureEnabled = m_features.testFlag(static_cast<QTextDocument::MarkdownFeature>(0x100000));
     qCDebug(lcMDW) << "writing FrontMatter?" << featureEnabled << "size" << inFrontMatter.size();
@@ -105,7 +105,7 @@ void MarkdownWriter::writeFrontMatter(const QString& inFrontMatter)
     m_stream << "---\n"_L1;
 }
 
-void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
+void SolMarkdownWriter::writeFrame(const QTextFrame* inFrame)
 {
     Q_ASSERT(inFrame);
     const QTextTable* table       = qobject_cast<const QTextTable*>(inFrame);
@@ -283,7 +283,7 @@ void MarkdownWriter::writeFrame(const QTextFrame* inFrame)
     m_listInfo.clear();
 }
 
-MarkdownWriter::ListInfo MarkdownWriter::listInfo(QTextList* list)
+SolMarkdownWriter::ListInfo SolMarkdownWriter::listInfo(QTextList* list)
 {
     if (!m_listInfo.contains(list))
     {
@@ -319,7 +319,7 @@ MarkdownWriter::ListInfo MarkdownWriter::listInfo(QTextList* list)
     return m_listInfo.value(list);
 }
 
-void MarkdownWriter::setLinePrefixForBlockQuote(int level)
+void SolMarkdownWriter::setLinePrefixForBlockQuote(int level)
 {
     m_linePrefix.clear();
     if (level > 0)
@@ -332,7 +332,7 @@ void MarkdownWriter::setLinePrefixForBlockQuote(int level)
     }
 }
 
-bool MarkdownWriter::isUseTableCellWidth() const
+bool SolMarkdownWriter::isUseTableCellWidth() const
 {
     return false;
 }
@@ -538,7 +538,7 @@ int columnLimit()
 
 } // anonymous namespace
 
-int MarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIgnoreFormat, bool inIgnoreEmpty)
+int SolMarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIgnoreFormat, bool inIgnoreEmpty)
 {
     if (inBlock.text().isEmpty() && inIgnoreEmpty)
     {

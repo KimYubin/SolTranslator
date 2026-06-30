@@ -14,10 +14,10 @@ class QTextStream;
 /**
  * @see qtextmarkdownwriter_p.h
  */
-class MarkdownWriter
+class SolMarkdownWriter
 {
 public:
-    MarkdownWriter(QTextStream& inStream, QTextDocument::MarkdownFeatures inFeatures);
+    SolMarkdownWriter(QTextStream& inStream, QTextDocument::MarkdownFeatures inFeatures);
     bool writeAll(const QTextDocument* inDoc);
     void writeTable(const QAbstractItemModel* inTableModel);
 

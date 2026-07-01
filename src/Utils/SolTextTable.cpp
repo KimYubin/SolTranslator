@@ -73,7 +73,7 @@ void expendRow(Grid& inTable, const int inRowPos, const int inSize)
         {
             if (!row[cIdx].isEmpty)
             {
-                minEmptyRow = std::min(minEmptyRow, rIdx - (inRowPos + 1));
+                minEmptyRow = std::min(minEmptyRow, rIdx - inRowPos);
                 break;
             }
         }
@@ -91,12 +91,12 @@ void expandGrid(Grid& inTable, const int inRowPos, const int inColPos, const int
     // 아래 먼저 밀기
     if (inRowSize > 1)
     {
-        expendRow(inTable, inRowPos, inRowSize);
+        expendRow(inTable, inRowPos, inRowSize - 1);
     }
 
     if (inColSize > 1)
     {
-        expendCol(inTable, inColPos, inColSize);
+        expendCol(inTable, inColPos, inColSize - 1);
     }
 }
 
@@ -107,10 +107,10 @@ std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int 
         return {0, 0};
     }
 
-    const int nestedRows = inNested.size();
-    const int nestedCols = inNested.front().size();
     const int targetRows = inRowPos + 1;
     const int targetCols = inColPos + 1;
+    const int nestedRows = inNested.size();
+    const int nestedCols = inNested.front().size();
 
     expandGrid(inOrigin, targetRows, targetCols, nestedRows, nestedCols);
 

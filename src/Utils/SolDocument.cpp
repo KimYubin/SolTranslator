@@ -25,37 +25,40 @@ struct TextFragmentData
 
 const QString newLineMarker = "__NEWLINE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
 
+
+/**
+ * Fix the internal error of the list items.
+ */
 void fixListItem(QTextDocument& inDoc);
 
-void fixTailSpaceInBold(QTextDocument& inDoc);
+/**
+ * Fix the last space of in Bold(**).
+ * Prevent broken bold.
+ */
+void fixBoldLastSpace(QTextDocument& inDoc);
 
+/**
+ * Integrate the divided blocks in the cell.
+ * Prevent the divided blocks from being interpreted as adjacent cells.
+ */
 void fixTable(QTextDocument& inDoc);
 
-QString docToMarkdown(QTextDocument& inDoc)
-{
-    QString res;
-    QTextStream testStream(&res);
-    SolMarkdownWriter mdWriter(testStream, QTextDocument::MarkdownDialectGitHub);
-    if (mdWriter.writeAll(&inDoc))
-    {
-        res.replace(QChar::Nbsp, " ");
-        res.replace(newLineMarker, R"(<br/>)");
+/**
+ * Flatten the nested tables into a single table.
+ */
+void flattenToSingleTable(QTextTable* inTable);
 
-        return res;
-    }
-    return QString();
-}
+QString docToMarkdown(QTextDocument& inDoc);
 
 } // anonymous namespace
 
 
 namespace Sol
 {
-QString htmlToMarkdown(QTextDocument& inDoc)
+QString htmlDocToMarkdown(QTextDocument& inDoc)
 {
     fixListItem(inDoc);
-
-    fixTailSpaceInBold(inDoc);
+    fixBoldLastSpace(inDoc);
     fixTable(inDoc);
 
     QString markdownStr = docToMarkdown(inDoc);
@@ -66,10 +69,11 @@ QString htmlToMarkdown(QTextDocument& inDoc)
 QString htmlToMarkdown(QString inHtml)
 {
     // Remove the syntax that ignores the list.
-    QTextDocument txtDoc;
     inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
+    QTextDocument txtDoc;
     txtDoc.setHtml(inHtml);
-    return htmlToMarkdown(txtDoc);
+
+    return htmlDocToMarkdown(txtDoc);
 }
 
 void asyncHtmlToMarkdown(QString inHtml
@@ -90,9 +94,6 @@ void asyncHtmlToMarkdown(QString inHtml
 
 namespace
 {
-/**
- * Fix the internal error of the list items.
- */
 void fixListItem(QTextDocument& inDoc)
 {
     QTextCursor fragCursor(&inDoc);
@@ -188,10 +189,10 @@ void fixListItem(QTextDocument& inDoc)
             // Remove newline in list item.
             mergeLinkText.removeIf([](const QChar& inChar)
             {
-                return (inChar == '\n')
+                return (inChar == QChar::LineFeed)
+                        || (inChar == QChar::CarriageReturn)
                         || (inChar == QChar::LineSeparator)
-                        || (inChar == QChar::ParagraphSeparator)
-                        || (inChar == QChar::CarriageReturn);
+                        || (inChar == QChar::ParagraphSeparator);
             });
 
             // Connect the separated links.
@@ -216,11 +217,7 @@ void fixListItem(QTextDocument& inDoc)
     }
 }
 
-/**
- * Fix the last space of in Bold(**).
- * Prevent broken bold.
- */
-void fixTailSpaceInBold(QTextDocument& inDoc)
+void fixBoldLastSpace(QTextDocument& inDoc)
 {
     QTextCursor textCursor(&inDoc);
 
@@ -292,13 +289,6 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
 
 // ~============================
 // tables
-
-void flattenToSingleTable(QTextTable* inTable);
-
-/**
- * Integrate the divided blocks in the cell.
- * Prevent the divided blocks from being interpreted as adjacent cells.
- */
 void fixTable(QTextDocument& inDoc)
 {
     QTextFrame* rootFrame  = inDoc.rootFrame();
@@ -525,10 +515,9 @@ Grid convertTableToGrid(QTextTable* inTable)
                     QTextFragment frags = blockIt.fragment();
 
                     QString fragStr = frags.text();
-
                     fragStr.replace("\r\n", newLineMarker);
-                    fragStr.replace(QChar::CarriageReturn, newLineMarker);
                     fragStr.replace(QChar::LineFeed, newLineMarker);
+                    fragStr.replace(QChar::CarriageReturn, newLineMarker);
                     fragStr.replace(QChar::LineSeparator, newLineMarker);
                     fragStr.replace(QChar::ParagraphSeparator, newLineMarker);
 
@@ -669,16 +658,52 @@ void printGrid(const Grid& inGrid)
     solDebug << res;
 }
 
+
+bool hasNestedTable(const QTextTable* inTable)
+{
+    if (inTable == nullptr)
+    {
+        return false;
+    }
+
+    QList<QTextFrame*> childFrameList = inTable->childFrames();
+    for (QTextFrame* child : childFrameList)
+    {
+        if (auto childTable = qobject_cast<QTextTable*>(child))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void flattenToSingleTable(QTextTable* inTable)
 {
     if (inTable == nullptr)
     {
         return;
     }
+
+    //  Convert table even without nested tables.
+    //  To fix issues such as line breaks within cells and block separation.
     const Grid grid = convertTableToGrid(inTable);
-    // printGrid(grid);
     gridToTable(grid, inTable);
 }
 
+QString docToMarkdown(QTextDocument& inDoc)
+{
+    QString res;
+    QTextStream testStream(&res);
+    SolMarkdownWriter mdWriter(testStream, QTextDocument::MarkdownDialectGitHub);
+    if (mdWriter.writeAll(&inDoc))
+    {
+        res.replace(QChar::Nbsp, " ");
+        res.replace(newLineMarker, R"(<br/>)");
+
+        return res;
+    }
+    return QString();
+}
 
 } // anonymous namespace

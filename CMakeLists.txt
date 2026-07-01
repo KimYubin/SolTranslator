@@ -174,6 +174,8 @@ qt_add_executable(
         src/Utils/SolPath.h
         src/Utils/SolSingleApplication.cpp
         src/Utils/SolSingleApplication.h
+        src/Utils/SolTextTable.cpp
+        src/Utils/SolTextTable.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
         src/Utils/UniqueQObjectPtr.hpp

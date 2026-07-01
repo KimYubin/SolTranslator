@@ -16,7 +16,7 @@ namespace Sol
  * Convert HTML string to Markdown.
  * Correct any distortion that occurs during the conversion.
  */
-QString htmlDocToMarkdown(QTextDocument& inDoc);
+QString textDocumentToMarkdown(QTextDocument& inDoc);
 
 /**
  * Convert HTML string to Markdown.

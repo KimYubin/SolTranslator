@@ -160,6 +160,8 @@ qt_add_executable(
 
         src/Utils/EnumUtils.hpp
         src/Utils/SolAsync.hpp
+        src/Utils/SolChrono.cpp
+        src/Utils/SolChrono.h
         src/Utils/SolDocument.cpp
         src/Utils/SolDocument.h
         src/Utils/SolI18n.cpp

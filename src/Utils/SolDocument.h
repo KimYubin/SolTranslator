@@ -3,8 +3,10 @@
 #ifndef SOLTRANSLATOR_SOLDOCUMENT_H
 #define SOLTRANSLATOR_SOLDOCUMENT_H
 
+#include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
 
+class QTextCursor;
 class QObject;
 class QTextDocument;
 class QString;
@@ -39,6 +41,14 @@ void asyncHtmlToMarkdown(QString inHtml
 
 
 } // namespace Sol
+
+
+class TextCursorEditBlockGuard : public SolGeneralGuard
+{
+public:
+    [[nodiscard]]
+    explicit TextCursorEditBlockGuard(QTextCursor& inCursor);
+};
 
 
 #endif //SOLTRANSLATOR_SOLDOCUMENT_H

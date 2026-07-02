@@ -86,7 +86,11 @@ void expendRow(Grid& inTable, const int inRowPos, const int inSize)
     inTable.insert_range(inTable.begin() + inRowPos, Grid(inSize - minEmptyRow, emptyRow));
 }
 
-void expandGrid(Grid& inTable, const int inRowPos, const int inColPos, const int inRowSize, const int inColSize)
+void expandGrid(Grid& inTable
+              , const int inRowPos
+              , const int inColPos
+              , const int inRowSize
+              , const int inColSize)
 {
     // 아래 먼저 밀기
     if (inRowSize > 1)
@@ -100,7 +104,10 @@ void expandGrid(Grid& inTable, const int inRowPos, const int inColPos, const int
     }
 }
 
-std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int inRowPos, const int inColPos)
+std::tuple<int, int> appendGrid(Grid& inOrigin
+                              , const Grid& inNested
+                              , const int inRowPos
+                              , const int inColPos)
 {
     if (inNested.empty() || inNested.front().empty())
     {

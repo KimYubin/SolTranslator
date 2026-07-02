@@ -2,7 +2,10 @@
 
 #include "ResultTextEdit.h"
 
+#include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
+#include "Utils/SolChrono.h"
+#include "Utils/SolDocument.h"
 #include "Utils/SolLog.h"
 
 #include <QRegularExpression>
@@ -58,11 +61,13 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     const qreal lineHeight = fntMetricsF.lineSpacing();
     const qreal parSpacing = lineHeight * 0.6; // 줄간격의 1.6배
 
-    QTextBlock block = document()->firstBlock();
+    QTextCursor blockCursor(document());
+    TextCursorEditBlockGuard cursorEditBlockGuard{blockCursor};
 
+    QTextBlock block = document()->firstBlock();
     while (block.isValid() && block.next().isValid())
     {
-        QTextCursor blockCursor(block);
+        blockCursor.setPosition(block.position());
         QTextBlockFormat blockFormat = blockCursor.blockFormat();
 
         // 코드 블록은 간격 조정 안함.
@@ -175,6 +180,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     // Restore 'Marker To Code' in reverse order of 'Code To Marker'.
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
     replaceMarkerToCode(codeBlockList, blockCodeFormat, blockPlaceMarker);
+
     document()->setMarkdown(md);
 }
 

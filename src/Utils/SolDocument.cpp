@@ -3,9 +3,11 @@
 #include "SolDocument.h"
 
 #include "SolAsync.hpp"
+#include "SolChrono.h"
 #include "SolLog.h"
 #include "SolMarkdownWriter.h"
 #include "SolTextTable.h"
+#include "Types/SolGuard.h"
 
 #include <QRegularExpression>
 #include <QTextBlock>
@@ -52,7 +54,6 @@ QString textDocumentToMarkdown(QTextDocument& inDoc)
 
     QString markdownStr = toSolMarkdown(inDoc);
 
-
     return markdownStr;
 }
 
@@ -87,11 +88,11 @@ namespace
 void fixListItem(QTextDocument& inDoc)
 {
     QTextCursor fragCursor(&inDoc);
+    TextCursorEditBlockGuard cursorEditBlockGuard{fragCursor};
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
-        QTextCursor cursor(textBlock);
-        QTextList* txtList = cursor.currentList();
+        QTextList* txtList = QTextCursor(textBlock).currentList();
         if (!txtList)
         {
             continue;
@@ -210,6 +211,7 @@ void fixListItem(QTextDocument& inDoc)
 void fixBoldLastSpace(QTextDocument& inDoc)
 {
     QTextCursor textCursor(&inDoc);
+    TextCursorEditBlockGuard cursorEditBlockGuard{textCursor};
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
@@ -316,3 +318,9 @@ QString toSolMarkdown(QTextDocument& inDoc)
 }
 
 } // anonymous namespace
+
+TextCursorEditBlockGuard::TextCursorEditBlockGuard(QTextCursor& inCursor)
+    : SolGeneralGuard([&inCursor]() { inCursor.endEditBlock(); })
+{
+    inCursor.beginEditBlock();
+}

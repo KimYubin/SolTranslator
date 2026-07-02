@@ -14,7 +14,6 @@
 #include "qloggingcategory.h"
 #include <QtCore/QRegularExpression>
 #include "qabstractitemmodel.h"
-#include "SolLog.h"
 
 #include <QAbstractItemModel>
 

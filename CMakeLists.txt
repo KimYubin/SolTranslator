@@ -278,14 +278,17 @@ target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
 
 # ============================
+# QtCustom thirdparty/md4c
+add_subdirectory(thirdparty/md4c)
+target_link_libraries(SolTranslator PRIVATE md4c)
+
+# ============================
 # QtCustom thirdparty/QtCustom/QtCustom3.h
 add_library(
         QtCustom
         STATIC
         thirdparty/QtCustom/SolMarkdownWriter.cpp
         thirdparty/QtCustom/SolMarkdownImporter.cpp
-        thirdparty/QtCustom/SolMarkdownImporter.h
-        thirdparty/QtCustom/md4c.h
 )
 add_library(QtCustom::QtCustom ALIAS QtCustom)
 

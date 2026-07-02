@@ -16,7 +16,7 @@
 #if QT_CONFIG(system_textmarkdownreader)
 #include <md4c.h>
 #else
-#include "md4c.h"
+#include "../md4c/md4c.h"
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -240,11 +240,12 @@ int SolMarkdownImporter::cbEnterBlock(int blockType, void* det)
     case MD_BLOCK_CODE:
     {
         MD_BLOCK_CODE_DETAIL* detail = static_cast<MD_BLOCK_CODE_DETAIL*>(det);
-        m_codeBlock                  = true;
-        m_blockCodeLanguage          = QLatin1StringView(detail->lang.text, int(detail->lang.size));
-        m_blockCodeFence             = detail->fence_char;
-        QString info                 = QLatin1StringView(detail->info.text, int(detail->info.size));
-        m_needsInsertBlock           = true;
+
+        m_codeBlock         = true;
+        m_blockCodeLanguage = QLatin1StringView(detail->lang.text, int(detail->lang.size));
+        m_blockCodeFence    = detail->fence_char;
+        QString info        = QLatin1StringView(detail->info.text, int(detail->info.size));
+        m_needsInsertBlock  = true;
         if (m_blockQuoteDepth)
         {
             qCDebug(lcMD, "CODE lang '%s' info '%s' fenced with '%c' inside QUOTE %d", qPrintable(m_blockCodeLanguage), qPrintable(info), m_blockCodeFence
@@ -548,8 +549,10 @@ int SolMarkdownImporter::cbEnterSpan(int spanType, void* det)
         break;
     }
     case MD_SPAN_CODE:
-        charFmt.setFont(m_monoFont);
-        charFmt.setFontFixedPitch(true);
+        //! 추가됨
+        charFmt.setProperty(QTextFormat::UserProperty + 1, true);
+
+        // charFmt.setFontFixedPitch(true);
         break;
     case MD_SPAN_DEL:
         charFmt.setFontStrikeOut(true);
@@ -779,10 +782,10 @@ void SolMarkdownImporter::insertBlock()
         blockFormat.setProperty(QTextFormat::BlockCodeLanguage, m_blockCodeLanguage);
         if (m_blockCodeFence)
         {
-            blockFormat.setNonBreakableLines(true);
+            // blockFormat.setNonBreakableLines(true);
             blockFormat.setProperty(QTextFormat::BlockCodeFence, QString(QLatin1Char(m_blockCodeFence)));
         }
-        charFormat.setFont(m_monoFont);
+        // charFormat.setFont(m_monoFont);
     }
     else
     {

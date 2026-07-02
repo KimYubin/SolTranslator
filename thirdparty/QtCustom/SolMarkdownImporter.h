@@ -18,7 +18,7 @@ class QTextCursor;
 class QTextDocument;
 class QTextTable;
 
-class Q_GUI_EXPORT SolMarkdownImporter
+class SolMarkdownImporter
 {
 public:
     enum Feature

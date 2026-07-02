@@ -2,6 +2,7 @@
 
 #include "ResultTextEdit.h"
 
+#include "QtCustom/SolMarkdownImporter.h"
 #include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolChrono.h"
@@ -141,6 +142,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     // Add monospace fonts
     const QStringList monoFontList = QStringList{"Cascadia Mono", "Consolas", "monospace"} + document()->defaultFont().families();
+    document()->setProperty("monoFontList", monoFontList);
     QString codeFontFamilies = " font-family: ";
     for (const QString& font : monoFontList)
     {
@@ -152,10 +154,8 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
     const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
-    const QString blockCodeFormat  // = "\n<pre style=\" " + codeStyle + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
-    = "\n```\n%1\n```\n";
-    const QString inlineCodeFormat // = "<code style= \" " + codeStyle + " \">"  "%1"  "</code>";
-     = "`%1`";
+    const QString blockCodeFormat  = "\n<pre style=\" " + codeStyle + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
+    const QString inlineCodeFormat = "<code style= \" " + codeStyle + " \">"  "%1"  "</code>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -164,7 +164,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         {
             // Change the link to HTML-style.
             QString modifiedCode = inList[idx].toHtmlEscaped();
-            // modifiedCode.replace(mdLinkPattern, codeLinkHtml);
+            modifiedCode.replace(mdLinkPattern, codeLinkHtml);
             modifiedCode = inCodeFormat.arg(modifiedCode);
 
             QString placeMarker = QString(inPlaceMarker).arg(idx);
@@ -185,17 +185,20 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     if (md.startsWith("- <code") || md.startsWith("* <code") || md.startsWith("+ <code"))
     {
-        // md.push_front("<br/>\n\n");
+        md.push_front("<br/>\n\n");
     }
-    document()->setMarkdown(md);
-    QFont monoFont(monoFontList);
+
+    // document()->setMarkdown(md);
+    SolMarkdownImporter(document(), QTextDocument::MarkdownDialectGitHub).import(md);
+
+    QFont monoFont;//(monoFontList);
     QTextCursor cursor(document());
-    for (auto textBlock = document()->begin(); textBlock.isValid(); textBlock = textBlock.next())
+    for (QTextBlock textBlock = document()->begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
         QTextBlockFormat blockFmt = textBlock.blockFormat();
         if (blockFmt.hasProperty(QTextFormat::BlockCodeLanguage))
         {
-            QTextCharFormat charFormat = textBlock.charFormat();
+            QTextCharFormat charFormat;// = textBlock.charFormat();
             charFormat.setFont(monoFont);
             blockFmt.setBackground(getCodeBackgroundColor());
             if (blockFmt.nonBreakableLines())
@@ -204,20 +207,18 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
             }
 
             cursor.setPosition(textBlock.position());
-            cursor.setPosition(textBlock.position()+ textBlock.length(), QTextCursor::KeepAnchor);
-            cursor.setCharFormat(charFormat);
+            cursor.setPosition(textBlock.position() + textBlock.length(), QTextCursor::KeepAnchor);
             cursor.setBlockFormat(blockFmt);
+            cursor.setBlockCharFormat(charFormat);
             continue;
         }
 
         for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
         {
-            solDebug << blockIt.fragment().text() << blockIt.fragment().charFormat().properties() ;
-
             QTextFragment frag = blockIt.fragment();
-            if (frag.charFormat().hasProperty(QTextFormat::BlockCodeLanguage))
+            if (frag.charFormat().hasProperty(QTextFormat::UserProperty + 1))
             {
-                QTextCharFormat charFormat = frag.charFormat();
+                QTextCharFormat charFormat;// = frag.charFormat();
                 charFormat.setBackground(getCodeBackgroundColor());
                 charFormat.setFont(monoFont);
 

@@ -293,8 +293,8 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
             QTextCursor cellCursor = curCell.firstCursorPosition();
             if (inGrid[rIdx][cIdx].fragments.empty())
             {
-                // In Qt markdown, empty cells may not render, so add whitespace.
-                cellCursor.insertText(" ");
+                // SolMarkdownImporter supports whitespace and empty cell rendering. Qt Markdown does not.
+                cellCursor.insertText("");
                 continue;
             }
 

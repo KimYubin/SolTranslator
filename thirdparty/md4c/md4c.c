@@ -4593,7 +4593,14 @@ md_process_table_row(MD_CTX* ctx, MD_BLOCKTYPE cell_type, OFF beg, OFF end,
     k = 0;
     for(i = 0; i < j-1  &&  k < col_count; i++) {
         if(pipe_offs[i] < pipe_offs[i+1]-1)
+        {
             MD_CHECK(md_process_table_cell(ctx, cell_type, align[k++], pipe_offs[i], pipe_offs[i+1]-1));
+        }
+        else if (i > 0 && pipe_offs[i] == pipe_offs[i + 1] - 1)
+        {
+            /* Empty cell */
+            MD_CHECK(md_process_table_cell(ctx, cell_type, align[k++], 0, 0));
+        }
     }
     /* Make sure we call enough table cells even if the current table contains
      * too few of them. */

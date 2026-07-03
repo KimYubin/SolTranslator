@@ -190,8 +190,7 @@ void SolMarkdownImporter::import(const QString& markdown)
     const auto defaultFont = doc->defaultFont();
 
     const QFontMetricsF fntMetricsF(defaultFont); // height + inter-line spacing
-    std::round(fntMetricsF.lineSpacing() * _paragraphMarginRate);
-    m_paragraphMargin = fntMetricsF.lineSpacing() * _paragraphMarginRate;
+    m_paragraphMargin = std::round(fntMetricsF.lineSpacing() * _paragraphMarginRate);
 
     doc->clear();
     if (defaultFont.pointSize() != -1)
@@ -440,6 +439,11 @@ int SolMarkdownImporter::cbLeaveBlock(int blockType, void* detail)
         break;
     case MD_BLOCK_TR:
     {
+        if (!_isUseTableCellMerge)
+        {
+            break;
+        }
+
         // https://github.com/mity/md4c/issues/29
         // MD4C doesn't tell us explicitly which cells are merged, so merge empty cells
         // with previous non-empty ones

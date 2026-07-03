@@ -49,7 +49,8 @@ public:
     SolMarkdownImporter(QTextDocument* doc, Features features);
     SolMarkdownImporter(QTextDocument* doc, QTextDocument::MarkdownFeatures features);
 
-    void setParagraphMarginRate(const double inParagraphMarginRate) { _paragraphMarginRate = inParagraphMarginRate; };
+    void setParagraphMarginRate(const double inParagraphMarginRate) { _paragraphMarginRate = inParagraphMarginRate; }
+    void setIsUseTableCellMerge(const bool inIsUse) { _isUseTableCellMerge = inIsUse; }
 
     void import(const QString& markdown);
 
@@ -87,8 +88,6 @@ private:
     int m_blockType        = 0;
     char m_blockCodeFence  = 0;
 
-    double _paragraphMarginRate = 0.6;
-
     Features m_features;
     QTextImageFormat m_imageFormat;
     QTextListFormat m_listFormat;
@@ -99,6 +98,9 @@ private:
     bool m_listItem         = false; // true from the beginning of LI to the end of the first P
     bool m_codeBlock        = false;
     bool m_imageSpan        = false;
+
+    bool _isUseTableCellMerge   = false;
+    double _paragraphMarginRate = 0.6; // Line spacing rate.
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SolMarkdownImporter::Features)

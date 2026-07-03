@@ -5,8 +5,8 @@
 #include "SolAsync.hpp"
 #include "SolChrono.h"
 #include "SolLog.h"
-#include "SolMarkdownWriter.h"
 #include "SolTextTable.h"
+#include "QtCustom/SolMarkdownWriter.h"
 #include "Types/SolGuard.h"
 
 #include <QRegularExpression>

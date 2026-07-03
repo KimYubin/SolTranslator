@@ -23,7 +23,8 @@ public:
         , _prev(_start)
     {}
 
-    template <typename Duration = std::chrono::milliseconds, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
+    using milli_floating = std::chrono::duration<double, std::milli>;
+    template <typename Duration = milli_floating, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
     auto lapTime()
     {
         time_point_hiRes cur = clockNow();
@@ -32,7 +33,7 @@ public:
         return res;
     }
 
-    template <typename Duration = std::chrono::milliseconds, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
+    template <typename Duration = milli_floating, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
     auto splitTime()
     {
         time_point_hiRes cur = clockNow();

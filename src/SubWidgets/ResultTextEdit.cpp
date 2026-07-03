@@ -42,7 +42,6 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     switch (inTextStyle)
     {
     case TextStyle::None:
-        break;
     case TextStyle::PlainText:
         setPlainText(inText);
         break;
@@ -56,7 +55,6 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
         break;
     default: ;
     }
-
 }
 
 void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)

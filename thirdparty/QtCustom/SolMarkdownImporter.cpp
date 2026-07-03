@@ -13,6 +13,7 @@
 #include <QTextDocumentFragment>
 #include <QTextList>
 #include <QTextTable>
+#include <qfontmetrics.h>
 #if QT_CONFIG(system_textmarkdownreader)
 #include <md4c.h>
 #else
@@ -175,9 +176,8 @@ static auto splitFrontMatter(QStringView md)
 void SolMarkdownImporter::import(const QString& markdown)
 {
     MD_PARSER callbacks = {
-        0
-      , // abi_version
-        unsigned(m_features)
+        0 // abi_version
+      , unsigned(m_features)
       , &CbEnterBlock
       , &CbLeaveBlock
       , &CbEnterSpan
@@ -188,7 +188,11 @@ void SolMarkdownImporter::import(const QString& markdown)
     };
     QTextDocument* doc     = m_cursor.document();
     const auto defaultFont = doc->defaultFont();
-    m_paragraphMargin      = defaultFont.pointSize() * 2 / 3;
+
+    const QFontMetricsF fntMetricsF(defaultFont); // height + inter-line spacing
+    std::round(fntMetricsF.lineSpacing() * _paragraphMarginRate);
+    m_paragraphMargin = fntMetricsF.lineSpacing() * _paragraphMarginRate;
+
     doc->clear();
     if (defaultFont.pointSize() != -1)
     {
@@ -244,7 +248,7 @@ int SolMarkdownImporter::cbEnterBlock(int blockType, void* det)
         m_codeBlock         = true;
         m_blockCodeLanguage = QLatin1StringView(detail->lang.text, int(detail->lang.size));
         m_blockCodeFence    = detail->fence_char;
-        QString info        = QLatin1StringView(detail->info.text, int(detail->info.size));
+        const QString info  = QLatin1StringView(detail->info.text, int(detail->info.size));
         m_needsInsertBlock  = true;
         if (m_blockQuoteDepth)
         {
@@ -281,14 +285,16 @@ int SolMarkdownImporter::cbEnterBlock(int blockType, void* det)
     break;
     case MD_BLOCK_LI:
     {
-        m_needsInsertBlock         = true;
-        m_listItem                 = true;
+        m_needsInsertBlock = true;
+        m_listItem         = true;
+
         MD_BLOCK_LI_DETAIL* detail = static_cast<MD_BLOCK_LI_DETAIL*>(det);
-        m_markerType               = detail->is_task
-                                         ? (detail->task_mark == ' '
-                                                ? QTextBlockFormat::MarkerType::Unchecked
-                                                : QTextBlockFormat::MarkerType::Checked)
-                                         : QTextBlockFormat::MarkerType::NoMarker;
+
+        m_markerType = detail->is_task
+                           ? (detail->task_mark == ' '
+                                  ? QTextBlockFormat::MarkerType::Unchecked
+                                  : QTextBlockFormat::MarkerType::Checked)
+                           : QTextBlockFormat::MarkerType::NoMarker;
         qCDebug(lcMD) << "LI";
     }
     break;
@@ -527,8 +533,9 @@ int SolMarkdownImporter::cbEnterSpan(int spanType, void* det)
     case MD_SPAN_A:
     {
         MD_SPAN_A_DETAIL* detail = static_cast<MD_SPAN_A_DETAIL*>(det);
-        QString url              = QString::fromUtf8(detail->href.text, int(detail->href.size));
-        QString title            = QString::fromUtf8(detail->title.text, int(detail->title.size));
+
+        const QString url   = QString::fromUtf8(detail->href.text, int(detail->href.size));
+        const QString title = QString::fromUtf8(detail->title.text, int(detail->title.size));
         charFmt.setAnchor(true);
         charFmt.setAnchorHref(url);
         if (!title.isEmpty())
@@ -541,9 +548,10 @@ int SolMarkdownImporter::cbEnterSpan(int spanType, void* det)
     break;
     case MD_SPAN_IMG:
     {
-        m_imageSpan                = true;
-        m_imageFormat              = QTextImageFormat();
         MD_SPAN_IMG_DETAIL* detail = static_cast<MD_SPAN_IMG_DETAIL*>(det);
+
+        m_imageSpan   = true;
+        m_imageFormat = QTextImageFormat();
         m_imageFormat.setName(QString::fromUtf8(detail->src.text, int(detail->src.size)));
         m_imageFormat.setProperty(QTextFormat::ImageTitle, QString::fromUtf8(detail->title.text, int(detail->title.size)));
         break;

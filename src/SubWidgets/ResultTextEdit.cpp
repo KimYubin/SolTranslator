@@ -57,32 +57,6 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     default: ;
     }
 
-    // 문단간 간격 조정.
-    const QFontMetricsF fntMetricsF(font());
-    const qreal lineHeight = fntMetricsF.lineSpacing();
-    const qreal parSpacing = lineHeight * 0.6; // 줄간격의 1.6배
-
-    QTextCursor blockCursor(document());
-    TextCursorEditBlockGuard cursorEditBlockGuard{blockCursor};
-
-    QTextBlock block = document()->firstBlock();
-    while (block.isValid() && block.next().isValid())
-    {
-        blockCursor.setPosition(block.position());
-        QTextBlockFormat blockFormat = blockCursor.blockFormat();
-
-        // 코드 블록은 간격 조정 안함.
-        if (blockFormat.background().color() == getCodeBackgroundColor()
-            && block.next().blockFormat().background().color() == getCodeBackgroundColor())
-        {
-            break;
-        }
-
-        blockFormat.setBottomMargin(parSpacing);
-        blockCursor.setBlockFormat(blockFormat);
-
-        block = block.next();
-    }
 }
 
 void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
@@ -142,7 +116,6 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
 
     // Add monospace fonts
     const QStringList monoFontList = QStringList{"Cascadia Mono", "Consolas", "monospace"} + document()->defaultFont().families();
-    document()->setProperty("monoFontList", monoFontList);
     QString codeFontFamilies = " font-family: ";
     for (const QString& font : monoFontList)
     {
@@ -153,9 +126,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     const QString codeStyle = getCodeBackgroundColorString() + codeFontFamilies ;
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
-    const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
-    const QString blockCodeFormat  = "\n<pre style=\" " + codeStyle + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
-    const QString inlineCodeFormat = "<code style= \" " + codeStyle + " \">"  "%1"  "</code>";
+    const QString codeLinkHtml = "<a href= \"\\2\"><code style= \"" + codeFontFamilies + " \" >\\1</code></a>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -179,6 +150,9 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         }
     };
 
+    const QString inlineCodeFormat = "<code style= \"" + codeStyle + "\">%1</code>";
+    const QString blockCodeFormat  = "\n<pre style=\"" + codeStyle + "white-space: pre-wrap; \">\n%1\n</pre>";
+
     // Restore 'Marker To Code' in reverse order of 'Code To Marker'.
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
     replaceMarkerToCode(codeBlockList, blockCodeFormat, blockPlaceMarker);
@@ -188,46 +162,8 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         md.push_front("<br/>\n\n");
     }
 
-    // document()->setMarkdown(md);
-    SolMarkdownImporter(document(), QTextDocument::MarkdownDialectGitHub).import(md);
-
-    QFont monoFont;//(monoFontList);
-    QTextCursor cursor(document());
-    for (QTextBlock textBlock = document()->begin(); textBlock.isValid(); textBlock = textBlock.next())
-    {
-        QTextBlockFormat blockFmt = textBlock.blockFormat();
-        if (blockFmt.hasProperty(QTextFormat::BlockCodeLanguage))
-        {
-            QTextCharFormat charFormat;// = textBlock.charFormat();
-            charFormat.setFont(monoFont);
-            blockFmt.setBackground(getCodeBackgroundColor());
-            if (blockFmt.nonBreakableLines())
-            {
-                blockFmt.setNonBreakableLines(false);
-            }
-
-            cursor.setPosition(textBlock.position());
-            cursor.setPosition(textBlock.position() + textBlock.length(), QTextCursor::KeepAnchor);
-            cursor.setBlockFormat(blockFmt);
-            cursor.setBlockCharFormat(charFormat);
-            continue;
-        }
-
-        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
-        {
-            QTextFragment frag = blockIt.fragment();
-            if (frag.charFormat().hasProperty(QTextFormat::UserProperty + 1))
-            {
-                QTextCharFormat charFormat;// = frag.charFormat();
-                charFormat.setBackground(getCodeBackgroundColor());
-                charFormat.setFont(monoFont);
-
-                cursor.setPosition(frag.position());
-                cursor.setPosition(frag.position()+ frag.length(), QTextCursor::KeepAnchor);
-                cursor.setCharFormat(charFormat);
-            }
-        }
-    }
+    SolMarkdownImporter mdImporter(document(), QTextDocument::MarkdownDialectGitHub);
+    mdImporter.import(md);
 }
 
 void ResultTextEdit::setCodeBackgroundColor(const QColor& inParam)

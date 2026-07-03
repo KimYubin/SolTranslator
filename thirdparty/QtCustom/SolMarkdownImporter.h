@@ -49,6 +49,8 @@ public:
     SolMarkdownImporter(QTextDocument* doc, Features features);
     SolMarkdownImporter(QTextDocument* doc, QTextDocument::MarkdownFeatures features);
 
+    void setParagraphMarginRate(const double inParagraphMarginRate) { _paragraphMarginRate = inParagraphMarginRate; };
+
     void import(const QString& markdown);
 
 public:
@@ -84,6 +86,8 @@ private:
     int m_paragraphMargin  = 0;
     int m_blockType        = 0;
     char m_blockCodeFence  = 0;
+
+    double _paragraphMarginRate = 0.6;
 
     Features m_features;
     QTextImageFormat m_imageFormat;

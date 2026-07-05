@@ -52,7 +52,7 @@ public:
     void setParagraphMarginRate(const double inParagraphMarginRate) { _paragraphMarginRate = inParagraphMarginRate; }
     void setIsUseTableCellMerge(const bool inIsUse) { _isUseTableCellMerge = inIsUse; }
 
-    void import(const QString& markdown);
+    void importMarkdown(const QString& markdown);
 
 public:
     // MD4C callbacks

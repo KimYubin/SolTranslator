@@ -17,6 +17,9 @@ class SolMarkdownWriter
 {
 public:
     SolMarkdownWriter(QTextStream& inStream, QTextDocument::MarkdownFeatures inFeatures);
+
+    void setColumnLimit(const int inColumLimit) { _columnLimit = inColumLimit; }
+
     bool writeAll(const QTextDocument* inDoc);
     void writeTable(const QAbstractItemModel* inTableModel);
 
@@ -34,6 +37,8 @@ private:
     void setLinePrefixForBlockQuote(int level);
     bool isUseTableCellWidth() const;
 
+    int columnLimit() const;
+
 private:
     QTextStream& m_stream;
     QTextDocument::MarkdownFeatures m_features;
@@ -46,6 +51,8 @@ private:
     bool m_linePrefixWritten    = false;
     bool m_indentedCodeBlock    = false;
     bool m_fencedCodeBlock      = false;
+
+    int _columnLimit = std::numeric_limits<int>::max();
 };
 
 #endif //SOLTRANSLATOR_SOLMARKDOWNWRITER_H

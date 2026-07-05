@@ -173,7 +173,7 @@ static auto splitFrontMatter(QStringView md)
     return R{frontMatter, md.sliced(endMarkerPos + marker.size())};
 }
 
-void SolMarkdownImporter::import(const QString& markdown)
+void SolMarkdownImporter::importMarkdown(const QString& markdown)
 {
     MD_PARSER callbacks = {
         0 // abi_version

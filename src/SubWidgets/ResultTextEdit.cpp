@@ -87,7 +87,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
             QRegularExpressionMatch match = it.next();
 
             replaceStr += md.mid(lastPos, match.capturedStart() - lastPos);
-            replaceStr += QString(inKeyMarker).arg(resList.size());
+            replaceStr += inKeyMarker.arg(resList.size());
 
             // 백틱 내부만 수집
             resList.append(match.captured(1));
@@ -161,21 +161,17 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     }
 
     SolMarkdownImporter mdImporter(document(), QTextDocument::MarkdownDialectGitHub);
-    mdImporter.import(md);
+    mdImporter.importMarkdown(md);
 }
 
 void ResultTextEdit::setCodeBackgroundColor(const QColor& inParam)
 {
     _codeBackgroundColor = inParam;
-
     _codeBackgroundColorString
-            = "background-color: "
-            + QString{"rgba(%1, %2, %3, %4)"}
-              .arg(_codeBackgroundColor.red())
-              .arg(_codeBackgroundColor.green())
-              .arg(_codeBackgroundColor.blue())
-              .arg(_codeBackgroundColor.alpha())
-            + "; ";
+    = QString{"background-color: rgba(%1, %2, %3, %4);"}.arg(QString::number(_codeBackgroundColor.red())
+                                                           , QString::number(_codeBackgroundColor.green())
+                                                           , QString::number(_codeBackgroundColor.blue())
+                                                           , QString::number(_codeBackgroundColor.alpha()));
 }
 
 QString ResultTextEdit::getCodeBackgroundColorString()

@@ -2,13 +2,19 @@
 
 #include "SolTextTable.h"
 
+#include "SolLog.h"
+
 #include <QTextTableCell>
 #include <QUuid>
 
+namespace
+{
+const QString newLineMarker = "__NEWLINE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "__";
+const QString newLineBrTag  = R"(<br/>)";
+} // anonymous namespace
+
 namespace Sol
 {
-const QString newLineMarker = "__NEWLINE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
-
 Grid makeGrid(const int inRow, const int inCol, CellData inCellData)
 {
     return Grid(inRow, GridRow(inCol, std::move(inCellData)));
@@ -145,12 +151,23 @@ Grid convertTableToGrid(QTextTable* inTable)
     {
         return {};
     }
+    const int tableRowCount = inTable->rows();
+    const int tableColCount = inTable->columns();
 
-    Grid resTable = makeGrid(inTable->rows(), inTable->columns(), CellData(inTable));
-    for (int rIdx = 0; rIdx < inTable->rows(); ++rIdx)
+    Grid resTable = makeGrid(tableRowCount, tableColCount, CellData(inTable));
+
+    for (int rIdx = 0; rIdx < tableRowCount; ++rIdx)
     {
-        for (int cIdx = 0; cIdx < inTable->columns(); ++cIdx)
+        for (int cIdx = 0; cIdx < tableColCount; ++cIdx)
         {
+            // Merged cells in CellData contain duplicate data,
+            // and after adding/removing columns and rows, there is a possibility of an error
+            QTextTableCell curCell = inTable->cellAt(rIdx, cIdx);
+            if (curCell.rowSpan() > 1 || curCell.columnSpan() > 1)
+            {
+                inTable->splitCell(rIdx, cIdx, 1, 1);
+            }
+
             resTable[rIdx][cIdx].row = rIdx;
             resTable[rIdx][cIdx].col = cIdx;
         }
@@ -168,8 +185,8 @@ Grid convertTableToGrid(QTextTable* inTable)
 
             std::vector<Grid> cellGridList;
 
-            QTextTableCell cell = curCellData.table->cellAt(curCellData.row, curCellData.col);
-            for (QTextFrame::iterator cellIt = cell.begin(); !cellIt.atEnd(); ++cellIt)
+            QTextTableCell curCell = curCellData.table->cellAt(curCellData.row, curCellData.col);
+            for (QTextFrame::iterator cellIt = curCell.begin(); !cellIt.atEnd(); ++cellIt)
             {
                 if (QTextTable* innerTable = qobject_cast<QTextTable*>(cellIt.currentFrame()))
                 {
@@ -188,17 +205,16 @@ Grid convertTableToGrid(QTextTable* inTable)
                 std::vector<TextFragmentData> newFragments;
                 for (QTextBlock::iterator blockIt = block.begin(); !blockIt.atEnd(); ++blockIt)
                 {
-                    QTextFragment frags = blockIt.fragment();
+                    QTextFragment frag = blockIt.fragment();
 
-                    QString fragStr = frags.text();
-                    QString newLineMarker = R"(<br/>)";
-                    fragStr.replace("\r\n", newLineMarker);
-                    fragStr.replace(QChar::LineFeed, newLineMarker);
-                    fragStr.replace(QChar::CarriageReturn, newLineMarker);
-                    fragStr.replace(QChar::LineSeparator, newLineMarker);
-                    fragStr.replace(QChar::ParagraphSeparator, newLineMarker);
+                    QString fragText = frag.text();
+                    fragText.replace("\r\n", newLineMarker);
+                    fragText.replace(QChar::LineFeed, newLineMarker);
+                    fragText.replace(QChar::CarriageReturn, newLineMarker);
+                    fragText.replace(QChar::LineSeparator, newLineMarker);
+                    fragText.replace(QChar::ParagraphSeparator, newLineMarker);
 
-                    newFragments.emplace_back(std::move(fragStr), frags.charFormat());
+                    newFragments.emplace_back(std::move(fragText), frag.charFormat());
                 }
 
                 if (newFragments.empty())
@@ -273,43 +289,34 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
         return;
     }
 
-    const int tableRowCount = inTable->rows();
-    const int tableColCount = inTable->columns();
-
     const int gridRows = inGrid.size();
     const int gridCols = inGrid[0].size();
 
-    if (tableColCount < gridCols)
-    {
-        inTable->appendColumns(gridCols - tableColCount);
-    }
-    inTable->appendRows(gridRows);
+    inTable->resize(gridRows, gridCols);
 
     for (int rIdx = 0; rIdx < gridRows; ++rIdx)
     {
         for (int cIdx = 0; cIdx < gridCols; ++cIdx)
         {
-            QTextTableCell curCell = inTable->cellAt(tableRowCount + rIdx, cIdx);
+            QTextTableCell curCell = inTable->cellAt(rIdx, cIdx);
             QTextCursor cellCursor = curCell.firstCursorPosition();
-            if (inGrid[rIdx][cIdx].fragments.empty())
+            cellCursor.setPosition(curCell.lastPosition(), QTextCursor::KeepAnchor);
+
+            const std::vector<TextFragmentData>& curFragments = inGrid[rIdx][cIdx].fragments;
+            if (curFragments.empty())
             {
                 // SolMarkdownImporter supports whitespace and empty cell rendering. Qt Markdown does not.
                 cellCursor.insertText("");
                 continue;
             }
 
-            for (const auto& [frgText, fragCharFormat] : inGrid[rIdx][cIdx].fragments)
+            for (const auto& [frgText, fragCharFormat] : curFragments)
             {
                 cellCursor.insertText(frgText, fragCharFormat);
             }
         }
     }
 
-    inTable->removeRows(0, tableRowCount);
-    if (tableColCount > gridCols)
-    {
-        inTable->removeColumns(gridCols, tableColCount - gridCols);
-    }
 }
 
 void flattenToSingleTable(QTextTable* inTable)
@@ -322,12 +329,13 @@ void flattenToSingleTable(QTextTable* inTable)
     //  Convert table even without nested tables.
     //  To fix issues such as line breaks within cells and block separation.
     const Grid grid = convertTableToGrid(inTable);
+
     gridToTable(grid, inTable);
 
 }
 
 void replaceNewLine(QString& inString)
 {
-    inString.replace(newLineMarker, R"(<br/>)");
+    inString.replace(newLineMarker, newLineBrTag);
 }
 } // namespace Sol 

@@ -14,6 +14,7 @@
 #include "qloggingcategory.h"
 #include <QtCore/QRegularExpression>
 #include "qabstractitemmodel.h"
+#include "../../src/Utils/SolLog.h"
 
 #include <QAbstractItemModel>
 
@@ -336,6 +337,11 @@ bool SolMarkdownWriter::isUseTableCellWidth() const
     return false;
 }
 
+int SolMarkdownWriter::columnLimit() const
+{
+    return _columnLimit;
+}
+
 namespace
 {
 
@@ -529,12 +535,6 @@ QString createLinkTitle(const QString& inTitle)
     return result;
 }
 
-int columnLimit()
-{
-    constexpr static int ColumnLimit = std::numeric_limits<int>::max();
-    return ColumnLimit;
-}
-
 } // anonymous namespace
 
 int SolMarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool inIgnoreFormat, bool inIgnoreEmpty)
@@ -542,6 +542,10 @@ int SolMarkdownWriter::writeBlock(const QTextBlock& inBlock, bool inWrap, bool i
     if (inBlock.text().isEmpty() && inIgnoreEmpty)
     {
         return 0;
+    }
+    if (columnLimit() <= 0 || columnLimit() == std::numeric_limits<int>::max())
+    {
+        inWrap = false;
     }
 
     QTextBlockFormat blockFmt     = inBlock.blockFormat();

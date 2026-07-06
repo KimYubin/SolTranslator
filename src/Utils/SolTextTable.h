@@ -14,6 +14,18 @@ struct TextFragmentData
     QTextCharFormat charFormat;
 };
 
+struct CellPos
+{
+    int row = -1;
+    int col = -1;
+};
+
+struct GridSize
+{
+    int rows = 0;
+    int cols = 0;
+};
+
 struct CellData
 {
     CellData() = default;
@@ -76,13 +88,23 @@ namespace Sol
 {
 Grid makeGrid(const int inRow, const int inCol, CellData inCellData);
 
-void expendCol(Grid& inTable, const int inColPos, const int inSize);
+/**
+ * inColPos부터 inSize 만큼 범위 내에 빈 셀을 삽입합니다.
+ * 범위 내에 빈셀로만 이루어진 column이 있다면 그만큼 덜 삽입합니다.
+ * inColPos가 inGrid 범위를 밖이라면 자동으로 확장합니다.
+ *
+ * @return 실제로 삽입한 column의 개수.
+ */
+int insertCol(Grid& inGrid, const int inColPos, const int inSize);
 
-void expendRow(Grid& inTable, const int inRowPos, const int inSize);
+int insertRow(Grid& inGrid, const int inRowPos, const int inSize);
 
-void expandGrid(Grid& inTable, const int inRowPos, const int inColPos, const int inRowSize, const int inColSize);
-
-std::tuple<int, int> appendGrid(Grid& inOrigin, const Grid& inNested, const int inRowPos, const int inColPos);
+/**
+ * \a inOrigin 의 inRowPos, inColPos 셀에 inNested를 삽입합니다.
+ *
+ * @return 
+ */
+std::tuple<int, int> insertGrid(Grid& inOrigin, const int inRowPos, const int inColPos, Grid inNested);
 
 /**
  * 중첩 테이블 및 다중 블록 셀을 단일 Grid 데이터로 변환합니다.

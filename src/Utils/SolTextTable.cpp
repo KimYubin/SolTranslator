@@ -20,123 +20,113 @@ Grid makeGrid(const int inRow, const int inCol, CellData inCellData)
     return Grid(inRow, GridRow(inCol, std::move(inCellData)));
 }
 
-void expendCol(Grid& inTable, const int inColPos, const int inSize)
+int insertCol(Grid& inGrid, const int inColPos, const int inSize)
 {
-    const int originColSize = inTable.front().size();
+    if (inSize <= 0 || inGrid.empty())
+    {
+        return 0;
+    }
+
+    const int originColSize = inGrid.front().size();
 
     if (originColSize <= inColPos)
     {
         const int emptyColSize = (inColPos + inSize) - originColSize;
         GridRow emptyCol(emptyColSize, CellData());
-        for (GridRow& curRow : inTable)
+        for (GridRow& curRow : inGrid)
         {
             curRow.append_range(emptyCol);
         }
-        return;
+        return emptyColSize;
     }
 
-    int minEmptyCol = inSize;
-    for (GridRow& curRow : inTable)
+    int minEmptyColCount = std::min<int>(inSize, originColSize - inColPos);
+    for (GridRow& curRow : inGrid)
     {
-        const int colMax = std::min<int>(curRow.size(), inColPos + minEmptyCol);
+        const int colMax = std::min<int>(curRow.size(), inColPos + minEmptyColCount);
         for (int cIdx = inColPos; cIdx < colMax; ++cIdx)
         {
             if (!curRow[cIdx].isEmpty)
             {
-                minEmptyCol = std::min(minEmptyCol, cIdx - inColPos);
+                minEmptyColCount = std::min(minEmptyColCount, cIdx - inColPos);
                 break;
             }
         }
     }
 
-    GridRow emptyCol(inSize - minEmptyCol, CellData());
-    for (GridRow& row : inTable)
+    const int needColSize = inSize - minEmptyColCount;
+    GridRow emptyCol(needColSize, CellData());
+    for (GridRow& row : inGrid)
     {
-        row.insert_range(row.begin() + inColPos + minEmptyCol, emptyCol);
+        row.insert_range(row.begin() + inColPos + minEmptyColCount, emptyCol);
     }
+    return needColSize;
 }
 
-void expendRow(Grid& inTable, const int inRowPos, const int inSize)
+int insertRow(Grid& inGrid, const int inRowPos, const int inSize)
 {
-    const int originRowSize = inTable.size();
-    const int originColSize = inTable.front().size();
+    if (inSize <= 0)
+    {
+        return 0;
+    }
+
+    const int originRowSize = inGrid.size();
+    const int originColSize = inGrid.empty() ? 0 : inGrid.front().size();
 
     const GridRow emptyRow(originColSize, CellData());
 
     if (originRowSize <= inRowPos)
     {
         const int emptyRowSize = (inRowPos + inSize) - originRowSize;
-        inTable.append_range(Grid(emptyRowSize, emptyRow));
-        return;
+        inGrid.append_range(Grid(emptyRowSize, emptyRow));
+        return emptyRowSize;
     }
 
-    int minEmptyRow   = inSize;
-    const int maxRows = std::min(originRowSize, inRowPos + inSize);
+    int minEmptyRowCount = std::min<int>(inSize, originRowSize - inRowPos);
+    const int maxRows    = std::min(originRowSize, inRowPos + inSize);
     for (int rIdx = inRowPos; rIdx < maxRows; ++rIdx)
     {
-        const GridRow& row = inTable[rIdx];
-        for (int cIdx = 0; cIdx < row.size(); ++cIdx)
+        const GridRow& row = inGrid[rIdx];
+        if (std::ranges::contains(row, false, &CellData::isEmpty))
         {
-            if (!row[cIdx].isEmpty)
-            {
-                minEmptyRow = std::min(minEmptyRow, rIdx - inRowPos);
-                break;
-            }
-        }
-        if (minEmptyRow != inSize)
-        {
+            minEmptyRowCount = std::min(minEmptyRowCount, rIdx - inRowPos);
             break;
         }
     }
 
-    inTable.insert_range(inTable.begin() + inRowPos, Grid(inSize - minEmptyRow, emptyRow));
+    const int needRowSize = inSize - minEmptyRowCount;
+    inGrid.insert_range(inGrid.begin() + inRowPos, Grid(needRowSize, emptyRow));
+
+    return needRowSize;
 }
 
-void expandGrid(Grid& inTable
-              , const int inRowPos
-              , const int inColPos
-              , const int inRowSize
-              , const int inColSize)
-{
-    // 아래 먼저 밀기
-    if (inRowSize > 1)
-    {
-        expendRow(inTable, inRowPos, inRowSize - 1);
-    }
-
-    if (inColSize > 1)
-    {
-        expendCol(inTable, inColPos, inColSize - 1);
-    }
-}
-
-std::tuple<int, int> appendGrid(Grid& inOrigin
-                              , const Grid& inNested
+std::tuple<int, int> insertGrid(Grid& inOrigin
                               , const int inRowPos
-                              , const int inColPos)
+                              , const int inColPos
+                              , Grid inNested)
 {
     if (inNested.empty() || inNested.front().empty())
     {
         return {0, 0};
     }
 
-    const int targetRows = inRowPos + 1;
-    const int targetCols = inColPos + 1;
     const int nestedRows = inNested.size();
     const int nestedCols = inNested.front().size();
 
-    expandGrid(inOrigin, targetRows, targetCols, nestedRows, nestedCols);
+    // Push Rows first.
+    const int addedRows = insertRow(inOrigin, inRowPos + 1, nestedRows - 1);
+    const int addedCols = insertCol(inOrigin, inColPos + 1, nestedCols - 1);
 
     for (int rowIdx = 0; rowIdx < nestedRows; ++rowIdx)
     {
         for (int colIdx = 0; colIdx < nestedCols; ++colIdx)
         {
-            inOrigin[inRowPos + rowIdx][inColPos + colIdx]         = inNested[rowIdx][colIdx];
+            inOrigin[inRowPos + rowIdx][inColPos + colIdx] = std::move(inNested[rowIdx][colIdx]);
             inOrigin[inRowPos + rowIdx][inColPos + colIdx].isEmpty = true;
         }
     }
 
-    return {nestedRows, nestedCols};
+    return {addedRows, addedCols};
 }
 
 /**
@@ -270,7 +260,7 @@ Grid convertTableToGrid(QTextTable* inTable)
                 continue;
             }
 
-            auto [exRow, exCol] = appendGrid(resTable, NewCellGrid, rIdx, cIdx);
+            auto [exRow, exCol] = insertGrid(resTable, rIdx, cIdx, std::move(NewCellGrid));
             cIdx                += std::max((exCol - 1), 0);
         }
     }

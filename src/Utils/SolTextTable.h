@@ -14,25 +14,9 @@ struct TextFragmentData
     QTextCharFormat charFormat;
 };
 
-struct CellPos
-{
-    int row = -1;
-    int col = -1;
-};
-
-struct GridSize
-{
-    int rows = 0;
-    int cols = 0;
-};
-
 struct CellData
 {
     CellData() = default;
-
-    explicit CellData(const bool inIsEmpty)
-        : isEmpty(inIsEmpty)
-    {}
 
     explicit CellData(QTextTable* inTable)
         : isEmpty(false)
@@ -80,7 +64,9 @@ inline QDebug operator<<(QDebug debug, const Grid& inGrid)
     }
 
     QDebugStateSaver saver(debug);
-    debug.nospace() << res;
+    debug.nospace();
+    debug.noquote() << "\n" << res;
+
     return debug;
 }
 

@@ -48,8 +48,8 @@ namespace Sol
 {
 QString textDocumentToMarkdown(QTextDocument& inDoc)
 {
-    fixListItem(inDoc);
     fixBoldLastSpace(inDoc);
+    fixListItem(inDoc);
     fixTable(inDoc);
 
     QString markdownStr = toSolMarkdown(inDoc);
@@ -85,23 +85,41 @@ void asyncHtmlToMarkdown(QString inHtml
 
 namespace
 {
+// Recreate the modified iterator after the update.
+void recreateBlockIterator(const QTextDocument& inDoc
+                         , QTextBlock& inTextBlock
+                         , QTextBlock::iterator& inBlockIt
+                         , const int inFragPos)
+{
+    inTextBlock = inDoc.findBlock(inFragPos);
+
+    for (inBlockIt = inTextBlock.begin(); !inBlockIt.atEnd(); ++inBlockIt)
+    {
+        QTextFragment frag = inBlockIt.fragment();
+        if (frag.contains(inFragPos))
+        {
+            break;
+        }
+    }
+}
+
 void fixListItem(QTextDocument& inDoc)
 {
-    QTextCursor fragCursor(&inDoc);
-    TextCursorEditBlockGuard cursorEditBlockGuard{fragCursor};
+    QTextCursor textCursor(&inDoc);
+    TextCursorEditBlockGuard cursorEditBlockGuard{textCursor};
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
-        QTextList* txtList = QTextCursor(textBlock).currentList();
+        const QTextList* txtList = QTextCursor(textBlock).currentList();
         if (!txtList)
         {
             continue;
         }
 
         // Fix hypertext link error.
-        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
         {
-            QTextFragment fragment = itemIt.fragment();
+            QTextFragment fragment = blockIt.fragment();
             if (!fragment.isValid())
             {
                 continue;
@@ -119,16 +137,17 @@ void fixListItem(QTextDocument& inDoc)
             const int fragStart = fragment.position();
             const int frageEnd  = fragment.position() + fragment.length();
 
-            fragCursor.setPosition(fragStart);
-            fragCursor.setPosition(frageEnd, QTextCursor::KeepAnchor);
+            textCursor.setPosition(fragStart);
+            textCursor.setPosition(frageEnd, QTextCursor::KeepAnchor);
+            textCursor.mergeCharFormat(fragFmt);
 
-            fragCursor.mergeCharFormat(fragFmt);
+            recreateBlockIterator(inDoc, textBlock, blockIt, fragStart);
         }
 
         // Merge the fragments that have the same Href.
-        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
         {
-            QTextFragment fragment = itemIt.fragment();
+            QTextFragment fragment = blockIt.fragment();
             if (!fragment.isValid())
             {
                 continue;
@@ -147,7 +166,7 @@ void fixListItem(QTextDocument& inDoc)
             const QString firstHref = firstFragFmt.anchorHref();
 
             // Track fragments with the same Href.
-            QTextBlock::iterator nextIt = itemIt;
+            QTextBlock::iterator nextIt = blockIt;
             ++nextIt;
             QTextFragment lastFrag = nextIt.fragment();
             while (!nextIt.atEnd())
@@ -188,22 +207,11 @@ void fixListItem(QTextDocument& inDoc)
 
             // Connect the separated links.
             // The front link format is broken, so Apply the last fragment format.
-            fragCursor.setPosition(frgStart);
-            fragCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
-            fragCursor.insertText(mergeLinkText, lastFrag.charFormat());
+            textCursor.setPosition(frgStart);
+            textCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
+            textCursor.insertText(mergeLinkText, lastFrag.charFormat());
 
-            // Recreate the modified iterator after the update.
-            itemIt = textBlock.begin();
-            while (!itemIt.atEnd())
-            {
-                QTextFragment frg = itemIt.fragment();
-                if (frg.isValid() && frg.position() >= frgStart)
-                {
-                    break;
-                }
-
-                ++itemIt;
-            }
+            recreateBlockIterator(inDoc, textBlock, blockIt, frgStart);
         }
     }
 }
@@ -229,7 +237,6 @@ void fixBoldLastSpace(QTextDocument& inDoc)
                 continue;
             }
 
-            // Check if the last character is a space.
             const QString fragText = fragment.text();
             if (fragText.isEmpty() || (!fragText.back().isSpace()))
             {
@@ -252,28 +259,18 @@ void fixBoldLastSpace(QTextDocument& inDoc)
                 continue;
             }
 
-            const int tailSpaceStart = fragment.position() + tailSpaceStartIdx;
-            const int tailSpaceEnd   = fragment.position() + fragText.size();
-
-            textCursor.setPosition(tailSpaceStart);
-            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
+            const int curFragPos     = fragment.position();
+            const int tailSpaceStart = curFragPos + tailSpaceStartIdx;
+            const int tailSpaceEnd   = curFragPos + fragText.size();
 
             QTextCharFormat normalFmt = charFmt;
             normalFmt.setFontWeight(QFont::Normal);
 
+            textCursor.setPosition(tailSpaceStart);
+            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
             textCursor.mergeCharFormat(normalFmt);
 
-            // Recreate the modified iterator after the update.
-            const int curBlockPos = textBlock.position();
-            for (textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
-            {
-                if (textBlock.position() >= curBlockPos)
-                {
-                    break;
-                }
-            }
-            // for renew textBlock
-            break;
+            recreateBlockIterator(inDoc, textBlock, blockIt, curFragPos);
         }
     }
 }

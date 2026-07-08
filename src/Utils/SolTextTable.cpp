@@ -2,6 +2,7 @@
 
 #include "SolTextTable.h"
 
+#include "SolDocument.h"
 #include "SolLog.h"
 
 #include <QTextTableCell>
@@ -279,6 +280,9 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
         return;
     }
 
+    QTextCursor textCursor(inTable);
+    TextCursorEditBlockGuard cursorEditBlockGuard{textCursor};
+
     const int gridRows = inGrid.size();
     const int gridCols = inGrid[0].size();
 
@@ -289,20 +293,20 @@ void gridToTable(const Grid& inGrid, QTextTable* inTable)
         for (int cIdx = 0; cIdx < gridCols; ++cIdx)
         {
             QTextTableCell curCell = inTable->cellAt(rIdx, cIdx);
-            QTextCursor cellCursor = curCell.firstCursorPosition();
-            cellCursor.setPosition(curCell.lastPosition(), QTextCursor::KeepAnchor);
+            textCursor.setPosition(curCell.firstPosition());
+            textCursor.setPosition(curCell.lastPosition(), QTextCursor::KeepAnchor);
 
             const std::vector<TextFragmentData>& curFragments = inGrid[rIdx][cIdx].fragments;
             if (curFragments.empty())
             {
                 // SolMarkdownImporter supports whitespace and empty cell rendering. Qt Markdown does not.
-                cellCursor.insertText("");
+                textCursor.insertText("");
                 continue;
             }
 
             for (const auto& [frgText, fragCharFormat] : curFragments)
             {
-                cellCursor.insertText(frgText, fragCharFormat);
+                textCursor.insertText(frgText, fragCharFormat);
             }
         }
     }
@@ -328,4 +332,4 @@ void replaceNewLine(QString& inString)
 {
     inString.replace(newLineMarker, newLineBrTag);
 }
-} // namespace Sol 
+} // namespace Sol

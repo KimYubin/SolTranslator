@@ -160,6 +160,8 @@ qt_add_executable(
 
         src/Utils/EnumUtils.hpp
         src/Utils/SolAsync.hpp
+        src/Utils/SolChrono.cpp
+        src/Utils/SolChrono.h
         src/Utils/SolDocument.cpp
         src/Utils/SolDocument.h
         src/Utils/SolI18n.cpp
@@ -172,6 +174,8 @@ qt_add_executable(
         src/Utils/SolPath.h
         src/Utils/SolSingleApplication.cpp
         src/Utils/SolSingleApplication.h
+        src/Utils/SolTextTable.cpp
+        src/Utils/SolTextTable.h
         src/Utils/SolUtilibrary.cpp
         src/Utils/SolUtilibrary.h
         src/Utils/UniqueQObjectPtr.hpp
@@ -272,6 +276,26 @@ endif ()
 
 target_link_libraries(SolTranslator PRIVATE QHotkey::QHotkey)
 
+
+# ============================
+# QtCustom thirdparty/md4c
+add_subdirectory(thirdparty/md4c)
+target_link_libraries(SolTranslator PRIVATE md4c)
+
+# ============================
+# QtCustom thirdparty/QtCustom/QtCustom3.h
+add_library(
+        QtCustom
+        STATIC
+        thirdparty/QtCustom/SolMarkdownWriter.cpp
+        thirdparty/QtCustom/SolMarkdownImporter.cpp
+)
+add_library(QtCustom::QtCustom ALIAS QtCustom)
+
+target_include_directories(QtCustom PUBLIC thirdparty/QtCustom)
+target_link_libraries(QtCustom PUBLIC Qt6::Core Qt6::Gui)
+
+target_link_libraries(SolTranslator PRIVATE QtCustom::QtCustom)
 
 # ============================
 # qtkeychain thirdparty/qtkeychain

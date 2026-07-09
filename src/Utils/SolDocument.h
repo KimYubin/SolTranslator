@@ -3,8 +3,10 @@
 #ifndef SOLTRANSLATOR_SOLDOCUMENT_H
 #define SOLTRANSLATOR_SOLDOCUMENT_H
 
+#include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
 
+class QTextCursor;
 class QObject;
 class QTextDocument;
 class QString;
@@ -16,7 +18,7 @@ namespace Sol
  * Convert HTML string to Markdown.
  * Correct any distortion that occurs during the conversion.
  */
-QString htmlToMarkdown(QTextDocument& inDoc);
+QString textDocumentToMarkdown(QTextDocument& inDoc);
 
 /**
  * Convert HTML string to Markdown.
@@ -39,6 +41,14 @@ void asyncHtmlToMarkdown(QString inHtml
 
 
 } // namespace Sol
+
+
+class TextCursorEditBlockGuard : public SolGeneralGuard
+{
+public:
+    [[nodiscard]]
+    explicit TextCursorEditBlockGuard(QTextCursor& inCursor);
+};
 
 
 #endif //SOLTRANSLATOR_SOLDOCUMENT_H

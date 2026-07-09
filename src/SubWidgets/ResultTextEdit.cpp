@@ -2,7 +2,11 @@
 
 #include "ResultTextEdit.h"
 
+#include "QtCustom/SolMarkdownImporter.h"
+#include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
+#include "Utils/SolChrono.h"
+#include "Utils/SolDocument.h"
 #include "Utils/SolLog.h"
 
 #include <QRegularExpression>
@@ -38,7 +42,6 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     switch (inTextStyle)
     {
     case TextStyle::None:
-        break;
     case TextStyle::PlainText:
         setPlainText(inText);
         break;
@@ -51,31 +54,6 @@ void ResultTextEdit::setFormattingText(const QString& inText, const TextStyle in
     case TextStyle::Size:
         break;
     default: ;
-    }
-
-    // 문단간 간격 조정.
-    const QFontMetricsF fntMetricsF(font());
-    const qreal lineHeight = fntMetricsF.lineSpacing();
-    const qreal parSpacing = lineHeight * 0.6; // 줄간격의 1.6배
-
-    QTextBlock block = document()->firstBlock();
-
-    while (block.isValid() && block.next().isValid())
-    {
-        QTextCursor blockCursor(block);
-        QTextBlockFormat blockFormat = blockCursor.blockFormat();
-
-        // 코드 블록은 간격 조정 안함.
-        if (blockFormat.background().color() == getCodeBackgroundColor()
-            && block.next().blockFormat().background().color() == getCodeBackgroundColor())
-        {
-            break;
-        }
-
-        blockFormat.setBottomMargin(parSpacing);
-        blockCursor.setBlockFormat(blockFormat);
-
-        block = block.next();
     }
 }
 
@@ -109,7 +87,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
             QRegularExpressionMatch match = it.next();
 
             replaceStr += md.mid(lastPos, match.capturedStart() - lastPos);
-            replaceStr += QString(inKeyMarker).arg(resList.size());
+            replaceStr += inKeyMarker.arg(resList.size());
 
             // 백틱 내부만 수집
             resList.append(match.captured(1));
@@ -146,9 +124,7 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
     const QString codeStyle = getCodeBackgroundColorString() + codeFontFamilies ;
 
     static const QRegularExpression mdLinkPattern(R"(\[([^\]]+)\]\(([^)]+)\))");
-    const QString codeLinkHtml     = "<a href= \""   "\\2"   "\"><code style= \"" + codeFontFamilies + " \" >"   "\\1"   "</code></a>";
-    const QString blockCodeFormat  = "\n<pre style=\" " + codeStyle + " white-space: pre-wrap; \">\n"  "%1"  "</pre>";
-    const QString inlineCodeFormat = "<code style= \" " + codeStyle + " \">"  "%1"  "</code>";
+    const QString codeLinkHtml = "<a href= \"\\2\"><code style= \"" + codeFontFamilies + " \" >\\1</code></a>";
 
     auto replaceMarkerToCode = [&codeLinkHtml, &md](const QStringList& inList, const QString& inCodeFormat, const QString& inPlaceMarker)
     {
@@ -172,24 +148,30 @@ void ResultTextEdit::setAdjustMarkdown(const QString& inMarkdownStr)
         }
     };
 
+    const QString inlineCodeFormat = "<code style= \"" + codeStyle + "\">%1</code>";
+    const QString blockCodeFormat  = "\n<pre style=\"" + codeStyle + "white-space: pre-wrap; \">\n%1\n</pre>";
+
     // Restore 'Marker To Code' in reverse order of 'Code To Marker'.
     replaceMarkerToCode(inlineList, inlineCodeFormat, inlinePlaceMarker);
     replaceMarkerToCode(codeBlockList, blockCodeFormat, blockPlaceMarker);
-    document()->setMarkdown(md);
+
+    if (md.startsWith("- <code") || md.startsWith("* <code") || md.startsWith("+ <code"))
+    {
+        md.push_front("<br/>\n\n");
+    }
+
+    SolMarkdownImporter mdImporter(document(), QTextDocument::MarkdownDialectGitHub);
+    mdImporter.importMarkdown(md);
 }
 
 void ResultTextEdit::setCodeBackgroundColor(const QColor& inParam)
 {
     _codeBackgroundColor = inParam;
-
     _codeBackgroundColorString
-            = "background-color: "
-            + QString{"rgba(%1, %2, %3, %4)"}
-              .arg(_codeBackgroundColor.red())
-              .arg(_codeBackgroundColor.green())
-              .arg(_codeBackgroundColor.blue())
-              .arg(_codeBackgroundColor.alpha())
-            + "; ";
+    = QString{"background-color: rgba(%1, %2, %3, %4);"}.arg(QString::number(_codeBackgroundColor.red())
+                                                           , QString::number(_codeBackgroundColor.green())
+                                                           , QString::number(_codeBackgroundColor.blue())
+                                                           , QString::number(_codeBackgroundColor.alpha()));
 }
 
 QString ResultTextEdit::getCodeBackgroundColorString()

@@ -3,60 +3,68 @@
 #include "SolDocument.h"
 
 #include "SolAsync.hpp"
+#include "SolChrono.h"
 #include "SolLog.h"
+#include "SolTextTable.h"
+#include "QtCustom/SolMarkdownWriter.h"
+#include "Types/SolGuard.h"
 
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextDocumentFragment>
 #include <QTextList>
 #include <QTextTableCell>
-#include <QUuid>
 
 namespace
 {
+/**
+ * Fix the internal error of the list items.
+ */
 void fixListItem(QTextDocument& inDoc);
 
-void codeBlockToMarker(QTextDocument& inDoc);
+/**
+ * Fix the last space of in Bold(**).
+ * Prevent broken bold.
+ */
+void fixBoldLastSpace(QTextDocument& inDoc);
 
-QString& markerToCodeBlock(QString& inString);
+/**
+ * Integrate the divided blocks in the cell.
+ * Prevent the divided blocks from being interpreted as adjacent cells.
+ */
+void fixTable(QTextDocument& inDoc);
 
+/**
+ * Converts QTextDocument to Markdown. Customized QTextDocument::toMarkdown().
+ */
+QString toSolMarkdown(QTextDocument& inDoc);
 
-void normalizeHtml(QTextDocument& inDoc);
-
-void fixTailSpaceInBold(QTextDocument& inDoc);
-
-void fixTableCell(QTextDocument& inDoc);
-
-QString fixNewLine(QTextDocument& inDoc);
 } // anonymous namespace
 
 
 namespace Sol
 {
-
-QString htmlToMarkdown(QTextDocument& inDoc)
+QString textDocumentToMarkdown(QTextDocument& inDoc)
 {
+    fixBoldLastSpace(inDoc);
     fixListItem(inDoc);
+    fixTable(inDoc);
 
-    codeBlockToMarker(inDoc);
+    QString markdownStr = toSolMarkdown(inDoc);
 
-    normalizeHtml(inDoc);
-    fixTailSpaceInBold(inDoc);
-    fixTableCell(inDoc);
-
-    QString markdownStr = fixNewLine(inDoc);
-
-    return markerToCodeBlock(markdownStr); 
+    return markdownStr;
 }
 
 QString htmlToMarkdown(QString inHtml)
 {
     // Remove the syntax that ignores the list.
-    QTextDocument txtDoc;
     inHtml.replace(QRegularExpression(R"(list-style: none)"), "");
+    QTextDocument txtDoc;
     txtDoc.setHtml(inHtml);
-    return htmlToMarkdown(txtDoc);
+
+    return textDocumentToMarkdown(txtDoc);
 }
 
 void asyncHtmlToMarkdown(QString inHtml
@@ -77,62 +85,69 @@ void asyncHtmlToMarkdown(QString inHtml
 
 namespace
 {
-const QString codeBlockMarker        = "__CODE_BLOCK_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
-const QString codeBlockNewLineMarker = "__CODE_LF_" + QUuid::createUuid().toString(QUuid::Id128).left(8) + "__";
+// Recreate the modified iterator after the update.
+void recreateBlockIterator(const QTextDocument& inDoc
+                         , QTextBlock& inTextBlock
+                         , QTextBlock::iterator& inBlockIt
+                         , const int inFragPos)
+{
+    inTextBlock = inDoc.findBlock(inFragPos);
 
+    for (inBlockIt = inTextBlock.begin(); !inBlockIt.atEnd(); ++inBlockIt)
+    {
+        QTextFragment frag = inBlockIt.fragment();
+        if (frag.contains(inFragPos))
+        {
+            break;
+        }
+    }
+}
 
-/**
- * Fix the internal error of the list items.
- */
 void fixListItem(QTextDocument& inDoc)
 {
-    QTextCursor fragCursor(&inDoc);
+    QTextCursor textCursor(&inDoc);
+    TextCursorEditBlockGuard cursorEditBlockGuard{textCursor};
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
-        QTextCursor cursor(textBlock);
-        QTextList* txtList = cursor.currentList();
+        const QTextList* txtList = QTextCursor(textBlock).currentList();
         if (!txtList)
         {
             continue;
         }
 
-        // fix hyper link error.
-        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        // Fix hypertext link error.
+        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
         {
-            QTextFragment fragment = itemIt.fragment();
+            QTextFragment fragment = blockIt.fragment();
             if (!fragment.isValid())
             {
                 continue;
             }
 
             QTextCharFormat fragFmt = fragment.charFormat();
-            if (fragFmt.isAnchor() && fragFmt.anchorHref().isEmpty())
-            {
-                fragFmt.setAnchor(false);
-            }
-            else if (!fragFmt.isAnchor() && !fragFmt.anchorHref().isEmpty())
-            {
-                fragFmt.setAnchor(true);
-            }
-            else
+            const bool hasLinkText  = (!fragFmt.anchorHref().isEmpty());
+            if (fragFmt.isAnchor() == hasLinkText)
             {
                 continue;
             }
 
+            fragFmt.setAnchor(hasLinkText);
+
             const int fragStart = fragment.position();
             const int frageEnd  = fragment.position() + fragment.length();
 
-            fragCursor.setPosition(fragStart);
-            fragCursor.setPosition(frageEnd, QTextCursor::KeepAnchor);
+            textCursor.setPosition(fragStart);
+            textCursor.setPosition(frageEnd, QTextCursor::KeepAnchor);
+            textCursor.mergeCharFormat(fragFmt);
 
-            fragCursor.mergeCharFormat(fragFmt);
+            recreateBlockIterator(inDoc, textBlock, blockIt, fragStart);
         }
 
-        // Connect the links that have the same Href.
-        for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
+        // Merge the fragments that have the same Href.
+        for (QTextBlock::iterator blockIt = textBlock.begin(); !blockIt.atEnd(); ++blockIt)
         {
-            QTextFragment fragment = itemIt.fragment();
+            QTextFragment fragment = blockIt.fragment();
             if (!fragment.isValid())
             {
                 continue;
@@ -151,14 +166,16 @@ void fixListItem(QTextDocument& inDoc)
             const QString firstHref = firstFragFmt.anchorHref();
 
             // Track fragments with the same Href.
-            QTextBlock::iterator nextIt = itemIt;
+            QTextBlock::iterator nextIt = blockIt;
             ++nextIt;
-            QTextBlock::iterator lastIt = nextIt;
+            QTextFragment lastFrag = nextIt.fragment();
             while (!nextIt.atEnd())
             {
                 QTextFragment nextFrag = nextIt.fragment();
                 if (!nextFrag.isValid())
+                {
                     break;
+                }
 
                 QTextCharFormat nextFmt = nextFrag.charFormat();
                 if (!nextFmt.isAnchor() || nextFmt.anchorHref() != firstHref)
@@ -168,7 +185,7 @@ void fixListItem(QTextDocument& inDoc)
 
                 isNeedMerge   = true;
                 mergeLinkText += nextFrag.text();
-                lastIt        = nextIt;
+                lastFrag      = nextIt.fragment();
 
                 ++nextIt;
             }
@@ -182,135 +199,27 @@ void fixListItem(QTextDocument& inDoc)
             // Remove newline in list item.
             mergeLinkText.removeIf([](const QChar& inChar)
             {
-                return (inChar == '\n')
+                return (inChar == QChar::LineFeed)
+                        || (inChar == QChar::CarriageReturn)
                         || (inChar == QChar::LineSeparator)
-                        || (inChar == QChar::ParagraphSeparator)
-                        || (inChar == QChar::CarriageReturn);
+                        || (inChar == QChar::ParagraphSeparator);
             });
 
-            QTextFragment lastFrag = lastIt.fragment();
-
             // Connect the separated links.
-            fragCursor.setPosition(frgStart);
-            fragCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
-            fragCursor.insertText(mergeLinkText, lastFrag.charFormat());
+            // The front link format is broken, so Apply the last fragment format.
+            textCursor.setPosition(frgStart);
+            textCursor.setPosition(lastFrag.position() + lastFrag.length(), QTextCursor::KeepAnchor);
+            textCursor.insertText(mergeLinkText, lastFrag.charFormat());
 
-            // Recreate the modified iterator after the update.
-            itemIt = textBlock.begin();
-            while (!itemIt.atEnd())
-            {
-                QTextFragment frg = itemIt.fragment();
-                if (frg.isValid() && frg.position() >= frgStart)
-                {
-                    break;
-                }
-
-                ++itemIt;
-            }
+            recreateBlockIterator(inDoc, textBlock, blockIt, frgStart);
         }
     }
 }
 
-/**
- * Replace the beginning, end, and line breaks of the code block, to Marker.
- * Fix the error of code blocks being changed to inline code during the HTML
- * modification process.
- *
- * @see markerToCodeBlock()
- */
-void codeBlockToMarker(QTextDocument& inDoc)
-{
-    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); /* textBlock = next; */)
-    {
-        QTextBlock next = textBlock.next();
-
-        QMap<int, QVariant> properties = textBlock.blockFormat().properties();
-        if (properties.contains(QTextFormat::BlockNonBreakableLines))
-        {
-            QTextCursor cursor(textBlock);
-
-            // Marking the start of the code block.
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.insertText(codeBlockMarker);
-
-            // Marking newline in code block.
-            for (QTextBlock::iterator itemIt = textBlock.begin(); !itemIt.atEnd(); ++itemIt)
-            {
-                QTextFragment frag = itemIt.fragment();
-
-                if (!frag.isValid())
-                {
-                    continue;
-                }
-
-                const int frgStart = frag.position();
-
-                QString text = frag.text();
-                text.replace(QChar::LineSeparator, codeBlockNewLineMarker);
-
-                QTextCursor fragCursor(&inDoc);
-                fragCursor.setPosition(frgStart);
-                fragCursor.setPosition(frgStart + frag.length(), QTextCursor::KeepAnchor);
-                fragCursor.insertText(text, frag.charFormat());
-
-                // Recreate the modified iterator after the update.
-                itemIt = textBlock.begin();
-                while (!itemIt.atEnd())
-                {
-                    QTextFragment curFrg = itemIt.fragment();
-                    if (curFrg.isValid() && curFrg.position() >= frgStart)
-                    {
-                        break;
-                    }
-
-                    ++itemIt;
-                }
-            }
-
-            // Marking the end of the code block.
-            cursor.movePosition(QTextCursor::EndOfBlock);
-            cursor.insertText(codeBlockMarker);
-        }
-
-        textBlock = next;
-    }
-}
-
-/**
- * Replace the marker to origin code block.
- *
- * @see codeBlockToMarker()
- */
-QString& markerToCodeBlock(QString& inString)
-{
-    const static QString frontBacktick = "```\n";
-    const static QString backBacktick  = "\n```";
-
-    inString.replace(frontBacktick + codeBlockMarker, frontBacktick);
-    inString.replace(codeBlockMarker + backBacktick, backBacktick);
-
-    inString.replace("`" + codeBlockMarker, frontBacktick);
-    inString.replace(codeBlockMarker + "`", backBacktick);
-
-    inString.replace(codeBlockNewLineMarker, "\n");
-    return inString;
-}
-
-/**
- * Normalize the HTML in the QTextDocument to Qt HTML style.
- */
-void normalizeHtml(QTextDocument& inDoc)
-{
-    inDoc.setHtml(inDoc.toHtml());
-}
-
-/**
- * Fix the last space of in Bold(**).
- * Prevent broken bold.
- */
-void fixTailSpaceInBold(QTextDocument& inDoc)
+void fixBoldLastSpace(QTextDocument& inDoc)
 {
     QTextCursor textCursor(&inDoc);
+    TextCursorEditBlockGuard cursorEditBlockGuard{textCursor};
 
     for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
     {
@@ -328,7 +237,6 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
                 continue;
             }
 
-            // Check if the last character is a space.
             const QString fragText = fragment.text();
             if (fragText.isEmpty() || (!fragText.back().isSpace()))
             {
@@ -351,126 +259,65 @@ void fixTailSpaceInBold(QTextDocument& inDoc)
                 continue;
             }
 
-            const int tailSpaceStart = fragment.position() + tailSpaceStartIdx;
-            const int tailSpaceEnd   = fragment.position() + fragText.size();
-
-            textCursor.setPosition(tailSpaceStart);
-            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
+            const int curFragPos     = fragment.position();
+            const int tailSpaceStart = curFragPos + tailSpaceStartIdx;
+            const int tailSpaceEnd   = curFragPos + fragText.size();
 
             QTextCharFormat normalFmt = charFmt;
             normalFmt.setFontWeight(QFont::Normal);
 
+            textCursor.setPosition(tailSpaceStart);
+            textCursor.setPosition(tailSpaceEnd, QTextCursor::KeepAnchor);
             textCursor.mergeCharFormat(normalFmt);
+
+            recreateBlockIterator(inDoc, textBlock, blockIt, curFragPos);
         }
     }
 }
 
-/**
- * Integrate the divided blocks in the cell.
- * Prevent the divided blocks from being interpreted as adjacent cells.
- */
-void fixTableCell(QTextDocument& inDoc)
+
+// ~============================
+// tables
+void fixTable(QTextDocument& inDoc)
 {
-    for (QTextBlock textBlock = inDoc.begin(); textBlock.isValid(); textBlock = textBlock.next())
+    QTextFrame* rootFrame  = inDoc.rootFrame();
+    QTextFrame* childFrame = nullptr;
+
+    for (QTextFrame::iterator rootIt = rootFrame->begin(); !rootIt.atEnd(); ++rootIt)
     {
-        QTextCursor cursor(textBlock);
-
-        // 현재 block이 table 내부인지
-        QTextTable* table = cursor.currentTable();
-        if (!table)
+        QTextFrame* curFrame = rootIt.currentFrame();
+        if (curFrame && childFrame != curFrame)
         {
-            continue;
-        }
-
-        // cell 내부 block 순회
-        QTextTableCell cell = table->cellAt(cursor);
-        for (QTextFrame::iterator it = cell.begin(); !it.atEnd(); ++it)
-        {
-            // 가장 앞쪽 block으로 통합
-            it = cell.begin();
-
-            QTextBlock cellBlock = it.currentBlock();
-            if (!cellBlock.isValid())
+            if (QTextTable* table = qobject_cast<QTextTable*>(curFrame))
             {
-                continue;
+                Sol::flattenToSingleTable(table);
             }
-
-            QTextCursor cellCursor(cellBlock);
-
-            cellCursor.movePosition(QTextCursor::EndOfBlock);
-            cellCursor.deleteChar();
         }
+
+        childFrame = curFrame;
     }
 }
 
-/**
- * Fix the table cell in Markdown to prevent line breaks from being broken.
- * Remove forced line breaks caused by word-wrap.
- *
- * @note If apply the return value back to QTextDocument, it may need to be fixed again.
- * @return Markdown string.
- */
-QString fixNewLine(QTextDocument& inDoc)
+
+QString toSolMarkdown(QTextDocument& inDoc)
 {
-    // ~====================
-    // fix newlines in table cell.
-    // html-> replace <br/> to marker -> convert markdown -> replace marker to <br/>.
-
-    const QString originHtml = inDoc.toHtml();
-
-    QString replacedHtml;
-    replacedHtml.reserve(originHtml.size());
-
-    // Only in <table>
-    static const QRegularExpression tablePattern(R"(<table\b[^>]*>[\s\S]*?</table>)"
-                                               , QRegularExpression::CaseInsensitiveOption);
-    static const QRegularExpression brPattern(R"(<br\s*/?>)"
-                                            , QRegularExpression::CaseInsensitiveOption);
-
-    static const QString newLineMarker = "__CODE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "_";
-
-    // Replace <br/> to marker
-    QRegularExpressionMatchIterator reIt = tablePattern.globalMatch(originHtml);
-
-    int lastPos = 0;
-    while (reIt.hasNext())
+    QString res;
+    QTextStream testStream(&res);
+    SolMarkdownWriter mdWriter(testStream, QTextDocument::MarkdownDialectGitHub);
+    if (mdWriter.writeAll(&inDoc))
     {
-        QRegularExpressionMatch match = reIt.next();
+        res.replace(QChar::Nbsp, " ");
+        Sol::replaceNewLine(res);
 
-        // Append text before table.
-        replacedHtml += originHtml.mid(lastPos, match.capturedStart() - lastPos);
-
-        // Replace newline in table
-        QString tableHtml = match.captured();
-        tableHtml.replace(brPattern, newLineMarker);
-        replacedHtml += tableHtml;
-
-        lastPos = match.capturedEnd();
+        return res;
     }
-
-    replacedHtml += originHtml.mid(lastPos);
-
-
-    // Convert to Markdown.
-    inDoc.setHtml(replacedHtml);
-    QString docMarkdown = inDoc.toMarkdown();
-
-    docMarkdown.replace(QChar::Nbsp, " ");
-
-    // ~====================
-    // Convert single newline to a space.
-    // Convert consecutive spaces before and after a single newline to a space.
-    // Do not modify consecutive newlines.
-    // If a list item follows a single newline, do not modify it.
-    docMarkdown.replace(
-        QRegularExpression(
-            R"([^\S\n]*(?<!\n)\n(?!\n)(?![^\S\n]*([-*+]|\d+\.))[^\S\n]*)"
-        ), " ");
-
-    // ~====================
-    // Replace marker to <br/>.
-    docMarkdown.replace(newLineMarker, R"(<br/>)");
-
-    return docMarkdown;
+    return QString();
 }
+
 } // anonymous namespace
+
+TextCursorEditBlockGuard::TextCursorEditBlockGuard(QTextCursor& inCursor)
+    : SolGeneralGuard([&inCursor]() { inCursor.endEditBlock(); })
+{
+    inCursor.beginEditBlock();
+}

@@ -3,13 +3,16 @@
 #ifndef SOLTRANSLATOR_HISTORYLISTVIEW_H
 #define SOLTRANSLATOR_HISTORYLISTVIEW_H
 
+#include "SubWidgets/SolContextMenuEventWidget.h"
+#include "SubWidgets/SolSmoothScrollArea.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QListView>
 
+using SolListView = SolSmoothScrollArea<QListView>;
 
-class HistoryListView : public QListView
+class HistoryListView : public SolListView
 {
     Q_OBJECT
 
@@ -20,8 +23,8 @@ class HistoryListView : public QListView
     SOL_QSS_COLOR(itemDisableColor)
 
 public:
-    explicit HistoryListView(QWidget* parent = nullptr);
-    ~HistoryListView() override;
+    explicit HistoryListView(QWidget* parent = nullptr) : SolListView(parent) {};
+    virtual ~HistoryListView() override = default;
 
     QColor getItemColor(const Sol::ItemColorRole inColorRole) const;
 };

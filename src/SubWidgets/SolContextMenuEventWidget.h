@@ -1,21 +1,19 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef CUSTOMMENUTEXTEDIT_H
-#define CUSTOMMENUTEXTEDIT_H
+#ifndef SOLTRANSLATOR_SOLCONTEXTMENUEVENTWIDGET_H
+#define SOLTRANSLATOR_SOLCONTEXTMENUEVENTWIDGET_H
 
-#include <QLineEdit>
+#include <QContextMenuEvent>
 #include <QMenu>
-#include <QPlainTextEdit>
-#include <QTextBrowser>
 
 /**
- * The CustomMenuTextEdit class is a general text editor class
+ * The SolMenuTextEdit class is a general text editor class
  * that provides a rounded corner context menu.
  *
  * @tparam BaseTextEdit requires virtual contextMenuEvent().
  */
 template <typename BaseTextEdit>
-class CustomMenuTextEdit : public BaseTextEdit
+class SolContextMenuEventWidget : public BaseTextEdit
 {
 public:
     using BaseTextEdit::BaseTextEdit;
@@ -33,9 +31,5 @@ protected:
     }
 };
 
-using MenuPlainTextEdit = CustomMenuTextEdit<QPlainTextEdit>;
-using MenuTextEdit      = CustomMenuTextEdit<QTextEdit>;
-using MenuTextBrowser   = CustomMenuTextEdit<QTextBrowser>;
-using MenuLineEdit      = CustomMenuTextEdit<QLineEdit>;
 
-#endif //CUSTOMMENUTEXTEDIT_H
+#endif //SOLTRANSLATOR_SOLCONTEXTMENUEVENTWIDGET_H

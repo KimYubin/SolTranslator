@@ -90,8 +90,6 @@ qt_add_executable(
         src/Settings/SettingWidgetFactory.cpp
         src/Settings/SettingWidgetFactory.h
 
-        src/SubWidgets/CustomMenuTextEdit.cpp
-        src/SubWidgets/CustomMenuTextEdit.h
         src/SubWidgets/DropdownMenu.cpp
         src/SubWidgets/DropdownMenu.h
         src/SubWidgets/EngineSelector.cpp
@@ -116,8 +114,14 @@ qt_add_executable(
         src/SubWidgets/ResultTextEdit.h
         src/SubWidgets/SettingCard.cpp
         src/SubWidgets/SettingCard.h
+        src/SubWidgets/SolBaseTextEdit.cpp
+        src/SubWidgets/SolBaseTextEdit.h
         src/SubWidgets/SolButton.cpp
         src/SubWidgets/SolButton.h
+        src/SubWidgets/SolContextMenuEventWidget.cpp
+        src/SubWidgets/SolContextMenuEventWidget.h
+        src/SubWidgets/SolSmoothScrollArea.cpp
+        src/SubWidgets/SolSmoothScrollArea.h
         src/SubWidgets/SolToast.cpp
         src/SubWidgets/SolToast.h
         src/SubWidgets/SolToolTip.cpp

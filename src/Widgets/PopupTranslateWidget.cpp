@@ -268,6 +268,7 @@ void PopupTranslateWidget::setupUI()
     QSizePolicy scrollSizePolicy = ui->outerVScrollBar->sizePolicy();
     scrollSizePolicy.setRetainSizeWhenHidden(true);
     ui->outerVScrollBar->setSizePolicy(scrollSizePolicy);
+    ui->outerVScrollBar->setSingleStep(ui->resultText->verticalScrollBar()->singleStep());
 
     // Control outer ScrollBar -> inner ScrollBar
     connect(ui->outerVScrollBar, &QScrollBar::valueChanged, this, [this](const int value)

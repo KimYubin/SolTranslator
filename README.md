@@ -6,6 +6,7 @@
 - [ ] Support for adding options based on JSON.
 - [ ] Add a bootstrapper wrapping for updates.
 - [ ] Add functions for translation history.
+  - [ ] Lazy Loading
   - [ ] Favorites
   - [ ] Delete selections
   - [ ] Search

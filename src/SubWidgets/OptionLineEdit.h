@@ -2,7 +2,7 @@
 
 #ifndef SOLTRANSLATOR_OPTIONLINEEDIT_H
 #define SOLTRANSLATOR_OPTIONLINEEDIT_H
-#include "CustomMenuTextEdit.h"
+#include "SolBaseTextEdit.h"
 #include "Types/SolTypes.h"
 
 class QHBoxLayout;
@@ -37,7 +37,7 @@ public slots:
     void saveText();
 
 private:
-    MenuLineEdit* _lineEdit;
+    SolLineEdit* _lineEdit;
     QHBoxLayout* _hLayout;
 
     QString _defaultText;

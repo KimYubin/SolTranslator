@@ -18,16 +18,16 @@
 
 namespace
 {
-const char* db_type = "QSQLITE";
+const QString db_type = "QSQLITE";
 
 namespace Path
 {
-const char* InsertTimeline      = ":/sql/insert_history_timeline.sql";
-const char* InsertHistoryData   = ":/sql/insert_history_data.sql";
-const char* DeleteHistoryData   = ":/sql/delete_history_data.sql";
-const char* SelectHistoryData   = ":/sql/select_history_data.sql";
-const char* SelectTimelineCount = ":/sql/select_timeline_count.sql";
-const char* SelectTimeline      = ":/sql/select_translation_timeline.sql";
+const QString InsertTimeline      = ":/sql/insert_history_timeline.sql";
+const QString InsertHistoryData   = ":/sql/insert_history_data.sql";
+const QString DeleteHistoryData   = ":/sql/delete_history_data.sql";
+const QString SelectHistoryData   = ":/sql/select_history_data.sql";
+const QString SelectTimelineCount = ":/sql/select_timeline_count.sql";
+const QString SelectTimeline      = ":/sql/select_translation_timeline.sql";
 } // Path
 
 } // anonymous namespace
@@ -96,13 +96,13 @@ void DbWorker::initDB()
 
     SolSqlTransactionGuard transactionGuard(historyDB);
 
-    QStringList db_tables = {
+    std::array<QString, 4> db_tables = {
         "history_data"
       , "history_favorite"
       , "history_favorite_group"
       , "history_timeline"
     };
-    QStringList db_indexes = {
+    std::array<QString, 4> db_indexes = {
         "index_favorite"
       , "index_history_data"
       , "index_timeline_accessed_index"

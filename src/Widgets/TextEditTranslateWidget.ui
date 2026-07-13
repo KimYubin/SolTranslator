@@ -55,7 +55,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="MenuTextEdit" name="srcTextEdit"/>
+       <widget class="SolTextEdit" name="srcTextEdit"/>
       </item>
       <item>
        <widget class="LayoutTextEdit" name="trTextEdit"/>
@@ -75,9 +75,9 @@
    <header>SubWidgets/LayoutTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>MenuTextEdit</class>
+   <class>SolTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>SubWidgets/CustomMenuTextEdit.h</header>
+   <header>SubWidgets/SolBaseTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

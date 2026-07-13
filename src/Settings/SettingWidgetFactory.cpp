@@ -3,7 +3,7 @@
 #include "SettingWidgetFactory.h"
 
 #include "Managers/ConfigManager.h"
-#include "SubWidgets/CustomMenuTextEdit.h"
+#include "SubWidgets/SolBaseTextEdit.h"
 #include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/OptionLineEdit.h"
 #include "SubWidgets/SettingCard.h"

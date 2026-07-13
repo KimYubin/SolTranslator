@@ -14,7 +14,7 @@
 #include <quuid.h>
 
 
-ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
+ResultTextEdit::ResultTextEdit(QWidget* parent) : SolTextBrowser(parent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -32,6 +32,9 @@ ResultTextEdit::ResultTextEdit(QWidget* parent) : MenuTextBrowser(parent)
     ensureCursorVisible();
     setOpenExternalLinks(true);
     setOpenLinks(true);
+
+    horizontalScrollBar()->setSingleStep(50);
+    verticalScrollBar()->setSingleStep(50);
 }
 
 ResultTextEdit::~ResultTextEdit()

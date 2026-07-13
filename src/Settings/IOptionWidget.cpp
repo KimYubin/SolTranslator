@@ -3,6 +3,7 @@
 #include "IOptionWidget.h"
 
 #include "SettingWidgetFactory.h"
+#include "SubWidgets/SolSmoothScrollArea.h"
 #include "Utils/SolLog.h"
 
 #include <QGroupBox>
@@ -49,12 +50,12 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 
 
     // 기본 수직 스크롤바를 외부 스크롤바로 대체
-    _outScrollBar = new QScrollBar(this);
+    _outScrollBar = new SolSmoothScrollBar(this);
     _outScrollBar->setOrientation(Qt::Orientation::Vertical);
     QSizePolicy scrollSizePolicy = _outScrollBar->sizePolicy();
     scrollSizePolicy.setRetainSizeWhenHidden(true);
     _outScrollBar->setSizePolicy(scrollSizePolicy);
-
+    _outScrollBar->setSingleStep(_srollArea->verticalScrollBar()->singleStep());
     _outScrollLayout->addWidget(_outScrollBar);
 
 

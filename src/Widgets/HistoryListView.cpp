@@ -3,12 +3,6 @@
 #include "HistoryListView.h"
 
 
-HistoryListView::HistoryListView(QWidget* parent) : QListView(parent)
-{}
-
-HistoryListView::~HistoryListView()
-{}
-
 QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
 {
     switch (inColorRole)

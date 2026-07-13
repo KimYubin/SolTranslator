@@ -23,7 +23,7 @@ OptionLineEdit::OptionLineEdit(const QString& inContent
     : QWidget(parent)
     , _isUsedSaveButton(inIsUsedSaveButton)
 {
-    _lineEdit = new MenuLineEdit(inContent, this);
+    _lineEdit = new SolLineEdit(inContent, this);
     _hLayout  = new QHBoxLayout(this);
     _hLayout->setContentsMargins(0, 0, 0, 0);
     _hLayout->addWidget(_lineEdit);

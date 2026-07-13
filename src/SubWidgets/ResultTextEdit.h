@@ -3,11 +3,11 @@
 #ifndef SOLTRANSLATOR_RESULTTEXTEDIT_H
 #define SOLTRANSLATOR_RESULTTEXTEDIT_H
 
-#include "CustomMenuTextEdit.h"
+#include "SolBaseTextEdit.h"
 
 enum class TextStyle;
 
-class ResultTextEdit : public MenuTextBrowser
+class ResultTextEdit : public SolTextBrowser
 {
     Q_OBJECT
 

@@ -2,6 +2,11 @@
 
 #include "SolSmoothScroll.h"
 
+#include <QPropertyAnimation>
+#include <QWheelEvent>
+
+// ~===============================
+// SolScrollSmoothComponent
 SolScrollSmoothComponent::SolScrollSmoothComponent(QWidget* inParent, QScrollBar* inScrollBar)
     : QObject(inParent)
     , _scrollAnim(new QPropertyAnimation(inScrollBar, "value", this))
@@ -50,16 +55,17 @@ bool SolScrollSmoothComponent::smoothWheel(const float inAngleDelta)
         _scrollAnim->stop();
     }
 
-    const float deltaStep = inAngleDelta / 120.f;
-    const int deltaVal    = deltaStep * _scrollBar->singleStep();
+    const float deltaWheelStep = inAngleDelta / 120.f;
+    const int deltaVal = _scrollBar->singleStep() * deltaWheelStep;
 
-    if ((deltaStep < 0 && curVal < _targetValue) || (deltaStep > 0 && curVal > _targetValue))
+    // Scroll direction == wheel direction
+    if ((deltaWheelStep < 0 && curVal < _targetValue) || (deltaWheelStep > 0 && curVal > _targetValue))
     {
         _targetValue = _targetValue - deltaVal;
     }
     else
     {
-        // Opposite direction wheel.
+        // Opposite wheel direction.
         _targetValue = curVal - deltaVal;
     }
 
@@ -80,6 +86,9 @@ bool SolScrollSmoothComponent::smoothWheel(const float inAngleDelta)
     return true;
 }
 
+
+// ~===============================
+// SolSmoothScrollBar
 SolSmoothScrollBar::SolSmoothScrollBar(QWidget* inParent)
     : QScrollBar(inParent)
     , _smoothComponent(new SolScrollSmoothComponent(this, this))

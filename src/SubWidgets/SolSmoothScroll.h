@@ -5,11 +5,15 @@
 
 #include <QAbstractScrollArea>
 #include <QPointer>
-#include <QPropertyAnimation>
 #include <QScrollBar>
-#include <QWheelEvent>
 
 
+class QPropertyAnimation;
+
+/**
+ * The SolScrollSmoothComponent class is a component class
+ * that provides a smooth wheel scrolling feature.
+ */
 class SolScrollSmoothComponent : public QObject
 {
 public:
@@ -23,7 +27,10 @@ public:
     int _targetValue = 0;
 };
 
-
+/**
+ * The SolSmoothScrollBar class is a QScrollBar-derived class
+ * that provides smooth wheel scrolling.
+ */
 class SolSmoothScrollBar : public QScrollBar
 {
 public:
@@ -36,8 +43,13 @@ protected:
     SolScrollSmoothComponent* _smoothComponent;
 };
 
-
-template <typename BaseType>
+/**
+ * The SolSmoothAbstractScrollArea class is a ScrollArea class
+ * that provides smooth wheel scrolling.
+ *
+ * @tparam BaseType requires QAbstractScrollArea-derived.
+ */
+template <std::derived_from<QAbstractScrollArea> BaseType>
 class SolSmoothAbstractScrollArea : public BaseType
 {
 public:
@@ -46,58 +58,10 @@ public:
     explicit SolSmoothAbstractScrollArea(QWidget* inParent = nullptr)
         : Base(inParent)
     {
-        _hScrollBar = new SolSmoothScrollBar(this);
-        _vScrollBar = new SolSmoothScrollBar(this);
-        Base::setHorizontalScrollBar(_hScrollBar);
-        Base::setVerticalScrollBar(_vScrollBar);
-        _hSmoothComponent = new SolScrollSmoothComponent{this, _hScrollBar};
-        _vSmoothComponent = new SolScrollSmoothComponent{this, _vScrollBar};
+        Base::setHorizontalScrollBar(new SolSmoothScrollBar(this));
+        Base::setVerticalScrollBar(new SolSmoothScrollBar(this));
     };
 
-protected:
-    virtual void wheelEvent(QWheelEvent* event) override
-    {
-        const QPoint angleDelta = event->angleDelta();
-
-        // Smooth Scroll
-        if (angleDelta.x() != 0)
-        {
-            if (_hScrollBar)
-            {
-                _hScrollBar->setSmoothValue(angleDelta.x());
-            }
-            else
-            {
-                Base::wheelEvent(event);
-                return;
-            }
-            // _hSmoothComponent->smoothWheel(angleDelta.x());
-        }
-        if (angleDelta.y() != 0)
-        {
-            if (_vScrollBar)
-            {
-                _vScrollBar->setSmoothValue(angleDelta.y());
-            }
-            else
-            {
-                Base::wheelEvent(event);
-                return;
-            }
-            // _vSmoothComponent->smoothWheel(angleDelta.y());
-        }
-
-        event->accept();
-
-        Base::updateMicroFocus();
-    }
-
-
-    QPointer<SolSmoothScrollBar> _hScrollBar;
-    QPointer<SolSmoothScrollBar> _vScrollBar;
-
-    SolScrollSmoothComponent* _hSmoothComponent;
-    SolScrollSmoothComponent* _vSmoothComponent;
 };
 
 

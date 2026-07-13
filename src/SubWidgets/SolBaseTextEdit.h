@@ -11,35 +11,14 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 
+/**
+ * The SolBaseTextEdit class is a general text editor class
+ * that provides a rounded corner context menu and smooth scrolling.
+ *
+ * @tparam BaseTextEdit requires virtual contextMenuEvent().
+ */
 template <typename BaseTextEdit>
-using SolBaseTextEdit2 = SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
-
-template <typename BaseTextEdit>
-class SolBaseTextEdit : public SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>
-{
-public:
-    using Base = SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
-    using Base::Base;
-
-protected:
-    virtual void wheelEvent(QWheelEvent* event) override
-    {
-        const QPoint angleDelta = event->angleDelta();
-
-        // Zoom
-        if (!(Base::textInteractionFlags().testFlag(Qt::TextEditable)))
-        {
-            if (event->modifiers().testFlag(Qt::ControlModifier))
-            {
-                float delta = angleDelta.y() / 120.f;
-                Base::zoomInF(delta);
-                return;
-            }
-        }
-
-        Base::wheelEvent(event);
-    }
-};
+using SolBaseTextEdit = SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
 
 using SolPlainTextEdit = SolBaseTextEdit<QPlainTextEdit>;
 using SolTextEdit      = SolBaseTextEdit<QTextEdit>;

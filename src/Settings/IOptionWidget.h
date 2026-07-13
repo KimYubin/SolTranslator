@@ -8,11 +8,11 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QScrollArea>
 #include <QWidget>
 
 class OptionGroupBox;
 class QScrollBar;
-class QScrollArea;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;

@@ -6,17 +6,24 @@
 #include <QContextMenuEvent>
 #include <QMenu>
 
+template <typename T>
+concept HasContextMenu = requires(T* t)
+{
+    { t->createStandardContextMenu() } -> std::same_as<QMenu*>;
+};
+
+
 /**
- * The SolMenuTextEdit class is a general text editor class
- * that provides a rounded corner context menu.
+ * The SolContextMenuEventWidget class provides
+ * a rounded corner context menu.
  *
- * @tparam BaseTextEdit requires virtual contextMenuEvent().
+ * @tparam BaseWidget requires virtual contextMenuEvent().
  */
-template <typename BaseTextEdit>
-class SolContextMenuEventWidget : public BaseTextEdit
+template <HasContextMenu BaseWidget>
+class SolContextMenuEventWidget : public BaseWidget
 {
 public:
-    using BaseTextEdit::BaseTextEdit;
+    using BaseWidget::BaseWidget;
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent* event) override

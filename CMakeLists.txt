@@ -120,8 +120,8 @@ qt_add_executable(
         src/SubWidgets/SolButton.h
         src/SubWidgets/SolContextMenuEventWidget.cpp
         src/SubWidgets/SolContextMenuEventWidget.h
-        src/SubWidgets/SolSmoothScrollArea.cpp
-        src/SubWidgets/SolSmoothScrollArea.h
+        src/SubWidgets/SolSmoothScroll.cpp
+        src/SubWidgets/SolSmoothScroll.h
         src/SubWidgets/SolToast.cpp
         src/SubWidgets/SolToast.h
         src/SubWidgets/SolToolTip.cpp

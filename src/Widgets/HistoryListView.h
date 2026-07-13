@@ -4,13 +4,13 @@
 #define SOLTRANSLATOR_HISTORYLISTVIEW_H
 
 #include "SubWidgets/SolContextMenuEventWidget.h"
-#include "SubWidgets/SolSmoothScrollArea.h"
+#include "SubWidgets/SolSmoothScroll.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QListView>
 
-using SolListView = SolSmoothScrollArea<QListView>;
+using SolListView = SolSmoothAbstractScrollArea<QListView>;
 
 class HistoryListView : public SolListView
 {

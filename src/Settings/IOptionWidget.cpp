@@ -3,7 +3,7 @@
 #include "IOptionWidget.h"
 
 #include "SettingWidgetFactory.h"
-#include "SubWidgets/SolSmoothScrollArea.h"
+#include "SubWidgets/SolSmoothScroll.h"
 #include "Utils/SolLog.h"
 
 #include <QGroupBox>
@@ -21,7 +21,7 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 
 
     // _srollArea
-    _srollArea = new QScrollArea(this);
+    _srollArea = new SolSmoothScrollArea(this);
     _srollArea->setWidgetResizable(true);
     _srollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _srollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

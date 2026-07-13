@@ -4,21 +4,21 @@
 #define SOLBASETEXTEDIT_H
 
 #include "SolContextMenuEventWidget.h"
-#include "SolSmoothScrollArea.h"
+#include "SolSmoothScroll.h"
 
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QTextBrowser>
 #include <QTextEdit>
 
-// template <typename BaseTextEdit>
-// using SolBaseTextEdit = SolSmoothScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
+template <typename BaseTextEdit>
+using SolBaseTextEdit2 = SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
 
 template <typename BaseTextEdit>
-class SolBaseTextEdit : public SolSmoothScrollArea<SolContextMenuEventWidget<BaseTextEdit>>
+class SolBaseTextEdit : public SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>
 {
 public:
-    using Base = SolSmoothScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
+    using Base = SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>;
     using Base::Base;
 
 protected:

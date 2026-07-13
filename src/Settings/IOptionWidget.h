@@ -3,6 +3,7 @@
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
 
+#include "SubWidgets/SolSmoothScroll.h"
 #include "Types/SolTypes.h"
 
 #include <QObject>
@@ -18,6 +19,8 @@ class QGridLayout;
 class QGroupBox;
 class SolTranslatorCore;
 class IOptionPage;
+
+using SolSmoothScrollArea = SolSmoothAbstractScrollArea<QScrollArea>;
 
 class IOptionWidget : public QWidget
 {
@@ -55,7 +58,7 @@ private:
     QHBoxLayout* _outScrollLayout; // scrollArea와 외부 스크롤바가 위치할 레이아웃
     QScrollBar* _outScrollBar;     // 외부 스크롤바
 
-    QScrollArea* _srollArea;
+    SolSmoothScrollArea* _srollArea;
     QWidget* _scrollContent;
     QGridLayout* _wrapMainLayout;  // mainLayout을 AlignTop으로 위로 정렬하기 위한 랩핑용 레이아웃
 

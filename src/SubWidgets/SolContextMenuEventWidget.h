@@ -17,7 +17,7 @@ concept HasContextMenu = requires(T* t)
  * The SolContextMenuEventWidget class provides
  * a rounded corner context menu.
  *
- * @tparam BaseWidget requires virtual contextMenuEvent().
+ * @tparam BaseWidget requires createStandardContextMenu().
  */
 template <HasContextMenu BaseWidget>
 class SolContextMenuEventWidget : public BaseWidget
@@ -29,6 +29,12 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent* event) override
     {
         QMenu* menu = this->createStandardContextMenu();
+        if (!menu)
+        {
+            return;
+        }
+
+        menu->setAttribute(Qt::WA_DeleteOnClose);
         menu->setAttribute(Qt::WA_TranslucentBackground);
         menu->setWindowFlag(Qt::FramelessWindowHint);
         menu->setWindowFlag(Qt::NoDropShadowWindowHint);

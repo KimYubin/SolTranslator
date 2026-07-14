@@ -6,6 +6,7 @@
 #include <QAbstractScrollArea>
 #include <QPointer>
 #include <QScrollBar>
+#include <QWheelEvent>
 
 
 class QPropertyAnimation;
@@ -22,6 +23,7 @@ public:
 
     bool smoothWheel(const float inAngleDelta);
 
+protected:
     QPointer<QScrollBar> _scrollBar;
     QPropertyAnimation* _scrollAnim;
     int _targetValue = 0;
@@ -38,7 +40,7 @@ public:
     bool setSmoothValue(const float inAngleDelta);
 
 protected:
-    virtual void wheelEvent(QWheelEvent* event) override;
+    virtual void wheelEvent(QWheelEvent* inEvent) override;
 
     SolScrollSmoothComponent* _smoothComponent;
 };
@@ -62,6 +64,26 @@ public:
         Base::setVerticalScrollBar(new SolSmoothScrollBar(this));
     };
 
+protected:
+    virtual void wheelEvent(QWheelEvent* inEvent) override
+    {
+        const QPoint angleDelta = inEvent->angleDelta();
+        bool isHorizontal = qAbs(angleDelta.x()) > qAbs(angleDelta.y());
+
+        if (inEvent->modifiers().testFlag(Qt::ShiftModifier))
+        {
+            isHorizontal = !isHorizontal;
+        }
+
+        if (isHorizontal)
+        {
+            QCoreApplication::sendEvent(QAbstractScrollArea::horizontalScrollBar(), inEvent);
+        }
+        else
+        {
+            QCoreApplication::sendEvent(QAbstractScrollArea::verticalScrollBar(), inEvent);
+        }
+    }
 };
 
 

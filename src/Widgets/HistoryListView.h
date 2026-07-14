@@ -3,7 +3,6 @@
 #ifndef SOLTRANSLATOR_HISTORYLISTVIEW_H
 #define SOLTRANSLATOR_HISTORYLISTVIEW_H
 
-#include "SubWidgets/SolContextMenuEventWidget.h"
 #include "SubWidgets/SolSmoothScroll.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolUtilibrary.h"

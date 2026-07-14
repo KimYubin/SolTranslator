@@ -99,11 +99,17 @@ bool SolSmoothScrollBar::setSmoothValue(const float inAngleDelta)
     return _smoothComponent->smoothWheel(inAngleDelta);
 }
 
-void SolSmoothScrollBar::wheelEvent(QWheelEvent* event)
+void SolSmoothScrollBar::wheelEvent(QWheelEvent* inEvent)
 {
-    const QPoint angleDelta = event->angleDelta();
+    QPoint angleDelta = inEvent->angleDelta();
 
-    event->ignore();
+    if (inEvent->modifiers().testFlag(Qt::ShiftModifier))
+    {
+        angleDelta.setX(inEvent->angleDelta().y());
+        angleDelta.setY(inEvent->angleDelta().x());
+    }
+
+    inEvent->ignore();
     const bool isHorizontal = qAbs(angleDelta.x()) > qAbs(angleDelta.y());
 
     if (!isHorizontal && angleDelta.x() != 0 && orientation() == Qt::Horizontal)
@@ -111,10 +117,12 @@ void SolSmoothScrollBar::wheelEvent(QWheelEvent* event)
         return;
     }
 
-    const int delta = isHorizontal ? (-angleDelta.x()) : angleDelta.y();
+    // The Qt default uses the inverted value of angleDelta.x().
+    // Here, Use the input value as it is without inverting the left-right scroll.
+    const int delta = isHorizontal ? (angleDelta.x()) : angleDelta.y();
 
     if (_smoothComponent->smoothWheel(delta))
     {
-        event->accept();
+        inEvent->accept();
     }
 }

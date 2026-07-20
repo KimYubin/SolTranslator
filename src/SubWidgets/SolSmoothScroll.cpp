@@ -9,15 +9,15 @@
 #include <qstyleoption.h>
 
 // ~===============================
-// SolScrollSmoothComponent
-SolScrollSmoothComponent::SolScrollSmoothComponent(QWidget* inParent, QScrollBar* inScrollBar)
+// SolSmoothScrollComponent
+SolSmoothScrollComponent::SolSmoothScrollComponent(QWidget* inParent, QScrollBar* inScrollBar)
     : QObject(inParent)
     , _scrollAnim(new QPropertyAnimation(inScrollBar, "value", this))
 {
     setScrollBar(inScrollBar);
 }
 
-void SolScrollSmoothComponent::setScrollBar(QScrollBar* inScrollBar)
+void SolSmoothScrollComponent::setScrollBar(QScrollBar* inScrollBar)
 {
     if (_scrollBar)
     {
@@ -41,8 +41,17 @@ void SolScrollSmoothComponent::setScrollBar(QScrollBar* inScrollBar)
     });
 }
 
-bool SolScrollSmoothComponent::scrollToTargetValue(const int inTargetValue
-                                                 , const int inAnimDuration)
+void SolSmoothScrollComponent::setAnimDuration(const int inAnimDuration)
+{
+    _animDuration = inAnimDuration;
+}
+
+void SolSmoothScrollComponent::setEasingCurve(const QEasingCurve& inEasingCurve)
+{
+    _easingCurve = inEasingCurve;
+}
+
+bool SolSmoothScrollComponent::scrollToTargetValue(const int inTargetValue)
 {
     _scrollAnim->stop();
 
@@ -56,17 +65,16 @@ bool SolScrollSmoothComponent::scrollToTargetValue(const int inTargetValue
         return false;
     }
 
-    _scrollAnim->setDuration(inAnimDuration);
+    _scrollAnim->setDuration(_animDuration);
     _scrollAnim->setStartValue(curVal);
     _scrollAnim->setEndValue(_targetValue);
-    _scrollAnim->setEasingCurve(QEasingCurve::OutCubic);
+    _scrollAnim->setEasingCurve(_easingCurve);
     _scrollAnim->start();
 
     return true;
 }
 
-bool SolScrollSmoothComponent::scrollToDeltaValue(const int inDeltaValue
-                                                , const int inAnimDuration)
+bool SolSmoothScrollComponent::scrollToDeltaValue(const int inDeltaValue)
 {
     if (_scrollBar.isNull())
     {
@@ -76,10 +84,6 @@ bool SolScrollSmoothComponent::scrollToDeltaValue(const int inDeltaValue
     const int curVal = _scrollBar->value();
     if (_scrollAnim->state() == QAbstractAnimation::Running)
     {
-        if (_targetValue == (curVal - inDeltaValue))
-        {
-            // return true;
-        }
         _scrollAnim->stop();
     }
     else
@@ -87,7 +91,7 @@ bool SolScrollSmoothComponent::scrollToDeltaValue(const int inDeltaValue
         _targetValue = curVal;
     }
 
-    // Scroll direction == wheel direction
+    // Adding same direction.
     if ((inDeltaValue < 0 && curVal < _targetValue)
         || (inDeltaValue > 0 && curVal > _targetValue))
     {
@@ -99,7 +103,7 @@ bool SolScrollSmoothComponent::scrollToDeltaValue(const int inDeltaValue
         _targetValue = curVal - inDeltaValue;
     }
 
-    return scrollToTargetValue(_targetValue, inAnimDuration);
+    return scrollToTargetValue(_targetValue);
 }
 
 
@@ -107,7 +111,7 @@ bool SolScrollSmoothComponent::scrollToDeltaValue(const int inDeltaValue
 // SolSmoothScrollBar
 SolSmoothScrollBar::SolSmoothScrollBar(QWidget* inParent)
     : QScrollBar(inParent)
-    , _smoothComponent(new SolScrollSmoothComponent(this, this))
+    , _smoothComponent(new SolSmoothScrollComponent(this, this))
     , _repeatDelay(500)
     , _repeatDuration(50)
     , _pageStepRepeatLimit(1)
@@ -115,16 +119,16 @@ SolSmoothScrollBar::SolSmoothScrollBar(QWidget* inParent)
     connect(this, &QAbstractSlider::actionTriggered, this, &SolSmoothScrollBar::onActionTriggered);
 }
 
-bool SolSmoothScrollBar::scrollSmoothToTargetValue(const int inTargetVal
-                                                 , const int inAnimDuration)
+bool SolSmoothScrollBar::scrollSmoothToTargetValue(const int inTargetVal)
 {
-    return _smoothComponent->scrollToTargetValue(inTargetVal, inAnimDuration);
+    stopRepeat();
+
+    return _smoothComponent->scrollToTargetValue(inTargetVal);
 }
 
-bool SolSmoothScrollBar::scrollSmoothToDeltaValue(const int inDeltaVal
-                                                , const int inAnimDuration)
+bool SolSmoothScrollBar::scrollSmoothToDeltaValue(const int inDeltaVal)
 {
-    return _smoothComponent->scrollToDeltaValue(inDeltaVal, inAnimDuration);
+    return _smoothComponent->scrollToDeltaValue(inDeltaVal);
 }
 
 bool SolSmoothScrollBar::scrollSmoothToDeltaAngle(const float inDeltaAngle)
@@ -192,11 +196,28 @@ void SolSmoothScrollBar::onActionTriggered(const int inAction)
 
         setSliderPosition(_prvValue);
 
+        // 음수면 아래/오른쪽 방향
+        const int nextDelta = _prvValue - _targetPos;
+
+        if (nextDelta == 0)
+        {
+            break;
+        }
+
         if (isPageStep)
         {
-            if ((_prvValue < _targetPos && _pressRangeValue <= _targetPos)
-                || (_prvValue > _targetPos && _pressRangeValue >= _targetPos))
+            // 클릭 위치에 도달
+            if ((nextDelta < 0 && _prvValue >= _pressRangeValue)
+                || (nextDelta > 0 && _prvValue <= _pressRangeValue))
             {
+                break;
+            }
+
+            // 다음 스탭이 press 위치를 넘어갈 경우. press 위치까지만 이동.
+            if ((nextDelta < 0 && _targetPos >= (_pressRangeValue - (pageStep() / 2)))
+                ||(nextDelta > 0 && _targetPos <= (_pressRangeValue + (pageStep() / 2))))
+            {
+                scrollSmoothToTargetValue(_pressRangeValue);
                 break;
             }
 
@@ -208,7 +229,8 @@ void SolSmoothScrollBar::onActionTriggered(const int inAction)
                 break;
             }
         }
-        scrollSmoothToDeltaValue(_prvValue - _targetPos);
+
+        scrollSmoothToDeltaValue(nextDelta);
         break;
     }
     default:;
@@ -228,14 +250,14 @@ void SolSmoothScrollBar::wheelEvent(QWheelEvent* inEvent)
     inEvent->ignore();
     const bool isHorizontalWheel = qAbs(angleDelta.x()) > qAbs(angleDelta.y());
 
-    if (!isHorizontalWheel && angleDelta.x() != 0 && isHorizontal())
+    if (!isHorizontalWheel && (angleDelta.x() != 0) && isHorizontal())
     {
         return;
     }
 
     // The Qt default uses the inverted value of angleDelta.x().
     // Here, Use the input value as it is without inverting the left-right scroll.
-    const int delta = isHorizontalWheel ? (angleDelta.x()) : angleDelta.y();
+    const int delta = isHorizontalWheel ? angleDelta.x() : angleDelta.y();
 
     if (scrollSmoothToDeltaAngle(delta))
     {
@@ -284,12 +306,6 @@ int SolSmoothScrollBar::pixelPosToRangeValue(const int inPos) const
 
 void SolSmoothScrollBar::mousePressEvent(QMouseEvent* inEvent)
 {
-    if (!_repeatActionTimer.isActive())
-    {
-        _isAfterThreshold = true;
-        _repeatActionTimer.start(_repeatDelay, this);
-    }
-
     QStyleOptionSlider opt;
     initStyleOption(&opt);
     opt.keyboardModifiers = inEvent->modifiers();
@@ -303,6 +319,12 @@ void SolSmoothScrollBar::mousePressEvent(QMouseEvent* inEvent)
 
     _pressRangeValue = pixelPosToRangeValue(isHorizontal() ? pixelPos.x() : pixelPos.y());
 
+    if (!_repeatActionTimer.isActive())
+    {
+        _isFirstAction = true;
+        _repeatActionTimer.start(_repeatDelay, this);
+    }
+
     QScrollBar::mousePressEvent(inEvent);
 }
 
@@ -310,9 +332,7 @@ void SolSmoothScrollBar::mouseReleaseEvent(QMouseEvent* inEvent)
 {
     if (_repeatActionTimer.isActive())
     {
-        _repeatAction = SliderNoAction;
-        _repeatStack  = 0;
-        _repeatActionTimer.stop();
+        stopRepeat();
     }
 
     QScrollBar::mouseReleaseEvent(inEvent);
@@ -323,13 +343,20 @@ void SolSmoothScrollBar::timerEvent(QTimerEvent* inEvent)
     QScrollBar::timerEvent(inEvent);
     if (inEvent->timerId() == _repeatActionTimer.timerId())
     {
-        if (_isAfterThreshold)
+        if (_isFirstAction)
         {
             // was threshold time, use repeat time next time
             _repeatActionTimer.start(_repeatDuration, this);
-            _isAfterThreshold = false;
+            _isFirstAction = false;
         }
 
         triggerAction(_repeatAction);
     }
+}
+
+void SolSmoothScrollBar::stopRepeat()
+{
+    _repeatAction = SliderNoAction;
+    _repeatStack  = 0;
+    _repeatActionTimer.stop();
 }

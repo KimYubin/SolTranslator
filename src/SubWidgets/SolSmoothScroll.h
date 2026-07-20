@@ -4,6 +4,7 @@
 #define SOLTRANSLATOR_SOLSMOOTHSCROLL_H
 
 #include <QAbstractScrollArea>
+#include <QEasingCurve>
 #include <QPointer>
 #include <QScrollBar>
 #include <QWheelEvent>
@@ -12,21 +13,28 @@
 class QPropertyAnimation;
 
 /**
- * The SolScrollSmoothComponent class is a component class
+ * The SolSmoothScrollComponent class is a component class
  * that provides a smooth wheel scrolling feature.
  */
-class SolScrollSmoothComponent : public QObject
+class SolSmoothScrollComponent : public QObject
 {
 public:
-    explicit SolScrollSmoothComponent(QWidget* inParent, QScrollBar* inScrollBar);
+    explicit SolSmoothScrollComponent(QWidget* inParent, QScrollBar* inScrollBar);
     void setScrollBar(QScrollBar* inScrollBar);
 
-    bool scrollToTargetValue(const int inTargetValue, const int inAnimDuration = 200);
-    bool scrollToDeltaValue(const int inDeltaValue, const int inAnimDuration = 200);
+    void setAnimDuration(const int inAnimDuration);
+    void setEasingCurve(const QEasingCurve& inEasingCurve);
+
+    bool scrollToTargetValue(const int inTargetValue);
+    bool scrollToDeltaValue(const int inDeltaValue);
 
 protected:
     QPointer<QScrollBar> _scrollBar;
     QPropertyAnimation* _scrollAnim;
+
+    QEasingCurve _easingCurve = QEasingCurve::OutCubic;
+    int _animDuration = 200;
+
     int _targetValue = 0;
 };
 
@@ -39,8 +47,9 @@ class SolSmoothScrollBar : public QScrollBar
 public:
     explicit SolSmoothScrollBar(QWidget* inParent = nullptr);
 
-    bool scrollSmoothToTargetValue(const int inTargetVal, const int inAnimDuration = 200);
-    bool scrollSmoothToDeltaValue(const int inDeltaVal, const int inAnimDuration = 200);
+    bool scrollSmoothToTargetValue(const int inTargetVal);
+    bool scrollSmoothToDeltaValue(const int inDeltaVal);
+
     bool scrollSmoothToDeltaAngle(const float inDeltaAngle);
     bool isHorizontal() const;
 
@@ -58,8 +67,11 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* inEvent) override;
     virtual void timerEvent(QTimerEvent* inEvent) override;
 
+private:
+    void stopRepeat();
+
 protected:
-    SolScrollSmoothComponent* _smoothComponent;
+    SolSmoothScrollComponent* _smoothComponent;
     int _prvValue  = 0;
     int _targetPos = 0;
 
@@ -69,11 +81,11 @@ protected:
 
     int _repeatDelay;
     int _repeatDuration;
-    int _pageStepRepeatLimit;
+    int _pageStepRepeatLimit; // Move directly to the target point after the Repeat limit.
 
     int _repeatStack       = 0;
     int _pressRangeValue   = 0;
-    bool _isAfterThreshold = false;
+    bool _isFirstAction = false;
 };
 
 /**

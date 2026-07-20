@@ -21,7 +21,8 @@ public:
     explicit SolScrollSmoothComponent(QWidget* inParent, QScrollBar* inScrollBar);
     void setScrollBar(QScrollBar* inScrollBar);
 
-    bool smoothWheel(const float inAngleDelta);
+    bool scrollToTargetValue(const int inTargetValue, const int inAnimDuration = 200);
+    bool scrollToDeltaValue(const int inDeltaValue, const int inAnimDuration = 200);
 
 protected:
     QPointer<QScrollBar> _scrollBar;
@@ -37,12 +38,42 @@ class SolSmoothScrollBar : public QScrollBar
 {
 public:
     explicit SolSmoothScrollBar(QWidget* inParent = nullptr);
-    bool setSmoothValue(const float inAngleDelta);
+
+    bool scrollSmoothToTargetValue(const int inTargetVal, const int inAnimDuration = 200);
+    bool scrollSmoothToDeltaValue(const int inDeltaVal, const int inAnimDuration = 200);
+    bool scrollSmoothToDeltaAngle(const float inDeltaAngle);
+    bool isHorizontal() const;
+
+    void setRepeatDelay(const int inRepeatDelay);
+    void setRepeatDuration(const int inRepeatDuration);
+    void setPageStepRepeatLimit(const int inPageStepRepeatLimit);
+
+    void onActionTriggered(const int inAction);
+
+    int pixelPosToRangeValue(const int inPos) const;
 
 protected:
     virtual void wheelEvent(QWheelEvent* inEvent) override;
+    virtual void mousePressEvent(QMouseEvent* inEvent) override;
+    virtual void mouseReleaseEvent(QMouseEvent* inEvent) override;
+    virtual void timerEvent(QTimerEvent* inEvent) override;
 
+protected:
     SolScrollSmoothComponent* _smoothComponent;
+    int _prvValue  = 0;
+    int _targetPos = 0;
+
+    SliderAction _repeatAction = SliderNoAction;
+
+    QBasicTimer _repeatActionTimer;
+
+    int _repeatDelay;
+    int _repeatDuration;
+    int _pageStepRepeatLimit;
+
+    int _repeatStack       = 0;
+    int _pressRangeValue   = 0;
+    bool _isAfterThreshold = false;
 };
 
 /**

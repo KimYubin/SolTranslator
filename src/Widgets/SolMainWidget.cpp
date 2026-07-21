@@ -252,7 +252,12 @@ QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon
 
 void SolMainWidget::quitApp()
 {
-    const auto reply = showNewMessageBox(QMessageBox::Icon::Question
+    qApp->quit();
+
+    return;
+
+    // Confirm, if needs.
+    const auto reply = showNewMessageBox(QMessageBox::Icon::NoIcon
                                        , i18n(Tr::Sol_Translator)
                                        , i18n(Tr::Confirm_Quit)
                                        , {{i18n(Tr::Quit), QMessageBox::Yes}, {i18n(Tr::Cancel), QMessageBox::Cancel}}

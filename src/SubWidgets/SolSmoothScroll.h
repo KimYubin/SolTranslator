@@ -72,12 +72,10 @@ private:
 
 protected:
     SolSmoothScrollComponent* _smoothComponent;
-    int _prvValue  = 0;
-    int _targetPos = 0;
 
     SliderAction _repeatAction = SliderNoAction;
 
-    QBasicTimer _repeatActionTimer;
+    QBasicTimer _repeatTimer;
 
     int _repeatDelay;
     int _repeatDuration;

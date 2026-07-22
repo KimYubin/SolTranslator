@@ -12,16 +12,20 @@
 #include <QWheelEvent>
 
 
-class QPropertyAnimation;
+class QVariantAnimation;
 
 /**
- * The SolSmoothScrollComponent class is a component class
+ * The SolSmoothComponent class is a component class
  * that provides a smooth wheel scrolling feature.
  */
-class SolSmoothScrollComponent : public QObject
+class SolSmoothComponent : public QObject
 {
+    Q_OBJECT
+
 public:
-    explicit SolSmoothScrollComponent(QObject* inParent, QObject* inTargetObject);
+    explicit SolSmoothComponent(QObject* inParent, Callback<int()>&& inValueCallback);
+
+    void setCurrentValueFunctor(Callback<int()>&& inValueCallback);
 
     void setAnimDuration(const int inAnimDuration);
     void setEasingCurve(const QEasingCurve& inEasingCurve);
@@ -29,17 +33,15 @@ public:
     bool scrollToTargetValue(const int inTargetValue);
     bool scrollToDeltaValue(const int inDeltaValue);
 
-    void setCurrentValueFunctor(Callback<int(void)>&& inCallback) { _curValue = std::move(inCallback); }
-
-    void onRangeChanged(const int inMin, const int inMax);
+    void setRange(const int inMin, const int inMax);
 
 signals:
     void valueChanged(int inValue);
 
 protected:
-    QPropertyAnimation* _smoothAnim;
+    QVariantAnimation* _smoothAnim;
 
-    Callback<int(void)> _curValue;
+    Callback<int()> _curValue;
 
     int _minVal;
     int _maxVal;
@@ -56,6 +58,8 @@ protected:
  */
 class SolSmoothScrollBar : public QScrollBar
 {
+    Q_OBJECT
+
 public:
     explicit SolSmoothScrollBar(QWidget* inParent = nullptr);
 
@@ -83,7 +87,7 @@ private:
     void stopRepeat();
 
 protected:
-    SolSmoothScrollComponent* _smoothComponent;
+    SolSmoothComponent* _smoothComponent;
 
     SliderAction _repeatAction = SliderNoAction;
 
@@ -93,9 +97,9 @@ protected:
     int _repeatDuration;
     int _pageStepRepeatLimit; // Move directly to the target point after the Repeat limit.
 
-    int _repeatStack       = 0;
-    int _pressRangeValue   = 0;
-    bool _isFirstAction = false;
+    int _repeatStack     = 0;
+    int _pressRangeValue = 0;
+    bool _isFirstAction  = false;
 };
 
 /**

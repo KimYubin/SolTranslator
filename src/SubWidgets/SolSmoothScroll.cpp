@@ -10,36 +10,12 @@
 
 // ~===============================
 // SolSmoothScrollComponent
-SolSmoothScrollComponent::SolSmoothScrollComponent(QWidget* inParent, QScrollBar* inScrollBar)
+SolSmoothScrollComponent::SolSmoothScrollComponent(QObject* inParent, QObject* inTargetObject)
     : QObject(inParent)
-    , _scrollAnim(new QPropertyAnimation(inScrollBar, "value", this))
-{
-    setScrollBar(inScrollBar);
-}
-
-void SolSmoothScrollComponent::setScrollBar(QScrollBar* inScrollBar)
-{
-    if (_scrollBar)
-    {
-        disconnect(_scrollBar, &QScrollBar::rangeChanged, _scrollAnim, nullptr);
-    }
-
-    _scrollAnim->setTargetObject(inScrollBar);
-
-    _scrollBar = inScrollBar;
-    if (_scrollBar.isNull())
-    {
-        return;
-    }
-
-    connect(_scrollBar, &QScrollBar::rangeChanged, _scrollAnim, [this](int min, int max)
-    {
-        if (min == max)
-        {
-            _scrollAnim->stop();
-        }
-    });
-}
+    , _smoothAnim(new QPropertyAnimation(inTargetObject, "value", this))
+    , _minVal(std::numeric_limits<int>::min())
+    , _maxVal(std::numeric_limits<int>::max())
+{}
 
 void SolSmoothScrollComponent::setAnimDuration(const int inAnimDuration)
 {
@@ -53,38 +29,41 @@ void SolSmoothScrollComponent::setEasingCurve(const QEasingCurve& inEasingCurve)
 
 bool SolSmoothScrollComponent::scrollToTargetValue(const int inTargetValue)
 {
-    _scrollAnim->stop();
+    if (_smoothAnim->targetObject() == nullptr || !_curValue)
+    {
+        return false;
+    }
 
-    const int curVal = _scrollBar->value();
-    const int minVal = _scrollBar->minimum();
-    const int maxVal = _scrollBar->maximum();
+    _smoothAnim->stop();
 
-    _targetValue = std::clamp(inTargetValue, minVal, maxVal);
+    const int curVal = _curValue();
+
+    _targetValue = std::clamp(inTargetValue, _minVal, _maxVal);
     if (curVal == _targetValue)
     {
         return false;
     }
 
-    _scrollAnim->setDuration(_animDuration);
-    _scrollAnim->setStartValue(curVal);
-    _scrollAnim->setEndValue(_targetValue);
-    _scrollAnim->setEasingCurve(_easingCurve);
-    _scrollAnim->start();
+    _smoothAnim->setDuration(_animDuration);
+    _smoothAnim->setStartValue(curVal);
+    _smoothAnim->setEndValue(_targetValue);
+    _smoothAnim->setEasingCurve(_easingCurve);
+    _smoothAnim->start();
 
     return true;
 }
 
 bool SolSmoothScrollComponent::scrollToDeltaValue(const int inDeltaValue)
 {
-    if (_scrollBar.isNull())
+    if (_smoothAnim->targetObject() == nullptr || !_curValue)
     {
         return false;
     }
 
-    const int curVal = _scrollBar->value();
-    if (_scrollAnim->state() == QAbstractAnimation::Running)
+    const int curVal = _curValue();
+    if (_smoothAnim->state() == QAbstractAnimation::Running)
     {
-        _scrollAnim->stop();
+        _smoothAnim->stop();
     }
     else
     {
@@ -106,6 +85,17 @@ bool SolSmoothScrollComponent::scrollToDeltaValue(const int inDeltaValue)
     return scrollToTargetValue(_targetValue);
 }
 
+void SolSmoothScrollComponent::onRangeChanged(const int inMin, const int inMax)
+{
+    _minVal = inMin;
+    _maxVal = inMax;
+
+    if (_minVal == _maxVal)
+    {
+        _smoothAnim->stop();
+    }
+}
+
 
 // ~===============================
 // SolSmoothScrollBar
@@ -117,6 +107,10 @@ SolSmoothScrollBar::SolSmoothScrollBar(QWidget* inParent)
     , _pageStepRepeatLimit(1)
 {
     connect(this, &QAbstractSlider::actionTriggered, this, &SolSmoothScrollBar::onActionTriggered);
+
+    connect(this, &QScrollBar::rangeChanged, _smoothComponent, &SolSmoothScrollComponent::onRangeChanged);
+
+    _smoothComponent->setCurrentValueFunctor([this]() { return value(); });
 }
 
 bool SolSmoothScrollBar::scrollSmoothToTargetValue(const int inTargetVal)

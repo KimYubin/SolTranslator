@@ -3,6 +3,8 @@
 #ifndef SOLTRANSLATOR_SOLSMOOTHSCROLL_H
 #define SOLTRANSLATOR_SOLSMOOTHSCROLL_H
 
+#include "Types/SolTypes.h"
+
 #include <QAbstractScrollArea>
 #include <QEasingCurve>
 #include <QPointer>
@@ -19,8 +21,7 @@ class QPropertyAnimation;
 class SolSmoothScrollComponent : public QObject
 {
 public:
-    explicit SolSmoothScrollComponent(QWidget* inParent, QScrollBar* inScrollBar);
-    void setScrollBar(QScrollBar* inScrollBar);
+    explicit SolSmoothScrollComponent(QObject* inParent, QObject* inTargetObject);
 
     void setAnimDuration(const int inAnimDuration);
     void setEasingCurve(const QEasingCurve& inEasingCurve);
@@ -28,9 +29,20 @@ public:
     bool scrollToTargetValue(const int inTargetValue);
     bool scrollToDeltaValue(const int inDeltaValue);
 
+    void setCurrentValueFunctor(Callback<int(void)>&& inCallback) { _curValue = std::move(inCallback); }
+
+    void onRangeChanged(const int inMin, const int inMax);
+
+signals:
+    void valueChanged(int inValue);
+
 protected:
-    QPointer<QScrollBar> _scrollBar;
-    QPropertyAnimation* _scrollAnim;
+    QPropertyAnimation* _smoothAnim;
+
+    Callback<int(void)> _curValue;
+
+    int _minVal;
+    int _maxVal;
 
     QEasingCurve _easingCurve = QEasingCurve::OutCubic;
     int _animDuration = 200;

@@ -32,6 +32,9 @@ public:
 
     void setRange(const int inMin, const int inMax);
 
+    void startContinuousSmoothAnimation(const bool inIsToAdd);
+    void stopContinuousSmoothAnimation();
+
 signals:
     void valueChanged(int inValue);
 

@@ -38,6 +38,7 @@ bool SolSmoothScrollBar::scrollSmoothToDeltaAngle(const float inDeltaAngle)
     const float deltaWheelStep = inDeltaAngle / 120.f;
     const int deltaVal = std::round(singleStep() * deltaWheelStep);
 
+    // In Qt, the angles of the lower and right wheels are negative.
     return scrollSmoothToDeltaValue(-deltaVal);
 }
 
@@ -63,84 +64,79 @@ void SolSmoothScrollBar::setPageStepRepeatLimit(const int inPageStepRepeatLimit)
 
 void SolSmoothScrollBar::onActionTriggered(const int inAction)
 {
-    const bool isSingleStep = (inAction == SliderSingleStepAdd || inAction == SliderSingleStepSub);
-    const bool isPageStep   = (inAction == SliderPageStepAdd || inAction == SliderPageStepSub);
+    // Disable the repeat action of the QScrollBar.
+    // Use custom repetition.
+    setRepeatAction(SliderNoAction);
 
-    if (isSingleStep)
-    {
-        setRepeatDuration(25);
-    }
-    else if (isPageStep)
-    {
-        setRepeatDuration(50);
-    }
+    bool isSingleStep = false;
+    bool isPageStep   = false;
+    bool isMinMax     = false;
 
     switch (inAction)
     {
-    case SliderSingleStepAdd:
-    case SliderSingleStepSub:
-    case SliderPageStepAdd:
-    case SliderPageStepSub:
-    case SliderToMinimum:
-    case SliderToMaximum:
+    case SliderSingleStepAdd: case SliderSingleStepSub: isSingleStep = true; break;
+    case SliderPageStepAdd: case SliderPageStepSub: isPageStep = true; break;
+    case SliderToMinimum: case SliderToMaximum: isMinMax = true; break;
+    default:
+        return;
+    }
+
+    // The value() has not been changed yet.
+    // Since Need to move the Slider with custom implementation,
+    // restore the changed sliderPosition to the value before the change.
+    const int curValue  = value();
+    const int targetVal = sliderPosition();
+    setSliderPosition(curValue);
+
+    if (isMinMax)
     {
-        if (!_repeatTimer.isActive())
-        {
-            _isFirstAction = true;
-            _repeatTimer.start(_repeatDelay, this);
-        }
-
-        setRepeatAction(SliderNoAction);
-        _repeatAction = static_cast<SliderAction>(inAction);
-
-        // actionTriggered() 신호 발생 이전과 이후에,
-        // 각각 sliderPosition과 value가 수정됩니다.
-        // 자체 타이머를 통해 Slider를 움직여야하므로, 
-        // 변경된 sliderPosition을 변경 전인 value값으로 복구합니다.
-
-        const int curValue  = value();
-        const int targetVal = sliderPosition();
-
-        setSliderPosition(curValue);
-
-        // 양수면 아래/오른쪽 방향
-        const int nextDelta = targetVal - curValue;
-
-        if (nextDelta == 0)
-        {
-            break;
-        }
-
-        if (isPageStep)
-        {
-            // 클릭 위치에 도달
-            if ((nextDelta > 0 && curValue >= _pressRangeValue)
-                || (nextDelta < 0 && curValue <= _pressRangeValue))
-            {
-                break;
-            }
-
-            // 다음 스탭이 press 위치를 넘어갈 경우. press 위치까지만 이동.
-            if ((nextDelta > 0 && targetVal >= (_pressRangeValue - (pageStep() / 2)))
-                ||(nextDelta < 0 && targetVal <= (_pressRangeValue + (pageStep() / 2))))
-            {
-                scrollSmoothToTargetValue(_pressRangeValue);
-                break;
-            }
-
-            if (_repeatStack++ >= _pageStepRepeatLimit)
-            {
-                _repeatStack = _pageStepRepeatLimit;
-                scrollSmoothToTargetValue(_pressRangeValue);
-                break;
-            }
-        }
-
-        scrollSmoothToDeltaValue(nextDelta);
-        break;
+        scrollSmoothToTargetValue(targetVal);
+        return;
     }
-    default:;
+
+    // Positive number, bottom right direction.
+    const int nextDelta = targetVal - curValue;
+    if (nextDelta == 0)
+    {
+        return;
     }
+
+    setRepeatTimer(static_cast<SliderAction>(inAction));
+
+    if (isSingleStep && (_isFirstAction == false))
+    {
+        stopRepeat();
+        _smoothComponent->startContinuousSmoothAnimation(inAction == SliderSingleStepAdd);
+        return;
+    }
+
+    if (isPageStep)
+    {
+        // Reached the press position.
+        if ((nextDelta > 0 && curValue >= _pressRangeValue)
+            || (nextDelta < 0 && curValue <= _pressRangeValue))
+        {
+            stopRepeat();
+            return;
+        }
+
+        // If the next step exceeds the press position, move only up to the press position.
+        if ((nextDelta > 0 && targetVal >= (_pressRangeValue - (pageStep() / 2)))
+            || (nextDelta < 0 && targetVal <= (_pressRangeValue + (pageStep() / 2))))
+        {
+            scrollSmoothToTargetValue(_pressRangeValue);
+            return;
+        }
+
+        if (_repeatStack++ >= _pageStepRepeatLimit)
+        {
+            _repeatStack = _pageStepRepeatLimit;
+            scrollSmoothToTargetValue(_pressRangeValue);
+            return;
+        }
+    }
+
+    scrollSmoothToDeltaValue(nextDelta);
 }
 
 int SolSmoothScrollBar::pixelPosToRangeValue(const int inPos) const
@@ -180,6 +176,33 @@ int SolSmoothScrollBar::pixelPosToRangeValue(const int inPos) const
                                          , inPos - sliderMin
                                          , sliderMax - sliderMin
                                          , opt.upsideDown);
+}
+
+void SolSmoothScrollBar::setRepeatTimer(const SliderAction inAction)
+{
+    switch (inAction)
+    {
+    case SliderSingleStepAdd:
+    case SliderSingleStepSub:
+    case SliderPageStepAdd:
+    case SliderPageStepSub:
+        break;
+    case SliderNoAction:
+    case SliderToMinimum:
+    case SliderToMaximum:
+    case SliderMove:
+    default:
+        stopRepeat();
+        return;
+    }
+
+    if (!_repeatTimer.isActive())
+    {
+        _isFirstAction = true;
+        _repeatTimer.start(_repeatDelay, this);
+    }
+
+    _repeatAction = inAction;
 }
 
 void SolSmoothScrollBar::wheelEvent(QWheelEvent* inEvent)
@@ -235,6 +258,8 @@ void SolSmoothScrollBar::mouseReleaseEvent(QMouseEvent* inEvent)
     {
         stopRepeat();
     }
+
+    _smoothComponent->stopContinuousSmoothAnimation();
 
     QScrollBar::mouseReleaseEvent(inEvent);
 }

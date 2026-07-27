@@ -36,6 +36,7 @@ public:
     int pixelPosToRangeValue(const int inPos) const;
 
 protected:
+    void setRepeatTimer(const SliderAction inAction);
     virtual void wheelEvent(QWheelEvent* inEvent) override;
     virtual void mousePressEvent(QMouseEvent* inEvent) override;
     virtual void mouseReleaseEvent(QMouseEvent* inEvent) override;
@@ -51,8 +52,8 @@ protected:
 
     QBasicTimer _repeatTimer;
 
-    int _repeatDelay;
-    int _repeatDuration;
+    int _repeatDelay;// 최초 반복 딜레이
+    int _repeatDuration; // 이후 반복 간 간격
     int _pageStepRepeatLimit; // Move directly to the target point after the Repeat limit.
 
     int _repeatStack     = 0;

@@ -11,5 +11,5 @@
   - [ ] Delete selections
   - [ ] Search
   - [ ] Search filter
-
+- [ ] Add multiple shortcuts.
 - [x] Add SolSharedGuard

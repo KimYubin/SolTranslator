@@ -2,6 +2,8 @@
 
 #include "SolSmoothComponent.h"
 
+#include "Utils/SolLog.h"
+
 #include <QVariantAnimation>
 
 
@@ -49,9 +51,10 @@ bool SolSmoothComponent::scrollToTargetValue(const int inTargetValue)
     }
 
     _smoothAnim->setDuration(_animDuration);
+    _smoothAnim->setEasingCurve(_easingCurve);
     _smoothAnim->setStartValue(curVal);
     _smoothAnim->setEndValue(_targetValue);
-    _smoothAnim->setEasingCurve(_easingCurve);
+
     _smoothAnim->start();
 
     return true;
@@ -98,4 +101,31 @@ void SolSmoothComponent::setRange(const int inMin, const int inMax)
     {
         _smoothAnim->stop();
     }
+}
+
+void SolSmoothComponent::startContinuousSmoothAnimation(const bool inIsToAdd)
+{
+    _smoothAnim->stop();
+
+    if (!_curValue)
+    {
+        return;
+    }
+
+    const int curVal = _curValue();
+
+    const float deltaToEnd = inIsToAdd ? (_maxVal - curVal) : (curVal - _minVal);
+    const int endValue     = inIsToAdd ? _maxVal : _minVal;
+
+    _smoothAnim->setDuration(deltaToEnd * 2.0f);
+    _smoothAnim->setEasingCurve(QEasingCurve::Linear);
+    _smoothAnim->setStartValue(curVal);
+    _smoothAnim->setEndValue(endValue);
+
+    _smoothAnim->start();
+}
+
+void SolSmoothComponent::stopContinuousSmoothAnimation()
+{
+    _smoothAnim->stop();
 }

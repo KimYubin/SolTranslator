@@ -34,13 +34,14 @@ public:
     explicit LanguageSelectorMenuPrivate(LanguageSelector* inLangSelector, QWidget* inParentWidget);
     ~LanguageSelectorMenuPrivate() override;
 
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+
     virtual QSize sizeHint() const override;
 
     void showMenuPopup();
     void closeMenuPopup();
 
 protected:
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
     virtual void closeEvent(QCloseEvent* event) override;
 
 public:
@@ -203,32 +204,6 @@ LanguageSelectorMenuPrivate::~LanguageSelectorMenuPrivate()
     qApp->removeEventFilter(this);
 }
 
-QSize LanguageSelectorMenuPrivate::sizeHint() const
-{
-    return getTargetSize();
-}
-
-void LanguageSelectorMenuPrivate::showMenuPopup()
-{
-    qApp->installEventFilter(this);
-    resize(getTargetSize());
-    move(getTargetRelPos());
-    show();
-    raise();
-    _searchLine->setFocus();
-}
-
-void LanguageSelectorMenuPrivate::closeMenuPopup()
-{
-    qApp->removeEventFilter(this);
-    if (_langSelector && _langSelector->_returnFocusWidget)
-    {
-        _langSelector->_returnFocusWidget->setFocus();
-    }
-
-    close();
-}
-
 bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
 {
     const QEvent::Type eventType = event->type();
@@ -295,6 +270,32 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
     }
 
     return QWidget::eventFilter(obj, event);
+}
+
+QSize LanguageSelectorMenuPrivate::sizeHint() const
+{
+    return getTargetSize();
+}
+
+void LanguageSelectorMenuPrivate::showMenuPopup()
+{
+    qApp->installEventFilter(this);
+    resize(getTargetSize());
+    move(getTargetRelPos());
+    show();
+    raise();
+    _searchLine->setFocus();
+}
+
+void LanguageSelectorMenuPrivate::closeMenuPopup()
+{
+    qApp->removeEventFilter(this);
+    if (_langSelector && _langSelector->_returnFocusWidget)
+    {
+        _langSelector->_returnFocusWidget->setFocus();
+    }
+
+    close();
 }
 
 void LanguageSelectorMenuPrivate::closeEvent(QCloseEvent* event)

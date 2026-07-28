@@ -37,6 +37,8 @@ public:
     explicit PopupTranslateWidget(QWidget* parent = nullptr);
     ~PopupTranslateWidget() override;
 
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+
 private:
     void setupUI();
 
@@ -131,8 +133,7 @@ protected:
     virtual void enterEvent(QEnterEvent* event) override;
     virtual void leaveEvent(QEvent* event) override;
 
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
-
+protected:
     QPropertyAnimation* _animation;
 
     SolWidgetModeFlags _widgetModeFlags;

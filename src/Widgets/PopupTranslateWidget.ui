@@ -136,7 +136,7 @@
   <customwidget>
    <class>SolSmoothScrollBar</class>
    <extends>QScrollBar</extends>
-   <header>SubWidgets/SolSmoothScroll.h</header>
+   <header>SubWidgets/SolSmoothScrollBar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

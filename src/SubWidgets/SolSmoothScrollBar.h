@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: Copyright (C) 2026 Kim Yubin. All rights reserved.
 
-#ifndef SOLTRANSLATOR_SOLSMOOTHSCROLL_H
-#define SOLTRANSLATOR_SOLSMOOTHSCROLL_H
+#ifndef SOLTRANSLATOR_SOLSMOOTHSCROLLBAR_H
+#define SOLTRANSLATOR_SOLSMOOTHSCROLLBAR_H
 
-
-#include <QAbstractScrollArea>
+#include <QBasicTimer>
 #include <QScrollBar>
-#include <QWheelEvent>
 
 class SolSmoothComponent;
 
@@ -61,46 +59,6 @@ protected:
     bool _isFirstAction  = false;
 };
 
-/**
- * The SolSmoothAbstractScrollArea class is a ScrollArea class
- * that provides smooth wheel scrolling.
- *
- * @tparam BaseType requires QAbstractScrollArea-derived.
- */
-template <std::derived_from<QAbstractScrollArea> BaseType>
-class SolSmoothAbstractScrollArea : public BaseType
-{
-public:
-    using Base = BaseType;
-
-    explicit SolSmoothAbstractScrollArea(QWidget* inParent = nullptr)
-        : Base(inParent)
-    {
-        Base::setHorizontalScrollBar(new SolSmoothScrollBar(this));
-        Base::setVerticalScrollBar(new SolSmoothScrollBar(this));
-    };
-
-protected:
-    virtual void wheelEvent(QWheelEvent* inEvent) override
-    {
-        const QPoint angleDelta = inEvent->angleDelta();
-        bool isHorizontal = qAbs(angleDelta.x()) > qAbs(angleDelta.y());
-
-        if (inEvent->modifiers().testFlag(Qt::ShiftModifier))
-        {
-            isHorizontal = !isHorizontal;
-        }
-
-        if (isHorizontal)
-        {
-            QCoreApplication::sendEvent(QAbstractScrollArea::horizontalScrollBar(), inEvent);
-        }
-        else
-        {
-            QCoreApplication::sendEvent(QAbstractScrollArea::verticalScrollBar(), inEvent);
-        }
-    }
-};
 
 
-#endif //SOLTRANSLATOR_SOLSMOOTHSCROLL_H
+#endif //SOLTRANSLATOR_SOLSMOOTHSCROLLBAR_H

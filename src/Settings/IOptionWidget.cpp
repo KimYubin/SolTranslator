@@ -3,7 +3,7 @@
 #include "IOptionWidget.h"
 
 #include "SettingWidgetFactory.h"
-#include "SubWidgets/SolSmoothScroll.h"
+#include "SubWidgets/SolSmoothScrollBar.h"
 #include "Utils/SolLog.h"
 
 #include <QGroupBox>

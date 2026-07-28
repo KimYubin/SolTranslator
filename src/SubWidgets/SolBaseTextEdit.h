@@ -4,7 +4,7 @@
 #define SOLBASETEXTEDIT_H
 
 #include "SolContextMenuEventWidget.h"
-#include "SolSmoothScroll.h"
+#include "SolSmoothAbstractScrollArea.hpp"
 
 #include <QLineEdit>
 #include <QPlainTextEdit>
@@ -37,18 +37,18 @@ protected:
         const QPoint angleDelta = event->angleDelta();
 
         // Zoom
-        if (!(Base::textInteractionFlags().testFlag(Qt::TextEditable)))
+        if (!(this->textInteractionFlags().testFlag(Qt::TextEditable)))
         {
             if (event->modifiers().testFlag(Qt::ControlModifier))
             {
                 float delta = angleDelta.y() / 120.f;
-                Base::zoomInF(delta);
+                this->zoomInF(delta);
                 return;
             }
         }
 
-        Base::wheelEvent(event);
-        Base::updateMicroFocus();
+        this->wheelEvent(event);
+        this->updateMicroFocus();
     }
 };
 

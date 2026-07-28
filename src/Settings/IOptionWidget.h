@@ -3,7 +3,7 @@
 #ifndef OPTIONWIDGET_H
 #define OPTIONWIDGET_H
 
-#include "SubWidgets/SolSmoothScroll.h"
+#include "SubWidgets/SolSmoothAbstractScrollArea.hpp"
 #include "Types/SolTypes.h"
 
 #include <QObject>

@@ -105,6 +105,37 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
+bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
+{
+    // 팝업모드에서 자동 종료
+    if (obj == qApp
+        && _widgetModeFlags.testFlag(SolWidgetMode::PopupMode)
+        && event->type() == QEvent::ApplicationStateChange)
+    {
+        const Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
+        if (changeState != Qt::ApplicationActive)
+        {
+            close();
+            return true;
+        }
+    } // 사이즈 조절 가능 모드로 전환
+    else if (obj == _sizeGrip
+        && event->type() == QEvent::MouseButtonPress)
+    {
+        manualSizeMode();
+        return false; // no consume
+    } // bgframe에 전달된 mouseMove이벤트 후킹
+    else if (obj == ui->bgFrame
+        && event->type() == QEvent::MouseMove)
+    {
+        mouseMoveEvent(static_cast<QMouseEvent*>(event));
+        return false; // no consume
+    }
+
+
+    return QWidget::eventFilter(obj, event);
+}
+
 void PopupTranslateWidget::setupUI()
 {
     ui->setupUi(this);
@@ -957,35 +988,4 @@ void PopupTranslateWidget::leaveEvent(QEvent* event)
     setCursor(Qt::ArrowCursor);
 
     QWidget::leaveEvent(event);
-}
-
-bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
-{
-    // 팝업모드에서 자동 종료
-    if (obj == qApp
-        && _widgetModeFlags.testFlag(SolWidgetMode::PopupMode)
-        && event->type() == QEvent::ApplicationStateChange)
-    {
-        const Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
-        if (changeState != Qt::ApplicationActive)
-        {
-            close();
-            return true;
-        }
-    } // 사이즈 조절 가능 모드로 전환
-    else if (obj == _sizeGrip
-        && event->type() == QEvent::MouseButtonPress)
-    {
-        manualSizeMode();
-        return false; // no consume
-    } // bgframe에 전달된 mouseMove이벤트 후킹
-    else if (obj == ui->bgFrame
-        && event->type() == QEvent::MouseMove)
-    {
-        mouseMoveEvent(static_cast<QMouseEvent*>(event));
-        return false; // no consume
-    }
-
-
-    return QWidget::eventFilter(obj, event);
 }

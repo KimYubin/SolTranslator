@@ -47,7 +47,7 @@ protected:
             }
         }
 
-        this->wheelEvent(event);
+        Base::wheelEvent(event);
         this->updateMicroFocus();
     }
 };

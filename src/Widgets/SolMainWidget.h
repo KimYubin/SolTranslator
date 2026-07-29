@@ -39,7 +39,7 @@ public:
 
     virtual void setVisible(const bool visible) override;
 
-    void showSettingsWidget();
+    void showSettings();
 
 protected:
     virtual void closeEvent(QCloseEvent* event) override;
@@ -58,8 +58,7 @@ private slots:
     void iconActivated(const QSystemTrayIcon::ActivationReason reason);
 
 private:
-    void createActions();
-    void createTrayIcon();
+    void setupTrayIcon();
     void setupShortcuts();
     void popupTrayMenu();
 
@@ -85,12 +84,9 @@ private:
     // trayIcon
     QAction* _miniToTrayAction;
     QAction* _restoreAction;
-    QAction* _settingAction;
-    QAction* _quitAction;
 
     QIcon _solIcon;
     QSystemTrayIcon* _trayIcon;
-    QMenu* _trayIconMenu;
 
     // 좌클릭과 더블클릭 구분용
     QTimer* _doubleClickTimer;

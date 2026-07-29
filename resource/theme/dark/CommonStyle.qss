@@ -199,12 +199,12 @@ QMenu::separator
 
 /* -------------------------------- */
 /* TrayIconMenu */
-QMenu#trayIconMenu
+QMenu#trayMenu
 {
   border-radius: 5px;
   padding: 4px;
 }
-QMenu#trayIconMenu::item
+QMenu#trayMenu::item
 {
   height: 16px;
   height: 14px;
@@ -214,19 +214,19 @@ QMenu#trayIconMenu::item
   padding: 8px 8px 8px 18px;
 }
 
-QMenu#trayIconMenu::item:disabled 
+QMenu#trayMenu::item:disabled
 {
   color: rgba(255, 255, 255, 0.3);
 } 
 
-QMenu#trayIconMenu::icon,
-QMenu#trayIconMenu::icon
+QMenu#trayMenu::icon,
+QMenu#trayMenu::icon
 {
   margin: 8px;
 }
 
-QMenu#trayIconMenu::separator,
-QMenu#trayIconMenu::separator
+QMenu#trayMenu::separator,
+QMenu#trayMenu::separator
 {
   margin: 4px 0px 4px 0px ;
 }

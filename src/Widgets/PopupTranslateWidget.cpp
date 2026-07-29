@@ -838,6 +838,33 @@ void PopupTranslateWidget::moveWindow(const QPoint& inMousePos)
     }
 }
 
+namespace
+{
+enum class GeoArea
+{
+    topLeft, topRight, bottomLeft, bottomRight, top, bottom, Left, Right, None
+};
+
+GeoArea containsPosInSpanArea(QRect inGeo
+                            , QRect inInGeo
+                            , const QPoint& inPos)
+{
+    inGeo.setBottomRight(inGeo.bottomRight() + QPoint{1, 1});
+    inInGeo.setBottomRight(inInGeo.bottomRight() + QPoint{1, 1});
+
+    if (QRect::span(inGeo.topLeft(), inInGeo.topLeft()).contains(inPos))         return GeoArea::topLeft;
+    if (QRect::span(inGeo.topRight(), inInGeo.topRight()).contains(inPos))       return GeoArea::topRight;
+    if (QRect::span(inGeo.bottomLeft(), inInGeo.bottomLeft()).contains(inPos))   return GeoArea::bottomLeft;
+    if (QRect::span(inGeo.bottomRight(), inInGeo.bottomRight()).contains(inPos)) return GeoArea::bottomRight;
+    if (QRect::span(inGeo.topLeft(), inInGeo.topRight()).contains(inPos))        return GeoArea::top;
+    if (QRect::span(inGeo.bottomLeft(), inInGeo.bottomRight()).contains(inPos))  return GeoArea::bottom;
+    if (QRect::span(inGeo.topLeft(), inInGeo.bottomLeft()).contains(inPos))      return GeoArea::Left;
+    if (QRect::span(inGeo.topRight(), inInGeo.bottomRight()).contains(inPos))    return GeoArea::Right;
+
+    return GeoArea::None;
+}
+} // anonymous namespace
+
 void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
 {
     manualSizeMode();
@@ -852,23 +879,18 @@ void PopupTranslateWidget::resizeWindow(const QPoint& inMousePos)
         return;
     }
 
-    const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
-    const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
-    const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
-    const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
-    const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
-    const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
-    const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
-    const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
-
-    if (topLeftArea.contains(inMousePos))          win->startSystemResize(Qt::TopEdge | Qt::LeftEdge);
-    else if (topRightArea.contains(inMousePos))    win->startSystemResize(Qt::TopEdge | Qt::RightEdge);
-    else if (bottomLeftArea.contains(inMousePos))  win->startSystemResize(Qt::BottomEdge | Qt::LeftEdge);
-    else if (bottomRightArea.contains(inMousePos)) win->startSystemResize(Qt::BottomEdge | Qt::RightEdge);
-    else if (topArea.contains(inMousePos))         win->startSystemResize(Qt::TopEdge);
-    else if (bottomArea.contains(inMousePos))      win->startSystemResize(Qt::BottomEdge);
-    else if (LeftArea.contains(inMousePos))        win->startSystemResize(Qt::LeftEdge);
-    else if (RightArea.contains(inMousePos))       win->startSystemResize(Qt::RightEdge);
+    switch (containsPosInSpanArea(geo, innGeo, inMousePos))
+    {
+    case GeoArea::topLeft:     win->startSystemResize(Qt::TopEdge | Qt::LeftEdge); break;
+    case GeoArea::topRight:    win->startSystemResize(Qt::TopEdge | Qt::RightEdge); break;
+    case GeoArea::bottomLeft:  win->startSystemResize(Qt::BottomEdge | Qt::LeftEdge); break;
+    case GeoArea::bottomRight: win->startSystemResize(Qt::BottomEdge | Qt::RightEdge); break;
+    case GeoArea::top:         win->startSystemResize(Qt::TopEdge); break;
+    case GeoArea::bottom:      win->startSystemResize(Qt::BottomEdge); break;
+    case GeoArea::Left:        win->startSystemResize(Qt::LeftEdge); break;
+    case GeoArea::Right:       win->startSystemResize(Qt::RightEdge); break;
+    case GeoArea::None:        break;
+    }
 }
 
 void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)
@@ -876,26 +898,20 @@ void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)
     const QRect geo    = frameGeometry();
     const QRect innGeo = getInnerGeometry();
 
-    const QRect topLeftArea     = QRect::span(geo.topLeft(), innGeo.topLeft());
-    const QRect topRightArea    = QRect::span(geo.topRight(), innGeo.topRight());
-    const QRect bottomLeftArea  = QRect::span(geo.bottomLeft(), innGeo.bottomLeft());
-    const QRect bottomRightArea = QRect::span(geo.bottomRight(), innGeo.bottomRight());
-    const QRect topArea         = QRect::span(geo.topLeft(), innGeo.topRight());
-    const QRect bottomArea      = QRect::span(geo.bottomLeft(), innGeo.bottomRight());
-    const QRect LeftArea        = QRect::span(geo.topLeft(), innGeo.bottomLeft());
-    const QRect RightArea       = QRect::span(geo.topRight(), innGeo.bottomRight());
-
     Qt::CursorShape cursorShape = Qt::ArrowCursor;
 
-    if (innGeo.contains(inMousePos))               cursorShape = Qt::ArrowCursor;
-    else if (topLeftArea.contains(inMousePos))     cursorShape = Qt::SizeFDiagCursor;
-    else if (topRightArea.contains(inMousePos))    cursorShape = Qt::SizeBDiagCursor;
-    else if (bottomLeftArea.contains(inMousePos))  cursorShape = Qt::SizeBDiagCursor;
-    else if (bottomRightArea.contains(inMousePos)) cursorShape = Qt::SizeFDiagCursor;
-    else if (topArea.contains(inMousePos))         cursorShape = Qt::SizeVerCursor;
-    else if (bottomArea.contains(inMousePos))      cursorShape = Qt::SizeVerCursor;
-    else if (LeftArea.contains(inMousePos))        cursorShape = Qt::SizeHorCursor;
-    else if (RightArea.contains(inMousePos))       cursorShape = Qt::SizeHorCursor;
+    switch (containsPosInSpanArea(geo, innGeo, inMousePos))
+    {
+    case GeoArea::topLeft:     cursorShape = Qt::SizeFDiagCursor; break;
+    case GeoArea::topRight:    cursorShape = Qt::SizeBDiagCursor; break;
+    case GeoArea::bottomLeft:  cursorShape = Qt::SizeBDiagCursor; break;
+    case GeoArea::bottomRight: cursorShape = Qt::SizeFDiagCursor; break;
+    case GeoArea::top:         cursorShape = Qt::SizeVerCursor; break;
+    case GeoArea::bottom:      cursorShape = Qt::SizeVerCursor; break;
+    case GeoArea::Left:        cursorShape = Qt::SizeHorCursor; break;
+    case GeoArea::Right:       cursorShape = Qt::SizeHorCursor; break;
+    case GeoArea::None:        cursorShape = Qt::ArrowCursor; break;
+    }
 
     setCursor(cursorShape);
 }

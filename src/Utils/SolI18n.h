@@ -63,10 +63,12 @@ enum class Tr
   , Confirm_Quit
   , Quit
   , Cancel
-  , Tray_Menu_Minimize
-  , Tray_Menu_Restore
-  , Tray_Menu_Settings
-  , Tray_Menu_Quit
+  , Tray_Minimize
+  , Tray_Restore
+  , Tray_Translation
+  , Tray_History
+  , Tray_Settings
+  , Tray_Quit
   , Copy_Translation
   , Copy_Complete_Noti
   , Source_Text_Editor

@@ -297,32 +297,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="87"/>
-        <source>구글 번역</source>
+        <location filename="../src/Utils/SolI18n.cpp" line="75"/>
+        <source>번역(&amp;T)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="88"/>
-        <source>마이크로소프트 번역</source>
+        <location filename="../src/Utils/SolI18n.cpp" line="76"/>
+        <source>기록(&amp;H)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/SolI18n.cpp" line="89"/>
-        <source>DeepL</source>
+        <source>구글 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/SolI18n.cpp" line="90"/>
-        <source>파파고</source>
+        <source>마이크로소프트 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/SolI18n.cpp" line="91"/>
-        <source>OpenAI</source>
+        <source>DeepL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/Utils/SolI18n.cpp" line="92"/>
+        <source>파파고</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/SolI18n.cpp" line="93"/>
+        <source>OpenAI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/Utils/SolI18n.cpp" line="94"/>
         <source>Gemini</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,62 +419,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="75"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="77"/>
         <source>설정(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="76"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="78"/>
         <source>종료(&amp;Q)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="77"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="79"/>
         <source>번역 복사</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="78"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="80"/>
         <source>복사 완료!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="79"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="81"/>
         <source>번역 원문 입력 편집기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="80"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="82"/>
         <source>번역 결과</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="81"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="83"/>
         <source>출발 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="82"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="84"/>
         <source>도착 언어</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="83"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="85"/>
         <source>언어 바꾸기</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="84"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="86"/>
         <source>출발 언어와 도착 언어를 서로 바꿉니다. 출발언어가 &apos;자동 감지&apos;라면 사용할 수 없습니다.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="85"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="87"/>
         <source>다시 번역</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Utils/SolI18n.cpp" line="86"/>
+        <location filename="../src/Utils/SolI18n.cpp" line="88"/>
         <source>번역 중...</source>
         <comment>번역 결과를 받기 전에 대기 중임을 안내합니다.</comment>
         <translation type="unfinished"></translation>

@@ -139,13 +139,12 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     ui->settingsButton->setIcon(QIcon(":/img/settings_gear_img"));
     ui->settingsButton->setShortcut(solConfig.shortcut(Action::SettingsOpen));
     ui->settingsButton->setFocusPolicy(Qt::TabFocus);
-    connect(ui->settingsButton, &QAbstractButton::clicked, this, &SolMainWidget::showSettingsWidget);
+    connect(ui->settingsButton, &QAbstractButton::clicked, this, &SolMainWidget::showSettings);
 
 
     // ~====================
     // tray icon
-    createActions();
-    createTrayIcon();
+    setupTrayIcon();
 
     setupShortcuts();
 
@@ -180,12 +179,12 @@ void SolMainWidget::setVisible(const bool visible)
     }
 
     _miniToTrayAction->setEnabled(visible);
-    _restoreAction->setEnabled(visible == false);
+    _restoreAction->setDisabled(visible);
 
     QWidget::setVisible(visible);
 }
 
-void SolMainWidget::showSettingsWidget()
+void SolMainWidget::showSettings()
 {
     if (_settingsWidget.isNull())
     {
@@ -317,38 +316,35 @@ void SolMainWidget::iconActivated(const QSystemTrayIcon::ActivationReason reason
     }
 }
 
-void SolMainWidget::createActions()
+void SolMainWidget::setupTrayIcon()
 {
-    _miniToTrayAction = new QAction(i18n(Tr::Tray_Menu_Minimize), this);
-    connect(_miniToTrayAction, &QAction::triggered, this, &QWidget::hide);
+    QMenu* trayMenu = new QMenu(this);
+    trayMenu->setAttribute(Qt::WA_TranslucentBackground);
+    trayMenu->setWindowFlag(Qt::FramelessWindowHint);
+    trayMenu->setWindowFlag(Qt::NoDropShadowWindowHint);
+    trayMenu->setObjectName("trayMenu");
 
-    _restoreAction = new QAction(i18n(Tr::Tray_Menu_Restore), this);
-    connect(_restoreAction, &QAction::triggered, this, &QWidget::show);
+    // menu actions
+    _miniToTrayAction = trayMenu->addAction(i18n(Tr::Tray_Minimize), this, &QWidget::hide);
+    _restoreAction    = trayMenu->addAction(i18n(Tr::Tray_Restore), this, &QWidget::show);
+    trayMenu->addAction(i18n(Tr::Tray_Translation), textTabButton, [this]()
+    {
+        show();
+        textTabButton->click();
+    });
+    trayMenu->addAction(i18n(Tr::Tray_History), historyTabButton, [this]()
+    {
+        show();
+        historyTabButton->click();
+    });
+    trayMenu->addAction(i18n(Tr::Tray_Settings), this, &SolMainWidget::showSettings);
+    trayMenu->addSeparator();
+    trayMenu->addAction(i18n(Tr::Tray_Quit), this, &SolMainWidget::quitApp, Qt::QueuedConnection);
 
-    _settingAction = new QAction(i18n(Tr::Tray_Menu_Settings), this);
-    connect(_settingAction, &QAction::triggered, this, &SolMainWidget::showSettingsWidget);
-
-    _quitAction = new QAction(i18n(Tr::Tray_Menu_Quit), this);
-    connect(_quitAction, &QAction::triggered, this, &SolMainWidget::quitApp, Qt::QueuedConnection);
-}
-
-void SolMainWidget::createTrayIcon()
-{
-    _trayIconMenu = new QMenu(this);
-    _trayIconMenu->setAttribute(Qt::WA_TranslucentBackground);
-    _trayIconMenu->setWindowFlag(Qt::FramelessWindowHint);
-    _trayIconMenu->setWindowFlag(Qt::NoDropShadowWindowHint);
-    _trayIconMenu->setObjectName("trayIconMenu");
-
-    _trayIconMenu->addAction(_miniToTrayAction);
-    _trayIconMenu->addAction(_restoreAction);
-    _trayIconMenu->addAction(_settingAction);
-    _trayIconMenu->addSeparator();
-    _trayIconMenu->addAction(_quitAction);
-
+    // trayIcon
     _trayIcon = new QSystemTrayIcon(this);
     _trayIcon->setIcon(_solIcon);
-    _trayIcon->setContextMenu(_trayIconMenu);
+    _trayIcon->setContextMenu(trayMenu);
     _trayIcon->setVisible(true);
     _trayIcon->setToolTip(i18n(Tr::Sol_Translator));
 
@@ -356,10 +352,7 @@ void SolMainWidget::createTrayIcon()
     _doubleClickTimer = new QTimer(this);
     _doubleClickTimer->setInterval(QApplication::doubleClickInterval() + 50);
     _doubleClickTimer->setSingleShot(true);
-    connect(_doubleClickTimer, &QTimer::timeout, this, [this]()
-    {
-        popupTrayMenu();
-    });
+    connect(_doubleClickTimer, &QTimer::timeout, this, &SolMainWidget::popupTrayMenu);
 
     connect(_trayIcon, &QSystemTrayIcon::activated, this, &SolMainWidget::iconActivated);
 

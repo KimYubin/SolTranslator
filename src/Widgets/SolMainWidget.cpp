@@ -274,13 +274,13 @@ void SolMainWidget::onAppQuitEvent()
     solConfig.saveWidgetGeometry(this);
 }
 
-void SolMainWidget::iconActivated(const QSystemTrayIcon::ActivationReason reason)
+void SolMainWidget::iconActivated(const QSystemTrayIcon::ActivationReason inReason)
 {
     // 클릭시 마우스 위치 저장합니다.
     // 좌클릭과 아이콘 활성화 사이에 커서가 움직여도, 클릭 당시 위치에 메뉴를 생성합니다.
     _prevMousePos = QCursor::pos();
 
-    switch (reason)
+    switch (inReason)
     {
     case QSystemTrayIcon::Trigger:
         // 더블클릭과 구분을 위해 50ms 추가

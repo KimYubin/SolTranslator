@@ -16,7 +16,7 @@ class SolLogWorker : public QObject
 
 public:
     explicit SolLogWorker(QObject* parent = nullptr);
-    virtual ~SolLogWorker() override;
+    ~SolLogWorker() override;
 
     void initialize();
 

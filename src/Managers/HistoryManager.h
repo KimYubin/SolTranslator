@@ -23,7 +23,7 @@ class HistoryManager : public AbstractManager
 
 public:
     explicit HistoryManager(SolTranslatorCore* parent);
-    virtual ~HistoryManager() override;
+    ~HistoryManager() override;
 
     void asyncAddHistory(const EngineId& inEngineId
                        , const LangType inSourceLang

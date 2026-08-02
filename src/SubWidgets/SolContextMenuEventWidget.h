@@ -26,7 +26,7 @@ public:
     using BaseWidget::BaseWidget;
 
 protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event) override
+    void contextMenuEvent(QContextMenuEvent* event) override
     {
         QMenu* menu = this->createStandardContextMenu();
         if (!menu)

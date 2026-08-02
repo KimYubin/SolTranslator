@@ -37,7 +37,7 @@ public:
     explicit PopupTranslateWidget(QWidget* parent = nullptr);
     ~PopupTranslateWidget() override;
 
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
     void setupUI();
@@ -50,19 +50,19 @@ public:
                         , const bool inIsIgnoreCache);
 
 
-    virtual void completeTranslateText(const QString& inTargetText) override;
+    void completeTranslateText(const QString& inTargetText) override;
 
     void viewTranslationText(const QString& inSourceText
                            , const QString& inTargetText
                            , const TextStyle inTextStyle);
 
 protected:
-    virtual void applyTranslation() override;
+    void applyTranslation() override;
 
-    virtual QScrollBar* getVerticalScrollBar() const override;
-    virtual QScrollBar* getHorizontalScrollBar() const override;
-    virtual QTextCursor getTextCursor() const override;
-    virtual void setTextCursor(const QTextCursor& cursor) override;
+    QScrollBar* getVerticalScrollBar() const override;
+    QScrollBar* getHorizontalScrollBar() const override;
+    QTextCursor getTextCursor() const override;
+    void setTextCursor(const QTextCursor& cursor) override;
 
 
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
@@ -125,13 +125,13 @@ private:
     void setCursorShape(const QPoint& inMousePos);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent* event) override;
-    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
-    virtual void mouseReleaseEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
-    virtual void enterEvent(QEnterEvent* event) override;
-    virtual void leaveEvent(QEvent* event) override;
+    void enterEvent(QEnterEvent* event) override;
+    void leaveEvent(QEvent* event) override;
 
 protected:
     QPropertyAnimation* _animation;

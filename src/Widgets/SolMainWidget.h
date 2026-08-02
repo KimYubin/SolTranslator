@@ -38,12 +38,12 @@ public:
     explicit SolMainWidget(QWidget* parent = nullptr);
     ~SolMainWidget() override;
 
-    virtual void setVisible(const bool visible) override;
+    void setVisible(const bool visible) override;
 
     void showSettings();
 
 protected:
-    virtual void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 protected slots:
     /** 앱을 종료합니다. */
@@ -56,10 +56,10 @@ protected slots:
     void onAppQuitEvent();
 
 private slots:
-    void iconActivated(const QSystemTrayIcon::ActivationReason reason);
+    void iconActivated(const QSystemTrayIcon::ActivationReason inReason);
 
 signals:
-    void visibleChanged(const bool isVisible);
+    void visibleChanged(const bool inIsVisible);
 
 private:
     void setupTrayIcon();

@@ -51,7 +51,7 @@ private:
     void hideToolTipDelay();
 
 protected:
-    virtual void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent*) override;
 
 private:
     // property

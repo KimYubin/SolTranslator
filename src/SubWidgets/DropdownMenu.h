@@ -18,11 +18,11 @@ class DropdownMenu : public QComboBox
 public:
     explicit DropdownMenu(QWidget* parent = nullptr);
 
-    virtual QSize sizeHint() const override;
-    virtual QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
-    virtual void showPopup() override;
-    virtual void hidePopup() override;
+    void showPopup() override;
+    void hidePopup() override;
 
     void setShortcut(const QKeySequence& inKey);
 
@@ -34,7 +34,7 @@ public:
 
 
 protected:
-    virtual void wheelEvent(QWheelEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
 
 private:
     /** Reset the view mouse hover selection state when reopening the menu. */

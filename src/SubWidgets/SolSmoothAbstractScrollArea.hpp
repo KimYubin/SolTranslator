@@ -28,7 +28,7 @@ public:
     }
 
 protected:
-    virtual void wheelEvent(QWheelEvent* inEvent) override
+    void wheelEvent(QWheelEvent* inEvent) override
     {
         const QPoint angleDelta = inEvent->angleDelta();
         bool isHorizontal = qAbs(angleDelta.x()) > qAbs(angleDelta.y());

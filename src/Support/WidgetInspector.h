@@ -14,7 +14,7 @@ class WidgetInspector : public QWidget
 public:
     explicit WidgetInspector(QWidget* parent = nullptr);
 
-    virtual bool eventFilter(QObject* watched, QEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     void updateInfo(const QObject* watched, const QEvent* event);
 

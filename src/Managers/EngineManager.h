@@ -18,10 +18,10 @@ class EngineManager : public AbstractManager
 
 public:
     explicit EngineManager(SolTranslatorCore* parent);
-    virtual ~EngineManager() override;
+    ~EngineManager() override;
 
 protected:
-    virtual void postInitialize() override;
+    void postInitialize() override;
 
 public:
     static void registerEngine(ITranslateEngine* inEngine);

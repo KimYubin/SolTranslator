@@ -15,12 +15,12 @@ public:
     explicit OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
 protected:
-    virtual void requestTranslateImpl() override;
+    void requestTranslateImpl() override;
 
     void chatTranslate(const bool inIsStreaming);
 
-    virtual void onReadyRead() override;
-    virtual QString replyTranslateFinished() override;
+    void onReadyRead() override;
+    QString replyTranslateFinished() override;
 
     QString chunkToContent();
 };

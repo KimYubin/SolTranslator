@@ -12,7 +12,7 @@ class IAiEngine : public ITranslateEngine
 
 public:
     explicit IAiEngine(const EngineId& inEngine);
-    virtual ~IAiEngine() override;
+    ~IAiEngine() override;
 };
 
 namespace AiOptionKey

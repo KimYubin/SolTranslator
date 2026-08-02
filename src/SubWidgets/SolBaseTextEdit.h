@@ -32,7 +32,7 @@ public:
     using Base::Base;
 
 protected:
-    virtual void wheelEvent(QWheelEvent* event) override
+    void wheelEvent(QWheelEvent* event) override
     {
         const QPoint angleDelta = event->angleDelta();
 

@@ -28,7 +28,7 @@ class ITranslateEngine : public QObject
 
 public:
     explicit ITranslateEngine(EngineId inEngine);
-    virtual ~ITranslateEngine() override;
+    ~ITranslateEngine() override;
 
     virtual void postInitialize();
 

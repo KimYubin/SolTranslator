@@ -23,7 +23,7 @@ class HistoryListView : public SolListView
 
 public:
     explicit HistoryListView(QWidget* parent = nullptr) : SolListView(parent) {}
-    virtual ~HistoryListView() override = default;
+    ~HistoryListView() override = default;
 
     QColor getItemColor(const Sol::ItemColorRole inColorRole) const;
 };

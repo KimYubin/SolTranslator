@@ -28,12 +28,12 @@ public:
     ~TextEditTranslateWidget() override;
 
 protected:
-    virtual void applyTranslation() override;
+    void applyTranslation() override;
 
-    virtual QScrollBar* getVerticalScrollBar() const override;
-    virtual QScrollBar* getHorizontalScrollBar() const override;
-    virtual QTextCursor getTextCursor() const override;
-    virtual void setTextCursor(const QTextCursor& cursor) override;
+    QScrollBar* getVerticalScrollBar() const override;
+    QScrollBar* getHorizontalScrollBar() const override;
+    QTextCursor getTextCursor() const override;
+    void setTextCursor(const QTextCursor& cursor) override;
 
 public:
     void focusTextOrigin();

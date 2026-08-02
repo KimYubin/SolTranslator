@@ -34,15 +34,15 @@ public:
     explicit LanguageSelectorMenuPrivate(LanguageSelector* inLangSelector, QWidget* inParentWidget);
     ~LanguageSelectorMenuPrivate() override;
 
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
-    virtual QSize sizeHint() const override;
+    QSize sizeHint() const override;
 
     void showMenuPopup();
     void closeMenuPopup();
 
 protected:
-    virtual void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
 
 public:
 signals:

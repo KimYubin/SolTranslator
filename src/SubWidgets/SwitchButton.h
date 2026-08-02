@@ -35,7 +35,7 @@ class SwitchButton : public QCheckBox
 public:
     explicit SwitchButton(const bool inChecked = false, QWidget* parent = nullptr);
 
-    virtual QSize sizeHint() const override;
+    QSize sizeHint() const override;
 
     /**
      * 
@@ -49,8 +49,8 @@ private slots:
     void setupAnimation(const Qt::CheckState inCheckState);
 
 protected:
-    virtual bool hitButton(const QPoint& pos) const override;
-    virtual void paintEvent(QPaintEvent* event) override;
+    bool hitButton(const QPoint& pos) const override;
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     // property

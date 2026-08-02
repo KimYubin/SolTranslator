@@ -35,10 +35,10 @@ public:
 
 protected:
     void setRepeatTimer(const SliderAction inAction);
-    virtual void wheelEvent(QWheelEvent* inEvent) override;
-    virtual void mousePressEvent(QMouseEvent* inEvent) override;
-    virtual void mouseReleaseEvent(QMouseEvent* inEvent) override;
-    virtual void timerEvent(QTimerEvent* inEvent) override;
+    void wheelEvent(QWheelEvent* inEvent) override;
+    void mousePressEvent(QMouseEvent* inEvent) override;
+    void mouseReleaseEvent(QMouseEvent* inEvent) override;
+    void timerEvent(QTimerEvent* inEvent) override;
 
 private:
     void stopRepeat();

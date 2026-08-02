@@ -18,8 +18,8 @@ class LoadingBar : public ILoadingWidget
 public:
     explicit LoadingBar(const QString& inFile, QWidget* parent = nullptr);
 
-    virtual void run() override;
-    virtual void stop() override;
+    void run() override;
+    void stop() override;
 
 private:
     QSvgWidget* _svg;

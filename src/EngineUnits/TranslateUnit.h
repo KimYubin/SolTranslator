@@ -25,7 +25,7 @@ class TranslateUnit : public QObject
 
 public:
     explicit TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine);
-    virtual ~TranslateUnit() override;
+    ~TranslateUnit() override;
 
     void setTranslateRequest(TranslateRequest&& inTrRequest);
     void onTranslationFromCache(const QString& inTargetText);

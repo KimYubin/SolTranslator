@@ -15,10 +15,10 @@ public:
     explicit GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
 
 protected:
-    virtual void requestTranslateImpl() override;
+    void requestTranslateImpl() override;
 
-    virtual void onReadyRead() override;
-    virtual QString replyTranslateFinished() override;
+    void onReadyRead() override;
+    QString replyTranslateFinished() override;
 };
 
 

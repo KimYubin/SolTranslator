@@ -21,7 +21,7 @@ public:
     ~LayoutTextEdit() override;
 
 protected:
-    virtual void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 public:
     /**

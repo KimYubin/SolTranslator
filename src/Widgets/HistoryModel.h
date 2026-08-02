@@ -16,14 +16,14 @@ class HistoryModel : public QAbstractListModel
 public:
     explicit HistoryModel(QObject* parent = nullptr);
 
-    virtual int rowCount(const QModelIndex& parent) const override;
-    virtual int columnCount(const QModelIndex& parent) const override;
-    virtual QVariant data(const QModelIndex& index, const int role) const override;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, const int role = Qt::EditRole) override;
+    int rowCount(const QModelIndex& parent) const override;
+    int columnCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex& index, const int role) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, const int role = Qt::EditRole) override;
 
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
-    virtual bool insertRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
-    virtual bool removeRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    bool insertRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
+    bool removeRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
 
     Expected<const HistoryCacheData*> getHistoryCacheData(const int inIdx) const;
 

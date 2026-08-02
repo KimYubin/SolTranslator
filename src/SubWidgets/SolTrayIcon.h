@@ -21,7 +21,7 @@ class SolTrayIcon : public QSystemTrayIcon
 public:
     explicit SolTrayIcon(QObject* inParent = nullptr);
     explicit SolTrayIcon(const QIcon& inIcon, QObject* inParent = nullptr);
-    virtual ~SolTrayIcon() override;
+    ~SolTrayIcon() override;
 
     // ~================
     // addAction

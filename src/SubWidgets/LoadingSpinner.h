@@ -17,14 +17,14 @@ class LoadingSpinner : public ILoadingWidget
 public:
     explicit LoadingSpinner(const QString& inFile, QWidget* parent = nullptr);
 
-    virtual void run() override;
-    virtual void stop() override;
+    void run() override;
+    void stop() override;
 
 protected:
-    virtual void showEvent(QShowEvent* event) override;
-    virtual void hideEvent(QHideEvent* event) override;
+    void showEvent(QShowEvent* event) override;
+    void hideEvent(QHideEvent* event) override;
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     void setSvgVisibility(const bool inVisible);

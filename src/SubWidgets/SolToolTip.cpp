@@ -20,7 +20,7 @@ class SolToolTipFilter : public QObject
     Q_OBJECT
 
 public:
-    virtual bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 #include "SolToolTip.moc"

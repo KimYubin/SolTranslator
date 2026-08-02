@@ -32,7 +32,7 @@ public:
             , GlobalHotKeyManager* inGlobalHotKeyManager);
 
 protected:
-    virtual void postInitialize() override;
+    void postInitialize() override;
 
 public:
     QNetworkReply* get(const QNetworkRequest& inRequest);

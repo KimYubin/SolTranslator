@@ -13,7 +13,7 @@ class SolSingleApplication : public QObject
 
 public:
     explicit SolSingleApplication(QString inAppName);
-    virtual ~SolSingleApplication() override;
+    ~SolSingleApplication() override;
 
     bool isAlreadyRunning() const { return _isRunning; }
 

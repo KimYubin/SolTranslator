@@ -15,7 +15,7 @@ public:
     explicit SolSingleApplication(QString inAppName);
     virtual ~SolSingleApplication() override;
 
-    bool isAlreadyRunning() const { return _isRunning; };
+    bool isAlreadyRunning() const { return _isRunning; }
 
 signals:
     void raiseRequested();

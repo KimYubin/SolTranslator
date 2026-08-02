@@ -52,7 +52,7 @@ public:
         Q_ASSERT_X(_managers.contains(std::type_index(typeid(T))) == false, "manager", "Manager already registered");
 
         _managers[std::type_index(typeid(T))] = std::move(inManager);
-    };
+    }
 
     template <std::derived_from<AbstractManager> T>
     T* manager()

@@ -20,8 +20,6 @@ public:
 
     void initialize();
 
-private:
-
 public
 slots :
     void enqueueLog(const QString& inLog);

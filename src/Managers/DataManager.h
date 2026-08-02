@@ -13,14 +13,14 @@ class DataManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit DataManager(SolTranslatorCore* parent);
+    explicit DataManager(SolTranslatorCore* inParent);
 
     cache_queue loadTranslateCache();
-    bool asyncSaveTranslateCache(const cache_queue& CacheTextQueue);
+    bool asyncSaveTranslateCache(const cache_queue& inCacheTextQueue);
 
 private:
-    static QJsonObject convertCacheToJson(const cache_queue& CacheTextQueue);
-    cache_queue convertJsonToCache(const QJsonObject& CacheJson);
+    static QJsonObject convertCacheToJson(const cache_queue& inCacheTextQueue);
+    cache_queue convertJsonToCache(const QJsonObject& inCacheJson);
 };
 
 

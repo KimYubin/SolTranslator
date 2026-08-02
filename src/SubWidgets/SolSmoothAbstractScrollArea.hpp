@@ -25,7 +25,7 @@ public:
     {
         this->setHorizontalScrollBar(new SolSmoothScrollBar(this));
         this->setVerticalScrollBar(new SolSmoothScrollBar(this));
-    };
+    }
 
 protected:
     virtual void wheelEvent(QWheelEvent* inEvent) override

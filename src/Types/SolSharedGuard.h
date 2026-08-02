@@ -36,7 +36,7 @@ public:
             delete _refPtr;
             _refPtr = nullptr;
         }
-    };
+    }
 
 private:
     std::size_t _counter = 1;

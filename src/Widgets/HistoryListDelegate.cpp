@@ -151,6 +151,19 @@ void HistoryListDelegate::paint(QPainter* painter
     drawText(painter, opt, targetTextRect, Qt::TextForceLeftToRight, index.data(HistoryRole::TargetSimplifiedTextRole).toString());
 }
 
+QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    const int textHeight        = option.fontMetrics.height();
+    const int textMargin        = textHeight * textVMarginRatio;
+    const QMargins focusMargins = getFocusMargins(option);
+    const int frameVMargin      = focusMargins.top() + focusMargins.bottom();
+
+    QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
+    sizeHint.setHeight(textHeight * (2 + langFontSizeRatio) + textMargin * 2 + frameVMargin);
+
+    return sizeHint;
+}
+
 bool HistoryListDelegate::editorEvent(QEvent* event
                                     , QAbstractItemModel* model
                                     , const QStyleOptionViewItem& option
@@ -222,19 +235,6 @@ bool HistoryListDelegate::editorEvent(QEvent* event
     }
 
     return model->setData(index, state, HistoryRole::CheckRole);
-}
-
-QSize HistoryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-    const int textHeight        = option.fontMetrics.height();
-    const int textMargin        = textHeight * textVMarginRatio;
-    const QMargins focusMargins = getFocusMargins(option);
-    const int frameVMargin      = focusMargins.top() + focusMargins.bottom();
-
-    QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
-    sizeHint.setHeight(textHeight * (2 + langFontSizeRatio) + textMargin * 2 + frameVMargin);
-
-    return sizeHint;
 }
 
 void HistoryListDelegate::drawText(QPainter* painter

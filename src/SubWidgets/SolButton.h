@@ -41,8 +41,6 @@ public:
     void changeShortcut(const QKeySequence& inKey);
     void setAction(const Action inAction);
 
-private:
-
 };
 
 

@@ -14,13 +14,15 @@ public:
                      , const QStyleOptionViewItem& option
                      , const QModelIndex& index) const override;
 
+
+    virtual QSize sizeHint(const QStyleOptionViewItem& option
+                         , const QModelIndex& index) const override;
+
+protected:
     virtual bool editorEvent(QEvent* event
                            , QAbstractItemModel* model
                            , const QStyleOptionViewItem& option
                            , const QModelIndex& index) override;
-
-    virtual QSize sizeHint(const QStyleOptionViewItem& option
-                         , const QModelIndex& index) const override;
 
 private:
     void drawText(QPainter* painter

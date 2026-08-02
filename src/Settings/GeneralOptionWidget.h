@@ -14,8 +14,6 @@ public:
     explicit GeneralOptionWidget(QWidget* parent = nullptr);
     ~GeneralOptionWidget() override;
 
-protected:
-
 private:
     friend class GeneralOptionPage;
 

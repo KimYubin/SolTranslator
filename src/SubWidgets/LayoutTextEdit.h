@@ -20,8 +20,10 @@ public:
     explicit LayoutTextEdit(QWidget* parent = nullptr);
     ~LayoutTextEdit() override;
 
+protected:
     virtual void resizeEvent(QResizeEvent* event) override;
 
+public:
     /**
      * 텍스트 레이아웃 하단에 위젯을 추가합니다.
      */

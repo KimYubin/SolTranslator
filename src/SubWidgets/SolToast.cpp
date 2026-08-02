@@ -12,6 +12,8 @@
 #include <qgraphicseffect.h>
 
 
+namespace
+{
 class SolToastWidget : public QWidget
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ private:
 
     float _toastRatio; // 시작, 종료 애니메이션에서 현재 단계를 비율로 나타냅니다.(투명도, 위치 등)
 };
+} // anonymous namespace
 
 #include "SolToast.moc"
 

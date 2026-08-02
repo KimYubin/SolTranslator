@@ -15,8 +15,8 @@ class hash_queue
 {
 public:
     using pair_list      = std::list<std::pair<_Kty, _Valty>>;
-    using iterator       = typename pair_list::iterator;
-    using const_iterator = typename pair_list::const_iterator;
+    using iterator       = pair_list::iterator;
+    using const_iterator = pair_list::const_iterator;
 
 private:
     pair_list keyValQueue; // key, value queue

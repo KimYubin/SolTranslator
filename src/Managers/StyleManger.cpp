@@ -18,6 +18,8 @@ public:
     QString _themeName;
 };
 
+namespace
+{
 class SolPaletteWidget : public ISolWidget
 {
     Q_OBJECT
@@ -51,6 +53,7 @@ private:
     SOL_QSS_COLOR(disableColor);
 
 };
+} // anonymous namespace
 
 #include "StyleManger.moc"
 

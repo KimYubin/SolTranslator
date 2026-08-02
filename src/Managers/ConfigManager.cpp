@@ -80,9 +80,9 @@ EnumType enumValue(const QSettings* inSettings, const QString& inKey, const Enum
 {
     const QString defaultQStr = Sol::enumToQStr(inDefault);
 
-    const QString setting_value_str = inSettings->value(inKey, defaultQStr).toString();
+    const QString settingValueStr = inSettings->value(inKey, defaultQStr).toString();
 
-    EnumType policy = magic_enum::enum_cast<EnumType>(setting_value_str.toStdString()).value_or(inDefault);
+    EnumType policy = magic_enum::enum_cast<EnumType>(settingValueStr.toStdString()).value_or(inDefault);
 
     return policy;
 }
@@ -125,7 +125,7 @@ void ConfigManager::setSecretKey(const QString& inKey
 
 QVariant ConfigManager::secretKey(const QString& inKey, const QVariant& inDefault) const
 {
-    return _secretStore->getSecret(inKey, inDefault.toString());;
+    return _secretStore->getSecret(inKey, inDefault.toString());
 }
 
 Expected<void> ConfigManager::setEngineOption(const EngineId& inEngineId

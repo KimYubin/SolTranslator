@@ -109,7 +109,7 @@ struct OptionSpec
     Type getOptionSpecType() const
     {
         return static_cast<Type>(defaultValue.index());
-    };
+    }
 
     QVariant getDefaultValue() const;
 

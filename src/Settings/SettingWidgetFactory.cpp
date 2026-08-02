@@ -3,10 +3,10 @@
 #include "SettingWidgetFactory.h"
 
 #include "Managers/ConfigManager.h"
-#include "SubWidgets/SolBaseTextEdit.h"
 #include "SubWidgets/OptionGroupBox.h"
 #include "SubWidgets/OptionLineEdit.h"
 #include "SubWidgets/SettingCard.h"
+#include "SubWidgets/SolBaseTextEdit.h"
 #include "SubWidgets/SolButton.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"

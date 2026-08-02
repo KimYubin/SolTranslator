@@ -72,7 +72,7 @@ QNetworkReply* TranslateManager::post(const QNetworkRequest& inRequest, const QB
 
 Expected<TranslateUnit*> TranslateManager::newTranslateUnit(const EngineId& inEngineId)
 {
-    return EngineManager::newTrUnit(inEngineId, this);;
+    return EngineManager::newTrUnit(inEngineId, this);
 }
 
 Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)

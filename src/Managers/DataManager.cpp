@@ -17,7 +17,7 @@
 
 #include <magic_enum.hpp>
 
-DataManager::DataManager(SolTranslatorCore* parent) : AbstractManager(parent)
+DataManager::DataManager(SolTranslatorCore* inParent) : AbstractManager(inParent)
 {}
 
 cache_queue DataManager::loadTranslateCache()
@@ -37,7 +37,7 @@ cache_queue DataManager::loadTranslateCache()
     return convertJsonToCache(loadDoc.object());
 }
 
-bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
+bool DataManager::asyncSaveTranslateCache(const cache_queue& inCacheTextQueue)
 {
     QFutureWatcher<bool>* dataWatcher = new QFutureWatcher<bool>(this);
     connect(dataWatcher, &QFutureWatcher<bool>::finished, this, [dataWatcher]
@@ -49,7 +49,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
         dataWatcher->deleteLater();
     });
 
-    const QFuture<bool> future = QtConcurrent::run([CacheTextQueue]()
+    const QFuture<bool> future = QtConcurrent::run([inCacheTextQueue]()
     {
         QFile saveFile(SolPath::absolute(SolFile::TranslateHistory));
         if (saveFile.open(QIODevice::WriteOnly) == false)
@@ -58,7 +58,7 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
             return false;
         }
 
-        const QJsonObject cacheObject = convertCacheToJson(CacheTextQueue);
+        const QJsonObject cacheObject = convertCacheToJson(inCacheTextQueue);
         const QJsonDocument cacheDoc  = QJsonDocument(cacheObject);
         const QByteArray cacheJson    = cacheDoc.toJson();
         saveFile.write(cacheJson);
@@ -70,12 +70,12 @@ bool DataManager::asyncSaveTranslateCache(const cache_queue& CacheTextQueue)
     return true;
 }
 
-QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
+QJsonObject DataManager::convertCacheToJson(const cache_queue& inCacheTextQueue)
 {
     QJsonObject res;
     QJsonArray arr;
 
-    for (auto& [cacheKey, cacheText] : CacheTextQueue)
+    for (auto& [cacheKey, cacheText] : inCacheTextQueue)
     {
         QJsonObject cacheObject;
         cacheObject["SourceText"] = cacheKey.sourceText;
@@ -91,10 +91,10 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& CacheTextQueue)
     return res;
 }
 
-cache_queue DataManager::convertJsonToCache(const QJsonObject& CacheJson)
+cache_queue DataManager::convertJsonToCache(const QJsonObject& inCacheJson)
 {
     cache_queue res;
-    QJsonValue vArr = CacheJson["CacheList"];
+    QJsonValue vArr = inCacheJson["CacheList"];
     if (vArr.isArray())
     {
         QJsonArray jsonArr = vArr.toArray();

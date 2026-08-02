@@ -42,11 +42,6 @@ QSize SwitchButton::sizeHint() const
     return _size;
 }
 
-bool SwitchButton::hitButton(const QPoint& pos) const
-{
-    return contentsRect().contains(pos);
-}
-
 void SwitchButton::setButtonShape(const QSize& inSize, const float inTrackHeightRatio, const float inHandleRatio)
 {
     _size             = inSize;
@@ -60,6 +55,11 @@ void SwitchButton::setupAnimation(const Qt::CheckState inCheckState)
     _animationGroup->stop();
     _handleAnimation->setEndValue(inCheckState == Qt::Checked ? 1.0f : 0.0f);
     _animationGroup->start();
+}
+
+bool SwitchButton::hitButton(const QPoint& pos) const
+{
+    return contentsRect().contains(pos);
 }
 
 void SwitchButton::paintEvent(QPaintEvent* event)

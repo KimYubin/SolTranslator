@@ -266,7 +266,6 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineId& inEngineId
     SolSqlTransactionGuard transactionGuard(database());
 
     QVariant historyDataId;
-    QString targetText;
 
     // find history
     {
@@ -291,8 +290,7 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineId& inEngineId
         }
 
         historyDataId = sqlQuery.value(0);
-        targetText    = sqlQuery.value(1).toString();
-        res           = {true, targetText};
+        res           = {true, sqlQuery.value(1).toString()};
     }
 
     // insert history timeline (update)

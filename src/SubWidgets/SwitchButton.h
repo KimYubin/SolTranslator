@@ -36,7 +36,6 @@ public:
     explicit SwitchButton(const bool inChecked = false, QWidget* parent = nullptr);
 
     virtual QSize sizeHint() const override;
-    virtual bool hitButton(const QPoint& pos) const override;
 
     /**
      * 
@@ -50,6 +49,7 @@ private slots:
     void setupAnimation(const Qt::CheckState inCheckState);
 
 protected:
+    virtual bool hitButton(const QPoint& pos) const override;
     virtual void paintEvent(QPaintEvent* event) override;
 
 private:

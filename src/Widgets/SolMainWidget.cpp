@@ -12,6 +12,7 @@
 #include "SubWidgets/EngineSelector.h"
 #include "SubWidgets/SolButton.h"
 #include "SubWidgets/SolToolTip.h"
+#include "SubWidgets/SolTrayIcon.h"
 #include "Types/EngineId.h"
 #include "Utils/SolI18n.h"
 #include "Utils/SolLog.h"
@@ -72,40 +73,40 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     // 텍스트 번역
     _textEditTranslate = new TextEditTranslateWidget();
 
-    textTabButton = new SolButton(this);
-    textTabButton->setObjectName("textTabButton");
-    textTabButton->setText(i18n(Tr::Text));
-    textTabButton->setAction(Action::TextTab);
-    textTabButton->setIcon(QIcon(":/img/text_caret_cursor"));
-    ui->tabBarLayout->addWidget(textTabButton, 0, Qt::AlignLeft);
+    _textButton = new SolButton(this);
+    _textButton->setObjectName("_textButton");
+    _textButton->setText(i18n(Tr::Text));
+    _textButton->setAction(Action::TextTab);
+    _textButton->setIcon(QIcon(":/img/text_caret_cursor"));
+    ui->tabBarLayout->addWidget(_textButton, 0, Qt::AlignLeft);
 
-    bindButton(textTabButton, _textEditTranslate);
+    bindButton(_textButton, _textEditTranslate);
 
 
     // 문서 번역
     QLabel* docTranslateWidget = new QLabel(i18n(Tr::Preparing));
     docTranslateWidget->setAlignment(Qt::AlignCenter);
 
-    docTabButton = new SolButton(this);
-    docTabButton->setObjectName("docTabButton");
-    docTabButton->setText(i18n(Tr::Document));
-    docTabButton->setAction(Action::DocumentTab);
-    docTabButton->setIcon(QIcon(":/img/document_img"));
-    ui->tabBarLayout->addWidget(docTabButton, 0, Qt::AlignLeft);
+    _docButton = new SolButton(this);
+    _docButton->setObjectName("_docButton");
+    _docButton->setText(i18n(Tr::Document));
+    _docButton->setAction(Action::DocumentTab);
+    _docButton->setIcon(QIcon(":/img/document_img"));
+    ui->tabBarLayout->addWidget(_docButton, 0, Qt::AlignLeft);
 
-    bindButton(docTabButton, docTranslateWidget);
+    bindButton(_docButton, docTranslateWidget);
 
     // 번역 기록
     HistoryWidget* historyWidget = new HistoryWidget();
 
-    historyTabButton = new SolButton(this);
-    historyTabButton->setObjectName("historyTabButton");
-    historyTabButton->setText(i18n(Tr::History));
-    historyTabButton->setIcon(QIcon(":/img/history_img"));
-    historyTabButton->setAction(Action::HistoryTab);
-    ui->tabBarLayout->addWidget(historyTabButton, 0, Qt::AlignLeft);
+    _historyButton = new SolButton(this);
+    _historyButton->setObjectName("_historyButton");
+    _historyButton->setText(i18n(Tr::History));
+    _historyButton->setIcon(QIcon(":/img/history_img"));
+    _historyButton->setAction(Action::HistoryTab);
+    ui->tabBarLayout->addWidget(_historyButton, 0, Qt::AlignLeft);
 
-    bindButton(historyTabButton, historyWidget);
+    bindButton(_historyButton, historyWidget);
 
     // apply an existing history to TextEditTranslateWidget.
     connect(historyWidget, &HistoryWidget::exportHistoryData, _textEditTranslate, &TextEditTranslateWidget::importExistingTranslation);
@@ -178,8 +179,7 @@ void SolMainWidget::setVisible(const bool visible)
         activateWindow();
     }
 
-    _miniToTrayAction->setEnabled(visible);
-    _restoreAction->setDisabled(visible);
+    emit visibleChanged(visible);
 
     QWidget::setVisible(visible);
 }
@@ -318,45 +318,30 @@ void SolMainWidget::iconActivated(const QSystemTrayIcon::ActivationReason reason
 
 void SolMainWidget::setupTrayIcon()
 {
-    QMenu* trayMenu = new QMenu(this);
-    trayMenu->setAttribute(Qt::WA_TranslucentBackground);
-    trayMenu->setWindowFlag(Qt::FramelessWindowHint);
-    trayMenu->setWindowFlag(Qt::NoDropShadowWindowHint);
-    trayMenu->setObjectName("trayMenu");
+    // trayIcon
+    _trayIcon = new SolTrayIcon(_solIcon, this);
+    _trayIcon->setToolTip(i18n(Tr::Sol_Translator));
+    _trayIcon->show();
+
+    connect(_trayIcon, &QSystemTrayIcon::activated, this, &SolMainWidget::iconActivated);
 
     // menu actions
-    _miniToTrayAction = trayMenu->addAction(i18n(Tr::Tray_Minimize), this, &QWidget::hide);
-    _restoreAction    = trayMenu->addAction(i18n(Tr::Tray_Restore), this, &QWidget::show);
-    trayMenu->addAction(i18n(Tr::Tray_Translation), textTabButton, [this]()
-    {
-        show();
-        textTabButton->click();
-    });
-    trayMenu->addAction(i18n(Tr::Tray_History), historyTabButton, [this]()
-    {
-        show();
-        historyTabButton->click();
-    });
-    trayMenu->addAction(i18n(Tr::Tray_Settings), this, &SolMainWidget::showSettings);
-    trayMenu->addSeparator();
-    trayMenu->addAction(i18n(Tr::Tray_Quit), this, &SolMainWidget::quitApp, Qt::QueuedConnection);
+    QAction* miniTray = _trayIcon->addAction(Tr::Tray_Minimize, this, &QWidget::hide);
+    QAction* restore  = _trayIcon->addAction(Tr::Tray_Restore, this, &QWidget::show);
+    connect(this, &SolMainWidget::visibleChanged, miniTray, &QAction::setEnabled);
+    connect(this, &SolMainWidget::visibleChanged, restore, &QAction::setDisabled);
 
-    // trayIcon
-    _trayIcon = new QSystemTrayIcon(this);
-    _trayIcon->setIcon(_solIcon);
-    _trayIcon->setContextMenu(trayMenu);
-    _trayIcon->setVisible(true);
-    _trayIcon->setToolTip(i18n(Tr::Sol_Translator));
+    _trayIcon->addAction(Tr::Tray_Translation, _textButton, [this](){show(); _textButton->click();});
+    _trayIcon->addAction(Tr::Tray_History, _historyButton, [this](){show(); _historyButton->click();});
+    _trayIcon->addAction(Tr::Tray_Settings, this, &SolMainWidget::showSettings);
+    _trayIcon->addSeparator();
+    _trayIcon->addAction(Tr::Tray_Quit, this, &SolMainWidget::quitApp, Qt::QueuedConnection);
 
 
     _doubleClickTimer = new QTimer(this);
     _doubleClickTimer->setInterval(QApplication::doubleClickInterval() + 50);
     _doubleClickTimer->setSingleShot(true);
     connect(_doubleClickTimer, &QTimer::timeout, this, &SolMainWidget::popupTrayMenu);
-
-    connect(_trayIcon, &QSystemTrayIcon::activated, this, &SolMainWidget::iconActivated);
-
-    _trayIcon->show();
 }
 
 void SolMainWidget::setupShortcuts()
@@ -376,15 +361,17 @@ void SolMainWidget::popupTrayMenu()
 {
     if (_trayIcon && _trayIcon->contextMenu())
     {
+        QMenu* contextMenu = _trayIcon->contextMenu();
+
         // 메뉴 사이즈 계산 유도.
-        _trayIcon->contextMenu()->show();
+        contextMenu->show();
 
         // todo: 트레이 아이콘 위치가 상단(화면 높이 절반 위인 경우)이면, 아이콘 아래로 메뉴가 열리게 변경
         // 트레이 아이콘 중앙 상단에, 메뉴 중앙 하단이 오도록 조정.
-        const QRect trayGeo        = _trayIcon->geometry();
-        const QPoint trayTopCenter = trayGeo.topLeft() + QPoint(trayGeo.width() / 2, 0);
-        const QSize menuSize       = _trayIcon->contextMenu()->size();
-        const QPoint popupPos      = trayTopCenter - QPoint(menuSize.width() / 2, menuSize.height());
+        const QRect trayGeo    = _trayIcon->geometry();
+        const QPoint topCenter = trayGeo.topLeft() + QPoint(trayGeo.width() / 2, 0);
+        const QSize menuSize   = contextMenu->size();
+        const QPoint popupPos  = topCenter - QPoint(menuSize.width() / 2, menuSize.height());
 
         QRect popupGeo = QRect(popupPos, menuSize);
 
@@ -392,7 +379,7 @@ void SolMainWidget::popupTrayMenu()
         const QRect availableGeo = Sol::availableGeometryAt(_prevMousePos);
         popupGeo = Sol::moveToInside(availableGeo, popupGeo);
 
-        _trayIcon->contextMenu()->popup(popupGeo.topLeft());
+        contextMenu->popup(popupGeo.topLeft());
     }
 }
 

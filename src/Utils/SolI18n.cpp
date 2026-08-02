@@ -21,6 +21,7 @@ QString Sol::i18n(const Tr inTr)
 
     switch (inTr)
     {
+    case Translation:                    return TrImpl::tr("번역");
     case Translation_Engine:             return TrImpl::tr("번역 엔진");
     case Save:                           return TrImpl::tr("저장");
     case Translation_Engine_Settings:    return TrImpl::tr("번역 엔진 설정");
@@ -70,12 +71,12 @@ QString Sol::i18n(const Tr inTr)
     case Confirm_Quit:                   return TrImpl::tr("정말 종료할까요?");
     case Quit:                           return TrImpl::tr("종료");
     case Cancel:                         return TrImpl::tr("취소");
-    case Tray_Minimize:                  return TrImpl::tr("트레이로 최소화(&M)");
-    case Tray_Restore:                   return TrImpl::tr("창 복원(&R)");
-    case Tray_Translation:               return TrImpl::tr("번역(&T)");
-    case Tray_History:                   return TrImpl::tr("기록(&H)");
-    case Tray_Settings:                  return TrImpl::tr("설정(&S)");
-    case Tray_Quit:                      return TrImpl::tr("종료(&Q)");
+    case Tray_Minimize:                  return TrImpl::tr("트레이로 최소화(&Z)");
+    case Tray_Restore:                   return TrImpl::tr("창 복원(&R)", "트레이 컨텍스트 메뉴 아이템. 숨겨진 창을 이전 상태로 복원합니다.");
+    case Tray_Translation:               return TrImpl::tr("번역(&T)", "트레이 컨텍스트 메뉴 아이템. 창을 열고 텍스트 번역 탭으로 이동합니다.");
+    case Tray_History:                   return TrImpl::tr("기록(&H)", "트레이 컨텍스트 메뉴 아이템. 창을 열고 번역 기록 택으로 이동합니다.");
+    case Tray_Settings:                  return TrImpl::tr("설정(&S)", "트레이 컨텍스트 메뉴 아이템. 설정창을 엽니다.");
+    case Tray_Quit:                      return TrImpl::tr("종료(&Q)", "트레이 컨텍스트 메뉴 아이템. 프로그램을 종료합니다.");
     case Copy_Translation:               return TrImpl::tr("번역 복사");
     case Copy_Complete_Noti:             return TrImpl::tr("복사 완료!");
     case Source_Text_Editor:             return TrImpl::tr("번역 원문 입력 편집기");
@@ -102,6 +103,6 @@ QString Sol::i18n(const Tr inTr)
 
 namespace
 {
-constexpr int TrKeyCheck = 71;
+constexpr int TrKeyCheck = 72;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace

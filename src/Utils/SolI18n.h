@@ -14,7 +14,8 @@ QString i18n(const Tr inTr);
 
 enum class Tr
 {
-    Translation_Engine
+    Translation
+  , Translation_Engine
   , Save
   , Translation_Engine_Settings
   , Options

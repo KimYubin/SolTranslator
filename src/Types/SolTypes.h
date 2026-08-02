@@ -96,6 +96,13 @@ enum class Action
   , HistoryTab
   , EngineSelector
 
+  , Tray_Minimize
+  , Tray_Restore
+  , Tray_Translation
+  , Tray_History
+  , Tray_Settings
+  , Tray_Quit
+
   , SourceTargetToggle
   , CopyDoc
   , ViewInPopup

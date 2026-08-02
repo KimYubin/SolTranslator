@@ -131,6 +131,8 @@ qt_add_executable(
         src/SubWidgets/SolToolTip.h
         src/SubWidgets/SolToolTipBallon.cpp
         src/SubWidgets/SolToolTipBallon.h
+        src/SubWidgets/SolTrayIcon.cpp
+        src/SubWidgets/SolTrayIcon.h
         src/SubWidgets/SolWidgetFactory.cpp
         src/SubWidgets/SolWidgetFactory.h
         src/SubWidgets/SwitchButton.cpp

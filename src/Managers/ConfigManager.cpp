@@ -373,6 +373,13 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
   , {Action::HistoryTab,            QKeySequence{Qt::CTRL | Qt::Key_H}}
   , {Action::EngineSelector,        QKeySequence{Qt::CTRL | Qt::Key_E}}
 
+  , {Action::Tray_Minimize,         QKeySequence{"Z"}}
+  , {Action::Tray_Restore,          QKeySequence{"R"}}
+  , {Action::Tray_Translation,      QKeySequence{"T"}}
+  , {Action::Tray_History,          QKeySequence{"H"}}
+  , {Action::Tray_Settings,         QKeySequence{"S"}}
+  , {Action::Tray_Quit,             QKeySequence{"Q"}}
+
   , {Action::SourceTargetToggle,    QKeySequence{Qt::Key_T}}
   , {Action::CopyDoc,               QKeySequence{Qt::Key_C}}
   , {Action::ViewInPopup,           QKeySequence{Qt::Key_V}}
@@ -387,7 +394,7 @@ const std::unordered_map<Action, QKeySequence> defaultShortcuts
 
 };
 
-constexpr int ActionCheck = 22;
+constexpr int ActionCheck = 28;
 static_assert(static_cast<int>(Action::Size) == ActionCheck, "Action changed: update defaultShortcuts");
 
 } // anonymous namespace

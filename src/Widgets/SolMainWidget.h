@@ -9,6 +9,7 @@
 #include <QSystemTrayIcon>
 
 
+class SolTrayIcon;
 class SolButton;
 class EngineSelector;
 class QPushButton;
@@ -57,6 +58,9 @@ protected slots:
 private slots:
     void iconActivated(const QSystemTrayIcon::ActivationReason reason);
 
+signals:
+    void visibleChanged(const bool isVisible);
+
 private:
     void setupTrayIcon();
     void setupShortcuts();
@@ -72,23 +76,18 @@ private:
     // ~==============
     // sub widgets
     QButtonGroup* _buttonGroup;
-    SolButton* textTabButton;
-    SolButton* docTabButton;
-    SolButton* historyTabButton;
+    SolButton* _textButton;
+    SolButton* _docButton;
+    SolButton* _historyButton;
 
     TextEditTranslateWidget* _textEditTranslate;
     QPointer<SettingsWidget> _settingsWidget;
 
-
     // ~==============
     // trayIcon
-    QAction* _miniToTrayAction;
-    QAction* _restoreAction;
-
     QIcon _solIcon;
-    QSystemTrayIcon* _trayIcon;
+    SolTrayIcon* _trayIcon;
 
-    // 좌클릭과 더블클릭 구분용
     QTimer* _doubleClickTimer;
     QPoint _prevMousePos;
 

@@ -32,14 +32,14 @@ public:
     using Base::Base;
 
 protected:
-    void wheelEvent(QWheelEvent* event) override
+    void wheelEvent(QWheelEvent* inEvent) override
     {
-        const QPoint angleDelta = event->angleDelta();
+        const QPoint angleDelta = inEvent->angleDelta();
 
         // Zoom
         if (!(this->textInteractionFlags().testFlag(Qt::TextEditable)))
         {
-            if (event->modifiers().testFlag(Qt::ControlModifier))
+            if (inEvent->modifiers().testFlag(Qt::ControlModifier))
             {
                 float delta = angleDelta.y() / 120.f;
                 this->zoomInF(delta);
@@ -47,7 +47,7 @@ protected:
             }
         }
 
-        Base::wheelEvent(event);
+        Base::wheelEvent(inEvent);
         this->updateMicroFocus();
     }
 };

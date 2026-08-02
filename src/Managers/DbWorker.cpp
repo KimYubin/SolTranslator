@@ -32,8 +32,8 @@ const QString SelectTimeline      = ":/sql/select_translation_timeline.sql";
 
 } // anonymous namespace
 
-DbWorker::DbWorker(const QString& inDbConnectionName, QObject* parent)
-    : QObject(parent)
+DbWorker::DbWorker(const QString& inDbConnectionName, QObject* inParent)
+    : QObject(inParent)
     , _dbConnectionName(inDbConnectionName)
     , _dbUpdateTimer(nullptr)
 {}

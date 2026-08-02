@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 
 
-IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
+IOptionWidget::IOptionWidget(QWidget* inParent) : QWidget(inParent)
 {
     _outScrollLayout = new QHBoxLayout(this);
     _outScrollLayout->setSpacing(16);
@@ -60,9 +60,9 @@ IOptionWidget::IOptionWidget(QWidget* parent) : QWidget(parent)
 
 
     // 외부 스크롤바 -> 내부 스크롤바 제어
-    connect(_outScrollBar, &QScrollBar::valueChanged, this, [this](const int value)
+    connect(_outScrollBar, &QScrollBar::valueChanged, this, [this](const int inValue)
     {
-        _srollArea->verticalScrollBar()->setValue(value);
+        _srollArea->verticalScrollBar()->setValue(inValue);
     });
     // 내부 스크롤바 값 -> 외부 스크롤바에 반영
     connect(_srollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](int, int)

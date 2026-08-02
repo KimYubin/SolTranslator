@@ -9,7 +9,7 @@
 #include "Types/SolTypes.h"
 #include "Utils/SolLog.h"
 
-EngineSelector::EngineSelector(QWidget* parent) : DropdownMenu(parent)
+EngineSelector::EngineSelector(QWidget* inParent) : DropdownMenu(inParent)
 {
     setEditable(false);
 

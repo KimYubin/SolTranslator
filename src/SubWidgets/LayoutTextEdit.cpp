@@ -8,7 +8,7 @@
 #include <QAbstractButton>
 #include <QHBoxLayout>
 
-LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
+LayoutTextEdit::LayoutTextEdit(QWidget* inParent) : ResultTextEdit(inParent)
 {
     _bottomLayoutWidget = new QFrame(this);
     _bottomLayoutWidget->setObjectName("bottomWidget");
@@ -21,9 +21,9 @@ LayoutTextEdit::LayoutTextEdit(QWidget* parent) : ResultTextEdit(parent)
 LayoutTextEdit::~LayoutTextEdit()
 {}
 
-void LayoutTextEdit::resizeEvent(QResizeEvent* event)
+void LayoutTextEdit::resizeEvent(QResizeEvent* inEvent)
 {
-    QTextEdit::resizeEvent(event);
+    QTextEdit::resizeEvent(inEvent);
 
     _bottomLayoutWidget->adjustSize();
     const QSize bottomSize = _bottomLayoutWidget->size();
@@ -38,7 +38,7 @@ void LayoutTextEdit::addBottomWidget(QWidget* inWidget
 }
 
 SolButton* LayoutTextEdit::addBottomButton(const QIcon& inIcon
-                                         , const Qt::FocusPolicy policy
+                                         , const Qt::FocusPolicy inPolicy
                                          , const QString& inToolTip
                                          , const QKeySequence& inKey
                                          , const int inStretch
@@ -46,7 +46,7 @@ SolButton* LayoutTextEdit::addBottomButton(const QIcon& inIcon
 {
     SolButton* newButton = new SolButton(this);
     newButton->setIcon(inIcon);
-    newButton->setFocusPolicy(policy);
+    newButton->setFocusPolicy(inPolicy);
     newButton->setToolTipShortcut(inToolTip, inKey);
 
     addBottomWidget(newButton, inStretch, inAlignment);

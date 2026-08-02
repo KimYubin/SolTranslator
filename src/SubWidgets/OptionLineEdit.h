@@ -12,14 +12,14 @@ class OptionLineEdit : public QWidget
     Q_OBJECT
 
 public:
-    explicit OptionLineEdit(QWidget* parent            = nullptr
+    explicit OptionLineEdit(QWidget* inParent             = nullptr
                           , const bool inIsUsedSaveButton = false
-                          , const bool inIsSecret      = false);
+                          , const bool inIsSecret         = false);
 
     explicit OptionLineEdit(const QString& inContent
-                          , QWidget* parent            = nullptr
+                          , QWidget* inParent             = nullptr
                           , const bool inIsUsedSaveButton = false
-                          , const bool inIsSecret      = false);
+                          , const bool inIsSecret         = false);
 
     ~OptionLineEdit() override = default;
 

@@ -11,8 +11,8 @@
 #include <QNetworkReply>
 #include <QTextDocument>
 
-GoogleTrUnit::GoogleTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
-    : TranslateUnit(parent, inEngine)
+GoogleTrUnit::GoogleTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
+    : TranslateUnit(inParent, inEngine)
 {}
 
 void GoogleTrUnit::requestTranslateImpl()

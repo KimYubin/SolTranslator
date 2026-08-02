@@ -26,7 +26,7 @@ class TranslateManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit TranslateManager(SolTranslatorCore* parent);
+    explicit TranslateManager(SolTranslatorCore* inParent);
 
     void init(HistoryManager* inHistoryManager
             , GlobalHotKeyManager* inGlobalHotKeyManager);

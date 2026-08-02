@@ -34,7 +34,7 @@ public:
     explicit LanguageSelectorMenuPrivate(LanguageSelector* inLangSelector, QWidget* inParentWidget);
     ~LanguageSelectorMenuPrivate() override;
 
-    bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* inObj, QEvent* inEvent) override;
 
     QSize sizeHint() const override;
 
@@ -42,7 +42,7 @@ public:
     void closeMenuPopup();
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* inEvent) override;
 
 public:
 signals:
@@ -69,11 +69,11 @@ private:
 #include "LanguageSelector.moc"
 
 
-LanguageSelector::LanguageSelector(QWidget* parent
+LanguageSelector::LanguageSelector(QWidget* inParent
                                  , QWidget* inSizeWidget
                                  , QWidget* inReturnFocusWidget
                                  , const LangType inLangType)
-    : QFrame(parent)
+    : QFrame(inParent)
     , _currentLangType(inLangType)
     , _sizeWidget(inSizeWidget)
     , _returnFocusWidget(inReturnFocusWidget)
@@ -117,9 +117,9 @@ LanguageSelector::~LanguageSelector()
     }
 }
 
-void LanguageSelector::setButtonText(const LangType inlangType)
+void LanguageSelector::setButtonText(const LangType inLangType)
 {
-    _button->setText(Langs::getLocaleName(inlangType));
+    _button->setText(Langs::getLocaleName(inLangType));
 }
 
 void LanguageSelector::setButtonToolTip(const QString& inStr)
@@ -127,20 +127,20 @@ void LanguageSelector::setButtonToolTip(const QString& inStr)
     SolToolTip::setToolTip(_button, inStr);
 }
 
-void LanguageSelector::onSelectedLanguage(const LangType inlangType)
+void LanguageSelector::onSelectedLanguage(const LangType inLangType)
 {
-    setButtonText(inlangType);
-    emit languageSelected(inlangType);
+    setButtonText(inLangType);
+    emit languageSelected(inLangType);
 }
 
-void LanguageSelector::closeEvent(QCloseEvent* event)
+void LanguageSelector::closeEvent(QCloseEvent* inEvent)
 {
     if (_menu)
     {
         _menu->close();
     }
 
-    QWidget::closeEvent(event);
+    QWidget::closeEvent(inEvent);
 }
 
 LanguageSelectorMenuPrivate* LanguageSelector::getMenu()
@@ -204,16 +204,16 @@ LanguageSelectorMenuPrivate::~LanguageSelectorMenuPrivate()
     qApp->removeEventFilter(this);
 }
 
-bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
+bool LanguageSelectorMenuPrivate::eventFilter(QObject* inObj, QEvent* inEvent)
 {
-    const QEvent::Type eventType = event->type();
+    const QEvent::Type eventType = inEvent->type();
     bool isCloseEvent = (eventType == QEvent::NonClientAreaMouseButtonPress);
 
     if (eventType == QEvent::MouseButtonPress)
     {
-        if (Sol::isThis(this, obj) == false)
+        if (Sol::isThis(this, inObj) == false)
         {
-            const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+            const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(inEvent);
             const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();
 
             // 마우스가 메뉴 위에 있는지 확인
@@ -239,7 +239,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
     }
     else if (eventType == QEvent::KeyPress)
     {
-        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        const QKeyEvent* keyEvent = static_cast<QKeyEvent*>(inEvent);
         const int pressedKey = keyEvent->key();
         // esc 종료
         if (pressedKey == Qt::Key_Escape)
@@ -249,12 +249,12 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
         // 탭 순환
         else if (pressedKey == Qt::Key_Tab)
         {
-            if (obj == _searchLine)
+            if (inObj == _searchLine)
             {
                 _listWidget->setFocus();
                 return true;
             }
-            else if (obj == _listWidget)
+            else if (inObj == _listWidget)
             {
                 _searchLine->setFocus();
                 return true;
@@ -266,10 +266,10 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* obj, QEvent* event)
     if (isCloseEvent)
     {
         closeMenuPopup();
-        event->accept();
+        inEvent->accept();
     }
 
-    return QWidget::eventFilter(obj, event);
+    return QWidget::eventFilter(inObj, inEvent);
 }
 
 QSize LanguageSelectorMenuPrivate::sizeHint() const
@@ -298,9 +298,9 @@ void LanguageSelectorMenuPrivate::closeMenuPopup()
     close();
 }
 
-void LanguageSelectorMenuPrivate::closeEvent(QCloseEvent* event)
+void LanguageSelectorMenuPrivate::closeEvent(QCloseEvent* inEvent)
 {
-    QWidget::closeEvent(event);
+    QWidget::closeEvent(inEvent);
 }
 
 void LanguageSelectorMenuPrivate::filterItems(const QString& inText)

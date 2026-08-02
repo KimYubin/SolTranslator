@@ -14,8 +14,8 @@
 #include <QThread>
 #include <QTimer>
 
-GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* parent)
-    : AbstractManager(parent)
+GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* inParent)
+    : AbstractManager(inParent)
 {}
 
 void GlobalHotKeyManager::registerAction(const Action inActionType

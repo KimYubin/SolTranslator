@@ -11,11 +11,11 @@
 
 
 SettingCard::SettingCard(QWidget* inContent
-                       , QWidget* parent
-                       , const ContentPos contentPos)
-    : QFrame(parent)
+                       , QWidget* inParent
+                       , const ContentPos inContentPos)
+    : QFrame(inParent)
     , _content(inContent)
-    , _contentPos(contentPos)
+    , _contentPos(inContentPos)
 {
     setObjectName("SettingCard");
 

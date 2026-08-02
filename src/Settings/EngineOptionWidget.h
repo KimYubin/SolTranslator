@@ -21,7 +21,7 @@ class EngineOptionWidget : public IOptionWidget
     Q_OBJECT
 
 public:
-    explicit EngineOptionWidget(QWidget* parent = nullptr);
+    explicit EngineOptionWidget(QWidget* inParent = nullptr);
     ~EngineOptionWidget() override;
 
 protected:

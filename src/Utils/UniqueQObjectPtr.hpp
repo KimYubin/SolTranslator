@@ -12,10 +12,10 @@
  */
 struct QObjectDeleter
 {
-    void operator()(QObject* obj) const noexcept
+    void operator()(QObject* inObj) const noexcept
     {
-        if (obj)
-            obj->deleteLater();
+        if (inObj)
+            inObj->deleteLater();
     }
 };
 

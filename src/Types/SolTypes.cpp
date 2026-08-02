@@ -64,6 +64,6 @@ bool Langs::containName(const LangType inLangType, const QString& inLangName)
 {
     // todo: 로케일 현지화 이름 및 각국 언어별 명칭을 모두 찾도록 만들어야합니다.
     // todo: 현지명, 영어명, 코드명, 자국명(모든언어 검색X. 자국명만 따로 모아놓아야합니다.)
-    const QString LangName = getLocaleName(inLangType);
-    return LangName.contains(inLangName, Qt::CaseInsensitive);
+    const QString langName = getLocaleName(inLangType);
+    return langName.contains(inLangName, Qt::CaseInsensitive);
 }

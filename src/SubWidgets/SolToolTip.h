@@ -16,7 +16,7 @@ class SolToolTip : public QObject
 {
     Q_OBJECT
 
-    explicit SolToolTip(QObject* parent = nullptr);
+    explicit SolToolTip(QObject* inParent = nullptr);
 
 public:
     static bool isValidToolTip(const QWidget* inWidget);

@@ -35,10 +35,10 @@ enum HistoryRole
 
 enum ItemColorRole
 {
-    itemTextColorRole
-  , itemSelectionTextColorRole
-  , itemHoverTextColorRole
-  , itemDisableColorRole
+    ItemTextColorRole
+  , ItemSelectionTextColorRole
+  , ItemHoverTextColorRole
+  , ItemDisableColorRole
 };
 
 } // namespace Sol

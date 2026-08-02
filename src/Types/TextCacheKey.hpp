@@ -47,12 +47,12 @@ struct cache_ky_hasher
 
 struct cache_ky_eq
 {
-    bool operator()(const TextCacheKey& ACacheKy, const TextCacheKey& BCacheKy) const
+    bool operator()(const TextCacheKey& inACacheKy, const TextCacheKey& inBCacheKy) const
     {
-        return (ACacheKy.engineId == BCacheKy.engineId)
-                && (ACacheKy.sourceLang == BCacheKy.sourceLang)
-                && (ACacheKy.targetLang == BCacheKy.targetLang)
-                && (ACacheKy.sourceText == BCacheKy.sourceText);
+        return (inACacheKy.engineId == inBCacheKy.engineId)
+                && (inACacheKy.sourceLang == inBCacheKy.sourceLang)
+                && (inACacheKy.targetLang == inBCacheKy.targetLang)
+                && (inACacheKy.sourceText == inBCacheKy.sourceText);
     }
 };
 

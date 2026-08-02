@@ -33,8 +33,8 @@
 
 using Sol::i18n;
 
-SolMainWidget::SolMainWidget(QWidget* parent)
-    : ISolWidget(parent)
+SolMainWidget::SolMainWidget(QWidget* inParent)
+    : ISolWidget(inParent)
     , ui(new Ui::SolMainWidget)
 {
     qApp->setQuitOnLastWindowClosed(false);
@@ -59,22 +59,22 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     _buttonGroup->setExclusive(true);
 
 
-    auto bindButton = [this, &tabOrderList](QPushButton* button, QWidget* childWidget)
+    auto bindButton = [this, &tabOrderList](QPushButton* inButton, QWidget* inChildWidget)
     {
-        button->setCheckable(true);
-        button->setFocusPolicy(Qt::TabFocus);
-        ui->tabBarLayout->addWidget(button, 0, Qt::AlignLeft);
+        inButton->setCheckable(true);
+        inButton->setFocusPolicy(Qt::TabFocus);
+        ui->tabBarLayout->addWidget(inButton, 0, Qt::AlignLeft);
 
-        const int stkIdx = ui->mainStackedWidget->addWidget(childWidget);
-        _buttonGroup->addButton(button, stkIdx);
-        tabOrderList.push_back(button);
+        const int stkIdx = ui->mainStackedWidget->addWidget(inChildWidget);
+        _buttonGroup->addButton(inButton, stkIdx);
+        tabOrderList.push_back(inButton);
     };
 
     // 텍스트 번역
     _textEditTranslate = new TextEditTranslateWidget();
 
     _textButton = new SolButton(this);
-    _textButton->setObjectName("_textButton");
+    _textButton->setObjectName("textTabButton");
     _textButton->setText(i18n(Tr::Text));
     _textButton->setAction(Action::TextTab);
     _textButton->setIcon(QIcon(":/img/text_caret_cursor"));
@@ -88,7 +88,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     docTranslateWidget->setAlignment(Qt::AlignCenter);
 
     _docButton = new SolButton(this);
-    _docButton->setObjectName("_docButton");
+    _docButton->setObjectName("docTabButton");
     _docButton->setText(i18n(Tr::Document));
     _docButton->setAction(Action::DocumentTab);
     _docButton->setIcon(QIcon(":/img/document_img"));
@@ -100,7 +100,7 @@ SolMainWidget::SolMainWidget(QWidget* parent)
     HistoryWidget* historyWidget = new HistoryWidget();
 
     _historyButton = new SolButton(this);
-    _historyButton->setObjectName("_historyButton");
+    _historyButton->setObjectName("historyTabButton");
     _historyButton->setText(i18n(Tr::History));
     _historyButton->setIcon(QIcon(":/img/history_img"));
     _historyButton->setAction(Action::HistoryTab);
@@ -172,16 +172,16 @@ SolMainWidget::~SolMainWidget()
     delete ui;
 }
 
-void SolMainWidget::setVisible(const bool visible)
+void SolMainWidget::setVisible(const bool inVisible)
 {
-    if (visible)
+    if (inVisible)
     {
         activateWindow();
     }
 
-    emit visibleChanged(visible);
+    emit visibleChanged(inVisible);
 
-    QWidget::setVisible(visible);
+    QWidget::setVisible(inVisible);
 }
 
 void SolMainWidget::showSettings()
@@ -196,7 +196,7 @@ void SolMainWidget::showSettings()
     }
 }
 
-void SolMainWidget::closeEvent(QCloseEvent* event)
+void SolMainWidget::closeEvent(QCloseEvent* inEvent)
 {
     if (solConfig.isFirstCloseToTray())
     {
@@ -209,9 +209,9 @@ void SolMainWidget::closeEvent(QCloseEvent* event)
 
     solConfig.saveWidgetGeometry(this);
     hide();
-    event->ignore();
+    inEvent->ignore();
 
-    ISolWidget::closeEvent(event);
+    ISolWidget::closeEvent(inEvent);
 }
 
 QMessageBox::StandardButton showNewMessageBox(const QMessageBox::Icon inIcon

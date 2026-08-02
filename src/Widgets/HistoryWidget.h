@@ -22,7 +22,7 @@ class HistoryWidget : public ISolWidget
     Q_OBJECT
 
 public:
-    explicit HistoryWidget(QWidget* parent = nullptr);
+    explicit HistoryWidget(QWidget* inParent = nullptr);
     ~HistoryWidget() override;
 
 public:

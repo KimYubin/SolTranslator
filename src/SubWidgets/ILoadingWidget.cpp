@@ -4,6 +4,6 @@
 
 #include "SolToolTip.h"
 
-ILoadingWidget::ILoadingWidget(QWidget* parent)
-    :QWidget(parent)
+ILoadingWidget::ILoadingWidget(QWidget* inParent)
+    :QWidget(inParent)
 {}

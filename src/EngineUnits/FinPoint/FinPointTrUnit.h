@@ -12,7 +12,7 @@ class FinPointTrUnit final : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit FinPointTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
+    explicit FinPointTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine);
 
 protected:
     void requestTranslateImpl() override;

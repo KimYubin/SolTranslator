@@ -89,7 +89,7 @@ EnumType enumValue(const QSettings* inSettings, const QString& inKey, const Enum
 
 } // anonymous namespace
 
-ConfigManager::ConfigManager(SolTranslatorCore* parent) : AbstractManager(parent)
+ConfigManager::ConfigManager(SolTranslatorCore* inParent) : AbstractManager(inParent)
 {
     _settings    = new QSettings(SolPath::absolute(SolFile::Config), QSettings::IniFormat, this);
     _secretStore = new SecretStore(this);

@@ -88,9 +88,9 @@ void SecretStore::requestLoadSecretList(const std::vector<QString>& inKeyList
     SolSharedGuard solSharedGuard{std::move(inCallback)};
 
     // Copy capture to connect the 'sharedSgg' lifetime to each 'loading'.
-    for (const QString& inKey : inKeyList)
+    for (const QString& keyStr : inKeyList)
     {
-        requestLoadSecret(inKey, [solSharedGuard](const QString&) {});
+        requestLoadSecret(keyStr, [solSharedGuard](const QString&) {});
     }
 }
 

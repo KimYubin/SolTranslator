@@ -22,7 +22,7 @@ class HistoryListView : public SolListView
     SOL_QSS_COLOR(itemDisableColor)
 
 public:
-    explicit HistoryListView(QWidget* parent = nullptr) : SolListView(parent) {}
+    explicit HistoryListView(QWidget* inParent = nullptr) : SolListView(inParent) {}
     ~HistoryListView() override = default;
 
     QColor getItemColor(const Sol::ItemColorRole inColorRole) const;

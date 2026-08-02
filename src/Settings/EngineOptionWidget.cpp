@@ -25,8 +25,8 @@
 
 using Sol::i18n;
 
-EngineOptionWidget::EngineOptionWidget(QWidget* parent)
-    : IOptionWidget(parent)
+EngineOptionWidget::EngineOptionWidget(QWidget* inParent)
+    : IOptionWidget(inParent)
 {
     setObjectName("EngineOptionWidget");
 

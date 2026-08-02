@@ -74,24 +74,24 @@ QRect Sol::availableGeometryAt(const QPoint& inPoint)
     return targetScreen ? targetScreen->availableGeometry() : QRect();
 }
 
-QRect Sol::moveToInside(const QRect& outerRect, const QRect& innerRect)
+QRect Sol::moveToInside(const QRect& inOuterRect, const QRect& inNerRect)
 {
-    QRect res = innerRect;
-    if (outerRect.left() > res.left())
+    QRect res = inNerRect;
+    if (inOuterRect.left() > res.left())
     {
-        res.moveLeft(outerRect.left());
+        res.moveLeft(inOuterRect.left());
     }
-    if (outerRect.top() > res.top())
+    if (inOuterRect.top() > res.top())
     {
-        res.moveTop(outerRect.top());
+        res.moveTop(inOuterRect.top());
     }
-    if (outerRect.right() < res.right())
+    if (inOuterRect.right() < res.right())
     {
-        res.moveRight(outerRect.right());
+        res.moveRight(inOuterRect.right());
     }
-    if (outerRect.bottom() < res.bottom())
+    if (inOuterRect.bottom() < res.bottom())
     {
-        res.moveBottom(outerRect.bottom());
+        res.moveBottom(inOuterRect.bottom());
     }
 
     return res;

@@ -24,8 +24,8 @@
 
 using Sol::i18n;
 
-TextEditTranslateWidget::TextEditTranslateWidget(QWidget* parent)
-    : ITranslateWidget(parent)
+TextEditTranslateWidget::TextEditTranslateWidget(QWidget* inParent)
+    : ITranslateWidget(inParent)
     , ui(new Ui::TextEditTranslateWidget)
 {
     ui->setupUi(this);
@@ -144,9 +144,9 @@ QTextCursor TextEditTranslateWidget::getTextCursor() const
     return ui->trTextEdit->textCursor();
 }
 
-void TextEditTranslateWidget::setTextCursor(const QTextCursor& cursor)
+void TextEditTranslateWidget::setTextCursor(const QTextCursor& inCursor)
 {
-    ui->trTextEdit->setTextCursor(cursor);
+    ui->trTextEdit->setTextCursor(inCursor);
 }
 
 void TextEditTranslateWidget::focusTextOrigin()
@@ -185,23 +185,23 @@ void TextEditTranslateWidget::onExecuteTranslate(const bool inIgnoreCache)
                        , inIgnoreCache);
 }
 
-void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inlangType)
+void TextEditTranslateWidget::onSourceLanguageChanged(const LangType inLangType)
 {
-    const bool isAuto = (inlangType == LangType::AUTO);
+    const bool isAuto = (inLangType == LangType::AUTO);
     ui->languageSwapButton->setEnabled(isAuto == false);
 
-    if (solConfig.textSrcLang() != inlangType)
+    if (solConfig.textSrcLang() != inLangType)
     {
-        solConfig.setTextSrcLang(inlangType);
+        solConfig.setTextSrcLang(inLangType);
         _translationExecutionTimer->start();
     }
 }
 
-void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inlangType)
+void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inLangType)
 {
-    if (solConfig.textTargetLang() != inlangType)
+    if (solConfig.textTargetLang() != inLangType)
     {
-        solConfig.setTextTargetLang(inlangType);
+        solConfig.setTextTargetLang(inLangType);
         _translationExecutionTimer->start();
     }
 }

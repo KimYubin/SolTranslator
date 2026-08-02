@@ -19,8 +19,8 @@
 
 using Sol::i18n;
 
-GeneralOptionWidget::GeneralOptionWidget(QWidget* parent)
-    : IOptionWidget(parent)
+GeneralOptionWidget::GeneralOptionWidget(QWidget* inParent)
+    : IOptionWidget(inParent)
 {
     setObjectName("GeneralOptionWidget");
 

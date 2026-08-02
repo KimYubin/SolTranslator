@@ -13,15 +13,15 @@
 #include <magic_enum.hpp>
 
 
-WidgetInspector::WidgetInspector(QWidget* parent) : QWidget(parent)
+WidgetInspector::WidgetInspector(QWidget* inParent) : QWidget(inParent)
 {
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setStyleSheet("background: rgba(0, 0, 0, 150); color: white; font: 10pt;");
 
-    label = new QLabel("Waiting...", this);
+    _label = new QLabel("Waiting...", this);
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->addWidget(label);
+    layout->addWidget(_label);
     layout->setContentsMargins(5, 5, 5, 5);
 
     resize(300, 50);
@@ -31,28 +31,28 @@ WidgetInspector::WidgetInspector(QWidget* parent) : QWidget(parent)
     show();
 }
 
-bool WidgetInspector::eventFilter(QObject* watched, QEvent* event)
+bool WidgetInspector::eventFilter(QObject* inWatched, QEvent* inEvent)
 {
-    if (event->type() == QEvent::MouseMove)
+    if (inEvent->type() == QEvent::MouseMove)
     {
-        updateInfo(watched, event);
+        updateInfo(inWatched, inEvent);
     }
-    return QWidget::eventFilter(watched, event);
+    return QWidget::eventFilter(inWatched, inEvent);
 }
 
-void WidgetInspector::updateInfo(const QObject* watched, const QEvent* event)
+void WidgetInspector::updateInfo(const QObject* inWatched, const QEvent* inEvent)
 {
     const QPoint globalPos = QCursor::pos();
 
     if (const QWidget* widget = QApplication::widgetAt(globalPos))
     {
-        label->setText(QString("Class: %1\nObject: %2\nevent: %3")
+        _label->setText(QString("Class: %1\nObject: %2\nevent: %3")
                        .arg(widget->metaObject()->className())
                        .arg(widget->objectName().isEmpty() ? "<no name>" : widget->objectName())
-                       .arg(Sol::enumToQStr(event->type())));
+                       .arg(Sol::enumToQStr(inEvent->type())));
     }
     else
     {
-        label->setText("No widget under cursor");
+        _label->setText("No widget under cursor");
     }
 }

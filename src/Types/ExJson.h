@@ -20,8 +20,8 @@ public:
 
     ExJson() = default;
 
-    explicit ExJson(const ExpectedJson& r)
-        : _expected(r)
+    explicit ExJson(const ExpectedJson& inExp)
+        : _expected(inExp)
     {}
 
     explicit ExJson(const QByteArray& inJson)

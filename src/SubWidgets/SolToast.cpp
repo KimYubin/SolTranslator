@@ -23,8 +23,8 @@ class SolToastWidget : public QWidget
 
 public:
     explicit SolToastWidget(const QString& inMsg
-                          , QWidget* targetWidget
-                          , QWidget* parent
+                          , QWidget* inTargetWidget
+                          , QWidget* inParent
                           , const int inDurationMsec);
     ~SolToastWidget() override;
 
@@ -58,11 +58,11 @@ private:
 #include "SolToast.moc"
 
 SolToastWidget::SolToastWidget(const QString& inMsg
-                             , QWidget* targetWidget
-                             , QWidget* parent
+                             , QWidget* inTargetWidget
+                             , QWidget* inParent
                              , const int inDurationMsec)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
-    , _targetWidget(targetWidget)
+    : QWidget(inParent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint | Qt::WindowStaysOnTopHint)
+    , _targetWidget(inTargetWidget)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_ShowWithoutActivating);

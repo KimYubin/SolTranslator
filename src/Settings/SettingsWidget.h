@@ -21,16 +21,16 @@ class SettingsWidget : public ISolWidget
 
     enum SettingsListItemRole
     {
-        stackIndexRole = Qt::ItemDataRole::UserRole + 1
+        StackIndexRole = Qt::ItemDataRole::UserRole + 1
       , OptionPageRole
     };
 
 public:
-    explicit SettingsWidget(QWidget* parent = nullptr);
+    explicit SettingsWidget(QWidget* inParent = nullptr);
     ~SettingsWidget() override;
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* inEvent) override;
 
 protected slots:
     void appQuitEvent();

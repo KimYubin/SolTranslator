@@ -10,7 +10,7 @@ class ILoadingWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ILoadingWidget(QWidget* parent = nullptr);
+    explicit ILoadingWidget(QWidget* inParent = nullptr);
 
     virtual void run() = 0;
     virtual void stop() = 0;

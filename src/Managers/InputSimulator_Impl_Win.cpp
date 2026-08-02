@@ -32,7 +32,7 @@ INPUT make_INPUT(const DWORD in_type, const WORD in_wVK, const DWORD in_dwFlags 
  * 컨트롤 키가 눌린 상태에서 다른 모든키를 릴리즈 합니다.
  * Release all other keys while the Control key is held down.
  */
-void ReleaseAllKeysOnPressedControlKey()
+void releaseAllKeysOnPressedControlKey()
 {
     constexpr int KeyCount = 255;
 
@@ -56,7 +56,7 @@ void ReleaseAllKeysOnPressedControlKey()
 
 void InputSimulator::triggerCopy()
 {
-    ReleaseAllKeysOnPressedControlKey();
+    releaseAllKeysOnPressedControlKey();
 
     std::array<INPUT, 4> inputs;
 

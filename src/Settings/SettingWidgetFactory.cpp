@@ -24,9 +24,9 @@ SettingCard* createBaseCard(QWidget* inContent
                           , QWidget* inParent
                           , const QString& inHeader
                           , const std::optional<QString>& inDescription
-                          , const SettingCard::ContentPos contentPos = SettingCard::Right)
+                          , const SettingCard::ContentPos inContentPos = SettingCard::Right)
 {
-    SettingCard* resCard = new SettingCard(inContent, inParent, contentPos);
+    SettingCard* resCard = new SettingCard(inContent, inParent, inContentPos);
     resCard->setHeader(inHeader);
     if (inDescription.has_value())
     {

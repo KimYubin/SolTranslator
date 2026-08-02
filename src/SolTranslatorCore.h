@@ -30,7 +30,7 @@ class SolTranslatorCore : public QObject
     static SolTranslatorCore* _self;
 
 public:
-    explicit SolTranslatorCore(QObject* parent = nullptr);
+    explicit SolTranslatorCore(QObject* inParent = nullptr);
     ~SolTranslatorCore() override;
 
     static SolTranslatorCore* instance() noexcept { return _self; }

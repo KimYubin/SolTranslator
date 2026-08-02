@@ -10,33 +10,33 @@
 
 #include <QRegularExpression>
 
-HistoryModel::HistoryModel(QObject* parent)
-    : QAbstractListModel(parent)
+HistoryModel::HistoryModel(QObject* inParent)
+    : QAbstractListModel(inParent)
 {
     connect(solCore->manager<HistoryManager>(), &HistoryManager::translateHistoryUpdated, this, &HistoryModel::updateHistoryCache);
 }
 
-int HistoryModel::rowCount(const QModelIndex& parent) const
+int HistoryModel::rowCount(const QModelIndex& inParent) const
 {
-    return parent.isValid() ? 0 : solCore->manager<HistoryManager>()->getHistoryCacheSize();
+    return inParent.isValid() ? 0 : solCore->manager<HistoryManager>()->getHistoryCacheSize();
 }
 
-int HistoryModel::columnCount(const QModelIndex& parent) const
+int HistoryModel::columnCount(const QModelIndex& inParent) const
 {
-    return parent.isValid() ? 0 : 1;
+    return inParent.isValid() ? 0 : 1;
 }
 
-QVariant HistoryModel::data(const QModelIndex& index, const int role) const
+QVariant HistoryModel::data(const QModelIndex& inIndex, const int inRole) const
 {
-    const Expected<const HistoryCacheData*> trCache = getHistoryCacheData(index.row());
+    const Expected<const HistoryCacheData*> trCache = getHistoryCacheData(inIndex.row());
 
     if (!trCache)
     {
-        solDebug << trCache.error() << "- role :" << role;
+        solDebug << trCache.error() << "- role :" << inRole;
         return QVariant();
     }
 
-    switch (role)
+    switch (inRole)
     {
     case Sol::SourceLangRole:
     {
@@ -71,18 +71,18 @@ QVariant HistoryModel::data(const QModelIndex& index, const int role) const
     return QVariant();
 }
 
-bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, const int role)
+bool HistoryModel::setData(const QModelIndex& inIndex, const QVariant& inValue, const int inRole)
 {
-    if (index.isValid() == false)
+    if (inIndex.isValid() == false)
     {
         return false;
     }
 
-    switch (role)
+    switch (inRole)
     {
     case Sol::CheckRole:
     {
-        solCore->manager<HistoryManager>()->setCheckState(index.row(), static_cast<Qt::CheckState>(value.toInt()));
+        solCore->manager<HistoryManager>()->setCheckState(inIndex.row(), static_cast<Qt::CheckState>(inValue.toInt()));
         return true;
     }
     default:
@@ -92,22 +92,22 @@ bool HistoryModel::setData(const QModelIndex& index, const QVariant& value, cons
     return false;
 }
 
-Qt::ItemFlags HistoryModel::flags(const QModelIndex& index) const
+Qt::ItemFlags HistoryModel::flags(const QModelIndex& inIndex) const
 {
-    if (index.isValid() == false)
+    if (inIndex.isValid() == false)
     {
         return Qt::ItemIsEnabled;
     }
 
-    return QAbstractListModel::flags(index)
+    return QAbstractListModel::flags(inIndex)
             | Qt::ItemIsEnabled
             | Qt::ItemIsUserCheckable;
 }
 
-bool HistoryModel::insertRows(const int position, const int rows, const QModelIndex& index)
+bool HistoryModel::insertRows(const int inPosition, const int inRows, const QModelIndex& inIndex)
 {
-    Q_UNUSED(index);
-    beginInsertRows(QModelIndex(), position, position + rows - 1);
+    Q_UNUSED(inIndex);
+    beginInsertRows(QModelIndex(), inPosition, inPosition + inRows - 1);
 
     // for (int row = 0; row < rows; ++row)
     //     _historyList.insert(position, {QString(), QString()});
@@ -116,10 +116,10 @@ bool HistoryModel::insertRows(const int position, const int rows, const QModelIn
     return true;
 }
 
-bool HistoryModel::removeRows(const int position, const int rows, const QModelIndex& index)
+bool HistoryModel::removeRows(const int inPosition, const int inRows, const QModelIndex& inIndex)
 {
-    Q_UNUSED(index);
-    beginRemoveRows(QModelIndex(), position, position + rows - 1);
+    Q_UNUSED(inIndex);
+    beginRemoveRows(QModelIndex(), inPosition, inPosition + inRows - 1);
 
     // for (int row = 0; row < rows; ++row)
         // _historyList.removeAt(position);
@@ -133,9 +133,9 @@ Expected<const HistoryCacheData*> HistoryModel::getHistoryCacheData(const int in
     return solCore->manager<HistoryManager>()->getHistoryCacheData(inIdx);
 }
 
-Expected<const HistoryCacheData*> HistoryModel::getHistoryCacheData(const QModelIndex& index) const
+Expected<const HistoryCacheData*> HistoryModel::getHistoryCacheData(const QModelIndex& inIndex) const
 {
-    return getHistoryCacheData(index.row());
+    return getHistoryCacheData(inIndex.row());
 }
 
 

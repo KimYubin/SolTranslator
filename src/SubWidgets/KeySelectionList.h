@@ -10,13 +10,13 @@ class KeySelectionList : public QListWidget
     Q_OBJECT
 
 public:
-    explicit KeySelectionList(QWidget* parent = nullptr);
+    explicit KeySelectionList(QWidget* inParent = nullptr);
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *inEvent) override;
 
 signals:
-    void itemKeyPressed(QListWidgetItem* item);
+    void itemKeyPressed(QListWidgetItem* inItem);
 
 };
 

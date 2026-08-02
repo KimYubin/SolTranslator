@@ -11,7 +11,7 @@ class GeneralOptionWidget : public IOptionWidget
     Q_OBJECT
 
 public:
-    explicit GeneralOptionWidget(QWidget* parent = nullptr);
+    explicit GeneralOptionWidget(QWidget* inParent = nullptr);
     ~GeneralOptionWidget() override;
 
 private:

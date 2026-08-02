@@ -4,12 +4,12 @@
 
 #include <QKeyEvent>
 
-KeySelectionList::KeySelectionList(QWidget* parent) : QListWidget(parent)
+KeySelectionList::KeySelectionList(QWidget* inParent) : QListWidget(inParent)
 {}
 
-void KeySelectionList::keyPressEvent(QKeyEvent* event)
+void KeySelectionList::keyPressEvent(QKeyEvent* inEvent)
 {
-    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter || event->key() == Qt::Key_Space)
+    if (inEvent->key() == Qt::Key_Return || inEvent->key() == Qt::Key_Enter || inEvent->key() == Qt::Key_Space)
     {
         if (QListWidgetItem* item = currentItem())
         {
@@ -18,5 +18,5 @@ void KeySelectionList::keyPressEvent(QKeyEvent* event)
         return;
     }
 
-    QListWidget::keyPressEvent(event);
+    QListWidget::keyPressEvent(inEvent);
 }

@@ -30,7 +30,7 @@
 #include <magic_enum.hpp>
 
 
-TranslateManager::TranslateManager(SolTranslatorCore* parent): AbstractManager(parent)
+TranslateManager::TranslateManager(SolTranslatorCore* inParent): AbstractManager(inParent)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
 }
@@ -190,16 +190,16 @@ void TranslateManager::processPopupTranslate()
 
     // 클립보드 갱신(복사) 대기
     QMetaObject::Connection clipboardConnection
-        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](const QClipboard::Mode mode) mutable
+        = connect(QApplication::clipboard(), &QClipboard::changed, this, [this, prevMimeChanged = std::move(prevMime)](const QClipboard::Mode inMode) mutable
     {
-        const QMimeData* selectedMime = QApplication::clipboard()->mimeData(mode);
+        const QMimeData* selectedMime = QApplication::clipboard()->mimeData(inMode);
 
         if (selectedMime == nullptr || selectedMime->hasText() == false)
         {
             return;
         }
 
-        switch (mode)
+        switch (inMode)
         {
         case QClipboard::Clipboard:
         {

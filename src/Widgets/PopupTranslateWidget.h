@@ -34,10 +34,10 @@ class PopupTranslateWidget : public ITranslateWidget
     Q_PROPERTY(QSize textEditSize READ getTextEditSize WRITE setTextEditSize)
 
 public:
-    explicit PopupTranslateWidget(QWidget* parent = nullptr);
+    explicit PopupTranslateWidget(QWidget* inParent = nullptr);
     ~PopupTranslateWidget() override;
 
-    bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject* inObj, QEvent* inEvent) override;
 
 private:
     void setupUI();
@@ -62,7 +62,7 @@ protected:
     QScrollBar* getVerticalScrollBar() const override;
     QScrollBar* getHorizontalScrollBar() const override;
     QTextCursor getTextCursor() const override;
-    void setTextCursor(const QTextCursor& cursor) override;
+    void setTextCursor(const QTextCursor& inCursor) override;
 
 
     /** 입력된 문자열로 교체하고, 적정 사이즈로 팝업을 엽니다. */
@@ -111,7 +111,7 @@ protected:
     void setShadowEffectEnabled(const bool inIsEnable);
 
 protected slots:
-    void detectFocusInOut(const QWidget* old, const QWidget* now);
+    void detectFocusInOut(const QWidget* inOld, const QWidget* inNow);
 
 private:
     /**
@@ -125,13 +125,13 @@ private:
     void setCursorShape(const QPoint& inMousePos);
 
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* inEvent) override;
+    void mouseDoubleClickEvent(QMouseEvent* inEvent) override;
+    void mouseMoveEvent(QMouseEvent* inEvent) override;
+    void mouseReleaseEvent(QMouseEvent* inEvent) override;
 
-    void enterEvent(QEnterEvent* event) override;
-    void leaveEvent(QEvent* event) override;
+    void enterEvent(QEnterEvent* inEvent) override;
+    void leaveEvent(QEvent* inEvent) override;
 
 protected:
     QPropertyAnimation* _animation;
@@ -183,7 +183,7 @@ protected:
 private:
     Ui::PopupTranslateWidget* ui;
 
-    SolButton* _AlwaysOnButton;
+    SolButton* _alwaysOnButton;
     SolButton* _windowModeButton;
 
     SolButton* _maxRestoreButton;

@@ -13,16 +13,16 @@ class SolButton : public QPushButton
     Q_OBJECT
 
 public:
-    explicit SolButton(QWidget* parent = nullptr)
-        : QPushButton(parent)
+    explicit SolButton(QWidget* inParent = nullptr)
+        : QPushButton(inParent)
     {}
 
-    explicit SolButton(const QString& text, QWidget* parent = nullptr)
-        : QPushButton(text, parent)
+    explicit SolButton(const QString& inText, QWidget* inParent = nullptr)
+        : QPushButton(inText, inParent)
     {}
 
-    SolButton(const QIcon& icon, const QString& text, QWidget* parent)
-        : QPushButton(icon, text, parent)
+    SolButton(const QIcon& inIcon, const QString& inText, QWidget* inParent)
+        : QPushButton(inIcon, inText, inParent)
     {}
 
     void setCheckIcon(const QString& inOnFileName, const QString& inOffFileName);

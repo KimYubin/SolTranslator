@@ -12,8 +12,8 @@
 #include <QTimer>
 
 
-LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* parent)
-    : ILoadingWidget(parent)
+LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* inParent)
+    : ILoadingWidget(inParent)
 {
     _svgRenderer = new QSvgRenderer(this);
     _svgRenderer->load(inFile);
@@ -47,23 +47,23 @@ void LoadingSpinner::stop()
     }
 }
 
-void LoadingSpinner::showEvent(QShowEvent* event)
+void LoadingSpinner::showEvent(QShowEvent* inEvent)
 {
     _svgRenderer->setAnimationEnabled(true);
 
-    ILoadingWidget::showEvent(event);
+    ILoadingWidget::showEvent(inEvent);
 }
 
-void LoadingSpinner::hideEvent(QHideEvent* event)
+void LoadingSpinner::hideEvent(QHideEvent* inEvent)
 {
     _svgRenderer->setAnimationEnabled(false);
 
-    ILoadingWidget::hideEvent(event);
+    ILoadingWidget::hideEvent(inEvent);
 }
 
-void LoadingSpinner::paintEvent(QPaintEvent* event)
+void LoadingSpinner::paintEvent(QPaintEvent* inEvent)
 {
-    ILoadingWidget::paintEvent(event);
+    ILoadingWidget::paintEvent(inEvent);
 
     QStyleOption opt;
     opt.initFrom(this);

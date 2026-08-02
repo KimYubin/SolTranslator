@@ -12,14 +12,14 @@ class WidgetInspector : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetInspector(QWidget* parent = nullptr);
+    explicit WidgetInspector(QWidget* inParent = nullptr);
 
-    bool eventFilter(QObject* watched, QEvent* event) override;
+    bool eventFilter(QObject* inWatched, QEvent* inEvent) override;
 
-    void updateInfo(const QObject* watched, const QEvent* event);
+    void updateInfo(const QObject* inWatched, const QEvent* inEvent);
 
 private:
-    QLabel* label;
+    QLabel* _label;
 };
 
 #endif //SOLTRANSLATOR_WIDGETINSPECTOR_H

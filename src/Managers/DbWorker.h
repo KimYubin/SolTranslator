@@ -21,7 +21,7 @@ class DbWorker : public QObject
 
 public:
     explicit DbWorker(const QString& inDbConnectionName = "sol_db"
-                    , QObject* parent = nullptr);
+                    , QObject* inParent = nullptr);
     ~DbWorker() override;
 
     void initialize();

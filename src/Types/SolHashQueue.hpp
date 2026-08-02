@@ -82,21 +82,21 @@ public:
      */
     template <typename _KArg, typename _VArg>
         requires std::constructible_from<_Kty, _KArg&&> && std::constructible_from<_Valty, _VArg&&>
-    void push(_KArg&& key, _VArg&& value)
+    void push(_KArg&& inKey, _VArg&& inValue)
     {
-        auto findHashIt = keyListHash.find(key);
+        auto findHashIt = keyListHash.find(inKey);
         if (findHashIt != keyListHash.end())
         {
-            if (findHashIt->second->second != value)
+            if (findHashIt->second->second != inValue)
             {
-                findHashIt->second->second = std::forward<_VArg>(value);
+                findHashIt->second->second = std::forward<_VArg>(inValue);
             }
 
             keyValQueue.splice(keyValQueue.end(), keyValQueue, findHashIt->second);
             return;
         }
 
-        keyListHash[key] = keyValQueue.emplace(keyValQueue.end(), key, std::forward<_VArg>(value));
+        keyListHash[inKey] = keyValQueue.emplace(keyValQueue.end(), inKey, std::forward<_VArg>(inValue));
     }
 
     const _Valty& top() const
@@ -120,9 +120,9 @@ public:
         keyValQueue.pop_front();
     }
 
-    bool erase(const _Kty& key)
+    bool erase(const _Kty& inKey)
     {
-        const auto findIt = keyListHash.find(key);
+        const auto findIt = keyListHash.find(inKey);
         if (findIt == keyListHash.end())
         {
             return false;
@@ -133,20 +133,20 @@ public:
         return true;
     }
 
-    bool erase(const const_iterator listIt)
+    bool erase(const const_iterator inListIt)
     {
-        if (listIt == keyValQueue.end())
+        if (inListIt == keyValQueue.end())
         {
             return false;
         }
-        keyValQueue.erase(listIt);
-        keyListHash.erase(listIt->first);
+        keyValQueue.erase(inListIt);
+        keyListHash.erase(inListIt->first);
         return true;
     }
 
-    const _Valty* find(const _Kty& key) const
+    const _Valty* find(const _Kty& inKey) const
     {
-        const auto findIt = keyListHash.find(key);
+        const auto findIt = keyListHash.find(inKey);
         if (findIt == keyListHash.end())
         {
             return nullptr;
@@ -155,9 +155,9 @@ public:
         return &(findIt->second->second);
     }
 
-    _Valty* find(const _Kty& key)
+    _Valty* find(const _Kty& inKey)
     {
-        const auto findIt = keyListHash.find(key);
+        const auto findIt = keyListHash.find(inKey);
         if (findIt == keyListHash.end())
         {
             return nullptr;
@@ -171,9 +171,9 @@ public:
      * If it already exists, update the order.
      * The iterator becomes invalid.
      */
-    _Valty* look_up(const _Kty& key)
+    _Valty* look_up(const _Kty& inKey)
     {
-        const auto findIt = keyListHash.find(key);
+        const auto findIt = keyListHash.find(inKey);
         if (findIt == keyListHash.end())
         {
             return nullptr;

@@ -14,7 +14,7 @@ class EngineSelector : public DropdownMenu
     Q_OBJECT
 
 public:
-    explicit EngineSelector(QWidget* parent = nullptr);
+    explicit EngineSelector(QWidget* inParent = nullptr);
 
     void setCurrentIndexChanged(Callback<void(const int)>&& inFunctor);
 

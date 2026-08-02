@@ -30,7 +30,7 @@ class ConfigManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit ConfigManager(SolTranslatorCore* parent);
+    explicit ConfigManager(SolTranslatorCore* inParent);
 
     /**
      * Load The secret key, asynchronously.

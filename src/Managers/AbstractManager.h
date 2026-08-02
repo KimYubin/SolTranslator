@@ -16,7 +16,7 @@ class AbstractManager : public QObject
     Q_OBJECT
 
 public:
-    explicit AbstractManager(SolTranslatorCore* parent);
+    explicit AbstractManager(SolTranslatorCore* inParent);
     ~AbstractManager() override;
 
 protected:

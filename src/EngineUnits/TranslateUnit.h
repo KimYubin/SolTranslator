@@ -24,7 +24,7 @@ class TranslateUnit : public QObject
     Q_OBJECT
 
 public:
-    explicit TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine);
+    explicit TranslateUnit(TranslateManager* inParent, ITranslateEngine* inEngine);
     ~TranslateUnit() override;
 
     void setTranslateRequest(TranslateRequest&& inTrRequest);

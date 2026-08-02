@@ -7,20 +7,20 @@
 
 #include <QHBoxLayout>
 
-OptionLineEdit::OptionLineEdit(QWidget* parent
+OptionLineEdit::OptionLineEdit(QWidget* inParent
                              , const bool inIsUsedSaveButton
                              , const bool inIsSecret)
     : OptionLineEdit(QString()
-                   , parent
+                   , inParent
                    , inIsUsedSaveButton
                    , inIsSecret)
 {}
 
 OptionLineEdit::OptionLineEdit(const QString& inContent
-                             , QWidget* parent
+                             , QWidget* inParent
                              , const bool inIsUsedSaveButton
                              , const bool inIsSecret)
-    : QWidget(parent)
+    : QWidget(inParent)
     , _isUsedSaveButton(inIsUsedSaveButton)
 {
     _lineEdit = new SolLineEdit(inContent, this);

@@ -5,8 +5,8 @@
 #include <QRegularExpression>
 #include <QVBoxLayout>
 
-OptionGroupBox::OptionGroupBox(const QString& inGroupTitle, QWidget* parent)
-    : QGroupBox(parent)
+OptionGroupBox::OptionGroupBox(const QString& inGroupTitle, QWidget* inParent)
+    : QGroupBox(inParent)
 {
     QString objStr = inGroupTitle;
     objStr.remove(QRegularExpression("\\s"));

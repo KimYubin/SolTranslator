@@ -14,8 +14,8 @@
 
 SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 
-SolTranslatorCore::SolTranslatorCore(QObject* parent)
-    : QObject(parent)
+SolTranslatorCore::SolTranslatorCore(QObject* inParent)
+    : QObject(inParent)
     , _solMainWidget(nullptr)
 {
     Q_ASSERT_X(!SolTranslatorCore::_self, "SolTranslatorCore", "there should be only one sol core object");

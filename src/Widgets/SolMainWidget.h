@@ -35,15 +35,15 @@ class SolMainWidget : public ISolWidget
     Q_OBJECT
 
 public:
-    explicit SolMainWidget(QWidget* parent = nullptr);
+    explicit SolMainWidget(QWidget* inParent = nullptr);
     ~SolMainWidget() override;
 
-    void setVisible(const bool visible) override;
+    void setVisible(const bool inVisible) override;
 
     void showSettings();
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* inEvent) override;
 
 protected slots:
     /** 앱을 종료합니다. */

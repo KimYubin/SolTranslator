@@ -11,7 +11,7 @@ class StyleManger  : public QObject
     Q_OBJECT
 
 public:
-    explicit StyleManger(QObject* parent = nullptr);
+    explicit StyleManger(QObject* inParent = nullptr);
     ~StyleManger() override;
 
     static void applyTheme(const QString& inThemeName = "dark");

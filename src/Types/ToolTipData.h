@@ -9,7 +9,7 @@
 
 struct ToolTipData
 {
-    static const char* Name;
+    static const char* propertyName;
 
     ToolTipData() = default;
 
@@ -18,7 +18,7 @@ struct ToolTipData
               , QKeySequence inShortcut
               , const bool inIsOnToolTip = true)
         : toolTip(std::move(inToolTip))
-        , OffToolTip(std::move(inOffToolTip))
+        , offToolTip(std::move(inOffToolTip))
         , shortcut(std::move(inShortcut))
         , isOnToolTip(inIsOnToolTip)
     {}
@@ -26,19 +26,19 @@ struct ToolTipData
     ToolTipData(QString inToolTip
               , const QKeySequence& inShortcut)
         : toolTip(std::move(inToolTip))
-        , OffToolTip(std::nullopt)
+        , offToolTip(std::nullopt)
         , shortcut(std::move(inShortcut.toString()))
     {}
 
     explicit ToolTipData(QString inToolTip)
         : toolTip(std::move(inToolTip))
-        , OffToolTip(std::nullopt)
+        , offToolTip(std::nullopt)
         , shortcut(QKeySequence{})
     {}
 
     explicit ToolTipData(const QKeySequence& inShortcut)
         : toolTip(QString{})
-        , OffToolTip(std::nullopt)
+        , offToolTip(std::nullopt)
         , shortcut(std::move(inShortcut.toString()))
     {}
 
@@ -54,7 +54,7 @@ struct ToolTipData
     QString toolTipShortcutString() const;
 
     QString toolTip;
-    std::optional<QString> OffToolTip;
+    std::optional<QString> offToolTip;
     QKeySequence shortcut;
     bool isOnToolTip = true;
     bool isVisible   = true;

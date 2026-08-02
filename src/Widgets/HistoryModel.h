@@ -14,20 +14,20 @@ class HistoryModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit HistoryModel(QObject* parent = nullptr);
+    explicit HistoryModel(QObject* inParent = nullptr);
 
-    int rowCount(const QModelIndex& parent) const override;
-    int columnCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, const int role) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, const int role = Qt::EditRole) override;
+    int rowCount(const QModelIndex& inParent) const override;
+    int columnCount(const QModelIndex& inParent) const override;
+    QVariant data(const QModelIndex& inIndex, const int inRole) const override;
+    bool setData(const QModelIndex& inIndex, const QVariant& inValue, const int inRole = Qt::EditRole) override;
 
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
-    bool insertRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
-    bool removeRows(const int position, const int rows, const QModelIndex& index = QModelIndex()) override;
+    Qt::ItemFlags flags(const QModelIndex& inIndex) const override;
+    bool insertRows(const int inPosition, const int inRows, const QModelIndex& inIndex = QModelIndex()) override;
+    bool removeRows(const int inPosition, const int inRows, const QModelIndex& inIndex = QModelIndex()) override;
 
     Expected<const HistoryCacheData*> getHistoryCacheData(const int inIdx) const;
 
-    Expected<const HistoryCacheData*> getHistoryCacheData(const QModelIndex& index) const;
+    Expected<const HistoryCacheData*> getHistoryCacheData(const QModelIndex& inIndex) const;
 
 private:
     void updateHistoryCache();

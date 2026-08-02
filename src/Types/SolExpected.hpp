@@ -41,7 +41,7 @@ struct Error
     friend bool operator==(const Error& inLhs, const Error& inRhs);
     friend bool operator!=(const Error& inLhs, const Error& inRhs);
 
-    friend QDebug operator<<(QDebug debug, const Error& inError);
+    friend QDebug operator<<(QDebug inDebug, const Error& inError);
 
     ErrorCode code;
     QString message;
@@ -59,13 +59,13 @@ inline bool operator!=(const Error& inLhs, const Error& inRhs)
     return !(inLhs == inRhs);
 }
 
-inline QDebug operator<<(QDebug debug, const Error& inError)
+inline QDebug operator<<(QDebug inDebug, const Error& inError)
 {
     static constexpr QAnyStringView debugMsg{"Unexpected Error: Code %1, Message %2"};
 
-    QDebugStateSaver saver(debug);
-    debug.nospace() << debugMsg.arg(Sol::enumToQStr(inError.code), inError.message);
-    return debug;
+    QDebugStateSaver saver(inDebug);
+    inDebug.nospace() << debugMsg.arg(Sol::enumToQStr(inError.code), inError.message);
+    return inDebug;
 }
 
 // ~====================
@@ -88,9 +88,9 @@ using Expected = std::expected<T, E>;
 
 template <typename T, typename E>
 [[nodiscard]]
-constexpr bool is_error(const std::expected<T, E>& e) noexcept
+constexpr bool is_error(const std::expected<T, E>& inE) noexcept
 {
-    return !e.has_value();
+    return !inE.has_value();
 }
 
 #endif //SOLTRANSLATOR_SOLEXPECTED_H

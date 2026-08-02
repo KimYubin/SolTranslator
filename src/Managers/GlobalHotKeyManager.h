@@ -24,7 +24,7 @@ class GlobalHotKeyManager : public AbstractManager
     using ActionKeyHash = std::unordered_map<Action, std::unique_ptr<QHotkey>>;
 
 public:
-    explicit GlobalHotKeyManager(SolTranslatorCore* parent);
+    explicit GlobalHotKeyManager(SolTranslatorCore* inParent);
 
     /**
      * Register the shortcut assigned to Action as a global shortcut.

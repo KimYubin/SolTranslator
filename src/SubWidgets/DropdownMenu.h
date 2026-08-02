@@ -16,7 +16,7 @@ class DropdownMenu : public QComboBox
     Q_OBJECT
 
 public:
-    explicit DropdownMenu(QWidget* parent = nullptr);
+    explicit DropdownMenu(QWidget* inParent = nullptr);
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
@@ -34,7 +34,7 @@ public:
 
 
 protected:
-    void wheelEvent(QWheelEvent* event) override;
+    void wheelEvent(QWheelEvent* inEvent) override;
 
 private:
     /** Reset the view mouse hover selection state when reopening the menu. */

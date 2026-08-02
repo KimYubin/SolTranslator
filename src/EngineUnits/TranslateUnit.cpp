@@ -16,9 +16,9 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-TranslateUnit::TranslateUnit(TranslateManager* parent, ITranslateEngine* inEngine)
-    : QObject(parent)
-    , _translateManager(parent)
+TranslateUnit::TranslateUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
+    : QObject(inParent)
+    , _translateManager(inParent)
     , _trEngine(inEngine)
     , _trReqData()
 {

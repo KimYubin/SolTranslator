@@ -18,8 +18,8 @@
 QPointer<SolToolTipBallon> SolToolTipBallon::_ins = nullptr;
 
 
-SolToolTipBallon::SolToolTipBallon(QWidget* parent)
-    : QWidget(parent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+SolToolTipBallon::SolToolTipBallon(QWidget* inParent)
+    : QWidget(inParent, Qt::ToolTip | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
 {
     setObjectName("SolToolTipBallon");
     setAttribute(Qt::WA_TransparentForMouseEvents);

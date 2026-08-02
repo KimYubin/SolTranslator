@@ -18,7 +18,7 @@ class ITranslateWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ITranslateWidget(QWidget* parent = nullptr, const Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit ITranslateWidget(QWidget* inParent = nullptr, const Qt::WindowFlags inFlags = Qt::WindowFlags());
 
     ~ITranslateWidget() override;
 
@@ -63,7 +63,7 @@ protected:
      * 번역 중, 커서 위치를 고정하기 위해 사용할 텍스트 커서
      */
     virtual QTextCursor getTextCursor() const = 0;
-    virtual void setTextCursor(const QTextCursor& cursor) = 0;
+    virtual void setTextCursor(const QTextCursor& inCursor) = 0;
 
     const QString& getSourceText() const { return _sourceText; }
     const QString& getTargetText() const { return _targetText; }

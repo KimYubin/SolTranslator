@@ -19,28 +19,28 @@ class LanguageSelector : public QFrame
     Q_OBJECT
 
 public:
-    explicit LanguageSelector(QWidget* parent
+    explicit LanguageSelector(QWidget* inParent
                             , QWidget* inSizeWidget
                             , QWidget* inReturnFocusWidget
                             , const LangType inLangType);
 
     ~LanguageSelector() override;
 
-    void setButtonText(const LangType inlangType);
+    void setButtonText(const LangType inLangType);
 
     void setButtonToolTip(const QString& inStr);
 
-    LangType getCurrentLangType() { return _currentLangType; }
+    LangType getCurrentLangType() const { return _currentLangType; }
 
 public slots:
-    void onSelectedLanguage(const LangType inlangType);
+    void onSelectedLanguage(const LangType inLangType);
 
 public:
 signals:
-    void languageSelected(const LangType inlangType);
+    void languageSelected(const LangType inLangType);
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void closeEvent(QCloseEvent* inEvent) override;
 
 private:
     friend class LanguageSelectorMenuPrivate;

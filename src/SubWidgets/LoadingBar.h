@@ -16,7 +16,7 @@ class LoadingBar : public ILoadingWidget
     Q_PROPERTY(float animRatio READ getAnimRatio WRITE setAnimRatio)
 
 public:
-    explicit LoadingBar(const QString& inFile, QWidget* parent = nullptr);
+    explicit LoadingBar(const QString& inFile, QWidget* inParent = nullptr);
 
     void run() override;
     void stop() override;

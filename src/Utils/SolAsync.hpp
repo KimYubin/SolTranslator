@@ -18,23 +18,23 @@ public:
     /**
      * Fire & Forget, QFuture와 QFutureWatcher을 이용한 비동기 계산 후, 동기화 로직의 간소화 버전입니다.
      * 
-     * @tparam ret 비동기 함수 반환값입니다. 
+     * @tparam Ret 비동기 함수 반환값입니다. 
      * @param inWatcherContext watcher의 수명을 관리하는 QObject 객체입니다.
      * @param inAsyncFunc worker thread에서 실행할 펑터입니다.
      * @param inMainThreadFunc main thread에서 계산 결과를 동기화하는 펑터입니다. inAsyncFunc의 반환값을 매개변수로 받아야합니다.
      */
-    template <typename ret>
+    template <typename Ret>
     static void asyncLaunch(QObject* inWatcherContext
-                          , Callback<ret(void)>&& inAsyncFunc
-                          , Callback<void(ret)>&& inMainThreadFunc)
+                          , Callback<Ret(void)>&& inAsyncFunc
+                          , Callback<void(Ret)>&& inMainThreadFunc)
     {
-        QFutureWatcher<ret>* watcher = new QFutureWatcher<ret>(inWatcherContext);
-        connect(watcher, &QFutureWatcher<ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable
+        QFutureWatcher<Ret>* watcher = new QFutureWatcher<Ret>(inWatcherContext);
+        connect(watcher, &QFutureWatcher<Ret>::finished, inWatcherContext, [watcher, mtFunc = std::move(inMainThreadFunc)]() mutable
         {
             mtFunc(watcher->future().result());
             watcher->deleteLater();
         });
-        QFuture<ret> future = QtConcurrent::run(std::move(inAsyncFunc));
+        QFuture<Ret> future = QtConcurrent::run(std::move(inAsyncFunc));
 
         watcher->setFuture(future);
     }

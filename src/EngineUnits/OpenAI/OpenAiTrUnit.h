@@ -12,7 +12,7 @@ class OpenAiTrUnit : public TranslateUnit
     Q_OBJECT
 
 public:
-    explicit OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine);
+    explicit OpenAiTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine);
 
 protected:
     void requestTranslateImpl() override;

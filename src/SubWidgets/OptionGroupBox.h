@@ -12,7 +12,7 @@ class OptionGroupBox : public QGroupBox
     Q_OBJECT
 
 public:
-    explicit OptionGroupBox(const QString& inGroupTitle = "", QWidget* parent = nullptr);
+    explicit OptionGroupBox(const QString& inGroupTitle = "", QWidget* inParent = nullptr);
 
     void addChild(QWidget* inChild);
 

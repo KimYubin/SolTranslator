@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-HistoryManager::HistoryManager(SolTranslatorCore* parent) : AbstractManager(parent)
+HistoryManager::HistoryManager(SolTranslatorCore* inParent) : AbstractManager(inParent)
 {
     DbWorker* dbWorker = new DbWorker();
     connect(&_workerThread, &QThread::started, dbWorker, &DbWorker::initialize);

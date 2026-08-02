@@ -245,23 +245,23 @@ Grid convertTableToGrid(QTextTable* inTable)
                 totalHeight += cellGrid.size();
             }
 
-            Grid NewCellGrid;
-            NewCellGrid.reserve(totalHeight);
+            Grid newCellGrid;
+            newCellGrid.reserve(totalHeight);
             for (Grid& cellGrid : cellGridList)
             {
                 for (GridRow& cellCol : cellGrid)
                 {
                     cellCol.resize(maxWidth);
                 }
-                NewCellGrid.append_range(std::move(cellGrid));
+                newCellGrid.append_range(std::move(cellGrid));
             }
 
-            if (NewCellGrid.empty() || NewCellGrid.front().empty())
+            if (newCellGrid.empty() || newCellGrid.front().empty())
             {
                 continue;
             }
 
-            auto [exRow, exCol] = insertGrid(resTable, rIdx, cIdx, std::move(NewCellGrid));
+            auto [exRow, exCol] = insertGrid(resTable, rIdx, cIdx, std::move(newCellGrid));
             cIdx                += std::max((exCol - 1), 0);
         }
     }

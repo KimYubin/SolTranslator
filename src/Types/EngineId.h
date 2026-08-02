@@ -36,8 +36,8 @@ public:
         return *this;
     }
 
-    std::strong_ordering operator<=>(const EngineId& other) const = default;
-    bool operator==(const EngineId& other) const = default;
+    std::strong_ordering operator<=>(const EngineId& inOther) const = default;
+    bool operator==(const EngineId& inOther) const = default;
 
 
     const QString& toString() const { return _value; }

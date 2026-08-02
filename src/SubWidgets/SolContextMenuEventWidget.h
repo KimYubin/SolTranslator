@@ -26,7 +26,7 @@ public:
     using BaseWidget::BaseWidget;
 
 protected:
-    void contextMenuEvent(QContextMenuEvent* event) override
+    void contextMenuEvent(QContextMenuEvent* inEvent) override
     {
         QMenu* menu = this->createStandardContextMenu();
         if (!menu)
@@ -38,9 +38,9 @@ protected:
         menu->setAttribute(Qt::WA_TranslucentBackground);
         menu->setWindowFlag(Qt::FramelessWindowHint);
         menu->setWindowFlag(Qt::NoDropShadowWindowHint);
-        menu->popup(event->globalPos());
+        menu->popup(inEvent->globalPos());
 
-        event->accept();
+        inEvent->accept();
     }
 };
 

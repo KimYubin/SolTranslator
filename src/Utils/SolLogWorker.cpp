@@ -9,8 +9,8 @@
 #include <QTimer>
 
 
-SolLogWorker::SolLogWorker(QObject* parent)
-    : QObject(parent)
+SolLogWorker::SolLogWorker(QObject* inParent)
+    : QObject(inParent)
     , _loggingTimer(nullptr)
 {}
 
@@ -28,13 +28,13 @@ void SolLogWorker::initialize()
     _loggingTimer->callOnTimeout(this, &SolLogWorker::execLog);
 
 
-    logFile.setFileName(SolPath::absolute(SolFile::Log));
-    if (logFile.open(QIODevice::Append | QIODevice::Text) == false)
+    _logFile.setFileName(SolPath::absolute(SolFile::Log));
+    if (_logFile.open(QIODevice::Append | QIODevice::Text) == false)
     {
         qCritical() << "Cannot open the log file.";
         return;
     }
-    logStream.setDevice(&logFile);
+    _logStream.setDevice(&_logFile);
 }
 
 void SolLogWorker::enqueueLog(const QString& inLog)
@@ -47,7 +47,7 @@ void SolLogWorker::execLog()
 {
     for (QString& logStr : _logList)
     {
-        logStream << logStr << Qt::endl;
+        _logStream << logStr << Qt::endl;
     }
     _logList.clear();
 
@@ -58,14 +58,14 @@ void SolLogWorker::execLog()
         _logList.squeeze();
     }
 
-    logStream.flush();
+    _logStream.flush();
 }
 
 
 // ~========================
 // SolLogProxy
-SolLogProxy::SolLogProxy(QObject* parent)
-    : QObject(parent)
+SolLogProxy::SolLogProxy(QObject* inParent)
+    : QObject(inParent)
 {
     _logWorker = new SolLogWorker();
     connect(&_workerThread, &QThread::started, _logWorker, &SolLogWorker::initialize);

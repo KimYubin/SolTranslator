@@ -27,7 +27,7 @@ class IOptionWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit IOptionWidget(QWidget* parent = nullptr);
+    explicit IOptionWidget(QWidget* inParent = nullptr);
     ~IOptionWidget() override;
 
 protected:

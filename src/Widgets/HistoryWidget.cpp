@@ -28,7 +28,7 @@
 
 using Sol::i18n;
 
-HistoryWidget::HistoryWidget(QWidget* parent) : ISolWidget(parent)
+HistoryWidget::HistoryWidget(QWidget* inParent) : ISolWidget(inParent)
 {
     setupUI();
 
@@ -151,13 +151,13 @@ void HistoryWidget::setupUI()
 
     // select item
     const QItemSelectionModel* selectionModel = _historyListView->selectionModel();
-    connect(selectionModel, &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& current, const QModelIndex& previous)
+    connect(selectionModel, &QItemSelectionModel::currentChanged, this, [this](const QModelIndex& inCurrent, const QModelIndex&)
     {
-        if (current.isValid() == false)
+        if (inCurrent.isValid() == false)
         {
             return;
         }
-        ExpectedHistory historyData = getHistoryData(current);
+        ExpectedHistory historyData = getHistoryData(inCurrent);
         if (!historyData)
         {
             solDebug << historyData.error();
@@ -215,11 +215,11 @@ void HistoryWidget::setupUI()
         _historyListView->setCurrentIndex(curIdx);
     });
 
-    connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](const int min, const int max)
+    connect(_historyListView->verticalScrollBar(), &QScrollBar::rangeChanged, this, [this](const int inMin, const int inMax)
     {
         QScrollBar* scrollBar = _historyListView->verticalScrollBar();
 
-        if (min < max)
+        if (inMin < inMax)
         {
             const qreal newVal = _listScrollBarRatio * scrollBar->maximum();
             scrollBar->setValue(static_cast<int>(newVal));

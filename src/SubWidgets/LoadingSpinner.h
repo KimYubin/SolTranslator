@@ -15,16 +15,16 @@ class LoadingSpinner : public ILoadingWidget
     Q_PROPERTY(float opacityRatio READ getOpacityRatio WRITE setOpacityRatio)
 
 public:
-    explicit LoadingSpinner(const QString& inFile, QWidget* parent = nullptr);
+    explicit LoadingSpinner(const QString& inFile, QWidget* inParent = nullptr);
 
     void run() override;
     void stop() override;
 
 protected:
-    void showEvent(QShowEvent* event) override;
-    void hideEvent(QHideEvent* event) override;
+    void showEvent(QShowEvent* inEvent) override;
+    void hideEvent(QHideEvent* inEvent) override;
 
-    void paintEvent(QPaintEvent* event) override;
+    void paintEvent(QPaintEvent* inEvent) override;
 
 private:
     void setSvgVisibility(const bool inVisible);

@@ -2,8 +2,8 @@
 
 #include "ISolWidget.h"
 
-ISolWidget::ISolWidget(QWidget* parent, const Qt::WindowFlags flags)
-    : QWidget(parent, flags)
+ISolWidget::ISolWidget(QWidget* inParent, const Qt::WindowFlags inFlags)
+    : QWidget(inParent, inFlags)
 {}
 
 ISolWidget::~ISolWidget()

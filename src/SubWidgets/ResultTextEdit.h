@@ -15,7 +15,7 @@ private:
     Q_PROPERTY(QColor codeBackgroundColor READ getCodeBackgroundColor WRITE setCodeBackgroundColor)
 
 public:
-    explicit ResultTextEdit(QWidget* parent = nullptr);
+    explicit ResultTextEdit(QWidget* inParent = nullptr);
 
     ~ResultTextEdit() override;
 

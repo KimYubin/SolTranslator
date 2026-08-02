@@ -25,12 +25,12 @@ class SolPaletteWidget : public ISolWidget
     Q_OBJECT
 
 public:
-    explicit SolPaletteWidget(QWidget* parent = nullptr);
+    explicit SolPaletteWidget(QWidget* inParent = nullptr);
     ~SolPaletteWidget() override;
 
     void applyThemePrivate(const QString& inThemeName = "dark");
 
-    QString applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors);
+    QString applyThemeColor(const QString& inTemplateTheme, const std::unordered_map<QString, QString>& inColors);
 
     void updatePaletteColor() const;
 
@@ -57,7 +57,7 @@ private:
 
 #include "StyleManger.moc"
 
-SolPaletteWidget::SolPaletteWidget(QWidget* parent): ISolWidget(parent)
+SolPaletteWidget::SolPaletteWidget(QWidget* inParent): ISolWidget(inParent)
 {
     _windowColor          = QColor(53, 53, 53);
     _windowTextColor      = Qt::white;
@@ -79,8 +79,8 @@ SolPaletteWidget::~SolPaletteWidget()
 {}
 
 
-StyleManger::StyleManger(QObject* parent)
-    : QObject(parent)
+StyleManger::StyleManger(QObject* inParent)
+    : QObject(inParent)
     , _solPalette(nullptr)
 {}
 
@@ -158,10 +158,10 @@ void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)
     }
 }
 
-QString SolPaletteWidget::applyThemeColor(const QString& templateTheme, const std::unordered_map<QString, QString>& colors)
+QString SolPaletteWidget::applyThemeColor(const QString& inTemplateTheme, const std::unordered_map<QString, QString>& inColors)
 {
-    QString res = templateTheme;
-    for (const auto& [colorName, colorValue] : colors)
+    QString res = inTemplateTheme;
+    for (const auto& [colorName, colorValue] : inColors)
     {
         res.replace("${" + colorName + "}", colorValue);
     }

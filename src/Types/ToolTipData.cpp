@@ -5,7 +5,7 @@
 #include "Managers/ConfigManager.h"
 
 
-const char* ToolTipData::Name = "SolToolTipData";
+const char* ToolTipData::propertyName = "SolToolTipData";
 
 namespace
 {
@@ -28,7 +28,7 @@ QString ToolTipData::toolTipString() const
         return "";
     }
 
-    return isOnToolTip ? toolTip : OffToolTip.has_value() ? OffToolTip.value() : "";
+    return isOnToolTip ? toolTip : offToolTip.has_value() ? offToolTip.value() : "";
 }
 
 QString ToolTipData::toolTipShortcutString() const

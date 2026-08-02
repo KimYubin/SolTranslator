@@ -9,7 +9,7 @@
 #include <QShortcut>
 #include <qevent.h>
 
-DropdownMenu::DropdownMenu(QWidget* parent) : QComboBox(parent)
+DropdownMenu::DropdownMenu(QWidget* inParent) : QComboBox(inParent)
 {
     // not WheelFocus
     setFocusPolicy(Qt::TabFocus);
@@ -74,16 +74,16 @@ void DropdownMenu::setAction(const Action inAction)
 }
 
 
-void DropdownMenu::wheelEvent(QWheelEvent* event)
+void DropdownMenu::wheelEvent(QWheelEvent* inEvent)
 {
     if (hasFocus())
     {
-        QComboBox::wheelEvent(event);
+        QComboBox::wheelEvent(inEvent);
     }
     else
     {
         // 포커스 없으면 wheel 이벤트 무시
-        event->ignore();
+        inEvent->ignore();
     }
 }
 

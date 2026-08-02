@@ -36,12 +36,12 @@ QAction* SolTrayIcon::addSeparator()
 namespace
 {
 constexpr QChar amp = '&';
-qsizetype findFirstAmp(const QString& inStr, int from = 0)
+qsizetype findFirstAmp(const QString& inStr, int inFrom = 0)
 {
     const int strSize = inStr.size();
-    while (from < strSize)
+    while (inFrom < strSize)
     {
-        const qsizetype findIdx = inStr.indexOf(amp, from);
+        const qsizetype findIdx = inStr.indexOf(amp, inFrom);
         if (findIdx < 0)
         {
             return -1;
@@ -54,7 +54,7 @@ qsizetype findFirstAmp(const QString& inStr, int from = 0)
             return findIdx;
         }
 
-        from = findIdx + 1;
+        inFrom = findIdx + 1;
     }
     return -1;
 }

@@ -36,8 +36,8 @@
 using Sol::i18n;
 
 
-PopupTranslateWidget::PopupTranslateWidget(QWidget* parent)
-    : ITranslateWidget(parent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
+PopupTranslateWidget::PopupTranslateWidget(QWidget* inParent)
+    : ITranslateWidget(inParent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , _minSizeRatio(0.15, 0.15)
     , _maxSizeRatio(0.2, 0.65)
     , _fullSizeRatio(0.95, 0.95)
@@ -105,35 +105,35 @@ PopupTranslateWidget::~PopupTranslateWidget()
     delete ui;
 }
 
-bool PopupTranslateWidget::eventFilter(QObject* obj, QEvent* event)
+bool PopupTranslateWidget::eventFilter(QObject* inObj, QEvent* inEvent)
 {
     // 팝업모드에서 자동 종료
-    if (obj == qApp
+    if (inObj == qApp
         && _widgetModeFlags.testFlag(SolWidgetMode::PopupMode)
-        && event->type() == QEvent::ApplicationStateChange)
+        && inEvent->type() == QEvent::ApplicationStateChange)
     {
-        const Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(event)->applicationState();
+        const Qt::ApplicationState changeState = static_cast<QApplicationStateChangeEvent*>(inEvent)->applicationState();
         if (changeState != Qt::ApplicationActive)
         {
             close();
             return true;
         }
     } // 사이즈 조절 가능 모드로 전환
-    else if (obj == _sizeGrip
-        && event->type() == QEvent::MouseButtonPress)
+    else if (inObj == _sizeGrip
+        && inEvent->type() == QEvent::MouseButtonPress)
     {
         manualSizeMode();
         return false; // no consume
     } // bgframe에 전달된 mouseMove이벤트 후킹
-    else if (obj == ui->bgFrame
-        && event->type() == QEvent::MouseMove)
+    else if (inObj == ui->bgFrame
+        && inEvent->type() == QEvent::MouseMove)
     {
-        mouseMoveEvent(static_cast<QMouseEvent*>(event));
+        mouseMoveEvent(static_cast<QMouseEvent*>(inEvent));
         return false; // no consume
     }
 
 
-    return QWidget::eventFilter(obj, event);
+    return QWidget::eventFilter(inObj, inEvent);
 }
 
 void PopupTranslateWidget::setupUI()
@@ -172,16 +172,16 @@ void PopupTranslateWidget::setupUI()
 
     // ~===========
     // keepPinButton
-    _AlwaysOnButton = new SolButton(this);
-    _AlwaysOnButton->setCheckable(true);
-    _AlwaysOnButton->setObjectName("alwaysOnButton");
-    _AlwaysOnButton->setCheckIcon(":/img/keep_pin_fill_v", ":/img/keep_pin_clock45d");
-    _AlwaysOnButton->setCheckToolTipAction(i18n(Tr::Always_On_Top_Off), i18n(Tr::Always_On_Top_On), Action::PopupAlwaysOn);
-    _AlwaysOnButton->hide();
+    _alwaysOnButton = new SolButton(this);
+    _alwaysOnButton->setCheckable(true);
+    _alwaysOnButton->setObjectName("alwaysOnButton");
+    _alwaysOnButton->setCheckIcon(":/img/keep_pin_fill_v", ":/img/keep_pin_clock45d");
+    _alwaysOnButton->setCheckToolTipAction(i18n(Tr::Always_On_Top_Off), i18n(Tr::Always_On_Top_On), Action::PopupAlwaysOn);
+    _alwaysOnButton->hide();
 
-    setupTitleWidget(_AlwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
+    setupTitleWidget(_alwaysOnButton, Qt::AlignTop | Qt::AlignLeft);
 
-    connect(_AlwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
+    connect(_alwaysOnButton, &QPushButton::toggled, this, &PopupTranslateWidget::onAlwaysOnToggle);
 
     // ~===========
     // windowModeButton
@@ -326,7 +326,7 @@ void PopupTranslateWidget::setupUI()
     });
 
 
-    setTabOrder({_windowModeButton, _AlwaysOnButton, _minimizedButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
+    setTabOrder({_windowModeButton, _alwaysOnButton, _minimizedButton, _maxRestoreButton, _closeButton, ui->resultText, _sizeGrip});
 
     // To ensure that the TabFocus starts in a hidden state.
     _sizeGrip->setFocusPolicy(Qt::TabFocus);
@@ -404,9 +404,9 @@ QTextCursor PopupTranslateWidget::getTextCursor() const
     return ui->resultText->textCursor();
 }
 
-void PopupTranslateWidget::setTextCursor(const QTextCursor& cursor)
+void PopupTranslateWidget::setTextCursor(const QTextCursor& inCursor)
 {
-    ui->resultText->setTextCursor(cursor);
+    ui->resultText->setTextCursor(inCursor);
 }
 
 
@@ -605,9 +605,9 @@ void PopupTranslateWidget::manualSizeMode()
 
 void PopupTranslateWidget::onAlwaysOnToggle(const bool inChecked)
 {
-    if (_AlwaysOnButton->isChecked() != inChecked)
+    if (_alwaysOnButton->isChecked() != inChecked)
     {
-        _AlwaysOnButton->setChecked(inChecked);
+        _alwaysOnButton->setChecked(inChecked);
     }
 
     manualSizeMode();
@@ -656,15 +656,15 @@ void PopupTranslateWidget::changeNormalWindowMode()
 
     const bool hasWModeBtnFocus = _windowModeButton->hasFocus();
     _windowModeButton->hide();
-    if (_AlwaysOnButton->isHidden())
+    if (_alwaysOnButton->isHidden())
     {
-        _AlwaysOnButton->show();
+        _alwaysOnButton->show();
     }
 
     // 대체되는 버튼에 포커스 이동.
     if (hasWModeBtnFocus)
     {
-        _AlwaysOnButton->setFocus(Qt::TabFocusReason);
+        _alwaysOnButton->setFocus(Qt::TabFocusReason);
     }
 }
 
@@ -675,9 +675,9 @@ void PopupTranslateWidget::changePopupMode()
 
     _widgetModeFlags.setFlag(SolWidgetMode::PopupMode);
 
-    if (_AlwaysOnButton->isHidden() == false)
+    if (_alwaysOnButton->isHidden() == false)
     {
-        _AlwaysOnButton->hide();
+        _alwaysOnButton->hide();
     }
 }
 
@@ -746,11 +746,11 @@ void PopupTranslateWidget::setShadowEffectEnabled(const bool inIsEnable)
     ui->bgFrame->graphicsEffect()->setEnabled(inIsEnable);
 }
 
-void PopupTranslateWidget::detectFocusInOut(const QWidget* old, const QWidget* now)
+void PopupTranslateWidget::detectFocusInOut(const QWidget* inOld, const QWidget* inNow)
 {
-    if (Sol::isThis(this, old))
+    if (Sol::isThis(this, inOld))
     {
-        if (Sol::isThis(this, now))
+        if (Sol::isThis(this, inNow))
         {
             return;
         }
@@ -760,7 +760,7 @@ void PopupTranslateWidget::detectFocusInOut(const QWidget* old, const QWidget* n
             return;
         }
     }
-    if (Sol::isThis(this, now))
+    if (Sol::isThis(this, inNow))
     {
         setShadowEffectEnabled(true);
     }
@@ -916,37 +916,37 @@ void PopupTranslateWidget::setCursorShape(const QPoint& inMousePos)
     setCursor(cursorShape);
 }
 
-void PopupTranslateWidget::mousePressEvent(QMouseEvent* event)
+void PopupTranslateWidget::mousePressEvent(QMouseEvent* inEvent)
 {
-    if (event->button() == Qt::LeftButton)
+    if (inEvent->button() == Qt::LeftButton)
     {
-        _dragPoint = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        _dragPoint = inEvent->globalPosition().toPoint() - frameGeometry().topLeft();
 
         _isDrag = true;
         if (_isMaximizedMode == false)
         {
-            resizeWindow(event->globalPosition().toPoint());
+            resizeWindow(inEvent->globalPosition().toPoint());
         }
 
-        event->accept();
+        inEvent->accept();
     }
 }
 
-void PopupTranslateWidget::mouseDoubleClickEvent(QMouseEvent* event)
+void PopupTranslateWidget::mouseDoubleClickEvent(QMouseEvent* inEvent)
 {
-    if (event->button() == Qt::LeftButton)
+    if (inEvent->button() == Qt::LeftButton)
     {
         setMaxNormal(!_isMaximizedMode);
 
-        event->accept();
+        inEvent->accept();
     }
 
-    QWidget::mouseDoubleClickEvent(event);
+    QWidget::mouseDoubleClickEvent(inEvent);
 }
 
-void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* event)
+void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* inEvent)
 {
-    const QPoint eventPoint = event->globalPosition().toPoint();
+    const QPoint eventPoint = inEvent->globalPosition().toPoint();
 
     if (_isMaximizedMode == false)
     {
@@ -961,26 +961,26 @@ void PopupTranslateWidget::mouseMoveEvent(QMouseEvent* event)
     manualSizeMode();
 
     moveWindow(eventPoint);
-    event->accept();
+    inEvent->accept();
 }
 
-void PopupTranslateWidget::mouseReleaseEvent(QMouseEvent* event)
+void PopupTranslateWidget::mouseReleaseEvent(QMouseEvent* inEvent)
 {
-    if (event->button() == Qt::LeftButton)
+    if (inEvent->button() == Qt::LeftButton)
     {
         _isDrag = false;
-        event->accept();
+        inEvent->accept();
     }
 }
 
-void PopupTranslateWidget::enterEvent(QEnterEvent* event)
+void PopupTranslateWidget::enterEvent(QEnterEvent* inEvent)
 {
     setShadowEffectEnabled(true);
 
-    QWidget::enterEvent(event);
+    QWidget::enterEvent(inEvent);
 }
 
-void PopupTranslateWidget::leaveEvent(QEvent* event)
+void PopupTranslateWidget::leaveEvent(QEvent* inEvent)
 {
     bool hasChildFocus = hasFocus();
 
@@ -1003,5 +1003,5 @@ void PopupTranslateWidget::leaveEvent(QEvent* event)
     }
     setCursor(Qt::ArrowCursor);
 
-    QWidget::leaveEvent(event);
+    QWidget::leaveEvent(inEvent);
 }

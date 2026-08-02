@@ -14,8 +14,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-OpenAiTrUnit::OpenAiTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
-    : TranslateUnit(parent, inEngine)
+OpenAiTrUnit::OpenAiTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
+    : TranslateUnit(inParent, inEngine)
 {}
 
 void OpenAiTrUnit::requestTranslateImpl()

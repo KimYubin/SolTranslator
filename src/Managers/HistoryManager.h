@@ -22,7 +22,7 @@ class HistoryManager : public AbstractManager
     using LookupResult = std::tuple<bool, QString>;
 
 public:
-    explicit HistoryManager(SolTranslatorCore* parent);
+    explicit HistoryManager(SolTranslatorCore* inParent);
     ~HistoryManager() override;
 
     void asyncAddHistory(const EngineId& inEngineId
@@ -75,12 +75,12 @@ private:
 
     QThread _workerThread;
 
-    struct reqCallback
+    struct ReqCallback
     {
         QPointer<QObject> context;
         Callback<void(const LookupResult&)> callback;
     };
-    std::unordered_map<int, reqCallback> _requestCallbacks;
+    std::unordered_map<int, ReqCallback> _requestCallbacks;
 };
 
 

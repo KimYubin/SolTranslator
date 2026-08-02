@@ -18,16 +18,16 @@ namespace
 QtMessageHandler originalHandler = nullptr;
 
 
-void solMessageHandler(const QtMsgType type, const QMessageLogContext& context, const QString& msg)
+void solMessageHandler(const QtMsgType inType, const QMessageLogContext& inContext, const QString& inMsg)
 {
     // Asynchronous logging
-    const QString logStr = qFormatLogMessage(type, context, msg);
+    const QString logStr = qFormatLogMessage(inType, inContext, inMsg);
     QMetaObject::invokeMethod(SolLogProxy::instance(), &SolLogProxy::log, Qt::AutoConnection, logStr);
 
     // for debug message
     if (originalHandler)
     {
-        originalHandler(type, context, msg);
+        originalHandler(inType, inContext, inMsg);
     }
 }
 } // anonymous namespace

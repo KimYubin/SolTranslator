@@ -40,7 +40,7 @@ struct CellData
 using GridRow = std::vector<CellData>;
 using Grid    = std::vector<GridRow>;
 
-inline QDebug operator<<(QDebug debug, const Grid& inGrid)
+inline QDebug operator<<(QDebug inDebug, const Grid& inGrid)
 {
     QString res;
     bool isFirstRow = true;
@@ -63,11 +63,11 @@ inline QDebug operator<<(QDebug debug, const Grid& inGrid)
         }
     }
 
-    QDebugStateSaver saver(debug);
-    debug.nospace();
-    debug.noquote() << "\n" << res;
+    QDebugStateSaver saver(inDebug);
+    inDebug.nospace();
+    inDebug.noquote() << "\n" << res;
 
-    return debug;
+    return inDebug;
 }
 
 namespace Sol

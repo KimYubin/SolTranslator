@@ -19,8 +19,8 @@
 
 using Sol::i18n;
 
-SettingsWidget::SettingsWidget(QWidget* parent)
-    : ISolWidget(parent)
+SettingsWidget::SettingsWidget(QWidget* inParent)
+    : ISolWidget(inParent)
     , ui(new Ui::SettingsWidget)
 {
     ui->setupUi(this);
@@ -52,12 +52,12 @@ SettingsWidget::SettingsWidget(QWidget* parent)
         QListWidgetItem* listItem = new QListWidgetItem(option->getIcon()
                                                       , option->getDisplayName()
                                                       , ui->listWidget);
-        listItem->setData(stackIndexRole, stkIdx);
+        listItem->setData(StackIndexRole, stkIdx);
     }
 
-    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](const QListWidgetItem* current, const QListWidgetItem* prev)
+    connect(ui->listWidget, &QListWidget::currentItemChanged, this, [this](const QListWidgetItem* inCurrent, const QListWidgetItem*)
     {
-        ui->optionStackedWidget->setCurrentIndex(current->data(stackIndexRole).toInt());
+        ui->optionStackedWidget->setCurrentIndex(inCurrent->data(StackIndexRole).toInt());
         QWidget* curWidget = ui->optionStackedWidget->currentWidget();
         if (const IOptionWidget* curOptWidget = qobject_cast<IOptionWidget*>(curWidget))
         {
@@ -86,10 +86,10 @@ SettingsWidget::~SettingsWidget()
     delete ui;
 }
 
-void SettingsWidget::closeEvent(QCloseEvent* event)
+void SettingsWidget::closeEvent(QCloseEvent* inEvent)
 {
     solConfig.saveWidgetGeometry(this);
-    ISolWidget::closeEvent(event);
+    ISolWidget::closeEvent(inEvent);
 }
 
 void SettingsWidget::appQuitEvent()

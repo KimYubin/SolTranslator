@@ -33,7 +33,7 @@ class SwitchButton : public QCheckBox
     Q_PROPERTY(QColor handleUncheckedBorderColor READ getHandleUncheckedBorderColor WRITE setHandleUncheckedBorderColor)
 
 public:
-    explicit SwitchButton(const bool inChecked = false, QWidget* parent = nullptr);
+    explicit SwitchButton(const bool inChecked = false, QWidget* inParent = nullptr);
 
     QSize sizeHint() const override;
 
@@ -49,8 +49,8 @@ private slots:
     void setupAnimation(const Qt::CheckState inCheckState);
 
 protected:
-    bool hitButton(const QPoint& pos) const override;
-    void paintEvent(QPaintEvent* event) override;
+    bool hitButton(const QPoint& inPos) const override;
+    void paintEvent(QPaintEvent* inEvent) override;
 
 private:
     // property

@@ -17,7 +17,7 @@ class EngineManager : public AbstractManager
     Q_OBJECT
 
 public:
-    explicit EngineManager(SolTranslatorCore* parent);
+    explicit EngineManager(SolTranslatorCore* inParent);
     ~EngineManager() override;
 
 protected:

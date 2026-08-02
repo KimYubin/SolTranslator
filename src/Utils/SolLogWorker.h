@@ -15,7 +15,7 @@ class SolLogWorker : public QObject
     Q_OBJECT
 
 public:
-    explicit SolLogWorker(QObject* parent = nullptr);
+    explicit SolLogWorker(QObject* inParent = nullptr);
     ~SolLogWorker() override;
 
     void initialize();
@@ -31,8 +31,8 @@ private:
     QTimer* _loggingTimer;
 
     // 로그 파일 스트림
-    QFile logFile;
-    QTextStream logStream;
+    QFile _logFile;
+    QTextStream _logStream;
 };
 
 
@@ -40,7 +40,7 @@ class SolLogProxy : public QObject
 {
     Q_OBJECT
 
-    explicit SolLogProxy(QObject* parent = nullptr);
+    explicit SolLogProxy(QObject* inParent = nullptr);
     ~SolLogProxy() override;
 
 public:

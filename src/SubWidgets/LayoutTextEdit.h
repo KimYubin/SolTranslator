@@ -17,11 +17,11 @@ class LayoutTextEdit : public ResultTextEdit
     Q_OBJECT
 
 public:
-    explicit LayoutTextEdit(QWidget* parent = nullptr);
+    explicit LayoutTextEdit(QWidget* inParent = nullptr);
     ~LayoutTextEdit() override;
 
 protected:
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent* inEvent) override;
 
 public:
     /**
@@ -33,7 +33,7 @@ public:
 
     /** add button at layout bottm */
     SolButton* addBottomButton(const QIcon& inIcon
-                             , const Qt::FocusPolicy policy
+                             , const Qt::FocusPolicy inPolicy
                              , const QString& inToolTip
                              , const QKeySequence& inKey       = QKeySequence()
                              , const int inStretch             = 0

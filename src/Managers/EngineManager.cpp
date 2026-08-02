@@ -23,8 +23,8 @@ TrEngineMap& translateEngines()
 
 // ~====================
 // EngineManager
-EngineManager::EngineManager(SolTranslatorCore* parent)
-    : AbstractManager(parent)
+EngineManager::EngineManager(SolTranslatorCore* inParent)
+    : AbstractManager(inParent)
 {
     TrEngineMap& trEngineMap = translateEngines();
     for (QPointer<ITranslateEngine>& trEngine : trEngineMap | std::views::values)

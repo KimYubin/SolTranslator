@@ -26,7 +26,7 @@ class SolToolTipBallon : public QWidget
     Q_PROPERTY(QColor borderColor READ getBorderColor WRITE setBorderColor)
 
     static QPointer<SolToolTipBallon> _ins;
-    explicit SolToolTipBallon(QWidget* parent = nullptr);
+    explicit SolToolTipBallon(QWidget* inParent = nullptr);
 
 public:
     static SolToolTipBallon* instance()
@@ -103,7 +103,7 @@ private:
 
     // 툴팁의 생성 위치. 타겟 위젯에서 바라보는 방향.
     ShowDirection _direction = ShowDirection::Top;
-    QPoint triVertex;
+    QPoint _triVertex;
 };
 
 

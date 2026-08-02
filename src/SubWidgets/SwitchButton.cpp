@@ -11,8 +11,8 @@
 #include <QRectF>
 #include <QSequentialAnimationGroup>
 
-SwitchButton::SwitchButton(const bool inChecked, QWidget* parent)
-    : QCheckBox(parent)
+SwitchButton::SwitchButton(const bool inChecked, QWidget* inParent)
+    : QCheckBox(inParent)
     , _barCheckedBrush(QColor(0x00B0FF))
     , _barUncheckedBrush(Qt::gray)
     , _handleCheckedBrush(Qt::white)
@@ -57,14 +57,14 @@ void SwitchButton::setupAnimation(const Qt::CheckState inCheckState)
     _animationGroup->start();
 }
 
-bool SwitchButton::hitButton(const QPoint& pos) const
+bool SwitchButton::hitButton(const QPoint& inPos) const
 {
-    return contentsRect().contains(pos);
+    return contentsRect().contains(inPos);
 }
 
-void SwitchButton::paintEvent(QPaintEvent* event)
+void SwitchButton::paintEvent(QPaintEvent* inEvent)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(inEvent);
 
     // 펜이 그려지기 위해 절반만큼 안쪽으로 들어가서 그려야함.
     const qreal defaultDrawMargin = qCeil(_barPen.width() / 2.0);

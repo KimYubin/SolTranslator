@@ -26,7 +26,8 @@ color: rgb(220, 222, 223);
   text-align: center center;
 }
 #SolMainWidget QPushButton#textTabButton,
-#SolMainWidget QPushButton#docTabButton
+#SolMainWidget QPushButton#docTabButton,
+#SolMainWidget QPushButton#historyTabButton
 {
   icon-size: 20px;
 }

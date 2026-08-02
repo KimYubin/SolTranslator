@@ -36,8 +36,8 @@ public:
         return *this;
     }
 
-    std::strong_ordering operator<=>(const OptionKey& other) const = default;
-    bool operator==(const OptionKey& other) const = default;
+    std::strong_ordering operator<=>(const OptionKey& inOther) const = default;
+    bool operator==(const OptionKey& inOther) const = default;
 
 
     const QString& toString() const { return _value; }

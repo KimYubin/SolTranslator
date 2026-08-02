@@ -13,8 +13,8 @@
 #include <QScrollBar>
 #include <QTimer>
 
-ITranslateWidget::ITranslateWidget(QWidget* parent, const Qt::WindowFlags flags)
-    : QWidget(parent, flags)
+ITranslateWidget::ITranslateWidget(QWidget* inParent, const Qt::WindowFlags inFlags)
+    : QWidget(inParent, inFlags)
     , _targetText("")
     , _textStyle(TextStyle::PlainText)
 {

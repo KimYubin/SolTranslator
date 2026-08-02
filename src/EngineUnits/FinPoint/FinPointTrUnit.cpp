@@ -13,8 +13,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
-FinPointTrUnit::FinPointTrUnit(TranslateManager* parent, ITranslateEngine* inEngine)
-    : TranslateUnit(parent, inEngine)
+FinPointTrUnit::FinPointTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
+    : TranslateUnit(inParent, inEngine)
 {}
 
 void FinPointTrUnit::requestTranslateImpl()

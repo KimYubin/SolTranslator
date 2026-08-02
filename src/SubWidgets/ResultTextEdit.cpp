@@ -14,7 +14,7 @@
 #include <quuid.h>
 
 
-ResultTextEdit::ResultTextEdit(QWidget* parent) : SolTextBrowser(parent)
+ResultTextEdit::ResultTextEdit(QWidget* inParent) : SolTextBrowser(inParent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);

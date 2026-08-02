@@ -74,11 +74,11 @@ QRect availableGeometryAt(const QPoint& inPoint);
 /**
  * innerRect을 outerRect 안으로 이동시킵니다.
  *
- * @param outerRect
- * @param innerRect
+ * @param inOuterRect
+ * @param inNerRect
  * @return
  */
-[[nodiscard]] QRect moveToInside(const QRect& outerRect, const QRect& innerRect);
+[[nodiscard]] QRect moveToInside(const QRect& inOuterRect, const QRect& inNerRect);
 
 
 /**

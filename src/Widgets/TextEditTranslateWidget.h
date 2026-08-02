@@ -24,7 +24,7 @@ class TextEditTranslateWidget : public ITranslateWidget
     Q_OBJECT
 
 public:
-    explicit TextEditTranslateWidget(QWidget* parent = nullptr);
+    explicit TextEditTranslateWidget(QWidget* inParent = nullptr);
     ~TextEditTranslateWidget() override;
 
 protected:
@@ -33,7 +33,7 @@ protected:
     QScrollBar* getVerticalScrollBar() const override;
     QScrollBar* getHorizontalScrollBar() const override;
     QTextCursor getTextCursor() const override;
-    void setTextCursor(const QTextCursor& cursor) override;
+    void setTextCursor(const QTextCursor& inCursor) override;
 
 public:
     void focusTextOrigin();
@@ -41,8 +41,8 @@ public:
 
 private slots:
     void onExecuteTranslate(const bool inIgnoreCache = false);
-    void onSourceLanguageChanged(const LangType inlangType);
-    void onTargetLanguageChanged(const LangType inlangType);
+    void onSourceLanguageChanged(const LangType inLangType);
+    void onTargetLanguageChanged(const LangType inLangType);
 
 private:
     Ui::TextEditTranslateWidget* ui;

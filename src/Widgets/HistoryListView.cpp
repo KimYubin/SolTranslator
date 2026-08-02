@@ -7,10 +7,10 @@ QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
 {
     switch (inColorRole)
     {
-    case Sol::itemTextColorRole:          return _itemTextColor;
-    case Sol::itemSelectionTextColorRole: return _itemSelectionTextColor;
-    case Sol::itemHoverTextColorRole:     return _itemHoverTextColor;
-    case Sol::itemDisableColorRole:       return _itemDisableColor;
+    case Sol::ItemTextColorRole:          return _itemTextColor;
+    case Sol::ItemSelectionTextColorRole: return _itemSelectionTextColor;
+    case Sol::ItemHoverTextColorRole:     return _itemHoverTextColor;
+    case Sol::ItemDisableColorRole:       return _itemDisableColor;
     default: ;
     }
     return QColor();

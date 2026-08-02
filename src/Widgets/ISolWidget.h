@@ -10,7 +10,7 @@ class ISolWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ISolWidget(QWidget* parent = nullptr, const Qt::WindowFlags flags = Qt::WindowFlags());
+    explicit ISolWidget(QWidget* inParent = nullptr, const Qt::WindowFlags inFlags = Qt::WindowFlags());
 
     ~ISolWidget() override;
 

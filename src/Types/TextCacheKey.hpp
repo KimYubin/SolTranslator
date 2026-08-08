@@ -39,8 +39,8 @@ struct cache_ky_hasher
         return std::hash<::QString>()(
             inKy.sourceText
             + inKy.engineId.toString()
-            + QChar(Sol::EnumToInt(inKy.sourceLang))
-            + QChar(Sol::EnumToInt(inKy.targetLang))
+            + QChar(Sol::enumToInt(inKy.sourceLang))
+            + QChar(Sol::enumToInt(inKy.targetLang))
         );
     }
 };

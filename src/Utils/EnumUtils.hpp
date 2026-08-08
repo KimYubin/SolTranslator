@@ -14,25 +14,25 @@
 
 namespace Sol
 {
+template <typename EnumType>
+concept IsEnum = std::is_enum_v<EnumType>;
+
 /**
  * Static cast the enum class member to a base type value.
- * 
- * @tparam E enum class Only
- * @param e enum class value
- * @return static_cast<integer type>(e). std::underlying_type_t<E>(e)
+ *
+ * @tparam EnumType enum class Only
  */
-template <typename E>
-constexpr std::enable_if_t<std::is_enum_v<E>, std::underlying_type_t<E>> EnumToInt(E e) noexcept
+template <IsEnum EnumType>
+constexpr std::underlying_type_t<EnumType> enumToInt(EnumType inE) noexcept
 {
-    return static_cast<std::underlying_type_t<E>>(e);
+    return static_cast<std::underlying_type_t<EnumType>>(inE);
 }
 
 
 /**
  * Convert enum to QString.
  */
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
+template <IsEnum EnumType>
 QString enumToQStr(const EnumType inDefaultVal)
 {
     return qStrFromStdView(magic_enum::enum_name<EnumType>(inDefaultVal));
@@ -45,8 +45,7 @@ QString enumToQStr(const EnumType inDefaultVal)
  * @param inString Source string
  * @param inDefaultVal \a Default value to use if inString is invalid.
  */
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
+template <IsEnum EnumType>
 EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
 {
     return magic_enum::enum_cast<EnumType>(inString.toStdString()).value_or(inDefaultVal);

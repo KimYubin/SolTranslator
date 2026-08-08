@@ -21,6 +21,7 @@ find_package(
         Sql
         Gui
         LinguistTools
+        Pdf
 )
 
 qt_add_executable(
@@ -183,6 +184,8 @@ qt_add_executable(
         src/Utils/SolPath.h
         src/Utils/SolSingleApplication.cpp
         src/Utils/SolSingleApplication.h
+        src/Utils/SolTextSpliter.cpp
+        src/Utils/SolTextSpliter.h
         src/Utils/SolTextTable.cpp
         src/Utils/SolTextTable.h
         src/Utils/SolUtilibrary.cpp
@@ -241,6 +244,7 @@ target_link_libraries(
         Qt6::Core
         Qt6::Sql
         Qt6::Gui
+        Qt6::Pdf
 )
 
 # ============================

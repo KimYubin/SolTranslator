@@ -15,7 +15,8 @@ constexpr bool Is_duration_v = Is_specialization_v<_Ty, std::chrono::duration>;
 
 class SolChrono
 {
-    using time_point_hiRes = std::chrono::time_point<std::chrono::high_resolution_clock>;
+    using time_point_hi_res = std::chrono::time_point<std::chrono::high_resolution_clock>;
+    using milli_double      = std::chrono::duration<double, std::milli>;
 
 public:
     SolChrono()
@@ -23,33 +24,42 @@ public:
         , _prev(_start)
     {}
 
-    using milli_floating = std::chrono::duration<double, std::milli>;
-    template <typename Duration = milli_floating, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
+    /**
+     * Returns the time interval between the last call to lapTime().
+     *
+     * @tparam Duration The default is milliseconds, double.
+     */
+    template <typename Duration = milli_double, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
     auto lapTime()
     {
-        time_point_hiRes cur = clockNow();
-        auto res = std::chrono::duration_cast<Duration>(cur - _prev);
-        _prev = std::move(cur);
+        time_point_hi_res cur = clockNow();
+        auto res              = std::chrono::duration_cast<Duration>(cur - _prev);
+        _prev                 = std::move(cur);
         return res;
     }
 
-    template <typename Duration = milli_floating, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
-    auto splitTime()
+    /**
+     * Returns the cumulative elapsed time from the beginning.
+     *
+     * @tparam Duration The default is milliseconds, double.
+     */
+    template <typename Duration = milli_double, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
+    auto elapsedTime()
     {
-        time_point_hiRes cur = clockNow();
-        auto res = std::chrono::duration_cast<Duration>(cur - _start);
-        _prev = std::move(cur);
+        time_point_hi_res cur = clockNow();
+        auto res              = std::chrono::duration_cast<Duration>(cur - _start);
+        _prev                 = std::move(cur);
         return res;
     }
 
 private:
-    static time_point_hiRes clockNow()
+    static time_point_hi_res clockNow()
     {
         return std::chrono::high_resolution_clock::now();
     }
 
-    time_point_hiRes _start;
-    time_point_hiRes _prev;
+    time_point_hi_res _start;
+    time_point_hi_res _prev;
 };
 
 

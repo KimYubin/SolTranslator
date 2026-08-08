@@ -75,9 +75,9 @@ Expected<TranslateUnit*> TranslateManager::newTranslateUnit(const EngineId& inEn
     return EngineManager::newTrUnit(inEngineId, this);
 }
 
-Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(TranslateRequest&& inTrRequest)
+Expected<QPointer<TranslateUnit>> TranslateManager::translateText(TranslateRequest&& inTrRequest)
 {
-    Q_ASSERT_X(_historyManager, "TranslateManager::executeNewTranslateUnit", "The _historyManager is not initialized.");
+    Q_ASSERT_X(_historyManager, "TranslateManager::translateText", "The _historyManager is not initialized.");
 
     // 앞뒤 공백 제거
     inTrRequest.sourceText = inTrRequest.sourceText.trimmed();
@@ -138,11 +138,6 @@ Expected<QPointer<TranslateUnit>> TranslateManager::executeNewTranslateUnit(Tran
         });
 
     return trUnit;
-}
-
-Expected<QPointer<TranslateUnit>> TranslateManager::translateText(TranslateRequest&& inTrRequest)
-{
-    return executeNewTranslateUnit(std::move(inTrRequest));
 }
 
 void TranslateManager::translateAtPopup(const QString& inSourceText

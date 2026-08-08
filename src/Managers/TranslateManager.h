@@ -40,7 +40,6 @@ public:
 
 private:
     Expected<TranslateUnit*> newTranslateUnit(const EngineId& inEngineId);
-    Expected<QPointer<TranslateUnit>> executeNewTranslateUnit(TranslateRequest&& inTrRequest);
 
 public:
     Expected<QPointer<TranslateUnit>> translateText(TranslateRequest&& inTrRequest);

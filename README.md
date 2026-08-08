@@ -12,4 +12,5 @@
   - [ ] Search
   - [ ] Search filter
 - [ ] Add multiple shortcuts.
+- [ ] Support for translating long texts.
 - [x] Add SolSharedGuard

@@ -10,6 +10,7 @@
 #include "Types/SolGuard.h"
 
 #include <QRegularExpression>
+#include <QString>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>

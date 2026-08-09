@@ -21,7 +21,6 @@ find_package(
         Sql
         Gui
         LinguistTools
-        Pdf
 )
 
 qt_add_executable(
@@ -244,7 +243,6 @@ target_link_libraries(
         Qt6::Core
         Qt6::Sql
         Qt6::Gui
-        Qt6::Pdf
 )
 
 # ============================

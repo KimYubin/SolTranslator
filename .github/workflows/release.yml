@@ -54,11 +54,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.1'
+          version: '6.10.1'
+#          version: '6.11.1'
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2022_64'
-          modules: 'extensions.qtpdf.6111.win64_msvc2022_64'
+          modules: 'extensions.qtpdf.6101.win64_msvc2022_64'
           dir: '${{ github.workspace }}'
           cache: 'true'
 

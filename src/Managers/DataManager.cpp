@@ -4,7 +4,7 @@
 
 #include "Types/TextCacheKey.hpp"
 #include "Utils/EnumUtils.hpp"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolPath.h"
 
 #include <QFile>

@@ -6,7 +6,7 @@
 #include "SolToolTip.h"
 #include "Types/SolTypes.h"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QApplication>

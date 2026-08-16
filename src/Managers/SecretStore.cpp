@@ -6,7 +6,7 @@
 #include "qtkeychain/keychain.h"
 
 #include "Types/SolSharedGuard.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QVariant>
 

@@ -10,7 +10,8 @@
 #include "Types/SolGuard.h"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
+#include "Utils/SolTextSpliter.h"
 #include "Widgets/ITranslateWidget.h"
 
 #include <QNetworkReply>
@@ -68,7 +69,7 @@ void TranslateUnit::get(const QNetworkRequest& inRequest)
 
 void TranslateUnit::post(const QNetworkRequest& inRequest, const QByteArray& inPayload, const bool inIsStreaming)
 {
-    Q_ASSERT_X(_translateManager, "TranslateUnit::get", "TranslateManager is invalid.");
+    Q_ASSERT_X(_translateManager, "TranslateUnit::post", "TranslateManager is invalid.");
 
     _reply = _translateManager->post(inRequest, inPayload);
 

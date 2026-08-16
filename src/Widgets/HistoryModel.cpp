@@ -4,7 +4,7 @@
 
 #include "SolTranslatorCore.h"
 #include "Managers/HistoryManager.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/HistoryCacheData.h"
 

@@ -2,7 +2,7 @@
 
 #include "SolSmoothComponent.h"
 
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QVariantAnimation>
 

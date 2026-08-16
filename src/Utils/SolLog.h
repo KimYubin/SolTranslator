@@ -3,11 +3,6 @@
 #ifndef SOLTRANSLATOR_SOLLOG_H
 #define SOLTRANSLATOR_SOLLOG_H
 
-#include <QDebug>
-
-#define solDebug qDebug()
-
-
 class SolLogHandler
 {
 public:

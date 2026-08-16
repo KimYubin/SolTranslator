@@ -2,7 +2,6 @@
 
 #ifndef SOLTRANSLATOR_SOLCHRONO_H
 #define SOLTRANSLATOR_SOLCHRONO_H
-#include "SolLog.h"
 
 #include <chrono>
 

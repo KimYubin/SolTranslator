@@ -16,7 +16,7 @@
 #include "Types/TranslateRequest.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolAsync.hpp"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Widgets/PopupTranslateWidget.h"
 
 #include <QApplication>

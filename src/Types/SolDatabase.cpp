@@ -3,7 +3,7 @@
 #include "SolDatabase.h"
 
 #include "SolGuard.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QFile>
 #include <QSqlError>

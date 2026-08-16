@@ -7,7 +7,7 @@
 #include "Managers/ConfigManager.h"
 #include "Managers/EngineManager.h"
 #include "Types/SolTypes.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 EngineSelector::EngineSelector(QWidget* inParent) : DropdownMenu(inParent)
 {

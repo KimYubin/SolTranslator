@@ -6,7 +6,7 @@
 #include "HistoryModel.h"
 #include "HistoryWidget.h"
 #include "Types/SolGuard.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QApplication>

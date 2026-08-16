@@ -9,7 +9,7 @@
 #include "SubWidgets/SolBaseTextEdit.h"
 #include "SubWidgets/SolButton.h"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QDoubleSpinBox>
 #include <QGridLayout>

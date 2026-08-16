@@ -3,7 +3,6 @@
 #include "SolTextTable.h"
 
 #include "SolDocument.h"
-#include "SolLog.h"
 
 #include <QTextTableCell>
 #include <QUuid>

@@ -5,7 +5,7 @@
 #include "SolToolTipBallon.h"
 #include "Managers/ConfigManager.h"
 #include "Types/ToolTipData.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QAbstractButton>
 #include <QEvent>

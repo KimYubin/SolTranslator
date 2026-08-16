@@ -7,7 +7,7 @@
 #include "Types/SolTypes.h"
 #include "Utils/SolChrono.h"
 #include "Utils/SolDocument.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QRegularExpression>
 #include <QTextBlock>

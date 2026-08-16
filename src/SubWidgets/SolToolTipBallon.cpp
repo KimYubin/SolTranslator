@@ -4,7 +4,7 @@
 
 #include "SolToolTip.h"
 #include "Types/ToolTipData.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QLabel>

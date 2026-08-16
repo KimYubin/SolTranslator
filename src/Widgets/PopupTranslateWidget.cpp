@@ -13,7 +13,7 @@
 #include "Utils/SolAsync.hpp"
 #include "Utils/SolDocument.h"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ui_PopupTranslateWidget.h"
 

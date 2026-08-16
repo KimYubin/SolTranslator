@@ -8,7 +8,7 @@
 #include "SubWidgets/SolBaseTextEdit.h"
 #include "Types/SolExpected.hpp"
 #include "Types/TranslateRequest.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QScrollBar>
 #include <QTimer>

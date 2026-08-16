@@ -12,7 +12,7 @@
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolPath.h"
 
 #include <QCoreApplication>
@@ -57,8 +57,7 @@ const QString Shortcuts = "Shortcuts/";
  * @param inKey 저장에 사용할 key
  * @param inVal 저장할 enum 
  */
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
+template <Sol::IsEnum EnumType>
 void setEnumValue(QSettings* inSettings, const QString& inKey, const EnumType inVal)
 {
     inSettings->setValue(inKey, Sol::enumToQStr(inVal));
@@ -74,8 +73,7 @@ void setEnumValue(QSettings* inSettings, const QString& inKey, const EnumType in
  * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
  * @return 
  */
-template <typename EnumType>
-    requires std::is_enum_v<EnumType>
+template <Sol::IsEnum EnumType>
 EnumType enumValue(const QSettings* inSettings, const QString& inKey, const EnumType inDefault)
 {
     const QString defaultQStr = Sol::enumToQStr(inDefault);

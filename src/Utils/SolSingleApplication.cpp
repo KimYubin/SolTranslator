@@ -2,7 +2,7 @@
 
 #include "SolSingleApplication.h"
 
-#include "SolLog.h"
+#include "SolDebug.h"
 
 #include <QLocalServer>
 #include <QLocalSocket>

@@ -6,7 +6,7 @@
 #include "Types/SolTypes.h"
 #include "Utils/EnumUtils.hpp"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>

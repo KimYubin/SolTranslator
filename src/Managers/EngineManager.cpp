@@ -5,7 +5,7 @@
 #include "EngineUnits/IAiEngine.h"
 #include "EngineUnits/ITranslateEngine.h"
 #include "Types/EngineId.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 
 namespace

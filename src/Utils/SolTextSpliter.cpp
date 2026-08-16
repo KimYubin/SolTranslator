@@ -2,6 +2,8 @@
 
 #include "SolTextSpliter.h"
 
+#include "SolDebug.h"
+
 #include <QRegularExpression>
 #include <QString>
 
@@ -66,47 +68,44 @@ const std::vector<QString>& getSeparators()
 /**
  * 텍스트에서 첫 문장을 추출합니다.
  */
-QStringView getFirstSentence(const QStringView inTextView, const int inMaxLen = 200, const int inMinLen = 100)
+QStringView getFirstSentence(const QStringView inTextView, const int inMinLen = 50, const int inMaxLen = 200)
 {
-    const int sliceMin = std::min<int>(inMinLen, inTextView.size());
-    const int sliceMax = std::min<int>(inMaxLen, inTextView.size());
-    const int sliceLen = std::max<int>(0, sliceMax - sliceMin);
+    const int textSize = inTextView.size();
+    const int startIdx = std::min<int>(inMinLen, textSize);
+    const int endIdx   = std::min<int>(inMaxLen, textSize);
+    const int sliceLen = std::max<int>(0, endIdx - startIdx);
 
-    const QStringView slice = inTextView.mid(sliceMin, sliceLen);
-    const QRegularExpression re(R"([.!?]\s)");
-    const int nextPunctuationIdx = slice.indexOf(re);
+    const QStringView slice = inTextView.mid(startIdx, sliceLen);
+    static const QRegularExpression re(R"([.!?]\s)");
+    const int findIdx = slice.indexOf(re);
 
-    int splitIdx;
-    if (nextPunctuationIdx == -1)
+    int splitIdx = endIdx;
+    if (findIdx != -1)
     {
-        splitIdx = sliceMin + inMaxLen + 1; // 종결 부호가 없을 때 JS 원본과 동일하게 강제 인덱싱 계산
-    }
-    else
-    {
-        splitIdx = sliceMin + nextPunctuationIdx + 1;
+        splitIdx = startIdx + findIdx + 1;
     }
 
-    return inTextView.left(splitIdx); // Qt에서는 길이가 초과해도 안전하게 끝까지 반환함
+    return inTextView.left(splitIdx);
 }
 
 /**
  * 텍스트에서 마지막 문장을 추출합니다.
  */
-QStringView getLastSentence(const QStringView inTextView, const int inMaxLen = 200, const int inMinLen = 100)
+QStringView getLastSentence(const QStringView inTextView, const int inMinLen = 50, const int inMaxLen = 200)
 {
-    const int textLen  = inTextView.size();
-    const int startIdx = std::max<int>(0, textLen - inMaxLen);
-    const int endIdx   = std::max<int>(0, textLen - inMinLen);
+    const int textSize = inTextView.size();
+    const int startIdx = std::max<int>(0, textSize - inMaxLen);
+    const int endIdx   = std::max<int>(0, textSize - inMinLen);
     const int sliceLen = std::max<int>(0, endIdx - startIdx);
 
     const QStringView slice = inTextView.mid(startIdx, sliceLen);
-    const QRegularExpression re(R"([.!?]\s)");
-    const int nextPunctuationIdx = slice.indexOf(re);
+    static const QRegularExpression re(R"([.!?]\s)");
+    const int findIdx = slice.lastIndexOf(re);
 
     int splitIdx = startIdx;
-    if (nextPunctuationIdx != -1)
+    if (findIdx != -1)
     {
-        splitIdx = startIdx + nextPunctuationIdx + 1;
+        splitIdx = startIdx + findIdx + 1;
     }
 
     return inTextView.mid(splitIdx);
@@ -125,7 +124,7 @@ std::vector<QStringView> splitText(QStringView inText
 
     if (inText.isEmpty() || inText.size() <= maxLength)
     {
-        return {{inText, inText.first(0), inText.first(0)}};
+        return {inText};
     }
 
     std::vector<QStringView> splitTexts;
@@ -192,22 +191,22 @@ std::vector<QStringView> splitText(QStringView inText
     return splitTexts;
 }
 
-std::vector<TextChunk> splitToChunks(QStringView inText, const int inSplitSize, const int inTolerance)
+std::vector<TextChunk> textsToChunks(const std::vector<QStringView>& inSplitTexts, const int inMinLen, const int inMaxLen)
 {
     static const QStringView zeroView = QString("");
 
-    const std::vector<QStringView> splitList = splitText(inText, inSplitSize, inTolerance);
+    const int splitSize = inSplitTexts.size();
 
     std::vector<TextChunk> res;
-    res.reserve(splitList.size());
+    res.reserve(splitSize);
 
-    for (int i = 0; i < splitList.size(); ++i)
+    for (int i = 0; i < splitSize; ++i)
     {
-        QStringView prev = (i > 0) ? getLastSentence(splitList[i - 1]) : zeroView;
-        QStringView next = (i < (splitList.size() - 1)) ? getFirstSentence(splitList[i + 1]) : zeroView;
+        QStringView prev = (i > 0) ? getLastSentence(inSplitTexts[i - 1], inMinLen, inMaxLen) : zeroView;
+        QStringView next = (i < (splitSize - 1)) ? getFirstSentence(inSplitTexts[i + 1], inMinLen, inMaxLen) : zeroView;
 
         res.push_back({
-            .current     = splitList[i]
+            .current     = inSplitTexts[i]
           , .prevContext = std::move(prev)
           , .nextContext = std::move(next)
         });
@@ -218,35 +217,126 @@ std::vector<TextChunk> splitToChunks(QStringView inText, const int inSplitSize, 
 } // namespace Sol
 
 
-SolTextSpliter::SolTextSpliter(QStringView inText)
+SolTextSpliter::SolTextSpliter(QStringView inText
+                             , const int inSplitSize
+                             , const int inTolerance
+                             , const int inMinContextSize
+                             , const int inMaxContextSize)
     : _text(inText)
+    , _splitSize(inSplitSize)
+    , _tolerance(inTolerance)
+    , _minContextSize(inMinContextSize)
+    , _maxContextSize(inMaxContextSize)
     , _splitTexts({})
     , _splitChunks({})
 {}
 
-void SolTextSpliter::setText(QStringView inText)
+void SolTextSpliter::resetSplitCaches()
 {
-    _text = inText.toString();
     _splitTexts.clear();
     _splitChunks.clear();
 }
 
-const std::vector<QStringView>& SolTextSpliter::getSplitTexts(const int inSplitSize, const int inTolerance)
+void SolTextSpliter::setText(QStringView inText)
+{
+    if (_text == inText)
+    {
+        return;
+    }
+
+    _text = inText.toString();
+
+    resetSplitCaches();
+}
+
+void SolTextSpliter::setSplitSize(const int inSplitSize)
+{
+    if (_splitSize == inSplitSize)
+    {
+        return;
+    }
+
+    _splitSize = inSplitSize;
+
+    resetSplitCaches();
+}
+
+void SolTextSpliter::setTolerance(const int inTolerance)
+{
+    if (_tolerance == inTolerance)
+    {
+        return;
+    }
+
+    _tolerance = inTolerance;
+
+    resetSplitCaches();
+}
+
+void SolTextSpliter::setMinContextSize(const int inMinContextSize)
+{
+    if (_minContextSize == inMinContextSize)
+    {
+        return;
+    }
+
+    _minContextSize = inMinContextSize;
+
+    _splitChunks.clear();
+}
+
+void SolTextSpliter::setMaxContextSize(const int inMaxContextSize)
+{
+    if (_maxContextSize == inMaxContextSize)
+    {
+        return;
+    }
+
+    _maxContextSize = inMaxContextSize;
+
+    _splitChunks.clear();
+}
+
+const std::vector<QStringView>& SolTextSpliter::textList()
 {
     if (_splitTexts.empty())
     {
-        _splitTexts = Sol::splitText(_text, inSplitSize, inTolerance);
+        _splitTexts = Sol::splitText(_text, _splitSize, _tolerance);
+
+        _splitChunks.clear();
     }
 
     return _splitTexts;
 }
 
-const std::vector<TextChunk>& SolTextSpliter::getSplitChunks(const int inSplitSize, const int inTolerance)
+const std::vector<TextChunk>& SolTextSpliter::chunkList()
 {
     if (_splitChunks.empty())
     {
-        _splitChunks = Sol::splitToChunks(_text, inSplitSize, inTolerance);
+        // Induce _splitTexts generation.
+        textList();
+
+        _splitChunks = Sol::textsToChunks(_splitTexts, _minContextSize, _maxContextSize);
     }
 
     return _splitChunks;
 }
+
+QDebug operator<<(QDebug inDebug, const TextChunk& inChunks)
+{
+    const QString res
+            = "prev: " + inChunks.prevContext + "\n"
+            + "curr: " + inChunks.current + "\n"
+            + "next: " + inChunks.nextContext + "\n";
+
+    QDebugStateSaver saver(inDebug);
+    inDebug.nospace().noquote() << res;
+
+    return inDebug;
+}
+
+QDebug operator<<(QDebug inDebug, const std::vector<TextChunk>& inChunks)
+{
+    return debugRange(inDebug, inChunks);
+}
+

@@ -14,7 +14,7 @@
 #include "Types/EngineId.h"
 #include "Types/SolExpected.hpp"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QDoubleSpinBox>
 #include <QGridLayout>

@@ -22,45 +22,64 @@ namespace Sol
  * splitting positions around inSplitSize (+-inTolerance).
  */
 std::vector<QStringView> splitText(QStringView inText
-                                 , const int inSplitSize = 4000
-                                 , const int inTolerance = 500);
+                                 , const int inSplitSize
+                                 , const int inTolerance);
 
 /**
  * Creates a TextChunk from the text split at appropriate locations.
  * A TextChunk includes portions of the text before and after to understand the context.
  */
-std::vector<TextChunk> splitToChunks(QStringView inText
-                                   , const int inSplitSize = 4000
-                                   , const int inTolerance = 500);
+std::vector<TextChunk> textsToChunks(const std::vector<QStringView>& inSplitTexts
+                                   , const int inMinLen
+                                   , const int inMaxLen);
 } // namespace Sol
 
 
 /**
  * The SolTextSplitter is a utility class used for splitting strings into paragraphs.
  * The split result is returned as QStringView.
- * It holds a QString, ensuring that the QString outlives the QStringView.
+ * This class holds the text as a 'QString', ensuring that the the outlives the returned QStringView.
  */
 class SolTextSpliter
 {
 public:
-    SolTextSpliter() = default;
+    explicit SolTextSpliter(QStringView inText         = u""
+                          , const int inSplitSize      = 4000
+                          , const int inTolerance      = 500
+                          , const int inMinContextSize = 100
+                          , const int inMaxContextSize = 200);
 
-    explicit SolTextSpliter(QStringView inText);
+    void resetSplitCaches();
 
     void setText(QStringView inText);
-    QString getText() { return _text; }
+    void setSplitSize(const int inSplitSize);
+    void setTolerance(const int inTolerance);
+    void setMinContextSize(const int inMinContextSize);
+    void setMaxContextSize(const int inMaxContextSize);
 
-    const std::vector<QStringView>& getSplitTexts(const int inSplitSize = 4000
-                                                , const int inTolerance = 500);
+    QString getText() const { return _text; }
+    int getSplitSize() const { return _splitSize; }
+    int getTolerance() const { return _tolerance; }
+    int getMinContextSize() const { return _minContextSize; }
+    int getMaxContextSize() const { return _maxContextSize; }
 
-    const std::vector<TextChunk>& getSplitChunks(const int inSplitSize = 4000
-                                               , const int inTolerance = 500);
+    const std::vector<QStringView>& textList();
+    const std::vector<TextChunk>& chunkList();
 
 private:
     QString _text;
 
+    int _splitSize;
+    int _tolerance;
+
+    int _minContextSize;
+    int _maxContextSize;
+
     std::vector<QStringView> _splitTexts;
     std::vector<TextChunk> _splitChunks;
 };
+
+QDebug operator<<(QDebug inDebug, const TextChunk& inChunks);
+QDebug operator<<(QDebug inDebug, const std::vector<TextChunk>& inChunks);
 
 #endif //SOLTRANSLATOR_SOLTEXTSPLITER_H

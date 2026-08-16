@@ -4,7 +4,7 @@
 
 #include "SettingWidgetFactory.h"
 #include "SubWidgets/SolSmoothScrollBar.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 
 #include <QGroupBox>
 #include <QRegularExpression>

@@ -39,7 +39,6 @@ public:
     void focusTextOrigin();
     void importExistingTranslation(const HistoryCacheData* inHistoryCache);
 
-private slots:
     void onExecuteTranslate(const bool inIgnoreCache = false);
     void onSourceLanguageChanged(const LangType inLangType);
     void onTargetLanguageChanged(const LangType inLangType);

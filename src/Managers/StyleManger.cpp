@@ -2,7 +2,7 @@
 
 #include "StyleManger.h"
 
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ISolWidget.h"
 

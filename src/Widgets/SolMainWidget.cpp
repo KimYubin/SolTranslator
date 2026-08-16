@@ -15,7 +15,7 @@
 #include "SubWidgets/SolTrayIcon.h"
 #include "Types/EngineId.h"
 #include "Utils/SolI18n.h"
-#include "Utils/SolLog.h"
+#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ui_SolMainWidget.h"
 
@@ -123,11 +123,12 @@ SolMainWidget::SolMainWidget(QWidget* inParent)
     // 번역 엔진 선택
     _engineSelector = new EngineSelector(this);
     _engineSelector->setToolTipAction(i18n(Tr::Select_Translation_Engine), Action::EngineSelector);
-    _engineSelector->setCurrentIndexChanged([this](const int inIdx)
+    connect(_engineSelector, &EngineSelector::currentIndexChanged, this, [this](const int inIdx)
     {
         const QString payload = _engineSelector->itemData(inIdx).toString();
         const EngineId curEg  = EngineId{payload};
         solConfig.setCurrentEngineId(curEg);
+        _textEditTranslate->onExecuteTranslate();
     });
 
     ui->rightAlignLayout->insertWidget(1, _engineSelector, 0, Qt::AlignRight);

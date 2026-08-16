@@ -171,6 +171,8 @@ qt_add_executable(
         src/Utils/SolAsync.hpp
         src/Utils/SolChrono.cpp
         src/Utils/SolChrono.h
+        src/Utils/SolDebug.cpp
+        src/Utils/SolDebug.h
         src/Utils/SolDocument.cpp
         src/Utils/SolDocument.h
         src/Utils/SolI18n.cpp

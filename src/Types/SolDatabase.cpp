@@ -10,8 +10,8 @@
 #include <QSqlQuery>
 #include <QString>
 
-SolSql::SolSql(const QSqlDatabase& inDB)
-    : _database(inDB)
+SolSql::SolSql(QSqlDatabase inDb)
+    : _database(std::move(inDb))
 {}
 
 Expected<QString> SolSql::readSqlFromFile(const QString& inFilePath)
@@ -58,8 +58,8 @@ Expected<void> SolSql::execSqlQuery(const QString& inQueryName, const QString& i
     return {};
 }
 
-SolSqlTransactionGuard::SolSqlTransactionGuard(const QSqlDatabase& inDB)
-    : _database(inDB)
+SolSqlTransactionGuard::SolSqlTransactionGuard(QSqlDatabase inDb)
+    : _database(std::move(inDb))
     , _duringTransaction(false)
 {
     transaction();

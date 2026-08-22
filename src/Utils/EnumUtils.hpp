@@ -50,7 +50,7 @@ EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
 {
     return magic_enum::enum_cast<EnumType>(inString.toStdString()).value_or(inDefaultVal);
 }
-} // namespace Sol 
+} // namespace Sol
 
 
 #endif //SOLTRANSLATOR_ENUMUTILS_H

@@ -113,6 +113,6 @@ void flattenToSingleTable(QTextTable* inTable);
 
 void replaceNewLine(QString& inString);
 
-} // namespace Sol 
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLTEXTTABLE_H

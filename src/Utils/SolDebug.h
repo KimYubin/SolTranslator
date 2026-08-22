@@ -7,6 +7,8 @@
 
 #define solDebug qDebug()
 
+namespace Sol
+{
 template <typename T>
 concept HasQDebugOperator = requires(QDebug inDebug, const T& inValue)
 {
@@ -32,5 +34,6 @@ inline QDebug debugRange(QDebug inDebug, const Range& inVec)
 
     return inDebug;
 }
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLDEBUG_H

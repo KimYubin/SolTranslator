@@ -13,7 +13,7 @@ class QSqlError;
 class SolSql
 {
 public:
-    explicit SolSql(const QSqlDatabase& inDB);
+    explicit SolSql(QSqlDatabase inDb);
 
     static Expected<QString> readSqlFromFile(const QString& inFilePath);
     Expected<void> execSqlFile(const QString& inFilePath);
@@ -28,7 +28,7 @@ class SolSqlTransactionGuard
 {
 public:
     [[nodiscard]]
-    explicit SolSqlTransactionGuard(const QSqlDatabase& inDB);
+    explicit SolSqlTransactionGuard(QSqlDatabase inDb);
 
     ~SolSqlTransactionGuard();
 

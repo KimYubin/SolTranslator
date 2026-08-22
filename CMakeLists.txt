@@ -149,6 +149,7 @@ qt_add_executable(
         src/Types/OptionKey.h
         src/Types/OptionSpec.cpp
         src/Types/OptionSpec.h
+        src/Types/SolConcepts.hpp
         src/Types/SolConstants.cpp
         src/Types/SolConstants.h
         src/Types/SolDatabase.cpp

@@ -11,11 +11,16 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 
+namespace Sol
+{
+
 template <typename T>
 concept HasTextInteractionFlags = requires(T* t)
 {
     { t->textInteractionFlags() } -> std::same_as<Qt::TextInteractionFlags>;
 };
+
+} // namespace Sol
 
 
 /**
@@ -24,7 +29,7 @@ concept HasTextInteractionFlags = requires(T* t)
  *
  * @tparam BaseTextEdit requires textInteractionFlags().
  */
-template <HasTextInteractionFlags BaseTextEdit>
+template <Sol::HasTextInteractionFlags BaseTextEdit>
 class SolBaseTextEdit : public SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>
 {
 public:

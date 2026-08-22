@@ -3,14 +3,18 @@
 #ifndef SOLTRANSLATOR_SOLCHRONO_H
 #define SOLTRANSLATOR_SOLCHRONO_H
 
+#include "Types/SolConcepts.hpp"
+
 #include <chrono>
 
-template <class _Type, template <class...> class _Template>
-constexpr bool Is_specialization_v = false;
-template <template <class...> class _Template, class... _Types>
-constexpr bool Is_specialization_v<_Template<_Types...>, _Template> = true;
-template <class _Ty>
-constexpr bool Is_duration_v = Is_specialization_v<_Ty, std::chrono::duration>;
+namespace Sol
+{
+
+// SpecializedFrom<std::chrono::duration> Duration>
+template <class Specialized>
+concept ChronoDuration = Sol::SpecializedFrom<Specialized, std::chrono::duration>;
+
+} // namespace Sol
 
 class SolChrono
 {
@@ -24,31 +28,30 @@ public:
     {}
 
     /**
-     * Returns the time interval between the last call to lapTime().
+     * Returns the elapsed time since the previous call to lapTime().
      *
-     * @tparam Duration The default is milliseconds, double.
+     * @tparam Duration std::chrono::duration. The default is milliseconds, double.
      */
-    template <typename Duration = milli_double, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
+    template <Sol::ChronoDuration Duration = milli_double>
     auto lapTime()
     {
         time_point_hi_res cur = clockNow();
-        auto res              = std::chrono::duration_cast<Duration>(cur - _prev);
-        _prev                 = std::move(cur);
+
+        auto res = std::chrono::duration_cast<Duration>(cur - _prev);
+        _prev    = std::move(cur);
+
         return res;
     }
 
     /**
-     * Returns the cumulative elapsed time from the beginning.
+     * Returns the cumulative elapsed time from the initialization.
      *
-     * @tparam Duration The default is milliseconds, double.
+     * @tparam Duration std::chrono::duration. The default is milliseconds, double.
      */
-    template <typename Duration = milli_double, std::enable_if_t<Is_duration_v<Duration>, int> = 0>
-    auto elapsedTime()
+    template <Sol::ChronoDuration Duration = milli_double>
+    auto elapsedTime() const
     {
-        time_point_hi_res cur = clockNow();
-        auto res              = std::chrono::duration_cast<Duration>(cur - _start);
-        _prev                 = std::move(cur);
-        return res;
+        return std::chrono::duration_cast<Duration>(clockNow() - _start);
     }
 
 private:

@@ -337,6 +337,6 @@ QDebug operator<<(QDebug inDebug, const TextChunk& inChunks)
 
 QDebug operator<<(QDebug inDebug, const std::vector<TextChunk>& inChunks)
 {
-    return debugRange(inDebug, inChunks);
+    return Sol::debugRange(inDebug, inChunks);
 }
 

@@ -14,8 +14,8 @@
 #include "SubWidgets/SolToolTip.h"
 #include "SubWidgets/SolTrayIcon.h"
 #include "Types/EngineId.h"
-#include "Utils/SolI18n.h"
 #include "Utils/SolDebug.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ui_SolMainWidget.h"
 

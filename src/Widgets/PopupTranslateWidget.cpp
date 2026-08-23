@@ -11,9 +11,9 @@
 #include "SubWidgets/SolWidgetFactory.h"
 #include "Types/EngineId.h"
 #include "Utils/SolAsync.hpp"
+#include "Utils/SolDebug.h"
 #include "Utils/SolDocument.h"
 #include "Utils/SolI18n.h"
-#include "Utils/SolDebug.h"
 #include "Utils/SolUtilibrary.h"
 #include "Widgets/ui_PopupTranslateWidget.h"
 

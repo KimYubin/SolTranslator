@@ -3,8 +3,8 @@
 #include "GoogleTrUnit.h"
 
 #include "Types/ExJson.h"
-#include "Utils/SolI18n.h"
 #include "Utils/SolDebug.h"
+#include "Utils/SolI18n.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>

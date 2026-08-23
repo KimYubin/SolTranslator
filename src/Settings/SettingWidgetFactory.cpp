@@ -8,8 +8,8 @@
 #include "SubWidgets/SettingCard.h"
 #include "SubWidgets/SolBaseTextEdit.h"
 #include "SubWidgets/SolButton.h"
-#include "Utils/SolI18n.h"
 #include "Utils/SolDebug.h"
+#include "Utils/SolI18n.h"
 
 #include <QDoubleSpinBox>
 #include <QGridLayout>

@@ -5,8 +5,8 @@
 #include "KeySelectionList.h"
 #include "SolToolTip.h"
 #include "Types/SolTypes.h"
-#include "Utils/SolI18n.h"
 #include "Utils/SolDebug.h"
+#include "Utils/SolI18n.h"
 #include "Utils/SolUtilibrary.h"
 
 #include <QApplication>

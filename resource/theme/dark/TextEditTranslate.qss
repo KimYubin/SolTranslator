@@ -46,7 +46,7 @@
 
 
 /* 언어 선택 */
-LanguageSelector
+Sol--LanguageSelector
 {
   margin-left: 6px;
 }

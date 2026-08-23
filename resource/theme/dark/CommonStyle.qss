@@ -1,6 +1,6 @@
 /* -------------------------------- */
 /* Palette Color*/
-SolPalette
+Sol--SolPalette
 {
   qproperty-windowColor: rgba(53, 53, 53, 1);
   qproperty-windowTextColor: white;
@@ -413,7 +413,7 @@ QToolTip
   padding-bottom: 6px;
 }
 
-SolToolTipBallon
+Sol--SolToolTipBallon
 {
   qproperty-triangleBaseWidth: 8;
   qproperty-triangleHeight: 3;
@@ -425,13 +425,13 @@ SolToolTipBallon
   qproperty-borderColor: rgba(200, 200, 200, 1);
 }
 
-SolToastWidget
+Sol--SolToastWidget
 {
   qproperty-showPos: 15;
   qproperty-popPos: 5;
 }
 
-SolToastWidget QLabel
+Sol--SolToastWidget QLabel
 { 
   font-size: 14px;
 

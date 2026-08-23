@@ -1,5 +1,5 @@
 /* ----------------------------------------------------- */
-#HistoryWidget LayoutTextEdit
+#HistoryWidget Sol--LayoutTextEdit
 {
   padding-left: 10px;
   padding-top: 10px;
@@ -33,7 +33,7 @@
   
 }
 
-HistoryListView
+Sol--HistoryListView
 {
   qproperty-itemTextColor: rgba(235, 235, 235, 1);
   qproperty-itemSelectionTextColor: rgba(255, 255, 255, 1);

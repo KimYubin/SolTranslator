@@ -1,5 +1,5 @@
 /* ----------------------------------------------------- */
-ResultTextEdit
+Sol--ResultTextEdit
 {
   border: none;
   border-radius : 8px;
@@ -12,12 +12,12 @@ ResultTextEdit
   qproperty-codeBackgroundColor: rgba(24, 24, 24, 1);
 }
 
-ResultTextEdit > a,
-ResultTextEdit > span
+Sol--ResultTextEdit > a,
+Sol--ResultTextEdit > span
 {
   color:#ff0000;
 }
-ResultTextEdit > body
+Sol--ResultTextEdit > body
 {
   color:#6ba7f7;
 }

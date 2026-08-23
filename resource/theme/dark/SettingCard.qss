@@ -17,7 +17,7 @@
   font-size: 14px;
 }
 
-SwitchButton
+Sol--SwitchButton
 {
   qproperty-switchSize: 46px 28px;
   qproperty-trackHeightRatio: 1;
@@ -25,14 +25,14 @@ SwitchButton
 }
 
 
-SwitchButton
+Sol--SwitchButton
 {
   qproperty-switchSize: 44px 26px;
   qproperty-trackHeightRatio: 1;
   qproperty-HandleRatio: 0.72;
 }
 
-SwitchButton
+Sol--SwitchButton
 {
   qproperty-barCheckedColor: rgba(0, 176, 255, 1);
   qproperty-barUncheckedColor: gray;

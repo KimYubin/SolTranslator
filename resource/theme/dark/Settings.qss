@@ -153,10 +153,10 @@
 
 /* -------------------------------- */
 /* IOptionWidget */
-#SettingsWidget IOptionWidget > QWidget > QWidget> QWidget,
-#SettingsWidget IOptionWidget > QWidget > QWidget,
-#SettingsWidget IOptionWidget > QWidget,
-#SettingsWidget IOptionWidget
+#SettingsWidget Sol--IOptionWidget > QWidget > QWidget> QWidget,
+#SettingsWidget Sol--IOptionWidget > QWidget > QWidget,
+#SettingsWidget Sol--IOptionWidget > QWidget,
+#SettingsWidget Sol--IOptionWidget
 {
   background-color: transparent;
 }

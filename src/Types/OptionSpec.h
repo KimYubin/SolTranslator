@@ -9,6 +9,8 @@
 #include <QString>
 #include <QStringList>
 
+namespace Sol
+{
 template <typename T>
 struct _BaseSpinData
 {
@@ -127,5 +129,7 @@ struct OptionSpec
     mutable int insertionOrder = std::numeric_limits<int>::max();
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_OPTIONSPEC_H

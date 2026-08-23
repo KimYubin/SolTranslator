@@ -6,6 +6,8 @@
 
 #include <cstddef>
 
+namespace Sol
+{
 class SolGeneralGuard;
 
 template <typename T>
@@ -75,5 +77,7 @@ private:
     RefCount<SolGeneralGuard>* _refCount{nullptr};
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLSHAREDGUARD_H

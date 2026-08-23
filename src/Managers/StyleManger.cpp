@@ -9,6 +9,8 @@
 #include <QApplication>
 #include <QDir>
 
+namespace Sol
+{
 class SolPalette
 {
 public:
@@ -148,7 +150,7 @@ void SolPaletteWidget::applyThemePrivate(const QString& inThemeName)
         qApp->setStyleSheet(newStyleSheet);
         updatePaletteColor();
 
-        Sol::noHintingFont();
+        noHintingFont();
 
         QWidgetList allWidgetList = qApp->allWidgets();
         for (QWidget* childWidget : allWidgetList)
@@ -196,3 +198,4 @@ void SolPaletteWidget::updatePaletteColor() const
 
     QApplication::setPalette(qPalette);
 }
+} // namespace Sol

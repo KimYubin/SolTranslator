@@ -7,6 +7,8 @@
 
 #include <vector>
 
+namespace Sol
+{
 struct TextChunk
 {
     QStringView current;
@@ -14,8 +16,6 @@ struct TextChunk
     QStringView nextContext;
 };
 
-namespace Sol
-{
 /**
  * Splits The text at appropriate position.
  * Finds appropriate paragraph and sentence
@@ -32,7 +32,6 @@ std::vector<QStringView> splitText(QStringView inText
 std::vector<TextChunk> textsToChunks(const std::vector<QStringView>& inSplitTexts
                                    , const int inMinLen
                                    , const int inMaxLen);
-} // namespace Sol
 
 
 /**
@@ -81,5 +80,7 @@ private:
 
 QDebug operator<<(QDebug inDebug, const TextChunk& inChunks);
 QDebug operator<<(QDebug inDebug, const std::vector<TextChunk>& inChunks);
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLTEXTSPLITER_H

@@ -30,6 +30,8 @@
 #include <magic_enum.hpp>
 
 
+namespace Sol
+{
 TranslateManager::TranslateManager(SolTranslatorCore* inParent): AbstractManager(inParent)
 {
     _networkAccessManager = new QNetworkAccessManager(this);
@@ -252,3 +254,4 @@ void TranslateManager::processPopupTranslate()
 }
 
 
+} // namespace Sol

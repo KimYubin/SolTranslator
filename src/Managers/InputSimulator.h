@@ -4,6 +4,8 @@
 #define INPUTSIMULATOR_H
 
 
+namespace Sol
+{
 class InputSimulator
 {
 public:
@@ -12,5 +14,7 @@ public:
 };
 
 
+
+} // namespace Sol
 
 #endif //INPUTSIMULATOR_H

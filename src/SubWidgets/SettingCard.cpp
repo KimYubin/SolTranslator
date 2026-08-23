@@ -10,6 +10,8 @@
 #include <QStyleOption>
 
 
+namespace Sol
+{
 SettingCard::SettingCard(QWidget* inContent
                        , QWidget* inParent
                        , const ContentPos inContentPos)
@@ -86,3 +88,4 @@ void SettingCard::setDescription(const QString& inStr)
 
     _description.value()->setText(inStr);
 }
+} // namespace Sol

@@ -8,27 +8,28 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 
+QT_BEGIN_NAMESPACE
+namespace Ui
+{
+class SolMainWidget;
+}
+QT_END_NAMESPACE
 
-class SolTrayIcon;
-class SolButton;
-class EngineSelector;
 class QPushButton;
 class QComboBox;
 class QButtonGroup;
+
+namespace Sol
+{
+class SolTrayIcon;
+class SolButton;
+class EngineSelector;
 class SettingsWidget;
 class TextEditTranslateWidget;
 class SolTranslatorCore;
 class GlobalHotKeyManager;
 class TranslateManager;
 
-QT_BEGIN_NAMESPACE
-
-namespace Ui
-{
-class SolMainWidget;
-}
-
-QT_END_NAMESPACE
 
 class SolMainWidget : public ISolWidget
 {
@@ -93,5 +94,7 @@ private:
 
 };
 
+
+} // namespace Sol
 
 #endif //SOLMAINWIDGET_H

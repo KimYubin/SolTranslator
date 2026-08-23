@@ -4,6 +4,9 @@
 
 #include "SolToolTip.h"
 
+namespace Sol
+{
 ILoadingWidget::ILoadingWidget(QWidget* inParent)
     :QWidget(inParent)
 {}
+} // namespace Sol

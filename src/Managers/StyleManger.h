@@ -4,6 +4,8 @@
 #define PALETTEMANGER_H
 #include <QObject>
 
+namespace Sol
+{
 class SolPalette;
 
 class StyleManger  : public QObject
@@ -21,5 +23,7 @@ private:
 };
 
 
+
+} // namespace Sol
 
 #endif //PALETTEMANGER_H

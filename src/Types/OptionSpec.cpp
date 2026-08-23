@@ -4,6 +4,8 @@
 
 #include <QVariant>
 
+namespace Sol
+{
 QVariant OptionSpec::getDefaultValue() const
 {
     switch (getOptionSpecType())
@@ -28,3 +30,4 @@ QVariant OptionSpec::getDefaultValue() const
     }
     return {};
 }
+} // namespace Sol

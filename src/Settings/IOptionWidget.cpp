@@ -13,6 +13,8 @@
 #include <QVBoxLayout>
 
 
+namespace Sol
+{
 IOptionWidget::IOptionWidget(QWidget* inParent) : QWidget(inParent)
 {
     _outScrollLayout = new QHBoxLayout(this);
@@ -279,3 +281,4 @@ void IOptionPage::setPriority(const int inPriority)
 {
     _priority = inPriority;
 }
+} // namespace Sol

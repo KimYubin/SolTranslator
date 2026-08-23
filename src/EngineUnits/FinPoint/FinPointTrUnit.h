@@ -7,6 +7,8 @@
 #include "EngineUnits/TranslateUnit.h"
 
 
+namespace Sol
+{
 class FinPointTrUnit final : public TranslateUnit
 {
     Q_OBJECT
@@ -40,5 +42,7 @@ public:
     explicit FinPointEngine();
     ~FinPointEngine() override;
 };
+
+} // namespace Sol
 
 #endif //SOLPOINT_H

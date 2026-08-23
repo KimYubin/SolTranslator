@@ -16,8 +16,9 @@
 #include <QGroupBox>
 #include <QTimer>
 
-using Sol::i18n;
 
+namespace Sol
+{
 namespace
 {
 SettingCard* createBaseCard(QWidget* inContent
@@ -122,3 +123,4 @@ OptionGroupBox* OptionWidgetFactory::createOptionGroupBox(const QString& inGroup
 
     return groupBox;
 }
+} // namespace Sol

@@ -5,10 +5,11 @@
 
 #include "ILoadingWidget.h"
 
-
 class QPropertyAnimation;
 class QSvgWidget;
 
+namespace Sol
+{
 class LoadingBar : public ILoadingWidget
 {
     Q_OBJECT
@@ -34,5 +35,7 @@ private:
     bool _bRunning;
 };
 
+
+} // namespace Sol
 
 #endif //LOADINGBAR_H

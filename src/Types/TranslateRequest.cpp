@@ -5,6 +5,8 @@
 #include "Widgets/ITranslateWidget.h"
 
 
+namespace Sol
+{
 TranslateRequest::TranslateRequest(ITranslateWidget* inTrDisplayWidget
                                  , const bool inIsIgnoreCache
                                  , const EngineId& inEngineId
@@ -28,3 +30,4 @@ TranslateRequest::TranslateRequest(ITranslateWidget* inTrDisplayWidget
     , streamContext(inStreamContext)
     , callbackTranslateStreaming(std::move(inFuncStreaming))
 {}
+} // namespace Sol

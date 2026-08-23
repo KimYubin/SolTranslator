@@ -6,25 +6,26 @@
 #include "ITranslateWidget.h"
 #include "Types/SolTypes.h"
 
-class ILoadingWidget;
-class SolButton;
-class LoadingBar;
-class QPushButton;
-class QSizeGrip;
-class QScrollBar;
-class QPropertyAnimation;
-class SolTranslatorCore;
-class QVBoxLayout;
-class QLabel;
-
 QT_BEGIN_NAMESPACE
-
 namespace Ui
 {
 class PopupTranslateWidget;
 }
-
 QT_END_NAMESPACE
+
+class QPushButton;
+class QSizeGrip;
+class QScrollBar;
+class QPropertyAnimation;
+class QVBoxLayout;
+class QLabel;
+
+namespace Sol
+{
+class ILoadingWidget;
+class SolButton;
+class LoadingBar;
+class SolTranslatorCore;
 
 
 class PopupTranslateWidget : public ITranslateWidget
@@ -198,5 +199,7 @@ private:
     QSizeGrip* _sizeGrip;
 };
 
+
+} // namespace Sol
 
 #endif //POPUPTRANSLATEWIDGET_H

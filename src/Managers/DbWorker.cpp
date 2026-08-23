@@ -16,6 +16,8 @@
 #include <QTimer>
 
 
+namespace Sol
+{
 namespace
 {
 const QString db_type = "QSQLITE";
@@ -184,11 +186,11 @@ void DbWorker::processAddHistory(const EngineId& inEngineId
         sqlQuery.prepare(insertDataQuery.value());
 
         sqlQuery.bindValue(":engine",      inEngineId.toString());
-        sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_lang", enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inSourceText);
         sqlQuery.bindValue(":target_text", inTargetText);
-        sqlQuery.bindValue(":text_style",  Sol::enumToQStr(inTextStyle));
+        sqlQuery.bindValue(":text_style",  enumToQStr(inTextStyle));
 
         if (sqlQuery.exec() == false)
         {
@@ -273,8 +275,8 @@ std::tuple<bool, QString> DbWorker::lookupHistoryImpl(const EngineId& inEngineId
         sqlQuery.prepare(selectHistoryQuery.value());
 
         sqlQuery.bindValue(":engine",      inEngineId.toString());
-        sqlQuery.bindValue(":source_lang", Sol::enumToQStr(inSourceLang));
-        sqlQuery.bindValue(":target_lang", Sol::enumToQStr(inTargetLang));
+        sqlQuery.bindValue(":source_lang", enumToQStr(inSourceLang));
+        sqlQuery.bindValue(":target_lang", enumToQStr(inTargetLang));
         sqlQuery.bindValue(":source_text", inSourceText);
 
         // error sql
@@ -370,7 +372,7 @@ void DbWorker::updateDbCache()
                                   , sqlQuery.value(5).toString()
                                   , sqlQuery.value(6).toLongLong()
                                   , sqlQuery.value(7).toLongLong()
-                                  , Sol::qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
+                                  , qStrToEnum(sqlQuery.value(8).toString(), TextStyle::PlainText));
         }
     }
 
@@ -412,3 +414,4 @@ void DbWorker::runCheckpoint(const bool inIsTRUNCATE)
         solDebug << "run checkpoint failed" << sqlQuery.lastError();
     }
 }
+} // namespace Sol

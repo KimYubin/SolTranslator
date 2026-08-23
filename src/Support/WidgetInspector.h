@@ -7,6 +7,8 @@
 
 class QLabel;
 
+namespace Sol
+{
 class WidgetInspector : public QWidget
 {
     Q_OBJECT
@@ -21,5 +23,7 @@ public:
 private:
     QLabel* _label;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_WIDGETINSPECTOR_H

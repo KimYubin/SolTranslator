@@ -10,6 +10,8 @@
 #include <compare>
 
 
+namespace Sol
+{
 class EngineId
 {
 public:
@@ -54,5 +56,7 @@ struct EngineId_hasher
     }
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_ENGINEID_H

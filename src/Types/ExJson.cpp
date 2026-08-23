@@ -6,6 +6,8 @@
 #include <QJsonObject>
 
 
+namespace Sol
+{
 ExJson ExJson::fromJson(const QByteArray& inJson)
 {
     QJsonParseError parseError;
@@ -179,3 +181,4 @@ QJsonObject ExJson::toObject(const QJsonObject& inDefaultValue) const
     }
     return _expected->toObject(inDefaultValue);
 }
+} // namespace Sol

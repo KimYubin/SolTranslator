@@ -8,10 +8,13 @@
 #include <QPointer>
 #include <QWidget>
 
-class EngineId;
-class TranslateUnit;
 class QTextCursor;
 class QScrollBar;
+
+namespace Sol
+{
+class EngineId;
+class TranslateUnit;
 
 class ITranslateWidget : public QWidget
 {
@@ -79,5 +82,7 @@ private:
     TextStyle _textStyle;
     QTimer* _streamUpdateTimer; // To prevent updates from occurring too quickly in succession.
 };
+
+} // namespace Sol
 
 #endif //ITRANSLATEWIDGET_H

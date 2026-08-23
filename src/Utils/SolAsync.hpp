@@ -10,6 +10,8 @@
 #include <QtConcurrent>
 
 
+namespace Sol
+{
 class SolAsync : public QObject
 {
     Q_OBJECT
@@ -57,5 +59,7 @@ public:
 
 };
 
+
+} // namespace Sol
 
 #endif //SOLASYNC_H

@@ -9,6 +9,8 @@
 #include "Types/SolTypes.h"
 #include "Utils/SolDebug.h"
 
+namespace Sol
+{
 EngineSelector::EngineSelector(QWidget* inParent) : DropdownMenu(inParent)
 {
     setEditable(false);
@@ -33,3 +35,4 @@ void EngineSelector::setCurrentIndexChanged(Callback<void(const int)>&& inFuncto
 {
     connect(this, &QComboBox::currentIndexChanged, this, std::move(inFunctor));
 }
+} // namespace Sol

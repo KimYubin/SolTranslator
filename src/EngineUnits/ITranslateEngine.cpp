@@ -8,6 +8,8 @@
 #include <utility>
 
 
+namespace Sol
+{
 ITranslateEngine::ITranslateEngine(EngineId inEngine)
     : _engineId(std::move(inEngine))
     , _priority(std::numeric_limits<int>::max())
@@ -55,7 +57,7 @@ std::vector<QString> ITranslateEngine::secretEngineOptionKeys() const
     std::ranges::copy(
         _optionSpecs
         | std::views::filter([](const auto& inOpt) { return inOpt.second.isSecretMode; })
-        | std::views::transform([this](const auto& inOpt) { return Sol::engineOptionKey(_engineId, inOpt.second.key); })
+        | std::views::transform([this](const auto& inOpt) { return engineOptionKey(_engineId, inOpt.second.key); })
       , std::back_inserter(resVec)
     );
 
@@ -113,3 +115,4 @@ void ITranslateEngine::setOptionSpec(OptionSpec inOptionSpec)
 
     _optionSpecs[inOptionSpec.key] = std::move(inOptionSpec);
 }
+} // namespace Sol

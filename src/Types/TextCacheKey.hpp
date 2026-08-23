@@ -12,6 +12,8 @@
 #include <QHashFunctions>
 #include <QString>
 
+namespace Sol
+{
 struct TextCacheKey
 {
     TextCacheKey() = default;
@@ -39,8 +41,8 @@ struct cache_ky_hasher
         return std::hash<::QString>()(
             inKy.sourceText
             + inKy.engineId.toString()
-            + QChar(Sol::enumToInt(inKy.sourceLang))
-            + QChar(Sol::enumToInt(inKy.targetLang))
+            + QChar(enumToInt(inKy.sourceLang))
+            + QChar(enumToInt(inKy.targetLang))
         );
     }
 };
@@ -63,5 +65,7 @@ struct cache_ky_eq
  */
 using cache_queue = hash_queue<TextCacheKey, QString, cache_ky_hasher, cache_ky_eq>;
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_TEXTCACHEKEY_H

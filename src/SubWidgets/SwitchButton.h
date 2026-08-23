@@ -10,6 +10,9 @@
 class QPropertyAnimation;
 class QSequentialAnimationGroup;
 
+namespace Sol
+{
+
 class SwitchButton : public QCheckBox
 {
     Q_OBJECT
@@ -112,5 +115,7 @@ private:
     float _handlePos = 0.0f;
 };
 
+
+} // namespace Sol
 
 #endif //SWITCHBUTTON_H

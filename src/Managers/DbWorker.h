@@ -7,13 +7,15 @@
 
 #include <QObject>
 
+class QTimer;
+class QSqlDatabase;
 
+namespace Sol
+{
 class EngineId;
 enum class LangType;
 enum class TextStyle;
 class HistoryCacheData;
-class QTimer;
-class QSqlDatabase;
 
 class DbWorker : public QObject
 {
@@ -83,5 +85,7 @@ private:
 
     bool _isDirtyDB = true;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_DBWORKER_H

@@ -9,6 +9,8 @@
 #include <QShortcut>
 #include <qevent.h>
 
+namespace Sol
+{
 DropdownMenu::DropdownMenu(QWidget* inParent) : QComboBox(inParent)
 {
     // not WheelFocus
@@ -96,3 +98,4 @@ void DropdownMenu::resetViewCurrentIndex()
 
     view()->setCurrentIndex(curModelIdx);
 }
+} // namespace Sol

@@ -10,6 +10,8 @@
 #include <QSqlQuery>
 #include <QString>
 
+namespace Sol
+{
 SolSql::SolSql(QSqlDatabase inDb)
     : _database(std::move(inDb))
 {}
@@ -114,3 +116,4 @@ void SolSqlTransactionGuard::rollback()
     }
     _duringTransaction = false;
 }
+} // namespace Sol

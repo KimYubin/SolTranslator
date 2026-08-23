@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <vector>
 
+namespace Sol
+{
 namespace
 {
 /**
@@ -113,8 +115,6 @@ QStringView getLastSentence(const QStringView inTextView, const int inMinLen = 5
 } // anonymous namespace
 
 
-namespace Sol
-{
 std::vector<QStringView> splitText(QStringView inText
                                  , const int inSplitSize
                                  , const int inTolerance)
@@ -214,7 +214,6 @@ std::vector<TextChunk> textsToChunks(const std::vector<QStringView>& inSplitText
 
     return res;
 }
-} // namespace Sol
 
 
 SolTextSpliter::SolTextSpliter(QStringView inText
@@ -301,7 +300,7 @@ const std::vector<QStringView>& SolTextSpliter::textList()
 {
     if (_splitTexts.empty())
     {
-        _splitTexts = Sol::splitText(_text, _splitSize, _tolerance);
+        _splitTexts = splitText(_text, _splitSize, _tolerance);
 
         _splitChunks.clear();
     }
@@ -316,7 +315,7 @@ const std::vector<TextChunk>& SolTextSpliter::chunkList()
         // Induce _splitTexts generation.
         textList();
 
-        _splitChunks = Sol::textsToChunks(_splitTexts, _minContextSize, _maxContextSize);
+        _splitChunks = textsToChunks(_splitTexts, _minContextSize, _maxContextSize);
     }
 
     return _splitChunks;
@@ -337,6 +336,7 @@ QDebug operator<<(QDebug inDebug, const TextChunk& inChunks)
 
 QDebug operator<<(QDebug inDebug, const std::vector<TextChunk>& inChunks)
 {
-    return Sol::debugRange(inDebug, inChunks);
+    return debugRange(inDebug, inChunks);
 }
 
+} // namespace Sol

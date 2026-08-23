@@ -10,6 +10,8 @@
 #include <compare>
 
 
+namespace Sol
+{
 class OptionKey
 {
 public:
@@ -53,5 +55,7 @@ struct OptionKey_hasher
         return std::hash<QString>()(inKy.toString());
     }
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_OPTIONKEY_H

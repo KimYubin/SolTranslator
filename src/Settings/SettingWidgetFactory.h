@@ -9,12 +9,15 @@
 
 #include <QObject>
 
-class OptionGroupBox;
-class SolButton;
 class QLineEdit;
 class QGridLayout;
 class QVBoxLayout;
 class QGroupBox;
+
+namespace Sol
+{
+class OptionGroupBox;
+class SolButton;
 class SettingCard;
 
 class CardFactory : public QObject
@@ -70,5 +73,7 @@ public:
                                               , const Qt::Alignment inAlignment = Qt::Alignment());
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SETTINGWIDGETFACTORY_H

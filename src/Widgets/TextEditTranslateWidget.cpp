@@ -22,8 +22,9 @@
 #include <QScrollBar>
 #include <QTimer>
 
-using Sol::i18n;
 
+namespace Sol
+{
 TextEditTranslateWidget::TextEditTranslateWidget(QWidget* inParent)
     : ITranslateWidget(inParent)
     , ui(new Ui::TextEditTranslateWidget)
@@ -206,3 +207,4 @@ void TextEditTranslateWidget::onTargetLanguageChanged(const LangType inLangType)
     }
 }
 
+} // namespace Sol

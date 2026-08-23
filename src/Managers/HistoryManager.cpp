@@ -9,6 +9,8 @@
 
 #include <algorithm>
 
+namespace Sol
+{
 HistoryManager::HistoryManager(SolTranslatorCore* inParent) : AbstractManager(inParent)
 {
     DbWorker* dbWorker = new DbWorker();
@@ -148,3 +150,4 @@ Expected<int> HistoryManager::findModelIdxFromTimelineId(const qint64 inTimeline
 
     return findIt - _historyCaches.begin();
 }
+} // namespace Sol

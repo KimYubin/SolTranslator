@@ -7,6 +7,8 @@
 #include <QMetaType>
 #include <QString>
 
+namespace Sol
+{
 struct ToolTipData
 {
     static const char* propertyName;
@@ -62,5 +64,7 @@ struct ToolTipData
 
 
 Q_DECLARE_METATYPE(ToolTipData);
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_TOOLTIPDATA_HPP

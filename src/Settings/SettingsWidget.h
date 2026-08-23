@@ -7,14 +7,14 @@
 
 
 QT_BEGIN_NAMESPACE
-
 namespace Ui
 {
 class SettingsWidget;
 }
-
 QT_END_NAMESPACE
 
+namespace Sol
+{
 class SettingsWidget : public ISolWidget
 {
     Q_OBJECT
@@ -39,5 +39,7 @@ private:
     Ui::SettingsWidget* ui;
 };
 
+
+} // namespace Sol
 
 #endif //SETTINGSWIDGET_H

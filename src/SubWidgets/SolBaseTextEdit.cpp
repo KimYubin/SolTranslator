@@ -2,3 +2,6 @@
 
 #include "SolBaseTextEdit.h"
 
+namespace Sol
+{
+} // namespace Sol

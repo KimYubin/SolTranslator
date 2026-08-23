@@ -16,5 +16,4 @@ template <typename _Specialized, template <typename...> class _Template>
 concept SpecializedFrom = IsSpecialization<_Specialized, _Template>::value;
 } // namespace Sol
 
-
 #endif //SOLTRANSLATOR_SOLCONCEPTS_HPP

@@ -7,6 +7,8 @@
 
 #include <QObject>
 
+namespace Sol
+{
 enum class Action;
 class SolButton;
 
@@ -42,5 +44,7 @@ public:
                                             , Callback<void()>&& inFunc);
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLWIDGETFACTORY_H

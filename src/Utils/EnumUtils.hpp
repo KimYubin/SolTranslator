@@ -52,5 +52,4 @@ EnumType qStrToEnum(const QString& inString, const EnumType inDefaultVal)
 }
 } // namespace Sol
 
-
 #endif //SOLTRANSLATOR_ENUMUTILS_H

@@ -7,6 +7,8 @@
 
 class QLocalServer;
 
+namespace Sol
+{
 class SolSingleApplication : public QObject
 {
     Q_OBJECT
@@ -32,5 +34,7 @@ private:
     bool _isRunning = false;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLSINGLEAPPLICATION_H

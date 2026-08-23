@@ -9,12 +9,14 @@
 
 #include <QDateTime>
 
+class QSplitter;
+class QGridLayout;
 
+namespace Sol
+{
 class LayoutTextEdit;
 class HistoryCacheData;
 class HistoryModel;
-class QSplitter;
-class QGridLayout;
 class HistoryListView;
 
 class HistoryWidget : public ISolWidget
@@ -57,5 +59,7 @@ private:
     TextCategory _currentTextCategory = TextCategory::TargetText;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYWIDGET_H

@@ -2,9 +2,12 @@
 
 #include "IAiEngine.h"
 
+namespace Sol
+{
 IAiEngine::IAiEngine(const EngineId& inEngine)
     : ITranslateEngine(inEngine)
 {}
 
 IAiEngine::~IAiEngine()
 {}
+} // namespace Sol

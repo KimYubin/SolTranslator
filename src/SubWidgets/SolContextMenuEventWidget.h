@@ -13,7 +13,7 @@ concept HasContextMenu = requires(T* t)
 {
     { t->createStandardContextMenu() } -> std::same_as<QMenu*>;
 };
-} // namespace Sol
+
 
 /**
  * The SolContextMenuEventWidget class provides
@@ -21,7 +21,7 @@ concept HasContextMenu = requires(T* t)
  *
  * @tparam BaseWidget requires createStandardContextMenu().
  */
-template <Sol::HasContextMenu BaseWidget>
+template <HasContextMenu BaseWidget>
 class SolContextMenuEventWidget : public BaseWidget
 {
 public:
@@ -46,5 +46,7 @@ protected:
     }
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLCONTEXTMENUEVENTWIDGET_H

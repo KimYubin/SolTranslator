@@ -6,6 +6,8 @@
 #include "IOptionWidget.h"
 
 
+namespace Sol
+{
 class GeneralOptionWidget : public IOptionWidget
 {
     Q_OBJECT
@@ -31,5 +33,7 @@ public:
 
 };
 
+
+} // namespace Sol
 
 #endif //GeneralOptionWIDGET_H

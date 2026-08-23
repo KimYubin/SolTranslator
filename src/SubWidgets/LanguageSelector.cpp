@@ -17,8 +17,9 @@
 #include <QVBoxLayout>
 #include <qevent.h>
 
-using Sol::i18n;
 
+namespace Sol
+{
 /** LanguageSelector에서 사용하는 메뉴 */
 class LanguageSelectorMenuPrivate : public QWidget
 {
@@ -211,7 +212,7 @@ bool LanguageSelectorMenuPrivate::eventFilter(QObject* inObj, QEvent* inEvent)
 
     if (eventType == QEvent::MouseButtonPress)
     {
-        if (Sol::isThis(this, inObj) == false)
+        if (isThis(this, inObj) == false)
         {
             const QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(inEvent);
             const QPoint mouseGlobalPos   = mouseEvent->globalPosition().toPoint();
@@ -357,3 +358,4 @@ QSize LanguageSelectorMenuPrivate::getTargetSize() const
 }
 
 
+} // namespace Sol

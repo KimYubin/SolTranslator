@@ -10,6 +10,8 @@
 
 class QTimer;
 
+namespace Sol
+{
 class SolLogWorker : public QObject
 {
     Q_OBJECT
@@ -59,5 +61,7 @@ private:
     QThread _workerThread;
     SolLogWorker* _logWorker;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLLOGWORKER_H

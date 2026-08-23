@@ -3,10 +3,11 @@
 #ifndef SOLTOAST_H
 #define SOLTOAST_H
 
-
-class QWidget;
 class QString;
+class QWidget;
 
+namespace Sol
+{
 class SolToast
 {
 public:
@@ -34,5 +35,7 @@ public:
     static void popToastOnWidget(const QString& inMessage, QWidget* inTargetWidget, const int inDurationMsec = 500);
 };
 
+
+} // namespace Sol
 
 #endif //SOLTOAST_H

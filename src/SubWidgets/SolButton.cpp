@@ -8,6 +8,8 @@
 #include "Types/SolTypes.h"
 
 
+namespace Sol
+{
 void SolButton::setCheckIcon(const QString& inOnFileName, const QString& inOffFileName)
 {
     QIcon checkIcon;
@@ -58,3 +60,4 @@ void SolButton::setAction(const Action inAction)
 {
     changeShortcut(solConfig.shortcut(inAction));
 }
+} // namespace Sol

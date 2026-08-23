@@ -5,6 +5,8 @@
 #include <QComboBox>
 #include <QPointer>
 
+namespace Sol
+{
 enum class Action;
 /**
  * The DropdownMenu class is a custom QComboBox.
@@ -43,5 +45,7 @@ private:
     QPointer<QShortcut> _shortcut;
 };
 
+
+} // namespace Sol
 
 #endif //DROPDOWNMENU_H

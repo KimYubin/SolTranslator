@@ -17,8 +17,9 @@
 #include <QShortcut>
 #include <QStyledItemDelegate>
 
-using Sol::i18n;
 
+namespace Sol
+{
 SettingsWidget::SettingsWidget(QWidget* inParent)
     : ISolWidget(inParent)
     , ui(new Ui::SettingsWidget)
@@ -96,3 +97,4 @@ void SettingsWidget::appQuitEvent()
 {
     solConfig.saveWidgetGeometry(this);
 }
+} // namespace Sol

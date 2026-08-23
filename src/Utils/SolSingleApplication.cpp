@@ -7,6 +7,8 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 
+namespace Sol
+{
 namespace
 {
 const char* socketMessage = "SolTranslatorLocalServer.AlreadyRunning";
@@ -83,3 +85,4 @@ void SolSingleApplication::onNewConnection()
 void SolSingleApplication::onReadyRead()
 {
 }
+} // namespace Sol

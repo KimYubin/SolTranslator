@@ -6,6 +6,8 @@
 #include "Types/OptionKey.h"
 
 
+namespace Sol
+{
 class IAiEngine : public ITranslateEngine
 {
     Q_OBJECT
@@ -22,5 +24,7 @@ inline const OptionKey Prompt{"prompt"};
 inline const OptionKey Temperature{"temperature"};
 }
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_IAIENGINE_H

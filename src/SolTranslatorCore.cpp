@@ -12,6 +12,8 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 
+namespace Sol
+{
 SolTranslatorCore* SolTranslatorCore::_self = nullptr;
 
 SolTranslatorCore::SolTranslatorCore(QObject* inParent)
@@ -44,11 +46,11 @@ void SolTranslatorCore::postInitialize()
 
     // parsing
     QCommandLineParser parser;
-    parser.addOption({Sol::CmdLineOptions::START_UP_RUN, "Started from system startup"});
+    parser.addOption({CmdLineOptions::START_UP_RUN, "Started from system startup"});
     parser.process(*qApp);
 
     // 시작 프로그램 실행시 시스템 트레이에서 실행
-    if (parser.isSet(Sol::CmdLineOptions::START_UP_RUN))
+    if (parser.isSet(CmdLineOptions::START_UP_RUN))
     {
         _solMainWidget->hide();
     }
@@ -60,7 +62,6 @@ void SolTranslatorCore::postInitialize()
 #ifdef QT_DEBUG
     // WidgetInspector* inspector = new WidgetInspector();
 #endif
-
 }
 
 void SolTranslatorCore::raiseMainWidget()
@@ -70,3 +71,4 @@ void SolTranslatorCore::raiseMainWidget()
         _solMainWidget->showRaiseUp();
     }
 }
+} // namespace Sol

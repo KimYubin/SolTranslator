@@ -7,14 +7,15 @@
 #include <QTextTableCell>
 #include <QUuid>
 
+namespace Sol
+{
 namespace
 {
 const QString newLineMarker = "__NEWLINE_BR_" + QUuid::createUuid().toString(QUuid::Id128) + "__";
 const QString newLineBrTag  = R"(<br/>)";
 } // anonymous namespace
 
-namespace Sol
-{
+
 Grid makeGrid(const int inRow, const int inCol, CellData inCellData)
 {
     return Grid(inRow, GridRow(inCol, std::move(inCellData)));

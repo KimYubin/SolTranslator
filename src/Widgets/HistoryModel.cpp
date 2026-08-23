@@ -10,6 +10,8 @@
 
 #include <QRegularExpression>
 
+namespace Sol
+{
 HistoryModel::HistoryModel(QObject* inParent)
     : QAbstractListModel(inParent)
 {
@@ -145,3 +147,4 @@ void HistoryModel::updateHistoryCache()
 
     endResetModel();
 }
+} // namespace Sol

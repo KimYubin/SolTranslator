@@ -11,12 +11,15 @@
 #include <QScrollArea>
 #include <QWidget>
 
-class OptionGroupBox;
 class QScrollBar;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGridLayout;
 class QGroupBox;
+
+namespace Sol
+{
+class OptionGroupBox;
 class SolTranslatorCore;
 class IOptionPage;
 
@@ -107,5 +110,7 @@ private:
     Q_DISABLE_COPY_MOVE(IOptionPage)
 };
 
+
+} // namespace Sol
 
 #endif //OPTIONWIDGET_H

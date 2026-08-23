@@ -12,6 +12,8 @@
 #include <qgraphicseffect.h>
 
 
+namespace Sol
+{
 namespace
 {
 class SolToastWidget : public QWidget
@@ -184,3 +186,4 @@ void SolToast::popToastOnWidget(const QString& inMessage, QWidget* inTargetWidge
 {
     new SolToastWidget(inMessage, inTargetWidget, nullptr, inDurationMsec);
 }
+} // namespace Sol

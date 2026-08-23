@@ -14,6 +14,8 @@
 #include <QThread>
 #include <QTimer>
 
+namespace Sol
+{
 GlobalHotKeyManager::GlobalHotKeyManager(SolTranslatorCore* inParent)
     : AbstractManager(inParent)
 {}
@@ -50,7 +52,7 @@ Expected<void> GlobalHotKeyManager::changeHotkey(const Action inActionType
     const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
     if (findIt == _hotKeys.end())
     {
-        return makeUnexpected("Attempt to change non-existent shortcut: " + Sol::enumToQStr(inActionType) + inKeySeq.toString());
+        return makeUnexpected("Attempt to change non-existent shortcut: " + enumToQStr(inActionType) + inKeySeq.toString());
     }
 
     findIt->second->setShortcut(inKeySeq, true);
@@ -63,10 +65,11 @@ Expected<void> GlobalHotKeyManager::removeHotkey(const Action inActionType)
     const ActionKeyHash::iterator findIt = _hotKeys.find(inActionType);
     if (findIt == _hotKeys.end())
     {
-        return makeUnexpected("Attempt to remove non-existent shortcut: " + Sol::enumToQStr(inActionType));
+        return makeUnexpected("Attempt to remove non-existent shortcut: " + enumToQStr(inActionType));
     }
 
     _hotKeys.erase(findIt);
 
     return {};
 }
+} // namespace Sol

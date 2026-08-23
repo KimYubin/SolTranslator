@@ -8,6 +8,8 @@
 #include <QAbstractButton>
 #include <QHBoxLayout>
 
+namespace Sol
+{
 LayoutTextEdit::LayoutTextEdit(QWidget* inParent) : ResultTextEdit(inParent)
 {
     _bottomLayoutWidget = new QFrame(this);
@@ -53,3 +55,4 @@ SolButton* LayoutTextEdit::addBottomButton(const QIcon& inIcon
 
     return newButton;
 }
+} // namespace Sol

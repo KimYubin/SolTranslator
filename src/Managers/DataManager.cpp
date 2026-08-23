@@ -17,6 +17,8 @@
 
 #include <magic_enum.hpp>
 
+namespace Sol
+{
 DataManager::DataManager(SolTranslatorCore* inParent) : AbstractManager(inParent)
 {}
 
@@ -80,8 +82,8 @@ QJsonObject DataManager::convertCacheToJson(const cache_queue& inCacheTextQueue)
         QJsonObject cacheObject;
         cacheObject["SourceText"] = cacheKey.sourceText;
         cacheObject["EngineId"]   = cacheKey.engineId.toString();
-        cacheObject["sourceLang"] = Sol::enumToQStr(cacheKey.sourceLang);
-        cacheObject["targetLang"] = Sol::enumToQStr(cacheKey.targetLang);
+        cacheObject["sourceLang"] = enumToQStr(cacheKey.sourceLang);
+        cacheObject["targetLang"] = enumToQStr(cacheKey.targetLang);
         cacheObject["TargetText"] = cacheText;
 
         arr.append(cacheObject);
@@ -105,8 +107,8 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& inCacheJson)
             TextCacheKey cacheKey;
             cacheKey.engineId   = EngineId{cacheObject["EngineId"].toString()};
             cacheKey.sourceText = cacheObject["SourceText"].toString();
-            cacheKey.sourceLang = Sol::qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
-            cacheKey.targetLang = Sol::qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);
+            cacheKey.sourceLang = qStrToEnum(cacheObject["sourceLang"].toString(), LangType::NONE);
+            cacheKey.targetLang = qStrToEnum(cacheObject["targetLang"].toString(), LangType::NONE);
 
             QString cacheText = cacheObject["TargetText"].toString();
 
@@ -115,3 +117,4 @@ cache_queue DataManager::convertJsonToCache(const QJsonObject& inCacheJson)
     }
     return res;
 }
+} // namespace Sol

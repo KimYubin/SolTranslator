@@ -13,6 +13,8 @@
 #include <QScrollBar>
 #include <QTimer>
 
+namespace Sol
+{
 ITranslateWidget::ITranslateWidget(QWidget* inParent, const Qt::WindowFlags inFlags)
     : QWidget(inParent, inFlags)
     , _targetText("")
@@ -126,3 +128,4 @@ void ITranslateWidget::setSourceAndStyle(const QString& inSourceText
     _sourceText = inSourceText;
     _textStyle  = inTextStyle;
 }
+} // namespace Sol

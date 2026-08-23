@@ -8,19 +8,22 @@
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
-class SecretStore;
-struct OptionSpec;
-class OptionKey;
-class EngineId;
-class QSettings;
-enum class Action;
-enum class ScreenPopupPolicy;
-enum class LangType;
-
 #if defined(solConfig)
 #undef solConfig
 #endif
 #define solConfig (*(SolTranslatorCore::instance()->manager<ConfigManager>()))
+
+class QSettings;
+
+namespace Sol
+{
+class SecretStore;
+struct OptionSpec;
+class OptionKey;
+class EngineId;
+enum class Action;
+enum class ScreenPopupPolicy;
+enum class LangType;
 
 /**
  * The ConfigManager class stores and manages configuration/settings.
@@ -142,5 +145,7 @@ private:
     QSettings* _settings;
     SecretStore* _secretStore;
 };
+
+} // namespace Sol
 
 #endif //CONFIGMANAGER_H

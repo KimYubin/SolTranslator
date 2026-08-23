@@ -6,14 +6,16 @@
 #include "Managers/ConfigManager.h"
 #include "Types/ExJson.h"
 #include "Types/SolTypes.h"
-#include "Utils/SolI18n.h"
 #include "Utils/SolDebug.h"
+#include "Utils/SolI18n.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
 
+namespace Sol
+{
 OpenAiTrUnit::OpenAiTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
     : TranslateUnit(inParent, inEngine)
 {}
@@ -160,7 +162,6 @@ QString OpenAiTrUnit::chunkToContent()
     return contentStr;
 }
 
-using Sol::i18n;
 
 // ~======================
 // OpenAiEngine
@@ -216,3 +217,4 @@ namespace
 {
 const OpenAiEngine openAiEngine;
 } // anonymous namespace
+} // namespace Sol

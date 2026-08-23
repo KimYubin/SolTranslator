@@ -2,3 +2,6 @@
 
 #include "SolGuard.h"
 
+namespace Sol
+{
+} // namespace Sol

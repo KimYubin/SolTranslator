@@ -11,6 +11,8 @@
 
 class QVariantAnimation;
 
+namespace Sol
+{
 /**
  * The SolSmoothComponent class is a component class
  * that provides a smooth wheel scrolling feature.
@@ -52,5 +54,7 @@ protected:
     int _targetValue = 0;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLSMOOTHCOMPONENT_H

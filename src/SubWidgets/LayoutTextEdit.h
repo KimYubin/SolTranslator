@@ -4,9 +4,12 @@
 #define LAYOUTTEXTEDIT_H
 #include "ResultTextEdit.h"
 
-class SolButton;
 class QPushButton;
 class QHBoxLayout;
+
+namespace Sol
+{
+class SolButton;
 
 /**
  * 레이아웃이 포함된 텍스트 에디터입니다.
@@ -44,5 +47,7 @@ protected:
     QHBoxLayout* _layout;
 };
 
+
+} // namespace Sol
 
 #endif //LAYOUTTEXTEDIT_H

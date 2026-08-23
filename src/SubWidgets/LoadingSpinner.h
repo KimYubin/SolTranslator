@@ -9,6 +9,8 @@ class QSvgRenderer;
 class QTimer;
 class QPropertyAnimation;
 
+namespace Sol
+{
 class LoadingSpinner : public ILoadingWidget
 {
     Q_OBJECT
@@ -44,5 +46,7 @@ private:
     void setOpacityRatio(const float inOpacityRatio);
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_LOADINGSPINNER_H

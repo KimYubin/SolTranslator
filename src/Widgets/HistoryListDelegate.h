@@ -5,6 +5,8 @@
 
 #include <QStyledItemDelegate>
 
+namespace Sol
+{
 class HistoryListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
@@ -31,5 +33,7 @@ private:
                 , const int inFlags
                 , const QString& inText) const;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYLISTDELEGATE_H

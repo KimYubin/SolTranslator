@@ -12,6 +12,8 @@
 #include <qicon.h>
 
 
+namespace Sol
+{
 class ITranslateEngine;
 class TranslateManager;
 class TranslateUnit;
@@ -91,5 +93,7 @@ namespace TrEngineOptionKey
 inline const OptionKey ApiKey{"ApiKey"};
 }
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_ITRANSLATEENGINE_H

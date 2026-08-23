@@ -8,6 +8,8 @@
 #include <QAbstractScrollArea>
 #include <QWheelEvent>
 
+namespace Sol
+{
 /**
  * The SolSmoothAbstractScrollArea class is a ScrollArea class
  * that provides smooth wheel scrolling.
@@ -49,5 +51,7 @@ protected:
     }
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLSMOOTHABSTRACTSCROLLAREA_HPP

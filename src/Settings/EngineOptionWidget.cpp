@@ -23,8 +23,9 @@
 #include <qsortfilterproxymodel.h>
 #include <qstringlistmodel.h>
 
-using Sol::i18n;
 
+namespace Sol
+{
 EngineOptionWidget::EngineOptionWidget(QWidget* inParent)
     : IOptionWidget(inParent)
 {
@@ -213,3 +214,4 @@ namespace
 {
 const EngineOptionPage engineOptionPage;
 } // anonymous namespace
+} // namespace Sol

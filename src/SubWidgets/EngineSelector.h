@@ -6,6 +6,8 @@
 #include "DropdownMenu.h"
 #include "Types/SolTypes.h"
 
+namespace Sol
+{
 /**
  * Engine selection combo box
  */
@@ -19,5 +21,7 @@ public:
     void setCurrentIndexChanged(Callback<void(const int)>&& inFunctor);
 
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_ENGINSELECTER_H

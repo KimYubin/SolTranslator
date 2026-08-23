@@ -6,6 +6,8 @@
 #include <QPushButton>
 
 
+namespace Sol
+{
 enum class Action;
 
 class SolButton : public QPushButton
@@ -43,5 +45,7 @@ public:
 
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLPUSHBUTTON_H

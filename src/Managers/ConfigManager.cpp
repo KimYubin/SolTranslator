@@ -23,6 +23,8 @@
 
 #include <magic_enum.hpp>
 
+namespace Sol
+{
 namespace
 {
 const QString CurrentEngine = "CurrentEngine";
@@ -57,10 +59,10 @@ const QString Shortcuts = "Shortcuts/";
  * @param inKey 저장에 사용할 key
  * @param inVal 저장할 enum 
  */
-template <Sol::IsEnum EnumType>
+template <IsEnum EnumType>
 void setEnumValue(QSettings* inSettings, const QString& inKey, const EnumType inVal)
 {
-    inSettings->setValue(inKey, Sol::enumToQStr(inVal));
+    inSettings->setValue(inKey, enumToQStr(inVal));
 }
 
 /**
@@ -73,10 +75,10 @@ void setEnumValue(QSettings* inSettings, const QString& inKey, const EnumType in
  * @param inDefault 저장값이 없는 경우와 유효하지 않은 경우 반환할 값
  * @return 
  */
-template <Sol::IsEnum EnumType>
+template <IsEnum EnumType>
 EnumType enumValue(const QSettings* inSettings, const QString& inKey, const EnumType inDefault)
 {
-    const QString defaultQStr = Sol::enumToQStr(inDefault);
+    const QString defaultQStr = enumToQStr(inDefault);
 
     const QString settingValueStr = inSettings->value(inKey, defaultQStr).toString();
 
@@ -104,7 +106,7 @@ void ConfigManager::loadSecretKey(const EngineId& inEngineId
                                 , const OptionKey& inOptionKey
                                 , LoadCallback&& inCallback)
 {
-    loadSecretKey(Sol::engineOptionKey(inEngineId, inOptionKey), std::move(inCallback));
+    loadSecretKey(engineOptionKey(inEngineId, inOptionKey), std::move(inCallback));
 }
 
 void ConfigManager::loadSecretKeys(const std::vector<QString>& inKeyList
@@ -142,7 +144,7 @@ Expected<void> ConfigManager::setEngineOption(const EngineId& inEngineId
     }
 
     const OptionSpec& optSpec = *optExp.value();
-    const QString egOptKey    = Sol::engineOptionKey(inEngineId, inKey);
+    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
 
     if (optSpec.isSecretMode)
     {
@@ -169,7 +171,7 @@ Expected<QVariant> ConfigManager::engineOption(const EngineId& inEngineId
     }
 
     const OptionSpec& optSpec = *optExp.value();
-    const QString egOptKey    = Sol::engineOptionKey(inEngineId, inKey);
+    const QString egOptKey    = engineOptionKey(inEngineId, inKey);
     const QVariant defaultVal = optSpec.getDefaultValue();
 
     if (optSpec.isSecretMode)
@@ -193,7 +195,7 @@ EngineId ConfigManager::currentEngineId() const
 
 void ConfigManager::setStartRun(const bool inStartRun)
 {
-    _settings->setValue(Sol::CmdLineOptions::START_UP_RUN, inStartRun);
+    _settings->setValue(CmdLineOptions::START_UP_RUN, inStartRun);
 
     const QString appName = QCoreApplication::applicationName();
     const QString appPath = QCoreApplication::applicationFilePath();
@@ -202,7 +204,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
     if (inStartRun)
     {
-        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + Sol::CmdLineOptions::START_UP_RUN);
+        settings.setValue(appName, QDir::toNativeSeparators(appPath) + " --" + CmdLineOptions::START_UP_RUN);
 
         QSettings approvedSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run"
                                  , QSettings::NativeFormat);
@@ -223,7 +225,7 @@ void ConfigManager::setStartRun(const bool inStartRun)
 
 bool ConfigManager::startRun() const
 {
-    return _settings->value(Sol::CmdLineOptions::START_UP_RUN, false).toBool();
+    return _settings->value(CmdLineOptions::START_UP_RUN, false).toBool();
 }
 
 void ConfigManager::setPopupTargetLang(const LangType inLangType)
@@ -400,7 +402,7 @@ static_assert(static_cast<int>(Action::Size) == ActionCheck, "Action changed: up
 
 void ConfigManager::setShortCut(const Action inShortCut, const QKeySequence& inKeySequence)
 {
-    _settings->setValue(Shortcuts + Sol::enumToQStr(inShortCut), inKeySequence);
+    _settings->setValue(Shortcuts + enumToQStr(inShortCut), inKeySequence);
 }
 
 QKeySequence ConfigManager::shortcut(const Action inShortCut) const
@@ -412,7 +414,7 @@ QKeySequence ConfigManager::shortcut(const Action inShortCut) const
         defaultKey = findit->second;
     }
 
-    return _settings->value(Shortcuts + Sol::enumToQStr(inShortCut), defaultKey).value<QKeySequence>();
+    return _settings->value(Shortcuts + enumToQStr(inShortCut), defaultKey).value<QKeySequence>();
 }
 
 void ConfigManager::setSaveGeometry(const QString& inKey, const QByteArray& inGeoData)
@@ -426,3 +428,4 @@ std::tuple<bool, QByteArray> ConfigManager::saveGeometry(const QString& inKey) c
 
     return {valVariant.isValid(), valVariant.toByteArray()};
 }
+} // namespace Sol

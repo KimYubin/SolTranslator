@@ -11,6 +11,8 @@
 #include <QRectF>
 #include <QSequentialAnimationGroup>
 
+namespace Sol
+{
 SwitchButton::SwitchButton(const bool inChecked, QWidget* inParent)
     : QCheckBox(inParent)
     , _barCheckedBrush(QColor(0x00B0FF))
@@ -268,3 +270,4 @@ void SwitchButton::setHandleUncheckedBorderColor(const QColor& inColor)
     update();
 }
 
+} // namespace Sol

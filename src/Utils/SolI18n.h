@@ -4,13 +4,12 @@
 #define SOLTRANSLATOR_TR_H
 
 class QString;
-enum class Tr;
 
 namespace Sol
 {
+enum class Tr;
 
 QString i18n(const Tr inTr);
-} // namespace Sol
 
 enum class Tr
 {
@@ -89,5 +88,7 @@ enum class Tr
 
   , Size
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_TR_H

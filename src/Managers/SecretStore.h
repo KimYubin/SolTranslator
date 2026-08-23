@@ -11,6 +11,8 @@ namespace QKeychain
 class ReadPasswordJob;
 }
 
+namespace Sol
+{
 class ConfigManager;
 
 using LoadCallback = Callback<void(const QString&)>;
@@ -55,5 +57,7 @@ private:
 
     std::unordered_map<QString, KeyCache> _cacheList;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SECRETKEYSTORE_H

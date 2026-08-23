@@ -8,6 +8,8 @@
 #include "Types/SolExpected.hpp"
 
 
+namespace Sol
+{
 /**
  * The ExJson class is a QJsonValue wrapper class
  * that provides safe error handling and chaining
@@ -62,5 +64,7 @@ public:
 private:
     ExpectedJson _expected;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLJSONOBJECT_H

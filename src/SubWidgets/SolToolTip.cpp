@@ -11,6 +11,8 @@
 #include <QEvent>
 
 
+namespace Sol
+{
 namespace
 {
 // ~==================================
@@ -142,3 +144,4 @@ bool SolToolTipFilter::eventFilter(QObject* inObj, QEvent* inEvent)
 
     return QObject::eventFilter(inObj, inEvent);
 }
+} // namespace Sol

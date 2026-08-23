@@ -33,9 +33,8 @@
 #endif
 
 
-using Sol::i18n;
-
-
+namespace Sol
+{
 PopupTranslateWidget::PopupTranslateWidget(QWidget* inParent)
     : ITranslateWidget(inParent, Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint)
     , _minSizeRatio(0.15, 0.15)
@@ -353,7 +352,7 @@ void PopupTranslateWidget::executeTranslate(const QString& inSourceText
         return;
     }
 
-    Sol::asyncHtmlToMarkdown(inSourceText, this, [this, inSourceLang, inTargetLang](const QString& inMd)
+    asyncHtmlToMarkdown(inSourceText, this, [this, inSourceLang, inTargetLang](const QString& inMd)
     {
         executeTranslateImpl(solConfig.currentEngineId()
                            , inMd
@@ -748,9 +747,9 @@ void PopupTranslateWidget::setShadowEffectEnabled(const bool inIsEnable)
 
 void PopupTranslateWidget::detectFocusInOut(const QWidget* inOld, const QWidget* inNow)
 {
-    if (Sol::isThis(this, inOld))
+    if (isThis(this, inOld))
     {
-        if (Sol::isThis(this, inNow))
+        if (isThis(this, inNow))
         {
             return;
         }
@@ -760,7 +759,7 @@ void PopupTranslateWidget::detectFocusInOut(const QWidget* inOld, const QWidget*
             return;
         }
     }
-    if (Sol::isThis(this, inNow))
+    if (isThis(this, inNow))
     {
         setShadowEffectEnabled(true);
     }
@@ -1005,3 +1004,4 @@ void PopupTranslateWidget::leaveEvent(QEvent* inEvent)
 
     QWidget::leaveEvent(inEvent);
 }
+} // namespace Sol

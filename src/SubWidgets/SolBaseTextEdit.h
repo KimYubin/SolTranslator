@@ -20,8 +20,6 @@ concept HasTextInteractionFlags = requires(T* t)
     { t->textInteractionFlags() } -> std::same_as<Qt::TextInteractionFlags>;
 };
 
-} // namespace Sol
-
 
 /**
  * The SolBaseTextEdit class is a general text editor class
@@ -29,7 +27,7 @@ concept HasTextInteractionFlags = requires(T* t)
  *
  * @tparam BaseTextEdit requires textInteractionFlags().
  */
-template <Sol::HasTextInteractionFlags BaseTextEdit>
+template <HasTextInteractionFlags BaseTextEdit>
 class SolBaseTextEdit : public SolSmoothAbstractScrollArea<SolContextMenuEventWidget<BaseTextEdit>>
 {
 public:
@@ -62,5 +60,7 @@ using SolTextEdit      = SolBaseTextEdit<QTextEdit>;
 using SolTextBrowser   = SolBaseTextEdit<QTextBrowser>;
 
 using SolLineEdit = SolContextMenuEventWidget<QLineEdit>;
+
+} // namespace Sol
 
 #endif //SOLBASETEXTEDIT_H

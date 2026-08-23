@@ -13,6 +13,8 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 
+namespace Sol
+{
 FinPointTrUnit::FinPointTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
     : TranslateUnit(inParent, inEngine)
 {}
@@ -172,3 +174,4 @@ const FinPointEngineDebug finPointEngineDebug;
 } // anonymous namespace
 
 #endif
+} // namespace Sol

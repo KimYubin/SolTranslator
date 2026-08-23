@@ -17,8 +17,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-using Sol::i18n;
-
+namespace Sol
+{
 GeneralOptionWidget::GeneralOptionWidget(QWidget* inParent)
     : IOptionWidget(inParent)
 {
@@ -157,3 +157,5 @@ namespace
 {
 const GeneralOptionPage generalOptionPage;
 } // anonymous namespace
+
+} // namespace Sol

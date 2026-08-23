@@ -5,19 +5,19 @@
 
 #include "ITranslateWidget.h"
 
-class HistoryCacheData;
-class LanguageSelector;
-class SolTranslatorCore;
-enum class TextStyle;
-
 QT_BEGIN_NAMESPACE
-
 namespace Ui
 {
 class TextEditTranslateWidget;
 }
-
 QT_END_NAMESPACE
+
+namespace Sol
+{
+class HistoryCacheData;
+class LanguageSelector;
+class SolTranslatorCore;
+enum class TextStyle;
 
 class TextEditTranslateWidget : public ITranslateWidget
 {
@@ -52,5 +52,7 @@ private:
     QTimer* _translationExecutionTimer;
 };
 
+
+} // namespace Sol
 
 #endif //TEXTEDITTRANSLATEWIDGET_H

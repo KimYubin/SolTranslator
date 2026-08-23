@@ -4,6 +4,8 @@
 
 #include "Managers/ConfigManager.h"
 
+namespace Sol
+{
 SolTrayIcon::SolTrayIcon(QObject* inParent) : QSystemTrayIcon(inParent)
 {
     QMenu* trayMenu = new QMenu();
@@ -100,3 +102,4 @@ void SolTrayIcon::addActionInMenu(QAction* inQAction, const Action inAction)
 
     inQAction->setText(actText);
 }
+} // namespace Sol

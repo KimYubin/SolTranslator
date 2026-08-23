@@ -9,6 +9,8 @@
 #include <QPointer>
 
 
+namespace Sol
+{
 class SolTranslatorCore;
 
 class AbstractManager : public QObject
@@ -30,5 +32,7 @@ private:
     QPointer<SolTranslatorCore> _solCore;
 };
 
+
+} // namespace Sol
 
 #endif //ABSTRACTMANAGER_H

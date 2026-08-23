@@ -7,6 +7,8 @@
 
 #include <QRegularExpression>
 
+namespace Sol
+{
 HistoryCacheData::HistoryCacheData()
     : _dbId(0)
     , _timelineId(-1)
@@ -112,3 +114,4 @@ QString HistoryCacheData::getTimeStampString() const
 {
     return QLocale::system().toString(_timeStamp, solConfig.historyTimeFormat());
 }
+} // namespace Sol

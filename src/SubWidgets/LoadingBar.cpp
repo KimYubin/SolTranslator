@@ -5,6 +5,8 @@
 #include <QPropertyAnimation>
 #include <QSvgWidget>
 
+namespace Sol
+{
 LoadingBar::LoadingBar(const QString& inFile, QWidget* inParent)
     : ILoadingWidget(inParent)
 {
@@ -65,3 +67,4 @@ void LoadingBar::setAnimRatio(const float inAnimRatio)
 
     _svg->move(newPosX, 0);
 }
+} // namespace Sol

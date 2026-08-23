@@ -5,6 +5,8 @@
 
 #include <QWidget>
 
+namespace Sol
+{
 class ILoadingWidget : public QWidget
 {
     Q_OBJECT
@@ -16,5 +18,7 @@ public:
     virtual void stop() = 0;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_ILOADINGWIDGET_H

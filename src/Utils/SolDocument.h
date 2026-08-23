@@ -40,8 +40,6 @@ void asyncHtmlToMarkdown(QString inHtml
                        , Callback<void(const QString&)>&& inMainThreadFunc);
 
 
-} // namespace Sol
-
 
 class TextCursorEditBlockGuard : public SolGeneralGuard
 {
@@ -50,5 +48,7 @@ public:
     explicit TextCursorEditBlockGuard(QTextCursor& inCursor);
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLDOCUMENT_H

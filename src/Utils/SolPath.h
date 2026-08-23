@@ -4,6 +4,9 @@
 #define SOLTRANSLATOR_SOLPATHS_H
 
 class QString;
+
+namespace Sol
+{
 enum class SolFile;
 
 class SolPath
@@ -22,5 +25,7 @@ enum class SolFile
   , HistoryDB
   , Size
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLPATHS_H

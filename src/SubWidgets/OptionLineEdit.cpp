@@ -7,6 +7,8 @@
 
 #include <QHBoxLayout>
 
+namespace Sol
+{
 OptionLineEdit::OptionLineEdit(QWidget* inParent
                              , const bool inIsUsedSaveButton
                              , const bool inIsSecret)
@@ -31,7 +33,7 @@ OptionLineEdit::OptionLineEdit(const QString& inContent
 
     if (_isUsedSaveButton)
     {
-        SolButton* saveButton = new SolButton(Sol::i18n(Tr::Save), this);
+        SolButton* saveButton = new SolButton(i18n(Tr::Save), this);
         _hLayout->addWidget(saveButton);
         connect(saveButton, &SolButton::clicked, this, &OptionLineEdit::saveText);
     }
@@ -156,3 +158,4 @@ void OptionLineEdit::saveText()
         _lineEdit->setText("");
     }
 }
+} // namespace Sol

@@ -5,17 +5,18 @@
 #include <QCoreApplication>
 #include <QString>
 
+namespace Sol
+{
 namespace
 {
 class TrImpl
 {
     Q_DECLARE_TR_FUNCTIONS(Tr)
 };
-
 } // anonymous namespace
 
 
-QString Sol::i18n(const Tr inTr)
+QString i18n(const Tr inTr)
 {
     using enum Tr;
 
@@ -106,3 +107,4 @@ namespace
 constexpr int TrKeyCheck = 72;
 static_assert(static_cast<int>(Tr::Size) == TrKeyCheck, "Tr changed: update i18n()");
 } // anonymous namespace
+} // namespace Sol

@@ -9,6 +9,8 @@
 
 #include <QThread>
 
+namespace Sol
+{
 class EngineId;
 enum class TextStyle;
 enum class LangType;
@@ -83,5 +85,7 @@ private:
     std::unordered_map<int, ReqCallback> _requestCallbacks;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYMANAGER_H

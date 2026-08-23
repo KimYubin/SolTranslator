@@ -7,6 +7,8 @@
 #include "EngineUnits/TranslateUnit.h"
 
 
+namespace Sol
+{
 class OpenAiTrUnit : public TranslateUnit
 {
     Q_OBJECT
@@ -40,5 +42,7 @@ public:
     explicit OpenAiEngine();
     ~OpenAiEngine() override;
 };
+
+} // namespace Sol
 
 #endif //TRANSLATEUNITOPENAI_H

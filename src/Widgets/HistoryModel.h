@@ -7,6 +7,8 @@
 
 #include <QAbstractListModel>
 
+namespace Sol
+{
 class HistoryCacheData;
 
 class HistoryModel : public QAbstractListModel
@@ -34,5 +36,7 @@ private:
 
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYMODEL_H

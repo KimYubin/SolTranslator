@@ -15,6 +15,8 @@
 #include <QVBoxLayout>
 #include <qevent.h>
 
+namespace Sol
+{
 QPointer<SolToolTipBallon> SolToolTipBallon::_ins = nullptr;
 
 
@@ -125,7 +127,7 @@ void SolToolTipBallon::showToolTipImpl()
     const QPoint newBottomPos = {topBottomX, bottomY};
     const QPoint newLeftPos   = {leftX, lefRightY};
 
-    const QRect availableGeo = Sol::availableGeometryAt(QCursor::pos());
+    const QRect availableGeo = availableGeometryAt(QCursor::pos());
 
     // 교집합 면적 최대값 계산하고, _direction을 업데이트합니다.
     // 겹치는 면적이 가장 넓은 방향으로 생성합니다.
@@ -175,7 +177,7 @@ void SolToolTipBallon::showToolTipImpl()
     }
 
     // 벗어나면 안쪽으로 이동
-    newRect = Sol::moveToInside(availableGeo, newRect);
+    newRect = moveToInside(availableGeo, newRect);
     move(newRect.topLeft());
 
     // 계산된 마진 및 사이즈로 업데이트
@@ -386,3 +388,4 @@ QMargins SolToolTipBallon::triMargins(const ShowDirection inDirection) const
     }
     return margins;
 }
+} // namespace Sol

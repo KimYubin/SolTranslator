@@ -4,6 +4,8 @@
 #define KEYSELECTIONLIST_H
 #include <QListWidget>
 
+namespace Sol
+{
 /** 키보드로 아이템 선택이 가능한 리스트 위젯입니다. */
 class KeySelectionList : public QListWidget
 {
@@ -20,5 +22,7 @@ signals:
 
 };
 
+
+} // namespace Sol
 
 #endif //KEYSELECTIONLIST_H

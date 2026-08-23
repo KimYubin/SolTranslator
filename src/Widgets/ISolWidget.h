@@ -5,6 +5,8 @@
 
 #include <QWidget>
 
+namespace Sol
+{
 class ISolWidget : public QWidget
 {
     Q_OBJECT
@@ -17,5 +19,7 @@ public:
     virtual void showRaiseUp();
 };
 
+
+} // namespace Sol
 
 #endif //ISOLWIDGET_H

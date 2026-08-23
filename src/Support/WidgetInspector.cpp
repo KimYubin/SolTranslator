@@ -13,6 +13,8 @@
 #include <magic_enum.hpp>
 
 
+namespace Sol
+{
 WidgetInspector::WidgetInspector(QWidget* inParent) : QWidget(inParent)
 {
     setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -49,10 +51,11 @@ void WidgetInspector::updateInfo(const QObject* inWatched, const QEvent* inEvent
         _label->setText(QString("Class: %1\nObject: %2\nevent: %3")
                        .arg(widget->metaObject()->className())
                        .arg(widget->objectName().isEmpty() ? "<no name>" : widget->objectName())
-                       .arg(Sol::enumToQStr(inEvent->type())));
+                       .arg(enumToQStr(inEvent->type())));
     }
     else
     {
         _label->setText("No widget under cursor");
     }
 }
+} // namespace Sol

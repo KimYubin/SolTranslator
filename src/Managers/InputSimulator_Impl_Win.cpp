@@ -9,6 +9,8 @@
 
 #include <Windows.h>
 
+namespace Sol
+{
 namespace
 {
 /**
@@ -67,6 +69,6 @@ void InputSimulator::triggerCopy()
 
     SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
-
+} // namespace Sol
 
 #endif // _WIN32

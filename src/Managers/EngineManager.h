@@ -7,6 +7,8 @@
 #include "Types/SolExpected.hpp"
 
 
+namespace Sol
+{
 class TranslateManager;
 class EngineId;
 class TranslateUnit;
@@ -60,5 +62,7 @@ std::vector<QPointer<T>> EngineManager::findEngines()
     return resVec;
 }
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_ENGINEMANAGER_H

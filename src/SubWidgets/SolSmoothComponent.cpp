@@ -7,6 +7,8 @@
 #include <QVariantAnimation>
 
 
+namespace Sol
+{
 SolSmoothComponent::SolSmoothComponent(QObject* inParent, Callback<int()>&& inValueCallback)
     : QObject(inParent)
     , _smoothAnim(new QVariantAnimation(this))
@@ -129,3 +131,4 @@ void SolSmoothComponent::stopContinuousSmoothAnimation()
 {
     _smoothAnim->stop();
 }
+} // namespace Sol

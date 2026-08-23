@@ -8,11 +8,14 @@
 #include <QObject>
 #include <QPointer>
 
+class QNetworkRequest;
+class QNetworkReply;
+
+namespace Sol
+{
 class OptionKey;
 class ITranslateEngine;
 class HistoryManager;
-class QNetworkRequest;
-class QNetworkReply;
 class TranslateManager;
 
 
@@ -109,5 +112,7 @@ protected:
     bool _isReplyFinished = false;
 };
 
+
+} // namespace Sol
 
 #endif //TRANSLATEUNIT_H

@@ -5,6 +5,8 @@
 
 #include "SolBaseTextEdit.h"
 
+namespace Sol
+{
 enum class TextStyle;
 
 class ResultTextEdit : public SolTextBrowser
@@ -42,5 +44,7 @@ private:
     qreal _fontSize = 14.0;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_RESULTTEXTEDIT_H

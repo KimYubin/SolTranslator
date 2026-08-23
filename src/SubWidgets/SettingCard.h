@@ -5,9 +5,12 @@
 
 #include <QFrame>
 
-class SolButton;
 class QGridLayout;
 class QLabel;
+
+namespace Sol
+{
+class SolButton;
 class SwitchButton;
 
 class SettingCard : public QFrame
@@ -55,5 +58,7 @@ T* SettingCard::getContent() const
     return qobject_cast<T*>(_content);
 }
 
+
+} // namespace Sol
 
 #endif //TOGGLESWITCHBOX_H

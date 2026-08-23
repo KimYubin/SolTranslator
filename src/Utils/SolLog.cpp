@@ -13,6 +13,8 @@
 #include <QThread>
 #include <QTimer>
 
+namespace Sol
+{
 namespace
 {
 QtMessageHandler originalHandler = nullptr;
@@ -61,3 +63,4 @@ void SolLogHandler::setupLog()
     // Register custom message handler
     originalHandler = qInstallMessageHandler(solMessageHandler);
 }
+} // namespace Sol

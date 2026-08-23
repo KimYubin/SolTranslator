@@ -7,6 +7,8 @@
 #include <memory>
 
 
+namespace Sol
+{
 /**
  * QObject unique pointer using deleteLater()
  */
@@ -28,5 +30,7 @@ auto make_unique_qobject(Args&&... args)
     return unique_qobject<T>(new T(std::forward<Args>(args)...));
 }
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_UNIQUEQOBJECTPTR_H

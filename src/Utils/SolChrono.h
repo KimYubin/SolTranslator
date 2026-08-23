@@ -12,9 +12,8 @@ namespace Sol
 
 // SpecializedFrom<std::chrono::duration> Duration>
 template <class Specialized>
-concept ChronoDuration = Sol::SpecializedFrom<Specialized, std::chrono::duration>;
+concept ChronoDuration = SpecializedFrom<Specialized, std::chrono::duration>;
 
-} // namespace Sol
 
 class SolChrono
 {
@@ -32,7 +31,7 @@ public:
      *
      * @tparam Duration std::chrono::duration. The default is milliseconds, double.
      */
-    template <Sol::ChronoDuration Duration = milli_double>
+    template <ChronoDuration Duration = milli_double>
     auto lapTime()
     {
         time_point_hi_res cur = clockNow();
@@ -48,7 +47,7 @@ public:
      *
      * @tparam Duration std::chrono::duration. The default is milliseconds, double.
      */
-    template <Sol::ChronoDuration Duration = milli_double>
+    template <ChronoDuration Duration = milli_double>
     auto elapsedTime() const
     {
         return std::chrono::duration_cast<Duration>(clockNow() - _start);
@@ -64,5 +63,7 @@ private:
     time_point_hi_res _prev;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLCHRONO_H

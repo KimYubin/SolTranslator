@@ -31,8 +31,9 @@
 
 #include <vector>
 
-using Sol::i18n;
 
+namespace Sol
+{
 SolMainWidget::SolMainWidget(QWidget* inParent)
     : ISolWidget(inParent)
     , ui(new Ui::SolMainWidget)
@@ -377,8 +378,8 @@ void SolMainWidget::popupTrayMenu()
         QRect popupGeo = QRect(popupPos, menuSize);
 
         // 사용가능 영역 안쪽으로 이동. 커서 위 혹은, 시스템 영역에 겹치지 않도록 조정.
-        const QRect availableGeo = Sol::availableGeometryAt(_prevMousePos);
-        popupGeo = Sol::moveToInside(availableGeo, popupGeo);
+        const QRect availableGeo = availableGeometryAt(_prevMousePos);
+        popupGeo = moveToInside(availableGeo, popupGeo);
 
         contextMenu->popup(popupGeo.topLeft());
     }
@@ -406,3 +407,4 @@ void SolMainWidget::moveTab(const TabMovement inMovement)
     }
 }
 
+} // namespace Sol

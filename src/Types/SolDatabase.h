@@ -10,6 +10,8 @@
 class QString;
 class QSqlError;
 
+namespace Sol
+{
 class SolSql
 {
 public:
@@ -40,5 +42,7 @@ private:
     QSqlDatabase _database;
     bool _duringTransaction;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLDATABASE_H

@@ -6,6 +6,8 @@
 #include "AbstractManager.h"
 #include "Types/TextCacheKey.hpp"
 
+namespace Sol
+{
 class SolTranslatorCore;
 
 class DataManager : public AbstractManager
@@ -23,5 +25,7 @@ private:
     cache_queue convertJsonToCache(const QJsonObject& inCacheJson);
 };
 
+
+} // namespace Sol
 
 #endif //SAVEMANAGER_H

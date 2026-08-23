@@ -26,8 +26,9 @@
 #include <QTimer>
 
 
-using Sol::i18n;
 
+namespace Sol
+{
 HistoryWidget::HistoryWidget(QWidget* inParent) : ISolWidget(inParent)
 {
     setupUI();
@@ -318,3 +319,4 @@ HistoryWidget::ExpectedHistory HistoryWidget::getHistoryData(const QModelIndex& 
 {
     return _historyListModel->getHistoryCacheData(inCurIdx);
 }
+} // namespace Sol

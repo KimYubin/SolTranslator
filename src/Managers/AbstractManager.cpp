@@ -4,6 +4,8 @@
 
 #include "SolTranslatorCore.h"
 
+namespace Sol
+{
 AbstractManager::AbstractManager(SolTranslatorCore* inParent)
     : QObject(nullptr) // Manage lifecycle with unique_ptr.
     , _solCore(inParent)
@@ -18,3 +20,4 @@ AbstractManager::~AbstractManager()
 
 void AbstractManager::postInitialize()
 {}
+} // namespace Sol

@@ -10,6 +10,8 @@
 
 #include <QVariant>
 
+namespace Sol
+{
 namespace
 {
 const QString service = "SolTranslator";
@@ -148,3 +150,4 @@ void SecretStore::KeyCache::broadcastCallbacks()
         callback(secret);
     }
 }
+} // namespace Sol

@@ -6,6 +6,8 @@
 #include <QBasicTimer>
 #include <QScrollBar>
 
+namespace Sol
+{
 class SolSmoothComponent;
 
 /**
@@ -60,5 +62,7 @@ protected:
 };
 
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLSMOOTHSCROLLBAR_H

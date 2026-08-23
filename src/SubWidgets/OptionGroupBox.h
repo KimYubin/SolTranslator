@@ -4,9 +4,10 @@
 #define SOLTRANSLATOR_OPTIONGROUPBOX_H
 #include <QGroupBox>
 
-
 class QVBoxLayout;
 
+namespace Sol
+{
 class OptionGroupBox : public QGroupBox
 {
     Q_OBJECT
@@ -22,5 +23,7 @@ private:
     QVBoxLayout* _vLayout;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_OPTIONGROUPBOX_H

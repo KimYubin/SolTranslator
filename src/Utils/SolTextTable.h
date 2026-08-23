@@ -8,6 +8,8 @@
 class QTextTable;
 
 
+namespace Sol
+{
 struct TextFragmentData
 {
     QString text;
@@ -70,8 +72,7 @@ inline QDebug operator<<(QDebug inDebug, const Grid& inGrid)
     return inDebug;
 }
 
-namespace Sol
-{
+
 Grid makeGrid(const int inRow, const int inCol, CellData inCellData);
 
 /**

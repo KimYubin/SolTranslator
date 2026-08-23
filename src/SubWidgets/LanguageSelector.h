@@ -7,12 +7,15 @@
 #include <QPointer>
 #include <QWidget>
 
-enum class LangType;
 class QGridLayout;
-class LanguageSelectorMenuPrivate;
 class QListWidget;
 class QListWidgetItem;
 class QPushButton;
+
+namespace Sol
+{
+enum class LangType;
+class LanguageSelectorMenuPrivate;
 
 class LanguageSelector : public QFrame
 {
@@ -56,5 +59,7 @@ private:
     QPointer<LanguageSelectorMenuPrivate> _menu;
 };
 
+
+} // namespace Sol
 
 #endif //LANGUAGESELECTOR_H

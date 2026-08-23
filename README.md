@@ -13,4 +13,5 @@
   - [ ] Search filter
 - [ ] Add multiple shortcuts.
 - [ ] Support for translating long texts.
+- [x] Sol namespace
 - [x] Add SolSharedGuard

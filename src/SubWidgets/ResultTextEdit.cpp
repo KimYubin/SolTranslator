@@ -14,6 +14,8 @@
 #include <quuid.h>
 
 
+namespace Sol
+{
 ResultTextEdit::ResultTextEdit(QWidget* inParent) : SolTextBrowser(inParent)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
@@ -186,3 +188,4 @@ QString ResultTextEdit::getCodeBackgroundColorString()
 
     return _codeBackgroundColorString;
 }
+} // namespace Sol

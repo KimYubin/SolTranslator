@@ -6,19 +6,21 @@
 #include "AbstractManager.h"
 #include "Types/SolExpected.hpp"
 
+class QNetworkRequest;
+class QNetworkReply;
+class QNetworkAccessManager;
+class QTextEdit;
+class QMimeData;
 
+namespace Sol
+{
 class EngineId;
 class GlobalHotKeyManager;
 class HistoryManager;
-class QNetworkRequest;
-class QNetworkReply;
 enum class TextStyle;
 struct TranslateRequest;
-class QNetworkAccessManager;
-class QTextEdit;
 class TranslateUnit;
 class SolTranslatorCore;
-class QMimeData;
 
 
 class TranslateManager : public AbstractManager
@@ -60,5 +62,7 @@ private:
     QPointer<GlobalHotKeyManager> _globalHotKeyManager;
 };
 
+
+} // namespace Sol
 
 #endif //TRANSLATEMANAGER_H

@@ -17,6 +17,8 @@
 #include <QTextList>
 #include <QTextTableCell>
 
+namespace Sol
+{
 namespace
 {
 /**
@@ -44,8 +46,6 @@ QString toSolMarkdown(QTextDocument& inDoc);
 } // anonymous namespace
 
 
-namespace Sol
-{
 QString textDocumentToMarkdown(QTextDocument& inDoc)
 {
     fixBoldLastSpace(inDoc);
@@ -80,8 +80,6 @@ void asyncHtmlToMarkdown(QString inHtml
         std::move(inMainThreadFunc)
     );
 }
-} // namespace Sol
-
 
 namespace
 {
@@ -290,7 +288,7 @@ void fixTable(QTextDocument& inDoc)
         {
             if (QTextTable* table = qobject_cast<QTextTable*>(curFrame))
             {
-                Sol::flattenToSingleTable(table);
+                flattenToSingleTable(table);
             }
         }
 
@@ -307,7 +305,7 @@ QString toSolMarkdown(QTextDocument& inDoc)
     if (mdWriter.writeAll(&inDoc))
     {
         res.replace(QChar::Nbsp, " ");
-        Sol::replaceNewLine(res);
+        replaceNewLine(res);
 
         return res;
     }
@@ -321,3 +319,4 @@ TextCursorEditBlockGuard::TextCursorEditBlockGuard(QTextCursor& inCursor)
 {
     inCursor.beginEditBlock();
 }
+} // namespace Sol

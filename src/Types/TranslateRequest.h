@@ -9,6 +9,8 @@
 #include <QPointer>
 #include <QString>
 
+namespace Sol
+{
 class ITranslateWidget;
 
 using ReceiveMoveFunc = Callback<void(const QString&)>;
@@ -57,5 +59,7 @@ struct TranslateRequest
     std::optional<ReceiveMoveFunc> callbackTranslateStreaming;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_TranslateRequest_H

@@ -7,9 +7,12 @@
 #include <QTimer>
 #include <QWidget>
 
-struct ToolTipData;
 class QVBoxLayout;
 class QLabel;
+
+namespace Sol
+{
+struct ToolTipData;
 
 /** 커스텀 툴팁 말풍선 */
 class SolToolTipBallon : public QWidget
@@ -106,5 +109,7 @@ private:
     QPoint _triVertex;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLTOOLTIPBALLON_H

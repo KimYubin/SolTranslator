@@ -15,6 +15,8 @@
 #include <qevent.h>
 #include <qpainterstateguard.h>
 
+namespace Sol
+{
 namespace
 {
 class PainterPenStateGuard : public SolGeneralGuard
@@ -275,3 +277,4 @@ void HistoryListDelegate::drawText(QPainter* inPainter
 
     appStyle->drawItemText(inPainter, inTextRect, inFlags, inOption.palette, true, inText, QPalette::NoRole);
 }
+} // namespace Sol

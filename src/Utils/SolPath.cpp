@@ -7,6 +7,8 @@
 #include <QDir>
 #include <QStandardPaths>
 
+namespace Sol
+{
 namespace
 {
 QString solAppAbsolutePath(const QString& inSecondaryDir, const QString& inFileName)
@@ -71,3 +73,4 @@ QString SolPath::absolute(const SolFile inPath)
 
     return solAppAbsolutePath(filePath.dir, filePath.file);
 }
+} // namespace Sol

@@ -9,9 +9,11 @@
 
 #include <QHotkey>
 
-
-enum class Action;
 class QHotkey;
+
+namespace Sol
+{
+enum class Action;
 class SolTranslatorCore;
 
 /**
@@ -51,5 +53,7 @@ private:
     ActionKeyHash _hotKeys;
 };
 
+
+} // namespace Sol
 
 #endif //GLOBALHOTKEYMANAGER_H

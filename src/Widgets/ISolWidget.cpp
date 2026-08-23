@@ -2,6 +2,8 @@
 
 #include "ISolWidget.h"
 
+namespace Sol
+{
 ISolWidget::ISolWidget(QWidget* inParent, const Qt::WindowFlags inFlags)
     : QWidget(inParent, inFlags)
 {}
@@ -23,3 +25,4 @@ void ISolWidget::showRaiseUp()
     raise();
     activateWindow();
 }
+} // namespace Sol

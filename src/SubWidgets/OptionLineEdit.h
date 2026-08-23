@@ -7,6 +7,8 @@
 
 class QHBoxLayout;
 
+namespace Sol
+{
 class OptionLineEdit : public QWidget
 {
     Q_OBJECT
@@ -47,5 +49,7 @@ private:
     bool _isUsedSaveButton;
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_OPTIONLINEEDIT_H

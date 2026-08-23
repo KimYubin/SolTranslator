@@ -12,8 +12,9 @@
 #include <QPushButton>
 #include <QTimer>
 
-using Sol::i18n;
 
+namespace Sol
+{
 SolButton* SolWidgetFactory::createButton(QWidget* inParent
                                         , const QIcon& inIcon
                                         , const Qt::FocusPolicy inPolicy
@@ -124,3 +125,4 @@ SolButton* SolWidgetFactory::createDeleteTranslation(QWidget* inParent
 
     return newButton;
 }
+} // namespace Sol

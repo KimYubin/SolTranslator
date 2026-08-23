@@ -35,15 +35,15 @@ private: \
 
 #define SOL_QSS_COLOR(colorName) SOL_QSS_TYPE(QColor, colorName)
 
-
 class QKeySequence;
-class OptionKey;
-class EngineId;
 class QObject;
 class QWidget;
 
 namespace Sol
 {
+class OptionKey;
+class EngineId;
+
 /**
  * Other QObject와 그 부모가 this인지 재귀적으로 확인합니다.
  * @param inThis 비교 주체
@@ -90,6 +90,5 @@ QString qStrFromStdView(const std::string_view& inStrView);
 QString engineOptionKey(const EngineId& inEngineId, const OptionKey& inKey);
 
 } // namespace Sol
-
 
 #endif //SOLUTILIBRARY_H

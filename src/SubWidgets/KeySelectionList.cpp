@@ -4,6 +4,8 @@
 
 #include <QKeyEvent>
 
+namespace Sol
+{
 KeySelectionList::KeySelectionList(QWidget* inParent) : QListWidget(inParent)
 {}
 
@@ -20,3 +22,4 @@ void KeySelectionList::keyPressEvent(QKeyEvent* inEvent)
 
     QListWidget::keyPressEvent(inEvent);
 }
+} // namespace Sol

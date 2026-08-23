@@ -6,6 +6,8 @@
 #include "SolTypes.h"
 
 
+namespace Sol
+{
 SolSharedGuard::SolSharedGuard(Callback<void(void)>&& inEndFunctor)
 {
     _guardPtr = new SolGeneralGuard(std::move(inEndFunctor));
@@ -69,3 +71,4 @@ void SolSharedGuard::decrementRef() const noexcept
         _refCount->decrement();
     }
 }
+} // namespace Sol

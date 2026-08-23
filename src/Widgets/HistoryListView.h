@@ -9,6 +9,8 @@
 
 #include <QListView>
 
+namespace Sol
+{
 using SolListView = SolSmoothAbstractScrollArea<QListView>;
 
 class HistoryListView : public SolListView
@@ -27,5 +29,7 @@ public:
 
     QColor getItemColor(const Sol::ItemColorRole inColorRole) const;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYLISTVIEW_H

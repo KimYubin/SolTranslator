@@ -3,6 +3,8 @@
 #include "HistoryListView.h"
 
 
+namespace Sol
+{
 QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
 {
     switch (inColorRole)
@@ -15,3 +17,4 @@ QColor HistoryListView::getItemColor(const Sol::ItemColorRole inColorRole) const
     }
     return QColor();
 }
+} // namespace Sol

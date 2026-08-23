@@ -12,6 +12,8 @@
 #include <QTimer>
 
 
+namespace Sol
+{
 LoadingSpinner::LoadingSpinner(const QString& inFile, QWidget* inParent)
     : ILoadingWidget(inParent)
 {
@@ -107,3 +109,4 @@ void LoadingSpinner::setOpacityRatio(const float inOpacityRatio)
     _opacityRatio = inOpacityRatio;
     update();
 }
+} // namespace Sol

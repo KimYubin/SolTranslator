@@ -10,14 +10,15 @@
 #include <typeinfo>
 #include <unordered_map>
 
-
-class AbstractManager;
-class SolMainWidget;
-
 #if defined(solCore)
 #undef solCore
 #endif
 #define solCore (SolTranslatorCore::instance())
+
+namespace Sol
+{
+class AbstractManager;
+class SolMainWidget;
 
 /**
  * SolTranslator의 Non-UI 관련 기능과 mainWidget을 관리하는 최상위 객체입니다.
@@ -77,6 +78,6 @@ private:
 
     QPointer<SolMainWidget> _solMainWidget;
 };
-
+} // namespace Sol
 
 #endif //SOLTRANSLATORCORE_H

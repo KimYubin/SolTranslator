@@ -9,6 +9,8 @@
 #include <QTimer>
 
 
+namespace Sol
+{
 SolLogWorker::SolLogWorker(QObject* inParent)
     : QObject(inParent)
     , _loggingTimer(nullptr)
@@ -88,3 +90,4 @@ void SolLogProxy::log(const QString& inLog)
 {
      emit logEnqueued(inLog);
 }
+} // namespace Sol

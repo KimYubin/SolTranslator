@@ -5,6 +5,8 @@
 #include <QRegularExpression>
 #include <QVBoxLayout>
 
+namespace Sol
+{
 OptionGroupBox::OptionGroupBox(const QString& inGroupTitle, QWidget* inParent)
     : QGroupBox(inParent)
 {
@@ -27,3 +29,4 @@ void OptionGroupBox::addChild(QWidget* inChild)
 {
     _vLayout->addWidget(inChild, 0, Qt::AlignmentFlag::AlignTop);
 }
+} // namespace Sol

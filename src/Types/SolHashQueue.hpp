@@ -5,6 +5,8 @@
 
 #include <unordered_map>
 
+namespace Sol
+{
 /**
  * 원소가 추가된 순서를 유지하는 해시 맵입니다.
  * value의 선입선출을 유지하고, key를 통해 삭제할 수 있습니다.
@@ -228,5 +230,7 @@ public:
     }
 };
 
+
+} // namespace Sol
 
 #endif //SOLHASHQUEUE_H

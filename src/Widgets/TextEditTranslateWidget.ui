@@ -55,10 +55,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="SolTextEdit" name="srcTextEdit"/>
+       <widget class="Sol::SolTextEdit" name="srcTextEdit"/>
       </item>
       <item>
-       <widget class="LayoutTextEdit" name="trTextEdit"/>
+       <widget class="Sol::LayoutTextEdit" name="trTextEdit"/>
       </item>
      </layout>
     </item>
@@ -70,12 +70,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>LayoutTextEdit</class>
+   <class>Sol::LayoutTextEdit</class>
    <extends>QTextEdit</extends>
    <header>SubWidgets/LayoutTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>SolTextEdit</class>
+   <class>Sol::SolTextEdit</class>
    <extends>QTextEdit</extends>
    <header>SubWidgets/SolBaseTextEdit.h</header>
   </customwidget>

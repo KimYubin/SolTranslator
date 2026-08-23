@@ -10,6 +10,8 @@
 
 #include <expected>
 
+namespace Sol
+{
 enum class ErrorCode
 {
     None
@@ -64,7 +66,7 @@ inline QDebug operator<<(QDebug inDebug, const Error& inError)
     static constexpr QAnyStringView debugMsg{"Unexpected Error: Code %1, Message %2"};
 
     QDebugStateSaver saver(inDebug);
-    inDebug.nospace() << debugMsg.arg(Sol::enumToQStr(inError.code), inError.message);
+    inDebug.nospace() << debugMsg.arg(enumToQStr(inError.code), inError.message);
     return inDebug;
 }
 
@@ -92,5 +94,7 @@ constexpr bool is_error(const std::expected<T, E>& inE) noexcept
 {
     return !inE.has_value();
 }
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLEXPECTED_H

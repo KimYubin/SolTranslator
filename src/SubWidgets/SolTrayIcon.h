@@ -11,6 +11,8 @@
 #include <QWidget>
 
 
+namespace Sol
+{
 class SolTrayIcon : public QSystemTrayIcon
 {
     Q_OBJECT
@@ -48,7 +50,7 @@ public:
                      , Func&& inSlot
                      , Qt::ConnectionType inType = Qt::AutoConnection)
     {
-        return addAction(Sol::i18n(inTr), inAction, inContext, std::forward<Func>(inSlot), inType);
+        return addAction(i18n(inTr), inAction, inContext, std::forward<Func>(inSlot), inType);
     }
 
     /** Text */
@@ -68,7 +70,7 @@ public:
                      , Func&& inSlot
                      , Qt::ConnectionType inType = Qt::AutoConnection)
     {
-        return addAction(Sol::i18n(inTr), inContext, std::forward<Func>(inSlot), inType);
+        return addAction(i18n(inTr), inContext, std::forward<Func>(inSlot), inType);
     }
 
     /** Icon, Text, Action */
@@ -95,7 +97,7 @@ public:
                      , Func&& inSlot
                      , Qt::ConnectionType inType = Qt::AutoConnection)
     {
-        return addAction(inIcon, Sol::i18n(inTr), inAction, inContext, std::forward<Func>(inSlot), inType);
+        return addAction(inIcon, i18n(inTr), inAction, inContext, std::forward<Func>(inSlot), inType);
     }
 
     /** Icon, Text */
@@ -117,7 +119,7 @@ public:
                      , Func&& inSlot
                      , Qt::ConnectionType inType = Qt::AutoConnection)
     {
-        return addAction(inIcon, Sol::i18n(inTr), inContext, std::forward<Func>(inSlot), inType);
+        return addAction(inIcon, i18n(inTr), inContext, std::forward<Func>(inSlot), inType);
     }
 
     QAction* addSeparator();
@@ -126,5 +128,7 @@ protected:
     void addActionInMenu(QAction* inQAction, const Action inAction);
 };
 
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLTRAYICON_H

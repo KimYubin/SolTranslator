@@ -11,6 +11,8 @@
 #include <QNetworkReply>
 #include <QTextDocument>
 
+namespace Sol
+{
 GoogleTrUnit::GoogleTrUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
     : TranslateUnit(inParent, inEngine)
 {}
@@ -70,7 +72,7 @@ QString GoogleTrUnit::replyTranslateFinished()
 GoogleEngine::GoogleEngine()
     : ITranslateEngine(EngineIds::Google)
 {
-    setDisplayName(Sol::i18n(Tr::GoogleTranslate));
+    setDisplayName(i18n(Tr::GoogleTranslate));
     setDefaultUrl("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%1&tl=%2&dt=t&q=%3");
     setIconPath(":/engines/Google_Logo");
     setPriority(1);
@@ -84,3 +86,4 @@ namespace
 {
 const GoogleEngine googleEngine;
 } // anonymous namespace
+} // namespace Sol

@@ -8,6 +8,8 @@
 #include <qstyleoption.h>
 
 
+namespace Sol
+{
 SolSmoothScrollBar::SolSmoothScrollBar(QWidget* inParent)
     : QScrollBar(inParent)
     , _smoothComponent(new SolSmoothComponent(this, [this]() { return value(); }))
@@ -286,3 +288,4 @@ void SolSmoothScrollBar::stopRepeat()
     _repeatStack  = 0;
     _repeatTimer.stop();
 }
+} // namespace Sol

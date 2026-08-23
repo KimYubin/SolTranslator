@@ -7,6 +7,8 @@
 #include "EngineUnits/TranslateUnit.h"
 
 
+namespace Sol
+{
 class GoogleTrUnit final : public TranslateUnit
 {
     Q_OBJECT
@@ -37,5 +39,7 @@ public:
     explicit GoogleEngine();
     ~GoogleEngine() override;
 };
+
+} // namespace Sol
 
 #endif //TRANSLATEUNITGOOGLE_H

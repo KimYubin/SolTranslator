@@ -17,6 +17,8 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
+namespace Sol
+{
 TranslateUnit::TranslateUnit(TranslateManager* inParent, ITranslateEngine* inEngine)
     : QObject(inParent)
     , _translateManager(inParent)
@@ -253,3 +255,4 @@ QVariant TranslateUnit::getOption(const OptionKey& inKey) const
 
     return optExp.value();
 }
+} // namespace Sol

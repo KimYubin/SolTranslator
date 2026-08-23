@@ -10,6 +10,7 @@
 #include "Utils/SolSingleApplication.h"
 
 #include <QApplication>
+#include <QString>
 
 
 int main(int argc, char* argv[])
@@ -17,38 +18,38 @@ int main(int argc, char* argv[])
     QCoreApplication::setOrganizationName("Sol");
     QCoreApplication::setApplicationName("SolTranslator");
 
-    SolLogHandler::setupLog();
+    Sol::SolLogHandler::setupLog();
 
     QApplication app(argc, argv);
 
-    SolSingleApplication solSingleApp("SolTranslator.Single.App");
+    Sol::SolSingleApplication solSingleApp("SolTranslator.Single.App");
     if (solSingleApp.isAlreadyRunning())
     {
         return 0;
     }
 
     // solCore
-    SolTranslatorCore solTranslatorCore(&app);
+    Sol::SolTranslatorCore solTranslatorCore(&app);
 
     // managers
-    solTranslatorCore.emplaceManager<ConfigManager>(&solTranslatorCore);
-    solTranslatorCore.emplaceManager<TranslateManager>(&solTranslatorCore);
-    solTranslatorCore.emplaceManager<HistoryManager>(&solTranslatorCore);
-    solTranslatorCore.emplaceManager<GlobalHotKeyManager>(&solTranslatorCore);
-    solTranslatorCore.emplaceManager<EngineManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<Sol::ConfigManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<Sol::TranslateManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<Sol::HistoryManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<Sol::GlobalHotKeyManager>(&solTranslatorCore);
+    solTranslatorCore.emplaceManager<Sol::EngineManager>(&solTranslatorCore);
 
-    solTranslatorCore.manager<TranslateManager>()->init(
-        solTranslatorCore.manager<HistoryManager>()
-      , solTranslatorCore.manager<GlobalHotKeyManager>()
+    solTranslatorCore.manager<Sol::TranslateManager>()->init(
+        solTranslatorCore.manager<Sol::HistoryManager>()
+      , solTranslatorCore.manager<Sol::GlobalHotKeyManager>()
     );
 
 
     solTranslatorCore.postInitialize();
 
     QObject::connect(&solSingleApp
-                   , &SolSingleApplication::raiseRequested
+                   , &Sol::SolSingleApplication::raiseRequested
                    , &solTranslatorCore
-                   , &SolTranslatorCore::raiseMainWidget);
+                   , &Sol::SolTranslatorCore::raiseMainWidget);
 
     return app.exec();
 }

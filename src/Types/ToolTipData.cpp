@@ -5,6 +5,8 @@
 #include "Managers/ConfigManager.h"
 
 
+namespace Sol
+{
 const char* ToolTipData::propertyName = "SolToolTipData";
 
 namespace
@@ -47,3 +49,4 @@ QString ToolTipData::toolTipShortcutString() const
 
     return res;
 }
+} // namespace Sol

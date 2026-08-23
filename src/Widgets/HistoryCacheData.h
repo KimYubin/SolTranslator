@@ -10,6 +10,8 @@
 #include <Qt>
 #include <QtTypes>
 
+namespace Sol
+{
 class HistoryCacheData
 {
 public:
@@ -62,5 +64,7 @@ private:
     TextStyle _textStyle;
     Qt::CheckState _bCheckState;
 };
+
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_HISTORYCACHEDATA_H

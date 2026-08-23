@@ -5,6 +5,8 @@
 
 #include "SolTypes.h"
 
+namespace Sol
+{
 /**
  * The SolGeneralGuard class is a RAII-style guard class.
  * It executes registered callback when resource is destroyed.
@@ -30,6 +32,6 @@ private:
 
     Q_DISABLE_COPY_MOVE(SolGeneralGuard)
 };
-
+} // namespace Sol
 
 #endif //SOLTRANSLATOR_SOLGUARD_H

@@ -8,6 +8,9 @@
 #include <qnamespace.h>
 
 class QString;
+
+namespace Sol
+{
 class ITranslateWidget;
 enum class LangType;
 
@@ -16,8 +19,6 @@ template <typename Signature>
 using Callback = std::move_only_function<Signature>;
 
 
-namespace Sol
-{
 Q_NAMESPACE
 
 enum HistoryRole
@@ -41,7 +42,6 @@ enum ItemColorRole
   , ItemDisableColorRole
 };
 
-} // namespace Sol
 
 enum class ScreenPopupPolicy
 {
@@ -180,5 +180,7 @@ enum SolWidgetMode
 Q_DECLARE_FLAGS(SolWidgetModeFlags, SolWidgetMode)
 Q_DECLARE_OPERATORS_FOR_FLAGS(SolWidgetModeFlags)
 
+
+} // namespace Sol
 
 #endif //SOLTYPES_H

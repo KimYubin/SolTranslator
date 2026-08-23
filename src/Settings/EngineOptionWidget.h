@@ -7,9 +7,12 @@
 #include "Types/SolExpected.hpp"
 #include "Types/SolTypes.h"
 
+class QTabWidget;
+
+namespace Sol
+{
 class OptionGroupBox;
 class OptionKey;
-class QTabWidget;
 class ITranslateEngine;
 struct OptionSpec;
 class SettingCard;
@@ -66,5 +69,7 @@ public:
     ~EngineOptionPage() override;
 };
 
+
+} // namespace Sol
 
 #endif //ENGINEOPTIONWIDGET_H

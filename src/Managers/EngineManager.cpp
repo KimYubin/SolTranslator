@@ -8,6 +8,8 @@
 #include "Utils/SolDebug.h"
 
 
+namespace Sol
+{
 namespace
 {
 using TrEngineMap = std::unordered_map<EngineId, QPointer<ITranslateEngine>, EngineId_hasher>;
@@ -99,3 +101,4 @@ Expected<TranslateUnit*> EngineManager::newTrUnit(const EngineId& inEngine, Tran
 
     return trUnit;
 }
+} // namespace Sol

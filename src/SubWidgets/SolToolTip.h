@@ -5,9 +5,12 @@
 
 #include <QObject>
 
+class QAbstractButton;
+
+namespace Sol
+{
 struct ToolTipData;
 enum class Action;
-class QAbstractButton;
 
 /**
  * The SolToolTip class is a helper class for displaying custom tooltips.
@@ -53,5 +56,7 @@ public:
                                     , const QString& inOffToolTip
                                     , const QKeySequence& inKey);
 };
+
+} // namespace Sol
 
 #endif //SOLTOOLTIP_H

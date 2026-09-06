@@ -31,6 +31,7 @@ protected:
 namespace EngineIds
 {
 inline const EngineId FinPoint{"FinPoint"};
+inline const EngineId& defaultEngine = FinPoint;
 }
 
 class FinPointEngine : public ITranslateEngine

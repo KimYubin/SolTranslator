@@ -27,7 +27,7 @@ protected:
 namespace EngineIds
 {
 inline const EngineId Google{"Google"};
-inline const EngineId& defaultEngine = Google;
+// inline const EngineId& defaultEngine = Google;
 }
 
 class GoogleEngine : public ITranslateEngine
